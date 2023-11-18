@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signals TODO App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 2rem;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+    </style>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="main.dart.js"></script>
+  </head>
+  <body>
+    <h1>Signals TODO App</h1>
+    <form id="todoForm">
+      <input type="text" id="todoInput" placeholder="Add a new task" />
+      <button type="submit">Add</button>
+    </form>
+    <h2>Tasks</h2>
+    <div id="taskFilter">
+      <label
+        ><input type="radio" name="filter" value="all" checked /> All</label
+      >
+      <label><input type="radio" name="filter" value="active" /> Active</label>
+      <label
+        ><input type="radio" name="filter" value="completed" /> Completed</label
+      >
+    </div>
+    <ul id="todoList"></ul>
+    <div id="taskCounter"></div>
+  </body>
+</html>
