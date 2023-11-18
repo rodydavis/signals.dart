@@ -9,9 +9,9 @@ void main() {
     final multiplier = createSignal(2);
 
     // Creating a computed value
-    final multipliedCount = createComputed(
-      () => count.value * multiplier.value,
-    );
+    final multipliedCount = createComputed(() {
+      return count.value * multiplier.value;
+    });
 
     createEffect(() {
       print(
