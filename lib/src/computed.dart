@@ -1,4 +1,4 @@
-part of '../dart_signals.dart';
+part of 'signals.dart';
 
 typedef ComputedCallback<T> = T Function();
 
@@ -40,6 +40,3 @@ class Computed<T> extends _Notifier implements _Listenable {
   }
 }
 
-Computed<T> createComputed<T>(ComputedCallback<T> computeFn) {
-  return Computed<T>(computeFn);
-}

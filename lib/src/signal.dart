@@ -1,4 +1,4 @@
-part of '../dart_signals.dart';
+part of 'signals.dart';
 
 class Signal<T> extends _Notifier {
   Signal(this._value);
@@ -21,6 +21,3 @@ class Signal<T> extends _Notifier {
   }
 }
 
-Signal<T> createSignal<T>(T initialValue) {
-  return Signal<T>(initialValue);
-}

@@ -1,4 +1,6 @@
-part of '../dart_signals.dart';
+part of 'signals.dart';
+
+_Listenable? _currentAccessed;
 
 abstract class _Listenable {
   void _update();

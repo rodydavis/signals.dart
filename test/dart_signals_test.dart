@@ -1,19 +1,19 @@
 import 'package:test/test.dart';
 
-import 'package:dart_signals/dart_signals.dart';
+import 'package:signals/signals.dart';
 
 void main() {
   test('init', () {
     // Create signals
-    final count = createSignal(0);
-    final multiplier = createSignal(2);
+    final count = signal(0);
+    final multiplier = signal(2);
 
     // Creating a computed value
-    final multipliedCount = createComputed(() {
+    final multipliedCount = computed(() {
       return count.value * multiplier.value;
     });
 
-    createEffect(() {
+    effect(() {
       print(
           'Effect called: Count is ${count.value} and multiplier is ${multiplier.value}');
     });

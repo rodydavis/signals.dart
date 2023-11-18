@@ -1,3 +1,5 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+- Adding `computed`, `effect`, `signal`
+- Adding tests
+- Adding web example

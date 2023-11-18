@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:dart_signals/dart_signals.dart';
+import 'package:signals/signals.dart';
 
 typedef Task = ({String title, bool completed});
 
@@ -12,10 +12,10 @@ void main() {
   final taskFilter = document.getElementById("taskFilter")!;
   final taskCounter = document.getElementById("taskCounter")!;
 
-  final tasks = createSignal<List<Task>>([]);
-  final filter = createSignal("all");
+  final tasks = signal<List<Task>>([]);
+  final filter = signal("all");
 
-  final filteredTasks = createComputed(() {
+  final filteredTasks = computed(() {
     final currentFilter = filter.value;
     final currentTasks = tasks.value;
     if (currentFilter == "all") {
@@ -27,15 +27,15 @@ void main() {
     }
   });
 
-  final taskCount = createComputed(() {
+  final taskCount = computed(() {
     return tasks.value.length;
   });
 
-  final activeTaskCount = createComputed(() {
+  final activeTaskCount = computed(() {
     return tasks.value.where((task) => !task.completed).length;
   });
 
-  final completedTaskCount = createComputed(() {
+  final completedTaskCount = computed(() {
     return tasks.value.where((task) => task.completed).length;
   });
 
@@ -54,7 +54,7 @@ void main() {
     filter.value = target.value ?? '';
   });
 
-  createEffect(() {
+  effect(() {
     final currentTasks = filteredTasks.value;
     todoList.innerHtml = "";
     for (var index = 0; index < currentTasks.length; index++) {
@@ -78,7 +78,7 @@ void main() {
     }
   });
 
-  createEffect(() {
+  effect(() {
     taskCounter.text = '''
         Total: ${taskCount.value}, 
         Active: ${activeTaskCount.value}, 

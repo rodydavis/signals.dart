@@ -1,6 +1,8 @@
-part of '../dart_signals.dart';
+part of 'signals.dart';
 
 typedef EffectCallback = void Function();
+
+final _effectQueue = Queue<Effect>();
 
 class Effect implements _Listenable {
   Effect(this._effectFn) {
@@ -34,8 +36,4 @@ void _executeEffects() {
     final effect = _effectQueue.removeFirst();
     effect._execute();
   }
-}
-
-Effect createEffect(EffectCallback effectFn) {
-  return Effect(effectFn);
 }
