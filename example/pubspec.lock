@@ -337,6 +337,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  preact_signals:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   protobuf:
     dependency: transitive
     description:
@@ -385,13 +392,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  signals:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.1"
   source_maps:
     dependency: transitive
     description:

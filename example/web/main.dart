@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:signals/signals.dart';
+import 'package:preact_signals/preact_signals.dart';
 
 typedef Task = ({String title, bool completed});
 
