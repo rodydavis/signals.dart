@@ -117,10 +117,10 @@ packages:
     dependency: "direct dev"
     description:
       name: build_web_compilers
-      sha256: "70d67a571b068aa0b8f5569fea8f2d91647731643ad6d744f9035b47eefb2ace"
+      sha256: "66a068988c1c409021a2fe646f428c362ab49021bbf2380b6965a34fbc90c8f8"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.7"
+    version: "4.0.6"
   built_collection:
     dependency: transitive
     description:
@@ -337,6 +337,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  preact_signals:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   protobuf:
     dependency: transitive
     description:
@@ -385,13 +392,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  signals:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.1"
   source_maps:
     dependency: transitive
     description:
@@ -497,4 +497,4 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.3 <3.4.0"
+  dart: ">=3.0.0 <3.4.0"
