@@ -602,14 +602,14 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
         node._source._subscribe(node);
       }
     }
-    this._subscribe(node);
+    Signal.__subscribe(this, node);
   }
 
   @override
   void _unsubscribe(Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (_targets != null) {
-      this._unsubscribe(node);
+      Signal.__unsubscribe(this, node);
 
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.

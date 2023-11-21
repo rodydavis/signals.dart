@@ -65,11 +65,12 @@ void main() {
       checkbox.type = "checkbox";
       checkbox.checked = task.completed;
       checkbox.addEventListener("change", (e) {
-        tasks.value[index] = (
-          title: tasks.value[index].title,
+        final current = tasks.value;
+        current[index] = (
+          title: current[index].title,
           completed: checkbox.checked ?? false,
         );
-        tasks.value = [...tasks.value];
+        tasks.value = [...current];
       });
       label.append(checkbox);
       label.append(Text(" ${task.title}"));
