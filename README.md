@@ -191,6 +191,8 @@ batch(() {
 ### Dart
 
 ```dart
+import 'package:preact_signals/preact_signals.dart';
+
 // Create signals
 final count = signal(0);
 final multiplier = signal(2);
