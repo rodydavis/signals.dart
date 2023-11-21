@@ -1,3 +1,5 @@
+[![Publish Example](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml/badge.svg)](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml)
+
 # Preact Signals (Dart)
 
 Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
