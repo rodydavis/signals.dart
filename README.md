@@ -216,7 +216,7 @@ Futures can be converted to signals by either a method `futureToSignal` or as an
 ```dart
 import 'package:preact_signals/preact_signals.dart';
 
-void createStream() async* {
+Stream<int> createStream() async* {
     yield 1;
     yield 2;
     yield 3;
