@@ -81,9 +81,7 @@ class MyHomePage extends StatelessWidget {
             ),
             Text(
               '${counter.watch(context)}',
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
