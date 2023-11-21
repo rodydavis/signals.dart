@@ -1,0 +1,19 @@
+name: preact_signals_flutter
+description: Preact signals in flutter with widget helpers
+version: 0.0.1
+
+environment:
+  sdk: '>=3.1.5 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  preact_signals: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:

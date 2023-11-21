@@ -1,0 +1,3 @@
+dependency_overrides:
+  preact_signals:
+    path: ../../dart_preact_signals
