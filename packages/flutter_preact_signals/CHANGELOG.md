@@ -1,3 +1,8 @@
+## 0.1.0
+
+- Rename `valueListenableToSignal` to `signalFromValueListenable`
+- Rename `valueNotifierToSignal` to `signalFromValueNotifier`
+
 ## 0.0.2
 
 - Fixing recursive call after refactor

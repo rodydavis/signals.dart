@@ -1,3 +1,8 @@
+## 0.1.0
+
+- Rename `futureToSignal` to `signalFromFuture`
+- Rename `streamToSignal` to `signalFromStream`
+
 ## 0.0.2
 
 - Fixing recursive call after refactor

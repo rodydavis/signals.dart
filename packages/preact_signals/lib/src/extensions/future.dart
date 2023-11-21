@@ -1,6 +1,19 @@
 import 'package:preact_signals/preact_signals.dart';
 
-ReadonlySignal<SignalState> futureToSignal<T>(
+/// Returns a [ReadonlySignal] that uses [SignalState] for the value.
+///
+/// Starts with [SignalLoading] for the default
+/// state until the future completes.
+///
+/// When an error occurs [SignalError] is returned with the value
+/// being the [Object] of the exception
+///
+/// If a [Duration] is added for the timeout and the
+/// timeout is reached [SignalTimeout] will return and
+/// extends [SignalError]
+///
+/// If success then the result will be [SignalValue]
+ReadonlySignal<SignalState> signalFromFuture<T>(
   Future<T> future, {
   Duration? timeout,
 }) {
@@ -18,6 +31,8 @@ ReadonlySignal<SignalState> futureToSignal<T>(
   return s;
 }
 
+/// Extension on future to provide helpful methods for signals
 extension SignalFutureUtils on Future {
-  ReadonlySignal toSignal() => futureToSignal(this);
+  /// Convert an existing future to [ReadonlySignal]
+  ReadonlySignal toSignal() => signalFromFuture(this);
 }

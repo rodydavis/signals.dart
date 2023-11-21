@@ -192,20 +192,20 @@ batch(() {
 
 ### `Future`
 
-Futures can be converted to signals by either a method `futureToSignal` or as an extension method on a `Future`:
+Futures can be converted to signals by either a method `signalFromFuture` or as an extension method on a `Future`:
 
 ```dart
 import 'package:preact_signals/preact_signals.dart';
 
 final future = Future(() => 1);
-final signal = future.toSignal(); // or futureToSignal(future)
+final signal = future.toSignal(); // or signalFromFuture(future)
 ```
 
 > This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
 
 ### `Stream`
 
-Futures can be converted to signals by either a method `futureToSignal` or as an extension method on a `Future`:
+Futures can be converted to signals by either a method `signalFromFuture` or as an extension method on a `Future`:
 
 ```dart
 import 'package:preact_signals/preact_signals.dart';
@@ -216,7 +216,7 @@ Stream<int> createStream() async* {
     yield 3;
 }
 final stream = createStream();
-final signal = stream.toSignal(); // or streamToSignal(stream)
+final signal = stream.toSignal(); // or signalFromStream(stream)
 ```
 
 > This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
@@ -230,7 +230,7 @@ import 'package:flutter_preact_signals/flutter_preact_signals.dart';
 import 'package:flutter/material.dart';
 
 final ValueListenable listenable = ValueNotifier(10);
-final signal = listenable.toSignal(); // or valueListenableToSignal(listenable)
+final signal = listenable.toSignal(); // or signalFromValueListenable(listenable)
 ```
 
 ### `ValueNotifier`
@@ -242,7 +242,7 @@ import 'package:flutter_preact_signals/flutter_preact_signals.dart';
 import 'package:flutter/material.dart';
 
 final notifier = ValueNotifier(10);
-final signal = notifier.toSignal(); // or valueNotifierToSignal(notifier)
+final signal = notifier.toSignal(); // or signalFromValueNotifier(notifier)
 ```
 
 

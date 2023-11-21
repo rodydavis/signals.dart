@@ -5,9 +5,9 @@ import 'package:test/test.dart';
 
 void main() {
   group('Future', () {
-    test('futureToSignal', () async {
+    test('signalFromFuture', () async {
       final future = _future();
-      final signal = futureToSignal(future);
+      final signal = signalFromFuture(future);
       expect(signal() is SignalLoading, true);
 
       final completer = Completer<int>();

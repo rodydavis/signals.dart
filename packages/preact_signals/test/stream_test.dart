@@ -5,9 +5,9 @@ import 'package:test/test.dart';
 
 void main() {
   group('Stream', () {
-    test('streamToSignal', () async {
+    test('signalFromStream', () async {
       final stream = _stream();
-      final signal = streamToSignal(stream);
+      final signal = signalFromStream(stream);
       expect(signal() is SignalLoading, true);
 
       final completer = Completer();

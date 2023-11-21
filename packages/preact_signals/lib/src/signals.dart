@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, constant_identifier_names
+// ignore_for_file: public_member_api_docs, constant_identifier_names
 
 void cycleDetected() {
   throw Exception('Cycle detected');
@@ -22,12 +22,12 @@ const TRACKING = 1 << 5;
 // Also used to remember the source's last version number that the target saw.
 class Node {
   // A source whose value the target depends on.
-  ReadonlySignal _source;
+  final ReadonlySignal _source;
   Node? _prevSource;
   Node? _nextSource;
 
   // A target that depends on the source and should be notified when the source changes.
-  Listenable _target;
+  final Listenable _target;
   Node? _prevTarget;
   Node? _nextTarget;
 
@@ -231,18 +231,22 @@ Node? addDependency(ReadonlySignal signal) {
 }
 
 abstract class ReadonlySignal<T> {
+  /// Compute the current value
   T get value;
 
   @override
   String toString();
 
+  /// Convert value to JSON
   T toJson();
 
+  /// Return the value when invoked
   T call();
 
   /// Returns the current value without subscribing to updates.
   T peek();
 
+  /// Subscribe to value changes
   EffectCleanup subscribe(void Function(T value) fn);
 
   void _subscribe(Node node);
@@ -253,7 +257,6 @@ abstract class ReadonlySignal<T> {
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
   int get _version;
-  set _version(int value);
 
   // @internal
   Node? _node;
@@ -265,6 +268,7 @@ abstract class ReadonlySignal<T> {
 }
 
 abstract class MutableSignal<T> implements ReadonlySignal<T> {
+  // Update the current value
   set value(T value);
 }
 
@@ -514,7 +518,7 @@ void cleanupSources(Listenable target) {
 }
 
 class Computed<T> implements Listenable, ReadonlySignal<T> {
-  ComputedCallback<T> _compute;
+  final ComputedCallback<T> _compute;
 
   final String? debugLabel;
 

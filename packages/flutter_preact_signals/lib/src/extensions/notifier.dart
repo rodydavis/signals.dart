@@ -17,13 +17,13 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
   }
 }
 
-ReadonlySignal<T> valueListenableToSignal<T>(ValueListenable<T> notifier) {
+ReadonlySignal<T> signalFromValueListenable<T>(ValueListenable<T> notifier) {
   final s = signal<T>(notifier.value);
   notifier.addListener(() => s.value = notifier.value);
   return s;
 }
 
-MutableSignal<T> valueNotifierToSignal<T>(ValueNotifier<T> notifier) {
+MutableSignal<T> signalFromValueNotifier<T>(ValueNotifier<T> notifier) {
   final s = signal<T>(notifier.value);
   var local = false;
   notifier.addListener(() {
