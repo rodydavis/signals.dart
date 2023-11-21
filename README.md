@@ -1,3 +1,4 @@
+[![Tests](https://github.com/rodydavis/preact_signals.dart/actions/workflows/tests.yml/badge.svg)](https://github.com/rodydavis/preact_signals.dart/actions/workflows/tests.yml)
 [![Publish Example](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml/badge.svg)](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml)
 
 # Preact Signals (Dart)
