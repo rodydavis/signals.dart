@@ -43,7 +43,7 @@ Reacting to signal changes can be done with one extension method: `watch(context
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:preact_signals_flutter/preact_signals_flutter.dart';
+import 'package:flutter_preact_signals/flutter_preact_signals.dart';
 
 void main() {
   runApp(const MyApp());

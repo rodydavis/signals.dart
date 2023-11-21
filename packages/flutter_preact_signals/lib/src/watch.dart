@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:preact_signals_flutter/preact_signals_flutter.dart';
+import 'package:preact_signals/preact_signals.dart';
 
 extension SignalUtils<T> on ReadonlySignal<T> {
   T watch(BuildContext context) {

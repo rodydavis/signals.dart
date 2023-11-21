@@ -1,39 +1,99 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+## Example
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Reacting to signal changes can be done with one extension method: `watch(context)`:
 
 ```dart
-const like = 'sample';
+import 'package:flutter/material.dart';
+import 'package:flutter_preact_signals/flutter_preact_signals.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+final brightness = signal(Brightness.light);
+final counter = signal(0);
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.light,
+        ),
+        brightness: Brightness.light,
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        ),
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
+      themeMode: brightness.watch(context) == Brightness.dark
+          ? ThemeMode.dark
+          : ThemeMode.light,
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  void _incrementCounter() {
+    counter.value++;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              brightness.value = brightness() == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark;
+            },
+            icon: Icon(brightness() == Brightness.dark
+                ? Icons.light_mode
+                : Icons.dark_mode),
+          ),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '${counter.watch(context)}',
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
