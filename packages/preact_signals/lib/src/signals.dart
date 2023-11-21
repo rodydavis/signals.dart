@@ -22,7 +22,7 @@ const TRACKING = 1 << 5;
 // Also used to remember the source's last version number that the target saw.
 class Node {
   // A source whose value the target depends on.
-  Signal _source;
+  ReadonlySignal _source;
   Node? _prevSource;
   Node? _nextSource;
 
@@ -42,7 +42,7 @@ class Node {
   Node? _rollbackNode;
 
   Node({
-    required Signal source,
+    required ReadonlySignal source,
     Node? prevSource,
     Node? nextSource,
     required Listenable target,
@@ -150,7 +150,7 @@ int batchIteration = 0;
 // computed.peek()/computed.value calls when nothing has changed globally.
 int globalVersion = 0;
 
-Node? addDependency(Signal signal) {
+Node? addDependency(ReadonlySignal signal) {
   if (evalContext == null) {
     return null;
   }
@@ -243,22 +243,16 @@ abstract class ReadonlySignal<T> {
   T peek();
 
   EffectCleanup subscribe(void Function(T value) fn);
-}
 
-abstract class MutableSignal<T> extends ReadonlySignal<T> {
-  set value(T value);
-}
+  void _subscribe(Node node);
 
-class Signal<T extends dynamic> extends MutableSignal<T> {
-  final String? debugLabel;
-
-  // @internal
-  T _value;
+  void _unsubscribe(Node node);
 
   /// @internal
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
-  int _version;
+  int get _version;
+  set _version(int value);
 
   // @internal
   Node? _node;
@@ -266,25 +260,50 @@ class Signal<T extends dynamic> extends MutableSignal<T> {
   // @internal
   Node? _targets;
 
-  Signal(this._value, {this.debugLabel}) : _version = 0;
+  bool _refresh();
+}
 
+abstract class MutableSignal<T> implements ReadonlySignal<T> {
+  set value(T value);
+}
+
+class Signal<T> implements MutableSignal<T> {
+  final String? debugLabel;
+
+  Signal(this._value, {this.debugLabel})
+      : _version = 0,
+        brand = identifier;
+
+  // @internal
+  T _value;
+
+  /// @internal
+  /// Version numbers should always be >= 0, because the special value -1 is used
+  /// by Nodes to signify potentially unused but recyclable nodes.
+  @override
+  int _version;
+
+  @override
   bool _refresh() {
     return true;
   }
 
-  void _subscribe(Node node) {
-    if (this._targets != node && node._prevTarget == null) {
-      node._nextTarget = this._targets;
-      if (this._targets != null) {
-        this._targets!._prevTarget = node;
+  static void __subscribe(ReadonlySignal signal, Node node) {
+    if (signal._targets != node && node._prevTarget == null) {
+      node._nextTarget = signal._targets;
+      if (signal._targets != null) {
+        signal._targets!._prevTarget = node;
       }
-      this._targets = node;
+      signal._targets = node;
     }
   }
 
-  void _unsubscribe(Node node) {
+  @override
+  void _subscribe(Node node) => __subscribe(this, node);
+
+  static void __unsubscribe(ReadonlySignal signal, Node node) {
     // Only run the unsubscribe step if the signal has any subscribers to begin with.
-    if (this._targets != null) {
+    if (signal._targets != null) {
       final prev = node._prevTarget;
       final next = node._nextTarget;
       if (prev != null) {
@@ -295,15 +314,24 @@ class Signal<T extends dynamic> extends MutableSignal<T> {
         next._prevTarget = prev;
         node._nextTarget = null;
       }
-      if (node == this._targets) {
-        this._targets = next;
+      if (node == signal._targets) {
+        signal._targets = next;
       }
     }
   }
 
   @override
+  void _unsubscribe(Node node) => __unsubscribe(this, node);
+
+  @override
   EffectCleanup subscribe(void Function(T value) fn) {
-    final signal = this;
+    return __signalSubscribe(this, fn);
+  }
+
+  static EffectCleanup __signalSubscribe<T>(
+    ReadonlySignal<T> signal,
+    void Function(T value) fn,
+  ) {
     return effect(() {
       final effect = currentEffect!;
       final value = signal.value;
@@ -329,7 +357,7 @@ class Signal<T extends dynamic> extends MutableSignal<T> {
   @override
   T peek() => this._value;
 
-  Symbol brand = identifier;
+  final Symbol brand;
 
   @override
   T get value {
@@ -357,7 +385,7 @@ class Signal<T extends dynamic> extends MutableSignal<T> {
 
       startBatch();
       try {
-        for (var node = this._targets; node != null; node = node._nextTarget) {
+        for (var node = _targets; node != null; node = node._nextTarget) {
           node._target._notify();
         }
       } finally {
@@ -365,6 +393,12 @@ class Signal<T extends dynamic> extends MutableSignal<T> {
       }
     }
   }
+
+  @override
+  Node? _node;
+
+  @override
+  Node? _targets;
 }
 
 MutableSignal<T> signal<T>(T value, {String? debugLabel}) {
@@ -478,7 +512,7 @@ void cleanupSources(Listenable target) {
   target._sources = head;
 }
 
-class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
+class Computed<T> implements Listenable, ReadonlySignal<T> {
   ComputedCallback<T> _compute;
 
   final String? debugLabel;
@@ -491,11 +525,17 @@ class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
   @override
   int _flags;
 
+  Object? _error;
+
+  bool _initialized = false;
+  late T _value;
+
   Computed(ComputedCallback<T> compute, {this.debugLabel})
       : _compute = compute,
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
-        super(null);
+        _version = 0,
+        brand = identifier;
 
   @override
   bool _refresh() {
@@ -531,13 +571,17 @@ class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
       prepareSources(this);
       evalContext = this;
       final value = this._compute();
-      if ((this._flags & HAS_ERROR) != 0 || _value != value || _version == 0) {
+      if ((this._flags & HAS_ERROR) != 0 ||
+          !_initialized ||
+          _value != value ||
+          _version == 0) {
         _value = value;
+        if (!_initialized) _initialized = true;
         _flags &= ~HAS_ERROR;
         _version++;
       }
     } catch (err) {
-      _value = err as dynamic; // <- TODO: Weird but ok
+      _error = err;
       _flags |= HAS_ERROR;
       _version++;
     }
@@ -558,14 +602,14 @@ class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
         node._source._subscribe(node);
       }
     }
-    super._subscribe(node);
+    this._subscribe(node);
   }
 
   @override
   void _unsubscribe(Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (_targets != null) {
-      super._unsubscribe(node);
+      this._unsubscribe(node);
 
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
@@ -613,7 +657,7 @@ class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
       node._version = _version;
     }
     if ((_flags & HAS_ERROR) != 0) {
-      throw _value!;
+      throw _error!;
     }
     return _value!;
   }
@@ -626,11 +670,27 @@ class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
 
   @override
   T toJson() => value;
+
+  @override
+  Node? _node;
+
+  @override
+  Node? _targets;
+
+  @override
+  int _version;
+
+  final Symbol brand;
+
+  @override
+  EffectCleanup subscribe(void Function(T value) fn) {
+    return Signal.__signalSubscribe(this, fn);
+  }
 }
 
 typedef ComputedCallback<T> = T Function();
 
-ReadonlySignal computed<T extends Object>(
+ReadonlySignal<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
 }) {

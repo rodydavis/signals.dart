@@ -5,6 +5,7 @@ export 'src/signals.dart'
         signal,
         computed,
         effect,
+        batch,
         untracked,
         Signal,
         MutableSignal,
