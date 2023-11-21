@@ -240,6 +240,7 @@ abstract class ReadonlySignal<T> {
 
   T call();
 
+  /// Returns the current value without subscribing to updates.
   T peek();
 
   EffectCleanup subscribe(void Function(T value) fn);
