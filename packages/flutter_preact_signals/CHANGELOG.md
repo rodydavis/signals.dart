@@ -1,3 +1,4 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+- Adding extensions for `ValueNotifier`, `ValueListenable` and `BuildContext`
+- Adding example

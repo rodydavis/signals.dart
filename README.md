@@ -1,6 +1,6 @@
-# Dart Signals
+# Preact Signals (Dart)
 
-Based on the [following article](http://webcache.googleusercontent.com/search?q=cache:https://medium.com/gft-engineering/implementing-signals-in-javascript-step-by-step-9d0be46fb014&sca_esv=583538769&strip=1&vwsrc=0) and then updated based on [preact signal boosting](https://preactjs.com/blog/signal-boosting).
+Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
 
 ## Guide / API
 
@@ -185,6 +185,86 @@ batch(() {
 });
 // Now the callback completed and we'll trigger the effect.
 ```
+
+## Extensions
+
+### `Future`
+
+Futures can be converted to signals by either a method `futureToSignal` or as an extension method on a `Future`:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final future = Future(() => 1);
+final signal = future.toSignal(); // or futureToSignal(future)
+```
+
+> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
+
+### `Stream`
+
+Futures can be converted to signals by either a method `futureToSignal` or as an extension method on a `Future`:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+void createStream() async* {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+final stream = createStream();
+final signal = stream.toSignal(); // or streamToSignal(stream)
+```
+
+> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
+
+### `ValueListenable`
+
+To create a `ReadonlySignal` from `ValueListenable`:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+import 'package:flutter/material.dart';
+
+final ValueListenable listenable = ValueNotifier(10);
+final signal = listenable.toSignal(); // or valueListenableToSignal(listenable)
+```
+
+### `ValueNotifier`
+
+To create a `MutableSignal` from `ValueNotifier`:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+import 'package:flutter/material.dart';
+
+final notifier = ValueNotifier(10);
+final signal = notifier.toSignal(); // or valueNotifierToSignal(notifier)
+```
+
+
+### `BuildContext` and Widgets
+
+`StatefulWidget` and `StatelessWidget` widgets can both react to changes on a signal by adding a `watch`` command:
+
+```dart
+Text(
+  '${counter.watch(context)}',
+  style: Theme.of(context).textTheme.headlineMedium!,
+)
+```
+
+or with `watchSignal`:
+
+```dart
+Text(
+  '${watchSignal(context, counter)}',
+  style: Theme.of(context).textTheme.headlineMedium!,
+)
+```
+
+This will mark the widget as dirty and rebuild on next frame. This will all be optimized for batched effects and multiple signals being updated at the same time.
 
 ## Examples
 

@@ -1,6 +1,6 @@
-# Dart Signals
+# Preact Signals (Dart)
 
-Based on the [following article](http://webcache.googleusercontent.com/search?q=cache:https://medium.com/gft-engineering/implementing-signals-in-javascript-step-by-step-9d0be46fb014&sca_esv=583538769&strip=1&vwsrc=0) and then updated based on [preact signal boosting](https://preactjs.com/blog/signal-boosting).
+Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
 
 ## Guide / API
 
@@ -184,4 +184,72 @@ batch(() {
 	// Still not updated...
 });
 // Now the callback completed and we'll trigger the effect.
+```
+
+## Extensions
+
+### `Future`
+
+Futures can be converted to signals by either a method `futureToSignal` or as an extension method on a `Future`:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final future = Future(() => 1);
+final signal = future.toSignal(); // or futureToSignal(future)
+```
+
+> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
+
+### `Stream`
+
+Futures can be converted to signals by either a method `futureToSignal` or as an extension method on a `Future`:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+void createStream() async* {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+final stream = createStream();
+final signal = stream.toSignal(); // or streamToSignal(stream)
+```
+
+> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
+
+## Example
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+// Create signals
+final count = signal(0);
+final multiplier = signal(2);
+
+// Creating a computed value
+final multipliedCount = computed(() {
+    return count.value * multiplier.value;
+});
+
+effect(() {
+    print('Effect called: Count is ${count.value} and multiplier is ${multiplier.value}');
+});
+
+expect(multipliedCount.value, 0);
+
+count.value = 1;
+expect(multipliedCount.value, 2);
+
+multiplier.value = 3;
+expect(multipliedCount.value, 3);
+```
+
+This should print:
+
+```
+Effect called: Count is 0 and multiplier is 2
+Effect called: Count is 1 and multiplier is 2
+Effect called: Count is 1 and multiplier is 3
 ```
