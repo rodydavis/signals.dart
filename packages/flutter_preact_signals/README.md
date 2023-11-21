@@ -60,16 +60,15 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
         actions: [
-          IconButton(
-            onPressed: () {
-              brightness.value = brightness() == Brightness.dark
-                  ? Brightness.light
-                  : Brightness.dark;
-            },
-            icon: Icon(brightness() == Brightness.dark
-                ? Icons.light_mode
-                : Icons.dark_mode),
-          ),
+          Builder(builder: (context) {
+            final isDark = brightness.watch(context) == Brightness.dark;
+            return IconButton(
+              onPressed: () {
+                brightness.value = isDark ? Brightness.light : Brightness.dark;
+              },
+              icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+            );
+          }),
         ],
       ),
       body: Center(
@@ -81,7 +80,7 @@ class MyHomePage extends StatelessWidget {
             ),
             Text(
               '${counter.watch(context)}',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium!,
             ),
           ],
         ),
