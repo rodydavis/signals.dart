@@ -15,11 +15,6 @@ void main() {
       return count.value * multiplier.value;
     });
 
-    effect(() {
-      print(
-          'Effect called: Count is ${count.value} and multiplier is ${multiplier.value}');
-    });
-
     expect(multipliedCount.value, 0);
 
     count.value = 1;

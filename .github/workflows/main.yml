@@ -15,12 +15,12 @@ jobs:
 
       - run: dart pub get
       - run: dart test
-      - run: cd packages/dart_preact_signals/example && dart pub get
+      - run: cd packages/preact_signals/example && dart pub get
       - run: dart pub global activate webdev
-      - run: cd packages/dart_preact_signals/example && webdev build
+      - run: cd packages/preact_signals/example && webdev build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./packages/dart_preact_signals/example/build
+            publish_dir: ./packages/preact_signals/example/build

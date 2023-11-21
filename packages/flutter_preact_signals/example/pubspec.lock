@@ -125,7 +125,7 @@ packages:
   preact_signals:
     dependency: "direct overridden"
     description:
-      path: "../../dart_preact_signals"
+      path: "../../preact_signals"
       relative: true
     source: path
     version: "0.0.1"

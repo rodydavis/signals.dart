@@ -9,3 +9,5 @@ export 'src/signals.dart'
         Signal,
         MutableSignal,
         ReadonlySignal;
+export 'src/extensions.dart';
+export 'src/signal_state.dart';

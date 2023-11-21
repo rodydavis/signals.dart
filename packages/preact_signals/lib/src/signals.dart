@@ -630,11 +630,11 @@ class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
 
 typedef ComputedCallback<T> = T Function();
 
-ReadonlySignal<T> computed<T extends Object>(
+ReadonlySignal computed<T extends Object>(
   ComputedCallback<T> compute, {
   String? debugLabel,
 }) {
-  return Computed<T>(compute, debugLabel: debugLabel) as ReadonlySignal<T>;
+  return Computed<T>(compute, debugLabel: debugLabel);
 }
 
 void cleanupEffect(Effect effect) {

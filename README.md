@@ -35,7 +35,7 @@ Effect called: Count is 1 and multiplier is 2
 Effect called: Count is 1 and multiplier is 3
 ```
 
-See [dart_preact_signals/example](packages/dart_preact_signals/example/web/main.dart) for a full example.
+See [preact_signals/example](packages/preact_signals/example/web/main.dart) for a full example.
 
 ## Flutter Example
 
