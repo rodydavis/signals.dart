@@ -420,7 +420,9 @@ bool needsToRecompute(Listenable target) {
     // If there's a new version of the dependency before or after refreshing,
     // or the dependency has something blocking it from refreshing at all (e.g. a
     // dependency cycle), then we need to recompute.
-    if (node._source._version != node._version || !node._source._refresh() || node._source._version != node._version) {
+    if (node._source._version != node._version ||
+        !node._source._refresh() ||
+        node._source._version != node._version) {
       return true;
     }
   }
@@ -570,7 +572,10 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
       prepareSources(this);
       evalContext = this;
       final value = this._compute();
-      if ((this._flags & HAS_ERROR) != 0 || !_initialized || _value != value || _version == 0) {
+      if ((this._flags & HAS_ERROR) != 0 ||
+          !_initialized ||
+          _value != value ||
+          _version == 0) {
         _value = value;
         if (!_initialized) _initialized = true;
         _flags &= ~HAS_ERROR;
