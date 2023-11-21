@@ -2,7 +2,6 @@
 
 Based on the [following article](http://webcache.googleusercontent.com/search?q=cache:https://medium.com/gft-engineering/implementing-signals-in-javascript-step-by-step-9d0be46fb014&sca_esv=583538769&strip=1&vwsrc=0) and then updated based on [preact signal boosting](https://preactjs.com/blog/signal-boosting).
 
-
 ## Guide / API
 
 The signals library exposes four functions which are the building blocks to model any business logic you can think of.
