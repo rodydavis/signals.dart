@@ -1,0 +1,15 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+
+      - run: cd packages/preact_signals && dart pub get
+      - run: cd packages/preact_signals && dart test
