@@ -23,8 +23,20 @@ ReadonlySignal<T> valueListenableToSignal<T>(ValueListenable<T> notifier) {
   return s;
 }
 
-MutableSignal<T> valueNotifierToSignal<T>(ValueListenable<T> notifier) {
+MutableSignal<T> valueNotifierToSignal<T>(ValueNotifier<T> notifier) {
   final s = signal<T>(notifier.value);
-  notifier.addListener(() => s.value = notifier.value);
+  var local = false;
+  notifier.addListener(() {
+    if (local) {
+      local = false;
+      return;
+    }
+    s.value = notifier.value;
+  });
+  effect(() {
+    final val = s.value;
+    local = true;
+    notifier.value = val;
+  });
   return s;
 }
