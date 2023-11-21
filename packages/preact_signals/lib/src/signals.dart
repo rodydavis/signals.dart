@@ -827,5 +827,5 @@ EffectCleanup effect(EffectCallback compute, {String? debugLabel}) {
   }
   // Return a bound function instead of a wrapper like `() => effect._dispose()`,
   // because bound functions seem to be just as fast and take up a lot less memory.
-  return () => effect._dispose();
+  return effect._dispose;
 }
