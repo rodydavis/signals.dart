@@ -219,7 +219,7 @@ final stream = createStream();
 final signal = stream.toSignal(); // or streamToSignal(stream)
 ```
 
-> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
+> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors, and `SignalLoading`.
 
 ## Example
 
