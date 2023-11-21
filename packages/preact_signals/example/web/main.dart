@@ -1,6 +1,4 @@
 import 'dart:html';
-import 'dart:js_interop';
-
 import 'package:preact_signals/preact_signals.dart';
 
 typedef Task = ({String title, bool completed});
@@ -37,7 +35,10 @@ void main() {
   });
 
   final completedTaskCount = computed(() {
-    return taskCount.value - activeTaskCount.value;
+    // we use taskCount.peek() instead of taskCount.value
+    // because this will recompute when activeTaskCount changes
+    // thus, we can avoid an unnecessary subscription
+    return taskCount.peek() - activeTaskCount.value;
   });
 
   todoForm.addEventListener("submit", (event) {
