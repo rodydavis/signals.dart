@@ -224,7 +224,7 @@ final signal = stream.toSignal(); // or streamToSignal(stream)
 To create a `ReadonlySignal` from `ValueListenable`:
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:flutter_preact_signals/flutter_preact_signals.dart';
 import 'package:flutter/material.dart';
 
 final ValueListenable listenable = ValueNotifier(10);
@@ -236,7 +236,7 @@ final signal = listenable.toSignal(); // or valueListenableToSignal(listenable)
 To create a `MutableSignal` from `ValueNotifier`:
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:flutter_preact_signals/flutter_preact_signals.dart';
 import 'package:flutter/material.dart';
 
 final notifier = ValueNotifier(10);
@@ -249,6 +249,8 @@ final signal = notifier.toSignal(); // or valueNotifierToSignal(notifier)
 `StatefulWidget` and `StatelessWidget` widgets can both react to changes on a signal by adding a `watch`` command:
 
 ```dart
+import 'package:flutter_preact_signals/flutter_preact_signals.dart';
+
 Text(
   '${counter.watch(context)}',
   style: Theme.of(context).textTheme.headlineMedium!,
@@ -258,6 +260,8 @@ Text(
 or with `watchSignal`:
 
 ```dart
+import 'package:flutter_preact_signals/flutter_preact_signals.dart';
+
 Text(
   '${watchSignal(context, counter)}',
   style: Theme.of(context).textTheme.headlineMedium!,
