@@ -1,9 +1,11 @@
-[![preact_signals](https://img.shields.io/pub/v/preact_signals.svg)](https://pub.dev/packages/preact_signals)
-[![flutter_preact_signals](https://img.shields.io/pub/v/flutter_preact_signals.svg)](https://pub.dev/packages/flutter_preact_signals)
-
 # Preact Signals (Dart)
 
 Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
+
+| Package                  | Pub                                                                                                                                   |
+|--------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| `preact_signals`         | [![preact_signals](https://img.shields.io/pub/v/preact_signals.svg)](https://pub.dev/packages/preact_signals)                         |
+| `flutter_preact_signals` | [![flutter_preact_signals](https://img.shields.io/pub/v/flutter_preact_signals.svg)](https://pub.dev/packages/flutter_preact_signals) |
 
 ## Guide / API
 
