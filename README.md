@@ -6,15 +6,15 @@ Based on the [following article](http://webcache.googleusercontent.com/search?q=
 
 ```dart
 // Create signals
-final count = createSignal(0);
-final multiplier = createSignal(2);
+final count = signal(0);
+final multiplier = signal(2);
 
 // Creating a computed value
-final multipliedCount = createComputed(() {
+final multipliedCount = computed(() {
     return count.value * multiplier.value;
 });
 
-createEffect(() {
+effect(() {
     print('Effect called: Count is ${count.value} and multiplier is ${multiplier.value}');
 });
 
