@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields, constant_identifier_names
+
 void cycleDetected() {
   throw Exception('Cycle detected');
 }
@@ -46,7 +48,7 @@ class Node {
     required Listenable target,
     Node? prevTarget,
     Node? nextTarget,
-    int version = 0,
+    required int version,
     Node? rollbackNode,
   })  : _source = source,
         _prevSource = prevSource,
@@ -72,7 +74,7 @@ void endBatch() {
   bool hasError = false;
 
   while (batchedEffect != null) {
-    Effect? effect = batchedEffect!;
+    Effect? effect = batchedEffect;
     batchedEffect = null;
 
     batchIteration++;
@@ -82,7 +84,7 @@ void endBatch() {
       effect._nextBatchedEffect = null;
       effect._flags &= ~NOTIFIED;
 
-      if (!(effect._flags & DISPOSED != 0)) {
+      if (!((effect._flags & DISPOSED) != 0) && needsToRecompute(effect)) {
         try {
           effect._callback();
         } catch (err) {
@@ -117,6 +119,7 @@ T batch<T>(BatchCallback<T> callback) {
   }
 }
 
+// Currently evaluated computed or effect.
 Listenable? evalContext;
 
 int untrackedDepth = 0;
@@ -177,7 +180,7 @@ Node? addDependency(Signal signal) {
       rollbackNode: node,
     );
 
-    if (evalContext?._sources != null) {
+    if (evalContext!._sources != null) {
       evalContext!._sources!._nextSource = node;
     }
     evalContext!._sources = node;
@@ -185,7 +188,7 @@ Node? addDependency(Signal signal) {
 
     // Subscribe to change notifications from this dependency if we're in an effect
     // OR evaluating a computed signal that in turn has subscribers.
-    if (evalContext!._flags & TRACKING != 0) {
+    if ((evalContext!._flags & TRACKING) != 0) {
       signal._subscribe(node);
     }
     return node;
@@ -229,20 +232,33 @@ Node? addDependency(Signal signal) {
 
 abstract class ReadonlySignal<T> {
   T get value;
+
+  @override
+  String toString();
+
+  T toJson();
+
+  T call();
+
+  T peek();
+
+  EffectCleanup subscribe(void Function(T value) fn);
 }
 
 abstract class MutableSignal<T> extends ReadonlySignal<T> {
   set value(T value);
 }
 
-class Signal<T> extends MutableSignal<T> {
+class Signal<T extends dynamic> extends MutableSignal<T> {
+  final String? debugLabel;
+
   // @internal
   T _value;
 
   /// @internal
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
-  int _version = 0;
+  int _version;
 
   // @internal
   Node? _node;
@@ -250,14 +266,14 @@ class Signal<T> extends MutableSignal<T> {
   // @internal
   Node? _targets;
 
-  Signal(this._value);
+  Signal(this._value, {this.debugLabel}) : _version = 0;
 
   bool _refresh() {
     return true;
   }
 
   void _subscribe(Node node) {
-    if (this._targets != node && node._prevTarget != null) {
+    if (this._targets != node && node._prevTarget == null) {
       node._nextTarget = this._targets;
       if (this._targets != null) {
         this._targets!._prevTarget = node;
@@ -272,11 +288,11 @@ class Signal<T> extends MutableSignal<T> {
       final prev = node._prevTarget;
       final next = node._nextTarget;
       if (prev != null) {
-        node._nextTarget = next;
+        prev._nextTarget = next;
         node._prevTarget = null;
       }
       if (next != null) {
-        node._prevTarget = prev;
+        next._prevTarget = prev;
         node._nextTarget = null;
       }
       if (node == this._targets) {
@@ -285,6 +301,7 @@ class Signal<T> extends MutableSignal<T> {
     }
   }
 
+  @override
   EffectCleanup subscribe(void Function(T value) fn) {
     final signal = this;
     return effect(() {
@@ -297,17 +314,19 @@ class Signal<T> extends MutableSignal<T> {
       } finally {
         effect._flags |= flag;
       }
-      return null;
     });
   }
 
+  @override
   T call() => this.value;
 
   @override
   String toString() => '$value';
 
+  @override
   T toJson() => value;
 
+  @override
   T peek() => this._value;
 
   Symbol brand = identifier;
@@ -322,17 +341,17 @@ class Signal<T> extends MutableSignal<T> {
   }
 
   @override
-  set value(T value) {
+  set value(T val) {
     if (evalContext is Computed) {
       mutationDetected();
     }
 
-    if (value != this._value) {
+    if (val != this._value) {
       if (batchIteration > 100) {
         cycleDetected();
       }
 
-      this._value = value;
+      this._value = val;
       this._version++;
       globalVersion++;
 
@@ -348,13 +367,13 @@ class Signal<T> extends MutableSignal<T> {
   }
 }
 
-Signal<T> signal<T>(T value) {
-  return Signal<T>(value);
+MutableSignal<T> signal<T>(T value, {String? debugLabel}) {
+  return Signal<T>(value, debugLabel: debugLabel);
 }
 
 abstract class Listenable {
-  late Node? _sources;
-  late int _flags;
+  Node? _sources;
+  int get _flags;
   void _notify();
 }
 
@@ -459,20 +478,30 @@ void cleanupSources(Listenable target) {
   target._sources = head;
 }
 
-class Computed<T extends Object> extends Signal<T> implements Listenable {
+class Computed<T extends Object> extends Signal<dynamic> implements Listenable {
   ComputedCallback<T> _compute;
+
+  final String? debugLabel;
+
+  @override
   Node? _sources;
-  int _globalVersion = globalVersion - 1;
-  int _flags = OUTDATED;
 
-  Computed(ComputedCallback<T> compute)
+  int _globalVersion;
+
+  @override
+  int _flags;
+
+  Computed(ComputedCallback<T> compute, {this.debugLabel})
       : _compute = compute,
-        super(compute());
+        _globalVersion = globalVersion - 1,
+        _flags = OUTDATED,
+        super(null);
 
+  @override
   bool _refresh() {
     this._flags &= ~NOTIFIED;
 
-    if (this._flags & RUNNING != 0) {
+    if ((this._flags & RUNNING) != 0) {
       return false;
     }
 
@@ -502,13 +531,13 @@ class Computed<T extends Object> extends Signal<T> implements Listenable {
       prepareSources(this);
       evalContext = this;
       final value = this._compute();
-      if (this._flags & HAS_ERROR != 0 || _value != value || _version == 0) {
+      if ((this._flags & HAS_ERROR) != 0 || _value != value || _version == 0) {
         _value = value;
         _flags &= ~HAS_ERROR;
         _version++;
       }
     } catch (err) {
-      _value = err as dynamic; // <- Weird but ok
+      _value = err as dynamic; // <- TODO: Weird but ok
       _flags |= HAS_ERROR;
       _version++;
     }
@@ -544,14 +573,15 @@ class Computed<T extends Object> extends Signal<T> implements Listenable {
         _flags &= ~TRACKING;
 
         for (var node = _sources; node != null; node = node._nextSource) {
-          node._source._subscribe(node);
+          node._source._unsubscribe(node);
         }
       }
     }
   }
 
+  @override
   void _notify() {
-    if (!(_flags & NOTIFIED != 0)) {
+    if (!((_flags & NOTIFIED) != 0)) {
       _flags |= OUTDATED | NOTIFIED;
 
       for (var node = _targets; node != null; node = node._nextTarget) {
@@ -565,15 +595,15 @@ class Computed<T extends Object> extends Signal<T> implements Listenable {
     if (!_refresh()) {
       cycleDetected();
     }
-    if (_flags & HAS_ERROR != 0) {
-      throw _value;
+    if ((_flags & HAS_ERROR) != 0) {
+      throw _value!;
     }
-    return _value;
+    return _value!;
   }
 
   @override
   T get value {
-    if (_flags & RUNNING != 0) {
+    if ((_flags & RUNNING) != 0) {
       cycleDetected();
     }
 
@@ -582,17 +612,28 @@ class Computed<T extends Object> extends Signal<T> implements Listenable {
     if (node != null) {
       node._version = _version;
     }
-    if (_flags & HAS_ERROR != 0) {
-      throw _value;
+    if ((_flags & HAS_ERROR) != 0) {
+      throw _value!;
     }
-    return _value;
+    return _value!;
   }
+
+  @override
+  T call() => this.value;
+
+  @override
+  String toString() => '$value';
+
+  @override
+  T toJson() => value;
 }
 
 typedef ComputedCallback<T> = T Function();
 
-ReadonlySignal<T> computed<T extends Object>(ComputedCallback<T> compute) {
-  return Computed<T>(compute);
+// TODO: Should be read only signal [ReadonlySignal<dynamic>]
+Computed<T> computed<T extends Object>(ComputedCallback<T> compute,
+    {String? debugLabel}) {
+  return Computed<T>(compute, debugLabel: debugLabel);
 }
 
 void cleanupEffect(Effect effect) {
@@ -637,7 +678,7 @@ void endEffect(Effect effect, Listenable? prevContext) {
   evalContext = prevContext;
 
   effect._flags &= ~RUNNING;
-  if (effect._flags & DISPOSED != 0) {
+  if ((effect._flags & DISPOSED) != 0) {
     disposeEffect(effect);
   }
   endBatch();
@@ -650,28 +691,33 @@ Effect? currentEffect;
 
 class Effect implements Listenable {
   EffectCallback? _compute;
+  String? debugLabel;
+
   Function? _cleanup;
+
+  @override
   Node? _sources;
+
   Effect? _nextBatchedEffect;
+
+  @override
   int _flags;
 
-  Effect(EffectCallback compute) : _flags = TRACKING {
-    _compute = compute;
-    _cleanup = null;
-  }
+  Effect(EffectCallback compute, {this.debugLabel})
+      : _flags = TRACKING,
+        _compute = compute,
+        _cleanup = null;
 
   void _callback() {
     final finish = _start();
     try {
-      if (_flags & DISPOSED != 0) return;
+      if ((_flags & DISPOSED) != 0) return;
       if (_compute == null) return;
       currentEffect = this;
       final cleanup = _compute!();
       currentEffect = null;
-      if (cleanup != null) {
-        if (cleanup is Function) {
-          _cleanup = cleanup;
-        }
+      if (cleanup is Function) {
+        _cleanup = cleanup;
       }
     } finally {
       finish();
@@ -679,41 +725,39 @@ class Effect implements Listenable {
   }
 
   EffectCleanup _start() {
-    if (_flags & RUNNING != 0) {
+    if ((_flags & RUNNING) != 0) {
       cycleDetected();
     }
     _flags |= RUNNING;
     _flags &= ~DISPOSED;
     cleanupEffect(this);
     prepareSources(this);
+
     startBatch();
     final prevContext = evalContext;
     evalContext = this;
-    return () {
-      endEffect(this, prevContext);
-    };
+    return () => endEffect(this, prevContext);
   }
 
   @override
   void _notify() {
-    if (!(_flags & NOTIFIED != 0)) {
+    if (!((_flags & NOTIFIED) != 0)) {
       _flags |= NOTIFIED;
-      batchedEffect = _nextBatchedEffect;
-      _nextBatchedEffect = null;
+      _nextBatchedEffect = batchedEffect;
       batchedEffect = this;
     }
   }
 
   void _dispose() {
     _flags |= DISPOSED;
-    if (!(_flags & RUNNING != 0)) {
+    if (!((_flags & RUNNING) != 0)) {
       disposeEffect(this);
     }
   }
 }
 
-EffectCleanup effect(EffectCallback compute) {
-  final effect = Effect(compute);
+EffectCleanup effect(EffectCallback compute, {String? debugLabel}) {
+  final effect = Effect(compute, debugLabel: debugLabel);
   try {
     effect._callback();
   } catch (e) {
@@ -722,5 +766,5 @@ EffectCleanup effect(EffectCallback compute) {
   }
   // Return a bound function instead of a wrapper like `() => effect._dispose()`,
   // because bound functions seem to be just as fast and take up a lot less memory.
-  return effect._dispose;
+  return () => effect._dispose();
 }

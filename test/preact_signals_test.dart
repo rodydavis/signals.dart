@@ -1,34 +1,33 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:preact_signals/src/signals.dart';
 import 'package:test/test.dart';
 
-import 'package:preact_signals/preact_signals.dart';
-
 void main() {
-  // test('init', () {
-  //   // Create signals
-  //   final count = signal(0);
-  //   final multiplier = signal(2);
+  test('init', () {
+    // Create signals
+    final count = signal(0);
+    final multiplier = signal(2);
 
-  //   // Creating a computed value
-  //   final multipliedCount = computed(() {
-  //     return count.value * multiplier.value;
-  //   });
+    // Creating a computed value
+    final multipliedCount = computed(() {
+      return count.value * multiplier.value;
+    });
 
-  //   effect((_) {
-  //     print(
-  //         'Effect called: Count is ${count.value} and multiplier is ${multiplier.value}');
-  //   });
+    effect(() {
+      print(
+          'Effect called: Count is ${count.value} and multiplier is ${multiplier.value}');
+    });
 
-  //   expect(multipliedCount.value, 0);
+    expect(multipliedCount.value, 0);
 
-  //   count.value = 1;
-  //   expect(multipliedCount.value, 2);
+    count.value = 1;
+    expect(multipliedCount.value, 2);
 
-  //   multiplier.value = 3;
-  //   expect(multipliedCount.value, 3);
-  // });
+    multiplier.value = 3;
+    expect(multipliedCount.value, 3);
+  });
 
   group('signal', () {
     test('should return value', () {
@@ -71,40 +70,102 @@ void main() {
         () {
       final s = signal(123);
 
-      int spy1Count = 0;
-      int spy1() {
-        spy1Count++;
+      int effectCount1 = 0;
+      int effectCount2 = 0;
+      int effectCount3 = 0;
+
+      effect(() {
+        effectCount1++;
         return s.value;
-      }
-
-      int spy2Count = 0;
-      int spy2() {
-        spy2Count++;
+      });
+      final dispose = effect(() {
+        effectCount2++;
         return s.value;
-      }
-
-      int spy3Count = 0;
-      int spy3() {
-        spy3Count++;
+      });
+      effect(() {
+        effectCount3++;
         return s.value;
-      }
+      });
 
-      effect(spy1);
-
-      final dispose = effect(spy2);
-
-      effect(spy3);
-
-      expect(spy1Count, 1);
-      expect(spy2Count, 1);
-      expect(spy3Count, 1);
+      expect(effectCount1, 1);
+      expect(effectCount2, 1);
+      expect(effectCount3, 1);
 
       dispose();
 
       s.value = 1;
-      expect(spy1Count, 2);
-      expect(spy2Count, 1);
-      expect(spy3Count, 2);
+      expect(effectCount1, 2);
+      expect(effectCount2, 1);
+      expect(effectCount3, 2);
+    });
+
+    group('.peek', () {
+      test('should get value', () {
+        final s = signal(1);
+        expect(s.peek(), 1);
+      });
+
+      test('should get the updated value after a value change', () {
+        final s = signal(1);
+        s.value = 2;
+        expect(s.peek(), 2);
+      });
+
+      test('should not make surrounding effect depend on the signal', () {
+        final s = signal(1);
+        int effectCount = 0;
+
+        effect(() {
+          effectCount++;
+          s.peek();
+        });
+        expect(effectCount, 1);
+
+        s.value = 2;
+        expect(effectCount, 1);
+      });
+
+      test('should not make surrounding computed depend on the signal', () {
+        final s = signal(1);
+        int effectCount = 0;
+        final d = computed(() {
+          effectCount++;
+          return s.peek();
+        });
+
+        d.value;
+        expect(effectCount, 1);
+
+        s.value = 2;
+        d.value;
+
+        expect(effectCount, 1);
+      });
+    });
+
+    group('.subscribe', () {
+      test('should subscribe to a signal', () async {
+        final a = signal(1);
+        final completer = Completer<int>();
+
+        a.subscribe(completer.complete);
+
+        final result = await completer.future;
+
+        expect(result, 1);
+      });
+
+      test('should unsubscribe to a signal', () async {
+        final a = signal(1);
+        final completer = Completer<int>();
+
+        final dispose = a.subscribe(completer.complete);
+        dispose();
+
+        final result = await completer.future;
+
+        expect(result, 1);
+      });
     });
   });
 }
