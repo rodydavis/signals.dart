@@ -13,10 +13,10 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
 
-      - run: dart pub get
-      - run: dart test
+      - run: cd packages/preact_signals && dart pub get
+      - run: cd packages/preact_signals && dart test
       - run: cd packages/preact_signals/example && dart pub get
-      - run: dart pub global activate webdev
+      - run: cd packages/preact_signals/example && dart pub global activate webdev
       - run: cd packages/preact_signals/example && webdev build
 
       - name: Deploy
