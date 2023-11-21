@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:js_interop';
 
 import 'package:preact_signals/preact_signals.dart';
 
@@ -36,7 +37,7 @@ void main() {
   });
 
   final completedTaskCount = computed(() {
-    return tasks.value.where((task) => task.completed).length;
+    return taskCount.value - activeTaskCount.value;
   });
 
   todoForm.addEventListener("submit", (event) {
