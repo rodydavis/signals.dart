@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Fixing memory lead on `watchSignal`
+
 ## 0.1.0
 
 - Rename `valueListenableToSignal` to `signalFromValueListenable`

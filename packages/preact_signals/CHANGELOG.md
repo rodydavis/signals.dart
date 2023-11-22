@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Updating inline code documentation
+
 ## 0.1.0
 
 - Rename `futureToSignal` to `signalFromFuture`
