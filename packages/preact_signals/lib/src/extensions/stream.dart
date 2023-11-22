@@ -11,11 +11,24 @@ import 'package:preact_signals/preact_signals.dart';
 /// If success then the result will be [SignalValue]
 ReadonlySignal<SignalState> signalFromStream<T>(Stream<T> stream) {
   final s = signal<SignalState>(SignalLoading());
-  stream.listen((event) {
-    s.value = SignalValue(event);
-  }).onError((err) {
-    s.value = SignalError(err);
+  bool started = false;
+
+  Stream<SignalState> execute() async* {
+    var s = stream.map<SignalState>((val) {
+      return SignalValue(val);
+    }).handleError((err) {
+      return SignalError(err);
+    });
+    yield* s;
+  }
+
+  s.subscribe((value) {
+    if (!started) {
+      started = true;
+      execute().listen((value) => s.value = value);
+    }
   });
+
   return s;
 }
 

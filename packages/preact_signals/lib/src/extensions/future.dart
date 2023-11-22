@@ -18,16 +18,29 @@ ReadonlySignal<SignalState> signalFromFuture<T>(
   Duration? timeout,
 }) {
   final s = signal<SignalState>(SignalLoading());
-  var f = future.then((val) {
-    s.value = SignalValue(val);
-  }).catchError((err) {
-    s.value = SignalError(err);
-  });
-  if (timeout != null) {
-    f = f.timeout(timeout, onTimeout: () {
-      s.value = SignalTimeout();
+  bool started = false;
+
+  Future<SignalState> execute() async {
+    var f = future.then<SignalState>((val) {
+      return SignalValue(val);
+    }).catchError((err) {
+      return SignalError(err);
     });
+    if (timeout != null) {
+      f = f.timeout(timeout, onTimeout: () {
+        return SignalTimeout();
+      });
+    }
+    return await f;
   }
+
+  s.subscribe((value) {
+    if (!started) {
+      started = true;
+      execute().then((value) => s.value = value);
+    }
+  });
+
   return s;
 }
 
