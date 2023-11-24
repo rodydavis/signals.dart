@@ -7,7 +7,7 @@ void main() {
   group('Stream', () {
     test('signalFromStream', () async {
       final stream = _stream();
-      final signal = signalFromStream(stream);
+      final signal = stream.toSignal();
       expect(signal() is SignalLoading, true);
 
       final completer = Completer();

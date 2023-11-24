@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:preact_signals/preact_signals.dart';
-import 'package:preact_signals/src/future_signal.dart';
 import 'package:test/test.dart';
 
 void main() {

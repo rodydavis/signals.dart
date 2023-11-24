@@ -1,3 +1,8 @@
+## 0.2.0
+
+- Adding [FutureSignal] and removing [signalFromFuture]
+- Adding [StreamSignal] and removing [signalFromStream]
+
 ## 0.1.1
 
 - Updating inline code documentation
