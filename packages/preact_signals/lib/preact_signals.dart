@@ -12,3 +12,4 @@ export 'src/signals.dart'
         ReadonlySignal;
 export 'src/extensions.dart';
 export 'src/signal_state.dart';
+export 'src/future_signal.dart';
