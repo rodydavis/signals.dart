@@ -7,7 +7,7 @@ void main() {
   group('Future', () {
     test('signalFromFuture', () async {
       final future = _future();
-      final signal = signalFromFuture(future);
+      final signal = FutureSignal(() => future);
       expect(signal() is SignalLoading, true);
 
       final completer = Completer<int>();
