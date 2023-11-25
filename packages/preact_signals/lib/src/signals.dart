@@ -487,22 +487,30 @@ class Signal<T> implements MutableSignal<T> {
     }
 
     if (val != this._value) {
-      if (batchIteration > 100) {
-        cycleDetected();
-      }
+      _updateValue(val);
+    }
+  }
 
-      this._value = val;
-      this._version++;
-      globalVersion++;
+  void forceUpdate(T val) {
+    _updateValue(val);
+  }
 
-      startBatch();
-      try {
-        for (var node = _targets; node != null; node = node._nextTarget) {
-          node._target._notify();
-        }
-      } finally {
-        endBatch();
+  void _updateValue(T val) {
+    if (batchIteration > 100) {
+      cycleDetected();
+    }
+
+    this._value = val;
+    this._version++;
+    globalVersion++;
+
+    startBatch();
+    try {
+      for (var node = _targets; node != null; node = node._nextTarget) {
+        node._target._notify();
       }
+    } finally {
+      endBatch();
     }
   }
 
