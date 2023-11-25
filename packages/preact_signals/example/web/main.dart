@@ -16,9 +16,9 @@ void main() {
 
   final filteredTasks = computed(() {
     final currentFilter = filter.value;
-    final currentTasks = tasks.value;
+    final currentTasks = tasks;
     if (currentFilter == "all") {
-      return currentTasks;
+      return currentTasks.toList();
     } else if (currentFilter == "active") {
       return currentTasks.where((task) => !task.completed).toList();
     } else {
