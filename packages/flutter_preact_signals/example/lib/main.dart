@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_preact_signals/flutter_preact_signals.dart';
 
 void main() {
+  // initPreactSignalsDevTools();
   runApp(const MyApp());
 }
 

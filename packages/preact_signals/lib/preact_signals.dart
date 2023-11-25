@@ -9,7 +9,8 @@ export 'src/signals.dart'
         untracked,
         Signal,
         MutableSignal,
-        ReadonlySignal;
+        ReadonlySignal,
+        initPreactSignalsDevTools;
 export 'src/extensions/stream.dart';
 export 'src/extensions/future.dart';
 export 'src/signal_state.dart';

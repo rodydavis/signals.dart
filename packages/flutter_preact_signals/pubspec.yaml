@@ -1,16 +1,16 @@
 name: flutter_preact_signals
 description: Preact signals in flutter with widget helpers
-version: 0.1.1
+version: 0.2.0
 repository: https://github.com/rodydavis/preact_signals.dart
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  preact_signals: ^0.1.0
+  preact_signals: ^0.2.1
 
 dev_dependencies:
   flutter_test:

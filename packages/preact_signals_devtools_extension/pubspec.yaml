@@ -8,14 +8,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
-  devtools_extensions: ^0.0.9
+  devtools_extensions: ^0.0.10
+  devtools_app_shared: ^0.0.6
+  preact_signals: ^0.1.1
+  flutter_preact_signals: ^0.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^2.0.0
 
 flutter:
