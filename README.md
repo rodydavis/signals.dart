@@ -254,7 +254,7 @@ final signal = notifier.toSignal(); // or signalFromValueNotifier(notifier)
 
 ### `BuildContext` and Widgets
 
-`StatefulWidget` and `StatelessWidget` widgets can both react to changes on a signal by adding a `watch`` command:
+`StatefulWidget` and `StatelessWidget` widgets can both react to changes on a signal by adding a `watch` command:
 
 ```dart
 import 'package:flutter_preact_signals/flutter_preact_signals.dart';
