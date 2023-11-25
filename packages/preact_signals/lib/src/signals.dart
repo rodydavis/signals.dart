@@ -1,4 +1,10 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names
+import 'dart:convert';
+import 'dart:developer' as developer;
+
+import 'utils/constants.dart';
+
+part 'devtool.dart';
 
 void cycleDetected() {
   throw Exception('Cycle detected');
@@ -303,7 +309,15 @@ Node? addDependency(ReadonlySignal signal) {
   return null;
 }
 
+int _lastGlobalId = 0;
+
 abstract class ReadonlySignal<T> {
+  /// Debug label for Debug Mode
+  String? get debugLabel;
+
+  /// Global ID of the signal
+  int get globalId;
+
   /// Compute the current value
   T get value;
 
@@ -361,11 +375,16 @@ abstract class MutableSignal<T> implements ReadonlySignal<T> {
 }
 
 class Signal<T> implements MutableSignal<T> {
+  @override
+  final int globalId;
+
+  @override
   final String? debugLabel;
 
   Signal(this._value, {this.debugLabel})
       : _version = 0,
-        brand = identifier;
+        brand = identifier,
+        globalId = ++_lastGlobalId;
 
   // @internal
   T _value;
@@ -510,12 +529,22 @@ class Signal<T> implements MutableSignal<T> {
 ///
 /// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](#computedfn) and [effect](#effectfn) that depends on that signal, ensuring your app state is always consistent.
 MutableSignal<T> signal<T>(T value, {String? debugLabel}) {
-  return Signal<T>(value, debugLabel: debugLabel);
+  final instance = Signal<T>(value, debugLabel: debugLabel);
+  _onSignalCreated(instance);
+  return instance;
 }
 
 abstract class Listenable {
   Node? _sources;
+
   int get _flags;
+
+  /// Debug label for Debug Mode
+  String? get debugLabel;
+
+  /// Global ID of the signal
+  int get globalId;
+
   void _notify();
 }
 
@@ -623,6 +652,10 @@ void cleanupSources(Listenable target) {
 class Computed<T> implements Listenable, ReadonlySignal<T> {
   final ComputedCallback<T> _compute;
 
+  @override
+  final int globalId;
+
+  @override
   final String? debugLabel;
 
   @override
@@ -643,7 +676,8 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
         _version = 0,
-        brand = identifier;
+        brand = identifier,
+        globalId = ++_lastGlobalId;
 
   @override
   bool _refresh() {
@@ -823,7 +857,9 @@ ReadonlySignal<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
 }) {
-  return Computed<T>(compute, debugLabel: debugLabel);
+  final instance = Computed<T>(compute, debugLabel: debugLabel);
+  _onComputedCreated(instance);
+  return instance;
 }
 
 void cleanupEffect(Effect effect) {
@@ -881,7 +917,12 @@ Effect? currentEffect;
 
 class Effect implements Listenable {
   EffectCallback? _compute;
-  String? debugLabel;
+
+  @override
+  final String? debugLabel;
+
+  @override
+  final int globalId;
 
   Function? _cleanup;
 
@@ -896,7 +937,8 @@ class Effect implements Listenable {
   Effect(EffectCallback compute, {this.debugLabel})
       : _flags = TRACKING,
         _compute = compute,
-        _cleanup = null;
+        _cleanup = null,
+        globalId = ++_lastGlobalId;
 
   void _callback() {
     final finish = _start();
@@ -985,6 +1027,7 @@ class Effect implements Listenable {
 /// ```
 EffectCleanup effect(EffectCallback compute, {String? debugLabel}) {
   final effect = Effect(compute, debugLabel: debugLabel);
+  _onEffectCreated(effect);
   try {
     effect._callback();
   } catch (e) {

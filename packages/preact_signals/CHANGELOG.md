@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Adding Preact Signals 0.0.1 DevTools extension
+
 ## 0.2.0
 
 - Adding [FutureSignal] and removing [signalFromFuture]
