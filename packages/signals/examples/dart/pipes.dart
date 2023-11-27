@@ -40,7 +40,10 @@ void main() {
     // Refill our source if required
     while (source.value.length < poolSize) {
       final complement = generate();
-      source.value = source.value..add(complement);
+
+      // Rely on ListSignal, no need to reassign source.value = ...
+      source.value.add(complement);
+
       print("Complemented with $complement: ${source.value}\n");
     }
   });
