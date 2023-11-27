@@ -18,19 +18,31 @@ class FutureSignal<T> extends Signal<SignalState<T>> {
   /// Future [Duration] to wait before timing out
   final Duration? timeout;
 
+  /// If true then the future will be called immediately
+  final bool fireImmediately;
+
   /// Creates a [FutureSignal] that wraps a [Future]
-  FutureSignal(this._getFuture, {this.timeout}) : super(SignalLoading<T>()) {
-    _init();
+  FutureSignal(
+    this._getFuture, {
+    this.timeout,
+    this.fireImmediately = true,
+  }) : super(SignalLoading<T>()) {
+    if (fireImmediately) _init();
+    _stale = !fireImmediately;
   }
 
   final Future<T> Function() _getFuture;
+  bool _stale = false;
 
   /// Resets the signal by calling the [Future] again
   void reset() {
-    _init();
+    _stale = true;
+    if (fireImmediately) _init();
   }
 
   void _init() {
+    if (!_stale) return;
+    _stale = false;
     if (peek() is! SignalLoading<T>) {
       value = SignalLoading<T>();
     }
@@ -50,15 +62,23 @@ class FutureSignal<T> extends Signal<SignalState<T>> {
       }
     });
   }
+
+  @override
+  SignalState<T> get value {
+    _init();
+    return super.value;
+  }
 }
 
 /// Create a [FutureSignal] from a [Future]
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() compute, {
   Duration? timeout,
+  bool fireImmediately = true,
 }) {
   return FutureSignal<T>(
     compute,
     timeout: timeout,
+    fireImmediately: fireImmediately,
   );
 }

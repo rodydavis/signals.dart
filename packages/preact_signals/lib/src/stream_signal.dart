@@ -19,21 +19,28 @@ class StreamSignal<T> extends Signal<SignalState<T>> {
   /// If true then the stream will be cancelled on error
   final bool? cancelOnError;
 
+  /// If true then the future will be called immediately
+  final bool fireImmediately;
+
   /// Creates a [StreamSignal] that wraps a [Stream]
   StreamSignal(
     this._getStream, {
     this.cancelOnError,
+    this.fireImmediately = true,
   }) : super(SignalLoading<T>()) {
-    _init();
+    if (fireImmediately) _init();
+    _stale = !fireImmediately;
   }
 
   final Stream<T> Function() _getStream;
   StreamSubscription<T>? _subscription;
+  bool _stale = false;
 
   /// Resets the signal by calling the [Stream] again
   void reset() {
     _subscription?.cancel();
-    _init();
+    _stale = true;
+    if (fireImmediately) _init();
   }
 
   /// Stop stream subscription
@@ -42,6 +49,8 @@ class StreamSignal<T> extends Signal<SignalState<T>> {
   }
 
   void _init() {
+    if (!_stale) return;
+    _stale = false;
     if (peek() is! SignalLoading<T>) {
       value = SignalLoading<T>();
     }
@@ -60,15 +69,23 @@ class StreamSignal<T> extends Signal<SignalState<T>> {
       cancelOnError: cancelOnError,
     );
   }
+
+  @override
+  SignalState<T> get value {
+    _init();
+    return super.value;
+  }
 }
 
 /// Create a [StreamSignal] from a [Stream]
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() stream, {
   bool? cancelOnError,
+  bool fireImmediately = true,
 }) {
   return StreamSignal<T>(
     stream,
     cancelOnError: cancelOnError,
+    fireImmediately: fireImmediately,
   );
 }

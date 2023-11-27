@@ -1,6 +1,6 @@
 name: preact_signals
 description: Signal, Computed and Effect built with dart
-version: 0.3.2
+version: 0.3.3
 repository: https://github.com/rodydavis/preact_signals.dart
 
 environment:

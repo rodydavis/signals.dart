@@ -1,3 +1,7 @@
+## 0.3.3
+
+- Adding `fireImmediately` for `FutureSignal`, `StreamSignal`
+
 ## 0.3.2
 
 - Fixing generics for `FutureSignal`, `StreamSignal` via `SignalState`
