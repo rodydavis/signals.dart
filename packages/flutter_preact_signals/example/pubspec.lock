@@ -84,7 +84,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.3.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -160,7 +160,7 @@ packages:
       path: "../../preact_signals"
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.3.2"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Updating `preact_signals` to 0.3.2
+
 ## 0.3.1
 
 - Updating `preact_signals` to 0.3.1
