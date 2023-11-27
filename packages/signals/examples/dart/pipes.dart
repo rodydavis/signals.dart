@@ -11,7 +11,7 @@ void main() {
 
   const poolSize = 5;
 
-  final candidat = signal(0);
+  final candidate = signal(0);
 
   /*
   Signal<int> from an Iterable
@@ -23,28 +23,28 @@ void main() {
     // Subscribe to timer event
     timer.value;
 
-    // We use peak to avoid subscription to source
+    // We use peek to avoid subscription to source
     final [head, ...tail] = source.peek();
 
     // Batch multiple Signals at once.
     batch(() {
       source.value = tail;
-      candidat.value = head;
+      candidate.value = head;
     });
   });
 
-  effect(() => print("Qualified to ${candidat.value}"));
+  /// Display selected [candidate]
+  effect(() => print("Qualified to ${candidate.value}"));
 
   /// Effect on source => refill
   effect(() {
     // Refill our source if required
     while (source.value.length < poolSize) {
-      final complement = generate();
-
       // Rely on ListSignal, no need to reassign source.value = ...
-      source.value.add(complement);
+      // see how we bypass value
+      source.add(generate());
 
-      print("Complemented with $complement: ${source.value}\n");
+      print("Complemented with ${source.value.last}: ${source.value}\n");
     }
   });
 }
