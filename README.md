@@ -9,6 +9,7 @@ Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-sig
 | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | [`preact_signals`](packages/preact_signals)                                       | [![preact_signals](https://img.shields.io/pub/v/preact_signals.svg)](https://pub.dev/packages/preact_signals)                         |
 | [`flutter_preact_signals`](packages/flutter_preact_signals)                       | [![flutter_preact_signals](https://img.shields.io/pub/v/flutter_preact_signals.svg)](https://pub.dev/packages/flutter_preact_signals) |
+| [`signals`](packages/signals)                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals) |
 | [`preact_signals_devtools_extension`](packages/preact_signals_devtools_extension) |                                                                                                                                       |
 
 ## Guide / API
