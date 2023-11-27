@@ -1,11 +1,18 @@
+## 0.3.0
+
+- Adding value signals: `ListSignal`, `MapSignal`, `SetSignal`, `IterableSignal`
+- Adding extension methods for value signals
+- Adding methods: `listSignal`, `mapSignal`, `setSignal`, `iterableSignal`, `futureSignal`, `streamSignal`
+- Making all devtool methods private
+
 ## 0.2.1
 
 - Adding Preact Signals 0.0.1 DevTools extension
 
 ## 0.2.0
 
-- Adding [FutureSignal] and removing [signalFromFuture]
-- Adding [StreamSignal] and removing [signalFromStream]
+- Adding `FutureSignal` and removing `signalFromFuture`
+- Adding `StreamSignal` and removing `signalFromStream`
 
 ## 0.1.1
 

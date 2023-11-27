@@ -1,8 +1,12 @@
 [![flutter_preact_signals](https://img.shields.io/pub/v/flutter_preact_signals.svg)](https://pub.dev/packages/flutter_preact_signals)
+[![Tests](https://github.com/rodydavis/preact_signals.dart/actions/workflows/tests.yml/badge.svg)](https://github.com/rodydavis/preact_signals.dart/actions/workflows/tests.yml)
+[![Publish Example](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml/badge.svg)](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml)
 
 # Preact Signals (Flutter)
 
 Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
+
+This package is a set of Flutter extensions for the [`preact_signals`](https://pub.dev/packages/preact_signals) package.
 
 ## Guide / API
 
@@ -188,6 +192,87 @@ batch(() {
 // Now the callback completed and we'll trigger the effect.
 ```
 
+## Value Signals
+
+To provide a more connivent API for common value types, various wrappers are created that implement all the public methods and notify on mutations will keeping the same object reference.
+
+### List
+
+List signals can be created by extension, method or class:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final list = ['a', 'b', 'c'];
+
+final s1 = list.toSignal();
+final s2 = listSignal(list);
+final s3 = ListSignal(list);
+```
+
+Mutations can also be done directly:
+
+```dart
+final s = listSignal([1, 2, 3]);
+s[0] = -1;
+print(s.length); // 3
+s.addAll([4, 5, 6]);
+s.first = 1;
+```
+
+### Set
+
+Set signals can be created by extension, method or class:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final set = {'a', 'b', 'c'};
+
+final s1 = set.toSignal();
+
+final s2 = setSignal(set);
+
+final s3 = SetSignal(set);
+```
+
+### Map
+
+Map signals can be created by extension, method or class:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final map = {'a': 1, 'b': 2, 'c': 3};
+
+final s1 = map.toSignal();
+
+final s2 = mapSignal(map);
+
+final s3 = MapSignal(map);
+```
+
+### Iterable
+
+Iterable signals can be created by extension, method or class:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final iterable = () sync* {
+	yield '1';
+	yield '2';
+	yield '3';
+	return '4';
+};
+
+final s1 = iterable.toSignal();
+
+final s2 = iterableSignal(iterable);
+
+final s3 = IterableSignal(iterable);
+```
+
 ## Extensions
 
 ### `Future`
@@ -244,7 +329,6 @@ import 'package:flutter/material.dart';
 final notifier = ValueNotifier(10);
 final signal = notifier.toSignal(); // or signalFromValueNotifier(notifier)
 ```
-
 
 ### `BuildContext` and Widgets
 
@@ -368,3 +452,7 @@ class MyHomePage extends StatelessWidget {
   }
 }
 ```
+
+## DevTools
+
+There is an early version of a devtools extension included with the [preact_signals] package.
