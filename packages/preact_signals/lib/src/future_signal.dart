@@ -27,8 +27,8 @@ class FutureSignal<T> extends Signal<SignalState<T>> {
     this.timeout,
     this.fireImmediately = true,
   }) : super(SignalLoading<T>()) {
+    _stale = true;
     if (fireImmediately) _init();
-    _stale = !fireImmediately;
   }
 
   final Future<T> Function() _getFuture;

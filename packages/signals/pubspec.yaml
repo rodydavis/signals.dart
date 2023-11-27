@@ -1,7 +1,7 @@
 name: signals
 description: "signal, computed and effect built with dart and extensions for flutter"
 repository: https://github.com/rodydavis/preact_signals.dart
-version: 1.0.1
+version: 1.0.1+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_preact_signals: ^0.3.2
-  preact_signals: ^0.3.3
+  preact_signals: ^0.3.3+1
 
 dev_dependencies:
   flutter_test:

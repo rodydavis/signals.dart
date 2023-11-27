@@ -28,8 +28,8 @@ class StreamSignal<T> extends Signal<SignalState<T>> {
     this.cancelOnError,
     this.fireImmediately = true,
   }) : super(SignalLoading<T>()) {
+    _stale = true;
     if (fireImmediately) _init();
-    _stale = !fireImmediately;
   }
 
   final Stream<T> Function() _getStream;
