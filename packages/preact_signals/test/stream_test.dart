@@ -13,7 +13,7 @@ void main() {
       final completer = Completer();
       effect(() {
         final state = signal.value;
-        if (state is SignalValue) {
+        if (state is SignalValue<int>) {
           completer.complete(state.value);
         }
       });
@@ -30,7 +30,7 @@ void main() {
       final completer = Completer<int>();
       effect(() {
         final state = signal.value;
-        if (state is SignalValue) {
+        if (state is SignalValue<int>) {
           completer.complete(state.value);
         }
       });

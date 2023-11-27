@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Fixing generics for `FutureSignal`, `StreamSignal` via `SignalState`
+
 ## 0.3.1
 
 - Fixing generics for `FutureSignal`, `StreamSignal`, `IterableSignal`, `ListSignal`, `MapSignal` and `SetSignal`

@@ -14,12 +14,12 @@ import 'package:preact_signals/preact_signals.dart';
 ///   SignalLoading _ => print('loading'),
 /// });
 /// ```
-class FutureSignal<T> extends Signal<SignalState> {
+class FutureSignal<T> extends Signal<SignalState<T>> {
   /// Future [Duration] to wait before timing out
   final Duration? timeout;
 
   /// Creates a [FutureSignal] that wraps a [Future]
-  FutureSignal(this._getFuture, {this.timeout}) : super(SignalLoading()) {
+  FutureSignal(this._getFuture, {this.timeout}) : super(SignalLoading<T>()) {
     _init();
   }
 
@@ -31,8 +31,8 @@ class FutureSignal<T> extends Signal<SignalState> {
   }
 
   void _init() {
-    if (peek() is! SignalLoading) {
-      value = SignalLoading();
+    if (peek() is! SignalLoading<T>) {
+      value = SignalLoading<T>();
     }
     var f = _getFuture();
     if (timeout != null) {
@@ -41,12 +41,12 @@ class FutureSignal<T> extends Signal<SignalState> {
       });
     }
     f.then((value) {
-      this.value = SignalValue(value);
+      this.value = SignalValue<T>(value);
     }).catchError((error) {
-      if (error is SignalTimeout) {
+      if (error is SignalTimeout<T>) {
         value = error;
       } else {
-        value = SignalError(error);
+        value = SignalError<T, Object>(error);
       }
     });
   }
@@ -57,5 +57,8 @@ FutureSignal<T> futureSignal<T>(
   Future<T> Function() compute, {
   Duration? timeout,
 }) {
-  return FutureSignal(compute, timeout: timeout);
+  return FutureSignal<T>(
+    compute,
+    timeout: timeout,
+  );
 }

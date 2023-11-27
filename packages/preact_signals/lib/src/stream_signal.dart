@@ -15,7 +15,7 @@ import 'package:preact_signals/preact_signals.dart';
 ///   SignalLoading _ => print('loading'),
 /// });
 /// ```
-class StreamSignal<T> extends Signal<SignalState> {
+class StreamSignal<T> extends Signal<SignalState<T>> {
   /// If true then the stream will be cancelled on error
   final bool? cancelOnError;
 
@@ -23,7 +23,7 @@ class StreamSignal<T> extends Signal<SignalState> {
   StreamSignal(
     this._getStream, {
     this.cancelOnError,
-  }) : super(SignalLoading()) {
+  }) : super(SignalLoading<T>()) {
     _init();
   }
 
@@ -42,19 +42,19 @@ class StreamSignal<T> extends Signal<SignalState> {
   }
 
   void _init() {
-    if (peek() is! SignalLoading) {
-      value = SignalLoading();
+    if (peek() is! SignalLoading<T>) {
+      value = SignalLoading<T>();
     }
     var s = _getStream();
     _subscription = s.listen(
       (value) {
-        this.value = SignalValue(value);
+        this.value = SignalValue<T>(value);
       },
       onError: (error) {
-        if (error is SignalTimeout) {
+        if (error is SignalTimeout<T>) {
           value = error;
         } else {
-          value = SignalError(error);
+          value = SignalError<T, Object>(error);
         }
       },
       cancelOnError: cancelOnError,
@@ -67,5 +67,8 @@ StreamSignal<T> streamSignal<T>(
   Stream<T> Function() stream, {
   bool? cancelOnError,
 }) {
-  return StreamSignal(stream, cancelOnError: cancelOnError);
+  return StreamSignal<T>(
+    stream,
+    cancelOnError: cancelOnError,
+  );
 }
