@@ -44,7 +44,7 @@ void main() {
       // see how we bypass value
       source.add(generate());
 
-      print("Complemented with ${source.value.last}: ${source.value}\n");
+      print("Complemented with ${source.last}: ${source.value}\n");
     }
   });
 }
