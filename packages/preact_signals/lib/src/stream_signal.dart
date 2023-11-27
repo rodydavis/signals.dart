@@ -4,13 +4,17 @@ import 'package:preact_signals/preact_signals.dart';
 
 /// A [Signal] that wraps a [Stream]
 ///
-/// Starts with [SignalLoading] for the default
-/// state until the future completes.
+/// The [StreamSignal] will return [SignalState] for the value. To react to
+/// the various states you can use a switch statement:
 ///
-/// When an error occurs [SignalError] is returned with the value
-/// being the [Object] of the exception
-///
-/// If success then the result will be [SignalValue]
+/// ```dart
+/// final s = StreamSignal(...);
+/// final result = (switch(s.value) {
+///   SignalValue result => print('value: ${result.value}'),
+///   SignalError result => print('error: ${result.error}'),
+///   SignalLoading _ => print('loading'),
+/// });
+/// ```
 class StreamSignal<T> extends Signal<SignalState> {
   /// If true then the stream will be cancelled on error
   final bool? cancelOnError;
@@ -56,4 +60,12 @@ class StreamSignal<T> extends Signal<SignalState> {
       cancelOnError: cancelOnError,
     );
   }
+}
+
+/// Create a [StreamSignal] from a [Stream]
+StreamSignal<T> streamSignal<T>(
+  Stream<T> Function() stream, {
+  bool? cancelOnError,
+}) {
+  return StreamSignal(stream, cancelOnError: cancelOnError);
 }

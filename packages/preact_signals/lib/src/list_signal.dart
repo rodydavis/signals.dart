@@ -320,4 +320,23 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   Iterable<T> whereType<T>() {
     return value.whereType<T>();
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ListSignal<E> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+      for (final item in value) item.hashCode
+    ]);
+  }
+}
+
+/// Create an [ListSignal] from [List]
+ListSignal<T> listSignal<T>(List<T> list) {
+  return ListSignal<T>(list);
 }

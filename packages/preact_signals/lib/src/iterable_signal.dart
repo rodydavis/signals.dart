@@ -142,3 +142,8 @@ class IterableSignal<E> extends Signal<Iterable<E>> implements Iterable<E> {
     return value.whereType<T>();
   }
 }
+
+/// Create an [IterableSignal] from [Iterable]
+IterableSignal<T> iterableSignal<T>(Iterable<T> iterable) {
+  return IterableSignal<T>(iterable);
+}

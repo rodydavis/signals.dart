@@ -2,13 +2,18 @@ import 'package:preact_signals/preact_signals.dart';
 
 /// A [Signal] that wraps a [Future]
 ///
-/// Starts with [SignalLoading] for the default
-/// state until the future completes.
+/// The [FutureSignal] will return [SignalState] for the value. To react to
+/// the various states you can use a switch statement:
 ///
-/// When an error occurs [SignalError] is returned with the value
-/// being the [Object] of the exception
-///
-/// If success then the result will be [SignalValue]
+/// ```dart
+/// final s = FutureSignal(...);
+/// final result = (switch(s.value) {
+///   SignalValue result => print('value: ${result.value}'),
+///   SignalTimeout _ => print('timeout error'),
+///   SignalError result => print('error: ${result.error}'),
+///   SignalLoading _ => print('loading'),
+/// });
+/// ```
 class FutureSignal<T> extends Signal<SignalState> {
   /// Future [Duration] to wait before timing out
   final Duration? timeout;
@@ -45,4 +50,12 @@ class FutureSignal<T> extends Signal<SignalState> {
       }
     });
   }
+}
+
+/// Create a [FutureSignal] from a [Future]
+FutureSignal<T> futureSignal<T>(
+  Future<T> Function() compute, {
+  Duration? timeout,
+}) {
+  return FutureSignal(compute, timeout: timeout);
 }

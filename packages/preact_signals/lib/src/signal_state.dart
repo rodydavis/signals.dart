@@ -1,4 +1,14 @@
-/// Base signal state
+/// To react to the various states you can use a switch statement:
+///
+/// ```dart
+/// final SignalState state = ...;
+/// final result = (switch(state) {
+///   SignalValue result => print('value: ${result.value}'),
+///   SignalTimeout _ => print('timeout error'),
+///   SignalError result => print('error: ${result.error}'),
+///   SignalLoading _ => print('loading'),
+/// });
+/// ```
 sealed class SignalState {}
 
 /// Successful state for a signal

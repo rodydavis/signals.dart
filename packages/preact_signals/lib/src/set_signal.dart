@@ -216,4 +216,23 @@ class SetSignal<E> extends Signal<Set<E>> implements Set<E> {
   Iterable<T> whereType<T>() {
     return value.whereType<T>();
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SetSignal<E> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+      for (final item in value) item.hashCode
+    ]);
+  }
+}
+
+/// Create an [SetSignal] from [Set]
+SetSignal<T> setSignal<T>(Set<T> list) {
+  return SetSignal<T>(list);
 }

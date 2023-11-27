@@ -400,6 +400,19 @@ class Signal<T> implements MutableSignal<T> {
     return true;
   }
 
+  @override
+  bool operator ==(Object other) {
+    return other is Signal<T> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+    ]);
+  }
+
   static void __subscribe(ReadonlySignal signal, Node node) {
     if (signal._targets != node && node._prevTarget == null) {
       node._nextTarget = signal._targets;
@@ -679,6 +692,19 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
   bool _initialized = false;
   late T _value;
 
+  @override
+  bool operator ==(Object other) {
+    return other is Signal<T> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+    ]);
+  }
+
   Computed(ComputedCallback<T> compute, {this.debugLabel})
       : _compute = compute,
         _globalVersion = globalVersion - 1,
@@ -941,6 +967,16 @@ class Effect implements Listenable {
 
   @override
   int _flags;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Effect && globalId == other.globalId;
+  }
+
+  @override
+  int get hashCode {
+    return globalId.hashCode;
+  }
 
   Effect(EffectCallback compute, {this.debugLabel})
       : _flags = TRACKING,

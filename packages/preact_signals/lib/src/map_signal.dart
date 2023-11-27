@@ -110,4 +110,23 @@ class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
 
   @override
   Iterable<V> get values => value.values;
+
+  @override
+  bool operator ==(Object other) {
+    return other is MapSignal<K, V> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+      for (final item in value.entries) item.hashCode
+    ]);
+  }
+}
+
+/// Create an [MapSignal] from [Map]
+MapSignal<K, V> mapSignal<K, V>(Map<K, V> map) {
+  return MapSignal<K, V>(map);
 }

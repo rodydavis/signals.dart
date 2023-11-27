@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_preact_signals/flutter_preact_signals.dart';
 
-void main() {
-  // initPreactSignalsDevTools();
-  runApp(const MyApp());
-}
-
 final brightness = signal(Brightness.light);
-final counter = signal(0);
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -41,10 +37,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final counter = signal(0);
 
   void _incrementCounter() {
     counter.value++;
@@ -54,7 +57,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
         actions: [
           Builder(builder: (context) {
             final isDark = brightness.watch(context) == Brightness.dark;
@@ -74,10 +77,12 @@ class MyHomePage extends StatelessWidget {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '${counter.watch(context)}',
-              style: Theme.of(context).textTheme.headlineMedium!,
-            ),
+            Builder(builder: (context) {
+              return Text(
+                '${counter.watch(context)}',
+                style: Theme.of(context).textTheme.headlineMedium!,
+              );
+            }),
           ],
         ),
       ),

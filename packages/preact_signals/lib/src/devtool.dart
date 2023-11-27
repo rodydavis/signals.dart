@@ -5,7 +5,7 @@ void _debugPostEvent(
   String eventKind, [
   Map<Object?, Object?> event = const {},
 ]) {
-  initPreactSignalsDevTools();
+  _initDevTools();
   if (_devToolsEnabled) {
     developer.postEvent(eventKind, event);
   }
@@ -15,7 +15,7 @@ bool _devToolsInitialized = false;
 bool _devToolsEnabled = kDebugMode;
 
 // ignore: public_member_api_docs
-void initPreactSignalsDevTools() {
+void _initDevTools() {
   if (!_devToolsEnabled || _devToolsInitialized) return;
   developer.registerExtension(
     'ext.preact_signals.getAllNodes',
@@ -115,6 +115,7 @@ void initPreactSignalsDevTools() {
 
 Set<WeakReference<ReadonlySignal>> _signals = {};
 void _onSignalCreated(Signal instance) {
+  if (!_devToolsEnabled) return;
   if (_signals.any((e) => e.target == instance)) return;
   _signals.add(WeakReference(instance));
   _debugPostEvent('preact_signals:signal', {
@@ -126,6 +127,7 @@ void _onSignalCreated(Signal instance) {
 
 Set<WeakReference<Computed>> _computed = {};
 void _onComputedCreated(Computed instance) {
+  if (!_devToolsEnabled) return;
   if (_computed.any((e) => e.target == instance)) return;
   _computed.add(WeakReference(instance));
   _debugPostEvent('preact_signals:computed', {
@@ -137,6 +139,7 @@ void _onComputedCreated(Computed instance) {
 
 Set<WeakReference<Effect>> _effects = {};
 void _onEffectCreated(Effect instance) {
+  if (!_devToolsEnabled) return;
   if (_effects.any((e) => e.target == instance)) return;
   _effects.add(WeakReference(instance));
   _debugPostEvent('preact_signals:effect', {

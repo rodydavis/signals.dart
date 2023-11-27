@@ -4,7 +4,6 @@ import 'package:preact_signals/preact_signals.dart';
 typedef Task = ({String title, bool completed});
 
 void main() {
-  // Application logic
   final todoForm = document.getElementById("todoForm")!;
   final todoInput = document.getElementById("todoInput") as InputElement;
   final todoList = document.getElementById("todoList")!;
@@ -81,9 +80,9 @@ void main() {
 
   effect(() {
     taskCounter.text = '''
-        Total: ${taskCount.value}, 
-        Active: ${activeTaskCount.value}, 
-        Completed: ${completedTaskCount.value}
-        ''';
+    Total: ${taskCount.value}, 
+    Active: ${activeTaskCount.value}, 
+    Completed: ${completedTaskCount.value}
+    ''';
   });
 }
