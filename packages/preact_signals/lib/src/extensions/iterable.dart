@@ -4,6 +4,6 @@ import 'package:preact_signals/src/iterable_signal.dart';
 extension SignalIterableUtils<T> on Iterable<T> {
   /// Convert an existing list to [IterableSignal]
   IterableSignal<T> toSignal() {
-    return IterableSignal(this);
+    return IterableSignal<T>(this);
   }
 }

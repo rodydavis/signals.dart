@@ -1,4 +1,8 @@
-## 0.2.1
+## 0.3.1
+
+- Updating `preact_signals` to 0.3.1
+
+## 0.3.0
 
 - Fixing `watchSignal` so it works in StatefulWidgets and inside rebuilds and subscriber list will remain stable
 - Updating example to show non global signal

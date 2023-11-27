@@ -4,6 +4,6 @@ import 'package:preact_signals/src/list_signal.dart';
 extension SignalListUtils<T> on List<T> {
   /// Convert an existing list to [ListSignal]
   ListSignal<T> toSignal() {
-    return ListSignal(this);
+    return ListSignal<T>(this);
   }
 }

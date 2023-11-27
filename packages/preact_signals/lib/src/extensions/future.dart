@@ -1,7 +1,7 @@
 import 'package:preact_signals/src/future_signal.dart';
 
 /// Extension on future to provide helpful methods for signals
-extension SignalFutureUtils on Future {
+extension SignalFutureUtils<T> on Future<T> {
   /// Convert an existing future to [FutureSignal]
   ///
   /// ```dart
@@ -23,8 +23,8 @@ extension SignalFutureUtils on Future {
   ///   SignalLoading _ => print('loading'),
   /// });
   /// ```
-  FutureSignal toSignal({Duration? timeout}) {
-    return FutureSignal(
+  FutureSignal<T> toSignal({Duration? timeout}) {
+    return FutureSignal<T>(
       () => this,
       timeout: timeout,
     );
