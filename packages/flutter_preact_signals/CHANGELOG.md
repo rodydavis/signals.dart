@@ -1,3 +1,12 @@
+## 0.4.1
+
+- Updating `preact_signals` to 0.4.1
+- Adding `getSubscriberCount()` for tests
+
+## 0.4.0
+
+- Updating `preact_signals` to 0.4.0
+
 ## 0.3.2
 
 - Updating `preact_signals` to 0.3.2

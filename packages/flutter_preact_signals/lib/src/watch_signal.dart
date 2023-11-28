@@ -5,6 +5,10 @@ import '../flutter_preact_signals.dart';
 // Local set of subscribes that will hold the element to rebuild
 final _subscribers = <(int, int), WeakReference<Element>>{};
 
+@visibleForTesting
+// ignore: public_member_api_docs
+int getSubscriberCount() => _subscribers.length;
+
 /// Watch a signal value and rebuild the context of the [Element]
 /// if mounted and mark it as dirty
 T watchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {

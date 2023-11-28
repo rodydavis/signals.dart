@@ -98,10 +98,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_preact_signals
-      sha256: "0be3503730174e4ef16cb6434265ef3e6042c51324aaeb6238cf296437b38851"
+      sha256: "1f8986efd28cfdcb61e1da5fdf84dd970d12680a2fc3ad470619f87d3b147cba"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.2"
+    version: "0.4.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -234,10 +234,10 @@ packages:
     dependency: transitive
     description:
       name: preact_signals
-      sha256: "0565ab10f1e3b65437f5e12d2ff6dce00c8bd23979c3f65df1ec346e3ca6a242"
+      sha256: "3afc2e67c3b8cb835ef3f2c2f8f352246bbb7a77494ae205734a09567a065afc"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3+1"
+    version: "0.4.1"
   pub_semver:
     dependency: transitive
     description:
@@ -284,7 +284,7 @@ packages:
       path: "../.."
       relative: true
     source: path
-    version: "1.0.1+1"
+    version: "1.1.0"
   sky_engine:
     dependency: transitive
     description: flutter

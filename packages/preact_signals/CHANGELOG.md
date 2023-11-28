@@ -1,6 +1,11 @@
-## 0.3.3
+## 0.4.1
+
+- Fixing issue with `computed` on null value check
+
+## 0.4.0
 
 - Adding `fireImmediately` for `FutureSignal`, `StreamSignal`
+- Removing `SignalState` and providing methods directly on each class
 
 ## 0.3.2
 

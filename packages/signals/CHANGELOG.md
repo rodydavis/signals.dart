@@ -1,3 +1,8 @@
+## 1.1.0
+
+- Updating `preact_signals` to 0.4.1
+- Updating `flutter_preact_signals` to 0.4.1
+
 ## 1.0.1
 
 - Updating `preact_signals` to 0.3.3
