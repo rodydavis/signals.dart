@@ -5,6 +5,8 @@
 
 Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
 
+Documentation Site: https://rodydavis.github.io/signals.dart/
+
 | Package                                                             | Pub                                                                                      |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | [`signals`](packages/signals)                                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals) |
