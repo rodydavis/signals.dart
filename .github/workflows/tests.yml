@@ -11,5 +11,5 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
 
-      - run: cd packages/signals && dart pub get
-      - run: cd packages/signals && dart test
+      - run: cd packages/signals && flutter pub get
+      - run: cd packages/signals && flutter test
