@@ -1,22 +1,34 @@
-name: Publish Website
-
+name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1
-
-      - run: cd packages/signals && flutter pub get
-      - run: cd packages/signals && flutter test
-      - run: cd packages/signals && dart doc
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Checkout your repository using git
+        uses: actions/checkout@v3
+      - name: Install, build, and upload your site output
+        uses: withastro/action@v1
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./packages/signals/doc
+          path: website
+          node-version: 18
+          package-manager: pnpm@latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
