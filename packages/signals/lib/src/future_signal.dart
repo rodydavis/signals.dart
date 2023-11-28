@@ -33,11 +33,9 @@ class FutureSignal<T> extends Signal<T?> {
   final bool fireImmediately;
 
   /// Creates a [FutureSignal] that wraps a [Future]
-  FutureSignal(
-    this._compute, {
-    this.timeout,
-    this.fireImmediately = false,
-  }) : super(null) {
+  FutureSignal(this._compute,
+      {this.timeout, this.fireImmediately = false, super.debugLabel})
+      : super(null) {
     _stale = true;
     if (fireImmediately) _execute().ignore();
   }

@@ -40,6 +40,7 @@ class StreamSignal<T> extends Signal<T?> {
     this._compute, {
     this.cancelOnError,
     this.fireImmediately = false,
+    super.debugLabel,
   }) : super(null) {
     _stale = true;
     if (fireImmediately) _execute();

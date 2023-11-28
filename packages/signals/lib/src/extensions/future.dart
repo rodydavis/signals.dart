@@ -23,9 +23,10 @@ extension SignalFutureUtils<T> on Future<T> {
   ///   SignalLoading _ => print('loading'),
   /// });
   /// ```
-  FutureSignal<T> toSignal({Duration? timeout}) {
+  FutureSignal<T> toSignal({Duration? timeout, String? debugLabel}) {
     return FutureSignal<T>(
       () => this,
+      debugLabel: debugLabel,
       timeout: timeout,
     );
   }
