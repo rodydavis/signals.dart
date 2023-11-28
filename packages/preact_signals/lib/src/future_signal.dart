@@ -92,7 +92,7 @@ class FutureSignal<T> extends Signal<T?> {
   /// Returns true if the future signal has timed out
   bool get isTimeout => _state == _FutureState.timeout;
 
-  /// Returns true if the future signal has timed out
+  /// Returns true if the future signal is loading
   bool get isLoading => _state == _FutureState.loading;
 
   /// Returns the value of the signal or null if not a value
