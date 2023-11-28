@@ -818,7 +818,7 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
     if ((_flags & HAS_ERROR) != 0) {
       throw _value!;
     }
-    return _value!;
+    return _value;
   }
 
   @override
@@ -835,7 +835,7 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
     if ((_flags & HAS_ERROR) != 0) {
       throw _error!;
     }
-    return _value!;
+    return _value;
   }
 
   @override

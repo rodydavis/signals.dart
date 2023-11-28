@@ -5,16 +5,20 @@ import 'package:test/test.dart';
 
 void main() {
   group('Future', () {
-    test('signalFromFuture', () async {
-      final future = _future();
-      final signal = FutureSignal(() => future);
-      expect(signal() is SignalLoading, true);
+    test('FutureSignal', () async {
+      Future<int> future() async {
+        await Future.delayed(const Duration(milliseconds: 5));
+        return 10;
+      }
+
+      final signal = FutureSignal(() => future());
+      expect(signal.peek() == null, true);
 
       final completer = Completer<int>();
       effect(() {
-        final state = signal.value;
-        if (state is SignalValue<int>) {
-          completer.complete(state.value);
+        signal.value;
+        if (signal.isSuccess) {
+          completer.complete(signal.peek());
         }
       });
       final result = await completer.future;
@@ -23,25 +27,57 @@ void main() {
     });
 
     test('extension on Future', () async {
-      final future = _future();
-      final signal = future.toSignal();
-      expect(signal() is SignalLoading, true);
+      Future<int> future() async {
+        await Future.delayed(const Duration(milliseconds: 5));
+        return 10;
+      }
+
+      final signal = future().toSignal();
+      expect(signal.peek() == null, true);
 
       final completer = Completer<int>();
       effect(() {
-        final state = signal.value;
-        if (state is SignalValue<int>) {
-          completer.complete(state.value);
+        signal.value;
+        if (signal.isSuccess) {
+          completer.complete(signal.peek());
         }
       });
       final result = await completer.future;
 
       expect(result, 10);
     });
-  });
-}
 
-Future<int> _future() async {
-  await Future.delayed(const Duration(milliseconds: 5));
-  return 10;
+    test('check repeated calls', () async {
+      int calls = 0;
+
+      Future<int> future() async {
+        calls++;
+        await Future.delayed(const Duration(milliseconds: 5));
+        return 10;
+      }
+
+      final signal = FutureSignal(() => future());
+      expect(signal.peek() == null, true);
+      expect(calls, 0);
+
+      var (val, err) = await signal.result;
+
+      expect(calls, 1);
+      expect(val, 10);
+      expect(err, null);
+
+      (val, err) = await signal.result;
+
+      expect(calls, 1);
+      expect(val, 10);
+      expect(err, null);
+
+      await signal.reset();
+      (val, err) = await signal.result;
+
+      expect(calls, 2);
+      expect(val, 10);
+      expect(err, null);
+    });
+  });
 }

@@ -5,16 +5,16 @@ import 'package:test/test.dart';
 
 void main() {
   group('Stream', () {
-    test('signalFromStream', () async {
+    test('StreamSignal', () async {
       final stream = _stream();
-      final signal = stream.toSignal();
-      expect(signal() is SignalLoading, true);
+      final signal = StreamSignal(() => stream);
+      expect(signal.peek() == null, true);
 
       final completer = Completer();
       effect(() {
-        final state = signal.value;
-        if (state is SignalValue<int>) {
-          completer.complete(state.value);
+        signal.value;
+        if (signal.isSuccess) {
+          completer.complete(signal.peek());
         }
       });
       final result = await completer.future;
@@ -25,13 +25,13 @@ void main() {
     test('extension on Stream', () async {
       final stream = _stream();
       final signal = stream.toSignal();
-      expect(signal() is SignalLoading, true);
+      expect(signal.peek() == null, true);
 
-      final completer = Completer<int>();
+      final completer = Completer();
       effect(() {
-        final state = signal.value;
-        if (state is SignalValue<int>) {
-          completer.complete(state.value);
+        signal.value;
+        if (signal.isSuccess) {
+          completer.complete(signal.peek());
         }
       });
       final result = await completer.future;

@@ -18,7 +18,7 @@ export 'src/extensions/list.dart';
 export 'src/extensions/map.dart';
 export 'src/extensions/set.dart';
 export 'src/extensions/iterable.dart';
-export 'src/signal_state.dart';
+// export 'src/signal_state.dart';
 export 'src/future_signal.dart' show FutureSignal, futureSignal;
 export 'src/stream_signal.dart' show StreamSignal, streamSignal;
 export 'src/list_signal.dart' show ListSignal, listSignal;
