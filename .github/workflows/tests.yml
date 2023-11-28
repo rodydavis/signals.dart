@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
 
       - run: cd packages/signals && flutter pub get
       - run: cd packages/signals && flutter test
