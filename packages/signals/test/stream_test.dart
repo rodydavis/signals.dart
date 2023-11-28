@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Stream', () {
-    test('StreamSignal', () async {
+    test('streamSignal', () async {
       final stream = _stream();
-      final signal = StreamSignal(() => stream);
+      final signal = streamSignal(() => stream);
       expect(signal.peek() == null, true);
 
       final completer = Completer();

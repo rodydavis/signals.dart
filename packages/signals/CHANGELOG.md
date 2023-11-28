@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Fixing public API and removing public classes (Computed, Effect, StreamSignal, etc.)
+
 ## 1.1.1
 
 - Migrated to single package `signals` from `preact_signals` and `flutter_preact_signals`

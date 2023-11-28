@@ -17,13 +17,13 @@ typedef FutureSignalBuilder<R> = R Function();
 /// the various states you can use a switch statement:
 ///
 /// ```dart
-/// final s = FutureSignal(...);
-/// final result = (switch(s.value) {
-///   SignalValue result => print('value: ${result.value}'),
-///   SignalTimeout _ => print('timeout error'),
-///   SignalError result => print('error: ${result.error}'),
-///   SignalLoading _ => print('loading'),
-/// });
+/// final s = futureSignal(Future(() => 1));
+/// final mapped = s.map(
+///     value: (value) => 'value: $value',
+///     error: (error) => 'error: $error',
+///     loading: () => 'loading',
+///     timeout: () => 'timeout',
+/// );
 /// ```
 class FutureSignal<T> extends Signal<T?> {
   /// Future [Duration] to wait before timing out

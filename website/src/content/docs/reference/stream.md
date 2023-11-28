@@ -3,20 +3,13 @@ title: Stream Signal
 description: Creates a signal that contains a stream
 ---
 
-Stream signals can be created by extension, method or class.
+Stream signals can be created by extension or method.
 
-### StreamSignal
-
-```dart
-final stream = () async* {...};
-final s = StreamSignal(stream);
-```
-
-### futureSignal
+### streamSignal
 
 ```dart
 final stream = () async* {...};
-final s = futureSignal(stream);
+final s = streamSignal(stream);
 ```
 
 ### toSignal()
@@ -38,7 +31,7 @@ final stream = s.toStream();
 The `isSuccess` getter returns true if the stream completed successfully.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -51,7 +44,7 @@ final success = s.isSuccess; // true
 The `isError` getter returns true if the stream completed with an error.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -65,7 +58,7 @@ final error = s.isError; // true
 The `isLoading` getter returns true if the stream has not completed.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -78,7 +71,7 @@ final loading = s.isLoading; // true
 The `value` getter returns the last value emitted by the stream.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -91,7 +84,7 @@ final value = s.value; // 3
 The `error` getter returns the last error emitted by the stream.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -105,7 +98,7 @@ final error = s.error; // 'error'
 The `peek` method returns the last value emitted by the stream without subscribing to it.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -118,7 +111,7 @@ final value = s.peek(); // 3
 The `reset` method resets the stream to its initial state to recall on the next evaluation.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -131,7 +124,7 @@ s.reset();
 The `map` method is a convenience method to map the states of the stream to a signal.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;
@@ -148,7 +141,7 @@ final mapped = s.map(
 The `maybeMap` method is a convenience method to map the states of the stream to a signal.
 
 ```dart
-final s = StreamSignal(() async* {
+final s = streamSignal(() async* {
     yield 1;
     yield 2;
     yield 3;

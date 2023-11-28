@@ -3,15 +3,9 @@ title: List Signal
 description: Creates a signal that implements List
 ---
 
-List signals can be created by extension, method or class and implement the [List](https://api.dart.dev/stable/3.2.1/dart-core/List-class.html) interface.
+List signals can be created by extension or method and implement the [List](https://api.dart.dev/stable/3.2.1/dart-core/List-class.html) interface.
 
 This makes them useful for creating signals from existing lists, or for creating signals that can be used as lists.
-
-### ListSignal
-
-```dart
-final s = ListSignal([1, 2, 3]);
-```
 
 ### listSignal
 

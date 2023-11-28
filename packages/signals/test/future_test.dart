@@ -5,13 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Future', () {
-    test('FutureSignal', () async {
+    test('futureSignal', () async {
       Future<int> future() async {
         await Future.delayed(const Duration(milliseconds: 5));
         return 10;
       }
 
-      final signal = FutureSignal(() => future());
+      final signal = futureSignal(() => future());
       expect(signal.peek() == null, true);
 
       final completer = Completer<int>();
@@ -56,7 +56,7 @@ void main() {
         return 10;
       }
 
-      final signal = FutureSignal(() => future());
+      final signal = futureSignal(() => future());
       expect(signal.peek() == null, true);
       expect(calls, 0);
 

@@ -17,13 +17,16 @@ typedef StreamSignalBuilder<R> = R Function();
 /// the various states you can use a switch statement:
 ///
 /// ```dart
-/// final s = StreamSignal(...);
-/// final result = (switch(s.value) {
-///   SignalValue result => print('value: ${result.value}'),
-///   SignalTimeout _ => print('timeout error'),
-///   SignalError result => print('error: ${result.error}'),
-///   SignalLoading _ => print('loading'),
+/// final s = streamSignal(() async* {
+///     yield 1;
+///     yield 2;
+///     yield 3;
 /// });
+/// final mapped = s.map(
+///     value: (value) => 'value: $value',
+///     error: (error) => 'error: $error',
+///     loading: () => 'loading',
+/// );
 /// ```
 class StreamSignal<T> extends Signal<T?> {
   /// Cancel the stream on error
