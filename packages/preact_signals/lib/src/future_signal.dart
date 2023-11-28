@@ -25,7 +25,7 @@ class FutureSignal<T> extends Signal<T?> {
   FutureSignal(
     this._getFuture, {
     this.timeout,
-    this.fireImmediately = true,
+    this.fireImmediately = false,
   }) : super(null) {
     _stale = true;
     if (fireImmediately) _execute();
@@ -154,7 +154,7 @@ enum _FutureState {
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() compute, {
   Duration? timeout,
-  bool fireImmediately = true,
+  bool fireImmediately = false,
 }) {
   return FutureSignal<T>(
     compute,
