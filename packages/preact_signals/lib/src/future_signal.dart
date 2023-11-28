@@ -1,4 +1,15 @@
+import 'dart:async';
+
 import 'package:preact_signals/preact_signals.dart';
+
+/// Builder on a successful [FutureSignal] value
+typedef FutureSignalValueBuilder<R, T> = R Function(T value);
+
+/// Builder on a [FutureSignal] error
+typedef FutureSignalErrorBuilder<R> = R Function(Object? error);
+
+/// Builder on a [FutureSignal] callback
+typedef FutureSignalBuilder<R> = R Function();
 
 /// A [Signal] that wraps a [Future]
 ///
@@ -23,63 +34,64 @@ class FutureSignal<T> extends Signal<T?> {
 
   /// Creates a [FutureSignal] that wraps a [Future]
   FutureSignal(
-    this._getFuture, {
+    this._compute, {
     this.timeout,
     this.fireImmediately = false,
   }) : super(null) {
     _stale = true;
-    if (fireImmediately) _execute();
+    if (fireImmediately) _execute().ignore();
   }
 
-  final Future<T> Function() _getFuture;
+  final Future<T> Function() _compute;
   bool _stale = false;
   Object? _error;
   var _state = _FutureState.loading;
 
   /// Resets the signal by calling the [Future] again
-  void reset() {
+  Future<void> reset() async {
     _stale = true;
     _state = _FutureState.loading;
-    if (fireImmediately) _execute();
+    if (fireImmediately) await _execute();
   }
 
   Future<T> _future() {
     if (timeout != null) {
-      return _getFuture().timeout(timeout!, onTimeout: () {
+      return _compute().timeout(timeout!, onTimeout: () {
         throw FutureSignalTimeoutException();
       });
     } else {
-      return _getFuture();
+      return _compute();
     }
   }
 
-  void _execute() async {
+  Future<void> _execute() async {
     if (!_stale) return;
     _stale = false;
     try {
-      value = await _future();
+      final result = await _future();
       _state = _FutureState.value;
+      value = result;
     } catch (e) {
       value = null;
       if (e is FutureSignalTimeoutException) {
-        _error = null;
         _state = _FutureState.timeout;
+        _error = null;
       } else {
-        _error = e;
         _state = _FutureState.error;
+        _error = e;
       }
     }
   }
 
   @override
   T? get value {
-    _execute();
+    _execute().ignore();
     return super.value;
   }
 
   /// Returns the error of the signal if present
   Object? get error {
-    _execute();
+    _execute().ignore();
     return _error;
   }
 
@@ -96,32 +108,33 @@ class FutureSignal<T> extends Signal<T?> {
   bool get isLoading => _state == _FutureState.loading;
 
   /// Returns the value of the signal or null if not a value
-  E when<E>(
-    E Function(T value) value,
-    E Function(Object? error) error,
-    E Function() timeout,
-    E Function() loading,
-  ) {
+  E map<E>({
+    required FutureSignalValueBuilder<E, T> value,
+    required FutureSignalBuilder<E> loading,
+    required FutureSignalErrorBuilder<E> error,
+    FutureSignalBuilder<E>? timeout,
+  }) {
     switch (_state) {
       case _FutureState.value:
         return value(this.value as T);
       case _FutureState.error:
         return error(_error);
       case _FutureState.timeout:
-        return timeout();
+        if (timeout != null) return timeout();
+        return error(null);
       case _FutureState.loading:
         return loading();
     }
   }
 
   /// Returns the value of the signal or null if not a value
-  E maybeWhen<E>(
-    E Function(T value)? value,
-    E Function(Object? error)? error,
-    E Function()? timeout,
-    E Function()? loading,
-    E Function() orElse,
-  ) {
+  E maybeMap<E>({
+    FutureSignalValueBuilder<E, T>? value,
+    FutureSignalBuilder<E>? loading,
+    FutureSignalErrorBuilder<E>? error,
+    FutureSignalBuilder<E>? timeout,
+    required FutureSignalBuilder<E> orElse,
+  }) {
     switch (_state) {
       case _FutureState.value:
         if (value != null) return value(this.value as T);
@@ -131,12 +144,23 @@ class FutureSignal<T> extends Signal<T?> {
         break;
       case _FutureState.timeout:
         if (timeout != null) return timeout();
+        if (error != null) return error(null);
         break;
       case _FutureState.loading:
         if (loading != null) return loading();
         break;
     }
     return orElse();
+  }
+
+  /// Future result of the signal with value and error pair
+  FutureOr<(T?, Object?)> get result async {
+    await _execute();
+    if (isError) {
+      return (null, _error);
+    } else {
+      return (peek()!, null);
+    }
   }
 }
 

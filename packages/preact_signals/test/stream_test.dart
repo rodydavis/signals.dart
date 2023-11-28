@@ -8,33 +8,35 @@ void main() {
     test('StreamSignal', () async {
       final stream = _stream();
       final signal = StreamSignal(() => stream);
-      expect(signal.value == null, true);
+      expect(signal.peek() == null, true);
 
-      // final completer = Completer();
-      // effect(() {
-      //   if (signal.isSuccess) {
-      //     completer.complete(signal.value);
-      //   }
-      // });
-      // final result = await completer.future;
+      final completer = Completer();
+      effect(() {
+        signal.value;
+        if (signal.isSuccess) {
+          completer.complete(signal.peek());
+        }
+      });
+      final result = await completer.future;
 
-      // expect(result, 10);
+      expect(result, 10);
     });
 
     test('extension on Stream', () async {
       final stream = _stream();
       final signal = stream.toSignal();
-      expect(signal.value == null, true);
+      expect(signal.peek() == null, true);
 
-      // final completer = Completer();
-      // effect(() {
-      //   if (signal.isSuccess) {
-      //     completer.complete(signal.value);
-      //   }
-      // });
-      // final result = await completer.future;
+      final completer = Completer();
+      effect(() {
+        signal.value;
+        if (signal.isSuccess) {
+          completer.complete(signal.peek());
+        }
+      });
+      final result = await completer.future;
 
-      // expect(result, 10);
+      expect(result, 10);
     });
   });
 }

@@ -2,6 +2,15 @@ import 'dart:async';
 
 import 'package:preact_signals/preact_signals.dart';
 
+/// Builder on a successful [StreamSignal] value
+typedef StreamSignalValueBuilder<R, T> = R Function(T value);
+
+/// Builder on a [StreamSignal] error
+typedef StreamSignalErrorBuilder<R> = R Function(Object? error);
+
+/// Builder on a [StreamSignal] callback
+typedef StreamSignalBuilder<R> = R Function();
+
 /// A [Signal] that wraps a [Stream]
 ///
 /// The [StreamSignal] will return [SignalState] for the value. To react to
@@ -25,7 +34,7 @@ class StreamSignal<T> extends Signal<T?> {
 
   /// Creates a [StreamSignal] that wraps a [Stream]
   StreamSignal(
-    this._getStream, {
+    this._compute, {
     this.cancelOnError,
     this.fireImmediately = false,
   }) : super(null) {
@@ -33,7 +42,7 @@ class StreamSignal<T> extends Signal<T?> {
     if (fireImmediately) _execute();
   }
 
-  final Stream<T> Function() _getStream;
+  final Stream<T> Function() _compute;
   bool _stale = false;
   Object? _error;
   var _state = _StreamState.loading;
@@ -47,17 +56,17 @@ class StreamSignal<T> extends Signal<T?> {
     if (fireImmediately) _execute();
   }
 
-  Stream<void> _execute() async* {
+  void _execute() {
     if (!_stale) return;
     _stale = false;
-    _subscription = _getStream().listen(
+    _subscription = _compute().listen(
       (data) {
-        value = data;
         _state = _StreamState.value;
+        value = data;
       },
       onError: (data) {
-        _error = data;
         _state = _StreamState.error;
+        _error = data;
       },
       cancelOnError: cancelOnError,
     );
@@ -90,11 +99,11 @@ class StreamSignal<T> extends Signal<T?> {
   bool get isLoading => _state == _StreamState.loading;
 
   /// Returns the value of the signal or null if not a value
-  E when<E>(
-    E Function(T value) value,
-    E Function(Object? error) error,
-    E Function() loading,
-  ) {
+  E map<E>({
+    required StreamSignalValueBuilder<E, T> value,
+    required StreamSignalBuilder<E> loading,
+    required StreamSignalErrorBuilder<E> error,
+  }) {
     switch (_state) {
       case _StreamState.value:
         return value(this.value as T);
@@ -106,12 +115,12 @@ class StreamSignal<T> extends Signal<T?> {
   }
 
   /// Returns the value of the signal or null if not a value
-  E maybeWhen<E>(
-    E Function(T value)? value,
-    E Function(Object? error)? error,
-    E Function()? loading,
-    E Function() orElse,
-  ) {
+  E maybeMap<E>({
+    StreamSignalValueBuilder<E, T>? value,
+    StreamSignalBuilder<E>? loading,
+    StreamSignalErrorBuilder<E>? error,
+    required StreamSignalBuilder<E> orElse,
+  }) {
     switch (_state) {
       case _StreamState.value:
         if (value != null) return value(this.value as T);
