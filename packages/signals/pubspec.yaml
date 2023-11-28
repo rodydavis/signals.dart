@@ -1,7 +1,7 @@
 name: signals
 description: "signal, computed and effect built with dart and extensions for flutter"
 repository: https://github.com/rodydavis/signals.dart
-version: 1.1.0
+version: 1.1.1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

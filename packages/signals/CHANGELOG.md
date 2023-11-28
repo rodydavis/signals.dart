@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Migrated to single package `signals` from `preact_signals` and `flutter_preact_signals`
+
 ## 1.1.0
 
 - Updating `preact_signals` to 0.4.1
