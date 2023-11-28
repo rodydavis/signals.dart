@@ -299,7 +299,7 @@ final s3 = IterableSignal(iterable);
 
 ### `Future`
 
-Futures can be converted to signals by either a method `signalFromFuture` or as an extension method on a `Future`:
+Futures can be converted to signals by either a method `futureSignal`, `FutureSignal` class or as an extension method on a `Future`:
 
 ```dart
 import 'package:signals/signals.dart';
@@ -308,11 +308,9 @@ final future = Future(() => 1);
 final signal = future.toSignal(); // or signalFromFuture(future)
 ```
 
-> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
-
 ### `Stream`
 
-Futures can be converted to signals by either a method `signalFromFuture` or as an extension method on a `Future`:
+Streams can be converted to signals by either a method `streamSignal`, `StreamSignal` class or as an extension method on a `Stream`:
 
 ```dart
 import 'package:signals/signals.dart';
@@ -325,8 +323,6 @@ Stream<int> createStream() async* {
 final stream = createStream();
 final signal = stream.toSignal(); // or signalFromStream(stream)
 ```
-
-> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
 
 ### `ValueListenable`
 
