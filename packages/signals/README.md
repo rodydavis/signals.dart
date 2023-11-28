@@ -130,6 +130,28 @@ dispose();
 surname.value = "Doe 2";
 ```
 
+#### Warning Cycles
+
+Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](#untrackedfn) to read a signal without subscribing to it.
+
+```dart
+import 'dart:async';
+
+import 'package:signals/signals.dart';
+
+Future<void> main() async {
+  final completer = Completer<void>();
+  final age = signal(0);
+
+  effect(() {
+    print('You are ${age.value} years old');
+    age.value++; // <-- This will throw a cycle error
+  });
+
+  await completer.future;
+}
+```
+
 ### `batch(fn)`
 
 The `batch` function allows you to combine multiple signal writes into one single update that is triggered at the end when the callback completes.
@@ -277,7 +299,7 @@ final s3 = IterableSignal(iterable);
 
 ### `Future`
 
-Futures can be converted to signals by either a method `signalFromFuture` or as an extension method on a `Future`:
+Futures can be converted to signals by either a method `futureSignal`, `FutureSignal` class or as an extension method on a `Future`:
 
 ```dart
 import 'package:signals/signals.dart';
@@ -286,11 +308,9 @@ final future = Future(() => 1);
 final signal = future.toSignal(); // or signalFromFuture(future)
 ```
 
-> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
-
 ### `Stream`
 
-Futures can be converted to signals by either a method `signalFromFuture` or as an extension method on a `Future`:
+Streams can be converted to signals by either a method `streamSignal`, `StreamSignal` class or as an extension method on a `Stream`:
 
 ```dart
 import 'package:signals/signals.dart';
@@ -303,8 +323,6 @@ Stream<int> createStream() async* {
 final stream = createStream();
 final signal = stream.toSignal(); // or signalFromStream(stream)
 ```
-
-> This will return a sealed union based on `SignalState` that will return `SignalValue` for success, `SignalError` for errors (and `SignalTimeout` on optional timeout), and `SignalLoading`.
 
 ### `ValueListenable`
 
@@ -558,4 +576,4 @@ void main() {
 
 ## DevTools
 
-There is an early version of a devtools extension included with the `preact_signals` package.
+There is an early version of a devtools extension included with this package.

@@ -5,12 +5,10 @@
 
 Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
 
-| Package                                                                           | Pub                                                                                                                                   |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| [`preact_signals`](packages/preact_signals)                                       | [![preact_signals](https://img.shields.io/pub/v/preact_signals.svg)](https://pub.dev/packages/preact_signals)                         |
-| [`flutter_preact_signals`](packages/flutter_preact_signals)                       | [![flutter_preact_signals](https://img.shields.io/pub/v/flutter_preact_signals.svg)](https://pub.dev/packages/flutter_preact_signals) |
-| [`signals`](packages/signals)                                                     | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                                              |
-| [`preact_signals_devtools_extension`](packages/preact_signals_devtools_extension) |                                                                                                                                       |
+| Package                                                             | Pub                                                                                      |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [`signals`](packages/signals)                                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals) |
+| [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                          |
 
 ## Guide / API
 
@@ -21,7 +19,7 @@ The signals library exposes four functions which are the building blocks to mode
 The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
 final counter = signal(0);
 
@@ -75,7 +73,7 @@ effect(() {
 Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
 final name = signal("Jane");
 final surname = signal("Doe");
@@ -99,7 +97,7 @@ Any signal that is accessed inside the `computed`'s callback function will be au
 The `effect` function is the last piece that makes everything reactive. When you access a signal inside an `effect`'s callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](#computedfn). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
 final name = signal("Jane");
 final surname = signal("Doe");
@@ -116,7 +114,7 @@ name.value = "John";
 You can destroy an effect and unsubscribe from all signals it was subscribed to, by calling the returned function.
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
 final name = signal("Jane");
 final surname = signal("Doe");
@@ -161,7 +159,7 @@ Future<void> main() async {
 The `batch` function allows you to combine multiple signal writes into one single update that is triggered at the end when the callback completes.
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
 final name = signal("Jane");
 final surname = signal("Doe");
@@ -181,7 +179,7 @@ batch(() {
 When you access a signal that you wrote to earlier inside the callback, or access a computed signal that was invalidated by another signal, we'll only update the necessary dependencies to get the current value for the signal you read from. All other invalidated signals will update at the end of the callback function.
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
 final counter = signal(0);
 final _double = computed(() => counter.value * 2);
@@ -201,7 +199,7 @@ batch(() {
 Batches can be nested and updates will be flushed when the outermost batch call completes.
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
 final counter = signal(0);
 effect(() => print(counter.value));

@@ -11,14 +11,14 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
 
-      - run: cd packages/preact_signals && dart pub get
-      - run: cd packages/preact_signals && dart test
-      - run: cd packages/preact_signals/example && dart pub get
-      - run: cd packages/preact_signals/example && dart pub global activate webdev
-      - run: cd packages/preact_signals/example && webdev build
+      - run: cd packages/signals && dart pub get
+      - run: cd packages/signals && dart test
+      - run: cd packages/signals/example && dart pub get
+      - run: cd packages/signals/example && dart pub global activate webdev
+      - run: cd packages/signals/example && webdev build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./packages/preact_signals/example/build
+            publish_dir: ./packages/signals/example/build
