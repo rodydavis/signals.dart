@@ -19,7 +19,7 @@ jobs:
         uses: withastro/action@v1
         with:
           path: website
-          node-version: 18
+          node-version: 19
           package-manager: pnpm@latest
 
   deploy:
