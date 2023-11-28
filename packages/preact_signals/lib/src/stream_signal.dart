@@ -27,7 +27,7 @@ class StreamSignal<T> extends Signal<T?> {
   StreamSignal(
     this._getStream, {
     this.cancelOnError,
-    this.fireImmediately = true,
+    this.fireImmediately = false,
   }) : super(null) {
     _stale = true;
     if (fireImmediately) _execute();
@@ -137,7 +137,7 @@ enum _StreamState {
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() stream, {
   bool? cancelOnError,
-  bool fireImmediately = true,
+  bool fireImmediately = false,
 }) {
   return StreamSignal<T>(
     stream,
