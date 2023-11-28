@@ -134,6 +134,26 @@ dispose();
 surname.value = "Doe 2";
 ```
 
+> [!WARNING] Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](#untrackedfn) to read a signal without subscribing to it.
+
+```dart
+import 'dart:async';
+
+import 'package:signals/signals.dart';
+
+Future<void> main() async {
+  final completer = Completer<void>();
+  final age = signal(0);
+
+  effect(() {
+    print('You are ${age.value} years old');
+    age.value++;
+  });
+
+  await completer.future;
+}
+```
+
 ### `batch(fn)`
 
 The `batch` function allows you to combine multiple signal writes into one single update that is triggered at the end when the callback completes.

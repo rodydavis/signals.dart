@@ -6,6 +6,8 @@ import 'utils/constants.dart';
 
 part 'devtool.dart';
 
+const _maxCallDepth = 100;
+
 void cycleDetected() {
   throw Exception('Cycle detected');
 }
@@ -509,7 +511,7 @@ class Signal<T> implements MutableSignal<T> {
   }
 
   void _updateValue(T val) {
-    if (batchIteration > 100) {
+    if (batchIteration > _maxCallDepth) {
       cycleDetected();
     }
 
