@@ -1,6 +1,6 @@
 [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)
-[![Tests](https://github.com/rodydavis/preact_signals.dart/actions/workflows/tests.yml/badge.svg)](https://github.com/rodydavis/preact_signals.dart/actions/workflows/tests.yml)
-[![Publish Example](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml/badge.svg)](https://github.com/rodydavis/preact_signals.dart/actions/workflows/main.yml)
+[![Tests](https://github.com/rodydavis/signals.dart/actions/workflows/tests.yml/badge.svg)](https://github.com/rodydavis/signals.dart/actions/workflows/tests.yml)
+[![Publish Example](https://github.com/rodydavis/signals.dart/actions/workflows/main.yml/badge.svg)](https://github.com/rodydavis/signals.dart/actions/workflows/main.yml)
 
 # Signals
 
