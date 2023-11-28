@@ -13,7 +13,7 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 
   /// Convert a signal to [ValueListenable] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
-  ValueListenable<T> listenable() {
+  ValueListenable<T> toValueListenable() {
     final notifier = ValueNotifier(this());
     subscribe((_) {
       notifier.value = this();
@@ -23,7 +23,7 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 
   /// Convert a signal to a [Stream] to be consumed as
   /// a read only stream and also be used in a [StreamBuilder]
-  Stream<T> stream() {
+  Stream<T> toStream() {
     final controller = StreamController<T>();
     controller.add(value);
     subscribe((_) => controller.add(value));
@@ -34,12 +34,12 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 /// Mutable signal utils
 extension MutableSignalUtils<T> on MutableSignal<T> {
   /// Restrict API to readonly signal
-  ReadonlySignal<T> readonly() => this;
+  ReadonlySignal<T> toReadonlySignal() => this;
 
   /// Convert a [ValueListenable] to [MutableSignal] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
   /// and allow for mutation
-  ValueNotifier<T> notifier() {
+  ValueNotifier<T> toValueNotifier() {
     final notifier = ValueNotifier(value);
     subscribe((_) => notifier.value = value);
     notifier.addListener(() => value = notifier.value);

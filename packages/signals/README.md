@@ -6,8 +6,6 @@
 
 Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
 
-This package is a set of Flutter extensions for the [`signals`](https://pub.dev/packages/signals) package.
-
 ## Guide / API
 
 The signals library exposes four functions which are the building blocks to model any business logic you can think of.
