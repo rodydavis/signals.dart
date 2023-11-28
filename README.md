@@ -134,7 +134,7 @@ dispose();
 surname.value = "Doe 2";
 ```
 
-#### Warning: Cycles
+#### Warning Cycles
 
 Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](#untrackedfn) to read a signal without subscribing to it.
 
