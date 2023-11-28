@@ -5,16 +5,14 @@ import 'package:test/test.dart';
 
 void main() {
   group('Future', () {
-    test('signalFromFuture', () async {
-      final future = _future();
-      final signal = FutureSignal(() => future);
-      expect(signal() is SignalLoading, true);
+    test('FutureSignal', () async {
+      final signal = FutureSignal(() => _future());
+      expect(signal.value == null, true);
 
       final completer = Completer<int>();
       effect(() {
-        final state = signal.value;
-        if (state is SignalValue<int>) {
-          completer.complete(state.value);
+        if (signal.isSuccess) {
+          completer.complete(signal.value);
         }
       });
       final result = await completer.future;
@@ -25,13 +23,12 @@ void main() {
     test('extension on Future', () async {
       final future = _future();
       final signal = future.toSignal();
-      expect(signal() is SignalLoading, true);
+      expect(signal.value == null, true);
 
       final completer = Completer<int>();
       effect(() {
-        final state = signal.value;
-        if (state is SignalValue<int>) {
-          completer.complete(state.value);
+        if (signal.isSuccess) {
+          completer.complete(signal.value);
         }
       });
       final result = await completer.future;
