@@ -290,7 +290,7 @@ final signal = future.toSignal(); // or signalFromFuture(future)
 
 ### `Stream`
 
-Futures can be converted to signals by either a method `signalFromFuture` or as an extension method on a `Future`:
+Streams can be converted to signals by either a method `signalFromStream` or as an extension method on a `Stream`:
 
 ```dart
 import 'package:signals/signals.dart';
