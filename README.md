@@ -9,7 +9,7 @@ Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-sig
 | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | [`preact_signals`](packages/preact_signals)                                       | [![preact_signals](https://img.shields.io/pub/v/preact_signals.svg)](https://pub.dev/packages/preact_signals)                         |
 | [`flutter_preact_signals`](packages/flutter_preact_signals)                       | [![flutter_preact_signals](https://img.shields.io/pub/v/flutter_preact_signals.svg)](https://pub.dev/packages/flutter_preact_signals) |
-| [`signals`](packages/signals)                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals) |
+| [`signals`](packages/signals)                                                     | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                                              |
 | [`preact_signals_devtools_extension`](packages/preact_signals_devtools_extension) |                                                                                                                                       |
 
 ## Guide / API
@@ -134,8 +134,9 @@ dispose();
 surname.value = "Doe 2";
 ```
 
->	**Warning**
->	Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](#untrackedfn) to read a signal without subscribing to it.
+#### Warning: Cycles
+
+Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](#untrackedfn) to read a signal without subscribing to it.
 
 ```dart
 import 'dart:async';
@@ -148,7 +149,7 @@ Future<void> main() async {
 
   effect(() {
     print('You are ${age.value} years old');
-    age.value++;
+    age.value++; // <-- This will throw a cycle error
   });
 
   await completer.future;
