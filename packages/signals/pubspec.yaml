@@ -10,8 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_preact_signals: ^0.4.1
-  preact_signals: ^0.4.0
 
 dev_dependencies:
   flutter_test:
