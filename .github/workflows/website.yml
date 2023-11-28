@@ -20,7 +20,7 @@ jobs:
         with:
           path: website
           node-version: 19
-          package-manager: pnpm@latest
+          package-manager: pnpm@7.26.1
 
   deploy:
     needs: build
