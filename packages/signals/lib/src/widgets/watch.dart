@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 
 import '../signals.dart';
 
-/// [Watch] Widget that will rebuild when any signals
-/// inside the builder change
+/// [Watch] is a drop-in replacement for [Builder] that will rebuild
+/// when any signals inside the builder change
 class Watch<T extends Widget> extends StatefulWidget {
   const Watch(this.builder, {super.key});
 
   /// The widget to rebuild when any signals change
-  final T Function() builder;
+  final T Function(BuildContext context) builder;
 
   @override
   State<Watch<T>> createState() => _WatchState<T>();
 }
 
 class _WatchState<T extends Widget> extends State<Watch<T>> {
-  late final signal = computed(() => widget.builder());
+  late Widget child;
   EffectCleanup? fn;
+  bool _initialized = false;
 
   void init() {
     fn?.call();
     fn = effect(() {
-      signal.value;
+      child = widget.builder(context);
       if (mounted) {
         (context as Element).markNeedsBuild();
       }
@@ -37,7 +38,10 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   @override
   void initState() {
     super.initState();
-    init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      init();
+      _initialized = true;
+    });
   }
 
   @override
@@ -47,7 +51,20 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    child = widget.builder(context);
+    if (mounted) {
+      (context as Element).markNeedsBuild();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return signal.value;
+    if (!_initialized) {
+      return widget.builder(context);
+    } else {
+      return child;
+    }
   }
 }

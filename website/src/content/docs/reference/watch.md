@@ -12,24 +12,7 @@ final signal = signal(10);
 ...
 @override
 Widget build(BuildContext context) {
-  return Watch(() => Text('$signal'));
-}
-```
-
-## WatchBuilder
-
-If you need the BuildContext to be passed to the watch function, use the `WatchBuilder` widget.
-
-```dart
-final signal = signal(10);
-...
-@override
-Widget build(BuildContext context) {
-  return WatchBuilder((context) {
-    return Text('$signal',
-      style: Theme.of(context).textTheme.displayLarge,
-    );
-  });
+  return Watch((context) => Text('$signal'));
 }
 ```
 

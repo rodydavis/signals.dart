@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          Watch(() {
+          Watch((_) {
             final isDark = brightness() == Brightness.dark;
             return IconButton(
               onPressed: () {
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            WatchBuilder((context) {
+            Watch((context) {
               return Text(
                 '$counter',
                 style: Theme.of(context).textTheme.headlineMedium,

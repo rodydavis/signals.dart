@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'watch_builder.dart';
+import 'watch.dart';
 
 /// Easy replacement for [StatelessWidget] that will rebuild
 abstract class SignalWidget extends StatefulWidget {
@@ -16,6 +16,6 @@ abstract class SignalWidget extends StatefulWidget {
 class _SignalStatefulWidgetState extends State<SignalWidget> {
   @override
   Widget build(BuildContext context) {
-    return WatchBuilder((context) => widget.build(context));
+    return Watch((context) => widget.build(context));
   }
 }
