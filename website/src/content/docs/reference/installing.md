@@ -3,6 +3,8 @@ title: Installing
 description: How to install Signals
 ---
 
+`Signals.dart` is available on [pub.dev](https://pub.dev/packages/signals).
+
 Add the following to your `pubspec.yaml`:
 
 ```yaml
