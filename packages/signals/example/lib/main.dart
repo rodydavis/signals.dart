@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
 final brightness = signal(Brightness.light);
+final themeMode = computed(() {
+  if (brightness() == Brightness.dark) {
+    return ThemeMode.dark;
+  } else {
+    return ThemeMode.light;
+  }
+});
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends SignalWidget {
   const MyApp({super.key});
 
   @override
@@ -29,9 +36,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      themeMode: brightness.watch(context) == Brightness.dark
-          ? ThemeMode.dark
-          : ThemeMode.light,
+      themeMode: themeMode(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -47,12 +52,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late final counterFutureSignal = futureSignal(counterFuture);
+  final counter = signal(0);
 
-  Future<String> counterFuture() async {
-    print('counterFuture');
-    await Future.delayed(const Duration(seconds: 1));
-    return 'One second has passed.';
+  void _incrementCounter() {
+    counter.value++;
   }
 
   @override
@@ -73,17 +76,25 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
-        child: Watch(() => counterFutureSignal.map(
-              value: (value) => Text(
-                value,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Watch(() {
+              return Text(
+                '$counter',
                 style: Theme.of(context).textTheme.headlineMedium!,
-              ),
-              error: (error) => Text(
-                'Error: $error',
-                style: Theme.of(context).textTheme.headlineMedium!,
-              ),
-              loading: () => const CircularProgressIndicator(),
-            )),
+              );
+            }),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
       ),
     );
   }
