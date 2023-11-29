@@ -16,6 +16,6 @@ abstract class SignalWidget extends StatefulWidget {
 class _SignalStatefulWidgetState extends State<SignalWidget> {
   @override
   Widget build(BuildContext context) {
-    return Watch((context) => widget.build(context));
+    return Watch(widget.build);
   }
 }

@@ -15,18 +15,13 @@ class Watch<T extends Widget> extends StatefulWidget {
 }
 
 class _WatchState<T extends Widget> extends State<Watch<T>> {
-  late Widget child;
+  Widget? child;
   EffectCleanup? fn;
-  bool _initialized = false;
 
-  void init() {
-    fn?.call();
-    fn = effect(() {
-      child = widget.builder(context);
-      if (mounted) {
-        (context as Element).markNeedsBuild();
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => init());
   }
 
   @override
@@ -36,12 +31,9 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      init();
-      _initialized = true;
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    rebuild();
   }
 
   @override
@@ -50,10 +42,15 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    child = widget.builder(context);
+  void init() {
+    fn?.call();
+    fn = effect(rebuild);
+  }
+
+  void rebuild() {
+    final result = widget.builder(context);
+    if (result == child) return;
+    child = result;
     if (mounted) {
       (context as Element).markNeedsBuild();
     }
@@ -61,10 +58,10 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_initialized) {
+    if (child == null) {
       return widget.builder(context);
     } else {
-      return child;
+      return child!;
     }
   }
 }
