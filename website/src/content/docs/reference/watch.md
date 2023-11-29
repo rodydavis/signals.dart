@@ -86,6 +86,6 @@ final computed = computed(() => signal.value.a);
 ...
 @override
 Widget build(BuildContext context) {
-  return Watch(() => Text('$computed'));
+  return Watch((_) => Text('$computed'));
 }
 ```
