@@ -1,3 +1,8 @@
+## 1.2.2
+
+- Fixing `FutureSignal` and `StreamSignal` in watch
+- Adding `Watch` and `SignalWidget`
+
 ## 1.2.1
 
 - Fixing `computed` and `signal` to work the same in debug mode as in release mode
