@@ -82,10 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Watch(() {
+            WatchBuilder((context) {
               return Text(
                 '$counter',
-                style: Theme.of(context).textTheme.headlineMedium!,
+                style: Theme.of(context).textTheme.headlineMedium,
               );
             }),
           ],

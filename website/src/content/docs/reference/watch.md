@@ -16,6 +16,23 @@ Widget build(BuildContext context) {
 }
 ```
 
+## WatchBuilder
+
+If you need the BuildContext to be passed to the watch function, use the `WatchBuilder` widget.
+
+```dart
+final signal = signal(10);
+...
+@override
+Widget build(BuildContext context) {
+  return WatchBuilder((context) {
+    return Text('$signal',
+      style: Theme.of(context).textTheme.displayLarge,
+    );
+  });
+}
+```
+
 ## SignalWidget
 
 If using a `StatelessWidget` and you want to watch a signal for changes rebuilding the entire widget, use the `SignalWidget` widget.

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'signals.dart';
+import '../signals.dart';
 
-/// [Watch] Widget that will rebuild when any single
-/// inside the builder changes
+/// [Watch] Widget that will rebuild when any signals
+/// inside the builder change
 class Watch<T extends Widget> extends StatefulWidget {
   const Watch(this.builder, {super.key});
 
-  /// The widget to rebuild when the signal changes
+  /// The widget to rebuild when any signals change
   final T Function() builder;
 
   @override
@@ -16,19 +16,28 @@ class Watch<T extends Widget> extends StatefulWidget {
 
 class _WatchState<T extends Widget> extends State<Watch<T>> {
   late final signal = computed(() => widget.builder());
-  late Widget child = signal.value;
-
   EffectCleanup? fn;
 
-  @override
-  void initState() {
-    super.initState();
+  void init() {
+    fn?.call();
     fn = effect(() {
-      child = signal.value;
+      signal.value;
       if (mounted) {
         (context as Element).markNeedsBuild();
       }
     });
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    init();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    init();
   }
 
   @override
@@ -39,6 +48,6 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return child;
+    return signal.value;
   }
 }
