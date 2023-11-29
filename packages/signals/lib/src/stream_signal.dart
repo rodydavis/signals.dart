@@ -108,9 +108,10 @@ class StreamSignal<T> extends Signal<T?> {
     required StreamSignalBuilder<E> loading,
     required StreamSignalErrorBuilder<E> error,
   }) {
+    this.value;
     switch (_state) {
       case _StreamState.value:
-        return value(this.value as T);
+        return value(peek() as T);
       case _StreamState.error:
         return error(_error);
       case _StreamState.loading:
@@ -125,9 +126,10 @@ class StreamSignal<T> extends Signal<T?> {
     StreamSignalErrorBuilder<E>? error,
     required StreamSignalBuilder<E> orElse,
   }) {
+    this.value;
     switch (_state) {
       case _StreamState.value:
-        if (value != null) return value(this.value as T);
+        if (value != null) return value(peek() as T);
         break;
       case _StreamState.error:
         if (error != null) return error(_error);

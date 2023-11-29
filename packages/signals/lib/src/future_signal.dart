@@ -33,9 +33,12 @@ class FutureSignal<T> extends Signal<T?> {
   final bool fireImmediately;
 
   /// Creates a [FutureSignal] that wraps a [Future]
-  FutureSignal(this._compute,
-      {this.timeout, this.fireImmediately = false, super.debugLabel})
-      : super(null) {
+  FutureSignal(
+    this._compute, {
+    this.timeout,
+    this.fireImmediately = false,
+    super.debugLabel,
+  }) : super(null) {
     _stale = true;
     if (fireImmediately) _execute().ignore();
   }
@@ -112,9 +115,10 @@ class FutureSignal<T> extends Signal<T?> {
     required FutureSignalErrorBuilder<E> error,
     FutureSignalBuilder<E>? timeout,
   }) {
+    this.value;
     switch (_state) {
       case _FutureState.value:
-        return value(this.value as T);
+        return value(peek() as T);
       case _FutureState.error:
         return error(_error);
       case _FutureState.timeout:
@@ -133,9 +137,10 @@ class FutureSignal<T> extends Signal<T?> {
     FutureSignalBuilder<E>? timeout,
     required FutureSignalBuilder<E> orElse,
   }) {
+    this.value;
     switch (_state) {
       case _FutureState.value:
-        if (value != null) return value(this.value as T);
+        if (value != null) return value(peek() as T);
         break;
       case _FutureState.error:
         if (error != null) return error(_error);
