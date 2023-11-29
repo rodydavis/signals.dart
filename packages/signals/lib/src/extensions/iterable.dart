@@ -4,6 +4,9 @@ import '../iterable_signal.dart';
 extension SignalIterableUtils<T> on Iterable<T> {
   /// Convert an existing list to [IterableSignal]
   IterableSignal<T> toSignal({String? debugLabel}) {
-    return IterableSignal<T>(this, debugLabel: debugLabel);
+    return IterableSignal<T>(
+      this,
+      debugLabel: debugLabel,
+    );
   }
 }

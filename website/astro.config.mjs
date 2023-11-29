@@ -35,6 +35,12 @@ export default defineConfig({
                 { label: "Iterable", link: "/reference/iterable" },
                 { label: "Future", link: "/reference/future" },
                 { label: "Stream", link: "/reference/stream" },
+              ],
+            },
+            {
+              label: "Flutter",
+              items: [
+                { label: "Watch", link: "/reference/watch" },
                 {
                   label: "ValueListenable",
                   link: "/reference/value-listenable",

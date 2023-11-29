@@ -151,10 +151,12 @@ StreamSignal<T> streamSignal<T>(
   Stream<T> Function() stream, {
   bool? cancelOnError,
   bool fireImmediately = false,
+  String? debugLabel,
 }) {
   return StreamSignal<T>(
     stream,
     cancelOnError: cancelOnError,
     fireImmediately: fireImmediately,
+    debugLabel: debugLabel,
   );
 }

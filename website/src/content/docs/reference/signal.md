@@ -17,6 +17,14 @@ print(counter.value);
 counter.value = 1;
 ```
 
+Signals can be created globally, inside classes or functions. It's up to you how you want to structure your app.
+
+It is not recommended to create signals inside effects or computed, as this will create a new signal every time the effect or computed is triggered. This can lead to unexpected behavior.
+
+In Flutter do not create signals inside `build` methods, as this will create a new signal every time the widget is rebuilt.
+
+## Writing to a signal
+
 Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/signals.dart/reference/computed) and [effect](/signals.dart/reference/effect) that depends on that signal, ensuring your app state is always consistent.
 
 ## .peek()

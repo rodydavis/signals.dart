@@ -19,12 +19,7 @@ Future<void> refreshNodes() async {
     final items = (response.json?['nodes'] as List?) ?? [];
     final results = <Node>[];
     for (final item in items) {
-      results.add((
-        id: item['id'] as int,
-        type: item['type'] as String,
-        label: item['label'] as String?,
-        value: item['value'] as String?,
-      ));
+      results.add(parseNode(item));
     }
     nodes.value = results;
     if (selectedIndex.peek() == -1) {
@@ -33,6 +28,15 @@ Future<void> refreshNodes() async {
   } catch (e) {
     print('Error fetching all signals: $e');
   }
+}
+
+Node parseNode(dynamic item) {
+  return (
+    id: item['id'] as int,
+    type: item['type'] as String,
+    label: item['label'] as String?,
+    value: item['value'] as String?,
+  );
 }
 
 void changeId({required bool increment}) {

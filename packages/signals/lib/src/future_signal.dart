@@ -177,10 +177,12 @@ FutureSignal<T> futureSignal<T>(
   Future<T> Function() compute, {
   Duration? timeout,
   bool fireImmediately = false,
+  String? debugLabel,
 }) {
   return FutureSignal<T>(
     compute,
     timeout: timeout,
     fireImmediately: fireImmediately,
+    debugLabel: debugLabel,
   );
 }

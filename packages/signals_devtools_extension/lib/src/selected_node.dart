@@ -22,7 +22,7 @@ class SelectedNode extends StatefulWidget {
 }
 
 class _SelectedNodeState extends State<SelectedNode> {
-  String selected = 'unknown';
+  late Node? node = widget.selectedNode;
 
   Future<void> _updateSelectedNode(int id) async {
     try {
@@ -31,12 +31,12 @@ class _SelectedNodeState extends State<SelectedNode> {
         args: {'id': id},
       );
       setState(() {
-        selected = response.json?['value'] as String? ?? 'unknown';
+        node = parseNode(response.json ?? {});
       });
     } catch (e) {
       print('error fetching node $id');
       setState(() {
-        selected = 'unknown';
+        node = null;
       });
     }
   }
@@ -57,26 +57,32 @@ class _SelectedNodeState extends State<SelectedNode> {
 
   @override
   Widget build(BuildContext context) {
-    final node = widget.selectedNode;
+    if (node == null) {
+      return const Center(child: Text('Error fetching node'));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
           title: const Text('Global ID'),
-          subtitle: Text(node.id.toString()),
+          subtitle: Text(node!.id.toString()),
         ),
         ListTile(
           title: const Text('Type'),
-          subtitle: Text(node.type),
+          subtitle: Text(node!.type),
         ),
         ListTile(
           title: const Text('Debug Label'),
-          subtitle: Text(node.label ?? 'N/A'),
+          subtitle: Text(node!.label ?? 'N/A'),
         ),
-        if (node.value != null)
+        if (node!.value != null)
           ListTile(
             title: const Text('Value'),
-            subtitle: Text(node.value!),
+            subtitle: Text(node!.value!),
+            trailing: IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () => _updateSelectedNode(node!.id),
+            ),
           ),
       ],
     );

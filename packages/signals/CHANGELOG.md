@@ -1,3 +1,8 @@
+## 1.2.1
+
+- Fixing `computed` and `signal` to work the same in debug mode as in release mode
+- Passing through `debugLabel` to all methods
+
 ## 1.2.0
 
 - Fixing public API and removing public classes (Computed, Effect, StreamSignal, etc.)
