@@ -25,6 +25,7 @@ void main() {
     final currentFilter = filter.value;
     final currentTasks = tasks;
     if (currentFilter == "all") {
+      // We use toList() here because we need to return a new reference of the list to pass the effect's equality check
       return currentTasks.toList();
     } else if (currentFilter == "active") {
       return currentTasks.where((task) => !task.completed).toList();
