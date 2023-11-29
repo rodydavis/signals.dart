@@ -16,22 +16,6 @@ Widget build(BuildContext context) {
 }
 ```
 
-## SignalWidget
-
-If using a `StatelessWidget` and you want to watch a signal for changes rebuilding the entire widget, use the `SignalWidget` widget.
-
-```diff
-final signal = signal(10);
-...
-- class MyWidget extends StatelessWidget {
-+ class MyWidget extends SignalWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text('$signal');
-  }
-}
-```
-
 ## .watch(context)
 
 If you need to map to a widget property use the `watch` extension method. This will infer the type and subscribe to the signal.

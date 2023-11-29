@@ -20,7 +20,7 @@ final themeMode = computed(() {
 
 void main() => runApp(const MyApp());
 
-class MyApp extends SignalWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
@@ -44,7 +44,7 @@ class MyApp extends SignalWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      themeMode: themeMode(),
+      themeMode: themeMode.watch(context),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

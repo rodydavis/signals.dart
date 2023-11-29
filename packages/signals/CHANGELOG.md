@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Removing `SignalWidget` since it will cause unnecessary rebuilds if used at the root and too easy to use incorrectly
+
 ## 1.2.2
 
 - Fixing `FutureSignal` and `StreamSignal` in watch
