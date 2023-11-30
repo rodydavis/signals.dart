@@ -21,3 +21,4 @@ export 'src/list_signal.dart' show listSignal;
 export 'src/map_signal.dart' show mapSignal;
 export 'src/set_signal.dart' show setSignal;
 export 'src/iterable_signal.dart' show iterableSignal;
+export 'src/connect.dart' show connect;

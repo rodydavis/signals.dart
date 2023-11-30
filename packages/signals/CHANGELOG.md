@@ -1,3 +1,7 @@
+## 1.3.2
+
+- Adding `connect` to make it easier to connect a signal to a set of streams
+
 ## 1.3.1
 
 - `FutureSignal` now implements `ReadonlySignal` instead of `Signal`
