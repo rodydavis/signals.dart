@@ -1,3 +1,7 @@
+## 1.3.3
+
+- Adding inject `<<` and `&` fork operators on collections
+
 ## 1.3.2
 
 - Adding `connect` to make it easier to connect a signal to a set of streams
