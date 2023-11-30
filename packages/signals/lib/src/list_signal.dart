@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:signals/signals.dart';
+
 import 'signals.dart';
 
 /// A [Signal] that holds a [List].
@@ -48,6 +50,19 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   void operator []=(int index, E value) {
     this.value[index] = value;
     forceUpdate(this.value);
+  }
+
+  /// Inject: Update current signal value with iterable
+  Signal<Iterable<E>> operator <<(Iterable<E> other) {
+    value.addAll(other);
+    forceUpdate(value);
+    return this;
+  }
+
+  /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter
+  Signal<Iterable<E>> operator &(Iterable<E> other) {
+    final rs = List<E>.from(peek())..addAll(other);
+    return rs.toSignal();
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'package:signals/src/extensions/set.dart';
+
 import 'signals.dart';
 
 /// A [Signal] that holds a [Set].
@@ -117,6 +119,19 @@ class SetSignal<E> extends Signal<Set<E>> implements Set<E> {
 
   @override
   int get length => value.length;
+
+  /// Inject: Update current signal value with iterable
+  Signal<Set<E>> operator <<(Set<E> other) {
+    value.addAll(other);
+    forceUpdate(value);
+    return this;
+  }
+
+  /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter
+  Signal<Set<E>> operator &(Set<E> other) {
+    final rs = Set<E>.from(peek())..addAll(other);
+    return rs.toSignal();
+  }
 
   @override
   E? lookup(Object? object) {

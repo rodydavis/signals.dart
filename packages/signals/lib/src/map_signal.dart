@@ -1,3 +1,5 @@
+import 'package:signals/src/extensions/map.dart';
+
 import 'signals.dart';
 
 /// A [Signal] that holds a [Map].
@@ -14,6 +16,19 @@ class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
   void operator []=(K key, V value) {
     this.value[key] = value;
     forceUpdate(this.value);
+  }
+
+  /// Inject: Update current signal value with iterable
+  Signal<Map<K, V>> operator <<(Map<K, V> other) {
+    value.addAll(other);
+    forceUpdate(value);
+    return this;
+  }
+
+  /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter
+  Signal<Map<K, V>> operator &(Map<K, V> other) {
+    final rs = Map<K, V>.from(peek())..addAll(other);
+    return rs.toSignal();
   }
 
   @override
