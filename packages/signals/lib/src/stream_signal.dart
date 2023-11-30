@@ -28,7 +28,7 @@ typedef StreamSignalBuilder<R> = R Function();
 ///     loading: () => 'loading',
 /// );
 /// ```
-class StreamSignal<T> extends Signal<T?> {
+class StreamSignal<T> implements ReadonlySignal<T?> {
   /// Cancel the stream on error
   final bool? cancelOnError;
 
@@ -40,23 +40,26 @@ class StreamSignal<T> extends Signal<T?> {
     this._compute, {
     this.cancelOnError,
     this.fireImmediately = false,
-    super.debugLabel,
-  }) : super(null) {
+    this.debugLabel,
+  }) {
     _stale = true;
     if (fireImmediately) _execute();
   }
 
   final Stream<T> Function() _compute;
   bool _stale = false;
-  Object? _error;
-  var _state = _StreamState.loading;
+  final _state = signal<(_StreamState, T?, Object?)>((
+    _StreamState.loading,
+    null,
+    null,
+  ));
   StreamSubscription<T>? _subscription;
 
   /// Resets the signal by calling the [Stream] again
   void reset() {
     _subscription?.cancel();
     _stale = true;
-    _state = _StreamState.loading;
+    _state.value = (_StreamState.loading, null, null);
     if (fireImmediately) _execute();
   }
 
@@ -65,12 +68,10 @@ class StreamSignal<T> extends Signal<T?> {
     _stale = false;
     _subscription = _compute().listen(
       (data) {
-        _state = _StreamState.value;
-        value = data;
+        _state.value = (_StreamState.value, data, null);
       },
       onError: (data) {
-        _state = _StreamState.error;
-        _error = data;
+        _state.value = (_StreamState.error, null, data);
       },
       cancelOnError: cancelOnError,
     );
@@ -84,23 +85,27 @@ class StreamSignal<T> extends Signal<T?> {
   @override
   T? get value {
     _execute();
-    return super.value;
+    final (state, val, _) = _state.value;
+    if (state == _StreamState.value) return val;
+    return null;
   }
 
   /// Returns the error of the signal if present
   Object? get error {
     _execute();
-    return _error;
+    final (state, _, err) = _state.value;
+    if (state == _StreamState.error) return err;
+    return null;
   }
 
   /// Returns true if the future signal is done loading
-  bool get isSuccess => _state == _StreamState.value;
+  bool get isSuccess => _state.peek().$1 == _StreamState.value;
 
   /// Returns true if the future signal has an error
-  bool get isError => _state == _StreamState.error;
+  bool get isError => _state.peek().$1 == _StreamState.error;
 
-  /// Returns true if the future signal has timed out
-  bool get isLoading => _state == _StreamState.loading;
+  /// Returns true if the future signal is loading
+  bool get isLoading => _state.peek().$1 == _StreamState.loading;
 
   /// Returns the value of the signal or null if not a value
   E map<E>({
@@ -108,12 +113,13 @@ class StreamSignal<T> extends Signal<T?> {
     required StreamSignalBuilder<E> loading,
     required StreamSignalErrorBuilder<E> error,
   }) {
-    this.value;
-    switch (_state) {
+    _execute();
+    final (state, val, err) = _state.value;
+    switch (state) {
       case _StreamState.value:
-        return value(peek() as T);
+        return value(val as T);
       case _StreamState.error:
-        return error(_error);
+        return error(err);
       case _StreamState.loading:
         return loading();
     }
@@ -126,13 +132,14 @@ class StreamSignal<T> extends Signal<T?> {
     StreamSignalErrorBuilder<E>? error,
     required StreamSignalBuilder<E> orElse,
   }) {
-    this.value;
-    switch (_state) {
+    _execute();
+    final (state, val, err) = _state.value;
+    switch (state) {
       case _StreamState.value:
-        if (value != null) return value(peek() as T);
+        if (value != null) return value(val as T);
         break;
       case _StreamState.error:
-        if (error != null) return error(_error);
+        if (error != null) return error(err);
         break;
       case _StreamState.loading:
         if (loading != null) return loading();
@@ -140,6 +147,32 @@ class StreamSignal<T> extends Signal<T?> {
     }
     return orElse();
   }
+
+  @override
+  T? call() => value;
+
+  @override
+  final String? debugLabel;
+
+  @override
+  int get globalId => _state.globalId;
+
+  @override
+  T? peek() {
+    final (_, value, _) = _state.peek();
+    return value;
+  }
+
+  @override
+  EffectCleanup subscribe(void Function(T? value) fn) {
+    return _state.subscribe((event) {
+      final (_, value, _) = event;
+      fn(value);
+    });
+  }
+
+  @override
+  T? toJson() => value;
 }
 
 enum _StreamState {

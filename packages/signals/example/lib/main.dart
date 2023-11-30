@@ -1,16 +1,25 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-final brightness = signal(Brightness.light);
-final themeMode = computed(() {
-  if (brightness() == Brightness.dark) {
-    return ThemeMode.dark;
+Future<int?> myFuture() async {
+  print('myFuture');
+  await Future.delayed(const Duration(milliseconds: 1000));
+  int number = Random().nextInt(10);
+  if (number.isEven) {
+    return number;
   } else {
-    return ThemeMode.light;
+    throw Exception('Exception');
   }
-});
+}
 
-void main() => runApp(const MyApp());
+final myFutureSignal = futureSignal(() => myFuture());
+
+final counter = signal(0);
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -19,24 +28,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.light,
-        ),
-        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
-        ),
-        brightness: Brightness.dark,
-        useMaterial3: true,
-      ),
-      themeMode: themeMode.watch(context),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -52,49 +47,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final counter = signal(0);
-
-  void _incrementCounter() {
+  void _random() async {
     counter.value++;
+    myFutureSignal.reset();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-        actions: [
-          Watch((_) {
-            final isDark = brightness() == Brightness.dark;
-            return IconButton(
-              onPressed: () {
-                brightness.value = isDark ? Brightness.light : Brightness.dark;
-              },
-              icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
-            );
-          }),
-        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              '${counter.watch(context)}',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             Watch((context) {
-              return Text(
-                '$counter',
-                style: Theme.of(context).textTheme.headlineMedium,
-              );
+              return myFutureSignal.map(value: (value) {
+                print('value:$value');
+                return Text(
+                  value.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium!,
+                );
+              }, error: (error) {
+                print('error:$error');
+                return Text(
+                  'error:$error',
+                  style: Theme.of(context).textTheme.headlineMedium!,
+                );
+              }, loading: () {
+                print('loading');
+                return const CircularProgressIndicator();
+              });
             }),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        onPressed: _random,
+        tooltip: 'Random',
+        child: const Icon(Icons.refresh),
       ),
     );
   }

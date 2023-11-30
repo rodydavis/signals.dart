@@ -1,3 +1,8 @@
+## 1.3.1
+
+- `FutureSignal` now implements `ReadonlySignal` instead of `Signal`
+- `StreamSignal` now implements `ReadonlySignal` instead of `Signal`
+
 ## 1.3.0
 
 - Removing `SignalWidget` since it will cause unnecessary rebuilds if used at the root and too easy to use incorrectly

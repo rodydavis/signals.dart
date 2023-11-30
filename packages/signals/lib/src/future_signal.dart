@@ -25,7 +25,7 @@ typedef FutureSignalBuilder<R> = R Function();
 ///     timeout: () => 'timeout',
 /// );
 /// ```
-class FutureSignal<T> extends Signal<T?> {
+class FutureSignal<T> implements ReadonlySignal<T?> {
   /// Future [Duration] to wait before timing out
   final Duration? timeout;
 
@@ -37,49 +37,46 @@ class FutureSignal<T> extends Signal<T?> {
     this._compute, {
     this.timeout,
     this.fireImmediately = false,
-    super.debugLabel,
-  }) : super(null) {
+    this.debugLabel,
+  }) {
     _stale = true;
     if (fireImmediately) _execute().ignore();
   }
 
+  final _state = signal<(_FutureState, T?, Object?)>((
+    _FutureState.loading,
+    null,
+    null,
+  ));
+
   final Future<T> Function() _compute;
   bool _stale = false;
-  Object? _error;
-  var _state = _FutureState.loading;
 
   /// Resets the signal by calling the [Future] again
   Future<void> reset() async {
     _stale = true;
-    _state = _FutureState.loading;
+    _state.value = (_FutureState.loading, null, null);
     if (fireImmediately) await _execute();
-  }
-
-  Future<T> _future() {
-    if (timeout != null) {
-      return _compute().timeout(timeout!, onTimeout: () {
-        throw FutureSignalTimeoutException();
-      });
-    } else {
-      return _compute();
-    }
   }
 
   Future<void> _execute() async {
     if (!_stale) return;
     _stale = false;
     try {
-      final result = await _future();
-      _state = _FutureState.value;
-      value = result;
-    } catch (e) {
-      value = null;
-      if (e is FutureSignalTimeoutException) {
-        _state = _FutureState.timeout;
-        _error = null;
+      T result;
+      if (timeout != null) {
+        result = await _compute().timeout(timeout!, onTimeout: () {
+          throw FutureSignalTimeoutException();
+        });
       } else {
-        _state = _FutureState.error;
-        _error = e;
+        result = await _compute();
+      }
+      _state.value = (_FutureState.value, result, null);
+    } catch (e) {
+      if (e is FutureSignalTimeoutException) {
+        _state.value = (_FutureState.timeout, null, null);
+      } else {
+        _state.value = (_FutureState.error, null, e);
       }
     }
   }
@@ -87,26 +84,30 @@ class FutureSignal<T> extends Signal<T?> {
   @override
   T? get value {
     _execute().ignore();
-    return super.value;
+    final (state, val, _) = _state.value;
+    if (state == _FutureState.value) return val;
+    return null;
   }
 
   /// Returns the error of the signal if present
   Object? get error {
     _execute().ignore();
-    return _error;
+    final (state, _, err) = _state.value;
+    if (state == _FutureState.error) return err;
+    return null;
   }
 
   /// Returns true if the future signal is done loading
-  bool get isSuccess => _state == _FutureState.value;
+  bool get isSuccess => _state.peek().$1 == _FutureState.value;
 
   /// Returns true if the future signal has an error
-  bool get isError => _state == _FutureState.error || isTimeout;
+  bool get isError => _state.peek().$1 == _FutureState.error || isTimeout;
 
   /// Returns true if the future signal has timed out
-  bool get isTimeout => _state == _FutureState.timeout;
+  bool get isTimeout => _state.peek().$1 == _FutureState.timeout;
 
   /// Returns true if the future signal is loading
-  bool get isLoading => _state == _FutureState.loading;
+  bool get isLoading => _state.peek().$1 == _FutureState.loading;
 
   /// Returns the value of the signal or null if not a value
   E map<E>({
@@ -115,12 +116,13 @@ class FutureSignal<T> extends Signal<T?> {
     required FutureSignalErrorBuilder<E> error,
     FutureSignalBuilder<E>? timeout,
   }) {
-    this.value;
-    switch (_state) {
+    _execute().ignore();
+    final (state, val, err) = _state.value;
+    switch (state) {
       case _FutureState.value:
-        return value(peek() as T);
+        return value(val as T);
       case _FutureState.error:
-        return error(_error);
+        return error(err);
       case _FutureState.timeout:
         if (timeout != null) return timeout();
         return error(null);
@@ -137,13 +139,14 @@ class FutureSignal<T> extends Signal<T?> {
     FutureSignalBuilder<E>? timeout,
     required FutureSignalBuilder<E> orElse,
   }) {
-    this.value;
-    switch (_state) {
+    _execute().ignore();
+    final (state, val, err) = _state.value;
+    switch (state) {
       case _FutureState.value:
-        if (value != null) return value(peek() as T);
+        if (value != null) return value(val as T);
         break;
       case _FutureState.error:
-        if (error != null) return error(_error);
+        if (error != null) return error(err);
         break;
       case _FutureState.timeout:
         if (timeout != null) return timeout();
@@ -159,12 +162,39 @@ class FutureSignal<T> extends Signal<T?> {
   /// Future result of the signal with value and error pair
   FutureOr<(T?, Object?)> get result async {
     await _execute();
-    if (isError) {
-      return (null, _error);
+    final (state, val, err) = _state.value;
+    if (state == _FutureState.error) {
+      return (null, err);
     } else {
-      return (peek()!, null);
+      return (val, null);
     }
   }
+
+  @override
+  T? call() => value;
+
+  @override
+  final String? debugLabel;
+
+  @override
+  int get globalId => _state.globalId;
+
+  @override
+  T? peek() {
+    final (_, value, _) = _state.peek();
+    return value;
+  }
+
+  @override
+  EffectCleanup subscribe(void Function(T? value) fn) {
+    return _state.subscribe((event) {
+      final (_, value, _) = event;
+      fn(value);
+    });
+  }
+
+  @override
+  T? toJson() => value;
 }
 
 /// Timeout exception for a signal
