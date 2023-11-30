@@ -9,6 +9,7 @@ environment:
 dependencies:
   signals:
     path: ../../packages/signals
+  sqlite_async: ^0.5.2
 
 dev_dependencies:
   lints: ^2.0.0
