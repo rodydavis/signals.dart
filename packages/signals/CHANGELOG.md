@@ -1,3 +1,8 @@
+## 1.3.3
+
+- Adding `requireValue` to `FutureSignal` and `StreamSignal` which return the value (non null) or throw an error
+- Switching `Exception` to `Error`
+
 ## 1.3.2
 
 - Adding `connect` to make it easier to connect a signal to a set of streams
