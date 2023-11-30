@@ -132,3 +132,14 @@ final mapped = s.maybeMap(
     orElse: () => 'loading',
 );
 ```
+
+## .requireValue
+
+The `requireValue` method returns the value of the future if it completed successfully or throws an error if it completed with an error.
+
+This uses `peek` internally and will not subscribe to updates if used inside an `effect` or `computed`.
+
+```dart
+final s = futureSignal(Future(() => 1));
+final value = s.requireValue(); // 1
+```
