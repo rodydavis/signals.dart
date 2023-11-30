@@ -151,3 +151,19 @@ final mapped = s.maybeMap(
     orElse: () => 'loading',
 );
 ```
+
+## .requireValue
+
+The `requireValue` method returns the value of the stream if it completed successfully or throws an error if it completed with an error.
+
+This uses `peek` internally and will not subscribe to updates if used inside an `effect` or `computed`.
+
+```dart
+final s = streamSignal(() async* {
+    yield 1;
+    yield 2;
+    yield 3;
+});
+final value = s.requireValue(); // 1
+```
+
