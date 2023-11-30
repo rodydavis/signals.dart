@@ -16,6 +16,8 @@ Widget build(BuildContext context) {
 }
 ```
 
+This will also automatically unsubscribe when the widget is disposed.
+
 ## .watch(context)
 
 If you need to map to a widget property use the `watch` extension method. This will infer the type and subscribe to the signal.
@@ -30,6 +32,8 @@ Widget build(BuildContext context) {
   );
 }
 ```
+
+It is recommended to use `Watch` instead of `watch` as it will automatically unsubscribe when the widget is disposed instead of waiting on the garbage collector via WeakReferences.
 
 ### Rebuilds
 
