@@ -58,10 +58,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
 
   @override
   Widget build(BuildContext context) {
-    if (child == null) {
-      return widget.builder(context);
-    } else {
-      return child!;
-    }
+    child ??= widget.builder(context);
+    return child!;
   }
 }
