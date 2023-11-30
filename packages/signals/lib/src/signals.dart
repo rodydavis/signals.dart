@@ -8,12 +8,22 @@ part 'devtool.dart';
 
 const _maxCallDepth = 100;
 
+/// Cycle detection usually means you have updated
+/// a signal inside an effect and are reading by value.
+class EffectCycleDetectionError extends Error {}
+
 void cycleDetected() {
-  throw Exception('Cycle detected');
+  throw EffectCycleDetectionError();
 }
 
+/// Mutation detection usually means you have updated
+/// a signal inside a computed.
+///
+/// Computed cannot have side-effects
+class MutationDetectedError extends Error {}
+
 void mutationDetected() {
-  throw Exception('Computed cannot have side-effects');
+  throw MutationDetectedError();
 }
 
 const identifier = Symbol('preact-signals');
