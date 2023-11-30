@@ -121,7 +121,6 @@ void _onSignalCreated(Signal instance) {
   _debugPostEvent('signals:signal', {
     'id': instance.globalId,
     'label': instance.debugLabel,
-    'value': instance.toString(),
   });
 }
 
@@ -133,7 +132,6 @@ void _onComputedCreated(Computed instance) {
   _debugPostEvent('signals:computed', {
     'id': instance.globalId,
     'label': instance.debugLabel,
-    'value': instance.toString(),
   });
 }
 

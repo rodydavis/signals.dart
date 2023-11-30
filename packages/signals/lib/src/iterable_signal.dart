@@ -144,6 +144,12 @@ class IterableSignal<E> extends Signal<Iterable<E>> implements Iterable<E> {
 }
 
 /// Create an [IterableSignal] from [Iterable]
-IterableSignal<T> iterableSignal<T>(Iterable<T> iterable) {
-  return IterableSignal<T>(iterable);
+IterableSignal<T> iterableSignal<T>(
+  Iterable<T> iterable, {
+  String? debugLabel,
+}) {
+  return IterableSignal<T>(
+    iterable,
+    debugLabel: debugLabel,
+  );
 }

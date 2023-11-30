@@ -337,6 +337,12 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
 }
 
 /// Create an [ListSignal] from [List]
-ListSignal<T> listSignal<T>(List<T> list) {
-  return ListSignal<T>(list);
+ListSignal<T> listSignal<T>(
+  List<T> list, {
+  String? debugLabel,
+}) {
+  return ListSignal<T>(
+    list,
+    debugLabel: debugLabel,
+  );
 }

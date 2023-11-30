@@ -233,6 +233,12 @@ class SetSignal<E> extends Signal<Set<E>> implements Set<E> {
 }
 
 /// Create an [SetSignal] from [Set]
-SetSignal<T> setSignal<T>(Set<T> list) {
-  return SetSignal<T>(list);
+SetSignal<T> setSignal<T>(
+  Set<T> list, {
+  String? debugLabel,
+}) {
+  return SetSignal<T>(
+    list,
+    debugLabel: debugLabel,
+  );
 }

@@ -24,6 +24,7 @@ export default defineConfig({
                 { label: "Effect", link: "/reference/effect" },
                 { label: "Untracked", link: "/reference/untracked" },
                 { label: "Batch", link: "/reference/batch" },
+                { label: "Connect", link: "/reference/connect" },
               ],
             },
             {
@@ -35,6 +36,12 @@ export default defineConfig({
                 { label: "Iterable", link: "/reference/iterable" },
                 { label: "Future", link: "/reference/future" },
                 { label: "Stream", link: "/reference/stream" },
+              ],
+            },
+            {
+              label: "Flutter",
+              items: [
+                { label: "Watch", link: "/reference/watch" },
                 {
                   label: "ValueListenable",
                   link: "/reference/value-listenable",

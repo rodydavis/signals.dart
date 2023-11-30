@@ -14,25 +14,22 @@ hero:
     - text: Explore on pub.dev
       link: https://pub.dev/packages/signals
       icon: external
-
-# import { Card, CardGrid } from '@astrojs/starlight/components';
-
-# ## Next steps
-
-# <CardGrid stagger>
-# 	<Card title="Update content" icon="pencil">
-# 		Edit `src/content/docs/index.mdx` to see this page change.
-# 	</Card>
-# 	<Card title="Add new content" icon="add-document">
-# 		Add Markdown or MDX files to `src/content/docs` to create new pages.
-# 	</Card>
-# 	<Card title="Configure your site" icon="setting">
-# 		Edit your `sidebar` and other config in `astro.config.mjs`.
-# 	</Card>
-# 	<Card title="Read the docs" icon="open-book">
-# 		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-# 	</Card>
-# </CardGrid>
 ---
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
+## Features
 
+<CardGrid stagger>
+	<Card title="Fine grained reactivity" icon="pencil">
+		Based on Preact Signals and provides a fine grained reactivity system that will automatically track dependencies and free them when no longer needed.
+	</Card>
+	<Card title="Lazy evaluation" icon="approve-check">
+		Signals are lazy and will only compute values when read. If a signal is not read, it will not be computed.
+	</Card>
+	<Card title="Flexible API" icon="puzzle">
+		Every app is different and signals can be composed in multiple ways. There are a few rules to follow but the API surface is small.
+	</Card>
+	<Card title="Surgical Rendering" icon="star">
+		Widgets can be rebuilt surgically, only marking dirty the parts of the Widget tree that need to be updated and if mounted.
+	</Card>
+</CardGrid>

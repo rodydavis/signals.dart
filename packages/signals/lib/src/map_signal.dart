@@ -127,6 +127,12 @@ class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
 }
 
 /// Create an [MapSignal] from [Map]
-MapSignal<K, V> mapSignal<K, V>(Map<K, V> map) {
-  return MapSignal<K, V>(map);
+MapSignal<K, V> mapSignal<K, V>(
+  Map<K, V> map, {
+  String? debugLabel,
+}) {
+  return MapSignal<K, V>(
+    map,
+    debugLabel: debugLabel,
+  );
 }

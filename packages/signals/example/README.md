@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
 final brightness = signal(Brightness.light);
+final themeMode = computed(() {
+  if (brightness() == Brightness.dark) {
+    return ThemeMode.dark;
+  } else {
+    return ThemeMode.light;
+  }
+});
 
 void main() => runApp(const MyApp());
 
@@ -32,9 +39,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      themeMode: brightness.watch(context) == Brightness.dark
-          ? ThemeMode.dark
-          : ThemeMode.light,
+      themeMode: themeMode.watch(context),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -62,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          Builder(builder: (context) {
-            final isDark = brightness.watch(context) == Brightness.dark;
+          Watch((_) {
+            final isDark = brightness() == Brightness.dark;
             return IconButton(
               onPressed: () {
                 brightness.value = isDark ? Brightness.light : Brightness.dark;
@@ -80,9 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Builder(builder: (context) {
+            Watch((context) {
               return Text(
-                '${counter.watch(context)}',
+                '$counter',
                 style: Theme.of(context).textTheme.headlineMedium!,
               );
             }),

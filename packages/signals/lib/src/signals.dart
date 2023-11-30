@@ -78,7 +78,7 @@ void endBatch() {
     return;
   }
 
-  Object? error;
+  dynamic error;
   bool hasError = false;
 
   while (batchedEffect != null) {
@@ -109,7 +109,7 @@ void endBatch() {
   batchDepth--;
 
   if (hasError) {
-    throw error!;
+    throw error;
   }
 }
 
