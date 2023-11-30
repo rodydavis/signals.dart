@@ -109,6 +109,15 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
   /// Returns true if the future signal is loading
   bool get isLoading => _state.peek().$1 == _FutureState.loading;
 
+  /// Returns the value of the signal or throws an error if not a value
+  /// This method uses peek() to get the value and will not subscribe to the
+  /// signal.
+  T get requireValue {
+    final (state, val, err) = _state.peek();
+    if (state == _FutureState.value) return val as T;
+    throw err ?? {};
+  }
+
   /// Returns the value of the signal or null if not a value
   E map<E>({
     required FutureSignalValueBuilder<E, T> value,
