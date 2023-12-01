@@ -1,6 +1,9 @@
-import 'package:collection/collection.dart';
-import 'package:signals/signals.dart';
+---
+title: Dart Pipe Example
+description: Dart example using pipe
+---
 
+```dart
 /// Operators on Signals Collection
 /// Combine Data Flow
 void main() {
@@ -27,3 +30,5 @@ void main() {
 
   assert(deepEq(s6, ['s', 'i', 'g', 'n', 'a', 'l']));
 }
+
+```
