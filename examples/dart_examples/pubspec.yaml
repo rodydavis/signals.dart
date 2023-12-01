@@ -7,6 +7,7 @@ environment:
   sdk: ^3.1.0
 
 dependencies:
+  collection:
   signals:
     path: ../../packages/signals
   sqlite_async: ^0.5.2
