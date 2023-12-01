@@ -52,7 +52,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final counter = signal(0);
+  final Signal<int> counter = signal(0);
 
   void _incrementCounter() {
     counter.value++;

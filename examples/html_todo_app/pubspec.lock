@@ -214,14 +214,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_preact_signals:
-    dependency: transitive
-    description:
-      name: flutter_preact_signals
-      sha256: "1f8986efd28cfdcb61e1da5fdf84dd970d12680a2fc3ad470619f87d3b147cba"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -366,14 +358,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
-  preact_signals:
-    dependency: transitive
-    description:
-      name: preact_signals
-      sha256: "3afc2e67c3b8cb835ef3f2c2f8f352246bbb7a77494ae205734a09567a065afc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.1"
   protobuf:
     dependency: transitive
     description:
@@ -428,7 +412,7 @@ packages:
       path: "../../packages/signals"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.3.3+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -534,10 +518,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
+      sha256: edc8a9573dd8c5a83a183dae1af2b6fd4131377404706ca4e5420474784906fa
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   web_socket_channel:
     dependency: transitive
     description:

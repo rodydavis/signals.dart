@@ -3,7 +3,7 @@ title: ValueNotifier
 description: Easy conversion between ValueNotifier and Signal
 ---
 
-## MutableSignal from ValueNotifier
+## Signal from ValueNotifier
 
 To create a mutable signal from a `ValueNotifier`, use the `toSignal` extension:
 
@@ -14,7 +14,7 @@ final signal = notifier.toSignal();
 
 > Setting the value on the signal or notifier will update the other.
 
-## ValueNotifier from MutableSignal
+## ValueNotifier from Signal
 
 To create a `ValueNotifier` from a mutable signal, use the `toValueNotifier` extension:
 

@@ -1,3 +1,10 @@
+## 1.4.0
+
+- Deprecating `MutableSignal` in favor of `Signal` (abstract class)
+- Adding `ValueSignal` that can be used in a class and extended (similar to ValueNotifier)
+- Exposing all classes for value signal and future/stream (for lint issues)
+- 
+
 ## 1.3.3
 
 - Adding `requireValue` to `FutureSignal` and `StreamSignal` which return the value (non null) or throw an error

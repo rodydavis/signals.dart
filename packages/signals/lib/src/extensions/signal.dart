@@ -33,11 +33,11 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 }
 
 /// Mutable signal utils
-extension MutableSignalUtils<T> on MutableSignal<T> {
+extension SignalUtils<T> on Signal<T> {
   /// Restrict API to readonly signal
   ReadonlySignal<T> toReadonlySignal() => this;
 
-  /// Convert a [ValueListenable] to [MutableSignal] to be used in builders
+  /// Convert a [ValueListenable] to [Signal] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
   /// and allow for mutation
   ValueNotifier<T> toValueNotifier() {
