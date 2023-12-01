@@ -133,6 +133,12 @@ class SetSignal<E> extends Signal<Set<E>> implements Set<E> {
     return rs.toSignal();
   }
 
+  /// Pipe: create a new signal by sending value from source to other
+  Signal<Set<E>> operator |(Signal<Iterable<E>> other) {
+    final rs = Set<E>.from(peek())..addAll(other.peek());
+    return rs.toSignal();
+  }
+
   @override
   E? lookup(Object? object) {
     return value.lookup(object);

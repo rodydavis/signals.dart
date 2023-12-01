@@ -1,6 +1,6 @@
 ## 1.3.4
 
-- Adding inject `<<` and `&` fork operators on collections
+- Adding inject `<<`, `&` fork and `|` pipe operators on collections
 
 ## 1.3.3
 

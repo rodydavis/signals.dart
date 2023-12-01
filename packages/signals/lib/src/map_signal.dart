@@ -31,6 +31,12 @@ class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
     return rs.toSignal();
   }
 
+  /// Pipe: create a new signal by sending value from source to other
+  Signal<Map<K, V>> operator |(Signal<Map<K, V>> other) {
+    final rs = Map<K, V>.from(peek())..addAll(other.peek());
+    return rs.toSignal();
+  }
+
   @override
   void addAll(Map<K, V> other) {
     value.addAll(other);

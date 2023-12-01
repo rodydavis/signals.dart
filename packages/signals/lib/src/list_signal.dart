@@ -59,9 +59,15 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
     return this;
   }
 
-  /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter
+  /// Fork: create a new signal which value is the concatenation of source signal and iterable parameter
   Signal<Iterable<E>> operator &(Iterable<E> other) {
     final rs = List<E>.from(peek())..addAll(other);
+    return rs.toSignal();
+  }
+
+  /// Pipe: create a new signal by sending value from source to other
+  Signal<Iterable<E>> operator |(Signal<Iterable<E>> other) {
+    final rs = List<E>.from(peek())..addAll(other.peek());
     return rs.toSignal();
   }
 
