@@ -131,5 +131,24 @@ void main() {
         expect(s.containsKey('c'), false);
       });
     });
+
+    group('iterable signal', () {
+      test('make sure iterable is the same object', () {
+        final Iterable<String> list = <String>['a', 'b', 'c'];
+        final s = list.toSignal();
+        expect(list, s);
+      });
+
+      test('check if hash code is the same', () {
+        final Iterable<String> a = <String>['a', 'b', 'c'];
+        final Iterable<String> b = <String>['a', 'b', 'c'];
+
+        final s1 = a.toSignal();
+        final s2 = b.toSignal();
+
+        expect(a != b, true);
+        expect(s1 != s2, true);
+      });
+    });
   });
 }
