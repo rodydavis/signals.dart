@@ -27,11 +27,16 @@ extension SignalStreamUtils<T> on Stream<T> {
   ///   SignalLoading _ => print('loading'),
   /// });
   /// ```
-  StreamSignal<T> toSignal({bool? cancelOnError, String? debugLabel}) {
+  StreamSignal<T> toSignal({
+    bool? cancelOnError,
+    String? debugLabel,
+    bool fireImmediately = false,
+  }) {
     return StreamSignal<T>(
       () => this,
       cancelOnError: cancelOnError,
       debugLabel: debugLabel,
+      fireImmediately: fireImmediately,
     );
   }
 }
