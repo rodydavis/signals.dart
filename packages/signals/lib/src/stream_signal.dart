@@ -35,24 +35,31 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
   /// If true then the future will be called immediately
   final bool fireImmediately;
 
+  // Before first data is collected, state is in [_StreamState.loading]
+  Signal<(_StreamState, T?, Object?)> _state;
+
   /// Creates a [StreamSignal] that wraps a [Stream]
   StreamSignal(
     this._compute, {
     this.cancelOnError,
     this.fireImmediately = false,
     this.debugLabel,
-  }) {
+    T? initial,
+  }) : _state = signal<(_StreamState, T?, Object?)>((
+          initial != null ? _StreamState.value : _StreamState.loading,
+          initial,
+          null,
+        )) {
     _stale = true;
+
     if (fireImmediately) _execute();
   }
 
+  // User defined function
   final Stream<T> Function() _compute;
+
   bool _stale = false;
-  final _state = signal<(_StreamState, T?, Object?)>((
-    _StreamState.loading,
-    null,
-    null,
-  ));
+
   StreamSubscription<T>? _subscription;
 
   /// Resets the signal by calling the [Stream] again
