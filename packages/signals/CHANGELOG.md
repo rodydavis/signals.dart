@@ -3,6 +3,7 @@
 - Deprecating `MutableSignal` in favor of `Signal` (abstract class)
 - Adding `ValueSignal` that can be used in a class and extended (similar to ValueNotifier)
 - Exposing all classes for value signal and future/stream (for lint issues)
+- Rename `to` to `from` in `connect`
 
 ## 1.3.4
 
