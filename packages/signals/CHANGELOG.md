@@ -1,3 +1,7 @@
+## 1.4.1
+
+- Adding `sorted` to `ListSignal` that returns new list with sorted values (does not mutate original list)
+
 ## 1.4.0
 
 - Deprecating `MutableSignal` in favor of `Signal` (abstract class)

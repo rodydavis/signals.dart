@@ -1,4 +1,4 @@
-import '../map_signal.dart';
+import '../value/map_signal.dart';
 
 /// Extension on future to provide helpful methods for signals
 extension SignalMapUtils<K, V> on Map<K, V> {

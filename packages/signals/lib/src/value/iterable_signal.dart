@@ -1,4 +1,4 @@
-import 'signals.dart';
+import '../signals.dart';
 
 /// A [Signal] that holds a [Iterable].
 class IterableSignal<E> extends ValueSignal<Iterable<E>>

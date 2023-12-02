@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'signals.dart';
+import '../signals.dart';
 
 /// A [Signal] that holds a [List].
 class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
@@ -303,6 +303,13 @@ class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
   void sort([int Function(E a, E b)? compare]) {
     value.sort(compare);
     forceUpdate(value);
+  }
+
+  /// Return a new array that is sorted by the [compare] function
+  List<E> sorted([int Function(E a, E b)? compare]) {
+    final items = toList();
+    items.sort(compare);
+    return items;
   }
 
   @override

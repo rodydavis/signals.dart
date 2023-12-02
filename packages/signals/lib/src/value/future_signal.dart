@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'signals.dart';
+import '../signals.dart';
 
 /// Builder on a successful [FutureSignal] value
 typedef FutureSignalValueBuilder<R, T> = R Function(T value);

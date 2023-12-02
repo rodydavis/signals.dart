@@ -1,4 +1,4 @@
-import '../future_signal.dart';
+import '../value/future_signal.dart';
 
 /// Extension on future to provide helpful methods for signals
 extension SignalFutureUtils<T> on Future<T> {

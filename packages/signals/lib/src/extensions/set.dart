@@ -1,4 +1,4 @@
-import '../set_signal.dart';
+import '../value/set_signal.dart';
 
 /// Extension on future to provide helpful methods for signals
 extension SignalSetUtils<T> on Set<T> {

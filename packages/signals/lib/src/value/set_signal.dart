@@ -1,4 +1,4 @@
-import 'signals.dart';
+import '../signals.dart';
 
 /// A [Signal] that holds a [Set].
 class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {

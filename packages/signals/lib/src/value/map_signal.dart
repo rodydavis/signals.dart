@@ -1,4 +1,4 @@
-import 'signals.dart';
+import '../signals.dart';
 
 /// A [Signal] that holds a [Map].
 class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
