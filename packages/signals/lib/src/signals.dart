@@ -26,7 +26,7 @@ void mutationDetected() {
   throw MutationDetectedError();
 }
 
-const identifier = Symbol('preact-signals');
+const identifier = Symbol('signals');
 
 // Flags for Computed and Effect.
 const RUNNING = 1 << 0;
@@ -249,17 +249,17 @@ Node? addDependency(ReadonlySignal signal) {
   var node = signal._node;
   if (node == null || node._target != evalContext) {
     /**
-		 * `signal` is a new dependency. Create a new dependency node, and set it
-		 * as the tail of the current context's dependency list. e.g:
-		 *
-		 * { A <-> B       }
-		 *         ↑     ↑
-		 *        tail  node (new)
-		 *               ↓
-		 * { A <-> B <-> C }
-		 *               ↑
-		 *              tail (evalContext._sources)
-		 */
+     * `signal` is a new dependency. Create a new dependency node, and set it
+     * as the tail of the current context's dependency list. e.g:
+     *
+     * { A <-> B       }
+     *         ↑     ↑
+     *        tail  node (new)
+     *               ↓
+     * { A <-> B <-> C }
+     *               ↑
+     *              tail (evalContext._sources)
+     */
     node = Node(
       version: 0,
       source: signal,
@@ -288,18 +288,18 @@ Node? addDependency(ReadonlySignal signal) {
     node._version = 0;
 
     /**
-		 * If `node` is not already the current tail of the dependency list (i.e.
-		 * there is a next node in the list), then make the `node` the new tail. e.g:
-		 *
-		 * { A <-> B <-> C <-> D }
-		 *         ↑           ↑
-		 *        node   ┌─── tail (evalContext._sources)
-		 *         └─────│─────┐
-		 *               ↓     ↓
-		 * { A <-> C <-> D <-> B }
-		 *                     ↑
-		 *                    tail (evalContext._sources)
-		 */
+     * If `node` is not already the current tail of the dependency list (i.e.
+     * there is a next node in the list), then make the `node` the new tail. e.g:
+     *
+     * { A <-> B <-> C <-> D }
+     *         ↑           ↑
+     *        node   ┌─── tail (evalContext._sources)
+     *         └─────│─────┐
+     *               ↓     ↓
+     * { A <-> C <-> D <-> B }
+     *                     ↑
+     *                    tail (evalContext._sources)
+     */
     if (node._nextSource != null) {
       node._nextSource!._prevSource = node._prevSource;
 
@@ -627,17 +627,17 @@ bool needsToRecompute(Listenable target) {
 
 void prepareSources(Listenable target) {
   /**
-	 * 1. Mark all current sources as re-usable nodes (version: -1)
-	 * 2. Set a rollback node if the current node is being used in a different context
-	 * 3. Point 'target._sources' to the tail of the doubly-linked list, e.g:
-	 *
-	 *    { undefined <- A <-> B <-> C -> undefined }
-	 *                   ↑           ↑
-	 *                   │           └──────┐
-	 * target._sources = A; (node is head)  │
-	 *                   ↓                  │
-	 * target._sources = C; (node is tail) ─┘
-	 */
+   * 1. Mark all current sources as re-usable nodes (version: -1)
+   * 2. Set a rollback node if the current node is being used in a different context
+   * 3. Point 'target._sources' to the tail of the doubly-linked list, e.g:
+   *
+   *    { undefined <- A <-> B <-> C -> undefined }
+   *                   ↑           ↑
+   *                   │           └──────┐
+   * target._sources = A; (node is head)  │
+   *                   ↓                  │
+   * target._sources = C; (node is tail) ─┘
+   */
   for (var node = target._sources; node != null; node = node._nextSource) {
     final rollbackNode = node._source._node;
     if (rollbackNode != null) {
@@ -658,21 +658,21 @@ void cleanupSources(Listenable target) {
   Node? head;
 
   /**
-	 * At this point 'target._sources' points to the tail of the doubly-linked list.
-	 * It contains all existing sources + new sources in order of use.
-	 * Iterate backwards until we find the head node while dropping old dependencies.
-	 */
+   * At this point 'target._sources' points to the tail of the doubly-linked list.
+   * It contains all existing sources + new sources in order of use.
+   * Iterate backwards until we find the head node while dropping old dependencies.
+   */
   while (node != null) {
     final prev = node._prevSource;
 
     /**
-		 * The node was not re-used, unsubscribe from its change notifications and remove itself
-		 * from the doubly-linked list. e.g:
-		 *
-		 * { A <-> B <-> C }
-		 *         ↓
-		 *    { A <-> C }
-		 */
+     * The node was not re-used, unsubscribe from its change notifications and remove itself
+     * from the doubly-linked list. e.g:
+     *
+     * { A <-> B <-> C }
+     *         ↓
+     *    { A <-> C }
+     */
     if (node._version == -1) {
       node._source._unsubscribe(node);
 
@@ -684,15 +684,15 @@ void cleanupSources(Listenable target) {
       }
     } else {
       /**
-			 * The new head is the last node seen which wasn't removed/unsubscribed
-			 * from the doubly-linked list. e.g:
-			 *
-			 * { A <-> B <-> C }
-			 *   ↑     ↑     ↑
-			 *   │     │     └ head = node
-			 *   │     └ head = node
-			 *   └ head = node
-			 */
+       * The new head is the last node seen which wasn't removed/unsubscribed
+       * from the doubly-linked list. e.g:
+       *
+       * { A <-> B <-> C }
+       *   ↑     ↑     ↑
+       *   │     │     └ head = node
+       *   │     └ head = node
+       *   └ head = node
+       */
       head = node;
     }
 

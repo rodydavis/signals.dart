@@ -24,9 +24,18 @@ final s = [1, 2, 3].toSignal();
 List modifications are done directly on the underlying list, and will trigger signals as expected.
 
 ```dart
-final s = listSignal([1, 2, 3]);
-s[0] = -1;
-print(s.length); // 3
-s.addAll([4, 5, 6]);
-s.first = 1;
+
+final s1 = listSignal([1, 2, 3]);
+
+// by index
+s1[0] = -1;
+print(s1.length); // 3
+
+// expose common Dart List interfaces
+s1.addAll([4, 5, 6]);
+s1.first = 1;
+
+// extended operators
+final s2 = s1 & [3, 4, 5];
+
 ```

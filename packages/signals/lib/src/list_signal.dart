@@ -50,6 +50,25 @@ class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
     forceUpdate(this.value);
   }
 
+  /// Inject: Update current signal value with iterable
+  ListSignal<E> operator <<(Iterable<E> other) {
+    value.addAll(other);
+    forceUpdate(value);
+    return this;
+  }
+
+  /// Fork: create a new signal which value is the concatenation of source signal and iterable parameter
+  ListSignal<E> operator &(Iterable<E> other) {
+    final rs = List<E>.from(peek())..addAll(other);
+    return ListSignal(rs);
+  }
+
+  /// Pipe: create a new signal by sending value from source to other
+  ListSignal<E> operator |(Signal<Iterable<E>> other) {
+    final rs = List<E>.from(peek())..addAll(other.peek());
+    return ListSignal(rs);
+  }
+
   @override
   void add(E value) {
     this.value.add(value);
