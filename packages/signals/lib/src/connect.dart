@@ -38,7 +38,7 @@ class Connect<T> {
     return this;
   }
 
-  /// Synonym for `from()`
+  /// Synonym for `from(Stream<T> source)`
   Connect<T> operator <<(Stream<T> source) => from(source);
 
   /// Cancels all subscriptions.

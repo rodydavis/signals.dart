@@ -39,6 +39,8 @@ final s1 = Stream.value(1);
 final s2 = Stream.value(2);
 
 c.from(s1).from(s2);
+// or
+c << s1 << s2
 
 c.dispose(); // This will cancel all subscriptions
 ```
