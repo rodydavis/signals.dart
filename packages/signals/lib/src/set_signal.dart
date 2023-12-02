@@ -118,6 +118,25 @@ class SetSignal<E> extends Signal<Set<E>> implements Set<E> {
   @override
   int get length => value.length;
 
+  /// Inject: Update current signal value with iterable
+  SetSignal<E> operator <<(Set<E> other) {
+    value.addAll(other);
+    forceUpdate(value);
+    return this;
+  }
+
+  /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter
+  SetSignal<E> operator &(Set<E> other) {
+    final rs = Set<E>.from(peek())..addAll(other);
+    return SetSignal(rs);
+  }
+
+  /// Pipe: create a new signal by sending value from source to other
+  SetSignal<E> operator |(Signal<Iterable<E>> other) {
+    final rs = Set<E>.from(peek())..addAll(other.peek());
+    return SetSignal(rs);
+  }
+
   @override
   E? lookup(Object? object) {
     return value.lookup(object);

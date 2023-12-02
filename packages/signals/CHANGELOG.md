@@ -1,3 +1,7 @@
+## 1.3.4
+
+- Adding inject `<<`, `&` fork and `|` pipe operators on collections
+
 ## 1.3.3
 
 - Adding `requireValue` to `FutureSignal` and `StreamSignal` which return the value (non null) or throw an error

@@ -16,6 +16,25 @@ class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
     forceUpdate(this.value);
   }
 
+  /// Inject: Update current signal value with iterable
+  MapSignal<K, V> operator <<(Map<K, V> other) {
+    value.addAll(other);
+    forceUpdate(value);
+    return this;
+  }
+
+  /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter
+  MapSignal<K, V> operator &(Map<K, V> other) {
+    final rs = Map<K, V>.from(peek())..addAll(other);
+    return MapSignal(rs);
+  }
+
+  /// Pipe: create a new signal by sending value from source to other
+  MapSignal<K, V> operator |(Signal<Map<K, V>> other) {
+    final rs = Map<K, V>.from(peek())..addAll(other.peek());
+    return MapSignal(rs);
+  }
+
   @override
   void addAll(Map<K, V> other) {
     value.addAll(other);
