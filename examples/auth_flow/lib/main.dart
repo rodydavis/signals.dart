@@ -1,6 +1,50 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
+
+typedef User = ({int id, String name});
+
+class Auth {
+  /// Current user signal
+  final currentUser = signal<User?>(null);
+
+  /// Computed signal that only emits when the user is logged in / out
+  late final isLoggedIn = computed(() => currentUser() != null);
+
+  /// Computed signal that returns the current user name or 'N/A'
+  late final currentUserName = computed(() => currentUser()?.name ?? 'N/A');
+
+  // This uses a controller but this user stream could come from a
+  // database or library like Firebase
+  final _controller = StreamController<User?>();
+
+  // Listen to auth state changes and update the current user
+  late Connect<User?> _authListener;
+
+  Auth() {
+    // Listen to the stream and update the current user
+    _authListener = connect(currentUser) << _controller.stream;
+  }
+
+  // Dispose of the stream controller
+  void dispose() {
+    _authListener.dispose();
+  }
+
+  /// Login with user data
+  void login(User data) {
+    _controller.add(data);
+  }
+
+  /// Logout
+  void logout() {
+    _controller.add(null);
+  }
+}
+
+final auth = Auth();
 
 void main() => runApp(const MyApp());
 
@@ -13,12 +57,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _router = GoRouter(
-    refreshListenable: currentUser.toValueListenable(),
+    refreshListenable: auth.isLoggedIn.toValueListenable(),
     routes: [
       GoRoute(
         path: '/',
         redirect: (context, state) {
-          if (currentUser.peek() == null) return '/login';
+          if (auth.currentUser.peek() == null) return '/login';
           return null;
         },
         builder: (context, state) => const HomeScreen(),
@@ -145,10 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-typedef User = (int id, String name);
-
-final currentUser = signal<User?>(null);
-
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -165,7 +205,7 @@ class LoginScreen extends StatelessWidget {
             const Text('Login to continue'),
             ElevatedButton(
               onPressed: () {
-                currentUser.value = (1, 'John Doe');
+                auth.login((id: 1, name: 'John Doe'));
                 context.go('/');
               },
               child: const Text('Login'),
@@ -199,7 +239,7 @@ class RegisterScreen extends StatelessWidget {
             const Text('Register to continue'),
             ElevatedButton(
               onPressed: () {
-                currentUser.value = (2, 'Jane Doe');
+                auth.login((id: 2, name: 'Jane Doe'));
                 context.go('/');
               },
               child: const Text('Register'),
@@ -231,7 +271,7 @@ class ProfileScreen extends StatelessWidget {
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: () {
-              currentUser.value = null;
+              auth.logout();
               context.go('/login');
             },
           ),
@@ -243,9 +283,8 @@ class ProfileScreen extends StatelessWidget {
           children: [
             const Text('Profile'),
             Watch((context) {
-              final name = currentUser()?.$2 ?? 'N/A';
               return Text(
-                name,
+                auth.currentUserName(),
                 style: Theme.of(context).textTheme.headlineMedium,
               );
             }),
