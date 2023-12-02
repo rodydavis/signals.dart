@@ -36,9 +36,10 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
   final bool fireImmediately;
 
   // Before first data is collected, state is in [_StreamState.loading]
-  Signal<(_StreamState, T?, Object?)> _state;
+  final Signal<(_StreamState, T?, Object?)> _state;
 
   /// Creates a [StreamSignal] that wraps a [Stream]
+  /// Defining an `initial` value will skip the loading state
   StreamSignal(
     this._compute, {
     this.cancelOnError,
