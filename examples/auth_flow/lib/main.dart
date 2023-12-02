@@ -46,6 +46,34 @@ class Auth {
 
 final auth = Auth();
 
+final router = GoRouter(
+  refreshListenable: auth.isLoggedIn.toValueListenable(),
+  routes: [
+    GoRoute(
+      path: '/',
+      redirect: (context, state) {
+        if (auth.currentUser.peek() == null) return '/login';
+        return null;
+      },
+      builder: (context, state) => const HomeScreen(),
+      routes: [
+        GoRoute(
+          path: 'profile',
+          builder: (context, state) => const ProfileScreen(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/register',
+      builder: (context, state) => const RegisterScreen(),
+    ),
+  ],
+);
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
@@ -56,34 +84,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _router = GoRouter(
-    refreshListenable: auth.isLoggedIn.toValueListenable(),
-    routes: [
-      GoRoute(
-        path: '/',
-        redirect: (context, state) {
-          if (auth.currentUser.peek() == null) return '/login';
-          return null;
-        },
-        builder: (context, state) => const HomeScreen(),
-        routes: [
-          GoRoute(
-            path: 'profile',
-            builder: (context, state) => const ProfileScreen(),
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: '/register',
-        builder: (context, state) => const RegisterScreen(),
-      ),
-    ],
-  );
-
   ThemeData theme(Brightness brightness) {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
@@ -103,9 +103,9 @@ class _MyAppState extends State<MyApp> {
       theme: theme(Brightness.light),
       darkTheme: theme(Brightness.dark),
       themeMode: themeMode.watch(context),
-      routerDelegate: _router.routerDelegate,
-      routeInformationProvider: _router.routeInformationProvider,
-      routeInformationParser: _router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
     );
   }
 }
