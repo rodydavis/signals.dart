@@ -1,4 +1,5 @@
 import 'dart:html';
+
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:signals/signals.dart';
@@ -41,5 +42,7 @@ void main() {
       .map((_) => konami.value = true)
       .startWith(false);
 
-  connect(konami).to(konamiStream);
+  // connect(konami).from(konamiStream);
+  // or
+  connect(konami) << konamiStream;
 }

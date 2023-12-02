@@ -1,6 +1,6 @@
 ---
-title: Dart Pipe Example
-description: Dart example using pipe
+title: Dart Operators Example
+description: Use of Operators as shorthand
 ---
 
 ```dart
@@ -29,6 +29,10 @@ void main() {
   final s6 = s4 | s5;
 
   assert(deepEq(s6, ['s', 'i', 'g', 'n', 'a', 'l']));
+  
+  // `Connect()` a Stream to Signal using operator
+  final x = Stream.fromIterable([1,2,3]);
+  final counter = connect(signal(0)) << x;
 }
 
 ```
