@@ -42,5 +42,7 @@ void main() {
       .map((_) => konami.value = true)
       .startWith(false);
 
-  connect(konami).from(konamiStream);
+  // both forms are equals:
+  // connect(konami).from(konamiStream);
+  connect(konami) << konamiStream;
 }
