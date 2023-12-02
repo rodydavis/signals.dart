@@ -3,25 +3,22 @@ import 'dart:math';
 import 'package:signals/signals.dart';
 
 void main() {
-  /*
-  Signal<bool> from a periodic Stream
-   */
-  final timer =
-      Stream.periodic(const Duration(milliseconds: 2000), (ms) {}).toSignal();
+  /// Recurring event
+  final timer = Duration(milliseconds: 800).toSignal();
 
   const poolSize = 5;
 
   final candidate = signal(0);
 
-  /*
-  Signal<int> from an Iterable
-   */
+  /// Signal<int> from an Iterable
   final source = List.generate(poolSize, (index) => generate()).toSignal();
 
   /// Each time the timer move on we take the first element of the list
   effect(() {
     // Subscribe to timer event
-    timer.value;
+    // timer.value;
+    // or
+    timer();
 
     // We use peek to avoid subscription to source
     final [head, ...tail] = source.peek();

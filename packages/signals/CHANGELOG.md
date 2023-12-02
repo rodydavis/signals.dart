@@ -1,3 +1,8 @@
+## 1.4.2
+
+- Adding `Timer` to emit `TimerEvent`
+- Adding `initial` to `StreamSignal` to skip loading state and avoid emit null value
+
 ## 1.4.1
 
 - Adding `sorted` to `ListSignal` that returns new list with sorted values (does not mutate original list)
