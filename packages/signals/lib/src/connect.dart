@@ -38,6 +38,9 @@ class Connect<T> {
     return this;
   }
 
+  /// Synonym for `from()`
+  Connect<T> operator <<(Stream<T> source) => from(source);
+
   /// Cancels all subscriptions.
   void dispose() {
     for (final subscription in _subscriptions.values) {
