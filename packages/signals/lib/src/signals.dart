@@ -381,19 +381,44 @@ abstract class ReadonlySignal<T> {
   bool _refresh();
 }
 
-abstract class MutableSignal<T> implements ReadonlySignal<T> {
+/// The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final counter = signal(0);
+///
+/// // Read value from signal, logs: 0
+/// print(counter.value);
+///
+/// // Write to a signal
+/// counter.value = 1;
+/// ```
+///
+/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](#computedfn) and [effect](#effectfn) that depends on that signal, ensuring your app state is always consistent.
+
+abstract class Signal<T> implements ReadonlySignal<T> {
   // Update the current value
   set value(T value);
 }
 
-class Signal<T> implements MutableSignal<T> {
+/// Signal that can read and write a value
+@Deprecated('Use `Signal` instead')
+typedef MutableSignal<T> = Signal<T>;
+
+/// Signal that can be extended and used as a class
+class ValueSignal<T> extends _Signal<T> {
+  ValueSignal(super.value, {super.debugLabel});
+}
+
+class _Signal<T> implements Signal<T> {
   @override
   final int globalId;
 
   @override
   final String? debugLabel;
 
-  Signal(this._value, {this.debugLabel})
+  _Signal(this._value, {this.debugLabel})
       : _version = 0,
         brand = identifier,
         globalId = ++_lastGlobalId;
@@ -561,8 +586,8 @@ class Signal<T> implements MutableSignal<T> {
 /// ```
 ///
 /// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](#computedfn) and [effect](#effectfn) that depends on that signal, ensuring your app state is always consistent.
-MutableSignal<T> signal<T>(T value, {String? debugLabel}) {
-  final instance = Signal<T>(value, debugLabel: debugLabel);
+Signal<T> signal<T>(T value, {String? debugLabel}) {
+  final instance = _Signal<T>(value, debugLabel: debugLabel);
   _onSignalCreated(instance);
   return instance;
 }
@@ -682,7 +707,30 @@ void cleanupSources(Listenable target) {
   target._sources = head;
 }
 
-class Computed<T> implements Listenable, ReadonlySignal<T> {
+/// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final name = signal("Jane");
+/// final surname = signal("Doe");
+///
+/// final fullName = computed(() => name.value + " " + surname.value);
+///
+/// // Logs: "Jane Doe"
+/// print(fullName.value);
+///
+/// // Updates flow through computed, but only if someone
+/// // subscribes to it. More on that later.
+/// name.value = "John";
+/// // Logs: "John Doe"
+/// print(fullName.value);
+/// ```
+///
+/// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
+abstract class Computed<T> implements ReadonlySignal<T> {}
+
+class _Computed<T> implements Computed<T>, Listenable {
   final ComputedCallback<T> _compute;
 
   @override
@@ -717,7 +765,7 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
     ]);
   }
 
-  Computed(ComputedCallback<T> compute, {this.debugLabel})
+  _Computed(ComputedCallback<T> compute, {this.debugLabel})
       : _compute = compute,
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
@@ -790,14 +838,14 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
         node._source._subscribe(node);
       }
     }
-    Signal.__subscribe(this, node);
+    _Signal.__subscribe(this, node);
   }
 
   @override
   void _unsubscribe(Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (_targets != null) {
-      Signal.__unsubscribe(this, node);
+      _Signal.__unsubscribe(this, node);
 
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
@@ -872,7 +920,7 @@ class Computed<T> implements Listenable, ReadonlySignal<T> {
 
   @override
   EffectCleanup subscribe(void Function(T value) fn) {
-    return Signal.__signalSubscribe(this, fn);
+    return _Signal.__signalSubscribe(this, fn);
   }
 }
 
@@ -899,11 +947,11 @@ typedef ComputedCallback<T> = T Function();
 /// ```
 ///
 /// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
-ReadonlySignal<T> computed<T>(
+Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
 }) {
-  final instance = Computed<T>(compute, debugLabel: debugLabel);
+  final instance = _Computed<T>(compute, debugLabel: debugLabel);
   _onComputedCreated(instance);
   return instance;
 }
@@ -956,7 +1004,10 @@ void endEffect(Effect effect, Listenable? prevContext) {
   endBatch();
 }
 
+/// Clean up function to stop subscriptions from updating the callback
 typedef EffectCleanup = void Function();
+
+/// Function called when signals in the callback change
 typedef EffectCallback = Function();
 
 Effect? currentEffect;

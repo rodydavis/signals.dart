@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'signals.dart';
 
-/// Connects a [Stream] to a [MutableSignal].
+/// Connects a [Stream] to a [Signal].
 class Connect<T> {
   Connect(this.signal);
-  final MutableSignal<T> signal;
+  final Signal<T> signal;
   final Map<int, StreamSubscription> _subscriptions = {};
 
-  /// Connects a [Stream] to a [MutableSignal].
+  /// Connects a [Stream] to a [Signal].
   ///
   /// ```dart
   /// final counter = signal(0);
@@ -49,7 +49,7 @@ class Connect<T> {
   }
 }
 
-/// Connects a [MutableSignal] to a [Stream].
-Connect<T> connect<T>(MutableSignal<T> signal) {
+/// Connects a [Signal] to a [Stream].
+Connect<T> connect<T>(Signal<T> signal) {
   return Connect(signal);
 }
