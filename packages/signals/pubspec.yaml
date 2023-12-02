@@ -1,5 +1,5 @@
 name: signals
-description: "signal, computed and effect built with dart and extensions for flutter"
+description: "Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more."
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://rodydavis.github.io/signals.dart/
 version: 1.4.0
@@ -18,3 +18,8 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
+
+scripts:
+  coverage:
+    - flutter test --coverage
+    - genhtml coverage/lcov.info -o coverage/html

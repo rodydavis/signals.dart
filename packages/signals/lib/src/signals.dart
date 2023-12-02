@@ -12,7 +12,7 @@ const _maxCallDepth = 100;
 /// a signal inside an effect and are reading by value.
 class EffectCycleDetectionError extends Error {}
 
-void cycleDetected() {
+void _cycleDetected() {
   throw EffectCycleDetectionError();
 }
 
@@ -22,7 +22,7 @@ void cycleDetected() {
 /// Computed cannot have side-effects
 class MutationDetectedError extends Error {}
 
-void mutationDetected() {
+void _mutationDetected() {
   throw MutationDetectedError();
 }
 
@@ -38,16 +38,16 @@ const TRACKING = 1 << 5;
 
 // A linked list node used to track dependencies (sources) and dependents (targets).
 // Also used to remember the source's last version number that the target saw.
-class Node {
+class _Node {
   // A source whose value the target depends on.
   final ReadonlySignal _source;
-  Node? _prevSource;
-  Node? _nextSource;
+  _Node? _prevSource;
+  _Node? _nextSource;
 
   // A target that depends on the source and should be notified when the source changes.
-  final Listenable _target;
-  Node? _prevTarget;
-  Node? _nextTarget;
+  final _Listenable _target;
+  _Node? _prevTarget;
+  _Node? _nextTarget;
 
   // The version number of the source that target has last seen. We use version numbers
   // instead of storing the source value, because source values can take arbitrary amount
@@ -57,17 +57,17 @@ class Node {
 
   // Used to remember & roll back the source's previous `._node` value when entering &
   // exiting a new evaluation context.
-  Node? _rollbackNode;
+  _Node? _rollbackNode;
 
-  Node({
+  _Node({
     required ReadonlySignal source,
-    Node? prevSource,
-    Node? nextSource,
-    required Listenable target,
-    Node? prevTarget,
-    Node? nextTarget,
+    _Node? prevSource,
+    _Node? nextSource,
+    required _Listenable target,
+    _Node? prevTarget,
+    _Node? nextTarget,
     required int version,
-    Node? rollbackNode,
+    _Node? rollbackNode,
   })  : _source = source,
         _prevSource = prevSource,
         _nextSource = nextSource,
@@ -78,31 +78,31 @@ class Node {
         _rollbackNode = rollbackNode;
 }
 
-void startBatch() {
-  batchDepth++;
+void _startBatch() {
+  _batchDepth++;
 }
 
-void endBatch() {
-  if (batchDepth > 1) {
-    batchDepth--;
+void _endBatch() {
+  if (_batchDepth > 1) {
+    _batchDepth--;
     return;
   }
 
   dynamic error;
   bool hasError = false;
 
-  while (batchedEffect != null) {
-    Effect? effect = batchedEffect;
-    batchedEffect = null;
+  while (_batchedEffect != null) {
+    _Effect? effect = _batchedEffect;
+    _batchedEffect = null;
 
-    batchIteration++;
+    _++;
 
     while (effect != null) {
-      final Effect? next = effect._nextBatchedEffect;
+      final _Effect? next = effect._nextBatchedEffect;
       effect._nextBatchedEffect = null;
       effect._flags &= ~NOTIFIED;
 
-      if (!((effect._flags & DISPOSED) != 0) && needsToRecompute(effect)) {
+      if (!((effect._flags & DISPOSED) != 0) && _needsToRecompute(effect)) {
         try {
           effect._callback();
         } catch (err) {
@@ -115,8 +115,8 @@ void endBatch() {
       effect = next;
     }
   }
-  batchIteration = 0;
-  batchDepth--;
+  _ = 0;
+  _batchDepth--;
 
   if (hasError) {
     throw error;
@@ -125,7 +125,8 @@ void endBatch() {
 
 typedef BatchCallback<T> = T Function();
 
-/// The `batch` function allows you to combine multiple signal writes into one single update that is triggered at the end when the callback completes.
+/// The `batch` function allows you to combine multiple signal writes into one 
+/// single update that is triggered at the end when the callback completes.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -145,7 +146,11 @@ typedef BatchCallback<T> = T Function();
 /// });
 /// ```
 ///
-/// When you access a signal that you wrote to earlier inside the callback, or access a computed signal that was invalidated by another signal, we'll only update the necessary dependencies to get the current value for the signal you read from. All other invalidated signals will update at the end of the callback function.
+/// When you access a signal that you wrote to earlier inside the callback, 
+/// or access a computed signal that was invalidated by another signal, we'll 
+/// only update the necessary dependencies to get the current value for the 
+/// signal you read from. All other invalidated signals will update at the 
+/// end of the callback function.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -165,7 +170,8 @@ typedef BatchCallback<T> = T Function();
 /// // Now we reached the end of the batch and call the effect
 /// ```
 ///
-/// Batches can be nested and updates will be flushed when the outermost batch call completes.
+/// Batches can be nested and updates will be flushed when the outermost 
+/// batch call completes.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -185,25 +191,27 @@ typedef BatchCallback<T> = T Function();
 /// // Now the callback completed and we'll trigger the effect.
 /// ```
 T batch<T>(BatchCallback<T> callback) {
-  if (batchDepth > 0) {
+  if (_batchDepth > 0) {
     return callback();
   }
-  startBatch();
+  _startBatch();
   try {
     return callback();
   } finally {
-    endBatch();
+    _endBatch();
   }
 }
 
 // Currently evaluated computed or effect.
-Listenable? evalContext;
+_Listenable? _evalContext;
 
-int untrackedDepth = 0;
+int _untrackedDepth = 0;
 
 typedef UntrackedCallback<T> = T Function();
 
-/// In case when you're receiving a callback that can read some signals, but you don't want to subscribe to them, you can use `untracked` to prevent any subscriptions from happening.
+/// In case when you're receiving a callback that can read some signals, 
+/// but you don't want to subscribe to them, you can use `untracked` to 
+/// prevent any subscriptions from happening.
 ///
 /// ```dart
 /// final counter = signal(0);
@@ -218,36 +226,36 @@ typedef UntrackedCallback<T> = T Function();
 /// });
 /// ```
 T untracked<T>(UntrackedCallback<T> callback) {
-  if (untrackedDepth > 0) {
+  if (_untrackedDepth > 0) {
     return callback();
   }
-  final prevContext = evalContext;
-  evalContext = null;
-  untrackedDepth++;
+  final prevContext = _evalContext;
+  _evalContext = null;
+  _untrackedDepth++;
   try {
     return callback();
   } finally {
-    untrackedDepth--;
-    evalContext = prevContext;
+    _untrackedDepth--;
+    _evalContext = prevContext;
   }
 }
 
 // Effects collected into a batch.
-Effect? batchedEffect;
-int batchDepth = 0;
-int batchIteration = 0;
+_Effect? _batchedEffect;
+int _batchDepth = 0;
+int _ = 0;
 
 // A global version number for signals, used for fast-pathing repeated
 // computed.peek()/computed.value calls when nothing has changed globally.
 int globalVersion = 0;
 
-Node? addDependency(ReadonlySignal signal) {
-  if (evalContext == null) {
+_Node? _addDependency(ReadonlySignal signal) {
+  if (_evalContext == null) {
     return null;
   }
 
   var node = signal._node;
-  if (node == null || node._target != evalContext) {
+  if (node == null || node._target != _evalContext) {
     /**
      * `signal` is a new dependency. Create a new dependency node, and set it
      * as the tail of the current context's dependency list. e.g:
@@ -260,26 +268,26 @@ Node? addDependency(ReadonlySignal signal) {
      *               ↑
      *              tail (evalContext._sources)
      */
-    node = Node(
+    node = _Node(
       version: 0,
       source: signal,
-      prevSource: evalContext!._sources,
+      prevSource: _evalContext!._sources,
       nextSource: null,
-      target: evalContext!,
+      target: _evalContext!,
       prevTarget: null,
       nextTarget: null,
       rollbackNode: node,
     );
 
-    if (evalContext!._sources != null) {
-      evalContext!._sources!._nextSource = node;
+    if (_evalContext!._sources != null) {
+      _evalContext!._sources!._nextSource = node;
     }
-    evalContext!._sources = node;
+    _evalContext!._sources = node;
     signal._node = node;
 
     // Subscribe to change notifications from this dependency if we're in an effect
     // OR evaluating a computed signal that in turn has subscribers.
-    if ((evalContext!._flags & TRACKING) != 0) {
+    if ((_evalContext!._flags & TRACKING) != 0) {
       signal._subscribe(node);
     }
     return node;
@@ -307,11 +315,11 @@ Node? addDependency(ReadonlySignal signal) {
         node._prevSource!._nextSource = node._nextSource;
       }
 
-      node._prevSource = evalContext!._sources;
+      node._prevSource = _evalContext!._sources;
       node._nextSource = null;
 
-      evalContext!._sources!._nextSource = node;
-      evalContext!._sources = node;
+      _evalContext!._sources!._nextSource = node;
+      _evalContext!._sources = node;
     }
 
     // We can assume that the currently evaluated effect / computed signal is already
@@ -342,7 +350,10 @@ abstract class ReadonlySignal<T> {
   /// Return the value when invoked
   T call();
 
-  /// In the rare instance that you have an effect that should write to another signal based on the previous value, but you _don't_ want the effect to be subscribed to that signal, you can read a signals's previous value via `signal.peek()`.
+  /// In the rare instance that you have an effect that should write to 
+  /// another signal based on the previous value, but you _don't_ want the 
+  /// effect to be subscribed to that signal, you can read a signals's 
+  /// previous value via `signal.peek()`.
   ///
   /// ```dart
   /// final counter = signal(0);
@@ -357,15 +368,16 @@ abstract class ReadonlySignal<T> {
   /// });
   /// ```
   ///
-  /// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
+  /// Note that you should only use `signal.peek()` if you really need it.
+  /// Reading a signal's value via `signal.value` is the preferred way in most scenarios.
   T peek();
 
   /// Subscribe to value changes
   EffectCleanup subscribe(void Function(T value) fn);
 
-  void _subscribe(Node node);
+  void _subscribe(_Node node);
 
-  void _unsubscribe(Node node);
+  void _unsubscribe(_Node node);
 
   /// @internal
   /// Version numbers should always be >= 0, because the special value -1 is used
@@ -373,15 +385,17 @@ abstract class ReadonlySignal<T> {
   int get _version;
 
   // @internal
-  Node? _node;
+  _Node? _node;
 
   // @internal
-  Node? _targets;
+  _Node? _targets;
 
   bool _refresh();
 }
 
-/// The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
+/// The `signal` function creates a new signal. A signal is a container for 
+/// a value that can change over time. You can read a signal's value or 
+/// subscribe to value updates by accessing its `.value` property.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -395,7 +409,10 @@ abstract class ReadonlySignal<T> {
 /// counter.value = 1;
 /// ```
 ///
-/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](#computedfn) and [effect](#effectfn) that depends on that signal, ensuring your app state is always consistent.
+/// Writing to a signal is done by setting its `.value` property. 
+/// Changing a signal's value synchronously updates every `computed` 
+/// and `effect` that depends on that signal, ensuring your app state 
+/// is always consistent.
 
 abstract class Signal<T> implements ReadonlySignal<T> {
   // Update the current value
@@ -450,7 +467,7 @@ class _Signal<T> implements Signal<T> {
     ]);
   }
 
-  static void __subscribe(ReadonlySignal signal, Node node) {
+  static void __subscribe(ReadonlySignal signal, _Node node) {
     if (signal._targets != node && node._prevTarget == null) {
       node._nextTarget = signal._targets;
       if (signal._targets != null) {
@@ -461,9 +478,9 @@ class _Signal<T> implements Signal<T> {
   }
 
   @override
-  void _subscribe(Node node) => __subscribe(this, node);
+  void _subscribe(_Node node) => __subscribe(this, node);
 
-  static void __unsubscribe(ReadonlySignal signal, Node node) {
+  static void __unsubscribe(ReadonlySignal signal, _Node node) {
     // Only run the unsubscribe step if the signal has any subscribers to begin with.
     if (signal._targets != null) {
       final prev = node._prevTarget;
@@ -483,7 +500,7 @@ class _Signal<T> implements Signal<T> {
   }
 
   @override
-  void _unsubscribe(Node node) => __unsubscribe(this, node);
+  void _unsubscribe(_Node node) => __unsubscribe(this, node);
 
   @override
   EffectCleanup subscribe(void Function(T value) fn) {
@@ -495,7 +512,7 @@ class _Signal<T> implements Signal<T> {
     void Function(T value) fn,
   ) {
     return effect(() {
-      final effect = currentEffect!;
+      final effect = _currentEffect!;
       final value = signal.value;
       final flag = effect._flags & TRACKING;
       effect._flags &= ~TRACKING;
@@ -523,7 +540,7 @@ class _Signal<T> implements Signal<T> {
 
   @override
   T get value {
-    final node = addDependency(this);
+    final node = _addDependency(this);
     if (node != null) {
       node._version = this._version;
     }
@@ -532,8 +549,8 @@ class _Signal<T> implements Signal<T> {
 
   @override
   set value(T val) {
-    if (evalContext is Computed) {
-      mutationDetected();
+    if (_evalContext is Computed) {
+      _mutationDetected();
     }
 
     if (val != this._value) {
@@ -546,32 +563,34 @@ class _Signal<T> implements Signal<T> {
   }
 
   void _updateValue(T val) {
-    if (batchIteration > _maxCallDepth) {
-      cycleDetected();
+    if (_ > _maxCallDepth) {
+      _cycleDetected();
     }
 
     this._value = val;
     this._version++;
     globalVersion++;
 
-    startBatch();
+    _startBatch();
     try {
       for (var node = _targets; node != null; node = node._nextTarget) {
         node._target._notify();
       }
     } finally {
-      endBatch();
+      _endBatch();
     }
   }
 
   @override
-  Node? _node;
+  _Node? _node;
 
   @override
-  Node? _targets;
+  _Node? _targets;
 }
 
-/// The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
+/// The `signal` function creates a new signal. A signal is a container 
+/// for a value that can change over time. You can read a signal's 
+/// value or subscribe to value updates by accessing its `.value` property.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -585,15 +604,18 @@ class _Signal<T> implements Signal<T> {
 /// counter.value = 1;
 /// ```
 ///
-/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](#computedfn) and [effect](#effectfn) that depends on that signal, ensuring your app state is always consistent.
+/// Writing to a signal is done by setting its `.value` property. 
+/// Changing a signal's value synchronously updates every `computed` 
+/// and `effect` that depends on that signal, ensuring your app state is 
+/// always consistent.
 Signal<T> signal<T>(T value, {String? debugLabel}) {
   final instance = _Signal<T>(value, debugLabel: debugLabel);
   _onSignalCreated(instance);
   return instance;
 }
 
-abstract class Listenable {
-  Node? _sources;
+abstract class _Listenable {
+  _Node? _sources;
 
   int get _flags;
 
@@ -606,7 +628,7 @@ abstract class Listenable {
   void _notify();
 }
 
-bool needsToRecompute(Listenable target) {
+bool _needsToRecompute(_Listenable target) {
   // Check the dependencies for changed values. The dependency list is already
   // in order of use. Therefore if multiple dependencies have changed values, only
   // the first used dependency is re-evaluated at this point.
@@ -625,7 +647,7 @@ bool needsToRecompute(Listenable target) {
   return false;
 }
 
-void prepareSources(Listenable target) {
+void _prepareSources(_Listenable target) {
   /**
    * 1. Mark all current sources as re-usable nodes (version: -1)
    * 2. Set a rollback node if the current node is being used in a different context
@@ -653,9 +675,9 @@ void prepareSources(Listenable target) {
   }
 }
 
-void cleanupSources(Listenable target) {
+void _cleanupSources(_Listenable target) {
   var node = target._sources;
-  Node? head;
+  _Node? head;
 
   /**
    * At this point 'target._sources' points to the tail of the doubly-linked list.
@@ -666,8 +688,8 @@ void cleanupSources(Listenable target) {
     final prev = node._prevSource;
 
     /**
-     * The node was not re-used, unsubscribe from its change notifications and remove itself
-     * from the doubly-linked list. e.g:
+     * The node was not re-used, unsubscribe from its change notifications 
+     * and remove itself from the doubly-linked list. e.g:
      *
      * { A <-> B <-> C }
      *         ↓
@@ -707,7 +729,12 @@ void cleanupSources(Listenable target) {
   target._sources = head;
 }
 
-/// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
+/// Data is often derived from other pieces of existing data. The `computed` 
+/// function lets you combine the values of multiple signals into a new 
+/// signal that can be reacted to, or even used by additional computeds. 
+/// When the signals accessed from within a computed callback change, the 
+/// computed callback is re-executed and its new return value becomes the 
+/// computed signal's value.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -727,10 +754,12 @@ void cleanupSources(Listenable target) {
 /// print(fullName.value);
 /// ```
 ///
-/// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
+/// Any signal that is accessed inside the `computed`'s callback 
+/// function will be automatically subscribed to and tracked as a 
+/// dependency of the computed signal.
 abstract class Computed<T> implements ReadonlySignal<T> {}
 
-class _Computed<T> implements Computed<T>, Listenable {
+class _Computed<T> implements Computed<T>, _Listenable {
   final ComputedCallback<T> _compute;
 
   @override
@@ -740,7 +769,7 @@ class _Computed<T> implements Computed<T>, Listenable {
   final String? debugLabel;
 
   @override
-  Node? _sources;
+  _Node? _sources;
 
   int _globalVersion;
 
@@ -797,15 +826,15 @@ class _Computed<T> implements Computed<T>, Listenable {
     // Mark this computed signal running before checking the dependencies for value
     // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
     this._flags |= RUNNING;
-    if (_version > 0 && !needsToRecompute(this)) {
+    if (_version > 0 && !_needsToRecompute(this)) {
       this._flags &= ~RUNNING;
       return true;
     }
 
-    final prevContext = evalContext;
+    final prevContext = _evalContext;
     try {
-      prepareSources(this);
-      evalContext = this;
+      _prepareSources(this);
+      _evalContext = this;
       final value = this._compute();
       if ((this._flags & HAS_ERROR) != 0 ||
           !_initialized ||
@@ -821,14 +850,14 @@ class _Computed<T> implements Computed<T>, Listenable {
       _flags |= HAS_ERROR;
       _version++;
     }
-    evalContext = prevContext;
-    cleanupSources(this);
+    _evalContext = prevContext;
+    _cleanupSources(this);
     _flags &= ~RUNNING;
     return true;
   }
 
   @override
-  void _subscribe(Node node) {
+  void _subscribe(_Node node) {
     if (_targets == null) {
       _flags |= OUTDATED | TRACKING;
 
@@ -842,7 +871,7 @@ class _Computed<T> implements Computed<T>, Listenable {
   }
 
   @override
-  void _unsubscribe(Node node) {
+  void _unsubscribe(_Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (_targets != null) {
       _Signal.__unsubscribe(this, node);
@@ -873,7 +902,7 @@ class _Computed<T> implements Computed<T>, Listenable {
   @override
   T peek() {
     if (!_refresh()) {
-      cycleDetected();
+      _cycleDetected();
     }
     if ((_flags & HAS_ERROR) != 0) {
       throw _value!;
@@ -884,10 +913,10 @@ class _Computed<T> implements Computed<T>, Listenable {
   @override
   T get value {
     if ((_flags & RUNNING) != 0) {
-      cycleDetected();
+      _cycleDetected();
     }
 
-    final node = addDependency(this);
+    final node = _addDependency(this);
     _refresh();
     if (node != null) {
       node._version = _version;
@@ -908,10 +937,10 @@ class _Computed<T> implements Computed<T>, Listenable {
   T toJson() => value;
 
   @override
-  Node? _node;
+  _Node? _node;
 
   @override
-  Node? _targets;
+  _Node? _targets;
 
   @override
   int _version;
@@ -926,7 +955,12 @@ class _Computed<T> implements Computed<T>, Listenable {
 
 typedef ComputedCallback<T> = T Function();
 
-/// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
+/// Data is often derived from other pieces of existing data. The `computed` 
+/// function lets you combine the values of multiple signals into a new signal 
+/// that can be reacted to, or even used by additional computeds. When the 
+/// signals accessed from within a computed callback change, the computed 
+/// callback is re-executed and its new return value becomes the computed 
+/// signal's value.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -946,7 +980,9 @@ typedef ComputedCallback<T> = T Function();
 /// print(fullName.value);
 /// ```
 ///
-/// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
+/// Any signal that is accessed inside the `computed`'s callback function 
+/// will be automatically subscribed to and tracked as a dependency of the 
+/// computed signal.
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
@@ -956,52 +992,52 @@ Computed<T> computed<T>(
   return instance;
 }
 
-void cleanupEffect(Effect effect) {
+void _cleanupEffect(_Effect effect) {
   final cleanup = effect._cleanup;
   effect._cleanup = null;
 
   if (cleanup != null) {
-    startBatch();
+    _startBatch();
 
     // Run cleanup functions always outside of any context.
-    final prevContext = evalContext;
-    evalContext = null;
+    final prevContext = _evalContext;
+    _evalContext = null;
     try {
       cleanup();
     } catch (e) {
       effect._flags &= ~RUNNING;
       effect._flags |= DISPOSED;
-      disposeEffect(effect);
+      _disposeEffect(effect);
       rethrow;
     } finally {
-      evalContext = prevContext;
-      endBatch();
+      _evalContext = prevContext;
+      _endBatch();
     }
   }
 }
 
-void disposeEffect(Effect effect) {
+void _disposeEffect(_Effect effect) {
   for (var node = effect._sources; node != null; node = node._nextSource) {
     node._source._unsubscribe(node);
   }
   effect._compute = null;
   effect._sources = null;
 
-  cleanupEffect(effect);
+  _cleanupEffect(effect);
 }
 
-void endEffect(Effect effect, Listenable? prevContext) {
-  if (evalContext != effect) {
+void _endEffect(_Effect effect, _Listenable? prevContext) {
+  if (_evalContext != effect) {
     throw Exception('Out-of-order effect');
   }
-  cleanupSources(effect);
-  evalContext = prevContext;
+  _cleanupSources(effect);
+  _evalContext = prevContext;
 
   effect._flags &= ~RUNNING;
   if ((effect._flags & DISPOSED) != 0) {
-    disposeEffect(effect);
+    _disposeEffect(effect);
   }
-  endBatch();
+  _endBatch();
 }
 
 /// Clean up function to stop subscriptions from updating the callback
@@ -1010,9 +1046,9 @@ typedef EffectCleanup = void Function();
 /// Function called when signals in the callback change
 typedef EffectCallback = Function();
 
-Effect? currentEffect;
+_Effect? _currentEffect;
 
-class Effect implements Listenable {
+class _Effect implements _Listenable {
   EffectCallback? _compute;
 
   @override
@@ -1024,16 +1060,16 @@ class Effect implements Listenable {
   Function? _cleanup;
 
   @override
-  Node? _sources;
+  _Node? _sources;
 
-  Effect? _nextBatchedEffect;
+  _Effect? _nextBatchedEffect;
 
   @override
   int _flags;
 
   @override
   bool operator ==(Object other) {
-    return other is Effect && globalId == other.globalId;
+    return other is _Effect && globalId == other.globalId;
   }
 
   @override
@@ -1041,7 +1077,7 @@ class Effect implements Listenable {
     return globalId.hashCode;
   }
 
-  Effect(EffectCallback compute, {this.debugLabel})
+  _Effect(EffectCallback compute, {this.debugLabel})
       : _flags = TRACKING,
         _compute = compute,
         _cleanup = null,
@@ -1052,9 +1088,9 @@ class Effect implements Listenable {
     try {
       if ((_flags & DISPOSED) != 0) return;
       if (_compute == null) return;
-      currentEffect = this;
+      _currentEffect = this;
       final cleanup = _compute!();
-      currentEffect = null;
+      _currentEffect = null;
       if (cleanup is Function) {
         _cleanup = cleanup;
       }
@@ -1065,37 +1101,42 @@ class Effect implements Listenable {
 
   EffectCleanup _start() {
     if ((_flags & RUNNING) != 0) {
-      cycleDetected();
+      _cycleDetected();
     }
     _flags |= RUNNING;
     _flags &= ~DISPOSED;
-    cleanupEffect(this);
-    prepareSources(this);
+    _cleanupEffect(this);
+    _prepareSources(this);
 
-    startBatch();
-    final prevContext = evalContext;
-    evalContext = this;
-    return () => endEffect(this, prevContext);
+    _startBatch();
+    final prevContext = _evalContext;
+    _evalContext = this;
+    return () => _endEffect(this, prevContext);
   }
 
   @override
   void _notify() {
     if (!((_flags & NOTIFIED) != 0)) {
       _flags |= NOTIFIED;
-      _nextBatchedEffect = batchedEffect;
-      batchedEffect = this;
+      _nextBatchedEffect = _batchedEffect;
+      _batchedEffect = this;
     }
   }
 
   void _dispose() {
     _flags |= DISPOSED;
     if (!((_flags & RUNNING) != 0)) {
-      disposeEffect(this);
+      _disposeEffect(this);
     }
   }
 }
 
-/// The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](#computedfn). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
+/// The `effect` function is the last piece that makes everything reactive.
+/// When you access a signal inside its callback function, that signal and
+/// every dependency of said signal will be activated and subscribed to.
+/// In that regard it is very similar to `computed`. By
+/// default all updates are lazy, so nothing will update until you access
+/// a signal inside `effect`.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -1112,7 +1153,8 @@ class Effect implements Listenable {
 /// name.value = "John";
 /// ```
 ///
-/// You can destroy an effect and unsubscribe from all signals it was subscribed to, by calling the returned function.
+/// You can destroy an effect and unsubscribe from all signals it was
+/// subscribed to, by calling the returned function.
 ///
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
@@ -1133,7 +1175,7 @@ class Effect implements Listenable {
 /// surname.value = "Doe 2";
 /// ```
 EffectCleanup effect(EffectCallback compute, {String? debugLabel}) {
-  final effect = Effect(compute, debugLabel: debugLabel);
+  final effect = _Effect(compute, debugLabel: debugLabel);
   _onEffectCreated(effect);
   try {
     effect._callback();

@@ -135,8 +135,8 @@ void _onComputedCreated(Computed instance) {
   });
 }
 
-Set<WeakReference<Effect>> _effects = {};
-void _onEffectCreated(Effect instance) {
+Set<WeakReference<_Effect>> _effects = {};
+void _onEffectCreated(_Effect instance) {
   if (!_devToolsEnabled) return;
   if (_effects.any((e) => e.target == instance)) return;
   _effects.add(WeakReference(instance));
