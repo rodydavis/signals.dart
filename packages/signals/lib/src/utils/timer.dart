@@ -1,32 +1,33 @@
 import '../../signals.dart';
 
 /// Time event to react to
-typedef TimerEvent = ({int iteration, int millis});
+typedef TimerSignalEvent = ({int iteration, int millis});
 
-/// Emit recurring [TimerEvent] aka [StreamSignal]
-class Timer extends StreamSignal<TimerEvent> {
+/// Emit recurring [TimerSignalEvent] aka [StreamSignal]
+class TimerSignal extends StreamSignal<TimerSignalEvent> {
   // Trigger an [TimerEvent] every duration
   final Duration every;
 
-  Timer({
+  TimerSignal({
     required this.every,
     super.cancelOnError,
     super.fireImmediately = false,
     super.debugLabel = 'Timer',
-  }) : super(() => Stream<TimerEvent>.periodic(every, (c) => _emit(c + 1)),
+  }) : super(
+            () => Stream<TimerSignalEvent>.periodic(every, (c) => _emit(c + 1)),
             initial: _emit(0));
 
-  static TimerEvent _emit(int count) =>
+  static TimerSignalEvent _emit(int count) =>
       (iteration: count, millis: DateTime.now().millisecondsSinceEpoch);
 }
 
-/// Expose Duration as a [Timer]
+/// Expose Duration as a [TimerSignal]
 extension TimerExtension on Duration {
-  Timer toSignal(
+  TimerSignal toSignal(
           {String? debugLabel,
           bool fireImmediately = false,
           bool? cancelOnError}) =>
-      Timer(
+      TimerSignal(
         every: this,
         debugLabel: debugLabel,
         fireImmediately: fireImmediately,
