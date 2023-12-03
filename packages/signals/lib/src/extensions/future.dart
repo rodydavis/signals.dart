@@ -23,11 +23,16 @@ extension SignalFutureUtils<T> on Future<T> {
   ///   SignalLoading _ => print('loading'),
   /// });
   /// ```
-  FutureSignal<T> toSignal({Duration? timeout, String? debugLabel}) {
+  FutureSignal<T> toSignal({
+    Duration? timeout,
+    String? debugLabel,
+    bool fireImmediately = false,
+  }) {
     return FutureSignal<T>(
       () => this,
       debugLabel: debugLabel,
       timeout: timeout,
+      fireImmediately: fireImmediately,
     );
   }
 }
