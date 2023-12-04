@@ -25,6 +25,10 @@ class Connect<T> {
     Stream<T> source, {
     bool? cancelOnError,
   }) {
+    // stop multiple subscriptions to the same stream
+    if (_subscriptions.containsKey(source.hashCode)) {
+      return this;
+    }
     final subscription = source.listen(
       (event) {
         signal.value = event;
