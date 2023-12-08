@@ -28,7 +28,8 @@ typedef StreamSignalBuilder<R> = R Function();
 ///     loading: () => 'loading',
 /// );
 /// ```
-class StreamSignal<T> implements ReadonlySignal<T?> {
+@Deprecated('Use [AsyncSignal.fromStream] instead')
+class StreamSignal<T> extends ReadonlySignal<T?> {
   /// Cancel the stream on error
   final bool? cancelOnError;
 

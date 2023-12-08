@@ -24,6 +24,8 @@ class Connect<T> {
   Connect<T> from(
     Stream<T> source, {
     bool? cancelOnError,
+    Function? onError,
+    Function? onDone,
   }) {
     // stop multiple subscriptions to the same stream
     if (_subscriptions.containsKey(source.hashCode)) {
@@ -33,8 +35,10 @@ class Connect<T> {
       (event) {
         signal.value = event;
       },
+      onError: onError,
       onDone: () {
         _subscriptions.removeWhere((key, value) => key == source.hashCode);
+        onDone?.call();
       },
       cancelOnError: cancelOnError,
     );

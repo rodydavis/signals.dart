@@ -21,6 +21,8 @@ export 'src/signals.dart'
         MutableSignal,
         ReadonlySignal;
 export 'src/utils/timer.dart' show TimerSignal, TimerExtension;
+export 'src/value/async_signal.dart'
+    show futureSignalWithDefault, streamSignalWithDefault, AsyncSignal;
 export 'src/value/future_signal.dart' show futureSignal, FutureSignal;
 export 'src/value/iterable_signal.dart' show iterableSignal, IterableSignal;
 export 'src/value/list_signal.dart' show listSignal, ListSignal;
