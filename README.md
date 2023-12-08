@@ -10,6 +10,7 @@ Documentation Site: https://rodydavis.github.io/signals.dart/
 | Package                                                             | Pub                                                                                      |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | [`signals`](packages/signals)                                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals) |
+| [`signals_lint`](packages/signals_lint)                                       | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint) |
 | [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                          |
 
 ## Guide / API
