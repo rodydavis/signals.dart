@@ -1,3 +1,7 @@
+## 1.5.1
+
+- Adding `isCompleted` and `future` to `AsyncSignal` to async methods to wait for a signal to complete
+
 ## 1.5.0
 
 - Adding `AsyncSignal` with helpers `asyncSignalFromFuture` and `asyncSignalFromStream`
