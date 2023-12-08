@@ -1,7 +1,7 @@
 name: signals_devtools_extension
 description: Signals DevTools extension.
 publish_to: "none"
-version: 1.0.0+1
+version: 1.0.1
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
@@ -11,7 +11,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   devtools_extensions: ^0.0.10
   devtools_app_shared: ^0.0.6
-  signals: ^1.1.0
+  force_directed_graphview: ^0.6.0
+  faker: ^2.1.0
+  signals:
+    path: ../signals
 
 dev_dependencies:
   flutter_test:

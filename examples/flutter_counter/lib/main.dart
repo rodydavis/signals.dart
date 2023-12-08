@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-final brightness = signal(Brightness.light);
-final themeMode = computed(() {
-  if (brightness() == Brightness.dark) {
-    return ThemeMode.dark;
-  } else {
-    return ThemeMode.light;
-  }
-});
+final brightness = signal(Brightness.light, debugLabel: 'Brightness');
+final isDark = computed(
+  () => brightness.value == Brightness.dark,
+  debugLabel: 'Is Dark',
+);
+final themeMode = computed(
+  () {
+    if (isDark.value) {
+      return ThemeMode.dark;
+    } else {
+      return ThemeMode.light;
+    }
+  },
+  debugLabel: 'Theme Mode',
+);
 
-void main() => runApp(const MyApp());
+void main() {
+  SignalsObserver.instance = LoggingSignalsObserver();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,7 +62,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final Signal<int> counter = signal(0);
+  final Signal<int> counter = signal(0, debugLabel: 'Counter');
 
   void _incrementCounter() {
     counter.value++;
@@ -65,12 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: [
           Builder(builder: (context) {
-            final isDark = brightness.watch(context) == Brightness.dark;
+            final dark = isDark.watch(context);
             return IconButton(
               onPressed: () {
-                brightness.value = isDark ? Brightness.light : Brightness.dark;
+                brightness.value = dark ? Brightness.light : Brightness.dark;
               },
-              icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+              icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
             );
           }),
         ],

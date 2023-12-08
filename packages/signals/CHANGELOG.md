@@ -1,3 +1,8 @@
+## 1.5.3
+
+- Adding `SignalObserver` and `LoggingSignalObserver`
+- Updating `signal_devtools` to 0.0.2 with graph view and reactive values
+
 ## 1.5.2
 
 - Migrating `TimerSignal` to `AsyncSignal`

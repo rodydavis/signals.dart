@@ -40,72 +40,9 @@ void _initDevTools() {
                 'type': 'computed',
               })
           .toList();
-      final effects = _effects
-          .where((e) => e.target != null)
-          .map((e) => e.target!)
-          .map((e) => {
-                'id': e.globalId,
-                'label': e.debugLabel,
-                'type': 'effect',
-              })
-          .toList();
       return developer.ServiceExtensionResponse.result(
         json.encode({
-          'signals': signals,
-          'computed': computed,
-          'effects': effects,
-          'nodes': [...signals, ...computed, ...effects]
-        }),
-      );
-    },
-  );
-  developer.registerExtension(
-    'ext.signals.getNode',
-    (method, parameters) async {
-      final id = int.parse(parameters['id']!);
-      Map<String, dynamic>? result;
-      for (final s in _signals) {
-        if (s.target?.globalId == id) {
-          final val = s.target!;
-          result = {
-            'id': val.globalId,
-            'label': val.debugLabel,
-            'value': val.toString(),
-            'type': 'signal',
-          };
-          break;
-        }
-      }
-      for (final s in _computed) {
-        if (s.target?.globalId == id) {
-          final val = s.target!;
-          result = {
-            'id': val.globalId,
-            'label': val.debugLabel,
-            'value': val.toString(),
-            'type': 'computed',
-          };
-          break;
-        }
-      }
-      for (final s in _effects) {
-        if (s.target?.globalId == id) {
-          final val = s.target!;
-          result = {
-            'id': val.globalId,
-            'label': val.debugLabel,
-            'type': 'effect',
-          };
-          break;
-        }
-      }
-      return developer.ServiceExtensionResponse.result(
-        json.encode({
-          ...result ??
-              {
-                'id': id,
-                'label': 'Disposed or does not exist',
-              },
+          'nodes': [...signals, ...computed]
         }),
       );
     },
@@ -115,23 +52,53 @@ void _initDevTools() {
 
 Set<WeakReference<ReadonlySignal>> _signals = {};
 void _onSignalCreated(Signal instance) {
+  SignalsObserver.instance?.onSignalCreated(instance);
   if (!_devToolsEnabled) return;
   if (_signals.any((e) => e.target == instance)) return;
   _signals.add(WeakReference(instance));
-  _debugPostEvent('signals:signal', {
+  _debugPostEvent('ext.signals.signalCreate', {
     'id': instance.globalId,
     'label': instance.debugLabel,
+    'value': instance.peek()?.toString(),
+    'type': 'signal',
+  });
+}
+
+void _onSignalUpdated(Signal instance, dynamic value) {
+  SignalsObserver.instance?.onSignalUpdated(instance, value);
+  if (!_devToolsEnabled) return;
+  _debugPostEvent('ext.signals.signalUpdate', {
+    'id': instance.globalId,
+    'label': instance.debugLabel,
+    'value': value?.toString(),
+    'type': 'signal',
   });
 }
 
 Set<WeakReference<Computed>> _computed = {};
 void _onComputedCreated(Computed instance) {
+  SignalsObserver.instance?.onComputedCreated(instance);
   if (!_devToolsEnabled) return;
   if (_computed.any((e) => e.target == instance)) return;
   _computed.add(WeakReference(instance));
-  _debugPostEvent('signals:computed', {
+  _debugPostEvent('ext.signals.computedCreate', {
     'id': instance.globalId,
     'label': instance.debugLabel,
+    'value': instance.peek()?.toString(),
+    'sources': instance._allSources.map((e) => e.globalId).join(','),
+    'type': 'computed',
+  });
+}
+
+void _onComputedUpdated(Computed instance, dynamic value) {
+  SignalsObserver.instance?.onComputedUpdated(instance, value);
+  if (!_devToolsEnabled) return;
+  _debugPostEvent('ext.signals.computedUpdate', {
+    'id': instance.globalId,
+    'label': instance.debugLabel,
+    'value': value?.toString(),
+    'sources': instance._allSources.map((e) => e.globalId).join(','),
+    'type': 'computed',
   });
 }
 
@@ -140,8 +107,19 @@ void _onEffectCreated(_Effect instance) {
   if (!_devToolsEnabled) return;
   if (_effects.any((e) => e.target == instance)) return;
   _effects.add(WeakReference(instance));
-  _debugPostEvent('signals:effect', {
+  _debugPostEvent('ext.signals.effectCreate', {
     'id': instance.globalId,
     'label': instance.debugLabel,
+    'type': 'effect',
+  });
+}
+
+void _onEffectCalled(_Effect instance) {
+  if (!_devToolsEnabled) return;
+  if (!_effects.any((e) => e.target == instance)) return;
+  _debugPostEvent('ext.signals.effectUpdate', {
+    'id': instance.globalId,
+    'label': instance.debugLabel,
+    'type': 'effect',
   });
 }

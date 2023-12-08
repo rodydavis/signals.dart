@@ -29,3 +29,4 @@ export 'src/value/list_signal.dart' show listSignal, ListSignal;
 export 'src/value/map_signal.dart' show mapSignal, MapSignal;
 export 'src/value/set_signal.dart' show setSignal, SetSignal;
 export 'src/value/stream_signal.dart' show streamSignal, StreamSignal;
+export 'src/observer.dart';

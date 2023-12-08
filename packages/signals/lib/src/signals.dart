@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 
+import 'observer.dart';
 import 'utils/constants.dart';
 
 part 'devtool.dart';
@@ -588,11 +589,6 @@ class _Signal<T> implements Signal<T> {
     }
   }
 
-  /// Update the value based on the current value
-  T updateValue(T Function(T value) fn) {
-    return this.value = fn(this.value);
-  }
-
   void _updateValue(T val) {
     if (_ > _maxCallDepth) {
       _cycleDetected();
@@ -611,6 +607,8 @@ class _Signal<T> implements Signal<T> {
     } finally {
       _endBatch();
     }
+
+    _onSignalUpdated(this, val);
   }
 
   @override
@@ -789,7 +787,9 @@ void _cleanupSources(_Listenable target) {
 /// Any signal that is accessed inside the `computed`'s callback
 /// function will be automatically subscribed to and tracked as a
 /// dependency of the computed signal.
-abstract class Computed<T> implements ReadonlySignal<T> {}
+abstract class Computed<T> implements ReadonlySignal<T> {
+  List<ReadonlySignal> get _allSources;
+}
 
 class _Computed<T> implements Computed<T>, _Listenable {
   final ComputedCallback<T> _compute;
@@ -824,6 +824,16 @@ class _Computed<T> implements Computed<T>, _Listenable {
       globalId.hashCode,
       value.hashCode,
     ]);
+  }
+
+  @override
+  List<ReadonlySignal> get _allSources {
+    final results = <ReadonlySignal>[];
+    _Node? root = _sources;
+    for (var node = root; node != null; node = node._nextSource) {
+      results.add(node._source);
+    }
+    return results;
   }
 
   _Computed(ComputedCallback<T> compute, {this.debugLabel})
@@ -955,7 +965,6 @@ class _Computed<T> implements Computed<T>, _Listenable {
     if ((_flags & RUNNING) != 0) {
       _cycleDetected();
     }
-
     final node = _addDependency(this);
     _refresh();
     if (node != null) {
@@ -964,6 +973,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
     if ((_flags & HAS_ERROR) != 0) {
       throw _error!;
     }
+    _onComputedUpdated(this, this._value);
     return this._value;
   }
 
@@ -1142,6 +1152,7 @@ class _Effect implements _Listenable {
     } finally {
       finish();
     }
+    _onEffectCalled(this);
   }
 
   EffectCleanup _start() {
