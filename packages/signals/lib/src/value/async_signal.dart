@@ -50,15 +50,16 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   void _stream(Stream<T> Function() stream, {bool? cancelOnError}) {
     _cleanup = effect(() {
       if (_completed()) return;
-      final source = stream();
       _connector.from(
-        source,
+        stream(),
         cancelOnError: cancelOnError,
         onError: (err, trace) {
           _error.value = err;
+          _completer = Completer<T>();
           _completer.completeError(err, trace);
         },
         onValue: (val) {
+          _completer = Completer<T>();
           _completer.complete(val);
         },
       );
