@@ -55,11 +55,15 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
         cancelOnError: cancelOnError,
         onError: (err, trace) {
           _error.value = err;
-          _completer = Completer<T>();
+          if (_completer.isCompleted) {
+            _completer = Completer<T>();
+          }
           _completer.completeError(err, trace);
         },
         onValue: (val) {
-          _completer = Completer<T>();
+          if (_completer.isCompleted) {
+            _completer = Completer<T>();
+          }
           _completer.complete(val);
         },
       );
