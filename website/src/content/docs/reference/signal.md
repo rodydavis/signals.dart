@@ -60,17 +60,17 @@ effect(() {
 counter.value = 1;
 ```
 
-## .forceUpdate(...)
+## .previousValue
 
-The `.forceUpdate()` method of a signal is used to force an update even if the value is the same or the same reference like an `Object`.
+The `.previousValue` property of a signal is used to read the previous value of the signal. If used inside an effect or computed, it will not subscribe to the signal and not trigger the effect or computed whenever the signal's value changes.
 
 ```dart
 final counter = signal(0);
 
 effect(() {
-	print(counter.value);
+	print('Current value: ${counter.value}');
+	print('Previous value: ${counter.previousValue}');
 });
 
 counter.value = 1;
-counter.forceUpdate(1);
 ```

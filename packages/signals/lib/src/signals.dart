@@ -125,7 +125,7 @@ void _endBatch() {
 
 typedef BatchCallback<T> = T Function();
 
-/// The `batch` function allows you to combine multiple signal writes into one 
+/// The `batch` function allows you to combine multiple signal writes into one
 /// single update that is triggered at the end when the callback completes.
 ///
 /// ```dart
@@ -146,10 +146,10 @@ typedef BatchCallback<T> = T Function();
 /// });
 /// ```
 ///
-/// When you access a signal that you wrote to earlier inside the callback, 
-/// or access a computed signal that was invalidated by another signal, we'll 
-/// only update the necessary dependencies to get the current value for the 
-/// signal you read from. All other invalidated signals will update at the 
+/// When you access a signal that you wrote to earlier inside the callback,
+/// or access a computed signal that was invalidated by another signal, we'll
+/// only update the necessary dependencies to get the current value for the
+/// signal you read from. All other invalidated signals will update at the
 /// end of the callback function.
 ///
 /// ```dart
@@ -170,7 +170,7 @@ typedef BatchCallback<T> = T Function();
 /// // Now we reached the end of the batch and call the effect
 /// ```
 ///
-/// Batches can be nested and updates will be flushed when the outermost 
+/// Batches can be nested and updates will be flushed when the outermost
 /// batch call completes.
 ///
 /// ```dart
@@ -209,8 +209,8 @@ int _untrackedDepth = 0;
 
 typedef UntrackedCallback<T> = T Function();
 
-/// In case when you're receiving a callback that can read some signals, 
-/// but you don't want to subscribe to them, you can use `untracked` to 
+/// In case when you're receiving a callback that can read some signals,
+/// but you don't want to subscribe to them, you can use `untracked` to
 /// prevent any subscriptions from happening.
 ///
 /// ```dart
@@ -341,6 +341,11 @@ abstract class ReadonlySignal<T> {
   /// Compute the current value
   T get value;
 
+  /// Get the last value before the last update or the initial value
+  ///
+  /// This does not subscribe in an effect and is the equivalent to peek()
+  T get previousValue;
+
   @override
   String toString();
 
@@ -350,9 +355,11 @@ abstract class ReadonlySignal<T> {
   /// Return the value when invoked
   T call();
 
-  /// In the rare instance that you have an effect that should write to 
-  /// another signal based on the previous value, but you _don't_ want the 
-  /// effect to be subscribed to that signal, you can read a signals's 
+  T get();
+
+  /// In the rare instance that you have an effect that should write to
+  /// another signal based on the previous value, but you _don't_ want the
+  /// effect to be subscribed to that signal, you can read a signals's
   /// previous value via `signal.peek()`.
   ///
   /// ```dart
@@ -393,8 +400,8 @@ abstract class ReadonlySignal<T> {
   bool _refresh();
 }
 
-/// The `signal` function creates a new signal. A signal is a container for 
-/// a value that can change over time. You can read a signal's value or 
+/// The `signal` function creates a new signal. A signal is a container for
+/// a value that can change over time. You can read a signal's value or
 /// subscribe to value updates by accessing its `.value` property.
 ///
 /// ```dart
@@ -409,14 +416,17 @@ abstract class ReadonlySignal<T> {
 /// counter.value = 1;
 /// ```
 ///
-/// Writing to a signal is done by setting its `.value` property. 
-/// Changing a signal's value synchronously updates every `computed` 
-/// and `effect` that depends on that signal, ensuring your app state 
+/// Writing to a signal is done by setting its `.value` property.
+/// Changing a signal's value synchronously updates every `computed`
+/// and `effect` that depends on that signal, ensuring your app state
 /// is always consistent.
 
 abstract class Signal<T> implements ReadonlySignal<T> {
-  // Update the current value
+  /// Update the current value
   set value(T value);
+
+  /// Set the current value
+  void set(T value);
 }
 
 /// Signal that can read and write a value
@@ -426,6 +436,15 @@ typedef MutableSignal<T> = Signal<T>;
 /// Signal that can be extended and used as a class
 class ValueSignal<T> extends _Signal<T> {
   ValueSignal(super.value, {super.debugLabel});
+
+  /// Should only be called to update the value of a signal if checks for equality
+  /// have already been made.
+  ///
+  /// This is primarily used by the `ValueSignal` class to update the value
+  /// since the reference is always the same.
+  void forceUpdate(T val) {
+    _updateValue(val);
+  }
 }
 
 class _Signal<T> implements Signal<T> {
@@ -437,11 +456,13 @@ class _Signal<T> implements Signal<T> {
 
   _Signal(this._value, {this.debugLabel})
       : _version = 0,
+        _previousValue = _value,
         brand = identifier,
         globalId = ++_lastGlobalId;
 
   // @internal
   T _value;
+  T _previousValue;
 
   /// @internal
   /// Version numbers should always be >= 0, because the special value -1 is used
@@ -536,6 +557,12 @@ class _Signal<T> implements Signal<T> {
   @override
   T peek() => this._value;
 
+  @override
+  T get() => value;
+
+  @override
+  void set(T value) => this.value = value;
+
   final Symbol brand;
 
   @override
@@ -548,6 +575,9 @@ class _Signal<T> implements Signal<T> {
   }
 
   @override
+  T get previousValue => this._previousValue;
+
+  @override
   set value(T val) {
     if (_evalContext is Computed) {
       _mutationDetected();
@@ -558,8 +588,9 @@ class _Signal<T> implements Signal<T> {
     }
   }
 
-  void forceUpdate(T val) {
-    _updateValue(val);
+  /// Update the value based on the current value
+  T updateValue(T Function(T value) fn) {
+    return this.value = fn(this.value);
   }
 
   void _updateValue(T val) {
@@ -567,6 +598,7 @@ class _Signal<T> implements Signal<T> {
       _cycleDetected();
     }
 
+    this._previousValue = _value;
     this._value = val;
     this._version++;
     globalVersion++;
@@ -588,8 +620,8 @@ class _Signal<T> implements Signal<T> {
   _Node? _targets;
 }
 
-/// The `signal` function creates a new signal. A signal is a container 
-/// for a value that can change over time. You can read a signal's 
+/// The `signal` function creates a new signal. A signal is a container
+/// for a value that can change over time. You can read a signal's
 /// value or subscribe to value updates by accessing its `.value` property.
 ///
 /// ```dart
@@ -604,9 +636,9 @@ class _Signal<T> implements Signal<T> {
 /// counter.value = 1;
 /// ```
 ///
-/// Writing to a signal is done by setting its `.value` property. 
-/// Changing a signal's value synchronously updates every `computed` 
-/// and `effect` that depends on that signal, ensuring your app state is 
+/// Writing to a signal is done by setting its `.value` property.
+/// Changing a signal's value synchronously updates every `computed`
+/// and `effect` that depends on that signal, ensuring your app state is
 /// always consistent.
 Signal<T> signal<T>(T value, {String? debugLabel}) {
   final instance = _Signal<T>(value, debugLabel: debugLabel);
@@ -729,11 +761,11 @@ void _cleanupSources(_Listenable target) {
   target._sources = head;
 }
 
-/// Data is often derived from other pieces of existing data. The `computed` 
-/// function lets you combine the values of multiple signals into a new 
-/// signal that can be reacted to, or even used by additional computeds. 
-/// When the signals accessed from within a computed callback change, the 
-/// computed callback is re-executed and its new return value becomes the 
+/// Data is often derived from other pieces of existing data. The `computed`
+/// function lets you combine the values of multiple signals into a new
+/// signal that can be reacted to, or even used by additional computeds.
+/// When the signals accessed from within a computed callback change, the
+/// computed callback is re-executed and its new return value becomes the
 /// computed signal's value.
 ///
 /// ```dart
@@ -754,8 +786,8 @@ void _cleanupSources(_Listenable target) {
 /// print(fullName.value);
 /// ```
 ///
-/// Any signal that is accessed inside the `computed`'s callback 
-/// function will be automatically subscribed to and tracked as a 
+/// Any signal that is accessed inside the `computed`'s callback
+/// function will be automatically subscribed to and tracked as a
 /// dependency of the computed signal.
 abstract class Computed<T> implements ReadonlySignal<T> {}
 
@@ -779,7 +811,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
   Object? _error;
 
   bool _initialized = false;
-  late T _value;
+  late T _value, _previousValue;
 
   @override
   bool operator ==(Object other) {
@@ -840,6 +872,11 @@ class _Computed<T> implements Computed<T>, _Listenable {
           !_initialized ||
           _value != value ||
           _version == 0) {
+        if (!_initialized) {
+          _previousValue = value;
+        } else {
+          _previousValue = _value;
+        }
         _value = value;
         if (!_initialized) _initialized = true;
         _flags &= ~HAS_ERROR;
@@ -911,6 +948,9 @@ class _Computed<T> implements Computed<T>, _Listenable {
   }
 
   @override
+  T get() => value;
+
+  @override
   T get value {
     if ((_flags & RUNNING) != 0) {
       _cycleDetected();
@@ -924,8 +964,11 @@ class _Computed<T> implements Computed<T>, _Listenable {
     if ((_flags & HAS_ERROR) != 0) {
       throw _error!;
     }
-    return _value;
+    return this._value;
   }
+
+  @override
+  T get previousValue => this._previousValue;
 
   @override
   T call() => this.value;
@@ -955,11 +998,11 @@ class _Computed<T> implements Computed<T>, _Listenable {
 
 typedef ComputedCallback<T> = T Function();
 
-/// Data is often derived from other pieces of existing data. The `computed` 
-/// function lets you combine the values of multiple signals into a new signal 
-/// that can be reacted to, or even used by additional computeds. When the 
-/// signals accessed from within a computed callback change, the computed 
-/// callback is re-executed and its new return value becomes the computed 
+/// Data is often derived from other pieces of existing data. The `computed`
+/// function lets you combine the values of multiple signals into a new signal
+/// that can be reacted to, or even used by additional computeds. When the
+/// signals accessed from within a computed callback change, the computed
+/// callback is re-executed and its new return value becomes the computed
 /// signal's value.
 ///
 /// ```dart
@@ -980,8 +1023,8 @@ typedef ComputedCallback<T> = T Function();
 /// print(fullName.value);
 /// ```
 ///
-/// Any signal that is accessed inside the `computed`'s callback function 
-/// will be automatically subscribed to and tracked as a dependency of the 
+/// Any signal that is accessed inside the `computed`'s callback function
+/// will be automatically subscribed to and tracked as a dependency of the
 /// computed signal.
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
@@ -1077,8 +1120,10 @@ class _Effect implements _Listenable {
     return globalId.hashCode;
   }
 
-  _Effect(EffectCallback compute, {this.debugLabel})
-      : _flags = TRACKING,
+  _Effect(
+    EffectCallback compute, {
+    this.debugLabel,
+  })  : _flags = TRACKING,
         _compute = compute,
         _cleanup = null,
         globalId = ++_lastGlobalId;

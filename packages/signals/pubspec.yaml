@@ -1,8 +1,9 @@
 name: signals
 description: "Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more."
 repository: https://github.com/rodydavis/signals.dart
-homepage: https://rodydavis.github.io/signals.dart/
-version: 1.4.1
+homepage: https://rodydavis.github.io/signals.dart
+documentation: https://rodydavis.github.io/signals.dart
+version: 1.5.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -18,6 +19,21 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
+
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
+topics:
+  - signal
+  - reactive
+  - state
+  - signals
+  - rx
 
 scripts:
   coverage:

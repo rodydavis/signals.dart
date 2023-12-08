@@ -25,6 +25,7 @@ typedef FutureSignalBuilder<R> = R Function();
 ///     timeout: () => 'timeout',
 /// );
 /// ```
+@Deprecated('Use [AsyncSignal.fromFuture] instead')
 class FutureSignal<T> implements ReadonlySignal<T?> {
   /// Future [Duration] to wait before timing out
   final Duration? timeout;
@@ -59,6 +60,13 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
     if (fireImmediately) await _execute();
   }
 
+  Future<void> reload() async {
+    _stale = true;
+    final (_, val, err) = _state.value;
+    _state.value = (_FutureState.reloading, val, err);
+    if (fireImmediately) await _execute();
+  }
+
   Future<void> _execute() async {
     if (!_stale) return;
     _stale = false;
@@ -71,6 +79,8 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
       } else {
         result = await _compute();
       }
+      final (_, val, _) = _state.value;
+      previousValue = val;
       _state.value = (_FutureState.value, result, null);
     } catch (e) {
       if (e is FutureSignalTimeoutException) {
@@ -82,10 +92,15 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
   }
 
   @override
+  T? previousValue;
+
+  @override
   T? get value {
     _execute().ignore();
     final (state, val, _) = _state.value;
-    if (state == _FutureState.value) return val;
+    if (state == _FutureState.value || state == _FutureState.reloading) {
+      return val;
+    }
     return null;
   }
 
@@ -93,21 +108,35 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
   Object? get error {
     _execute().ignore();
     final (state, _, err) = _state.value;
-    if (state == _FutureState.error) return err;
+    if (state == _FutureState.error || state == _FutureState.reloading) {
+      return err;
+    }
     return null;
   }
 
   /// Returns true if the future signal is done loading
   bool get isSuccess => _state.peek().$1 == _FutureState.value;
 
+  /// Returns true if the future signal is done loading
+  bool get hasValue => isSuccess || isReloading;
+
   /// Returns true if the future signal has an error
   bool get isError => _state.peek().$1 == _FutureState.error || isTimeout;
+
+  /// Returns true if the future signal has an error
+  bool get hasError => isError;
 
   /// Returns true if the future signal has timed out
   bool get isTimeout => _state.peek().$1 == _FutureState.timeout;
 
   /// Returns true if the future signal is loading
   bool get isLoading => _state.peek().$1 == _FutureState.loading;
+
+  /// Returns true if the future signal is reloading
+  bool get isReloading => _state.peek().$1 == _FutureState.reloading;
+
+  @override
+  T? get() => value;
 
   /// Returns the value of the signal or throws an error if not a value
   /// This method uses peek() to get the value and will not subscribe to the
@@ -124,6 +153,7 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
     required FutureSignalBuilder<E> loading,
     required FutureSignalErrorBuilder<E> error,
     FutureSignalBuilder<E>? timeout,
+    FutureSignalValueBuilder<E, T>? reloading,
   }) {
     _execute().ignore();
     final (state, val, err) = _state.value;
@@ -135,6 +165,9 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
       case _FutureState.timeout:
         if (timeout != null) return timeout();
         return error(null);
+      case _FutureState.reloading:
+        if (reloading != null) return reloading(val as T);
+        return value(val as T);
       case _FutureState.loading:
         return loading();
     }
@@ -144,6 +177,7 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
   E maybeMap<E>({
     FutureSignalValueBuilder<E, T>? value,
     FutureSignalBuilder<E>? loading,
+    FutureSignalValueBuilder<E, T>? reloading,
     FutureSignalErrorBuilder<E>? error,
     FutureSignalBuilder<E>? timeout,
     required FutureSignalBuilder<E> orElse,
@@ -160,6 +194,10 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
       case _FutureState.timeout:
         if (timeout != null) return timeout();
         if (error != null) return error(null);
+        break;
+      case _FutureState.reloading:
+        if (reloading != null) return reloading(val as T);
+        if (value != null) return value(val as T);
         break;
       case _FutureState.loading:
         if (loading != null) return loading();
@@ -214,9 +252,11 @@ enum _FutureState {
   error,
   value,
   loading,
+  reloading,
 }
 
 /// Create a [FutureSignal] from a [Future]
+@Deprecated('Use [asyncSignalFromFuture] instead')
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() compute, {
   Duration? timeout,

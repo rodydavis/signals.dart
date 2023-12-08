@@ -1,3 +1,4 @@
+import '../value/async_signal.dart';
 import '../value/future_signal.dart';
 
 /// Extension on future to provide helpful methods for signals
@@ -10,19 +11,7 @@ extension SignalFutureUtils<T> on Future<T> {
   /// final future = Future(() => 1);
   /// final signal = future.toSignal();
   /// ```
-  ///
-  /// The [FutureSignal] will return [SignalState] for the value. To react to
-  /// the various states you can use a switch statement:
-  ///
-  /// ```dart
-  /// final s = FutureSignal(...);
-  /// final result = (switch(s.value) {
-  ///   SignalValue result => print('value: ${result.value}'),
-  ///   SignalTimeout _ => print('timeout error'),
-  ///   SignalError result => print('error: ${result.error}'),
-  ///   SignalLoading _ => print('loading'),
-  /// });
-  /// ```
+  @Deprecated('Use [toSignalWithDefault] instead')
   FutureSignal<T> toSignal({
     Duration? timeout,
     String? debugLabel,
@@ -33,6 +22,17 @@ extension SignalFutureUtils<T> on Future<T> {
       debugLabel: debugLabel,
       timeout: timeout,
       fireImmediately: fireImmediately,
+    );
+  }
+
+  AsyncSignal<T> toSignalWithDefault(
+    T initialValue, {
+    String? debugLabel,
+  }) {
+    return AsyncSignal.fromFuture(
+      () => this,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
     );
   }
 }

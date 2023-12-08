@@ -24,6 +24,8 @@ class Connect<T> {
   Connect<T> from(
     Stream<T> source, {
     bool? cancelOnError,
+    Function? onError,
+    Function? onDone,
   }) {
     // stop multiple subscriptions to the same stream
     if (_subscriptions.containsKey(source.hashCode)) {
@@ -33,8 +35,10 @@ class Connect<T> {
       (event) {
         signal.value = event;
       },
+      onError: onError,
       onDone: () {
         _subscriptions.removeWhere((key, value) => key == source.hashCode);
+        onDone?.call();
       },
       cancelOnError: cancelOnError,
     );
@@ -54,6 +58,8 @@ class Connect<T> {
 }
 
 /// Connects a [Signal] to a [Stream].
-Connect<T> connect<T>(Signal<T> signal) {
-  return Connect(signal);
+Connect<T> connect<T>(Signal<T> signal, [Stream<T>? stream]) {
+  final instance = Connect(signal);
+  if (stream != null) instance << stream;
+  return instance;
 }

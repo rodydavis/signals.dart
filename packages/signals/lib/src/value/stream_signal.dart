@@ -28,7 +28,8 @@ typedef StreamSignalBuilder<R> = R Function();
 ///     loading: () => 'loading',
 /// );
 /// ```
-class StreamSignal<T> implements ReadonlySignal<T?> {
+@Deprecated('Use [AsyncSignal.fromStream] instead')
+class StreamSignal<T> extends ReadonlySignal<T?> {
   /// Cancel the stream on error
   final bool? cancelOnError;
 
@@ -63,9 +64,17 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
 
   /// Resets the signal by calling the [Stream] again
   void reset() {
-    _subscription?.cancel();
+    cancel();
     _stale = true;
     _state.value = (_StreamState.loading, null, null);
+    if (fireImmediately) _execute();
+  }
+
+  void reload() {
+    cancel();
+    _stale = true;
+    final (_, val, err) = _state.value;
+    _state.value = (_StreamState.reloading, val, err);
     if (fireImmediately) _execute();
   }
 
@@ -74,6 +83,8 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
     _stale = false;
     _subscription = _compute().listen(
       (data) {
+        final (_, val, _) = _state.value;
+        previousValue = val;
         _state.value = (_StreamState.value, data, null);
       },
       onError: (data) {
@@ -87,6 +98,9 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
   void cancel() {
     _subscription?.cancel();
   }
+
+  @override
+  T? previousValue;
 
   @override
   T? get value {
@@ -107,11 +121,20 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
   /// Returns true if the future signal is done loading
   bool get isSuccess => _state.peek().$1 == _StreamState.value;
 
+  /// Returns true if the future signal has a value
+  bool get hasValue => isSuccess || isReloading;
+
   /// Returns true if the future signal has an error
   bool get isError => _state.peek().$1 == _StreamState.error;
 
+  /// Returns true if the future signal has an error
+  bool get hasError => isError;
+
   /// Returns true if the future signal is loading
   bool get isLoading => _state.peek().$1 == _StreamState.loading;
+
+  /// Returns true if the future signal is reloading
+  bool get isReloading => _state.peek().$1 == _StreamState.reloading;
 
   /// Returns the value of the signal or throws an error if not a value
   /// This method uses peek() to get the value and will not subscribe to the
@@ -127,11 +150,15 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
     required StreamSignalValueBuilder<E, T> value,
     required StreamSignalBuilder<E> loading,
     required StreamSignalErrorBuilder<E> error,
+    StreamSignalValueBuilder<E, T>? reloading,
   }) {
     _execute();
     final (state, val, err) = _state.value;
     switch (state) {
       case _StreamState.value:
+        return value(val as T);
+      case _StreamState.reloading:
+        if (reloading != null) return reloading(val as T);
         return value(val as T);
       case _StreamState.error:
         return error(err);
@@ -144,12 +171,17 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
   E maybeMap<E>({
     StreamSignalValueBuilder<E, T>? value,
     StreamSignalBuilder<E>? loading,
+    StreamSignalValueBuilder<E, T>? reloading,
     StreamSignalErrorBuilder<E>? error,
     required StreamSignalBuilder<E> orElse,
   }) {
     _execute();
     final (state, val, err) = _state.value;
     switch (state) {
+      case _StreamState.reloading:
+        if (reloading != null) return reloading(val as T);
+        if (value != null) return value(val as T);
+        break;
       case _StreamState.value:
         if (value != null) return value(val as T);
         break;
@@ -165,6 +197,9 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
 
   @override
   T? call() => value;
+
+  @override
+  T? get() => value;
 
   @override
   final String? debugLabel;
@@ -194,9 +229,11 @@ enum _StreamState {
   error,
   value,
   loading,
+  reloading,
 }
 
 /// Create a [StreamSignal] from a [Stream]
+@Deprecated('Use [asyncSignalFromStream] instead')
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() stream, {
   bool? cancelOnError,
