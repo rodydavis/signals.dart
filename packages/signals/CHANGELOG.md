@@ -1,3 +1,12 @@
+## 1.5.0
+
+- Adding `AsyncSignal` with helpers `asyncSignalFromFuture` and `asyncSignalFromStream`
+- Adding async example
+- Adding `previousValue` to signal
+- Adding `reloading` state to `FutureSignal` and `StreamSignal`
+- Deprecating `FutureSignal` and `StreamSignal` in favor of `AsyncSignal`
+- Moving `forceUpdate` to `ValueSignal`
+
 ## 1.4.2
 
 - Adding `Timer` to emit `TimerEvent`

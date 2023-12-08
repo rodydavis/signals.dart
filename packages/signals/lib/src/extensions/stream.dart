@@ -1,3 +1,4 @@
+import '../value/async_signal.dart';
 import '../value/stream_signal.dart';
 
 /// Extension on stream to provide helpful methods for signals
@@ -15,18 +16,7 @@ extension SignalStreamUtils<T> on Stream<T> {
   /// final stream = createStream();
   /// final signal = stream.toSignal();
   /// ```
-  ///
-  /// The [StreamSignal] will return [SignalState] for the value. To react to
-  /// the various states you can use a switch statement:
-  ///
-  /// ```dart
-  /// final s = StreamSignal(...);
-  /// final result = (switch(s.value) {
-  ///   SignalValue result => print('value: ${result.value}'),
-  ///   SignalError result => print('error: ${result.error}'),
-  ///   SignalLoading _ => print('loading'),
-  /// });
-  /// ```
+  @Deprecated('Use [toSignalWithDefault] instead')
   StreamSignal<T> toSignal({
     bool? cancelOnError,
     String? debugLabel,
@@ -37,6 +27,19 @@ extension SignalStreamUtils<T> on Stream<T> {
       cancelOnError: cancelOnError,
       debugLabel: debugLabel,
       fireImmediately: fireImmediately,
+    );
+  }
+
+  AsyncSignal<T> toSignalWithDefault(
+    T initialValue, {
+    String? debugLabel,
+    bool? cancelOnError,
+  }) {
+    return AsyncSignal.fromStream(
+      () => this,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      cancelOnError: cancelOnError,
     );
   }
 }

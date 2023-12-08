@@ -116,7 +116,7 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   }
 }
 
-AsyncSignal<T> futureSignalWithDefault<T>(
+AsyncSignal<T> asyncSignalFromFuture<T>(
   Future<T> Function() future, {
   required T initialValue,
   String? debugLabel,
@@ -128,7 +128,7 @@ AsyncSignal<T> futureSignalWithDefault<T>(
   );
 }
 
-AsyncSignal<T> streamSignalWithDefault<T>(
+AsyncSignal<T> asyncSignalFromStream<T>(
   Stream<T> Function() stream, {
   required T initialValue,
   bool? cancelOnError,

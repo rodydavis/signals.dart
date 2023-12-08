@@ -14,15 +14,9 @@ void main() {
     yield 3;
   }
 
-  final id = streamSignalWithDefault(
-    idChanges,
-    initialValue: 0,
-  );
-  final user = futureSignalWithDefault(
-    () => fetch(id.value),
-    initialValue: 'guest',
-  );
-  final greeting = computed(() => 'Hello, $user');
+  final id = asyncSignalFromStream(idChanges, initialValue: 0);
+  final user = fetch(id.value).toSignalWithDefault('guest');
+  final greeting = computed(() => 'Hello, ${user.value}');
 
   effect(() {
     print('current id: $id');

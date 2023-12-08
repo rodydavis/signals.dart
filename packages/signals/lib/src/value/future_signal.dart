@@ -25,6 +25,7 @@ typedef FutureSignalBuilder<R> = R Function();
 ///     timeout: () => 'timeout',
 /// );
 /// ```
+@Deprecated('Use [AsyncSignal.fromFuture] instead')
 class FutureSignal<T> implements ReadonlySignal<T?> {
   /// Future [Duration] to wait before timing out
   final Duration? timeout;
@@ -255,6 +256,7 @@ enum _FutureState {
 }
 
 /// Create a [FutureSignal] from a [Future]
+@Deprecated('Use [asyncSignalFromFuture] instead')
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() compute, {
   Duration? timeout,
