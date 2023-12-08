@@ -13,9 +13,8 @@ int getSubscriberCount() => _subscribers.length;
 /// Watch a signal value and rebuild the context of the [Element]
 /// if mounted and mark it as dirty
 T watchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
-  if (context is Element) {
+  if (context is Element && context is! Watch) {
     // Ignore watching if the parent is a watch widget
-    if (context is Watch) return signal.peek();
     // Create a key with the global id of the signal and the target widget
     final key = (signal.globalId, context.hashCode);
     // checks if the widget is already subscribed to the signal

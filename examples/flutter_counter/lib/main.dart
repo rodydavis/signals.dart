@@ -64,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          Watch((_) {
-            final isDark = brightness() == Brightness.dark;
+          Builder(builder: (context) {
+            final isDark = brightness.watch(context) == Brightness.dark;
             return IconButton(
               onPressed: () {
                 brightness.value = isDark ? Brightness.light : Brightness.dark;
