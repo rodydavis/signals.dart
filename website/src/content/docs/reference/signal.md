@@ -59,18 +59,3 @@ effect(() {
 
 counter.value = 1;
 ```
-
-## .forceUpdate(...)
-
-The `.forceUpdate()` method of a signal is used to force an update even if the value is the same or the same reference like an `Object`.
-
-```dart
-final counter = signal(0);
-
-effect(() {
-	print(counter.value);
-});
-
-counter.value = 1;
-counter.forceUpdate(1);
-```

@@ -20,7 +20,7 @@ final items = listSignal<TestData>([]);
 void main() async {
   final db = SqliteDatabase(path: '${Directory.systemTemp.path}/test.db');
   await migrations.migrate(db);
-  
+
   final sub = db
       .watchRows(
         'SELECT * FROM test_data',

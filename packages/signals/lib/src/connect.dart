@@ -54,6 +54,8 @@ class Connect<T> {
 }
 
 /// Connects a [Signal] to a [Stream].
-Connect<T> connect<T>(Signal<T> signal) {
-  return Connect(signal);
+Connect<T> connect<T>(Signal<T> signal, [Stream<T>? stream]) {
+  final instance = Connect(signal);
+  if (stream != null) instance << stream;
+  return instance;
 }

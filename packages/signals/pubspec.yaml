@@ -19,6 +19,21 @@ dev_dependencies:
 
 flutter:
 
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
+topics:
+  - signal
+  - reactive
+  - state
+  - signals
+  - rx
+
 scripts:
   coverage:
     - flutter test --coverage
