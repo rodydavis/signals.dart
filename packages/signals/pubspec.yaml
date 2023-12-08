@@ -3,7 +3,7 @@ description: "Reactivity made simple. Do more by doing less. Supports Flutter an
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://rodydavis.github.io/signals.dart
 documentation: https://rodydavis.github.io/signals.dart
-version: 1.5.3
+version: 1.5.3+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -34,6 +34,12 @@ topics:
   - state
   - signals
   - rx
+
+screenshots:
+  - description: "DevTools signals list view"
+    path: doc/screenshots/list.png
+  - description: "DevTools signals graph view"
+    path: doc/screenshots/graph.png
 
 scripts:
   coverage:

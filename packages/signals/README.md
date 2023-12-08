@@ -219,3 +219,6 @@ batch(() {
 ## DevTools
 
 There is an early version of a devtools extension included with this package.
+
+![](/doc/screenshots/graph.png)
+![](/doc/screenshots/list.png)

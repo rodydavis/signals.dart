@@ -221,5 +221,5 @@ batch(() {
 
 ## DevTools
 
-![](screenshots/graph.png)
-![](screenshots/list.png)
+![](packages/signals/doc/screenshots/graph.png)
+![](packages/signals/doc/screenshots/list.png)
