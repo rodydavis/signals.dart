@@ -355,6 +355,8 @@ abstract class ReadonlySignal<T> {
   /// Return the value when invoked
   T call();
 
+  T get();
+
   /// In the rare instance that you have an effect that should write to
   /// another signal based on the previous value, but you _don't_ want the
   /// effect to be subscribed to that signal, you can read a signals's
@@ -420,8 +422,11 @@ abstract class ReadonlySignal<T> {
 /// is always consistent.
 
 abstract class Signal<T> implements ReadonlySignal<T> {
-  // Update the current value
+  /// Update the current value
   set value(T value);
+
+  /// Set the current value
+  void set(T value);
 }
 
 /// Signal that can read and write a value
@@ -543,6 +548,12 @@ class _Signal<T> implements Signal<T> {
   @override
   T peek() => this._value;
 
+  @override
+  T get() => value;
+
+  @override
+  void set(T value) => this.value = value;
+
   final Symbol brand;
 
   @override
@@ -568,8 +579,18 @@ class _Signal<T> implements Signal<T> {
     }
   }
 
+  /// Should only be called to update the value of a signal if checks for equality
+  /// have already been made.
+  ///
+  /// This is primarily used by the `ValueSignal` class to update the value
+  /// since the reference is always the same.
   void forceUpdate(T val) {
     _updateValue(val);
+  }
+
+  /// Update the value based on the current value
+  T updateValue(T Function(T value) fn) {
+    return this.value = fn(this.value);
   }
 
   void _updateValue(T val) {
@@ -925,6 +946,9 @@ class _Computed<T> implements Computed<T>, _Listenable {
     }
     return _value;
   }
+
+  @override
+  T get() => value;
 
   @override
   T get value {

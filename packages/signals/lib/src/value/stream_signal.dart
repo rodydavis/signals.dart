@@ -198,6 +198,9 @@ class StreamSignal<T> implements ReadonlySignal<T?> {
   T? call() => value;
 
   @override
+  T? get() => value;
+
+  @override
   final String? debugLabel;
 
   @override

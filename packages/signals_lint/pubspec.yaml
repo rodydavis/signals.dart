@@ -1,0 +1,25 @@
+name: signals_lint
+description: linter and developer tool for signals
+version: 1.0.0
+repository: https://github.com/rodyavis/signals
+documentation: https://rodydavis.github.io/signals.dart/
+topics:
+  - state-management
+  - state
+  - signals
+  - rx
+  - linter
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  analyzer: ^6.2.0
+  analyzer_plugin: ^0.11.3
+  collection: ^1.17.2
+  custom_lint_builder: ^0.5.5
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.24.9
+  signals: ^1.4.1

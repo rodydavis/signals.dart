@@ -134,6 +134,9 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
   /// Returns true if the future signal is reloading
   bool get isReloading => _state.peek().$1 == _FutureState.reloading;
 
+  @override
+  T? get() => value;
+
   /// Returns the value of the signal or throws an error if not a value
   /// This method uses peek() to get the value and will not subscribe to the
   /// signal.
