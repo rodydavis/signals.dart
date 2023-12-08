@@ -25,26 +25,22 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   AsyncSignal._(this._initialValue, {this.debugLabel});
 
   /// Creates a [AsyncSignal] that wraps a [Stream]
-  factory AsyncSignal.fromStream(
+  AsyncSignal.fromStream(
     Stream<T> Function() stream, {
     required T initialValue,
     bool? cancelOnError,
-    String? debugLabel,
-  }) {
-    final signal = AsyncSignal<T>._(initialValue, debugLabel: debugLabel);
-    signal._stream(() => stream(), cancelOnError: cancelOnError);
-    return signal;
+    this.debugLabel,
+  }) : _initialValue = initialValue {
+    _stream(() => stream(), cancelOnError: cancelOnError);
   }
 
   /// Creates a [AsyncSignal] that wraps a [Future]
-  factory AsyncSignal.fromFuture(
+  AsyncSignal.fromFuture(
     Future<T> Function() future, {
     required T initialValue,
-    String? debugLabel,
-  }) {
-    final signal = AsyncSignal<T>._(initialValue, debugLabel: debugLabel);
-    signal._future(() => future());
-    return signal;
+    this.debugLabel,
+  }) : _initialValue = initialValue {
+    _future(() => future());
   }
 
   void _stream(Stream<T> Function() stream, {bool? cancelOnError}) {

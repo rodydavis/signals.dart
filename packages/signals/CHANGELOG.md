@@ -1,3 +1,8 @@
+## 1.5.2
+
+- Migrating `TimerSignal` to `AsyncSignal`
+- Fixing `watch(context)` calls inside `Watch` widget
+
 ## 1.5.1
 
 - Adding `isCompleted` and `future` to `AsyncSignal` to async methods to wait for a signal to complete

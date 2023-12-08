@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-
-import 'signals.dart';
-
 // Local set of subscribes that will hold the element to rebuild
+import 'package:flutter/widgets.dart';
+import 'package:signals/signals.dart';
+
+import 'widget.dart';
+
 final _subscribers = <(int, int), WeakReference<Element>>{};
 
 @visibleForTesting
@@ -13,6 +14,8 @@ int getSubscriberCount() => _subscribers.length;
 /// if mounted and mark it as dirty
 T watchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
   if (context is Element) {
+    // Ignore watching if the parent is a watch widget
+    if (context is Watch) return signal.peek();
     // Create a key with the global id of the signal and the target widget
     final key = (signal.globalId, context.hashCode);
     // checks if the widget is already subscribed to the signal
