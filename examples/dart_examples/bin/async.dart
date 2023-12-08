@@ -14,7 +14,10 @@ void main() {
     yield 3;
   }
 
-  final id = streamSignalWithDefault(idChanges, initialValue: 0);
+  final id = streamSignalWithDefault(
+    idChanges,
+    initialValue: 0,
+  );
   final user = futureSignalWithDefault(
     () => fetch(id.value),
     initialValue: 'guest',
