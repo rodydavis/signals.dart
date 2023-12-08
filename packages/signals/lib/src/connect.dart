@@ -26,6 +26,7 @@ class Connect<T> {
     bool? cancelOnError,
     Function? onError,
     Function? onDone,
+    void Function(T)? onValue,
   }) {
     // stop multiple subscriptions to the same stream
     if (_subscriptions.containsKey(source.hashCode)) {
@@ -34,6 +35,7 @@ class Connect<T> {
     final subscription = source.listen(
       (event) {
         signal.value = event;
+        onValue?.call(event);
       },
       onError: onError,
       onDone: () {

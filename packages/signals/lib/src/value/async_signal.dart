@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../connect.dart';
 import '../signals.dart';
 
@@ -9,6 +11,13 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   final _error = signal<Object?>(null);
   late Connect<T> _connector = connect<T>(_result);
   EffectCleanup? _cleanup;
+  Completer<T> _completer = Completer<T>();
+
+  /// Future of the completer
+  Future<T> get future => _completer.future;
+
+  /// Returns true if the completer is done
+  bool get isCompleted => _completer.isCompleted;
 
   @override
   final String? debugLabel;
@@ -45,7 +54,13 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
       _connector.from(
         source,
         cancelOnError: cancelOnError,
-        onError: (err) => _error.value = err,
+        onError: (err, trace) {
+          _error.value = err;
+          _completer.completeError(err, trace);
+        },
+        onValue: (val) {
+          _completer.complete(val);
+        },
       );
       _completed.value = true;
     });
@@ -74,6 +89,7 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
     _cleanup?.call();
     _cleanup = null;
     _connector.dispose();
+    _completer = Completer<T>();
   }
 
   void refresh() {
