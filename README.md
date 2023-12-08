@@ -218,3 +218,8 @@ batch(() {
 });
 // Now the callback completed and we'll trigger the effect.
 ```
+
+## DevTools
+
+![](screenshots/graph.png)
+![](screenshots/list.png)
