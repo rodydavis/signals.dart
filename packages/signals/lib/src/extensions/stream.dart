@@ -6,7 +6,7 @@ extension SignalStreamUtils<T> on Stream<T> {
   /// Convert a stream to a signal
   ///
   /// ```dart
-  /// import 'package:preact_signals/preact_signals.dart';
+  /// import 'package:signals/signals.dart';
   ///
   /// Stream<int> createStream() async* {
   ///     yield 1;

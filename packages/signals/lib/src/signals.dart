@@ -130,7 +130,7 @@ typedef BatchCallback<T> = T Function();
 /// single update that is triggered at the end when the callback completes.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
@@ -154,7 +154,7 @@ typedef BatchCallback<T> = T Function();
 /// end of the callback function.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final counter = signal(0);
 /// final _double = computed(() => counter.value * 2);
@@ -175,7 +175,7 @@ typedef BatchCallback<T> = T Function();
 /// batch call completes.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final counter = signal(0);
 /// effect(() => print(counter.value));
@@ -408,7 +408,7 @@ abstract class ReadonlySignal<T> {
 /// subscribe to value updates by accessing its `.value` property.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final counter = signal(0);
 ///
@@ -635,7 +635,7 @@ class _Signal<T> implements Signal<T> {
 /// value or subscribe to value updates by accessing its `.value` property.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final counter = signal(0);
 ///
@@ -781,7 +781,7 @@ void _cleanupSources(_Listenable target) {
 /// computed signal's value.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
@@ -1056,7 +1056,7 @@ typedef ComputedCallback<T> = T Function();
 /// signal's value.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
@@ -1245,7 +1245,7 @@ class _Effect implements _Listenable {
 /// a signal inside `effect`.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
@@ -1263,7 +1263,7 @@ class _Effect implements _Listenable {
 /// subscribed to, by calling the returned function.
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
 /// final name = signal("Jane");
 /// final surname = signal("Doe");

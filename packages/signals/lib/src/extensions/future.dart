@@ -6,7 +6,7 @@ extension SignalFutureUtils<T> on Future<T> {
   /// Convert an existing future to [FutureSignal]
   ///
   /// ```dart
-  /// import 'package:preact_signals/preact_signals.dart';
+  /// import 'package:signals/signals.dart';
   ///
   /// final future = Future(() => 1);
   /// final signal = future.toSignal();
