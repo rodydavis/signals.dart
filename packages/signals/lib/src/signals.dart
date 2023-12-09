@@ -789,11 +789,27 @@ void _cleanupSources(_Listenable target) {
 /// dependency of the computed signal.
 abstract class Computed<T> implements ReadonlySignal<T> {
   List<ReadonlySignal> get _allSources;
+  T build();
 }
 
-class _Computed<T> implements Computed<T>, _Listenable {
+// /// Signal that can be extended and used as a class
+// abstract class BuilderSignal<T> extends _Computed<T> {
+//   BuilderSignal({super.debugLabel});
+
+//   @override
+//   T build();
+// }
+
+class _ComputedBuilder<T> extends _Computed<T> {
+  _ComputedBuilder(this._compute, {super.debugLabel});
+
   final ComputedCallback<T> _compute;
 
+  @override
+  T build() => _compute();
+}
+
+abstract class _Computed<T> implements Computed<T>, _Listenable {
   @override
   final int globalId;
 
@@ -836,9 +852,8 @@ class _Computed<T> implements Computed<T>, _Listenable {
     return results;
   }
 
-  _Computed(ComputedCallback<T> compute, {this.debugLabel})
-      : _compute = compute,
-        _globalVersion = globalVersion - 1,
+  _Computed({this.debugLabel})
+      : _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
         _version = 0,
         brand = identifier,
@@ -877,7 +892,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
     try {
       _prepareSources(this);
       _evalContext = this;
-      final value = this._compute();
+      final value = build();
       if ((this._flags & HAS_ERROR) != 0 ||
           !_initialized ||
           _value != value ||
@@ -1040,7 +1055,7 @@ Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
 }) {
-  final instance = _Computed<T>(compute, debugLabel: debugLabel);
+  final instance = _ComputedBuilder<T>(compute, debugLabel: debugLabel);
   _onComputedCreated(instance);
   return instance;
 }

@@ -1,3 +1,19 @@
+## 1.5.6
+
+- Adding `debugLabel` to `AsyncSignal`
+
+## 1.5.5
+
+- Adding `reloading` state to AsyncSignal
+- Adding `reload` to AsyncSignal
+
+## 1.5.4
+
+- Fixing pubspec Dart filters on pub.dev
+- Adding `map` and `maybeMap` to `AsyncSignal`
+- Adding `listen` to signal extensions for Flutter
+- Adding `listenSignal` for Flutter
+
 ## 1.5.3
 
 - Adding `SignalsObserver` and `LoggingSignalsObserver`

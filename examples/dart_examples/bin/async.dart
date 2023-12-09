@@ -1,29 +1,38 @@
 import 'package:signals/signals.dart';
 
+/// AsyncSignal emissions
 void main() {
-  Future<String> fetch(int id) async {
-    await Future.delayed(const Duration(milliseconds: 5));
-    return '$id';
-  }
+  /// Fetch id value as Future
+  Future<String> fetch(int id) async =>
+      Future.delayed(const Duration(milliseconds: 5), () => 'Future::$id');
 
-  Stream<int> idChanges() async* {
+  /// Emit temporised values
+  Stream<int> idEmitter() async* {
     yield 1;
-    await Future.delayed(const Duration(milliseconds: 5));
+    await Future.delayed(const Duration(milliseconds: 10));
     yield 2;
-    await Future.delayed(const Duration(milliseconds: 5));
+    await Future.delayed(const Duration(milliseconds: 10));
     yield 3;
   }
 
-  final id = asyncSignalFromStream(idChanges, initialValue: 0);
+  /// First AsyncSignal emit the initial value then sync with
+  /// idEmitter stream
+  final id = asyncSignalFromStream(idEmitter, initialValue: 0);
+
+  /// Sync on user emitted value with a default emission of 'guest'
   final user = fetch(id.value).toSignalWithDefault('guest');
+
+  /// When user Future resolve
   final greeting = computed(() => 'Hello, ${user.value}');
 
   effect(() {
+    /// Register to $id AsyncSignal
     print('current id: $id');
+
+    /// Configure new emission after Fetch resolve with id.value
     user.resetFuture(() => fetch(id.value));
   });
 
-  effect(() {
-    print('greeting: $greeting');
-  });
+  /// Computed Greeting emitted a new Salutation after user.value completed
+  effect(() => print('greeting: $greeting'));
 }
