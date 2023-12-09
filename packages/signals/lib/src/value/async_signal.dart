@@ -14,7 +14,7 @@ typedef AsyncSignalBuilder<R> = R Function();
 /// A compound [Signal] that wraps a [Stream] or [Future]
 class AsyncSignal<T> implements ReadonlySignal<T> {
   final T _initialValue;
-  late final _result = signal<T>(_initialValue);
+  late final Signal<T> _result;
   final _init = signal(false);
   final _error = signal<Object?>(null);
   final _cleanup = <EffectCleanup>[];
@@ -37,7 +37,8 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
     required T initialValue,
     bool? cancelOnError,
     this.debugLabel,
-  }) : _initialValue = initialValue {
+  })  : _initialValue = initialValue,
+        _result = signal<T>(initialValue, debugLabel: debugLabel) {
     _stream(() => stream(), cancelOnError: cancelOnError);
   }
 
@@ -46,7 +47,8 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
     Future<T> Function() future, {
     required T initialValue,
     this.debugLabel,
-  }) : _initialValue = initialValue {
+  })  : _initialValue = initialValue,
+        _result = signal<T>(initialValue, debugLabel: debugLabel) {
     _future(() => future());
   }
 
