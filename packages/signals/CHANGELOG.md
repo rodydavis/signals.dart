@@ -1,3 +1,7 @@
+## 1.5.6
+
+- Adding `debugLabel` to `AsyncSignal`
+
 ## 1.5.5
 
 - Adding `reloading` state to AsyncSignal
