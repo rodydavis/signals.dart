@@ -333,6 +333,8 @@ _Node? _addDependency(ReadonlySignal signal) {
 int _lastGlobalId = 0;
 
 abstract class ReadonlySignal<T> {
+  List<_Listenable> get _allTargets;
+
   /// Debug label for Debug Mode
   String? get debugLabel;
 
@@ -529,6 +531,16 @@ class _Signal<T> implements Signal<T> {
     return __signalSubscribe(this, fn);
   }
 
+  @override
+  List<_Listenable> get _allTargets {
+    final results = <_Listenable>[];
+    _Node? root = _targets;
+    for (var node = root; node != null; node = node._nextTarget) {
+      results.add(node._target);
+    }
+    return results;
+  }
+
   static EffectCleanup __signalSubscribe<T>(
     ReadonlySignal<T> signal,
     void Function(T value) fn,
@@ -656,6 +668,8 @@ abstract class _Listenable {
   int get globalId;
 
   void _notify();
+
+  List<ReadonlySignal> get _allSources;
 }
 
 bool _needsToRecompute(_Listenable target) {
@@ -789,6 +803,7 @@ void _cleanupSources(_Listenable target) {
 /// dependency of the computed signal.
 abstract class Computed<T> implements ReadonlySignal<T> {
   List<ReadonlySignal> get _allSources;
+  List<_Listenable> get _allTargets;
   T build();
 }
 
@@ -848,6 +863,16 @@ abstract class _Computed<T> implements Computed<T>, _Listenable {
     _Node? root = _sources;
     for (var node = root; node != null; node = node._nextSource) {
       results.add(node._source);
+    }
+    return results;
+  }
+
+  @override
+  List<_Listenable> get _allTargets {
+    final results = <_Listenable>[];
+    _Node? root = _targets;
+    for (var node = root; node != null; node = node._nextTarget) {
+      results.add(node._target);
     }
     return results;
   }
@@ -1152,6 +1177,16 @@ class _Effect implements _Listenable {
         _compute = compute,
         _cleanup = null,
         globalId = ++_lastGlobalId;
+
+  @override
+  List<ReadonlySignal> get _allSources {
+    final results = <ReadonlySignal>[];
+    _Node? root = _sources;
+    for (var node = root; node != null; node = node._nextSource) {
+      results.add(node._source);
+    }
+    return results;
+  }
 
   void _callback() {
     final finish = _start();

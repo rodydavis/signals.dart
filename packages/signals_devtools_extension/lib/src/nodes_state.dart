@@ -7,6 +7,7 @@ typedef $Node = ({
   String? label,
   String? value,
   String? sources,
+  String? targets,
 });
 
 final nodes = listSignal<$Node>([]);
@@ -23,6 +24,8 @@ void initNodes() {
       case 'ext.signals.signalUpdate':
       case 'ext.signals.computedCreate':
       case 'ext.signals.computedUpdate':
+      case 'ext.signals.effectCreate':
+      case 'ext.signals.effectCalled':
         final item = parseNode(data);
         final idx = nodes //
             .indexWhere((e) => e.id == item.id && e.type == item.type);
@@ -35,6 +38,66 @@ void initNodes() {
       default:
     }
   });
+}
+
+Stream<$Node> onSignalCreated() async* {
+  final source = serviceManager.service?.onExtensionEvent
+      .where((e) => e.extensionKind == 'ext.signals.signalCreate');
+  if (source == null) return;
+  await for (final event in source) {
+    final data = event.extensionData?.data ?? {};
+    yield parseNode(data);
+  }
+}
+
+Stream<$Node> onSignalUpdated() async* {
+  final source = serviceManager.service?.onExtensionEvent
+      .where((e) => e.extensionKind == 'ext.signals.signalUpdate');
+  if (source == null) return;
+  await for (final event in source) {
+    final data = event.extensionData?.data ?? {};
+    yield parseNode(data);
+  }
+}
+
+Stream<$Node> onComputedCreated() async* {
+  final source = serviceManager.service?.onExtensionEvent
+      .where((e) => e.extensionKind == 'ext.signals.computedCreate');
+  if (source == null) return;
+  await for (final event in source) {
+    final data = event.extensionData?.data ?? {};
+    yield parseNode(data);
+  }
+}
+
+Stream<$Node> onComputedUpdated() async* {
+  final source = serviceManager.service?.onExtensionEvent
+      .where((e) => e.extensionKind == 'ext.signals.computedUpdate');
+  if (source == null) return;
+  await for (final event in source) {
+    final data = event.extensionData?.data ?? {};
+    yield parseNode(data);
+  }
+}
+
+Stream<$Node> onEffectCreated() async* {
+  final source = serviceManager.service?.onExtensionEvent
+      .where((e) => e.extensionKind == 'ext.signals.effectCreate');
+  if (source == null) return;
+  await for (final event in source) {
+    final data = event.extensionData?.data ?? {};
+    yield parseNode(data);
+  }
+}
+
+Stream<$Node> onEffectUpdated() async* {
+  final source = serviceManager.service?.onExtensionEvent
+      .where((e) => e.extensionKind == 'ext.signals.effectCalled');
+  if (source == null) return;
+  await for (final event in source) {
+    final data = event.extensionData?.data ?? {};
+    yield parseNode(data);
+  }
 }
 
 Future<void> refreshNodes() async {
@@ -60,5 +123,6 @@ $Node parseNode(dynamic item) {
     label: item['label'] as String?,
     value: item['value'] as String?,
     sources: item['sources'] as String?,
+    targets: item['targets'] as String?,
   );
 }

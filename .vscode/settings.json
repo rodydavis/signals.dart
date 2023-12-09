@@ -1,9 +1,13 @@
 {
     "cSpell.words": [
         "computeds",
+        "Fruchterman",
         "graphview",
         "pathing",
         "preact",
-        "unawaited"
+        "Reingold",
+        "relayout",
+        "unawaited",
+        "vsync"
     ]
 }
