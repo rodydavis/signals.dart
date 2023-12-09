@@ -11,6 +11,29 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Rebuild the [Element] that the current signal is inside of
   T watch(BuildContext context) => watchSignal<T>(context, this);
 
+  /// Used to listen for updates on a signal but not rebuild the nearest element
+  ///
+  /// ```dart
+  /// final counter = signal(0);
+  /// ...
+  /// @override
+  /// Widget build(BuildContext context) {
+  ///   counter.listen(context, () {
+  ///     if (counter.value == 10) {
+  ///       final messenger = ScaffoldMessenger.of(context);
+  ///       messenger.hideCurrentSnackBar();
+  ///       messenger.showSnackBar(
+  ///         const SnackBar(content: Text('You hit 10 clicks!')),
+  ///       );
+  ///     }
+  ///   });
+  /// ...
+  /// }
+  /// ```
+  void listen(BuildContext context, void Function() callback) {
+    listenSignal<T>(context, this, callback);
+  }
+
   /// Convert a signal to [ValueListenable] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
   ValueListenable<T> toValueListenable() {

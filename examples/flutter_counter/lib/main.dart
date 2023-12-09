@@ -70,6 +70,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    counter.listen(context, () {
+      if (counter.value == 10) {
+        final messenger = ScaffoldMessenger.of(context);
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
+          const SnackBar(content: Text('You hit 10 clicks!')),
+        );
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
