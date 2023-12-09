@@ -35,6 +35,30 @@ Widget build(BuildContext context) {
 
 It is recommended to use `Watch` instead of `watch` as it will automatically unsubscribe when the widget is disposed instead of waiting on the garbage collector via [WeakReferences](https://api.flutter.dev/flutter/dart-core/WeakReference-class.html).
 
+## .listen(context, cb)
+
+Alternatively if need to listen for changes to a signal but not rebuild the widget you can use the listen extension.
+
+```dart
+final counter = signal(0);
+...
+@override
+Widget build(BuildContext context) {
+  counter.listen(context, () {
+    if (counter.value == 10) {
+      final messenger = ScaffoldMessenger.of(context);
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+        const SnackBar(content: Text('You hit 10 clicks!')),
+      );
+    }
+  });
+...
+}
+```
+
+This can be used in the build method and will call the callback method in the same way it would rebuild the widget (only when mounted).
+
 ### Rebuilds
 
 To protect against unnecessary rebuilds, the `watch` extension will only subscribe once to the nearest element and mark the widget as dirty.

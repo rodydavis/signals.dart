@@ -9,9 +9,9 @@ void main() {
   /// Emit temporised values
   Stream<int> idEmitter() async* {
     yield 1;
-    await Future.delayed(const Duration(milliseconds: 5));
+    await Future.delayed(const Duration(milliseconds: 10));
     yield 2;
-    await Future.delayed(const Duration(milliseconds: 5));
+    await Future.delayed(const Duration(milliseconds: 10));
     yield 3;
   }
 

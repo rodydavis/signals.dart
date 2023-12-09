@@ -1,17 +1,26 @@
 import 'dart:async';
 
-import '../connect.dart';
 import '../signals.dart';
+
+/// Builder on a successful [AsyncSignal] value
+typedef AsyncSignalValueBuilder<R, T> = R Function(T value);
+
+/// Builder on a [AsyncSignal] error
+typedef AsyncSignalErrorBuilder<R> = R Function(Object? error);
+
+/// Builder on a [AsyncSignal] callback
+typedef AsyncSignalBuilder<R> = R Function();
 
 /// A compound [Signal] that wraps a [Stream] or [Future]
 class AsyncSignal<T> implements ReadonlySignal<T> {
   final T _initialValue;
   late final _result = signal<T>(_initialValue);
-  final _completed = signal(false);
+  final _init = signal(false);
   final _error = signal<Object?>(null);
-  late Connect<T> _connector = connect<T>(_result);
-  EffectCleanup? _cleanup;
+  final _cleanup = <EffectCleanup>[];
   Completer<T> _completer = Completer<T>();
+  Stream<T> Function()? _lastStream;
+  bool? _lastCancelOnError;
 
   /// Future of the completer
   Future<T> get future => _completer.future;
@@ -21,8 +30,6 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
 
   @override
   final String? debugLabel;
-
-  AsyncSignal._(this._initialValue, {this.debugLabel});
 
   /// Creates a [AsyncSignal] that wraps a [Stream]
   AsyncSignal.fromStream(
@@ -44,11 +51,18 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   }
 
   void _stream(Stream<T> Function() stream, {bool? cancelOnError}) {
-    _cleanup = effect(() {
-      if (_completed()) return;
-      _connector.from(
-        stream(),
-        cancelOnError: cancelOnError,
+    final dispose = effect(() {
+      if (_init.value) return;
+      _lastStream = stream;
+      _lastCancelOnError = cancelOnError;
+      final subscription = _lastStream!().listen(
+        (val) {
+          if (_completer.isCompleted) {
+            _completer = Completer<T>();
+          }
+          _result.value = val;
+          _completer.complete(val);
+        },
         onError: (err, trace) {
           _error.value = err;
           if (_completer.isCompleted) {
@@ -56,15 +70,12 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
           }
           _completer.completeError(err, trace);
         },
-        onValue: (val) {
-          if (_completer.isCompleted) {
-            _completer = Completer<T>();
-          }
-          _completer.complete(val);
-        },
+        cancelOnError: cancelOnError,
       );
-      _completed.value = true;
+      _init.value = true;
+      _cleanup.add(subscription.cancel);
     });
+    _cleanup.add(dispose);
   }
 
   void _future(Future<T> Function() future) {
@@ -73,7 +84,7 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
 
   void resetFuture(Future<T> Function() future) {
     dispose();
-    _completed.value = false;
+    _init.value = false;
     _future(future);
   }
 
@@ -82,27 +93,27 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
     bool? cancelOnError,
   }) {
     dispose();
-    _completed.value = false;
+    _init.value = false;
     _stream(stream, cancelOnError: cancelOnError);
   }
 
   void dispose() {
-    _cleanup?.call();
-    _cleanup = null;
-    _connector.dispose();
+    for (final cleanup in _cleanup) {
+      cleanup();
+    }
+    _cleanup.clear();
     _completer = Completer<T>();
   }
 
   void refresh() {
-    _connector.dispose();
-    _connector = connect<T>(_result);
-    _completed.value = false;
+    if (_lastStream != null) {
+      dispose();
+      resetStream(_lastStream!, cancelOnError: _lastCancelOnError);
+    }
   }
 
   @override
   T get value => _result.value;
-
-  bool get completed => _completed.value;
 
   Object? get error => _error.value;
 
@@ -131,6 +142,57 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   EffectCleanup subscribe(void Function(T value) fn) {
     return _result.subscribe(fn);
   }
+
+  _AsyncState get _state {
+    if (isCompleted && _error.value != null) {
+      return _AsyncState.error;
+    }
+    if (isCompleted || _result.value != null) {
+      return _AsyncState.value;
+    }
+    return _AsyncState.loading;
+  }
+
+  /// Returns the value of the signal or null if not a value
+  E map<E>({
+    required AsyncSignalValueBuilder<E, T> value,
+    required AsyncSignalErrorBuilder<E> error,
+    required AsyncSignalBuilder<E> loading,
+  }) {
+    final val = _result.value;
+    final err = _error.value;
+    switch (_state) {
+      case _AsyncState.value:
+        return value(val);
+      case _AsyncState.error:
+        return error(err);
+      case _AsyncState.loading:
+        return loading();
+    }
+  }
+
+  /// Returns the value of the signal or null if not a value
+  E maybeMap<E>({
+    AsyncSignalValueBuilder<E, T>? value,
+    AsyncSignalErrorBuilder<E>? error,
+    AsyncSignalBuilder<E>? loading,
+    required AsyncSignalBuilder<E> orElse,
+  }) {
+    final val = _result.value;
+    final err = _error.value;
+    switch (_state) {
+      case _AsyncState.value:
+        if (value != null) return value(val);
+        break;
+      case _AsyncState.error:
+        if (error != null) return error(err);
+        break;
+      case _AsyncState.loading:
+        if (loading != null) return loading();
+        break;
+    }
+    return orElse();
+  }
 }
 
 AsyncSignal<T> asyncSignalFromFuture<T>(
@@ -157,4 +219,10 @@ AsyncSignal<T> asyncSignalFromStream<T>(
     cancelOnError: cancelOnError,
     debugLabel: debugLabel,
   );
+}
+
+enum _AsyncState {
+  error,
+  value,
+  loading,
 }
