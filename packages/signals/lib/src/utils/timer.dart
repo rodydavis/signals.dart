@@ -10,12 +10,13 @@ class TimerSignal extends AsyncSignal<TimerSignalEvent> {
 
   TimerSignal({
     required this.every,
-    super.debugLabel,
+    String debugLabel = 'Timer',
     bool? cancelOnError,
   }) : super.fromStream(
           () => Stream<TimerSignalEvent>.periodic(every, (c) => _emit(c + 1)),
           initialValue: _emit(0),
           cancelOnError: cancelOnError,
+          debugLabel: debugLabel,
         );
 
   static TimerSignalEvent _emit(int count) =>
@@ -24,7 +25,7 @@ class TimerSignal extends AsyncSignal<TimerSignalEvent> {
 
 /// Expose Duration as a [TimerSignal]
 extension TimerSignalDurationUtils on Duration {
-  TimerSignal toSignal({String? debugLabel, bool? cancelOnError}) =>
+  TimerSignal toSignal({String debugLabel = 'Timer', bool? cancelOnError}) =>
       TimerSignal(
         every: this,
         debugLabel: debugLabel,
