@@ -19,25 +19,29 @@ class NodeView extends StatelessWidget {
     return SizedBox.square(
       dimension: node.size,
       child: Center(
-        child: Chip(
-          avatar: SizedBox.square(
-            dimension: 50,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: item.type == 'signal'
-                    ? Colors.blue
-                    : item.type == 'computed'
-                        ? Colors.purple
-                        : Colors.grey,
-                border: Border.all(
-                  color: node.pinned ? Colors.red : Colors.black,
-                  width: 2,
+        child: Tooltip(
+          message: item.type,
+          child: Chip(
+            avatar: SizedBox.square(
+              dimension: 50,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: switch (item.type) {
+                    'signal' => Colors.blue,
+                    'computed' => Colors.purple,
+                    'effect' => Colors.red,
+                    (_) => Colors.grey,
+                  },
+                  border: Border.all(
+                    color: node.pinned ? Colors.red : Colors.black,
+                    width: 2,
+                  ),
                 ),
               ),
             ),
+            label: Text(item.value ?? ''),
           ),
-          label: Text(item.value ?? ''),
         ),
       ),
     );

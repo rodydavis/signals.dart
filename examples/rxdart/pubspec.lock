@@ -420,7 +420,7 @@ packages:
       path: "../../packages/signals"
       relative: true
     source: path
-    version: "1.5.2"
+    version: "1.5.6"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -547,5 +547,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0-91.0.dev <3.4.0"
+  dart: ">=3.2.0-194.0.dev <3.4.0"
   flutter: ">=1.17.0"

@@ -27,6 +27,7 @@ void _initDevTools() {
                 'id': e.globalId,
                 'label': e.debugLabel,
                 'value': e.toString(),
+                'targets': e._allTargets.map((e) => e.globalId).join(','),
                 'type': 'signal',
               })
           .toList();
@@ -37,12 +38,27 @@ void _initDevTools() {
                 'id': e.globalId,
                 'label': e.debugLabel,
                 'value': e.toString(),
+                'targets': e._allTargets.map((e) => e.globalId).join(','),
+                'sources': e._allSources.map((e) => e.globalId).join(','),
                 'type': 'computed',
+              })
+          .toList();
+      final effects = _effects.keys
+          .where((e) => e.target != null)
+          .map((e) => e.target!)
+          .map((e) => {
+                'id': e.globalId,
+                'label': e.debugLabel,
+                'value':
+                    _effects[_effects.keys.firstWhere((r) => r.target == e)]!
+                        .toString(),
+                'sources': e._allSources.map((e) => e.globalId).join(','),
+                'type': 'effect',
               })
           .toList();
       return developer.ServiceExtensionResponse.result(
         json.encode({
-          'nodes': [...signals, ...computed]
+          'nodes': [...signals, ...computed, ...effects]
         }),
       );
     },
@@ -60,6 +76,7 @@ void _onSignalCreated(Signal instance) {
     'id': instance.globalId,
     'label': instance.debugLabel,
     'value': instance.peek()?.toString(),
+    'targets': instance._allTargets.map((e) => e.globalId).join(','),
     'type': 'signal',
   });
 }
@@ -71,6 +88,7 @@ void _onSignalUpdated(Signal instance, dynamic value) {
     'id': instance.globalId,
     'label': instance.debugLabel,
     'value': value?.toString(),
+    'targets': instance._allTargets.map((e) => e.globalId).join(','),
     'type': 'signal',
   });
 }
@@ -86,6 +104,7 @@ void _onComputedCreated(Computed instance) {
     'label': instance.debugLabel,
     'value': instance.peek()?.toString(),
     'sources': instance._allSources.map((e) => e.globalId).join(','),
+    'targets': instance._allTargets.map((e) => e.globalId).join(','),
     'type': 'computed',
   });
 }
@@ -98,28 +117,36 @@ void _onComputedUpdated(Computed instance, dynamic value) {
     'label': instance.debugLabel,
     'value': value?.toString(),
     'sources': instance._allSources.map((e) => e.globalId).join(','),
+    'targets': instance._allTargets.map((e) => e.globalId).join(','),
     'type': 'computed',
   });
 }
 
-Set<WeakReference<_Effect>> _effects = {};
+Map<WeakReference<_Effect>, int> _effects = {};
 void _onEffectCreated(_Effect instance) {
   if (!_devToolsEnabled) return;
-  if (_effects.any((e) => e.target == instance)) return;
-  _effects.add(WeakReference(instance));
+  if (_effects.keys.any((e) => e.target == instance)) return;
+  _effects[WeakReference(instance)] = 0;
   _debugPostEvent('ext.signals.effectCreate', {
     'id': instance.globalId,
     'label': instance.debugLabel,
+    'sources': instance._allSources.map((e) => e.globalId).join(','),
+    'value': '0',
     'type': 'effect',
   });
 }
 
 void _onEffectCalled(_Effect instance) {
   if (!_devToolsEnabled) return;
-  if (!_effects.any((e) => e.target == instance)) return;
-  _debugPostEvent('ext.signals.effectUpdate', {
+  if (!_effects.keys.any((e) => e.target == instance)) return;
+  final ref = _effects.keys.firstWhere((e) => e.target == instance);
+  final count = _effects[ref]!;
+  _effects[ref] = count + 1;
+  _debugPostEvent('ext.signals.effectCalled', {
     'id': instance.globalId,
     'label': instance.debugLabel,
+    'sources': instance._allSources.map((e) => e.globalId).join(','),
+    'value': '${_effects[ref]}',
     'type': 'effect',
   });
 }
