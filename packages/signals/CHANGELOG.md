@@ -1,3 +1,8 @@
+## 1.5.5
+
+- Adding `reloading` state to AsyncSignal
+- Adding `reload` to AsyncSignal
+
 ## 1.5.4
 
 - Fixing pubspec Dart filters on pub.dev

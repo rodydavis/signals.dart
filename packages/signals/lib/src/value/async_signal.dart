@@ -16,6 +16,7 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   final T _initialValue;
   late final _result = signal<T>(_initialValue);
   final _init = signal(false);
+  final _reload = signal(false);
   final _error = signal<Object?>(null);
   final _cleanup = <EffectCleanup>[];
   Completer<T> _completer = Completer<T>();
@@ -61,6 +62,7 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
             _completer = Completer<T>();
           }
           _result.value = val;
+          _reload.value = false;
           _completer.complete(val);
         },
         onError: (err, trace) {
@@ -69,6 +71,7 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
             _completer = Completer<T>();
           }
           _completer.completeError(err, trace);
+          _reload.value = false;
         },
         cancelOnError: cancelOnError,
       );
@@ -112,6 +115,11 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
     }
   }
 
+  void reload() {
+    refresh();
+    _reload.value = true;
+  }
+
   @override
   T get value => _result.value;
 
@@ -144,6 +152,9 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   }
 
   _AsyncState get _state {
+    if (_reload.value) {
+      return _AsyncState.reloading;
+    }
     if (isCompleted && _error.value != null) {
       return _AsyncState.error;
     }
@@ -158,11 +169,15 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
     required AsyncSignalValueBuilder<E, T> value,
     required AsyncSignalErrorBuilder<E> error,
     required AsyncSignalBuilder<E> loading,
+    AsyncSignalValueBuilder<E, T>? reloading,
   }) {
     final val = _result.value;
     final err = _error.value;
     switch (_state) {
       case _AsyncState.value:
+        return value(val);
+      case _AsyncState.reloading:
+        if (reloading != null) return reloading(val);
         return value(val);
       case _AsyncState.error:
         return error(err);
@@ -176,11 +191,16 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
     AsyncSignalValueBuilder<E, T>? value,
     AsyncSignalErrorBuilder<E>? error,
     AsyncSignalBuilder<E>? loading,
+    AsyncSignalValueBuilder<E, T>? reloading,
     required AsyncSignalBuilder<E> orElse,
   }) {
     final val = _result.value;
     final err = _error.value;
     switch (_state) {
+      case _AsyncState.reloading:
+        if (reloading != null) return reloading(val);
+        if (value != null) return value(val);
+        break;
       case _AsyncState.value:
         if (value != null) return value(val);
         break;
@@ -225,4 +245,5 @@ enum _AsyncState {
   error,
   value,
   loading,
+  reloading,
 }
