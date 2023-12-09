@@ -28,10 +28,10 @@ topics:
   - rx
 
 screenshots:
-  - description: "DevTools signals list view"
-    path: doc/screenshots/list.png
   - description: "DevTools signals graph view"
     path: doc/screenshots/graph.png
+  - description: "DevTools signals list view"
+    path: doc/screenshots/list.png
 
 scripts:
   coverage:
