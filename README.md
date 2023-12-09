@@ -18,7 +18,7 @@ Documentation Site: https://rodydavis.github.io/signals.dart/
 The signals library exposes four functions which are the building blocks to model any business logic you can think of.
 
 ```mermaid
-  graph TD;
+  graph LR;
       Signal-->Computed;
       Computed-->Computed;
       Computed-->Effect;
