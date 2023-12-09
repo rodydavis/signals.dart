@@ -17,6 +17,14 @@ Documentation Site: https://rodydavis.github.io/signals.dart/
 
 The signals library exposes four functions which are the building blocks to model any business logic you can think of.
 
+```mermaid
+  graph TD;
+      Signal-->Computed;
+      Computed-->Computed;
+      Computed-->Effect;
+      Signal-->Effect;
+```
+
 ### `signal(initialValue)`
 
 The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
