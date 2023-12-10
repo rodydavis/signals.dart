@@ -26,13 +26,18 @@ void initNodes() {
       case 'ext.signals.computedUpdate':
       case 'ext.signals.effectCreate':
       case 'ext.signals.effectCalled':
+      case 'ext.signals.effectRemove':
         final item = parseNode(data);
-        final idx = nodes //
-            .indexWhere((e) => e.id == item.id && e.type == item.type);
+        final idx = nodes.indexWhere(
+          (e) => e.id == item.id && e.type == item.type,
+        );
         if (idx == -1) {
           nodes.add(item);
         } else {
           nodes[idx] = item;
+        }
+        if (item.value == '-1' && item.type == 'effect') {
+          nodes.removeWhere((e) => e.id == item.id);
         }
         break;
       default:
@@ -93,6 +98,16 @@ Stream<$Node> onEffectCreated() async* {
 Stream<$Node> onEffectUpdated() async* {
   final source = serviceManager.service?.onExtensionEvent
       .where((e) => e.extensionKind == 'ext.signals.effectCalled');
+  if (source == null) return;
+  await for (final event in source) {
+    final data = event.extensionData?.data ?? {};
+    yield parseNode(data);
+  }
+}
+
+Stream<$Node> onEffectRemove() async* {
+  final source = serviceManager.service?.onExtensionEvent
+      .where((e) => e.extensionKind == 'ext.signals.effectRemove');
   if (source == null) return;
   await for (final event in source) {
     final data = event.extensionData?.data ?? {};

@@ -1,3 +1,8 @@
+## 1.5.9
+
+- Updating `signal_devtools` to 0.0.5 which now works with hot reload (adding effect remove)
+- Signal `watch` and `listen` can now call the cleanup method on hot reload if any `Watch` widgets are used
+
 ## 1.5.8
 
 - Updating `signal_devtools` to 0.0.4 with graph view updated colors and debug label

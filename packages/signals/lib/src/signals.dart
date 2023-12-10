@@ -461,7 +461,9 @@ class _Signal<T> implements Signal<T> {
       : _version = 0,
         _previousValue = _value,
         brand = identifier,
-        globalId = ++_lastGlobalId;
+        globalId = ++_lastGlobalId {
+    _onSignalCreated(this);
+  }
 
   // @internal
   T _value;
@@ -651,9 +653,10 @@ class _Signal<T> implements Signal<T> {
 /// and `effect` that depends on that signal, ensuring your app state is
 /// always consistent.
 Signal<T> signal<T>(T value, {String? debugLabel}) {
-  final instance = _Signal<T>(value, debugLabel: debugLabel);
-  _onSignalCreated(instance);
-  return instance;
+  return _Signal<T>(
+    value,
+    debugLabel: debugLabel,
+  );
 }
 
 abstract class _Listenable {
@@ -866,7 +869,9 @@ class _Computed<T> implements Computed<T>, _Listenable {
         _flags = OUTDATED,
         _version = 0,
         brand = identifier,
-        globalId = ++_lastGlobalId;
+        globalId = ++_lastGlobalId {
+    _onComputedCreated(this);
+  }
 
   @override
   bool _refresh() {
@@ -1064,9 +1069,10 @@ Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
 }) {
-  final instance = _Computed<T>(compute, debugLabel: debugLabel);
-  _onComputedCreated(instance);
-  return instance;
+  return _Computed<T>(
+    compute,
+    debugLabel: debugLabel,
+  );
 }
 
 void _cleanupEffect(_Effect effect) {
@@ -1160,7 +1166,9 @@ class _Effect implements _Listenable {
   })  : _flags = TRACKING,
         _compute = compute,
         _cleanup = null,
-        globalId = ++_lastGlobalId;
+        globalId = ++_lastGlobalId {
+    _onEffectCreated(this);
+  }
 
   List<ReadonlySignal> get _allSources {
     final results = <ReadonlySignal>[];
@@ -1265,14 +1273,17 @@ class _Effect implements _Listenable {
 /// ```
 EffectCleanup effect(EffectCallback compute, {String? debugLabel}) {
   final effect = _Effect(compute, debugLabel: debugLabel);
-  _onEffectCreated(effect);
   try {
     effect._callback();
   } catch (e) {
     effect._dispose();
+    _onEffectRemoved(effect);
     rethrow;
   }
   // Return a bound function instead of a wrapper like `() => effect._dispose()`,
   // because bound functions seem to be just as fast and take up a lot less memory.
-  return effect._dispose;
+  return () {
+    effect._dispose();
+    _onEffectRemoved(effect);
+  };
 }

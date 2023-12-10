@@ -22,6 +22,22 @@ class _NodeGraphState extends State<NodeGraph> {
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  @override
+  void reassemble() {
+    for (var element in _cleanup) {
+      element();
+    }
+    _cleanup.clear();
+    graph.nodes.clear();
+    graph.edges.clear();
+    init();
+    super.reassemble();
+  }
+
+  void init() {
     final mutator = graph;
 
     builder
@@ -60,6 +76,17 @@ class _NodeGraphState extends State<NodeGraph> {
       addNode(mutator, node, false);
     });
     _cleanup.add(eu.cancel);
+    final er = onEffectRemove().listen((node) {
+      removeNode(mutator, node);
+    });
+    _cleanup.add(er.cancel);
+  }
+
+  void removeNode(Graph mutator, $Node n) {
+    graph.nodes.removeWhere((e) => e.key?.value == n.id);
+    graph.edges.removeWhere(
+        (e) => e.source.key?.value == n.id || e.destination.key?.value == n.id);
+    if (mounted) setState(() {});
   }
 
   void addNode(Graph mutator, $Node n, bool fresh) {

@@ -4,11 +4,22 @@ import 'package:signals/signals.dart';
 
 import 'widget.dart';
 
-final _subscribers = <(int, int), WeakReference<Element>>{};
+final _subscribers = <(int, int), (WeakReference<Element>, VoidCallback)>{};
 
 @visibleForTesting
 // ignore: public_member_api_docs
 int getSubscriberCount() => _subscribers.length;
+
+bool _clearing = false;
+void clearSubscribers() {
+  if (_clearing) return;
+  _clearing = true;
+  for (final (_, cleanup) in _subscribers.values) {
+    cleanup();
+  }
+  _subscribers.clear();
+  _clearing = false;
+}
 
 /// Watch a signal value and rebuild the context of the [Element]
 /// if mounted and mark it as dirty
@@ -24,7 +35,7 @@ T watchSignal<T>(
 }
 
 /// Used to listen for updates on a signal but not rebuild the nearest element
-/// 
+///
 /// ```dart
 /// final counter = signal(0);
 /// ...
@@ -58,7 +69,7 @@ void _watch<T>(
   bool listen,
   void Function(Element element) onUpdate,
 ) {
-  if (context is Element && context is! Watch) {
+  if (context is Element && (context is! Watch || listen)) {
     // Ignore watching if the parent is a watch widget
     // Create a key with the global id of the signal and the target widget
     final key = (
@@ -68,11 +79,11 @@ void _watch<T>(
     // checks if the widget is already subscribed to the signal
     if (!_subscribers.containsKey(key)) {
       // Save the element as a weak reference to allow for garbage collection
-      _subscribers[key] = WeakReference(context);
       // Subscribe to signal once
-      signal.subscribe((_) {
+      final el = WeakReference(context);
+      final cleanup = signal.subscribe((_) {
         // Grab the element from the subscriber map
-        final element = _subscribers[key]!;
+        final (element, _) = _subscribers[key] ?? (el, null);
         if (element.target != null) {
           // Only trigger update if mounted
           if (element.target!.mounted == true) {
@@ -85,9 +96,10 @@ void _watch<T>(
           _subscribers.remove(key);
         }
       });
+      _subscribers[key] = (el, cleanup);
     } else {
       // Clear out any garbage collected widgets
-      _subscribers.removeWhere((key, value) => value.target == null);
+      _subscribers.removeWhere((key, value) => value.$1.target == null);
     }
   }
 }

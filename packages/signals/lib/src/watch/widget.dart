@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../signals.dart';
+import 'extension.dart';
 
 /// [Watch] is a drop-in replacement for [Builder] that will rebuild
 /// when any signals inside the builder change
@@ -27,6 +28,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   @override
   void reassemble() {
     super.reassemble();
+    clearSubscribers();
     init();
   }
 

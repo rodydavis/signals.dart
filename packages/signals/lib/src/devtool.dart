@@ -150,3 +150,17 @@ void _onEffectCalled(_Effect instance) {
     'type': 'effect',
   });
 }
+
+void _onEffectRemoved(_Effect instance) {
+  if (!_devToolsEnabled) return;
+  if (!_effects.keys.any((e) => e.target == instance)) return;
+  final ref = _effects.keys.firstWhere((e) => e.target == instance);
+  _effects.remove(ref);
+  _debugPostEvent('ext.signals.effectRemove', {
+    'id': instance.globalId,
+    'label': instance.debugLabel,
+    'sources': instance._allSources.map((e) => e.globalId).join(','),
+    'value': '-1',
+    'type': 'effect',
+  });
+}
