@@ -25,7 +25,7 @@ void _initDevTools() {
           .map((e) => e.target!)
           .map((e) => {
                 'id': e.globalId,
-                'label': e.debugLabel,
+                'label': e.label,
                 'value': e.toString(),
                 'targets': e._allTargets.map((e) => e.globalId).join(','),
                 'type': 'signal',
@@ -36,7 +36,7 @@ void _initDevTools() {
           .map((e) => e.target!)
           .map((e) => {
                 'id': e.globalId,
-                'label': e.debugLabel,
+                'label': e.label,
                 'value': e.toString(),
                 'targets': e._allTargets.map((e) => e.globalId).join(','),
                 'sources': e._allSources.map((e) => e.globalId).join(','),
@@ -48,7 +48,7 @@ void _initDevTools() {
           .map((e) => e.target!)
           .map((e) => {
                 'id': e.globalId,
-                'label': e.debugLabel,
+                'label': e.label,
                 'value':
                     _effects[_effects.keys.firstWhere((r) => r.target == e)]!
                         .toString(),
@@ -74,7 +74,7 @@ void _onSignalCreated(Signal instance) {
   _signals.add(WeakReference(instance));
   _debugPostEvent('ext.signals.signalCreate', {
     'id': instance.globalId,
-    'label': instance.debugLabel,
+    'label': instance.label,
     'value': instance.peek()?.toString(),
     'targets': instance._allTargets.map((e) => e.globalId).join(','),
     'type': 'signal',
@@ -86,7 +86,7 @@ void _onSignalUpdated(Signal instance, dynamic value) {
   if (!_devToolsEnabled) return;
   _debugPostEvent('ext.signals.signalUpdate', {
     'id': instance.globalId,
-    'label': instance.debugLabel,
+    'label': instance.label,
     'value': value?.toString(),
     'targets': instance._allTargets.map((e) => e.globalId).join(','),
     'type': 'signal',
@@ -101,7 +101,7 @@ void _onComputedCreated(Computed instance) {
   _computed.add(WeakReference(instance));
   _debugPostEvent('ext.signals.computedCreate', {
     'id': instance.globalId,
-    'label': instance.debugLabel,
+    'label': instance.label,
     'sources': instance._allSources.map((e) => e.globalId).join(','),
     'targets': instance._allTargets.map((e) => e.globalId).join(','),
     'value': '',
@@ -114,7 +114,7 @@ void _onComputedUpdated(Computed instance, dynamic value) {
   if (!_devToolsEnabled) return;
   _debugPostEvent('ext.signals.computedUpdate', {
     'id': instance.globalId,
-    'label': instance.debugLabel,
+    'label': instance.label,
     'value': value?.toString(),
     'sources': instance._allSources.map((e) => e.globalId).join(','),
     'targets': instance._allTargets.map((e) => e.globalId).join(','),
@@ -129,7 +129,7 @@ void _onEffectCreated(_Effect instance) {
   _effects[WeakReference(instance)] = 0;
   _debugPostEvent('ext.signals.effectCreate', {
     'id': instance.globalId,
-    'label': instance.debugLabel,
+    'label': instance.label,
     'sources': instance._allSources.map((e) => e.globalId).join(','),
     'value': '0',
     'type': 'effect',
@@ -144,7 +144,7 @@ void _onEffectCalled(_Effect instance) {
   _effects[ref] = count + 1;
   _debugPostEvent('ext.signals.effectCalled', {
     'id': instance.globalId,
-    'label': instance.debugLabel,
+    'label': instance.label,
     'sources': instance._allSources.map((e) => e.globalId).join(','),
     'value': '${_effects[ref]}',
     'type': 'effect',
@@ -158,7 +158,7 @@ void _onEffectRemoved(_Effect instance) {
   _effects.remove(ref);
   _debugPostEvent('ext.signals.effectRemove', {
     'id': instance.globalId,
-    'label': instance.debugLabel,
+    'label': instance.label,
     'sources': instance._allSources.map((e) => e.globalId).join(','),
     'value': '-1',
     'type': 'effect',

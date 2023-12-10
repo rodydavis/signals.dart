@@ -15,22 +15,22 @@ abstract class SignalsObserver {
 class LoggingSignalsObserver extends SignalsObserver {
   @override
   void onComputedCreated(Computed instance) {
-    log('computed created: [${instance.globalId}|${instance.debugLabel}]');
+    log('computed created: [${instance.globalId}|${instance.label}]');
   }
 
   @override
   void onComputedUpdated(Computed instance, value) {
-    log('computed updated: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('computed updated: [${instance.globalId}|${instance.label}] => $value');
   }
 
   @override
   void onSignalCreated(Signal instance) {
-    log('signal created: [${instance.globalId}|${instance.debugLabel}] => ${instance.peek()}');
+    log('signal created: [${instance.globalId}|${instance.label}] => ${instance.peek()}');
   }
 
   @override
   void onSignalUpdated(Signal instance, value) {
-    log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('signal updated: [${instance.globalId}|${instance.label}] => $value');
   }
 
   // ignore: avoid_print

@@ -3,7 +3,7 @@ import '../signals.dart';
 /// A [Signal] that holds a [Map].
 class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
   /// Creates a [MapSignal] with the given [value].
-  MapSignal(super.value, {super.debugLabel});
+  MapSignal(super.value, {super.label});
 
   @override
   V? operator [](Object? key) {
@@ -148,10 +148,10 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
 /// Create an [MapSignal] from [Map]
 MapSignal<K, V> mapSignal<K, V>(
   Map<K, V> map, {
-  String? debugLabel,
+  String? label,
 }) {
   return MapSignal<K, V>(
     map,
-    debugLabel: debugLabel,
+    label: label,
   );
 }

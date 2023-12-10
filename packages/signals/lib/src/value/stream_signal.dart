@@ -45,7 +45,7 @@ class StreamSignal<T> extends ReadonlySignal<T?> {
     this._compute, {
     this.cancelOnError,
     this.fireImmediately = false,
-    this.debugLabel,
+    this.label,
     T? initial,
   }) : _state = signal<(_StreamState, T?, Object?)>((
           initial != null ? _StreamState.value : _StreamState.loading,
@@ -202,7 +202,7 @@ class StreamSignal<T> extends ReadonlySignal<T?> {
   T? get() => value;
 
   @override
-  final String? debugLabel;
+  final String? label;
 
   @override
   int get globalId => _state.globalId;
@@ -238,12 +238,12 @@ StreamSignal<T> streamSignal<T>(
   Stream<T> Function() stream, {
   bool? cancelOnError,
   bool fireImmediately = false,
-  String? debugLabel,
+  String? label,
 }) {
   return StreamSignal<T>(
     stream,
     cancelOnError: cancelOnError,
     fireImmediately: fireImmediately,
-    debugLabel: debugLabel,
+    label: label,
   );
 }
