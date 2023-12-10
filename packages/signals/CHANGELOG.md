@@ -3,6 +3,10 @@
 - `debugLabel` refactored to `label` as `SignalsObserver` and DevTools are central
 - Signals always hold at least a default `label`
 
+## 1.5.10
+
+- Updating `signal_devtools` to 0.0.6
+
 ## 1.5.9
 
 - Updating `signal_devtools` to 0.0.5 which now works with hot reload (adding effect remove)
