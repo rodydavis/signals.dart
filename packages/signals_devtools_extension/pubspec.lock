@@ -131,14 +131,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  force_directed_graphview:
+  graphview:
     dependency: "direct main"
     description:
-      name: force_directed_graphview
-      sha256: "369902c0f33d8d9e137de65fbba1e43c72701b8cacbab8b54e8b85cd3b3c7163"
+      name: graphview
+      sha256: bdba183583b23c30c71edea09ad5f0beef612572d3e39e855467a925bd08392f
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "1.2.0"
   http_parser:
     dependency: transitive
     description:

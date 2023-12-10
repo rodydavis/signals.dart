@@ -1,3 +1,9 @@
+## 1.5.7
+
+- Fixing Computed bug in debug mode
+- Updating `signal_devtools` to 0.0.3 with graph view showing effects
+- Adding `toAsyncSignal` for `Future` and `Stream` to convert to optional value `AsyncSignal`
+
 ## 1.5.6
 
 - Adding `debugLabel` to `AsyncSignal`
