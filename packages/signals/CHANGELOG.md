@@ -1,3 +1,7 @@
+## 1.5.10
+
+- Updating `signal_devtools` to 0.0.6
+
 ## 1.5.9
 
 - Updating `signal_devtools` to 0.0.5 which now works with hot reload (adding effect remove)
