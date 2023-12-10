@@ -86,7 +86,7 @@ class _NodeGraphState extends State<NodeGraph> {
           mutator.addEdge(
             graph.nodes[targetIdx],
             graph.nodes[idx],
-            paint: Paint()..color = Colors.red,
+            paint: Paint()..color = Colors.orange,
           );
         }
       }
@@ -105,7 +105,7 @@ class _NodeGraphState extends State<NodeGraph> {
           mutator.addEdge(
             graph.nodes[idx],
             graph.nodes[targetIdx],
-            paint: Paint()..color = Colors.blue,
+            paint: Paint()..color = Colors.green,
           );
         }
       }

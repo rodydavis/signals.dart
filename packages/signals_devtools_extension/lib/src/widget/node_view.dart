@@ -29,14 +29,18 @@ class NodeView extends StatelessWidget {
                 'effect' => Colors.red,
                 (_) => Colors.grey,
               },
-              // border: Border.all(
-              //   color: node.pinned ? Colors.red : Colors.black,
-              //   width: 2,
-              // ),
             ),
           ),
         ),
-        label: Text(item.value ?? ''),
+        label: Builder(builder: (context) {
+          final sb = StringBuffer();
+          sb.write(item.value ?? '');
+          if (item.label != null && item.label!.isNotEmpty) {
+            sb.write(' ');
+            sb.write('(${item.label})');
+          }
+          return Text(sb.toString());
+        }),
       ),
     );
   }

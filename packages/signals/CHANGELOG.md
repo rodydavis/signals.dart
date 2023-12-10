@@ -1,3 +1,7 @@
+## 1.5.8
+
+- Updating `signal_devtools` to 0.0.4 with graph view updated colors and debug label
+
 ## 1.5.7
 
 - Fixing Computed bug in debug mode
