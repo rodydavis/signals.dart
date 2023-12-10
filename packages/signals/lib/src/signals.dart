@@ -455,7 +455,7 @@ class _Signal<T> implements Signal<T> {
   final int globalId;
 
   @override
-  String get label => _label ?? "Signal:$globalId";
+  String get label => _label ?? "$runtimeType:$globalId";
 
   final String? _label;
 
