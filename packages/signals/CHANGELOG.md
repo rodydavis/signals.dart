@@ -1,3 +1,8 @@
+## 1.6.0
+
+- `debugLabel` refactored to `label` as `SignalsObserver` and DevTools are central
+- Signals always hold at least a default `label`
+
 ## 1.5.9
 
 - Updating `signal_devtools` to 0.0.5 which now works with hot reload (adding effect remove)
@@ -98,7 +103,7 @@
 ## 1.2.1
 
 - Fixing `computed` and `signal` to work the same in debug mode as in release mode
-- Passing through `debugLabel` to all methods
+- Passing through `label` to all methods
 
 ## 1.2.0
 
