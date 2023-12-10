@@ -102,9 +102,9 @@ void _onComputedCreated(Computed instance) {
   _debugPostEvent('ext.signals.computedCreate', {
     'id': instance.globalId,
     'label': instance.debugLabel,
-    'value': instance.peek()?.toString(),
     'sources': instance._allSources.map((e) => e.globalId).join(','),
     'targets': instance._allTargets.map((e) => e.globalId).join(','),
+    'value': '',
     'type': 'computed',
   });
 }

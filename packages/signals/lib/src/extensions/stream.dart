@@ -42,4 +42,17 @@ extension SignalStreamUtils<T> on Stream<T> {
       cancelOnError: cancelOnError,
     );
   }
+
+  AsyncSignal<T?> toAsyncSignal({
+    String? debugLabel,
+    T? initialValue,
+    bool? cancelOnError,
+  }) {
+    return AsyncSignal.fromStream(
+      () => this,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      cancelOnError: cancelOnError,
+    );
+  }
 }

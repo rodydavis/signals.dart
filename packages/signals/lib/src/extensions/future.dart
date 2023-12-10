@@ -35,4 +35,15 @@ extension SignalFutureUtils<T> on Future<T> {
       debugLabel: debugLabel,
     );
   }
+
+  AsyncSignal<T?> toAsyncSignal({
+    String? debugLabel,
+    T? initialValue,
+  }) {
+    return AsyncSignal.fromFuture(
+      () => this,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+    );
+  }
 }

@@ -11,10 +11,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   devtools_extensions: ^0.0.10
   devtools_app_shared: ^0.0.6
-  force_directed_graphview: ^0.6.0
   faker: ^2.1.0
   signals:
     path: ../signals
+  graphview: ^1.2.0
 
 dev_dependencies:
   flutter_test:
