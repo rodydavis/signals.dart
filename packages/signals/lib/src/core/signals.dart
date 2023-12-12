@@ -191,7 +191,7 @@ typedef BatchCallback<T> = T Function();
 /// });
 /// // Now the callback completed and we'll trigger the effect.
 /// ```
-T batch<T>(BatchCallback<T> callback) {
+T batch<T>(BatchCallback<T> callback, [String debugLabel = '']) {
   if (_batchDepth > 0) {
     return callback();
   }
@@ -226,7 +226,7 @@ typedef UntrackedCallback<T> = T Function();
 /// 	effectCount.value = untracked(fn);
 /// });
 /// ```
-T untracked<T>(UntrackedCallback<T> callback) {
+T untracked<T>(UntrackedCallback<T> callback, [String debugLabel = '']) {
   if (_untrackedDepth > 0) {
     return callback();
   }

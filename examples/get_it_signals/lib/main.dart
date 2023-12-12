@@ -11,7 +11,7 @@ typedef User = ({int id, String name});
 
 class Auth {
   /// Current user signal
-  final currentUser = signal<User?>(null);
+  final currentUser = signal<User?>(null, 'User');
 
   /// Computed signal that only emits when the user is logged in / out
   late final isLoggedIn = computed(() => currentUser() != null);
@@ -32,19 +32,13 @@ class Auth {
   }
 
   // Dispose of the stream controller
-  void dispose() {
-    _authListener.dispose();
-  }
+  void dispose() => _authListener.dispose();
 
   /// Login with user data
-  void login(User data) {
-    _controller.add(data);
-  }
+  void login(User data) => _controller.add(data);
 
   /// Logout
-  void logout() {
-    _controller.add(null);
-  }
+  void logout() => _controller.add(null);
 }
 
 @visibleForTesting
@@ -131,14 +125,14 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-final brightness = signal(Brightness.light);
+final brightness = signal(Brightness.light, 'Brightness');
 final themeMode = computed(() {
   if (brightness() == Brightness.dark) {
     return ThemeMode.dark;
   } else {
     return ThemeMode.light;
   }
-});
+}, 'Theme switch');
 
 class DarkModeToggle extends StatelessWidget {
   const DarkModeToggle({super.key});
