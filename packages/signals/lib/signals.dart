@@ -7,7 +7,7 @@ export 'src/extensions/list.dart';
 export 'src/extensions/map.dart';
 export 'src/extensions/set.dart';
 export 'src/extensions/stream.dart';
-export 'src/signals.dart'
+export 'src/core/signals.dart'
     show
         signal,
         computed,
@@ -29,4 +29,4 @@ export 'src/value/list_signal.dart' show listSignal, ListSignal;
 export 'src/value/map_signal.dart' show mapSignal, MapSignal;
 export 'src/value/set_signal.dart' show setSignal, SetSignal;
 export 'src/value/stream_signal.dart' show streamSignal, StreamSignal;
-export 'src/observer.dart';
+export 'src/core/observer.dart';

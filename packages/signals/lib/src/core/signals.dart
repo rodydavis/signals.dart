@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'observer.dart';
-import 'utils/constants.dart';
+import '../utils/constants.dart';
 
 part 'devtool.dart';
 

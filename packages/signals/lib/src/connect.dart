@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'signals.dart';
+import 'core/signals.dart';
 
 /// Connects a [Stream] to a [Signal].
 class Connect<T> {

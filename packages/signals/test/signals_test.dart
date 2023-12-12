@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:signals/signals.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:signals/src/signals.dart';
+import 'package:signals/src/core/signals.dart';
 
 void main() {
   test('init', () {

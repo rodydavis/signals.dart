@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../signals.dart';
+import '../core/signals.dart';
 import '../watch/extension.dart';
 
 /// Signal extensions

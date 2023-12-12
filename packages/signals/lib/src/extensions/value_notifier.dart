@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../signals.dart';
+import '../core/signals.dart';
 
 /// Extension on [ValueNotifier] to provide helpful methods for signals
 extension SignalValueNotifierUtils<T> on ValueNotifier<T> {

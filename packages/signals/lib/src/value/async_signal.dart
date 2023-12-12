@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../signals.dart';
+import '../core/signals.dart';
 
 /// Builder on a successful [AsyncSignal] value
 typedef AsyncSignalValueBuilder<R, T> = R Function(T value);

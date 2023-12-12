@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../signals.dart';
+import '../core/signals.dart';
 
 /// Extension on [ValueListenable] to provide helpful methods for signals
 extension SignalValueListenableUtils<T> on ValueListenable<T> {

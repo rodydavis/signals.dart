@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../signals.dart';
+import '../core/signals.dart';
 
 /// A [Signal] that holds a [List].
 class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
