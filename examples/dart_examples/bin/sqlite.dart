@@ -15,9 +15,11 @@ final migrations = SqliteMigrations()
   }));
 
 typedef TestData = ({int id, String data});
-final items = listSignal<TestData>([]);
+final items = listSignal<TestData>([], 'Data');
 
 void main() async {
+  SignalsObserver.instance = LoggingSignalsObserver();
+
   final db = SqliteDatabase(path: '${Directory.systemTemp.path}/test.db');
   await migrations.migrate(db);
 

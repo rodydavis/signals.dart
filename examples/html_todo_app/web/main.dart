@@ -1,4 +1,5 @@
 import 'dart:html';
+
 import 'package:signals/signals.dart';
 
 typedef Task = ({String title, bool completed});
@@ -10,7 +11,7 @@ void main() {
   final taskFilter = document.getElementById("taskFilter")!;
   final taskCounter = document.getElementById("taskCounter")!;
 
-  final tasks = <Task>[].toSignal();
+  final tasks = <Task>[].toSignal('Tasks');
   final filter = signal("all");
 
   final filteredTasks = computed(() {
@@ -23,7 +24,7 @@ void main() {
     } else {
       return currentTasks.where((task) => task.completed).toList();
     }
-  });
+  }, 'Filtered');
 
   final taskCount = computed(() {
     return tasks.length;
@@ -84,5 +85,5 @@ void main() {
     Active: ${activeTaskCount.value}, 
     Completed: ${completedTaskCount.value}
     ''';
-  });
+  }, 'Display');
 }

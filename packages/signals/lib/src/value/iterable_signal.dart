@@ -4,7 +4,7 @@ import '../core/signals.dart';
 class IterableSignal<E> extends ValueSignal<Iterable<E>>
     implements Iterable<E> {
   /// Creates a [IterableSignal] with the given [value].
-  IterableSignal(super.value, {super.debugLabel});
+  IterableSignal(super.value, [super.debugLabel = '']);
 
   @override
   bool any(bool Function(E element) test) {
@@ -146,11 +146,11 @@ class IterableSignal<E> extends ValueSignal<Iterable<E>>
 
 /// Create an [IterableSignal] from [Iterable]
 IterableSignal<T> iterableSignal<T>(
-  Iterable<T> iterable, {
-  String? debugLabel,
-}) {
+  Iterable<T> iterable, [
+  String debugLabel = '',
+]) {
   return IterableSignal<T>(
     iterable,
-    debugLabel: debugLabel,
+    debugLabel,
   );
 }

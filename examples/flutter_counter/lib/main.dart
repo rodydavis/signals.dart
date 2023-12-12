@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-final brightness = signal(Brightness.light, debugLabel: 'Brightness');
+final brightness = signal(Brightness.light, 'Brightness');
 final isDark = computed(
   () => brightness.value == Brightness.dark,
-  debugLabel: 'Is Dark',
+  'Is Dark',
 );
 final themeMode = computed(
   () {
@@ -14,7 +14,7 @@ final themeMode = computed(
       return ThemeMode.light;
     }
   },
-  debugLabel: 'Theme Mode',
+  'Theme Mode',
 );
 
 void main() {
@@ -62,7 +62,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final Signal<int> counter = signal(0, debugLabel: 'Counter');
+  final Signal<int> counter = signal(0, 'Counter');
 
   void _incrementCounter() {
     counter.value++;

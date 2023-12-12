@@ -3,15 +3,18 @@ import 'dart:math';
 import 'package:signals/signals.dart';
 
 void main() {
+  SignalsObserver.instance = LoggingSignalsObserver();
+
   /// Recurring event
-  final timer = Duration(milliseconds: 800).toSignal();
+  final timer = TimerSignal(every: Duration(milliseconds: 800));
 
   const poolSize = 5;
 
   final candidate = signal(0);
 
   /// Signal<int> from an Iterable
-  final source = List.generate(poolSize, (index) => generate()).toSignal();
+  final source =
+      List.generate(poolSize, (index) => generate()).toSignal('source');
 
   /// Each time the timer move on we take the first element of the list
   effect(() {
@@ -31,7 +34,7 @@ void main() {
   });
 
   /// Display selected [candidate]
-  effect(() => print("Qualified to ${candidate.value}"));
+  effect(() => print("Qualified to ${candidate.value}"), 'Selection completed');
 
   /// Effect on source => refill
   effect(() {
@@ -43,7 +46,7 @@ void main() {
 
       print("Complemented with ${source.last}: ${source.value}\n");
     }
-  });
+  }, 'Refill');
 }
 
 final rdm = Random();

@@ -33,22 +33,23 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
   /// If true then the future will be called immediately
   final bool fireImmediately;
 
+  /// Inner Signal
+  final Signal<(_FutureState, T?, Object?)> _state;
+
   /// Creates a [FutureSignal] that wraps a [Future]
   FutureSignal(
     this._compute, {
     this.timeout,
     this.fireImmediately = false,
-    this.debugLabel,
-  }) {
+    this.debugLabel = '',
+  }) : _state = signal<(_FutureState, T?, Object?)>((
+          _FutureState.loading,
+          null,
+          null,
+        ), debugLabel) {
     _stale = true;
     if (fireImmediately) _execute().ignore();
   }
-
-  final _state = signal<(_FutureState, T?, Object?)>((
-    _FutureState.loading,
-    null,
-    null,
-  ));
 
   final Future<T> Function() _compute;
   bool _stale = false;
@@ -221,7 +222,7 @@ class FutureSignal<T> implements ReadonlySignal<T?> {
   T? call() => value;
 
   @override
-  final String? debugLabel;
+  final String debugLabel;
 
   @override
   int get globalId => _state.globalId;
@@ -261,7 +262,7 @@ FutureSignal<T> futureSignal<T>(
   Future<T> Function() compute, {
   Duration? timeout,
   bool fireImmediately = false,
-  String? debugLabel,
+  String debugLabel = '',
 }) {
   return FutureSignal<T>(
     compute,
