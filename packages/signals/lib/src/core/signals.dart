@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'observer.dart';
 import '../utils/constants.dart';
+import 'observer.dart';
 
 part 'devtool.dart';
 
@@ -336,7 +336,7 @@ abstract class ReadonlySignal<T> {
   List<_Listenable> get _allTargets;
 
   /// Debug label for Debug Mode
-  String? get debugLabel;
+  String get debugLabel;
 
   /// Global ID of the signal
   int get globalId;
@@ -438,7 +438,7 @@ typedef MutableSignal<T> = Signal<T>;
 
 /// Signal that can be extended and used as a class
 class ValueSignal<T> extends _Signal<T> {
-  ValueSignal(super.value, {super.debugLabel});
+  ValueSignal(super.value, [super.debugLabel = '']);
 
   /// Should only be called to update the value of a signal if checks for equality
   /// have already been made.
@@ -455,13 +455,15 @@ class _Signal<T> implements Signal<T> {
   final int globalId;
 
   @override
-  final String? debugLabel;
+  final String debugLabel;
 
-  _Signal(this._value, {this.debugLabel})
+  _Signal(this._value, [String debugLabel = ''])
       : _version = 0,
         _previousValue = _value,
         brand = identifier,
-        globalId = ++_lastGlobalId {
+        globalId = ++_lastGlobalId,
+        debugLabel =
+            debugLabel.isEmpty ? 'Signal\$$_lastGlobalId' : debugLabel {
     _onSignalCreated(this);
   }
 
@@ -652,10 +654,10 @@ class _Signal<T> implements Signal<T> {
 /// Changing a signal's value synchronously updates every `computed`
 /// and `effect` that depends on that signal, ensuring your app state is
 /// always consistent.
-Signal<T> signal<T>(T value, {String? debugLabel}) {
+Signal<T> signal<T>(T value, [String debugLabel = '']) {
   return _Signal<T>(
     value,
-    debugLabel: debugLabel,
+    debugLabel,
   );
 }
 
@@ -733,7 +735,7 @@ void _cleanupSources(_Listenable target) {
     final prev = node._prevSource;
 
     /**
-     * The node was not re-used, unsubscribe from its change notifications 
+     * The node was not re-used, unsubscribe from its change notifications
      * and remove itself from the doubly-linked list. e.g:
      *
      * { A <-> B <-> C }
@@ -804,6 +806,7 @@ void _cleanupSources(_Listenable target) {
 /// dependency of the computed signal.
 abstract class Computed<T> implements ReadonlySignal<T> {
   List<ReadonlySignal> get _allSources;
+
   @override
   List<_Listenable> get _allTargets;
 }
@@ -815,7 +818,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
   final int globalId;
 
   @override
-  final String? debugLabel;
+  final String debugLabel;
 
   @override
   _Node? _sources;
@@ -863,7 +866,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
     return results;
   }
 
-  _Computed(ComputedCallback<T> compute, {this.debugLabel})
+  _Computed(ComputedCallback<T> compute, [this.debugLabel = ''])
       : _compute = compute,
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
@@ -1066,12 +1069,12 @@ typedef ComputedCallback<T> = T Function();
 /// will be automatically subscribed to and tracked as a dependency of the
 /// computed signal.
 Computed<T> computed<T>(
-  ComputedCallback<T> compute, {
-  String? debugLabel,
-}) {
+  ComputedCallback<T> compute, [
+  String debugLabel = '',
+]) {
   return _Computed<T>(
     compute,
-    debugLabel: debugLabel,
+    debugLabel,
   );
 }
 
@@ -1135,7 +1138,7 @@ class _Effect implements _Listenable {
   EffectCallback? _compute;
 
   @override
-  final String? debugLabel;
+  final String debugLabel;
 
   @override
   final int globalId;
@@ -1161,9 +1164,9 @@ class _Effect implements _Listenable {
   }
 
   _Effect(
-    EffectCallback compute, {
-    this.debugLabel,
-  })  : _flags = TRACKING,
+    EffectCallback compute, [
+    this.debugLabel = '',
+  ])  : _flags = TRACKING,
         _compute = compute,
         _cleanup = null,
         globalId = ++_lastGlobalId {
@@ -1271,8 +1274,8 @@ class _Effect implements _Listenable {
 /// // that no one listens to it.
 /// surname.value = "Doe 2";
 /// ```
-EffectCleanup effect(EffectCallback compute, {String? debugLabel}) {
-  final effect = _Effect(compute, debugLabel: debugLabel);
+EffectCleanup effect(EffectCallback compute, [String debugLabel = '']) {
+  final effect = _Effect(compute, debugLabel);
   try {
     effect._callback();
   } catch (e) {

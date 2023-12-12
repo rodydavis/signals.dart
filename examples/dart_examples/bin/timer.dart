@@ -2,6 +2,7 @@ import 'package:signals/signals.dart';
 
 /// Trigger [TimerSignalEvent]
 main() {
+  SignalsObserver.instance = LoggingSignalsObserver();
   final timer = TimerSignal(every: Duration(seconds: 1));
 
   effect(() {

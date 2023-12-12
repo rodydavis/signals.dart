@@ -14,7 +14,7 @@ extension SignalFutureUtils<T> on Future<T> {
   @Deprecated('Use [toSignalWithDefault] instead')
   FutureSignal<T> toSignal({
     Duration? timeout,
-    String? debugLabel,
+    String debugLabel = '',
     bool fireImmediately = false,
   }) {
     return FutureSignal<T>(
@@ -26,9 +26,9 @@ extension SignalFutureUtils<T> on Future<T> {
   }
 
   AsyncSignal<T> toSignalWithDefault(
-    T initialValue, {
-    String? debugLabel,
-  }) {
+    T initialValue, [
+    String debugLabel = '',
+  ]) {
     return AsyncSignal.fromFuture(
       () => this,
       initialValue: initialValue,
@@ -37,7 +37,7 @@ extension SignalFutureUtils<T> on Future<T> {
   }
 
   AsyncSignal<T?> toAsyncSignal({
-    String? debugLabel,
+    String debugLabel = '',
     T? initialValue,
   }) {
     return AsyncSignal.fromFuture(

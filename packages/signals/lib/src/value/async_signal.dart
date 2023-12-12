@@ -29,15 +29,15 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   bool get isCompleted => _completer.isCompleted;
 
   @override
-  final String? debugLabel;
+  final String debugLabel;
 
   /// Creates a [AsyncSignal] that wraps a [Stream]
   AsyncSignal.fromStream(
     Stream<T> Function() stream, {
     required T initialValue,
     bool? cancelOnError,
-    this.debugLabel,
-  }) : _result = signal<T>(initialValue, debugLabel: debugLabel) {
+    this.debugLabel = '',
+  }) : _result = signal<T>(initialValue, debugLabel) {
     _stream(() => stream(), cancelOnError: cancelOnError);
   }
 
@@ -45,8 +45,8 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
   AsyncSignal.fromFuture(
     Future<T> Function() future, {
     required T initialValue,
-    this.debugLabel,
-  }) : _result = signal<T>(initialValue, debugLabel: debugLabel) {
+    this.debugLabel = '',
+  }) : _result = signal<T>(initialValue, debugLabel) {
     _future(() => future());
   }
 
@@ -217,7 +217,7 @@ class AsyncSignal<T> implements ReadonlySignal<T> {
 AsyncSignal<T> asyncSignalFromFuture<T>(
   Future<T> Function() future, {
   required T initialValue,
-  String? debugLabel,
+  String debugLabel = '',
 }) {
   return AsyncSignal.fromFuture(
     future,
@@ -230,7 +230,7 @@ AsyncSignal<T> asyncSignalFromStream<T>(
   Stream<T> Function() stream, {
   required T initialValue,
   bool? cancelOnError,
-  String? debugLabel,
+  String debugLabel = '',
 }) {
   return AsyncSignal.fromStream(
     stream,
