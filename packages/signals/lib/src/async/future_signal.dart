@@ -17,7 +17,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
     if (fireImmediately) init();
   }
 
-  Future<void> execute() async {
+  Future<void> _execute() async {
     if (_fetching) return;
     _fetching = true;
     try {
@@ -31,20 +31,20 @@ class FutureSignal<T> extends AsyncSignal<T> {
   /// Reload the future
   Future<void> reload() async {
     _fetching = false;
-    await execute();
+    await _execute();
   }
 
   /// Refresh the future
   Future<void> refresh() async {
     setLoading(refresh: true);
     _fetching = false;
-    await execute();
+    await _execute();
   }
 
   @override
   void init() {
     super.init();
-    execute().ignore();
+    _execute().ignore();
   }
 
   @override
@@ -71,6 +71,7 @@ FutureSignal<T> futureSignal<T>(
     initialValue: initialValue,
     debugLabel: debugLabel,
     fireImmediately: fireImmediately,
+    
   );
 }
 

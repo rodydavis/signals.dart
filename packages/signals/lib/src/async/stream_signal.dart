@@ -4,16 +4,24 @@ import 'async_signal.dart';
 import 'async_signal_state.dart';
 
 class StreamSignal<T> extends AsyncSignal<T> {
-  final _controller = StreamController<T>();
-  StreamSubscription<T>? _subscription;
-  bool? cancelOnError;
-
   StreamSignal({
     Stream<T>? stream,
     T? initialValue,
     this.cancelOnError,
     super.debugLabel,
-  }) : super(initialValue != null
+    bool sync = false,
+    void Function()? onListen,
+    void Function()? onPause,
+    void Function()? onResume,
+    FutureOr<void> Function()? onCancel,
+  })  : _controller = StreamController<T>(
+          sync: sync,
+          onListen: onListen,
+          onPause: onPause,
+          onResume: onResume,
+          onCancel: onCancel,
+        ),
+        super(initialValue != null
             ? AsyncSignalState.data(initialValue)
             : AsyncSignalState.loading()) {
     _subscription = _controller.stream.listen(
@@ -24,6 +32,10 @@ class StreamSignal<T> extends AsyncSignal<T> {
     );
     if (stream != null) addStream(stream);
   }
+
+  late final StreamController<T> _controller;
+  StreamSubscription<T>? _subscription;
+  bool? cancelOnError;
 
   Future<void> addStream(
     Stream<T> stream, {

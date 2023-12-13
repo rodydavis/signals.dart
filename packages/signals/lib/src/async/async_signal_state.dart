@@ -1,16 +1,18 @@
-typedef AsyncSignalError = (Object, StackTrace?);
+typedef AsyncSignalErrorBuilder<E> = E Function(
+    Object error, StackTrace? stackTrace);
+typedef AsyncSignalValueBuilder<E, T> = E Function(T value);
+typedef AsyncSignalBuilder<E> = E Function();
 
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 /// State for an [AsyncSignal]
 sealed class AsyncSignalState<T> {
   final bool isLoading;
   final T? _value;
-  final AsyncSignalError? _error;
+  final (Object, StackTrace?)? _error;
 
   const AsyncSignalState({
     required this.isLoading,
     required T? value,
-    required AsyncSignalError? error,
+    required (Object, StackTrace?)? error,
   })  : _value = value,
         _error = error;
 
@@ -18,8 +20,8 @@ sealed class AsyncSignalState<T> {
     return AsyncSignalStateData<T>(data);
   }
 
-  factory AsyncSignalState.error(AsyncSignalError error) {
-    return AsyncSignalStateError<T>(error);
+  factory AsyncSignalState.error(Object error, StackTrace? stackTrace) {
+    return AsyncSignalStateError<T>(error, stackTrace);
   }
 
   factory AsyncSignalState.loading() {
@@ -47,26 +49,26 @@ sealed class AsyncSignalState<T> {
   StackTrace? get stackTrace => _error?.$2;
 
   E map<E>({
-    required E Function(T value) data,
-    required E Function(Object error, StackTrace? trace) error,
-    required E Function() loading,
-    E Function()? reloading,
-    E Function()? refreshing,
+    required AsyncSignalValueBuilder<E, T> data,
+    required AsyncSignalErrorBuilder<E> error,
+    required AsyncSignalBuilder<E> loading,
+    AsyncSignalBuilder<E>? reloading,
+    AsyncSignalBuilder<E>? refreshing,
   }) {
     if (isRefreshing) if (refreshing != null) return refreshing();
     if (isReloading) if (reloading != null) return reloading();
-    if (hasValue) return data(value as T);
+    if (hasValue) return data(requireValue);
     if (hasError) return error(this.error!, this.stackTrace);
     return loading();
   }
 
   E maybeMap<E>({
-    E Function(T value)? data,
-    E Function(Object error, StackTrace? trace)? error,
-    E Function()? loading,
-    E Function()? reloading,
-    E Function()? refreshing,
-    required E Function() orElse,
+    AsyncSignalValueBuilder<E, T>? data,
+    AsyncSignalErrorBuilder<E>? error,
+    AsyncSignalBuilder<E>? loading,
+    AsyncSignalBuilder<E>? reloading,
+    AsyncSignalBuilder<E>? refreshing,
+    required AsyncSignalBuilder<E> orElse,
   }) {
     if (isRefreshing) return refreshing != null ? refreshing() : orElse();
     if (isReloading) return reloading != null ? reloading() : orElse();
@@ -126,14 +128,16 @@ class AsyncSignalStateData<T> extends AsyncSignalState<T> {
 
 class AsyncSignalStateError<T> extends AsyncSignalState<T> {
   AsyncSignalStateError(
-    AsyncSignalError err, {
+    Object error,
+    StackTrace? stackTrace, {
     super.isLoading = false,
     super.value,
-  }) : super(error: err);
+  }) : super(error: (error, stackTrace));
 
   AsyncSignalStateError<T> toLoading() {
     return AsyncSignalStateError<T>(
-      (error!, stackTrace),
+      error!,
+      stackTrace,
       isLoading: true,
     );
   }

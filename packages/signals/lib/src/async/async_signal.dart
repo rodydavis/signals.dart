@@ -36,7 +36,7 @@ class AsyncSignal<T> extends ValueSignal<AsyncSignalState<T>> {
   }
 
   void setError(Object error, [StackTrace? stackTrace]) {
-    value = AsyncSignalState.error((error, stackTrace));
+    value = AsyncSignalState.error(error, stackTrace);
     if (_completer.isCompleted) _completer = Completer<T>();
     _completer.completeError(error, stackTrace);
   }
@@ -63,6 +63,7 @@ class AsyncSignal<T> extends ValueSignal<AsyncSignalState<T>> {
   void reset() {
     value = _initialValue;
     _initialized = false;
+    _completer = Completer<T>();
   }
 
   void init() async {
@@ -78,7 +79,5 @@ class AsyncSignal<T> extends ValueSignal<AsyncSignalState<T>> {
     return super.value;
   }
 
-  T get requireValue {
-    return super.value.requireValue;
-  }
+  T get requireValue => super.value.requireValue;
 }
