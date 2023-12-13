@@ -58,6 +58,10 @@ class FutureSignal<T> extends AsyncSignal<T> {
     _future = future;
     reset();
   }
+
+  operator <<(Future<T> Function() future) {
+    resetFuture(future);
+  }
 }
 
 FutureSignal<T> futureSignal<T>(
@@ -71,7 +75,6 @@ FutureSignal<T> futureSignal<T>(
     initialValue: initialValue,
     debugLabel: debugLabel,
     fireImmediately: fireImmediately,
-    
   );
 }
 
