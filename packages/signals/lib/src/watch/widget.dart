@@ -6,10 +6,11 @@ import 'extension.dart';
 /// [Watch] is a drop-in replacement for [Builder] that will rebuild
 /// when any signals inside the builder change
 class Watch<T extends Widget> extends StatefulWidget {
-  const Watch(this.builder, {super.key});
+  const Watch(this.builder, {super.key, this.debugLabel});
 
   /// The widget to rebuild when any signals change
   final T Function(BuildContext context) builder;
+  final String? debugLabel;
 
   @override
   State<Watch<T>> createState() => _WatchState<T>();
@@ -29,6 +30,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   void reassemble() {
     super.reassemble();
     clearSubscribers();
+    reloadSignalsDevTools();
     init();
   }
 
@@ -46,7 +48,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
 
   void init() {
     fn?.call();
-    fn = effect(rebuild);
+    fn = effect(rebuild, debugLabel: widget.debugLabel);
   }
 
   void rebuild() {

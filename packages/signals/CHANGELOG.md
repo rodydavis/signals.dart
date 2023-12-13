@@ -1,3 +1,12 @@
+## 1.5.11
+
+- Adding `disableSignalsDevTools` to disable the dev tools extension in debug/profile mode
+- Adding `getSignalListenSubscriberCount` for testing
+- Adding `getSignalWatchSubscriberCount` for testing
+- Fixing watch/listen extension to dedupe signals by context
+- Performance improvements based on benchmark examples by context_watch
+- Adding `debugLabel` to effect
+
 ## 1.5.10
 
 - Updating `signal_devtools` to 0.0.6

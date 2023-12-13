@@ -14,6 +14,7 @@ export 'src/core/signals.dart'
         effect,
         batch,
         untracked,
+        disableSignalsDevTools,
         EffectCleanup,
         Computed,
         Signal,

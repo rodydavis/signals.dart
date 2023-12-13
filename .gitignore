@@ -30,3 +30,6 @@ migrate_working_dir/
 build/
 
 pubspec_overrides.yaml
+
+.fvm/flutter_sdk
+.vscode/settings.json

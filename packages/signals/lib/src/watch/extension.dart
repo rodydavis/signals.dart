@@ -4,34 +4,78 @@ import 'package:signals/signals.dart';
 
 import 'widget.dart';
 
-final _subscribers = <(int, int), (WeakReference<Element>, VoidCallback)>{};
+typedef _Key = (int, int);
+typedef _Subscribers = Map<_Key, (WeakReference<Element>, VoidCallback)>;
+final _Subscribers _listenSubscribers = {};
+final _Subscribers _watchSubscribers = {};
 
+/// Subscriber count for listeners
 @visibleForTesting
-// ignore: public_member_api_docs
-int getSubscriberCount() => _subscribers.length;
+int getSignalListenSubscriberCount() => _listenSubscribers.length;
+
+/// Subscriber count for watchers
+@visibleForTesting
+int getSignalWatchSubscriberCount() => _watchSubscribers.length;
 
 bool _clearing = false;
 void clearSubscribers() {
   if (_clearing) return;
   _clearing = true;
-  for (final (_, cleanup) in _subscribers.values) {
+  for (final (_, cleanup) in _listenSubscribers.values) {
     cleanup();
   }
-  _subscribers.clear();
+  _listenSubscribers.clear();
+  for (final (_, cleanup) in _watchSubscribers.values) {
+    cleanup();
+  }
+  _watchSubscribers.clear();
   _clearing = false;
+}
+
+void _rebuild(Element element) {
+  element.markNeedsBuild();
 }
 
 /// Watch a signal value and rebuild the context of the [Element]
 /// if mounted and mark it as dirty
 T watchSignal<T>(
   BuildContext context,
-  ReadonlySignal<T> signal,
-) {
-  _watch(context, signal, false, (element) {
-    element.markNeedsBuild();
-  });
+  ReadonlySignal<T> signal, {
+  String? debugLabel,
+}) {
+  _watch(context, signal, false, _rebuild, debugLabel);
   // Grab the current value without subscribing
   return signal.peek();
+}
+
+/// Remove all subscribers for a given signal
+void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
+  // Remove keys for signal hashcode
+  final items = [
+    ..._watchSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
+    ..._listenSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
+  ];
+  for (final item in items) {
+    final (_, cleanup) = item.value;
+    cleanup();
+  }
+  _watchSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
+  _listenSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
+}
+
+/// Remove all subscribers for a given context
+void unwatchElement(BuildContext context) {
+  // Remove keys for element hashcode
+  final items = [
+    ..._watchSubscribers.entries.where((e) => e.key.$1 == context.hashCode),
+    ..._listenSubscribers.entries.where((e) => e.key.$1 == context.hashCode),
+  ];
+  for (final item in items) {
+    final (_, cleanup) = item.value;
+    cleanup();
+  }
+  _watchSubscribers.removeWhere((key, value) => key.$1 == context.hashCode);
+  _listenSubscribers.removeWhere((key, value) => key.$1 == context.hashCode);
 }
 
 /// Used to listen for updates on a signal but not rebuild the nearest element
@@ -56,11 +100,14 @@ T watchSignal<T>(
 void listenSignal<T>(
   BuildContext context,
   ReadonlySignal<T> signal,
-  VoidCallback callback,
-) {
-  _watch(context, signal, true, (element) {
-    callback();
-  });
+  VoidCallback callback, {
+  String? debugLabel,
+}) {
+  _watch(context, signal, true, (element) => callback(), debugLabel);
+}
+
+_Key _key<T>(BuildContext context, ReadonlySignal<T> signal) {
+  return (signal.globalId, context.hashCode);
 }
 
 void _watch<T>(
@@ -68,22 +115,27 @@ void _watch<T>(
   ReadonlySignal<T> signal,
   bool listen,
   void Function(Element element) onUpdate,
+  String? debugLabel,
 ) {
   if (context is Element && (context is! Watch || listen)) {
     // Ignore watching if the parent is a watch widget
     // Create a key with the global id of the signal and the target widget
-    final key = (
-      signal.globalId,
-      Object.hashAll([context.hashCode, if (listen) onUpdate.hashCode])
-    );
+    final key = _key(context, signal);
     // checks if the widget is already subscribed to the signal
-    if (!_subscribers.containsKey(key)) {
+    _Subscribers subscribers;
+    if (listen) {
+      subscribers = _listenSubscribers;
+    } else {
+      subscribers = _watchSubscribers;
+    }
+    if (!subscribers.containsKey(key)) {
       // Save the element as a weak reference to allow for garbage collection
       // Subscribe to signal once
       final el = WeakReference(context);
-      final cleanup = signal.subscribe((_) {
+      final cleanup = effect(() {
+        signal.value;
         // Grab the element from the subscriber map
-        final (element, _) = _subscribers[key] ?? (el, null);
+        final (element, _) = subscribers[key] ?? (el, null);
         if (element.target != null) {
           // Only trigger update if mounted
           if (element.target!.mounted == true) {
@@ -93,13 +145,10 @@ void _watch<T>(
           }
         } else {
           // Element garbage collected so we can safely remove
-          _subscribers.remove(key);
+          subscribers.remove(key);
         }
-      });
-      _subscribers[key] = (el, cleanup);
-    } else {
-      // Clear out any garbage collected widgets
-      _subscribers.removeWhere((key, value) => value.$1.target == null);
+      }, debugLabel: debugLabel);
+      subscribers[key] = (el, cleanup);
     }
   }
 }

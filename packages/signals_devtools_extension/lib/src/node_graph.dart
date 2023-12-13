@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:graphview/graphview.dart';
+import 'package:signals/signals.dart';
 
 import 'nodes_state.dart';
 import 'widget/node_view.dart';
@@ -25,120 +26,96 @@ class _NodeGraphState extends State<NodeGraph> {
     init();
   }
 
-  @override
-  void reassemble() {
-    for (var element in _cleanup) {
-      element();
-    }
-    _cleanup.clear();
-    graph.nodes.clear();
-    graph.edges.clear();
-    init();
-    super.reassemble();
-  }
-
   void init() {
-    final mutator = graph;
-
     builder
-      ..siblingSeparation = (100)
-      ..levelSeparation = (150)
-      ..subtreeSeparation = (150)
-      ..orientation = (BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM);
+      ..siblingSeparation = 100
+      ..levelSeparation = 150
+      ..subtreeSeparation = 150
+      ..orientation = BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM;
 
-    for (final node in nodes) {
-      addNode(mutator, node, true);
-    }
-    for (final node in nodes) {
-      addNode(mutator, node, false);
-    }
-    final sc = onSignalCreated().listen((node) {
-      addNode(mutator, node, true);
-    });
-    _cleanup.add(sc.cancel);
-    final su = onSignalUpdated().listen((node) {
-      addNode(mutator, node, false);
-    });
-    _cleanup.add(su.cancel);
-    final cc = onComputedCreated().listen((node) {
-      addNode(mutator, node, true);
-    });
-    _cleanup.add(cc.cancel);
-    final cu = onComputedUpdated().listen((node) {
-      addNode(mutator, node, false);
-    });
-    _cleanup.add(cu.cancel);
-    final ec = onEffectCreated().listen((node) {
-      addNode(mutator, node, true);
-    });
-    _cleanup.add(ec.cancel);
-    final eu = onEffectUpdated().listen((node) {
-      addNode(mutator, node, false);
-    });
-    _cleanup.add(eu.cancel);
-    final er = onEffectRemove().listen((node) {
-      removeNode(mutator, node);
-    });
-    _cleanup.add(er.cancel);
+    _cleanup.add(effect(() {
+      final node = nodeAdd.value;
+      if (node != null) {
+        setNode(graph, node);
+      }
+    }));
+    _cleanup.add(effect(() {
+      final node = nodeUpdate.value;
+      if (node != null) {
+        setNode(graph, node);
+      }
+    }));
+    _cleanup.add(effect(() {
+      final node = nodeRemove.value;
+      if (node != null) {
+        removeNode(graph, node);
+      }
+    }));
+    _cleanup.add(effect(() {
+      reassembleCount.value;
+      graph.nodes.clear();
+      graph.edges.clear();
+      for (final node in nodes.peek()) {
+        setNode(graph, node);
+      }
+    }));
   }
 
   void removeNode(Graph mutator, $Node n) {
-    graph.nodes.removeWhere((e) => e.key?.value == n.id);
+    graph.nodes.removeWhere(
+      (e) => e.key?.value == n.id,
+    );
     graph.edges.removeWhere(
-        (e) => e.source.key?.value == n.id || e.destination.key?.value == n.id);
+      (e) => e.source.key?.value == n.id || e.destination.key?.value == n.id,
+    );
     if (mounted) setState(() {});
   }
 
-  void addNode(Graph mutator, $Node n, bool fresh) {
-    final idx = graph.nodes.indexWhere((e) => e.key?.value == n.id);
-    if (fresh) {
-      if (idx == -1) {
-        final node = Node.Id(n.id);
-        mutator.addNode(node);
-      }
-      return;
+  Node addNode(int val) {
+    final idx = graph.nodes.indexWhere((e) => e.key?.value == val);
+    if (idx == -1) {
+      final node = Node.Id(val);
+      graph.addNode(node);
+      return node;
+    } else {
+      return graph.nodes[idx];
     }
+  }
 
-    final sources =
-        (n.sources?.split(',') ?? []).map((e) => int.parse(e)).toList();
-    for (final s in sources) {
-      final targetIdx = graph.nodes.indexWhere(
-        (e) => e.key?.value == s,
-      );
-      if (targetIdx != -1) {
-        final edgeIdx = graph.edges.indexWhere(
-          (e) => e.source.key?.value == s && e.destination.key?.value == n.id,
-        );
-        if (edgeIdx == -1) {
-          mutator.addEdge(
-            graph.nodes[targetIdx],
-            graph.nodes[idx],
-            paint: Paint()..color = Colors.orange,
-          );
-        }
-      }
-    }
-    final targets =
-        (n.targets?.split(',') ?? []).map((e) => int.parse(e)).toList();
-    for (final s in targets) {
-      final targetIdx = graph.nodes.indexWhere(
-        (e) => e.key?.value == s,
-      );
-      if (targetIdx != -1) {
-        final edgeIdx = graph.edges.indexWhere(
-          (e) => e.destination.key?.value == s && e.source.key?.value == n.id,
-        );
-        if (edgeIdx == -1) {
-          mutator.addEdge(
-            graph.nodes[idx],
-            graph.nodes[targetIdx],
-            paint: Paint()..color = Colors.green,
-          );
-        }
-      }
-    }
-
+  void setNode(Graph mutator, $Node n) {
+    addNode(n.id);
+    setNodeSources(mutator, n);
+    setNodeTargets(mutator, n);
     if (mounted) setState(() {});
+  }
+
+  void setNodeSources(Graph mutator, $Node n) {
+    final sources = n.sources?.split(',') ?? [];
+    final items = sources.map((e) => int.parse(e)).toList();
+    for (final item in items) {
+      addEdge(mutator, item, n.id, Colors.orange);
+    }
+  }
+
+  void setNodeTargets(Graph mutator, $Node n) {
+    final sources = n.targets?.split(',') ?? [];
+    final items = sources.map((e) => int.parse(e)).toList();
+    for (final item in items) {
+      addEdge(mutator, n.id, item, Colors.green);
+    }
+  }
+
+  void addEdge(Graph mutator, int from, int to, Color color) {
+    final idx = graph.edges.indexWhere(
+      (e) => e.source.key?.value == from && e.destination.key?.value == to,
+    );
+    if (idx == -1) {
+      mutator.addEdge(
+        addNode(from),
+        addNode(to),
+        paint: Paint()..color = color,
+      );
+    }
   }
 
   @override

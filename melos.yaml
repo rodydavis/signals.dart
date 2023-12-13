@@ -1,0 +1,6 @@
+name: signals
+sdkPath: .fvm/flutter_sdk
+
+packages:
+  - examples/*
+  - packages/*

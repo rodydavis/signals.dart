@@ -9,7 +9,16 @@ import '../watch/extension.dart';
 /// Signal extensions
 extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Rebuild the [Element] that the current signal is inside of
-  T watch(BuildContext context) => watchSignal<T>(context, this);
+  T watch(
+    BuildContext context, {
+    String? debugLabel,
+  }) {
+    return watchSignal<T>(
+      context,
+      this,
+      debugLabel: debugLabel,
+    );
+  }
 
   /// Used to listen for updates on a signal but not rebuild the nearest element
   ///
@@ -30,8 +39,22 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// ...
   /// }
   /// ```
-  void listen(BuildContext context, void Function() callback) {
-    listenSignal<T>(context, this, callback);
+  void listen(
+    BuildContext context,
+    void Function() callback, {
+    String? debugLabel,
+  }) {
+    listenSignal<T>(
+      context,
+      this,
+      callback,
+      debugLabel: debugLabel,
+    );
+  }
+
+  /// Stop listening to updates on a signal
+  void unwatch(BuildContext context) {
+    unwatchSignal(context, this);
   }
 
   /// Convert a signal to [ValueListenable] to be used in builders
