@@ -1,0 +1,12 @@
+name: signals_core
+description: Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more.
+homepage: https://rodydavis.github.io/signals.dart
+documentation: https://rodydavis.github.io/signals.dart
+version: 1.0.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.24.0
