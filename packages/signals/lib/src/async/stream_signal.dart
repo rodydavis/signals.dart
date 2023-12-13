@@ -36,17 +36,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
   Future<void> addStream(
     Stream<T> stream, {
     bool? cancelOnError,
-    bool reset = false,
   }) {
-    if (reset) {
-      _subscription?.cancel();
-      _subscription = _controller.stream.listen(
-        setValue,
-        onError: setError,
-        onDone: onDone,
-        cancelOnError: cancelOnError,
-      );
-    }
     return _controller.addStream(
       stream,
       cancelOnError: cancelOnError ?? this.cancelOnError,
@@ -62,11 +52,24 @@ class StreamSignal<T> extends AsyncSignal<T> {
     _controller.add(value);
   }
 
+  @override
+  void reset() {
+    super.reset();
+    _subscription?.cancel();
+    _subscription = _controller.stream.listen(
+      setValue,
+      onError: setError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+  }
+
   /// Called when the stream is done
   void onDone() {}
 
   void resetStream(Stream<T> Function() stream) {
-    addStream(stream(), reset: true);
+    reset();
+    addStream(stream());
   }
 
   @override
