@@ -11,14 +11,10 @@ class StreamSignal<T> extends AsyncSignal<T> {
     super.debugLabel,
     bool sync = false,
     void Function()? onListen,
-    void Function()? onPause,
-    void Function()? onResume,
     FutureOr<void> Function()? onCancel,
-  })  : _controller = StreamController<T>(
+  })  : _controller = StreamController<T>.broadcast(
           sync: sync,
           onListen: onListen,
-          onPause: onPause,
-          onResume: onResume,
           onCancel: onCancel,
         ),
         super(initialValue != null
