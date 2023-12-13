@@ -49,33 +49,54 @@ T watchSignal<T>(
 }
 
 /// Remove all subscribers for a given signal
-void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
+void unwatchSignal<T>(
+  BuildContext context,
+  ReadonlySignal<T> signal, {
+  bool watch = true,
+  bool listen = true,
+}) {
   // Remove keys for signal hashcode
   final items = [
-    ..._watchSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
-    ..._listenSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
+    if (watch)
+      ..._watchSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
+    if (listen)
+      ..._listenSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
   ];
   for (final item in items) {
     final (_, cleanup) = item.value;
     cleanup();
   }
-  _watchSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
-  _listenSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
+  if (watch) {
+    _watchSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
+  }
+  if (listen) {
+    _listenSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
+  }
 }
 
 /// Remove all subscribers for a given context
-void unwatchElement(BuildContext context) {
+void unwatchElement(
+  BuildContext context, {
+  bool watch = true,
+  bool listen = true,
+}) {
   // Remove keys for element hashcode
   final items = [
-    ..._watchSubscribers.entries.where((e) => e.key.$1 == context.hashCode),
-    ..._listenSubscribers.entries.where((e) => e.key.$1 == context.hashCode),
+    if (watch)
+      ..._watchSubscribers.entries.where((e) => e.key.$1 == context.hashCode),
+    if (listen)
+      ..._listenSubscribers.entries.where((e) => e.key.$1 == context.hashCode),
   ];
   for (final item in items) {
     final (_, cleanup) = item.value;
     cleanup();
   }
-  _watchSubscribers.removeWhere((key, value) => key.$1 == context.hashCode);
-  _listenSubscribers.removeWhere((key, value) => key.$1 == context.hashCode);
+  if (watch) {
+    _watchSubscribers.removeWhere((key, value) => key.$1 == context.hashCode);
+  }
+  if (listen) {
+    _listenSubscribers.removeWhere((key, value) => key.$1 == context.hashCode);
+  }
 }
 
 /// Used to listen for updates on a signal but not rebuild the nearest element
