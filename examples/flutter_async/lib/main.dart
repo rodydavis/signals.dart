@@ -18,21 +18,21 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const Example(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class Example extends StatefulWidget {
+  const Example({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Example> createState() => _ExampleState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ExampleState extends State<Example> {
   final throwError = signal(false);
   final delay = signal(500);
   late final _futureSignal = futureSignal(() => _future());
