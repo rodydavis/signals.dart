@@ -1,3 +1,11 @@
+## 1.6.0
+
+- Refactor `AsyncSignal`
+- Adding back `FutureSignal` and `StreamSignal` as `AsyncSignal` subclasses
+- Adding `AsyncSignalState`sealed class for `AsyncSignal` state
+- Adding `reload` to `AsyncSignal`
+- Adding `refresh` to `AsyncSignal`
+
 ## 1.5.11
 
 - Adding `disableSignalsDevTools` to disable the dev tools extension in debug/profile mode
