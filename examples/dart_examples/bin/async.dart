@@ -17,20 +17,20 @@ void main() {
 
   /// First AsyncSignal emit the initial value then sync with
   /// idEmitter stream
-  final id = asyncSignalFromStream(idEmitter, initialValue: 0);
+  final id = streamSignal(idEmitter, initialValue: 0);
 
   /// Sync on user emitted value with a default emission of 'guest'
-  final user = fetch(id.value).toSignalWithDefault('guest');
+  final user = fetch(id.value.requireValue).toSignal(initialValue: 'guest');
 
   /// When user Future resolve
   final greeting = computed(() => 'Hello, ${user.value}');
 
   effect(() {
     /// Register to $id AsyncSignal
-    print('current id: $id');
+    print('current id: ${id.requireValue}');
 
     /// Configure new emission after Fetch resolve with id.value
-    user.resetFuture(() => fetch(id.value));
+    user.resetFuture(() => fetch(id.value.requireValue));
   });
 
   /// Computed Greeting emitted a new Salutation after user.value completed

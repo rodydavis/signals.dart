@@ -8,13 +8,13 @@ void main() {
     test('streamSignal', () async {
       final stream = _stream();
       final signal = streamSignal(() => stream);
-      expect(signal.peek() == null, true);
+      expect(signal.peek().isLoading, true);
 
-      final completer = Completer();
+      final completer = Completer<int>();
       effect(() {
         signal.value;
-        if (signal.isSuccess) {
-          completer.complete(signal.peek());
+        if (signal.value.hasValue) {
+          completer.complete(signal.peek().requireValue);
         }
       });
       final result = await completer.future;
@@ -25,13 +25,13 @@ void main() {
     test('extension on Stream', () async {
       final stream = _stream();
       final signal = stream.toSignal();
-      expect(signal.peek() == null, true);
+      expect(signal.peek().isLoading, true);
 
-      final completer = Completer();
+      final completer = Completer<int>();
       effect(() {
         signal.value;
-        if (signal.isSuccess) {
-          completer.complete(signal.peek());
+        if (signal.value.hasValue) {
+          completer.complete(signal.peek().requireValue);
         }
       });
       final result = await completer.future;

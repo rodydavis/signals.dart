@@ -6,7 +6,7 @@ main() {
 
   effect(() {
     // Receive a TimerSignalEvent
-    final tick = timer();
+    final tick = timer().requireValue;
     final dateTime = DateTime.fromMillisecondsSinceEpoch(tick.millis);
     print("$tick => ${dateTime.hour}:${dateTime.minute}:${dateTime.second}");
   });

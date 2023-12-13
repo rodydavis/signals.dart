@@ -12,13 +12,13 @@ void main() {
       }
 
       final signal = futureSignal(() => future());
-      expect(signal.peek() == null, true);
+      expect(signal.peek().isLoading, true);
 
       final completer = Completer<int>();
       effect(() {
         signal.value;
-        if (signal.isSuccess) {
-          completer.complete(signal.peek());
+        if (signal.value.hasValue) {
+          completer.complete(signal.peek().requireValue);
         }
       });
       final result = await completer.future;
@@ -33,13 +33,13 @@ void main() {
       }
 
       final signal = future().toSignal();
-      expect(signal.peek() == null, true);
+      expect(signal.peek().isLoading, true);
 
       final completer = Completer<int>();
       effect(() {
         signal.value;
-        if (signal.isSuccess) {
-          completer.complete(signal.peek());
+        if (signal.value.hasValue) {
+          completer.complete(signal.peek().requireValue);
         }
       });
       final result = await completer.future;
@@ -57,27 +57,84 @@ void main() {
       }
 
       final signal = futureSignal(() => future());
-      expect(signal.peek() == null, true);
+      expect(signal.peek().isLoading, true);
       expect(calls, 0);
 
-      var (val, err) = await signal.result;
+      await signal.future;
 
       expect(calls, 1);
-      expect(val, 10);
-      expect(err, null);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
 
-      (val, err) = await signal.result;
+      await signal.future;
 
       expect(calls, 1);
-      expect(val, 10);
-      expect(err, null);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+    });
 
-      await signal.reset();
-      (val, err) = await signal.result;
+    test('check reload calls', () async {
+      int calls = 0;
+
+      Future<int> future() async {
+        calls++;
+        await Future.delayed(const Duration(milliseconds: 5));
+        return 10;
+      }
+
+      final signal = futureSignal(() => future());
+      expect(signal.peek().isLoading, true);
+      expect(calls, 0);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+
+      await signal.reload();
 
       expect(calls, 2);
-      expect(val, 10);
-      expect(err, null);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+    });
+
+    test('check refresh calls', () async {
+      int calls = 0;
+
+      Future<int> future() async {
+        calls++;
+        await Future.delayed(const Duration(milliseconds: 5));
+        return 10;
+      }
+
+      final signal = futureSignal(() => future());
+      expect(signal.peek().isLoading, true);
+      expect(calls, 0);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+
+      await signal.refresh();
+
+      expect(calls, 2);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
     });
   });
 }

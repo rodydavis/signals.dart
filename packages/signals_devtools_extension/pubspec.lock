@@ -257,7 +257,7 @@ packages:
       path: "../signals"
       relative: true
     source: path
-    version: "1.5.10"
+    version: "1.5.11"
   sky_engine:
     dependency: transitive
     description: flutter

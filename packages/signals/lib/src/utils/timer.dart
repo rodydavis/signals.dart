@@ -4,31 +4,45 @@ import '../../signals.dart';
 typedef TimerSignalEvent = ({int iteration, int millis});
 
 /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
-class TimerSignal extends AsyncSignal<TimerSignalEvent> {
+class TimerSignal extends StreamSignal<TimerSignalEvent> {
   // Trigger an [TimerEvent] every duration
   final Duration every;
 
   TimerSignal({
     required this.every,
-    String debugLabel = 'Timer',
-    bool? cancelOnError,
-  }) : super.fromStream(
-          () => Stream<TimerSignalEvent>.periodic(every, (c) => _emit(c + 1)),
+    String super.debugLabel = 'Timer',
+    super.cancelOnError,
+  }) : super(
+          stream: Stream<TimerSignalEvent>.periodic(every, (c) => _emit(c + 1)),
           initialValue: _emit(0),
-          cancelOnError: cancelOnError,
-          debugLabel: debugLabel,
         );
 
-  static TimerSignalEvent _emit(int count) =>
-      (iteration: count, millis: DateTime.now().millisecondsSinceEpoch);
+  static TimerSignalEvent _emit(int count) => (
+        iteration: count,
+        millis: DateTime.now().millisecondsSinceEpoch,
+      );
 }
 
 /// Expose Duration as a [TimerSignal]
 extension TimerSignalDurationUtils on Duration {
-  TimerSignal toSignal({String debugLabel = 'Timer', bool? cancelOnError}) =>
-      TimerSignal(
-        every: this,
-        debugLabel: debugLabel,
-        cancelOnError: cancelOnError,
-      );
+  TimerSignal toSignal({String debugLabel = 'Timer', bool? cancelOnError}) {
+    return TimerSignal(
+      every: this,
+      debugLabel: debugLabel,
+      cancelOnError: cancelOnError,
+    );
+  }
+}
+
+/// Create a [TimerSignal]
+TimerSignal timerSignal(
+  Duration every, {
+  String debugLabel = 'Timer',
+  bool? cancelOnError,
+}) {
+  return TimerSignal(
+    every: every,
+    debugLabel: debugLabel,
+    cancelOnError: cancelOnError,
+  );
 }

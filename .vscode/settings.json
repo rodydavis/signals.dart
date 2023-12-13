@@ -4,6 +4,7 @@
         "computeds",
         "Fruchterman",
         "graphview",
+        "millis",
         "pathing",
         "preact",
         "Reingold",
