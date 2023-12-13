@@ -34,8 +34,13 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
 
   @override
   void initState() {
-    initNodes();
     super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    initNodes();
+    await refreshNodes();
   }
 
   @override

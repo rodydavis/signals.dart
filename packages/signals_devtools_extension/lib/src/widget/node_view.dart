@@ -14,7 +14,9 @@ class NodeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = nodes.watch(context);
-    final item = items.firstWhere((e) => e.id == nodeId);
+    final idx = items.indexWhere((e) => e.id == nodeId);
+    if (idx == -1) return const SizedBox.shrink();
+    final item = items[idx];
     return Tooltip(
       message: item.type,
       child: Chip(

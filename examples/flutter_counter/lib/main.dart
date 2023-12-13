@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      themeMode: themeMode.watch(context),
+      themeMode: themeMode.watch(context, debugLabel: 'Material app theme mode'),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -70,21 +70,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    counter.listen(context, () {
-      if (counter.value == 10) {
-        final messenger = ScaffoldMessenger.of(context);
-        messenger.hideCurrentSnackBar();
-        messenger.showSnackBar(
-          const SnackBar(content: Text('You hit 10 clicks!')),
-        );
-      }
-    });
+    counter.listen(
+      context,
+      () {
+        if (counter.value == 10) {
+          final messenger = ScaffoldMessenger.of(context);
+          messenger.hideCurrentSnackBar();
+          messenger.showSnackBar(
+            const SnackBar(content: Text('You hit 10 clicks!')),
+          );
+        }
+      },
+      debugLabel: 'Counter Listener',
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
           Builder(builder: (context) {
-            final dark = isDark.watch(context);
+            final dark = isDark.watch(context, debugLabel: 'Dark mode toggle');
             return IconButton(
               onPressed: () {
                 brightness.value = dark ? Brightness.light : Brightness.dark;
@@ -101,12 +105,15 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Watch((context) {
-              return Text(
-                '$counter',
-                style: Theme.of(context).textTheme.headlineMedium!,
-              );
-            }),
+            Watch(
+              (context) {
+                return Text(
+                  '$counter',
+                  style: Theme.of(context).textTheme.headlineMedium!,
+                );
+              },
+              debugLabel: 'Counter text',
+            ),
           ],
         ),
       ),
