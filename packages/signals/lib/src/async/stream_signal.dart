@@ -69,6 +69,10 @@ class StreamSignal<T> extends AsyncSignal<T> {
   /// Called when the stream is done
   void onDone() {}
 
+  void resetStream(Stream<T> Function() stream) {
+    addStream(stream());
+  }
+
   @override
   void dispose() {
     _subscription?.cancel();
