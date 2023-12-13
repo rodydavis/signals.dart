@@ -48,30 +48,30 @@ T watchSignal<T>(
   return signal.peek();
 }
 
-/// Remove all subscribers for a given signal
-void unwatchSignal<T>(
-  BuildContext context,
-  ReadonlySignal<T> signal, {
-  bool watch = true,
-  bool listen = true,
-}) {
+/// Remove all subscribers for a given signal for watchers
+void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
   // Remove keys for signal hashcode
   final items = [
-    if (watch)
-      ..._watchSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
-    if (listen)
-      ..._listenSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
+    ..._watchSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
   ];
   for (final item in items) {
     final (_, cleanup) = item.value;
     cleanup();
   }
-  if (watch) {
-    _watchSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
+  _watchSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
+}
+
+/// Remove all subscribers for a given signal for listeners
+void unlistenSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
+  // Remove keys for signal hashcode
+  final items = [
+    ..._listenSubscribers.entries.where((e) => e.key.$2 == signal.globalId),
+  ];
+  for (final item in items) {
+    final (_, cleanup) = item.value;
+    cleanup();
   }
-  if (listen) {
-    _listenSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
-  }
+  _listenSubscribers.removeWhere((key, value) => key.$2 == signal.globalId);
 }
 
 /// Remove all subscribers for a given context

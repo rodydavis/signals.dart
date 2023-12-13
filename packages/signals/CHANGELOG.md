@@ -6,8 +6,8 @@
 - Fixing watch/listen extension to dedupe signals by context
 - Performance improvements based on benchmark examples by context_watch
 - Adding `debugLabel` to effect
-- Adding `unwatch` signals extension to stop watching a signal for watch/listen
-- Adding `unwatchSignal` and `unwatchElement`
+- Adding `unwatch`, `unlisten` signals extension to stop watching a signal for watch/listen
+- Adding `unwatchSignal`, `unlistenSignal` and `unwatchElement`
 
 ## 1.5.10
 

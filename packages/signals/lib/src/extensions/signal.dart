@@ -52,13 +52,14 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
     );
   }
 
-  /// Stop listening to updates on a signal
-  void unwatch(
-    BuildContext context, {
-    bool watch = true,
-    bool listen = true,
-  }) {
-    unwatchSignal(context, this, watch: watch, listen: listen);
+  /// Stop subscriptions to updates on a signal for watchers
+  void unwatch(BuildContext context) {
+    unwatchSignal(context, this);
+  }
+
+  /// Stop subscriptions to updates on a signal for listeners
+  void unlisten(BuildContext context) {
+    unlistenSignal(context, this);
   }
 
   /// Convert a signal to [ValueListenable] to be used in builders
