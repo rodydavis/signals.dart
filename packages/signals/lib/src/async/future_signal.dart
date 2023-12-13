@@ -2,26 +2,28 @@ import 'async_signal.dart';
 import 'async_signal_state.dart';
 
 class FutureSignal<T> extends AsyncSignal<T> {
-  Future<T> Function() _future;
+  Future<T> Function()? _future;
   final bool fireImmediately;
   bool _fetching = false;
 
-  FutureSignal(
-    this._future, {
+  FutureSignal({
+    Future<T> Function()? future,
     this.fireImmediately = false,
     super.debugLabel,
     T? initialValue,
-  }) : super(initialValue != null
+  })  : _future = future,
+        super(initialValue != null
             ? AsyncSignalState.data(initialValue)
             : AsyncSignalState.loading()) {
     if (fireImmediately) init();
   }
 
   Future<void> _execute() async {
+    if (_future == null) return;
     if (_fetching) return;
     _fetching = true;
     try {
-      final result = await _future();
+      final result = await _future!();
       setValue(result);
     } catch (error, stackTrace) {
       setError(error, stackTrace);
@@ -71,7 +73,7 @@ FutureSignal<T> futureSignal<T>(
   bool fireImmediately = false,
 }) {
   return FutureSignal(
-    future,
+    future: future,
     initialValue: initialValue,
     debugLabel: debugLabel,
     fireImmediately: fireImmediately,
