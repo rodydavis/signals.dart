@@ -1,4 +1,4 @@
-# layered_architecture
+# clean_architecture
 
 A new Flutter project.
 
