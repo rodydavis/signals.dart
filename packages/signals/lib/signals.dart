@@ -19,15 +19,12 @@ export 'src/core/signals.dart'
         Computed,
         Signal,
         ValueSignal,
-        MutableSignal,
         ReadonlySignal;
 export 'src/utils/timer.dart'
     show timerSignal, TimerSignal, TimerSignalDurationUtils;
 export 'src/async/async_signal.dart' show AsyncSignal;
-export 'src/async/stream_signal.dart'
-    show streamSignal, asyncSignalFromStream, StreamSignal;
-export 'src/async/future_signal.dart'
-    show futureSignal, asyncSignalFromFuture, FutureSignal;
+export 'src/async/stream_signal.dart' show streamSignal, StreamSignal;
+export 'src/async/future_signal.dart' show futureSignal, FutureSignal;
 export 'src/value/iterable_signal.dart' show iterableSignal, IterableSignal;
 export 'src/value/list_signal.dart' show listSignal, ListSignal;
 export 'src/value/map_signal.dart' show mapSignal, MapSignal;

@@ -92,18 +92,3 @@ StreamSignal<T> streamSignal<T>(
     debugLabel: debugLabel,
   );
 }
-
-@Deprecated('Use [streamSignal] instead')
-StreamSignal<T> asyncSignalFromStream<T>(
-  Stream<T> Function() stream, {
-  T? initialValue,
-  bool? cancelOnError,
-  String? debugLabel,
-}) {
-  return streamSignal(
-    stream,
-    initialValue: initialValue,
-    cancelOnError: cancelOnError,
-    debugLabel: debugLabel,
-  );
-}

@@ -16,23 +16,8 @@ extension SignalFutureUtils<T> on Future<T> {
     bool fireImmediately = false,
     T? initialValue,
   }) {
-    return asyncSignalFromFuture(
+    return futureSignal(
       () => timeout != null ? this.timeout(timeout) : this,
-      debugLabel: debugLabel,
-      fireImmediately: fireImmediately,
-      initialValue: initialValue,
-    );
-  }
-
-  @Deprecated('Use [toSignal] instead')
-  FutureSignal<T> toSignalWithDefault(
-    T initialValue, {
-    String? debugLabel,
-    Duration? timeout,
-    bool fireImmediately = false,
-  }) {
-    return toSignal(
-      timeout: timeout,
       debugLabel: debugLabel,
       fireImmediately: fireImmediately,
       initialValue: initialValue,

@@ -20,21 +20,8 @@ extension SignalStreamUtils<T> on Stream<T> {
     String? debugLabel,
     T? initialValue,
   }) {
-    return asyncSignalFromStream<T>(
+    return streamSignal<T>(
       () => this,
-      cancelOnError: cancelOnError,
-      debugLabel: debugLabel,
-      initialValue: initialValue,
-    );
-  }
-
-  @Deprecated('Use [toSignal] instead')
-  StreamSignal<T> toSignalWithDefault(
-    T initialValue, {
-    String? debugLabel,
-    bool? cancelOnError,
-  }) {
-    return toSignal(
       cancelOnError: cancelOnError,
       debugLabel: debugLabel,
       initialValue: initialValue,

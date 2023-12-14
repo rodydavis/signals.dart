@@ -1,4 +1,4 @@
-## 1.6.0
+## 2.0.0
 
 - Refactor `AsyncSignal`
 - Adding back `FutureSignal` and `StreamSignal` as `AsyncSignal` subclasses

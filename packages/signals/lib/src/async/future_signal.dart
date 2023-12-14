@@ -75,18 +75,3 @@ FutureSignal<T> futureSignal<T>(
     fireImmediately: fireImmediately,
   );
 }
-
-@Deprecated('Use [futureSignal] instead')
-FutureSignal<T> asyncSignalFromFuture<T>(
-  Future<T> Function() future, {
-  T? initialValue,
-  String? debugLabel,
-  bool fireImmediately = false,
-}) {
-  return futureSignal(
-    future,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    fireImmediately: fireImmediately,
-  );
-}
