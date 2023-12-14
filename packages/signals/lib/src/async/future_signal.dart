@@ -32,6 +32,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
 
   /// Reload the future
   Future<void> reload() async {
+    setLoading(reload: true);
     _fetching = false;
     await _execute();
   }

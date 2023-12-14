@@ -1,3 +1,8 @@
+## 2.0.2
+
+- Exporting `AsyncSignalState` for `AsyncSignal` state
+- Fixing `FutureSignal` reloading state not triggering
+
 ## 2.0.1
 
 - Fixing issue with `StreamSignal` on `resetStream`

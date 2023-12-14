@@ -47,11 +47,33 @@ class AsyncSignal<T> extends ValueSignal<AsyncSignalState<T>> {
     _completer.complete(value);
   }
 
-  void setLoading({bool refresh = false}) {
+  void setLoading({
+    bool refresh = false,
+    bool reload = false,
+  }) {
     if (refresh) {
       value = switch (value) {
-        AsyncSignalStateData<T> data => data.toLoading(),
-        AsyncSignalStateError<T> err => err.toLoading(),
+        AsyncSignalStateData<T> data => AsyncSignalStateData<T>(
+            data.requireValue,
+            isLoading: true,
+          ),
+        AsyncSignalStateError<T> err => AsyncSignalStateError<T>(
+            err.error!,
+            err.stackTrace,
+            isLoading: true,
+          ),
+        AsyncSignalStateLoading<T>() => AsyncSignalStateLoading<T>(),
+      };
+    } else if (reload) {
+      value = switch (value) {
+        AsyncSignalStateData<T> data => AsyncSignalStateLoading<T>(
+            value: data.requireValue,
+            hasValue: true,
+          ),
+        AsyncSignalStateError<T> err => AsyncSignalStateLoading<T>(
+            error: (err.error!, err.stackTrace),
+            hasError: true,
+          ),
         AsyncSignalStateLoading<T>() => AsyncSignalStateLoading<T>(),
       };
     } else {

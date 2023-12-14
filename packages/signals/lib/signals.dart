@@ -22,6 +22,7 @@ export 'src/core/signals.dart'
         ReadonlySignal;
 export 'src/utils/timer.dart'
     show timerSignal, TimerSignal, TimerSignalDurationUtils;
+export 'src/async/async_signal_state.dart';
 export 'src/async/async_signal.dart' show AsyncSignal;
 export 'src/async/stream_signal.dart' show streamSignal, StreamSignal;
 export 'src/async/future_signal.dart' show futureSignal, FutureSignal;
