@@ -12,9 +12,8 @@ class FutureSignal<T> extends AsyncSignal<T> {
     super.debugLabel,
     T? initialValue,
   })  : _future = future,
-        super(initialValue != null
-            ? AsyncSignalState.data(initialValue)
-            : AsyncSignalState.loading()) {
+        super(
+            initialValue != null ? AsyncState.data(initialValue) : AsyncState.loading()) {
     if (fireImmediately) init();
   }
 
@@ -32,14 +31,37 @@ class FutureSignal<T> extends AsyncSignal<T> {
 
   /// Reload the future
   Future<void> reload() async {
-    setLoading(reload: true);
+    value = switch (value) {
+      AsyncData<T> data => AsyncLoading<T>(
+          value: data.requireValue,
+          hasValue: true,
+          isLoading: false,
+        ),
+      AsyncError<T> err => AsyncLoading<T>(
+          error: (err.error!, err.stackTrace),
+          hasError: true,
+          isLoading: false,
+        ),
+      AsyncLoading<T>() => AsyncLoading<T>(),
+    };
     _fetching = false;
     await _execute();
   }
 
   /// Refresh the future
   Future<void> refresh() async {
-    setLoading(refresh: true);
+    value = switch (value) {
+      AsyncData<T> data => AsyncData<T>(
+          data.requireValue,
+          isLoading: true,
+        ),
+      AsyncError<T> err => AsyncError<T>(
+          err.error!,
+          err.stackTrace,
+          isLoading: true,
+        ),
+      AsyncLoading<T>() => AsyncLoading<T>(),
+    };
     _fetching = false;
     await _execute();
   }

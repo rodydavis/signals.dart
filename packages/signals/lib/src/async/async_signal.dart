@@ -13,13 +13,13 @@ typedef AsyncSignalErrorBuilder<R> = R Function(Object? error);
 typedef AsyncSignalBuilder<R> = R Function();
 
 /// A compound [Signal] that wraps a [Stream] or [Future]
-class AsyncSignal<T> extends ValueSignal<AsyncSignalState<T>> {
+class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   AsyncSignal(
     super.value, {
     super.debugLabel,
   }) : _initialValue = value;
 
-  final AsyncSignalState<T> _initialValue;
+  final AsyncState<T> _initialValue;
   bool _initialized = false;
   Completer<T> _completer = Completer<T>();
 
@@ -36,49 +36,19 @@ class AsyncSignal<T> extends ValueSignal<AsyncSignalState<T>> {
   }
 
   void setError(Object error, [StackTrace? stackTrace]) {
-    value = AsyncSignalState.error(error, stackTrace);
+    value = AsyncState.error(error, stackTrace);
     if (_completer.isCompleted) _completer = Completer<T>();
     _completer.completeError(error, stackTrace);
   }
 
   void setValue(T value) {
-    this.value = AsyncSignalState.data(value);
+    this.value = AsyncState.data(value);
     if (_completer.isCompleted) _completer = Completer<T>();
     _completer.complete(value);
   }
 
-  void setLoading({
-    bool refresh = false,
-    bool reload = false,
-  }) {
-    if (refresh) {
-      value = switch (value) {
-        AsyncSignalStateData<T> data => AsyncSignalStateData<T>(
-            data.requireValue,
-            isLoading: true,
-          ),
-        AsyncSignalStateError<T> err => AsyncSignalStateError<T>(
-            err.error!,
-            err.stackTrace,
-            isLoading: true,
-          ),
-        AsyncSignalStateLoading<T>() => AsyncSignalStateLoading<T>(),
-      };
-    } else if (reload) {
-      value = switch (value) {
-        AsyncSignalStateData<T> data => AsyncSignalStateLoading<T>(
-            value: data.requireValue,
-            hasValue: true,
-          ),
-        AsyncSignalStateError<T> err => AsyncSignalStateLoading<T>(
-            error: (err.error!, err.stackTrace),
-            hasError: true,
-          ),
-        AsyncSignalStateLoading<T>() => AsyncSignalStateLoading<T>(),
-      };
-    } else {
-      value = AsyncSignalState.loading();
-    }
+  void setLoading([AsyncState<T>? state]) {
+    value = state ?? AsyncState.loading();
     _completer = Completer<T>();
   }
 
@@ -96,7 +66,7 @@ class AsyncSignal<T> extends ValueSignal<AsyncSignalState<T>> {
   void dispose() {}
 
   @override
-  AsyncSignalState<T> get value {
+  AsyncState<T> get value {
     init();
     return super.value;
   }

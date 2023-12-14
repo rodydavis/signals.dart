@@ -10,8 +10,8 @@ class StreamSignal<T> extends AsyncSignal<T> {
     this.cancelOnError,
     super.debugLabel,
   }) : super(initialValue != null
-            ? AsyncSignalState.data(initialValue)
-            : AsyncSignalState.loading()) {
+            ? AsyncState.data(initialValue)
+            : AsyncState.loading()) {
     if (stream != null) addStream(stream);
   }
 

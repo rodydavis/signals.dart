@@ -9,9 +9,11 @@
         "preact",
         "Reingold",
         "relayout",
+        "Todos",
         "unawaited",
         "unlisten",
         "unwatch",
+        "viewmodel",
         "vsync"
     ],
     "dart.flutterSdkPath": ".fvm/flutter_sdk",

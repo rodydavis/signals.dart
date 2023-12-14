@@ -1,3 +1,11 @@
+## 2.0.3
+
+- Rename `AsyncSignalState` to `AsyncState`
+- Rename `AsyncSignalStateLoading` to `AsyncLoading`
+- Rename `AsyncSignalStateError` to `AsyncError`
+- Rename `AsyncSignalStateLoaded` to `AsyncLoaded`
+- Deprecate `AsyncSignalState` (and subclasses) in favor of `AsyncState`
+
 ## 2.0.2
 
 - Exporting `AsyncSignalState` for `AsyncSignal` state

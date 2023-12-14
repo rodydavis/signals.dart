@@ -1,24 +1,24 @@
-/// Error builder for [AsyncSignalState]
-typedef AsyncSignalErrorBuilder<E> = E Function(
+/// Error builder for [AsyncState]
+typedef AsyncErrorBuilder<E> = E Function(
   Object error,
   StackTrace? stackTrace,
 );
 
-/// Value builder for [AsyncSignalState]
-typedef AsyncSignalValueBuilder<E, T> = E Function(
+/// Value builder for [AsyncState]
+typedef AsyncDataBuilder<E, T> = E Function(
   T value,
 );
 
-/// Generic builder for [AsyncSignalState]
-typedef AsyncSignalBuilder<E> = E Function();
+/// Generic builder for [AsyncState]
+typedef AsyncStateBuilder<E> = E Function();
 
 /// State for an [AsyncSignal]
-sealed class AsyncSignalState<T> {
+sealed class AsyncState<T> {
   final bool isLoading;
   final T? _value;
   final (Object, StackTrace?)? _error;
 
-  const AsyncSignalState({
+  const AsyncState({
     required this.isLoading,
     required T? value,
     required (Object, StackTrace?)? error,
@@ -26,18 +26,18 @@ sealed class AsyncSignalState<T> {
         _error = error;
 
   /// Create a state with a value
-  factory AsyncSignalState.data(T data) {
-    return AsyncSignalStateData<T>(data);
+  factory AsyncState.data(T data) {
+    return AsyncData<T>(data);
   }
 
   /// Create a state with an error
-  factory AsyncSignalState.error(Object error, StackTrace? stackTrace) {
-    return AsyncSignalStateError<T>(error, stackTrace);
+  factory AsyncState.error(Object error, StackTrace? stackTrace) {
+    return AsyncError<T>(error, stackTrace);
   }
 
   /// Create a state with a loading state
-  factory AsyncSignalState.loading() {
-    return AsyncSignalStateLoading<T>();
+  factory AsyncState.loading() {
+    return AsyncLoading<T>();
   }
 
   /// Returns true if the state has a value
@@ -49,14 +49,11 @@ sealed class AsyncSignalState<T> {
   /// Returns true if the state is refreshing with a loading flag,
   ///  has a value or error and is not the loading state
   bool get isRefreshing =>
-      isLoading &&
-      (hasValue || hasError) &&
-      this is! AsyncSignalStateLoading<T>;
+      isLoading && (hasValue || hasError) && this is! AsyncLoading<T>;
 
   /// Returns true if the state is reloading with having a value or error,
   /// and is the loading state
-  bool get isReloading =>
-      (hasValue || hasError) && this is AsyncSignalStateLoading<T>;
+  bool get isReloading => (hasValue || hasError) && this is AsyncLoading<T>;
 
   /// Force unwrap the value of the state.
   ///
@@ -83,16 +80,16 @@ sealed class AsyncSignalState<T> {
   /// );
   /// ```
   E map<E>({
-    required AsyncSignalValueBuilder<E, T> data,
-    required AsyncSignalErrorBuilder<E> error,
-    required AsyncSignalBuilder<E> loading,
-    AsyncSignalBuilder<E>? reloading,
-    AsyncSignalBuilder<E>? refreshing,
+    required AsyncDataBuilder<E, T> data,
+    required AsyncErrorBuilder<E> error,
+    required AsyncStateBuilder<E> loading,
+    AsyncStateBuilder<E>? reloading,
+    AsyncStateBuilder<E>? refreshing,
   }) {
     if (isRefreshing) if (refreshing != null) return refreshing();
     if (isReloading) if (reloading != null) return reloading();
     if (hasValue) return data(requireValue);
-    if (hasError) return error(this.error!, this.stackTrace);
+    if (hasError) return error(this.error!, stackTrace);
     return loading();
   }
 
@@ -106,26 +103,23 @@ sealed class AsyncSignalState<T> {
   /// );
   /// ```
   E maybeMap<E>({
-    AsyncSignalValueBuilder<E, T>? data,
-    AsyncSignalErrorBuilder<E>? error,
-    AsyncSignalBuilder<E>? loading,
-    AsyncSignalBuilder<E>? reloading,
-    AsyncSignalBuilder<E>? refreshing,
-    required AsyncSignalBuilder<E> orElse,
+    AsyncDataBuilder<E, T>? data,
+    AsyncErrorBuilder<E>? error,
+    AsyncStateBuilder<E>? loading,
+    AsyncStateBuilder<E>? reloading,
+    AsyncStateBuilder<E>? refreshing,
+    required AsyncStateBuilder<E> orElse,
   }) {
-    if (isRefreshing) return refreshing != null ? refreshing() : orElse();
-    if (isReloading) return reloading != null ? reloading() : orElse();
-    if (hasValue) return data != null ? data(requireValue) : orElse();
-    if (hasError) {
-      if (error != null) return error(this.error!, this.stackTrace);
-      return orElse();
-    }
-    if (isLoading) return loading != null ? loading() : orElse();
+    if (isRefreshing) if (refreshing != null) return refreshing();
+    if (isReloading) if (reloading != null) return reloading();
+    if (hasValue) if (data != null) return data(requireValue);
+    if (hasError) if (error != null) return error(this.error!, stackTrace);
+    if (loading != null) return loading();
     return orElse();
   }
 
   @override
-  bool operator ==(covariant AsyncSignalState<T> other) {
+  bool operator ==(covariant AsyncState<T> other) {
     if (identical(this, other)) return true;
     return other.hasError == hasError &&
         other.hasValue == hasValue &&
@@ -148,9 +142,9 @@ sealed class AsyncSignalState<T> {
   }
 }
 
-/// State for an [AsyncSignal] with a value
-class AsyncSignalStateData<T> extends AsyncSignalState<T> {
-  AsyncSignalStateData(
+/// State for an [AsyncState] with a value
+class AsyncData<T> extends AsyncState<T> {
+  AsyncData(
     T data, {
     super.isLoading = false,
     super.error,
@@ -163,9 +157,9 @@ class AsyncSignalStateData<T> extends AsyncSignalState<T> {
   bool get hasError => false;
 }
 
-/// State for an [AsyncSignal] with an error
-class AsyncSignalStateError<T> extends AsyncSignalState<T> {
-  AsyncSignalStateError(
+/// State for an [AsyncState] with an error
+class AsyncError<T> extends AsyncState<T> {
+  AsyncError(
     Object error,
     StackTrace? stackTrace, {
     super.isLoading = false,
@@ -179,9 +173,9 @@ class AsyncSignalStateError<T> extends AsyncSignalState<T> {
   bool get hasError => true;
 }
 
-/// State for an [AsyncSignal] with a loading state
-class AsyncSignalStateLoading<T> extends AsyncSignalState<T> {
-  AsyncSignalStateLoading({
+/// State for an [AsyncState] with a loading state
+class AsyncLoading<T> extends AsyncState<T> {
+  AsyncLoading({
     super.value,
     super.error,
     super.isLoading = true,
@@ -195,3 +189,15 @@ class AsyncSignalStateLoading<T> extends AsyncSignalState<T> {
   @override
   final bool hasError;
 }
+
+@Deprecated('Use [AsyncState] instead')
+typedef AsyncSignalState<T> = AsyncState<T>;
+
+@Deprecated('Use [AsyncLoading] instead')
+typedef AsyncSignalStateLoading<T> = AsyncLoading<T>;
+
+@Deprecated('Use [AsyncData] instead')
+typedef AsyncSignalStateData<T> = AsyncData<T>;
+
+@Deprecated('Use [AsyncError] instead')
+typedef AsyncSignalStateError<T> = AsyncError<T>;

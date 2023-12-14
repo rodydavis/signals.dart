@@ -68,11 +68,11 @@ class _ExampleState extends State<Example> {
               }),
               Watch((context) {
                 return ListTile(
-                  title: const Text('Result'),
+                  title: const Text('Result (map)'),
                   subtitle: _futureSignal.value.map(
                     data: (value) {
                       return Text(
-                        value.toString(),
+                        'value:$value',
                         style: Theme.of(context).textTheme.headlineMedium!,
                       );
                     },
@@ -83,7 +83,10 @@ class _ExampleState extends State<Example> {
                       );
                     },
                     loading: () {
-                      return const Center(child: CircularProgressIndicator());
+                      return Text(
+                        'loading',
+                        style: Theme.of(context).textTheme.headlineMedium!,
+                      );
                     },
                     reloading: () {
                       return Text(
@@ -99,6 +102,24 @@ class _ExampleState extends State<Example> {
                     },
                   ),
                 );
+              }),
+              Watch((context) {
+                return ListTile(
+                    title: const Text('Result (switch)'),
+                    subtitle: switch (_futureSignal.value) {
+                      AsyncData data => Text(
+                          'value:${data.requireValue}',
+                          style: Theme.of(context).textTheme.headlineMedium!,
+                        ),
+                      AsyncError error => Text(
+                          'error:${error.error}',
+                          style: Theme.of(context).textTheme.headlineMedium!,
+                        ),
+                      AsyncLoading() => Text(
+                          'loading...',
+                          style: Theme.of(context).textTheme.headlineMedium!,
+                        ),
+                    });
               }),
               Row(
                 children: [
