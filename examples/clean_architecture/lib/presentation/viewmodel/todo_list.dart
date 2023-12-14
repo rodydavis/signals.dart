@@ -1,10 +1,10 @@
+import 'package:signals/signals.dart';
+
 import '../../domain/model/todo.dart';
 import '../../domain/usecase/add_todo.dart';
 import '../../domain/usecase/delete_completed_todos.dart';
 import '../../domain/usecase/delete_todo.dart';
 import '../../domain/usecase/get_todos.dart';
-import 'package:signals/signals.dart';
-
 import '../../domain/usecase/update_todo.dart';
 
 class TodoListViewModel {
