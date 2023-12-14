@@ -1,5 +1,5 @@
 import 'async_signal.dart';
-import 'async_signal_state.dart';
+import 'async_state.dart';
 
 class FutureSignal<T> extends AsyncSignal<T> {
   Future<T> Function()? _future;

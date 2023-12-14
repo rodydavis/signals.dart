@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'async_signal.dart';
-import 'async_signal_state.dart';
+import 'async_state.dart';
 
 class StreamSignal<T> extends AsyncSignal<T> {
   StreamSignal({
