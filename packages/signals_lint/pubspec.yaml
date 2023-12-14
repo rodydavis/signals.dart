@@ -1,6 +1,6 @@
 name: signals_lint
 description: linter and developer tool for signals
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/rodyavis/signals
 documentation: https://rodydavis.github.io/signals.dart/
 topics:
@@ -22,4 +22,4 @@ dependencies:
 dev_dependencies:
   lints: ^3.0.0
   test: ^1.24.9
-  signals: ^1.4.1
+  signals: ^2.0.0
