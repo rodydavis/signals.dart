@@ -1,5 +1,5 @@
-import '../../data/repository/todos_impl.dart';
 import '../model/todo.dart';
+import '../repository/todos.dart';
 
 class AddTodo {
   final TodosRepository _todosRepository;

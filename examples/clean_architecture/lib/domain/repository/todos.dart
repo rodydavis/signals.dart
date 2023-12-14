@@ -1,6 +1,6 @@
 import '../model/todo.dart';
 
-abstract class ITodosRepository {
+abstract class TodosRepository {
   Future<List<Todo>> getAll();
   Stream<List<Todo>> watchAll();
   Future<Todo?> get(int id);

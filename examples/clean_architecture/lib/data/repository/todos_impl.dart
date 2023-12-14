@@ -3,10 +3,10 @@ import 'package:clean_architecture/domain/model/todo.dart';
 import '../../domain/repository/todos.dart';
 import '../source/database/database.dart';
 
-class TodosRepository extends ITodosRepository {
+class TodosRepositoryImpl implements TodosRepository {
   final Database database;
 
-  TodosRepository(this.database) {
+  TodosRepositoryImpl(this.database) {
     database.addMigration(1, '''
       CREATE TABLE todos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dir = await getApplicationDocumentsDirectory();
   final db = Database('${dir.path}/todos.db');
-  final todosRepository = TodosRepository(db);
+  final todosRepository = TodosRepositoryImpl(db);
   await db.init();
   runApp(TodosApp(todosRepository: todosRepository));
 }

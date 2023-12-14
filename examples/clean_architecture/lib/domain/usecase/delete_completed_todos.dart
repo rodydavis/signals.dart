@@ -1,4 +1,4 @@
-import '../../data/repository/todos_impl.dart';
+import '../repository/todos.dart';
 
 class DeleteCompletedTodos {
   final TodosRepository _todosRepository;

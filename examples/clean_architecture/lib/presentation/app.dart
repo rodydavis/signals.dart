@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/repository/todos_impl.dart';
+import '../domain/repository/todos.dart';
 import '../domain/usecase/add_todo.dart';
 import '../domain/usecase/delete_completed_todos.dart';
 import '../domain/usecase/delete_todo.dart';
