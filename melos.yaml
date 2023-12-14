@@ -4,3 +4,7 @@ sdkPath: .fvm/flutter_sdk
 packages:
   - examples/*
   - packages/*
+
+scripts:
+  analyze:
+    exec: dart analyze .

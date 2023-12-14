@@ -219,20 +219,18 @@ packages:
     source: path
     version: "2.1.0"
   signals_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_core
-      sha256: "7fe87dbd786a6d0e25a24263cefe9ab7316d26364030fdb9985ced03fb7e8753"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/signals_core"
+      relative: true
+    source: path
     version: "1.0.1"
   signals_flutter:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_flutter
-      sha256: "396f0b3213abbd3c26cbc537a72c5d20b19d775e12cd3404702569198567af06"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/signals_flutter"
+      relative: true
+    source: path
     version: "1.0.0"
   sky_engine:
     dependency: transitive

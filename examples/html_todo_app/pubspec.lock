@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "36a321c3d2cbe01cbcb3540a87b8843846e0206df3e691fa7b23e19e78de6d49"
+      sha256: eb376e9acf6938204f90eb3b1f00b578640d3188b4c8a8ec054f9f479af8d051
       url: "https://pub.dev"
     source: hosted
-    version: "65.0.0"
+    version: "64.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: dfe03b90ec022450e22513b5e5ca1f01c0c01de9c3fba2f7fd233cb57a6b9a07
+      sha256: "69f54f967773f6c26c7dcb13e93d7ccee8b17a641689da39e878d5cf13b06893"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.2.0"
   archive:
     dependency: transitive
     description:
@@ -414,20 +414,18 @@ packages:
     source: path
     version: "2.1.0"
   signals_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_core
-      sha256: "7fe87dbd786a6d0e25a24263cefe9ab7316d26364030fdb9985ced03fb7e8753"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/signals_core"
+      relative: true
+    source: path
     version: "1.0.1"
   signals_flutter:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_flutter
-      sha256: "396f0b3213abbd3c26cbc537a72c5d20b19d775e12cd3404702569198567af06"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/signals_flutter"
+      relative: true
+    source: path
     version: "1.0.0"
   sky_engine:
     dependency: transitive
@@ -556,4 +554,3 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.2.0-194.0.dev <3.4.0"
-  flutter: ">=1.17.0"

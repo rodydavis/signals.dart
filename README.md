@@ -1,5 +1,6 @@
 [![Tests](https://github.com/rodydavis/signals.dart/actions/workflows/tests.yml/badge.svg)](https://github.com/rodydavis/signals.dart/actions/workflows/tests.yml)
 [![Website](https://github.com/rodydavis/signals.dart/actions/workflows/website.yml/badge.svg)](https://github.com/rodydavis/signals.dart/actions/workflows/website.yml)
+[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
 
 # Signals.dart
 
