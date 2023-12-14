@@ -29,7 +29,7 @@ class TodoListViewModel {
         _deleteCompletedTodos = deleteCompletedTodos;
 
   void init() {
-    _connectTodos.from(_getTodos());
+    _connectTodos << _getTodos();
   }
 
   void deleteTodo(Todo todo) {
