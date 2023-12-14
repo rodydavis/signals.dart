@@ -11,6 +11,7 @@ part 'computed.dart';
 part 'signal.dart';
 part 'batch.dart';
 part 'untracked.dart';
+part 'value.dart';
 
 const _maxCallDepth = 100;
 
