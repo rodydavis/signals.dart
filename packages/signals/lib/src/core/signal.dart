@@ -100,10 +100,6 @@ abstract class Signal<T> implements ReadonlySignal<T> {
   void set(T value);
 }
 
-/// Signal that can read and write a value
-@Deprecated('Use `Signal` instead')
-typedef MutableSignal<T> = Signal<T>;
-
 /// Signal that can be extended and used as a class
 class ValueSignal<T> extends _Signal<T> {
   ValueSignal(super.value, {super.debugLabel});

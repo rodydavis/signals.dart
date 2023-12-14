@@ -1,5 +1,4 @@
-import '../value/async_signal.dart';
-import '../value/stream_signal.dart';
+import 'package:signals/src/async/stream_signal.dart';
 
 /// Extension on stream to provide helpful methods for signals
 extension SignalStreamUtils<T> on Stream<T> {
@@ -16,43 +15,16 @@ extension SignalStreamUtils<T> on Stream<T> {
   /// final stream = createStream();
   /// final signal = stream.toSignal();
   /// ```
-  @Deprecated('Use [toSignalWithDefault] instead')
   StreamSignal<T> toSignal({
     bool? cancelOnError,
     String? debugLabel,
-    bool fireImmediately = false,
-  }) {
-    return StreamSignal<T>(
-      () => this,
-      cancelOnError: cancelOnError,
-      debugLabel: debugLabel,
-      fireImmediately: fireImmediately,
-    );
-  }
-
-  AsyncSignal<T> toSignalWithDefault(
-    T initialValue, {
-    String? debugLabel,
-    bool? cancelOnError,
-  }) {
-    return AsyncSignal.fromStream(
-      () => this,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-      cancelOnError: cancelOnError,
-    );
-  }
-
-  AsyncSignal<T?> toAsyncSignal({
-    String? debugLabel,
     T? initialValue,
-    bool? cancelOnError,
   }) {
-    return AsyncSignal.fromStream(
+    return streamSignal<T>(
       () => this,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
       cancelOnError: cancelOnError,
+      debugLabel: debugLabel,
+      initialValue: initialValue,
     );
   }
 }
