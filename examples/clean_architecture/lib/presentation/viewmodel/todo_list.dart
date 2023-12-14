@@ -13,10 +13,8 @@ class TodoListViewModel {
   final UpdateTodo _updateTodo;
   final DeleteTodo _deleteTodo;
   final DeleteCompletedTodos _deleteCompletedTodos;
-  final _todos = listSignal<Todo>([]);
-  late final _connectTodos = connect<List<Todo>>(_todos);
-
-  ListSignal<Todo> get todos => _todos;
+  final todos = listSignal<Todo>([]);
+  late final _connectTodos = connect<List<Todo>>(todos);
 
   TodoListViewModel({
     required GetTodos getTodos,
