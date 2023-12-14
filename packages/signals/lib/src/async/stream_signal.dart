@@ -9,72 +9,66 @@ class StreamSignal<T> extends AsyncSignal<T> {
     T? initialValue,
     this.cancelOnError,
     super.debugLabel,
-    bool sync = false,
-    void Function()? onListen,
-    FutureOr<void> Function()? onCancel,
-  })  : _controller = StreamController<T>.broadcast(
-          sync: sync,
-          onListen: onListen,
-          onCancel: onCancel,
-        ),
-        super(initialValue != null
+  }) : super(initialValue != null
             ? AsyncSignalState.data(initialValue)
             : AsyncSignalState.loading()) {
-    _subscription = _controller.stream.listen(
-      setValue,
-      onError: setError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
     if (stream != null) addStream(stream);
   }
 
-  late final StreamController<T> _controller;
-  StreamSubscription<T>? _subscription;
+  final _subscriptions = <(StreamSubscription<T>, void Function()?)>[];
   bool? cancelOnError;
-
-  Future<void> addStream(
-    Stream<T> stream, {
-    bool? cancelOnError,
-  }) {
-    return _controller.addStream(
-      stream,
-      cancelOnError: cancelOnError ?? this.cancelOnError,
-    );
-  }
-
-  void addError(Object error, [StackTrace? stackTrace]) {
-    _controller.addError(error, stackTrace);
-  }
-
-  /// Add a value to the stream
-  void add(T value) {
-    _controller.add(value);
-  }
 
   @override
   void reset() {
-    super.reset();
-    _subscription?.cancel();
-    _subscription = _controller.stream.listen(
-      setValue,
-      onError: setError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
+    for (final (sub, cb) in _subscriptions) {
+      sub.cancel();
+      cb?.call();
+    }
+    _subscriptions.clear();
   }
 
-  /// Called when the stream is done
-  void onDone() {}
+  /// Add a stream to listen to for updating the signal.
+  ///
+  /// This will not cancel any previous streams and will continue to listen to
+  /// all streams until the signal is disposed.
+  void addStream(
+    Stream<T> stream, {
+    bool? cancelOnError,
+    void Function()? onDone,
+  }) {
+    final subscription = stream.listen(
+      setValue,
+      onError: setError,
+      cancelOnError: cancelOnError,
+      onDone: onDone,
+    );
+    _subscriptions.add((subscription, onDone));
+  }
 
-  void resetStream(Stream<T> Function() stream) {
+  /// Reset the signal and add a new stream to listen to for
+  /// updating the signal.
+  ///
+  /// This will cancel any previous streams and will continue to listen to
+  /// the new stream until the signal is disposed.
+  void resetStream(
+    Stream<T> stream, {
+    bool? cancelOnError,
+    void Function()? onDone,
+  }) {
     reset();
-    addStream(stream());
+    addStream(
+      stream,
+      cancelOnError: cancelOnError,
+      onDone: onDone,
+    );
   }
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    for (final (sub, cb) in _subscriptions) {
+      sub.cancel();
+      cb?.call();
+    }
     super.dispose();
   }
 }

@@ -13,3 +13,11 @@ class ValueSignal<T> extends _Signal<T> {
     _updateValue(val);
   }
 }
+
+/// Create a `value` signal
+ValueSignal<T> valueSignal<T>(T value, {String? debugLabel}) {
+  return ValueSignal<T>(
+    value,
+    debugLabel: debugLabel,
+  );
+}

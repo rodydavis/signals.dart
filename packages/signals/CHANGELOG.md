@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Fixing issue with `StreamSignal` on `resetStream`
+
 ## 2.0.0
 
 - Refactor `AsyncSignal`
