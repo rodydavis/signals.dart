@@ -1,6 +1,5 @@
 part of 'signals.dart';
 
-
 void _cleanupEffect(_Effect effect) {
   final cleanup = effect._cleanup;
   effect._cleanup = null;

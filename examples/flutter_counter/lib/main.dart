@@ -46,7 +46,8 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      themeMode: themeMode.watch(context, debugLabel: 'Material app theme mode'),
+      themeMode:
+          themeMode.watch(context, debugLabel: 'Material app theme mode'),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
