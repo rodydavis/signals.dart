@@ -12,8 +12,9 @@ class FutureSignal<T> extends AsyncSignal<T> {
     super.debugLabel,
     T? initialValue,
   })  : _future = future,
-        super(
-            initialValue != null ? AsyncState.data(initialValue) : AsyncState.loading()) {
+        super(initialValue != null
+            ? AsyncState.data(initialValue)
+            : AsyncState.loading()) {
     if (fireImmediately) init();
   }
 
@@ -33,7 +34,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
   Future<void> reload() async {
     value = switch (value) {
       AsyncData<T> data => AsyncLoading<T>(
-          value: data.requireValue,
+          value: data.value as T,
           hasValue: true,
           isLoading: false,
         ),
@@ -52,7 +53,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
   Future<void> refresh() async {
     value = switch (value) {
       AsyncData<T> data => AsyncData<T>(
-          data.requireValue,
+          data.value as T,
           isLoading: true,
         ),
       AsyncError<T> err => AsyncError<T>(

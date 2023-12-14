@@ -17,7 +17,7 @@ void _endBatch() {
     _Effect? effect = _batchedEffect;
     _batchedEffect = null;
 
-    _++;
+    _callDepth++;
 
     while (effect != null) {
       final _Effect? next = effect._nextBatchedEffect;
@@ -37,7 +37,7 @@ void _endBatch() {
       effect = next;
     }
   }
-  _ = 0;
+  _callDepth = 0;
   _batchDepth--;
 
   if (hasError) {

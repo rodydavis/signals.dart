@@ -1,3 +1,8 @@
+## 2.0.4
+
+- Fixing `AsyncState` on void signals
+- Fixing `FutureSignal` with void Future
+
 ## 2.0.3
 
 - Rename `AsyncSignalState` to `AsyncState`

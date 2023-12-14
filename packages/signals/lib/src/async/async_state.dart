@@ -58,7 +58,7 @@ sealed class AsyncState<T> {
   /// Force unwrap the value of the state.
   ///
   /// This will throw an error if the state does not have a value.
-  T get requireValue => _value!;
+  T get requireValue => _value as T;
 
   /// Returns the value of the state.
   T? get value => _value;
@@ -88,7 +88,7 @@ sealed class AsyncState<T> {
   }) {
     if (isRefreshing) if (refreshing != null) return refreshing();
     if (isReloading) if (reloading != null) return reloading();
-    if (hasValue) return data(requireValue);
+    if (hasValue) return data(value as T);
     if (hasError) return error(this.error!, stackTrace);
     return loading();
   }
@@ -112,7 +112,7 @@ sealed class AsyncState<T> {
   }) {
     if (isRefreshing) if (refreshing != null) return refreshing();
     if (isReloading) if (reloading != null) return reloading();
-    if (hasValue) if (data != null) return data(requireValue);
+    if (hasValue) if (data != null) return data(value as T);
     if (hasError) if (error != null) return error(this.error!, stackTrace);
     if (loading != null) return loading();
     return orElse();

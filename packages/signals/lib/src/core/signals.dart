@@ -91,7 +91,7 @@ _Listenable? _evalContext;
 // Effects collected into a batch.
 _Effect? _batchedEffect;
 int _batchDepth = 0;
-int _ = 0;
+int _callDepth = 0;
 
 // A global version number for signals, used for fast-pathing repeated
 // computed.peek()/computed.value calls when nothing has changed globally.

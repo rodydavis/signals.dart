@@ -100,7 +100,6 @@ abstract class Signal<T> implements ReadonlySignal<T> {
   void set(T value);
 }
 
-
 class _Signal<T> implements Signal<T> {
   @override
   final int globalId;
@@ -255,7 +254,7 @@ class _Signal<T> implements Signal<T> {
   }
 
   void _updateValue(T val) {
-    if (_ > _maxCallDepth) {
+    if (_callDepth > _maxCallDepth) {
       _cycleDetected();
     }
 
