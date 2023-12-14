@@ -8,3 +8,15 @@ packages:
 scripts:
   analyze:
     exec: dart analyze .
+  flutter:test:
+    exec: flutter test
+    packageFilters:
+      flutter: true
+      scope: "*signals_flutter*"
+  dart:test:
+    exec: dart test
+    packageFilters:
+      flutter: false
+      scope: "*signals_core*"
+  test:
+    exec: melos run dart:test --no-select && melos run flutter:test --no-select
