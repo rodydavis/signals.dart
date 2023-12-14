@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:signals_core/signals_core.dart';
 
-import '../core/signals.dart';
 import 'extension.dart';
 
 /// [Watch] is a drop-in replacement for [Builder] that will rebuild

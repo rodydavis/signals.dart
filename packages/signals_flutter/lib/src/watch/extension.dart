@@ -1,6 +1,6 @@
 // Local set of subscribes that will hold the element to rebuild
 import 'package:flutter/widgets.dart';
-import 'package:signals/signals.dart';
+import 'package:signals_core/signals_core.dart';
 
 import 'widget.dart';
 

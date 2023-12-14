@@ -7,11 +7,13 @@ Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-sig
 
 Documentation Site: https://rodydavis.github.io/signals.dart/
 
-| Package                                                             | Pub                                                                                      |
-| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| [`signals`](packages/signals)                                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals) |
-| [`signals_lint`](packages/signals_lint)                                       | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint) |
-| [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                          |
+| Package                                                             | Pub                                                                                                              |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| [`signals`](packages/signals)                                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                         |
+| [`signals_core`](packages/signals_core)                             | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
+| [`signals_flutter`](packages/signals_flutter)                       | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |
+| [`signals_lint`](packages/signals_lint)                             | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint)          |
+| [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                                                  |
 
 ## Guide / API
 

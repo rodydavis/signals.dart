@@ -1,3 +1,11 @@
+## 2.1.0
+
+- Moving core api from `signals` package to `signals_core` package
+- Moving Flutter extensions from `signals` package to `signals_flutter` package
+- Reexporting `signals` package to `signals_core` and `signals_flutter` packages
+- Depending on `signals_core` package **1.0.1**
+- Depending on `signals_flutter` package **1.0.0**
+
 ## 2.0.4
 
 - Fixing `AsyncState` on void signals

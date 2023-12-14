@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:signals/signals.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:signals_core/signals_core.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Future', () {

@@ -1,4 +1,4 @@
-import '../../signals.dart';
+import '../async/stream_signal.dart';
 
 /// Time event to react to
 typedef TimerSignalEvent = ({int iteration, int millis});

@@ -12,5 +12,5 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
 
-      - run: cd packages/signals && flutter pub get
-      - run: cd packages/signals && flutter test
+      - run: cd packages/signals_core && dart pub get
+      - run: cd packages/signals_core && dart test

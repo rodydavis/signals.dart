@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:signals_core/signals_core.dart';
 
-import '../core/signals.dart';
 import '../watch/extension.dart';
 
 /// Signal extensions
-extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
+extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Rebuild the [Element] that the current signal is inside of
   T watch(
     BuildContext context, {
@@ -71,23 +69,10 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
     });
     return notifier;
   }
-
-  /// Convert a signal to a [Stream] to be consumed as
-  /// a read only stream and also be used in a [StreamBuilder]
-  Stream<T> toStream() {
-    // ignore: close_sinks
-    final controller = StreamController<T>();
-    controller.add(value);
-    subscribe((_) => controller.add(value));
-    return controller.stream;
-  }
 }
 
 /// Mutable signal utils
-extension SignalUtils<T> on Signal<T> {
-  /// Restrict API to readonly signal
-  ReadonlySignal<T> toReadonlySignal() => this;
-
+extension FlutterSignalUtils<T> on Signal<T> {
   /// Convert a [ValueListenable] to [Signal] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
   /// and allow for mutation

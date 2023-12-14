@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:signals/signals.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:signals/src/core/signals.dart';
+import 'package:signals_core/signals_core.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('init', () {

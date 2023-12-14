@@ -1,0 +1,29 @@
+name: signals_flutter
+description: Flutter extensions for signals_core
+version: 1.0.0
+repository: https://github.com/rodydavis/signals.dart
+homepage: https://rodydavis.github.io/signals.dart
+documentation: https://rodydavis.github.io/signals.dart
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  signals_core: ^1.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+
+topics:
+  - signal
+  - reactive
+  - state
+  - signals
+  - rx
