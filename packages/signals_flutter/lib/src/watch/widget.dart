@@ -21,34 +21,22 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   EffectCleanup? fn;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => init());
-  }
-
-  @override
   void reassemble() {
     super.reassemble();
     clearSubscribers();
     reloadSignalsDevTools();
-    init();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    rebuild();
+    if (child != null) rebuild();
   }
 
   @override
   void dispose() {
     fn?.call();
     super.dispose();
-  }
-
-  void init() {
-    fn?.call();
-    fn = effect(rebuild, debugLabel: widget.debugLabel);
   }
 
   void rebuild() {
@@ -61,7 +49,16 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
 
   @override
   Widget build(BuildContext context) {
-    child ??= widget.builder(context);
+    fn ??= effect(
+      () {
+        if (child == null) {
+          child = widget.builder(context);
+        } else {
+          rebuild();
+        }
+      },
+      debugLabel: widget.debugLabel,
+    );
     return child!;
   }
 }

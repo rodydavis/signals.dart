@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Updating `signals_flutter` package to **1.0.1**
+
 ## 2.1.0
 
 - Moving core api from `signals` package to `signals_core` package
