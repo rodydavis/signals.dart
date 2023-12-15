@@ -3,7 +3,7 @@ description: "Reactivity made simple. Do more by doing less. Supports Flutter an
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://rodydavis.github.io/signals.dart
 documentation: https://rodydavis.github.io/signals.dart
-version: 2.1.2
+version: 2.1.3
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   signals_core: ^1.0.1
-  signals_flutter: ^1.0.2
+  signals_flutter: ^1.0.3
 
 dev_dependencies:
   flutter_test:

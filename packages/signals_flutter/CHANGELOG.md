@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Fixing memory leak for `watch`/`listen`
+
 ## 1.0.2
 
 - Fixing memory leak for `watch`/`listen`

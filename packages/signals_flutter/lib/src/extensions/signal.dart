@@ -55,11 +55,6 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
     unwatchSignal(context, this);
   }
 
-  /// Stop subscriptions to updates on a signal for listeners
-  void unlisten(BuildContext context) {
-    unlistenSignal(context, this);
-  }
-
   /// Convert a signal to [ValueListenable] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
   ValueListenable<T> toValueListenable() {

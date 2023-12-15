@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:signals_core/signals_core.dart';
 
-import 'extension.dart';
-
 /// [Watch] is a drop-in replacement for [Builder] that will rebuild
 /// when any signals inside the builder change
 class Watch<T extends Widget> extends StatefulWidget {
@@ -23,7 +21,6 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   @override
   void reassemble() {
     super.reassemble();
-    clearSubscribers();
     reloadSignalsDevTools();
   }
 
@@ -45,6 +42,12 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
     if (result == child) return;
     child = result;
     (context as Element).markNeedsBuild();
+  }
+
+  @override
+  void didUpdateWidget(covariant Watch<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget != widget) rebuild();
   }
 
   @override
