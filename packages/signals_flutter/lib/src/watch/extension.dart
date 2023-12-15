@@ -32,8 +32,8 @@ void clearSubscribers() {
   _clearing = false;
 }
 
-void _rebuild(Element element) {
-  element.markNeedsBuild();
+void _rebuild(WeakReference<Element> element) {
+  element.target?.markNeedsBuild();
 }
 
 /// Watch a signal value and rebuild the context of the [Element]
@@ -76,7 +76,7 @@ void unlistenSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
 
 /// Remove all subscribers for a given context
 void unwatchElement(
-  BuildContext context, {
+  WeakReference<Element> context, {
   bool watch = true,
   bool listen = true,
 }) {
@@ -135,7 +135,7 @@ void _watch<T>(
   BuildContext context,
   ReadonlySignal<T> signal,
   bool listen,
-  void Function(Element element) onUpdate,
+  void Function(WeakReference<Element> element) onUpdate,
   String? debugLabel,
 ) {
   if (context is Element && (context is! Watch || listen)) {
@@ -152,24 +152,23 @@ void _watch<T>(
     if (!subscribers.containsKey(key)) {
       // Save the element as a weak reference to allow for garbage collection
       // Subscribe to signal once
-      final el = WeakReference(context);
       final cleanup = effect(() {
         signal.value;
         // Grab the element from the subscriber map
-        final (element, _) = subscribers[key] ?? (el, null);
+        final (element, _) = subscribers[key] ?? (WeakReference(context), null);
         if (element.target != null) {
           // Only trigger update if mounted
           if (element.target!.mounted == true) {
             // Mark the widget as dirty and multiple updates
             // will be batched into one rerender
-            onUpdate(element.target!);
+            onUpdate(element);
           }
         } else {
           // Element garbage collected so we can safely remove
           subscribers.remove(key);
         }
       }, debugLabel: debugLabel);
-      subscribers[key] = (el, cleanup);
+      subscribers[key] = (WeakReference(context), cleanup);
     }
   }
 }
