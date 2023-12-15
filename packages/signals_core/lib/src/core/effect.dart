@@ -151,6 +151,11 @@ class _Effect implements _Listenable {
       _disposeEffect(this);
     }
   }
+
+  @override
+  void dispose() {
+    _dispose();
+  }
 }
 
 /// The `effect` function is the last piece that makes everything reactive.

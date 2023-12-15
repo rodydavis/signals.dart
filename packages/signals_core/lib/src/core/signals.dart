@@ -191,6 +191,8 @@ abstract class _Listenable {
   int get globalId;
 
   void _notify();
+
+  void dispose();
 }
 
 bool _needsToRecompute(_Listenable target) {

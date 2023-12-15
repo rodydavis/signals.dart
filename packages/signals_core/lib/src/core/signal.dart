@@ -69,6 +69,8 @@ abstract class ReadonlySignal<T> {
   _Node? _targets;
 
   bool _refresh();
+
+  void dispose();
 }
 
 /// The `signal` function creates a new signal. A signal is a container for
@@ -280,6 +282,9 @@ class _Signal<T> implements Signal<T> {
 
   @override
   _Node? _targets;
+
+  @override
+  void dispose() {}
 }
 
 /// The `signal` function creates a new signal. A signal is a container

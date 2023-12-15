@@ -260,6 +260,11 @@ class _Computed<T> implements Computed<T>, _Listenable {
   EffectCleanup subscribe(void Function(T value) fn) {
     return _Signal.__signalSubscribe(this, fn);
   }
+
+  @override
+  void dispose() {
+    _flags |= DISPOSED;
+  }
 }
 
 typedef ComputedCallback<T> = T Function();
