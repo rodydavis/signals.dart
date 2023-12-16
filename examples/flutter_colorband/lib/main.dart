@@ -48,12 +48,14 @@ class Signals {
 
     // =======================
 
-    colorNameSignalStream = streamSignal(() => nameCtrl.stream
-        .debounce((_) => TimerStream(true, const Duration(milliseconds: 100))));
+    colorNameSignalStream =
+        streamSignal(() => nameCtrl.stream.debounce((_) => TimerStream(
+              true,
+              const Duration(milliseconds: 100),
+            )));
 
     colorNameSignal = signal("-");
 
-    // How to deal with memo ?
     String memo = '-';
 
     // Advantage of effect over computed: they can be async

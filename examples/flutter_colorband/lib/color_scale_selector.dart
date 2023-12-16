@@ -48,22 +48,26 @@ class ColorNameStream extends StatelessWidget {
   const ColorNameStream({super.key});
 
   @override
-  build(context) => Watch((context) => signals.colorNameSignalStream.map(
-      value: (name) => Semantics(
-            label: 'Current color',
-            value: name,
-            child: Text(
-              name ?? '-',
-              style: TextStyle(
-                // Take the value but don't register
-                color: signals.confSignal.peek().color,
-                fontWeight: FontWeight.w400,
-                fontSize: 30,
-              ),
-            ),
-          ),
-      loading: () => const Icon(Icons.local_activity),
-      error: (e) => const Icon(Icons.warning)));
+  build(context) => Watch(
+        (context) {
+          return signals.colorNameSignalStream.value.map(
+              data: (name) => Semantics(
+                    label: 'Current color',
+                    value: name,
+                    child: Text(
+                      name ?? '-',
+                      style: TextStyle(
+                        // Take the value but don't register
+                        color: signals.confSignal.peek().color,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+              loading: () => const Icon(Icons.local_activity),
+              error: (e, s) => const Icon(Icons.warning));
+        },
+      );
 }
 
 /// Define the drive color
