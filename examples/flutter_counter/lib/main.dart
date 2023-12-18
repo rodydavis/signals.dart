@@ -67,6 +67,14 @@ class _CounterExampleState extends State<CounterExample> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    counter.onDispose(() {
+      debugPrint('counter signal disposed');
+    });
+  }
+
+  @override
   void dispose() {
     counter.dispose();
     super.dispose();

@@ -56,6 +56,7 @@ class Connect<T> {
     for (final subscription in _subscriptions.values) {
       subscription.cancel();
     }
+    _subscriptions.clear();
   }
 }
 

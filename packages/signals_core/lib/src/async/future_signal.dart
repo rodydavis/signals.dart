@@ -3,6 +3,7 @@ import 'async_state.dart';
 
 class FutureSignal<T> extends AsyncSignal<T> {
   Future<T> Function()? _future;
+  final Future<T> Function()? _initialFuture;
   final bool fireImmediately;
   bool _fetching = false;
 
@@ -12,6 +13,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
     super.debugLabel,
     T? initialValue,
   })  : _future = future,
+        _initialFuture = future,
         super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
@@ -78,6 +80,16 @@ class FutureSignal<T> extends AsyncSignal<T> {
     super.reset();
     _fetching = false;
     if (fireImmediately) init();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (_initialFuture != null) {
+      resetFuture(_initialFuture!);
+    } else {
+      reset();
+    }
   }
 
   void resetFuture(Future<T> Function() future) {

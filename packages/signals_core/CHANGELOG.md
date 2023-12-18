@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Adding `dispose` for `FutureSignal`, `StreamSignal` and  `AsyncSignal`
+
 ## 1.0.2
 
 - Adding `dispose` methods for `signal`, `computed` and `effect`

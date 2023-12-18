@@ -20,6 +20,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
 
   @override
   void reset() {
+    super.reset();
     for (final (sub, cb) in _subscriptions) {
       sub.cancel();
       cb?.call();
@@ -40,9 +41,12 @@ class StreamSignal<T> extends AsyncSignal<T> {
       setValue,
       onError: setError,
       cancelOnError: cancelOnError,
-      onDone: onDone,
     );
     _subscriptions.add((subscription, onDone));
+    subscription.onDone(() {
+      onDone?.call();
+      _subscriptions.removeWhere((e) => e.$1 == subscription);
+    });
   }
 
   /// Reset the signal and add a new stream to listen to for
@@ -65,11 +69,8 @@ class StreamSignal<T> extends AsyncSignal<T> {
 
   @override
   void dispose() {
-    for (final (sub, cb) in _subscriptions) {
-      sub.cancel();
-      cb?.call();
-    }
     super.dispose();
+    reset();
   }
 }
 

@@ -63,8 +63,6 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
     _initialized = true;
   }
 
-  void dispose() {}
-
   @override
   AsyncState<T> get value {
     init();

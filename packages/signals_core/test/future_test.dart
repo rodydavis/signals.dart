@@ -136,5 +136,39 @@ void main() {
       expect(signal.value.value, 10);
       expect(signal.value.error, null);
     });
+
+    test('check dispose call', () async {
+      int calls = 0;
+
+      Future<int> future(int value) async {
+        calls++;
+        await Future.delayed(const Duration(milliseconds: 5));
+        return value;
+      }
+
+      final signal = futureSignal(() => future(10));
+      expect(signal.peek().isLoading, true);
+      expect(calls, 0);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+
+      signal.resetFuture(() => future(20));
+      await signal.future;
+
+      expect(calls, 2);
+      expect(signal.value.value, 20);
+      expect(signal.value.error, null);
+
+      signal.dispose();
+      await signal.future;
+
+      expect(calls, 3);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+    });
   });
 }

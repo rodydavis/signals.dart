@@ -57,6 +57,9 @@ void main() {
 
     test('reset stream', () async {
       final signal = StreamSignal<int>();
+      signal.onDispose(() {
+        print('stream disposed');
+      });
       expect(signal.peek().isLoading, true);
 
       final s1 = Completer();
