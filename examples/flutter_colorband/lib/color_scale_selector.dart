@@ -55,7 +55,7 @@ class ColorNameStream extends StatelessWidget {
                     label: 'Current color',
                     value: name,
                     child: Text(
-                      name ?? '-',
+                      name,
                       style: TextStyle(
                         // Take the value but don't register
                         color: signals.confSignal.peek().color,
