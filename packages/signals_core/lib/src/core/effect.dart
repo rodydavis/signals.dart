@@ -145,7 +145,18 @@ class _Effect implements _Listenable {
     }
   }
 
+  final _disposeCallbacks = <EffectCallback>{};
+
+  @override
+  void onDispose(EffectCleanup cleanup) {
+    _disposeCallbacks.add(cleanup);
+  }
+
   void _dispose() {
+    for (final cleanup in _disposeCallbacks) {
+      cleanup();
+    }
+    _disposeCallbacks.clear();
     _flags |= DISPOSED;
     if (!((_flags & RUNNING) != 0)) {
       _disposeEffect(this);

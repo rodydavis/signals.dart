@@ -25,48 +25,51 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  ThemeData theme(Brightness brightness) {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.deepPurple,
+        brightness: brightness,
+      ),
+      brightness: brightness,
+      useMaterial3: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.light,
-        ),
-        brightness: Brightness.light,
-        useMaterial3: true,
+      theme: theme(Brightness.light),
+      darkTheme: theme(Brightness.dark),
+      themeMode: themeMode.watch(
+        context,
+        debugLabel: 'Material app theme mode',
       ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
-        ),
-        brightness: Brightness.dark,
-        useMaterial3: true,
-      ),
-      themeMode:
-          themeMode.watch(context, debugLabel: 'Material app theme mode'),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const CounterExample(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class CounterExample extends StatefulWidget {
+  const CounterExample({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<CounterExample> createState() => _CounterExampleState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final Signal<int> counter = signal(0, debugLabel: 'Counter');
+class _CounterExampleState extends State<CounterExample> {
+  late final Signal<int> counter = signal(0, debugLabel: 'Counter');
 
   void _incrementCounter() {
     counter.value++;
+  }
+
+  @override
+  void dispose() {
+    counter.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Counter Example'),
         actions: [
           Builder(builder: (context) {
             final dark = isDark.watch(context, debugLabel: 'Dark mode toggle');
@@ -97,6 +100,17 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
             );
           }),
+          IconButton(
+            onPressed: () {
+              if (mounted) {
+                setState(() {
+                  counter.dispose();
+                });
+              }
+            },
+            tooltip: 'Dispose signal',
+            icon: const Icon(Icons.restore),
+          ),
         ],
       ),
       body: Center(

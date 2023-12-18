@@ -6,6 +6,8 @@ import 'package:signals_core/signals_core.dart';
 class Watch<T extends Widget> extends StatefulWidget {
   const Watch(this.builder, {super.key, this.debugLabel});
 
+  const Watch.builder({super.key, required this.builder, this.debugLabel});
+
   /// The widget to rebuild when any signals change
   final T Function(BuildContext context) builder;
   final String? debugLabel;

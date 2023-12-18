@@ -55,7 +55,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
   Object? _error;
 
   bool _initialized = false;
-  late T _value, _previousValue;
+  late T _value, _previousValue, _initialValue;
 
   @override
   bool operator ==(Object other) {
@@ -140,6 +140,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
           _version == 0) {
         if (!_initialized) {
           _previousValue = value;
+          _initialValue = value;
         } else {
           _previousValue = _value;
         }
@@ -261,10 +262,27 @@ class _Computed<T> implements Computed<T>, _Listenable {
     return _Signal.__signalSubscribe(this, fn);
   }
 
+  final _disposeCallbacks = <SignalCleanup>{};
+
+  @override
+  void onDispose(SignalCleanup cleanup) {
+    _disposeCallbacks.add(cleanup);
+  }
+
   @override
   void dispose() {
+    for (final cleanup in _disposeCallbacks) {
+      cleanup();
+    }
+    _disposeCallbacks.clear();
     _flags |= DISPOSED;
+    if (_node != null) _unsubscribe(_node!);
+    _value = _initialValue;
+    _previousValue = _initialValue;
   }
+
+  @override
+  T get initialValue => _initialValue;
 }
 
 typedef ComputedCallback<T> = T Function();

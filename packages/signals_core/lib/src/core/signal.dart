@@ -17,6 +17,9 @@ abstract class ReadonlySignal<T> {
   /// This does not subscribe in an effect and is the equivalent to peek()
   T get previousValue;
 
+  /// Get the value the signal was created with
+  T get initialValue;
+
   @override
   String toString();
 
@@ -71,7 +74,12 @@ abstract class ReadonlySignal<T> {
   bool _refresh();
 
   void dispose();
+
+  void onDispose(SignalCleanup cleanup);
 }
+
+/// Cleanup function for signal dispose
+typedef SignalCleanup = void Function();
 
 /// The `signal` function creates a new signal. A signal is a container for
 /// a value that can change over time. You can read a signal's value or
@@ -112,6 +120,7 @@ class _Signal<T> implements Signal<T> {
   _Signal(this._value, {this.debugLabel})
       : _version = 0,
         _previousValue = _value,
+        _initialValue = _value,
         brand = identifier,
         globalId = ++_lastGlobalId {
     _onSignalCreated(this);
@@ -120,6 +129,7 @@ class _Signal<T> implements Signal<T> {
   // @internal
   T _value;
   T _previousValue;
+  final T _initialValue;
 
   /// @internal
   /// Version numbers should always be >= 0, because the special value -1 is used
@@ -245,6 +255,9 @@ class _Signal<T> implements Signal<T> {
   T get previousValue => this._previousValue;
 
   @override
+  T get initialValue => this._initialValue;
+
+  @override
   set value(T val) {
     if (_evalContext is Computed) {
       _mutationDetected();
@@ -283,8 +296,23 @@ class _Signal<T> implements Signal<T> {
   @override
   _Node? _targets;
 
+  final _disposeCallbacks = <SignalCleanup>{};
+
   @override
-  void dispose() {}
+  void onDispose(SignalCleanup cleanup) {
+    _disposeCallbacks.add(cleanup);
+  }
+
+  @override
+  void dispose() {
+    for (final cleanup in _disposeCallbacks) {
+      cleanup();
+    }
+    _disposeCallbacks.clear();
+    if (_node != null) _unsubscribe(_node!);
+    _value = _initialValue;
+    _previousValue = _initialValue;
+  }
 }
 
 /// The `signal` function creates a new signal. A signal is a container

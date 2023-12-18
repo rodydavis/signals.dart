@@ -192,6 +192,8 @@ abstract class _Listenable {
 
   void _notify();
 
+  void onDispose(EffectCleanup cleanup);
+
   void dispose();
 }
 

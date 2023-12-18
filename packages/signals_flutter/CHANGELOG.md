@@ -1,3 +1,8 @@
+## 1.0.4
+
+- Depending on `signals_core` package **1.0.2**
+- Adding `Watch.builder` for non positional argument usage and direct replacement for `Builder`
+
 ## 1.0.3
 
 - Fixing memory leak for `watch`/`listen`

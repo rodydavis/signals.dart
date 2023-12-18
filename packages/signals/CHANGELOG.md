@@ -1,3 +1,8 @@
+## 2.1.4
+
+- Updating `signals_flutter` package to **1.0.4**
+- Updating `signals_core` package to **1.0.2**
+
 ## 2.1.3
 
 - Updating `signals_flutter` package to **1.0.3**
