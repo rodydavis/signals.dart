@@ -43,10 +43,8 @@ class _ElementWatcher {
   void watch(ReadonlySignal value) {
     if (!_watchSignals.containsKey(value.globalId)) {
       _watchSignals[value.globalId] = value;
-      if (!_watch) {
-        _watch = true;
-        subscribeWatch();
-      }
+      _watch = true;
+      subscribeWatch();
     }
   }
 
@@ -132,7 +130,8 @@ T watchSignal<T>(
   ReadonlySignal<T> signal, {
   String? debugLabel,
 }) {
-  if (context is Element && context is! Watch) {
+  if (context is Watch) return signal.value;
+  if (context is Element) {
     final key = context.hashCode;
     if (_elementRefs[key] == null) {
       final watcher = _ElementWatcher(key, WeakReference(context));
@@ -147,6 +146,7 @@ T watchSignal<T>(
 
 /// Remove all subscribers for a given signal for watchers
 void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
+  if (context is Watch) return;
   final key = context.hashCode;
   _elementRefs[key]?.unwatch(signal);
 }

@@ -1,3 +1,7 @@
+## 1.0.6
+
+- Fixing `watch` in extension with multiple signals
+
 ## 1.0.5
 
 - Updating `signals_core` package **1.0.3**

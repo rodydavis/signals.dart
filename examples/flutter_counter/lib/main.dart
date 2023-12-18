@@ -1,34 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-final brightness = signal(Brightness.light, debugLabel: 'Brightness');
-final isDark = computed(
-  () => brightness.value == Brightness.dark,
-  debugLabel: 'Is Dark',
-);
-final themeMode = computed(
-  () {
-    if (isDark.value) {
-      return ThemeMode.dark;
-    } else {
-      return ThemeMode.light;
-    }
-  },
-  debugLabel: 'Theme Mode',
-);
-
 void main() {
   SignalsObserver.instance = LoggingSignalsObserver();
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
-  ThemeData theme(Brightness brightness) {
+  static AppState of(BuildContext context) {
+    return context.findAncestorStateOfType<AppState>()!;
+  }
+
+  @override
+  State<App> createState() => AppState();
+}
+
+class AppState extends State<App> {
+  final color = signal(Colors.blue);
+  final brightness = signal(Brightness.light, debugLabel: 'Brightness');
+
+  late final isDark = computed(
+    () => brightness.value == Brightness.dark,
+    debugLabel: 'Is Dark',
+  );
+
+  late final themeMode = computed(
+    () {
+      if (isDark.value) {
+        return ThemeMode.dark;
+      } else {
+        return ThemeMode.light;
+      }
+    },
+    debugLabel: 'Theme Mode',
+  );
+
+  @override
+  void dispose() {
+    brightness.dispose();
+    isDark.dispose();
+    themeMode.dispose();
+    super.dispose();
+  }
+
+  ThemeData _theme(BuildContext context, Brightness brightness) {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
+        seedColor: color.watch(context),
         brightness: brightness,
       ),
       brightness: brightness,
@@ -41,8 +61,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: theme(Brightness.light),
-      darkTheme: theme(Brightness.dark),
+      theme: _theme(context, Brightness.light),
+      darkTheme: _theme(context, Brightness.dark),
       themeMode: themeMode.watch(
         context,
         debugLabel: 'Material app theme mode',
@@ -100,10 +120,13 @@ class _CounterExampleState extends State<CounterExample> {
         title: const Text('Counter Example'),
         actions: [
           Builder(builder: (context) {
-            final dark = isDark.watch(context, debugLabel: 'Dark mode toggle');
+            final dark = App.of(context)
+                .isDark
+                .watch(context, debugLabel: 'Dark mode toggle');
             return IconButton(
               onPressed: () {
-                brightness.value = dark ? Brightness.light : Brightness.dark;
+                App.of(context).brightness.value =
+                    dark ? Brightness.light : Brightness.dark;
               },
               icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
             );
