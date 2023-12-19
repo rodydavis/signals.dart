@@ -48,11 +48,11 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
 /// final cacheB = container('cache-b');
 /// final cacheC = container('cache-c');
 /// ```
-SignalContainer<T, Arg, Signal<T>> signalContainer<T, Arg>(
-  Signal<T> Function(Arg) create, {
+SignalContainer<T, Arg, ReadonlySignal<T>> signalContainer<T, Arg>(
+  ReadonlySignal<T> Function(Arg) create, {
   bool cache = false,
 }) {
-  return SignalContainer<T, Arg, Signal<T>>(
+  return SignalContainer<T, Arg, ReadonlySignal<T>>(
     create,
     cache: cache,
   );
