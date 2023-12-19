@@ -1,13 +1,13 @@
 import 'signals.dart';
 
 /// Signal container used to create signals based on args
-class SignalContainer<T, Arg> {
+class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
   /// If true then signals will be cached when created
   final bool cache;
 
-  final Map<Arg, ReadonlySignal<T>> _cache = {};
+  final Map<Arg, S> _cache = {};
 
-  final ReadonlySignal<T> Function(Arg) _create;
+  final S Function(Arg) _create;
 
   /// Signal container used to create multiple signals via args
   SignalContainer(
@@ -16,7 +16,7 @@ class SignalContainer<T, Arg> {
   });
 
   /// Create the signal with the given args
-  ReadonlySignal<T> call(Arg arg) {
+  S call(Arg arg) {
     if (cache) {
       return _cache.putIfAbsent(arg, () => _create(arg));
     } else {
@@ -48,11 +48,11 @@ class SignalContainer<T, Arg> {
 /// final cacheB = container('cache-b');
 /// final cacheC = container('cache-c');
 /// ```
-SignalContainer<T, Arg> signalContainer<T, Arg>(
-  ReadonlySignal<T> Function(Arg) create, {
+SignalContainer<T, Arg, Signal<T>> signalContainer<T, Arg>(
+  Signal<T> Function(Arg) create, {
   bool cache = false,
 }) {
-  return SignalContainer<T, Arg>(
+  return SignalContainer<T, Arg, Signal<T>>(
     create,
     cache: cache,
   );
