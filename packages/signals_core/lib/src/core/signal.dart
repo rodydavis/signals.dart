@@ -341,3 +341,11 @@ Signal<T> signal<T>(T value, {String? debugLabel}) {
     debugLabel: debugLabel,
   );
 }
+
+/// Create a read only signal
+ReadonlySignal<T> readonlySignal<T>(T value, {String? debugLabel}) {
+  return _Signal<T>(
+    value,
+    debugLabel: debugLabel,
+  );
+}

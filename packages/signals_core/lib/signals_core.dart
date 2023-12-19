@@ -18,6 +18,7 @@ export 'src/value/list_signal.dart';
 export 'src/value/map_signal.dart';
 export 'src/value/set_signal.dart';
 export 'src/core/observer.dart';
+export 'src/core/container.dart';
 export 'src/core/signals.dart'
     show
         signal,

@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Adding `SignalContainer`/`signalContainer` to create signals with args
+
 ## 1.0.3
 
 - Adding `dispose` for `FutureSignal`, `StreamSignal` and  `AsyncSignal`
