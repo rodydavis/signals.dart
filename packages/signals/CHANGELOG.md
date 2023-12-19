@@ -1,3 +1,7 @@
+## 2.1.7
+
+- Updating `signals_flutter` package to **1.0.7**
+
 ## 2.1.6
 
 - Updating `signals_flutter` package to **1.0.6**

@@ -1,3 +1,7 @@
+## 1.0.7
+
+- Fixing `listen` in extension with multiple signals
+
 ## 1.0.6
 
 - Fixing `watch` in extension with multiple signals

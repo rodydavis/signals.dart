@@ -4,8 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:signals_core/signals_core.dart';
 
 import 'widget.dart';
+import 'element_watcher.dart';
 
-final _elementRefs = <int, _ElementWatcher>{};
+final _elementRefs = <int, ElementWatcher>{};
 
 bool _initialized = false;
 void _init() {
@@ -14,113 +15,11 @@ void _init() {
   WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
     final items = _elementRefs.entries.toList();
     for (final el in items) {
-      if (el.value._element.target == null || !el.value.active) {
+      if (el.value.element.target == null || !el.value.active) {
         _elementRefs.remove(el.key)?.dispose();
       }
     }
   });
-}
-
-class _ElementWatcher {
-  _ElementWatcher(this.key, this._element);
-
-  final int key;
-  final WeakReference<Element> _element;
-  EffectCleanup? _watchCleanup;
-  EffectCleanup? _listenCleanup;
-
-  bool _watch = false;
-  final _listeners = <VoidCallback>{};
-  final _watchSignals = <int, ReadonlySignal>{};
-  final _listenSignals = <int, ReadonlySignal>{};
-
-  bool get active {
-    final w = _watchSignals.isNotEmpty && _watch;
-    final l = _listenSignals.isNotEmpty && _listeners.isNotEmpty;
-    return w || l;
-  }
-
-  void watch(ReadonlySignal value) {
-    if (!_watchSignals.containsKey(value.globalId)) {
-      _watchSignals[value.globalId] = value;
-      _watch = true;
-      subscribeWatch();
-    }
-  }
-
-  void unwatch(ReadonlySignal value) {
-    if (_watchSignals.containsKey(value.globalId)) {
-      _watchSignals.remove(value.globalId);
-      _watch = _watchSignals.isNotEmpty;
-      subscribeWatch();
-    }
-  }
-
-  void listen(ReadonlySignal value, VoidCallback cb) {
-    if (!_listenSignals.containsKey(value.globalId)) {
-      _listenSignals[value.globalId] = value;
-      subscribeListen();
-    }
-    _listeners.add(cb);
-  }
-
-  void unlisten(ReadonlySignal value, VoidCallback cb) {
-    if (!_listenSignals.containsKey(value.globalId)) {
-      _listenSignals.remove(value.globalId);
-      subscribeListen();
-    }
-    _listeners.remove(cb);
-  }
-
-  void subscribeWatch() {
-    _watchCleanup?.call();
-    _watchCleanup = effect(() {
-      if (_element.target == null) {
-        dispose();
-        return;
-      }
-      for (final s in _watchSignals.values) {
-        s.value;
-      }
-      if (_element.target?.mounted == true) {
-        if (_watch) rebuild();
-      }
-    });
-  }
-
-  void subscribeListen() {
-    _listenCleanup?.call();
-    _listenCleanup = effect(() {
-      if (_element.target == null) {
-        dispose();
-        return;
-      }
-      for (final s in _listenSignals.values) {
-        s.value;
-      }
-      if (_element.target?.mounted == true) {
-        notify();
-      }
-    });
-  }
-
-  void notify() {
-    for (final listener in _listeners) {
-      listener();
-    }
-  }
-
-  void rebuild() {
-    _element.target?.markNeedsBuild();
-  }
-
-  void dispose() {
-    _watchCleanup?.call();
-    _listenCleanup?.call();
-    _listeners.clear();
-    _watch = false;
-    // _finalizer.detach(this);
-  }
 }
 
 /// Watch a signal value and rebuild the context of the [Element]
@@ -134,7 +33,7 @@ T watchSignal<T>(
   if (context is Element) {
     final key = context.hashCode;
     if (_elementRefs[key] == null) {
-      final watcher = _ElementWatcher(key, WeakReference(context));
+      final watcher = ElementWatcher(key, WeakReference(context));
       _elementRefs[key] = watcher;
       _init();
     }
@@ -179,7 +78,7 @@ void listenSignal<T>(
   if (context is Element) {
     final key = context.hashCode;
     if (_elementRefs[key] == null) {
-      final watcher = _ElementWatcher(key, WeakReference(context));
+      final watcher = ElementWatcher(key, WeakReference(context));
       _elementRefs[key] = watcher;
       _init();
     }
