@@ -38,7 +38,7 @@ class CatalogView extends StatelessWidget {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => CatalogGridItem(
-                    catalog!.getByPosition(index),
+                    catalog.getByPosition(index),
                     cartController: cartController,
                   ),
                   childCount: catalog!.products.length,

@@ -29,6 +29,10 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
     return _cache.remove(arg);
   }
 
+  bool containsKey(Arg arg) {
+    return _cache.containsKey(arg);
+  }
+
   /// Dispose of all created signals
   void dispose() {
     for (final signal in _cache.values) {
