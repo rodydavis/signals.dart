@@ -1,3 +1,7 @@
+## 1.0.8
+
+- Updating `signals_core` package **1.0.6**
+
 ## 1.0.7
 
 - Fixing `listen` in extension with multiple signals

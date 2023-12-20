@@ -9,10 +9,17 @@ class StreamSignal<T> extends AsyncSignal<T> {
     T? initialValue,
     this.cancelOnError,
     super.debugLabel,
+    void Function()? onDone,
   }) : super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
-    if (stream != null) addStream(stream);
+    if (stream != null) {
+      addStream(
+        stream,
+        cancelOnError: cancelOnError,
+        onDone: onDone,
+      );
+    }
   }
 
   final _subscriptions = <(StreamSubscription<T>, void Function()?)>[];
@@ -79,11 +86,13 @@ StreamSignal<T> streamSignal<T>(
   T? initialValue,
   bool? cancelOnError,
   String? debugLabel,
+  void Function()? onDone,
 }) {
   return StreamSignal(
     stream: stream(),
     initialValue: initialValue,
     cancelOnError: cancelOnError,
     debugLabel: debugLabel,
+    onDone: onDone,
   );
 }

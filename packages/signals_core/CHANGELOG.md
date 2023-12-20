@@ -1,3 +1,7 @@
+## 1.0.6
+
+- Adding `onDone` for passed stream in `StreamSignal`
+
 ## 1.0.5
 
 - Adding `SignalContainer` `remove` and adding Signal generic
