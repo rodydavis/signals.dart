@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Adding `SignalContainer` `remove` and adding Signal generic
+
 ## 1.0.4
 
 - Adding `SignalContainer`/`signalContainer` to create signals with args

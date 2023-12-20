@@ -1,3 +1,7 @@
+## 2.1.9
+
+- Updating `signals_core` package to **1.0.5**
+
 ## 2.1.8
 
 - Updating `signals_core` package to **1.0.4**

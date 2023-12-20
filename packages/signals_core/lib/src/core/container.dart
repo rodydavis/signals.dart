@@ -24,6 +24,11 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
     }
   }
 
+  /// Remove a signal from the cache
+  S? remove(Arg arg) {
+    return _cache.remove(arg);
+  }
+
   /// Dispose of all created signals
   void dispose() {
     for (final signal in _cache.values) {
