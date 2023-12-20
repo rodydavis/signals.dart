@@ -17,8 +17,13 @@ class App extends StatefulWidget {
   State<App> createState() => AppState();
 }
 
+// Demonstration of ValueSignal to expose value as typed instance
+class ColorSignal extends ValueSignal<Color> {
+  ColorSignal() : super(Colors.amber);
+}
+
 class AppState extends State<App> {
-  final color = signal(Colors.blue);
+  final color = ColorSignal();
   final brightness = signal(Brightness.light, debugLabel: 'Brightness');
 
   late final isDark = computed(
@@ -27,13 +32,7 @@ class AppState extends State<App> {
   );
 
   late final themeMode = computed(
-    () {
-      if (isDark.value) {
-        return ThemeMode.dark;
-      } else {
-        return ThemeMode.light;
-      }
-    },
+    () => isDark.value ? ThemeMode.dark : ThemeMode.light,
     debugLabel: 'Theme Mode',
   );
 
