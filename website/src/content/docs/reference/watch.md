@@ -33,7 +33,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-It is recommended to use `Watch` instead of `watch` as it will automatically unsubscribe when the widget is disposed instead of waiting on the garbage collector via [WeakReferences](https://api.flutter.dev/flutter/dart-core/WeakReference-class.html).
+It is recommended to use `Watch` instead of `.watch(context)` as it will automatically unsubscribe when the widget is disposed instead of waiting on the garbage collector via [WeakReferences](https://api.flutter.dev/flutter/dart-core/WeakReference-class.html).
 
 ## .listen(context, cb)
 
