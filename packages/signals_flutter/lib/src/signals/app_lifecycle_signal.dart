@@ -5,7 +5,7 @@ import 'package:signals_flutter/signals_flutter.dart';
 
 class AppLifecycleSignal extends StreamSignal<AppLifecycleState> {
   AppLifecycleSignal({
-    String super.debugLabel = 'AppLifecycle',
+    super.debugLabel = 'AppLifecycle',
     super.cancelOnError,
   }) : super(
           stream: _controller.stream,
@@ -21,4 +21,14 @@ class AppLifecycleSignal extends StreamSignal<AppLifecycleState> {
     );
     return controller;
   }
+}
+
+AppLifecycleSignal appLifecycleSignal({
+  String? debugLabel = 'AppLifecycle',
+  bool? cancelOnError,
+}) {
+  return AppLifecycleSignal(
+    debugLabel: debugLabel,
+    cancelOnError: cancelOnError,
+  );
 }
