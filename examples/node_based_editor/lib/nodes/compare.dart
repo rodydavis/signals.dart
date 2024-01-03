@@ -11,7 +11,7 @@ class CompareNode<T extends num> extends Node<T, bool> {
   CompareNode(Operator operatorCompare, Node<dynamic, T> a, Node<dynamic, T> b)
       : current = signal(operatorCompare),
         super(
-          name: 'If Node',
+          name: 'Compare Node',
           inputs: [a, b],
         ) {
     output = computed(() {
