@@ -1,34 +1,43 @@
-import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-class AppLifecycleSignal extends StreamSignal<AppLifecycleState> {
+class AppLifecycleSignal extends ValueSignal<AppLifecycleState> {
   AppLifecycleSignal({
     super.debugLabel = 'AppLifecycle',
-    super.cancelOnError,
-  }) : super(
-          stream: _controller.stream,
-          initialValue: WidgetsBinding.instance.lifecycleState,
-        );
-
-  static final _controller = _buildController();
-
-  static StreamController<AppLifecycleState> _buildController() {
-    final controller = StreamController<AppLifecycleState>.broadcast();
-    WidgetsBinding.instance.addObserver(
-      AppLifecycleListener(onStateChange: controller.add),
+    AppLifecycleState? initialValue,
+    Future<AppExitResponse> Function()? onAppExit,
+    WidgetsBinding? binding,
+  })  : widgetsBinding = binding ?? WidgetsBinding.instance,
+        super(initialValue ??
+            binding?.lifecycleState ??
+            WidgetsBinding.instance.lifecycleState ??
+            AppLifecycleState.resumed) {
+    final listener = AppLifecycleListener(
+      binding: widgetsBinding,
+      onStateChange: set,
+      onExitRequested: onAppExit,
     );
-    return controller;
+    widgetsBinding.addObserver(listener);
+    onDispose(() {
+      widgetsBinding.removeObserver(listener);
+    });
   }
+
+  final WidgetsBinding widgetsBinding;
 }
 
 AppLifecycleSignal appLifecycleSignal({
   String? debugLabel = 'AppLifecycle',
-  bool? cancelOnError,
+  AppLifecycleState? initialValue,
+  Future<AppExitResponse> Function()? onAppExit,
+  WidgetsBinding? binding,
 }) {
   return AppLifecycleSignal(
     debugLabel: debugLabel,
-    cancelOnError: cancelOnError,
+    initialValue: initialValue,
+    onAppExit: onAppExit,
+    binding: binding,
   );
 }
