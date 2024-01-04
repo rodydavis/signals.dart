@@ -1,18 +1,18 @@
 {
     "configurations": [
         {
-            "name": "preact_signals",
+            "name": "signals",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "preact_signals (profile mode)",
+            "name": "signals (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "preact_signals (release mode)",
+            "name": "signals (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
@@ -38,14 +38,14 @@
             "flutterMode": "release"
         },
         {
-            "name": "preact_signals_devtools_extension",
-            "cwd": "packages/preact_signals_devtools_extension",
+            "name": "signals_devtools_extension",
+            "cwd": "packages/signals_devtools_extension",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "preact_signals_devtools_extension + simulated environment",
-            "program": "packages/preact_signals_devtools_extension/lib/main.dart",
+            "name": "signals_devtools_extension + simulated environment",
+            "program": "packages/signals_devtools_extension/lib/main.dart",
             "request": "launch",
             "type": "dart",
             "args": [
@@ -53,15 +53,15 @@
             ],
         },
         {
-            "name": "preact_signals_devtools_extension (profile mode)",
-            "cwd": "packages/preact_signals_devtools_extension",
+            "name": "signals_devtools_extension (profile mode)",
+            "cwd": "packages/signals_devtools_extension",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "preact_signals_devtools_extension (release mode)",
-            "cwd": "packages/preact_signals_devtools_extension",
+            "name": "signals_devtools_extension (release mode)",
+            "cwd": "packages/signals_devtools_extension",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
