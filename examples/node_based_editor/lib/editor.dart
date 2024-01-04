@@ -4,9 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
 import 'nodes/base.dart';
+import 'nodes/bitmap.dart';
+import 'nodes/color.dart';
 import 'nodes/compare.dart';
+import 'nodes/datetime.dart';
+import 'nodes/logic.dart';
 import 'nodes/number.dart';
 import 'nodes/reduce.dart';
+import 'nodes/slider.dart';
+import 'nodes/stepper.dart';
+import 'nodes/switch.dart';
+import 'nodes/text.dart';
+import 'nodes/time.dart';
 import 'widgets/node_edges.dart';
 import 'widgets/node_layout.dart';
 
@@ -117,26 +126,49 @@ class _EditorState extends State<Editor> {
                     runSpacing: 20,
                     children: [
                       nodePreview(size, () => NumberNode(0)),
-                      if (selection.length > 1 &&
-                          selection
-                              .toList()
-                              .every((e) => e is Node<dynamic, num>)) ...[
-                        nodePreview(size, () {
-                          final list =
-                              selection.toList().cast<Node<dynamic, num>>();
-                          final node = ReduceNode(Reducer.add, list);
-                          return node;
-                        }),
-                        if (selection.length == 2) ...[
+                      nodePreview(size, () => StepperNode(0)),
+                      nodePreview(size, () => ColorNode(Colors.blue.value)),
+                      nodePreview(size, () => SliderNode(0.5)),
+                      nodePreview(size, () => SwitchNode(true)),
+                      nodePreview(size, () => TextNode('Hello World')),
+                      nodePreview(size, () => DateTimeNode(DateTime.now())),
+                      nodePreview(size, () => TimeOfDayNode(TimeOfDay.now())),
+                      nodePreview(size, () => BitmapNode()),
+                      if (selection.length > 1) ...[
+                        if (selection.length == 2 &&
+                            selection
+                                .toList()
+                                .every((e) => e is Node<dynamic, bool>)) ...[
                           nodePreview(size, () {
-                            final list = selection.cast<Node<dynamic, num>>();
-                            final node = CompareNode(
-                              Operator.equalTo,
-                              list.first,
-                              list.last,
+                            final list =
+                                selection.toList().cast<Node<dynamic, bool>>();
+                            return LogicNode(
+                              BitwiseOperator.and,
+                              list[0],
+                              list[1],
                             );
+                          }),
+                        ],
+                        if (selection
+                            .toList()
+                            .every((e) => e is Node<dynamic, num>)) ...[
+                          nodePreview(size, () {
+                            final list =
+                                selection.toList().cast<Node<dynamic, num>>();
+                            final node = ReduceNode(Reducer.add, list);
                             return node;
                           }),
+                          if (selection.length == 2) ...[
+                            nodePreview(size, () {
+                              final list = selection.cast<Node<dynamic, num>>();
+                              final node = CompareNode(
+                                Operator.equalTo,
+                                list.first,
+                                list.last,
+                              );
+                              return node;
+                            }),
+                          ],
                         ],
                       ],
                     ],
