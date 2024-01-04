@@ -24,6 +24,7 @@ class DateTimeNode extends ValueNode<DateTime> {
                 firstDate: firstDate ?? now.subtract(const Duration(days: 365)),
                 lastDate: lastDate ?? now.add(const Duration(days: 365)),
                 currentDate: output.value,
+                initialDate: output.value,
               );
             },
             child: SizedBox(
