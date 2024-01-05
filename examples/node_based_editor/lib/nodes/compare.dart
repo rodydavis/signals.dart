@@ -56,7 +56,7 @@ class CompareNode<T extends num> extends Node<T, bool> {
       );
 
   @override
-  Size size() => const Size(200, 60);
+  Size size() => const Size(210, 60);
 }
 
 enum Operator {

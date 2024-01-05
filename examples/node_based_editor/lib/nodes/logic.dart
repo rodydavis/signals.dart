@@ -20,45 +20,54 @@ class LogicNode extends Node<bool, bool> {
       final bVal = b.output();
       return switch (current.value) {
         BitwiseOperator.and => aVal & bVal,
+        BitwiseOperator.negatedAnd => !(aVal & bVal),
         BitwiseOperator.or => aVal | bVal,
+        BitwiseOperator.negatedOr => !(aVal | bVal),
         BitwiseOperator.exclusiveOr => aVal ^ bVal,
+        BitwiseOperator.negatedExclusiveOr => !(aVal ^ bVal),
       };
     });
   }
 
   @override
-  Widget build() => Stack(
+  Widget build() => Row(
         children: [
-          Positioned(
-            top: 5,
-            right: 5,
-            child: Text('Result: $output'),
-          ),
-          Positioned(
-            bottom: 5,
-            right: 5,
-            left: 5,
+          const SizedBox(width: 10),
+          Expanded(
             child: DropdownButton(
               isDense: true,
               items: BitwiseOperator.values
                   .map((e) => DropdownMenuItem(
                         value: e,
-                        child: Text(e.name),
+                        child: Text(switch (e) {
+                          BitwiseOperator.and => 'AND',
+                          BitwiseOperator.negatedAnd => 'NAND',
+                          BitwiseOperator.or => 'OR',
+                          BitwiseOperator.negatedOr => 'NOR',
+                          BitwiseOperator.exclusiveOr => 'XOR',
+                          BitwiseOperator.negatedExclusiveOr => 'XNOR',
+                        }),
                       ))
                   .toList(),
               value: current.value,
               onChanged: (val) => current.set(val!),
             ),
           ),
+          const SizedBox(width: 10),
+          Text(output.value.toString()),
+          const SizedBox(width: 10),
         ],
       );
 
   @override
-  Size size() => const Size(200, 60);
+  Size size() => const Size(150, 60);
 }
 
 enum BitwiseOperator {
   and,
   or,
   exclusiveOr,
+  negatedAnd,
+  negatedOr,
+  negatedExclusiveOr
 }

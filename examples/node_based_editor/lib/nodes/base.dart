@@ -18,24 +18,51 @@ abstract class Node<I, O> {
   Size size();
 
   Widget buildWithNodes() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Positioned.fill(child: build()),
-        Positioned.fromRect(
-          rect: outputOffset & _circle,
-          child: nodeCircle(Colors.blue),
-        ),
-        for (final offset in inputOffsets)
-          Positioned.fromRect(
-            rect: offset & _circle,
-            child: nodeCircle(Colors.red),
+    const dragWidth = 10.0;
+    return SizedBox.fromSize(
+      size: size(),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            width: dragWidth,
+            top: 0,
+            left: 0,
+            bottom: 0,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  bottomLeft: Radius.circular(8),
+                ),
+              ),
+            ),
           ),
-      ],
+          Positioned.fill(
+            left: dragWidth,
+            child: Center(child: build()),
+          ),
+          Positioned.fromRect(
+            rect: outputOffset & _circle,
+            child: nodeCircle(Colors.blue),
+          ),
+          for (final offset in inputOffsets)
+            Positioned.fromRect(
+              rect: offset & _circle,
+              child: nodeCircle(Colors.red),
+            ),
+        ],
+      ),
     );
   }
 
   Offset get outputOffset => Offset(size().width, 0);
+
+  Map<Node, Offset> get inputsWithOffsets => {
+        for (var i = 0; i < inputs.length; i++)
+          inputs[i]: Offset(-_circle.width, i * (_circle.height + _gap))
+      };
 
   List<Offset> get inputOffsets => [
         for (var i = 0; i < inputs.length; i++)

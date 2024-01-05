@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signals/signals.dart';
 
 import 'value.dart';
 
@@ -8,9 +9,14 @@ class TimeOfDayNode extends ValueNode<TimeOfDay> {
     super.name = 'TimeOfDay',
   });
 
+  TimeOfDayNode.fromSource(
+    super.source, {
+    super.name = 'TimeOfDay (readonly)',
+  }) : super.fromSource();
+
   @override
-  Widget build() => Center(
-        child: Builder(builder: (context) {
+  Widget build() => Builder(builder: (context) {
+        if (output is Signal<TimeOfDay>) {
           return InkWell(
             onTap: () {
               showTimePicker(
@@ -21,12 +27,14 @@ class TimeOfDayNode extends ValueNode<TimeOfDay> {
             child: SizedBox(
               height: 40,
               width: 90,
-              child: Text(output.toString()),
+              child: Text(output.value.format(context)),
             ),
           );
-        }),
-      );
+        }
+
+        return Text(output.value.format(context));
+      });
 
   @override
-  Size size() => const Size(100, 60);
+  Size size() => const Size(80, 20);
 }

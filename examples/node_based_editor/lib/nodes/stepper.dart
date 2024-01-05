@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signals/signals.dart';
 
 import 'number.dart';
 
@@ -16,12 +17,12 @@ class StepperNode extends NumberNode {
               children: [
                 IconButton(
                   tooltip: 'Increment',
-                  onPressed: () => output.value += 1,
+                  onPressed: () => (output as Signal<num>).value += 1,
                   icon: const Icon(Icons.add),
                 ),
                 IconButton(
                   tooltip: 'Decrement',
-                  onPressed: () => output.value -= 1,
+                  onPressed: () => (output as Signal<num>).value -= 1,
                   icon: const Icon(Icons.remove),
                 ),
               ],
@@ -35,12 +36,14 @@ class StepperNode extends NumberNode {
               children: [
                 IconButton(
                   tooltip: 'Reset',
-                  onPressed: () => output.value = output.initialValue,
+                  onPressed: () =>
+                      (output as Signal<num>).value = output.initialValue,
                   icon: const Icon(Icons.restore),
                 ),
                 IconButton(
                   tooltip: 'Undo',
-                  onPressed: () => output.value = output.previousValue,
+                  onPressed: () =>
+                      (output as Signal<num>).value = output.previousValue,
                   icon: const Icon(Icons.refresh),
                 ),
               ],

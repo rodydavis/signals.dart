@@ -257,21 +257,23 @@ packages:
       path: "../signals"
       relative: true
     source: path
-    version: "2.1.0"
+    version: "2.1.10"
   signals_core:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../signals_core"
-      relative: true
-    source: path
-    version: "1.0.1"
+      name: signals_core
+      sha256: "96ca555b5881d1b7a7b521cec9ac64c56eacc75b54a79a76e73eb0d7bcbad82e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
   signals_flutter:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../signals_flutter"
-      relative: true
-    source: path
-    version: "1.0.0"
+      name: signals_flutter
+      sha256: ab0e7376fd4b1fbf2f427d431bcf35a1eb2251308feb35f7b770b6f95b5677e6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   sky_engine:
     dependency: transitive
     description: flutter
