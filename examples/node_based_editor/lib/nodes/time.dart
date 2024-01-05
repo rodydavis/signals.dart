@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:signals/signals.dart';
+import 'package:signals/signals_flutter.dart';
 
 import 'value.dart';
 
@@ -14,8 +14,13 @@ class TimeOfDayNode extends ValueNode<TimeOfDay> {
     super.name = 'TimeOfDay (readonly)',
   }) : super.fromSource();
 
+  TimeOfDayNode.computed({
+    super.name = 'TimeOfDay (computed)',
+    super.inputs,
+  }) : super.computed();
+
   @override
-  Widget build() => Builder(builder: (context) {
+  Widget build() => Watch.builder(builder: (context) {
         if (output is Signal<TimeOfDay>) {
           return InkWell(
             onTap: () {
@@ -31,10 +36,22 @@ class TimeOfDayNode extends ValueNode<TimeOfDay> {
             ),
           );
         }
-
         return Text(output.value.format(context));
       });
 
   @override
   Size size() => const Size(80, 20);
+}
+
+class CurrentTimeNode extends TimeOfDayNode {
+  CurrentTimeNode({
+    super.name = 'Current Time',
+    Duration tick = const Duration(seconds: 1),
+  }) : super.computed(inputs: []) {
+    final timer = timerSignal(tick);
+    output = computed(() {
+      timer.value.value;
+      return TimeOfDay.now();
+    });
+  }
 }

@@ -64,6 +64,7 @@ class BitmapNode extends Node<dynamic, List<bool>> {
   @override
   Widget build() {
     return GridView.count(
+      physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: crossAxisCount,
       children: [
         for (var i = 0; i < output.value.length; i++)

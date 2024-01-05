@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:signals/signals.dart';
+import 'package:signals/signals_flutter.dart';
 
 import 'value.dart';
 
@@ -24,7 +24,7 @@ class DateTimeNode extends ValueNode<DateTime> {
   @override
   Widget build() {
     if (output is Signal<DateTime>) {
-      return Builder(builder: (context) {
+      return Watch.builder(builder: (context) {
         return InkWell(
           onTap: () {
             final now = DateTime.now();

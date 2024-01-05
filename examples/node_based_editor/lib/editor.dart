@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
+import 'code.dart';
 import 'nodes/base.dart';
 import 'nodes/bitmap.dart';
 import 'nodes/boolean.dart';
@@ -80,6 +81,12 @@ class _EditorState extends State<Editor> {
         body: Watch.builder(
           builder: (context) => Stack(
             children: [
+              Positioned.fill(
+                child: CodeView(
+                  nodes: nodes.keys.toList(),
+                  selected: selection(),
+                ),
+              ),
               Positioned.fill(
                 child: SizedBox.expand(
                   child: GestureDetector(
@@ -353,6 +360,7 @@ class _EditorState extends State<Editor> {
                               size, () => TimeOfDayNode(TimeOfDay.now())),
                           nodePreview(size, () => BitmapNode.grid9()),
                           nodePreview(size, () => BooleanNode(true)),
+                          nodePreview(size, () => CurrentTimeNode()),
                         ],
                       ],
                     ),
