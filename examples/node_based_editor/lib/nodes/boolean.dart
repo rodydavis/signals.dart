@@ -4,7 +4,7 @@ import 'package:signals/signals.dart';
 import 'base.dart';
 import 'value.dart';
 
-class BooleanNode extends ValueNode<bool> {
+class BooleanNode<T extends bool> extends ValueNode<T> {
   BooleanNode(
     super.value, {
     super.name = 'Boolean',
@@ -21,16 +21,54 @@ class BooleanNode extends ValueNode<bool> {
   }) : super.computed();
 
   @override
-  Widget build() => Center(
-        child: SizedBox(
-          height: 40,
-          width: 40,
-          child: Text(output.toString()),
-        ),
-      );
+  Widget build() {
+    return Checkbox(
+      value: output.value,
+      onChanged: () {
+        if (output is Signal<bool>) {
+          return (bool? val) => (output as Signal<bool>).set(val!);
+        }
+        return null;
+      }(),
+    );
+  }
 
   @override
-  Size size() => const Size(60, 60);
+  Size size() => const Size(40, 30);
+}
+
+class TristateBooleanNode extends ValueNode<bool?> {
+  TristateBooleanNode(
+    super.value, {
+    super.name = 'Boolean',
+  });
+
+  TristateBooleanNode.fromSource(
+    super.source, {
+    super.name = 'Boolean',
+  }) : super.fromSource();
+
+  TristateBooleanNode.computed({
+    super.name = 'Boolean (readonly)',
+    super.inputs,
+  }) : super.computed();
+
+  @override
+  Widget build() {
+    return Checkbox(
+      tristate: true,
+      value: output.value,
+      onChanged: () {
+        if (output is Signal<bool>) {
+          return (bool? val) => (output as Signal<bool>).set(val!);
+        }
+        return null;
+      }(),
+    );
+  }
+
+  @override
+  Size size() => const Size(40, 30);
 }
 
 class IntToBoolean extends BooleanNode {

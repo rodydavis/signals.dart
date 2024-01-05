@@ -353,7 +353,6 @@ class _EditorState extends State<Editor> {
                               size, () => TimeOfDayNode(TimeOfDay.now())),
                           nodePreview(size, () => BitmapNode.grid9()),
                           nodePreview(size, () => BooleanNode(true)),
-                          nodePreview(size, () => BooleanNode(false)),
                         ],
                       ],
                     ),
