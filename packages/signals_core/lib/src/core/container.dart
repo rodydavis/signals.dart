@@ -49,7 +49,7 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
 /// Create a signal container used to instance signals based on args
 ///
 /// ```dart
-/// final container = signalContainer<Cache, String>((e) {
+/// final container = readonlySignalContainer<Cache, String>((e) {
 ///   return signal(Cache(e));
 /// });
 ///
@@ -57,11 +57,39 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
 /// final cacheB = container('cache-b');
 /// final cacheC = container('cache-c');
 /// ```
-SignalContainer<T, Arg, ReadonlySignal<T>> signalContainer<T, Arg>(
+///
+/// The signals cannot be updated but allows for
+/// using computed where the value is only derived from other signals.
+SignalContainer<T, Arg, ReadonlySignal<T>> readonlySignalContainer<T, Arg>(
   ReadonlySignal<T> Function(Arg) create, {
   bool cache = false,
 }) {
   return SignalContainer<T, Arg, ReadonlySignal<T>>(
+    create,
+    cache: cache,
+  );
+}
+
+/// Create a signal container used to instance signals based on args
+///
+/// ```dart
+/// final container = signalContainer<Cache, String>((e) {
+///   return signal(Cache(e));
+/// });
+///
+/// final cacheA = container('cache-a');
+/// final cacheB = container('cache-b');
+/// final cacheC = container('cache-c');
+///
+/// cacheA.value = 'a';
+/// cacheB.value = 'b';
+/// cacheC.value = 'c';
+/// ```
+SignalContainer<T, Arg, Signal<T>> signalContainer<T, Arg>(
+  Signal<T> Function(Arg) create, {
+  bool cache = false,
+}) {
+  return SignalContainer<T, Arg, Signal<T>>(
     create,
     cache: cache,
   );
