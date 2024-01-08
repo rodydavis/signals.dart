@@ -138,11 +138,15 @@ FutureSignal<T> futureSignal<T>(
   T? initialValue,
   String? debugLabel,
   bool fireImmediately = false,
+  List<ReadonlySignal<dynamic>> dependencies = const [],
+  FutureSignalAction dependencyChangeAction = FutureSignalAction.refresh,
 }) {
   return FutureSignal(
     future: future,
     initialValue: initialValue,
     debugLabel: debugLabel,
     fireImmediately: fireImmediately,
+    dependencies: dependencies,
+    dependencyChangeAction: dependencyChangeAction,
   );
 }
