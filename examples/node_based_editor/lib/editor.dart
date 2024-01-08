@@ -240,6 +240,7 @@ class _EditorState extends State<Editor> {
                               ),
                             ],
                             if (selection.first is Node<dynamic, double>) ...[
+                              if ((selection.first as Node<dynamic, double>).output.value >=0 && (selection.first as Node<dynamic, double>).output.value <= 1)
                               nodePreview(
                                 size,
                                 () => SliderNode.fromSource(
@@ -352,6 +353,11 @@ class _EditorState extends State<Editor> {
                           nodePreview(size, () => IntNode(0)),
                           nodePreview(size, () => DoubleNode(0)),
                           nodePreview(size, () => SliderNode(0.5)),
+                          nodePreview(size, () => IntSliderNode(0, 
+                            name: 'Int Slider',
+                            min: 0,
+                            max: 255,
+                          )),
                           nodePreview(size, () => TextNode('Hello World')),
                           nodePreview(size, () => StepperNode(0)),
                           nodePreview(size, () => ColorNode(Colors.blue)),
