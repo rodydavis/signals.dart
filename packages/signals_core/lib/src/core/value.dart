@@ -9,8 +9,8 @@ class ValueSignal<T> extends _Signal<T> implements Signal<T> {
   ///
   /// This is primarily used by the `ValueSignal` class to update the value
   /// since the reference is always the same.
-  void forceUpdate(T val) {
-    _updateValue(val);
+  void forceUpdate([T? val]) {
+    _updateValue(val ?? value);
   }
 }
 
