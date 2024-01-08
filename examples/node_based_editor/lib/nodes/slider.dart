@@ -36,3 +36,38 @@ class SliderNode extends ValueNode<double> {
   @override
   Size size() => const Size(180, 40);
 }
+
+
+class IntSliderNode extends ValueNode<int> {
+  IntSliderNode(
+    super.value, {
+    super.name = 'Int Slider',
+    this.min = 0,
+    this.max = 100,
+  });
+
+  IntSliderNode.fromSource(
+    super.source, {
+    super.name = 'Int Slider (readonly)',
+    this.min = 0,
+    this.max = 100,
+  }) : super.fromSource();
+
+  final int min, max;
+
+  @override
+  Widget build() => Slider(
+        value: output.get().toDouble(),
+        onChanged: () {
+          if (output is Signal<int>) {
+            return (val) => (output as Signal<int>).set(val.toInt());
+          }
+          return null;
+        }(),
+        min: min.toDouble(),
+        max: max.toDouble(),
+      );
+
+  @override
+  Size size() => const Size(180, 40);
+}
