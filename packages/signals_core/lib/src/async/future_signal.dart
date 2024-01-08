@@ -1,23 +1,57 @@
+import '../core/signals.dart';
 import 'async_signal.dart';
 import 'async_state.dart';
+
+/// Action to take when any dependency in the FutureSignal changes
+enum FutureSignalAction {
+  /// Trigger refresh and show refreshing state
+  refresh,
+
+  /// Trigger reload and show loading state
+  reload,
+
+  /// Reset the future
+  reset,
+}
 
 class FutureSignal<T> extends AsyncSignal<T> {
   Future<T> Function()? _future;
   final Future<T> Function()? _initialFuture;
   final bool fireImmediately;
   bool _fetching = false;
+  EffectCleanup? _cleanup;
 
   FutureSignal({
     Future<T> Function()? future,
     this.fireImmediately = false,
     super.debugLabel,
     T? initialValue,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    FutureSignalAction dependencyChangeAction = FutureSignalAction.refresh,
   })  : _future = future,
         _initialFuture = future,
         super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
     if (fireImmediately) init();
+    if (dependencies.isNotEmpty) {
+      _cleanup = effect(() {
+        for (final dependency in dependencies) {
+          dependency.value;
+        }
+        switch (dependencyChangeAction) {
+          case FutureSignalAction.refresh:
+            refresh().ignore();
+            break;
+          case FutureSignalAction.reload:
+            reload().ignore();
+            break;
+          case FutureSignalAction.reset:
+            reset();
+            break;
+        }
+      });
+    }
   }
 
   Future<void> _execute() async {
@@ -85,6 +119,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
   @override
   void dispose() {
     super.dispose();
+    _cleanup?.call();
     if (_initialFuture != null) {
       resetFuture(_initialFuture!);
     } else {
