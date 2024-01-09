@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../core/signals.dart';
 import 'async_signal.dart';
 import 'async_state.dart';
 
@@ -9,6 +10,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
     T? initialValue,
     this.cancelOnError,
     super.debugLabel,
+    super.equalityCheck,
     void Function()? onDone,
   }) : super(initialValue != null
             ? AsyncState.data(initialValue)
@@ -87,6 +89,7 @@ StreamSignal<T> streamSignal<T>(
   bool? cancelOnError,
   String? debugLabel,
   void Function()? onDone,
+  SignalEqualityCheck? equalityCheck,
 }) {
   return StreamSignal(
     stream: stream(),
@@ -94,5 +97,6 @@ StreamSignal<T> streamSignal<T>(
     cancelOnError: cancelOnError,
     debugLabel: debugLabel,
     onDone: onDone,
+    equalityCheck: equalityCheck,
   );
 }

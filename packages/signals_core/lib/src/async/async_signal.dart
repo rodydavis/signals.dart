@@ -12,11 +12,12 @@ typedef AsyncSignalErrorBuilder<R> = R Function(Object? error);
 /// Builder on a [AsyncSignal] callback
 typedef AsyncSignalBuilder<R> = R Function();
 
-/// A compound [Signal] that wraps a [Stream] or [Future]
+/// A [Signal] that stores value in [AsyncState]
 class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   AsyncSignal(
     super.value, {
     super.debugLabel,
+    super.equalityCheck,
   }) : _initialValue = value;
 
   final AsyncState<T> _initialValue;
@@ -70,4 +71,17 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   }
 
   T get requireValue => super.value.requireValue;
+}
+
+/// A [Signal] that stores value in [AsyncState]
+AsyncSignal<T> asyncSignal<T>(
+  AsyncState<T> value, {
+  String? debugLabel,
+  SignalEqualityCheck? equalityCheck,
+}) {
+  return AsyncSignal<T>(
+    value,
+    debugLabel: debugLabel,
+    equalityCheck: equalityCheck,
+  );
 }

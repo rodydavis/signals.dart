@@ -57,6 +57,8 @@ class _Computed<T> implements Computed<T>, _Listenable {
   bool _initialized = false;
   late T _value, _previousValue, _initialValue;
 
+  final SignalEqualityCheck equalityCheck;
+
   @override
   bool operator ==(Object other) {
     return other is Signal<T> && value == other.value;
@@ -90,11 +92,15 @@ class _Computed<T> implements Computed<T>, _Listenable {
     return results;
   }
 
-  _Computed(ComputedCallback<T> compute, {this.debugLabel})
-      : _compute = compute,
+  _Computed(
+    ComputedCallback<T> compute, {
+    this.debugLabel,
+    SignalEqualityCheck? equalityCheck,
+  })  : _compute = compute,
+        _version = 0,
+        equalityCheck = equalityCheck ?? ((a, b) => a == b),
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
-        _version = 0,
         brand = identifier,
         globalId = ++_lastGlobalId {
     _onComputedCreated(this);
@@ -136,7 +142,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
       final value = _compute();
       if ((this._flags & HAS_ERROR) != 0 ||
           !_initialized ||
-          _value != value ||
+          equalityCheck(_value, value) ||
           _version == 0) {
         if (!_initialized) {
           _previousValue = value;
@@ -318,9 +324,11 @@ typedef ComputedCallback<T> = T Function();
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
+  SignalEqualityCheck? equalityCheck,
 }) {
   return _Computed<T>(
     compute,
     debugLabel: debugLabel,
+    equalityCheck: equalityCheck,
   );
 }

@@ -3,7 +3,11 @@ import '../core/signals.dart';
 /// A [Signal] that holds a [Set].
 class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   /// Creates a [SetSignal] with the given [value].
-  SetSignal(super.value, {super.debugLabel});
+  SetSignal(
+    super.value, {
+    super.debugLabel,
+    super.equalityCheck,
+  });
 
   @override
   bool add(E value) {

@@ -13,6 +13,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
     Future<T> Function()? future,
     this.fireImmediately = false,
     super.debugLabel,
+    super.equalityCheck,
     T? initialValue,
     List<ReadonlySignal<dynamic>> dependencies = const [],
   })  : _future = future,
@@ -117,6 +118,7 @@ FutureSignal<T> futureSignal<T>(
   String? debugLabel,
   bool fireImmediately = false,
   List<ReadonlySignal<dynamic>> dependencies = const [],
+  SignalEqualityCheck? equalityCheck,
 }) {
   return FutureSignal(
     future: future,
@@ -124,5 +126,6 @@ FutureSignal<T> futureSignal<T>(
     debugLabel: debugLabel,
     fireImmediately: fireImmediately,
     dependencies: dependencies,
+    equalityCheck: equalityCheck,
   );
 }
