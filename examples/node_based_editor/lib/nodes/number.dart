@@ -17,6 +17,7 @@ class NumberNode<T extends num> extends ValueNode<T> {
     super.source, {
     super.name = 'Number (readonly)',
     T Function(String)? parser,
+      super.inputs,
   })  : parse = parser ?? ((val) => (num.tryParse(val) ?? 0.0) as T),
         super.fromSource();
 

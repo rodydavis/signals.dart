@@ -16,6 +16,7 @@ import 'nodes/stepper.dart';
 import 'nodes/switch.dart';
 import 'nodes/text.dart';
 import 'nodes/time.dart';
+import 'nodes/trigger.dart';
 import 'widgets/node_edges.dart';
 import 'widgets/node_layout.dart';
 
@@ -74,6 +75,17 @@ class _EditorState extends State<Editor> {
                 onPressed: () => selection.clear(),
                 icon: const Icon(Icons.clear),
                 tooltip: 'Clear selection',
+              );
+            }),
+            Watch((context) {
+              if (nodes.isEmpty) return const SizedBox.shrink();
+              return IconButton(
+                onPressed: () {
+                  selection.clear();
+                  nodes.clear();
+                },
+                icon: const Icon(Icons.clear_all),
+                tooltip: 'Clear all nodes',
               );
             }),
           ],
@@ -240,12 +252,19 @@ class _EditorState extends State<Editor> {
                               ),
                             ],
                             if (selection.first is Node<dynamic, double>) ...[
-                              if ((selection.first as Node<dynamic, double>).output.value >=0 && (selection.first as Node<dynamic, double>).output.value <= 1)
-                              nodePreview(
-                                size,
-                                () => SliderNode.fromSource(
-                                    selection.first as Node<dynamic, double>),
-                              ),
+                              if ((selection.first as Node<dynamic, double>)
+                                          .output
+                                          .value >=
+                                      0 &&
+                                  (selection.first as Node<dynamic, double>)
+                                          .output
+                                          .value <=
+                                      1)
+                                nodePreview(
+                                  size,
+                                  () => SliderNode.fromSource(
+                                      selection.first as Node<dynamic, double>),
+                                ),
                             ],
                             if (selection.first is Node<dynamic, String>) ...[
                               nodePreview(
@@ -256,6 +275,42 @@ class _EditorState extends State<Editor> {
                             ],
                           ],
                           if (selection.length > 1) ...[
+                            if (selection.length == 2 &&
+                                () {
+                                  final list = selection.toList();
+                                  final trigger =
+                                      list[1] is Node<dynamic, Object>;
+                                  return trigger;
+                                }()) ...[
+                              nodePreview(size, () {
+                                final list = selection.toList();
+                                final val = list[0];
+                                final trigger =
+                                    list[1] as Node<dynamic, Object>;
+                                return DynamicToTextOnTrigger.fromSource(
+                                  val,
+                                  trigger,
+                                );
+                              }),
+                            ],
+                            if (selection.length == 2 &&
+                                () {
+                                  final list = selection.toList();
+                                  final inc = list[0] is Node<dynamic, Object>;
+                                  final dec = list[1] is Node<dynamic, Object>;
+                                  return inc && dec;
+                                }()) ...[
+                              nodePreview(size, () {
+                                final list = selection.toList();
+                                final inc = list[0] as Node<dynamic, Object>;
+                                final dec = list[1] as Node<dynamic, Object>;
+                                return StepperNode.fromTriggers(
+                                  0,
+                                  increment: inc,
+                                  decrement: dec,
+                                );
+                              }),
+                            ],
                             if (selection.length == 3 &&
                                 () {
                                   final list = selection.toList();
@@ -353,11 +408,14 @@ class _EditorState extends State<Editor> {
                           nodePreview(size, () => IntNode(0)),
                           nodePreview(size, () => DoubleNode(0)),
                           nodePreview(size, () => SliderNode(0.5)),
-                          nodePreview(size, () => IntSliderNode(0, 
-                            name: 'Int Slider',
-                            min: 0,
-                            max: 255,
-                          )),
+                          nodePreview(
+                              size,
+                              () => IntSliderNode(
+                                    0,
+                                    name: 'Int Slider',
+                                    min: 0,
+                                    max: 255,
+                                  )),
                           nodePreview(size, () => TextNode('Hello World')),
                           nodePreview(size, () => StepperNode(0)),
                           nodePreview(size, () => ColorNode(Colors.blue)),
@@ -367,6 +425,7 @@ class _EditorState extends State<Editor> {
                           nodePreview(size, () => BitmapNode.grid9()),
                           nodePreview(size, () => BooleanNode(true)),
                           nodePreview(size, () => CurrentTimeNode()),
+                          nodePreview(size, () => TriggerNode(Object())),
                         ],
                       ],
                     ),

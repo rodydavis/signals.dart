@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals.dart';
 
+import 'base.dart';
 import 'number.dart';
 
 class StepperNode extends NumberNode {
-  StepperNode(super.value, {super.name = 'Stepper'});
+  StepperNode(
+    super.value, {
+    super.name = 'Stepper',
+  });
+
+  final _cleanup = <EffectCleanup>[];
+
+  StepperNode.fromTriggers(
+    num initial, {
+    super.name = 'Stepper (Triggers)',
+    required Node<dynamic, Object> increment,
+    required Node<dynamic, Object> decrement,
+  }) : super.computed(inputs: [increment, decrement]) {
+    output = signal(initial);
+    _cleanup.add(effect(() {
+      increment.output.value;
+      final out = output as Signal<num>;
+      out.value = out.peek() + 1;
+    }));
+    _cleanup.add(effect(() {
+      decrement.output.value;
+      final out = output as Signal<num>;
+      out.value = out.peek() - 1;
+    }));
+    output.onDispose(() {
+      for (final cb in _cleanup) {
+        cb();
+      }
+    });
+  }
 
   @override
   Widget build() => Stack(
