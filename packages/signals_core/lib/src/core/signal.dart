@@ -1,5 +1,25 @@
 part of 'signals.dart';
 
+/// Check if 2 signals are the same and change when updates happen.
+///
+/// If using an object or class that does not override the hashCode and == operator
+/// then checking for an id getter would return the boolean.
+///
+/// ```dart
+/// final s = signal(
+///   User(1, 'Bob'),
+///   equality: (a, b) => a.id == b.id,
+/// );
+/// ```
+///
+/// If using a package like collection then list checks could be used:
+///
+/// ```dart
+/// final list = listSignal(
+///   [1, 2, 3],
+///   equality: const ListEquality().check,
+/// );
+/// ```
 typedef SignalEquality<T> = bool Function(T previous, T value);
 
 abstract class ReadonlySignal<T> {
