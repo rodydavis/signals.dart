@@ -43,7 +43,6 @@ import 'signals.dart';
 ///     setting.dispose();
 ///   }
 /// }
-/// ```
 ///
 ///void main() {
 ///  // Load or find instance
@@ -83,25 +82,19 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
   }
 
   /// Remove a signal from the cache
-  S? remove(Arg arg) {
-    final item = store.remove(arg);
-    return item;
-  }
+  S? remove(Arg arg) => store.remove(arg);
 
-  bool containsKey(Arg arg) {
-    return store.containsKey(arg);
-  }
+  /// Check if signal is currently stored in the cache
+  bool containsKey(Arg arg) => store.containsKey(arg);
+
+  /// Clear the cache
+  void clear() => store.clear();
 
   /// Dispose of all created signals
   void dispose() {
     for (final signal in store.values) {
       signal.dispose();
     }
-  }
-
-  /// Clear the cache
-  void clear() {
-    store.clear();
   }
 }
 
