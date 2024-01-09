@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_cart/src/cart/controller.dart';
+import 'package:shopping_cart/deps.dart';
 import 'package:shopping_cart/src/cart/events.dart';
 import 'package:shopping_cart/src/models/models.dart';
 import 'package:shopping_cart/src/models/product.dart';
 import 'package:signals/signals_flutter.dart';
-import 'controller.dart';
 
 class CatalogView extends StatelessWidget {
-  const CatalogView(
-      {super.key, required this.controller, required this.cartController});
+  const CatalogView({super.key});
 
   static const routeName = '/';
 
-  final CatalogController controller;
-  final CartController cartController;
-
   @override
   Widget build(BuildContext context) {
-    final state = controller.catalog.watch(context);
+    final state = catalogController.instance.catalog.watch(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final cols = _getCrossAxisCount(screenWidth);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CatalogAppBar(cartController: cartController),
+          const CatalogAppBar(),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           switch (state) {
             AsyncError() => const SliverFillRemaining(
@@ -39,7 +34,6 @@ class CatalogView extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => CatalogGridItem(
                     catalog.getByPosition(index),
-                    cartController: cartController,
                   ),
                   childCount: catalog!.products.length,
                 ),
@@ -55,10 +49,9 @@ class CatalogView extends StatelessWidget {
 }
 
 class CatalogGridItem extends StatelessWidget {
-  const CatalogGridItem(this.item, {super.key, required this.cartController});
+  const CatalogGridItem(this.item, {super.key});
 
   final Product item;
-  final CartController cartController;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +73,7 @@ class CatalogGridItem extends StatelessWidget {
               Icons.directions_car_sharp, // Replace with actual item icon
               color: item.color,
             ),
-            AddButton(item: item, cartController: cartController),
+            AddButton(item: item),
           ],
         ),
       ),
@@ -89,16 +82,14 @@ class CatalogGridItem extends StatelessWidget {
 }
 
 class AddButton extends StatelessWidget {
-  const AddButton(
-      {required this.item, super.key, required this.cartController});
+  const AddButton({required this.item, super.key});
 
   final Product item;
-  final CartController cartController;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final state = cartController.cart.watch(context);
+    final state = cartController.instance.cart.watch(context);
 
     return switch (state) {
       AsyncError() => const Text('Something went wrong!'),
@@ -114,7 +105,7 @@ class AddButton extends StatelessWidget {
                   minimumSize: const Size(100, 50)),
               onPressed: isInCart
                   ? null
-                  : () => cartController.dispatch(CartItemAdded(item)),
+                  : () => cartController.instance.dispatch(CartItemAdded(item)),
               child: isInCart
                   ? const Icon(Icons.check, semanticLabel: 'ADDED')
                   : const Text('ADD'),
@@ -127,13 +118,11 @@ class AddButton extends StatelessWidget {
 }
 
 class CatalogAppBar extends StatelessWidget {
-  const CatalogAppBar({super.key, required this.cartController});
-
-  final CartController cartController;
+  const CatalogAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cart = cartController.cart.watch(context);
+    final cart = cartController.instance.cart.watch(context);
     int count = 0;
 
     if (cart is AsyncData<Cart>) {
@@ -148,6 +137,7 @@ class CatalogAppBar extends StatelessWidget {
         Stack(
           children: [
             IconButton(
+              key: const Key('cart_button'),
               icon: const Icon(Icons.shopping_cart),
               onPressed: () => Navigator.of(context).pushNamed('/cart'),
             ),

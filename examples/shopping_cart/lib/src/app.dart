@@ -8,14 +8,7 @@ import 'package:shopping_cart/src/catalog/view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
-  const MyApp({
-    super.key,
-    required this.cartController,
-    required this.catalogController,
-  });
-
-  final CartController cartController;
-  final CatalogController catalogController;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +52,10 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context) {
             switch (routeSettings.name) {
               case CartView.routeName:
-                return CartView(controller: cartController);
+                return const CartView();
               case CatalogView.routeName:
               default:
-                return CatalogView(
-                  controller: catalogController,
-                  cartController: cartController,
-                );
+                return const CatalogView();
             }
           },
         );
