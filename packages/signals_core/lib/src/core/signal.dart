@@ -1,5 +1,7 @@
 part of 'signals.dart';
 
+typedef SignalEqualityCheck<T> = bool Function(T previous, T value);
+
 abstract class ReadonlySignal<T> {
   List<_Listenable> get _allTargets;
 
@@ -101,24 +103,31 @@ typedef SignalCleanup = void Function();
 /// Changing a signal's value synchronously updates every `computed`
 /// and `effect` that depends on that signal, ensuring your app state
 /// is always consistent.
-
 abstract class Signal<T> implements ReadonlySignal<T> {
   /// Update the current value
   set value(T value);
 
   /// Set the current value
   void set(T value);
+
+  ReadonlySignal<T> readonly() => this as ReadonlySignal<T>;
 }
 
-class _Signal<T> implements Signal<T> {
+class _Signal<T> extends Signal<T> {
   @override
   final int globalId;
 
   @override
   final String? debugLabel;
 
-  _Signal(this._value, {this.debugLabel})
-      : _version = 0,
+  final SignalEqualityCheck equalityCheck;
+
+  _Signal(
+    this._value, {
+    this.debugLabel,
+    SignalEqualityCheck? equalityCheck,
+  })  : _version = 0,
+        equalityCheck = equalityCheck ?? ((a, b) => a == b),
         _previousValue = _value,
         _initialValue = _value,
         brand = identifier,
@@ -263,7 +272,7 @@ class _Signal<T> implements Signal<T> {
       _mutationDetected();
     }
 
-    if (val != this._value) {
+    if (!equalityCheck(val, this._value)) {
       _updateValue(val);
     }
   }
@@ -335,17 +344,27 @@ class _Signal<T> implements Signal<T> {
 /// Changing a signal's value synchronously updates every `computed`
 /// and `effect` that depends on that signal, ensuring your app state is
 /// always consistent.
-Signal<T> signal<T>(T value, {String? debugLabel}) {
+Signal<T> signal<T>(
+  T value, {
+  String? debugLabel,
+  SignalEqualityCheck? equalityCheck,
+}) {
   return _Signal<T>(
     value,
     debugLabel: debugLabel,
+    equalityCheck: equalityCheck,
   );
 }
 
 /// Create a read only signal
-ReadonlySignal<T> readonlySignal<T>(T value, {String? debugLabel}) {
-  return _Signal<T>(
+ReadonlySignal<T> readonlySignal<T>(
+  T value, {
+  String? debugLabel,
+  SignalEqualityCheck? equalityCheck,
+}) {
+  return signal(
     value,
     debugLabel: debugLabel,
-  );
+    equalityCheck: equalityCheck,
+  ).readonly();
 }

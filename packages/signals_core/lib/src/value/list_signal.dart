@@ -5,7 +5,11 @@ import '../core/signals.dart';
 /// A [Signal] that holds a [List].
 class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
   /// Creates a [ListSignal] with the given [value].
-  ListSignal(super.value, {super.debugLabel});
+  ListSignal(
+    super.value, {
+    super.debugLabel,
+    super.equalityCheck,
+  });
 
   @override
   E get first => value.first;
