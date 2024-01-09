@@ -18,7 +18,13 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
   /// Create the signal with the given args
   S call(Arg arg) {
     if (cache) {
-      return _cache.putIfAbsent(arg, () => _create(arg));
+      return _cache.putIfAbsent(
+        arg,
+        () => _create(arg)
+          ..onDispose(() {
+            _cache.remove(arg);
+          }),
+      );
     } else {
       return _create(arg);
     }
