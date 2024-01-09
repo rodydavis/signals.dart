@@ -57,7 +57,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
   bool _initialized = false;
   late T _value, _previousValue, _initialValue;
 
-  final SignalEqualityCheck equalityCheck;
+  final SignalEqualityCheck<T>? equalityCheck;
 
   @override
   bool operator ==(Object other) {
@@ -95,10 +95,9 @@ class _Computed<T> implements Computed<T>, _Listenable {
   _Computed(
     ComputedCallback<T> compute, {
     this.debugLabel,
-    SignalEqualityCheck? equalityCheck,
+    this.equalityCheck,
   })  : _compute = compute,
         _version = 0,
-        equalityCheck = equalityCheck ?? ((a, b) => a == b),
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
         brand = identifier,
@@ -140,6 +139,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
       _prepareSources(this);
       _evalContext = this;
       final value = _compute();
+      final equalityCheck = this.equalityCheck ?? ((a, b) => a == b);
       if ((this._flags & HAS_ERROR) != 0 ||
           !_initialized ||
           !equalityCheck(_value, value) ||

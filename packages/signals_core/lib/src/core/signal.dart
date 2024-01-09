@@ -120,14 +120,13 @@ class _Signal<T> extends Signal<T> {
   @override
   final String? debugLabel;
 
-  final SignalEqualityCheck equalityCheck;
+  final SignalEqualityCheck<T>? equalityCheck;
 
   _Signal(
     this._value, {
     this.debugLabel,
-    SignalEqualityCheck? equalityCheck,
+    this.equalityCheck,
   })  : _version = 0,
-        equalityCheck = equalityCheck ?? ((a, b) => a == b),
         _previousValue = _value,
         _initialValue = _value,
         brand = identifier,
@@ -271,7 +270,7 @@ class _Signal<T> extends Signal<T> {
     if (_evalContext is Computed) {
       _mutationDetected();
     }
-
+    final equalityCheck = this.equalityCheck ?? ((a, b) => a == b);
     if (!equalityCheck(val, this._value)) {
       _updateValue(val);
     }
