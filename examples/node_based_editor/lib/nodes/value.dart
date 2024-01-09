@@ -19,8 +19,9 @@ abstract class ValueNode<T> extends Node<dynamic, T> {
   ValueNode.fromSource(
     Node<dynamic, T> this.source, {
     super.name = 'Value (readonly)',
+    super.inputs = const [],
   })  : output = computed(() => source.output.value),
-        super(inputs: [source]);
+        super();
 
   ValueNode.computed({
     super.name = 'Value (computed)',

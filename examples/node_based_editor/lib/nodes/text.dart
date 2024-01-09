@@ -52,8 +52,26 @@ class DynamicToText extends TextNode {
 
   DynamicToText.fromSource(
     Node<dynamic, dynamic> source, {
-    super.name = 'Dynamic to Text (computed)',
+    super.name = 'Dynamic to Text (readonly)',
   }) : super.computed(inputs: [source]) {
     output = computed(() => source.output.value.toString());
+  }
+
+  DynamicToText.computed(
+    Node<dynamic, dynamic> source, {
+    super.name = 'Dynamic to Text (computed)',
+  }) : super.computed();
+}
+
+class DynamicToTextOnTrigger extends TextNode {
+  DynamicToTextOnTrigger.fromSource(
+    Node<dynamic, dynamic> source,
+    Node<dynamic, Object> trigger, {
+    super.name = 'Dynamic Trigger (readonly)',
+  }) : super.computed(inputs: [source, trigger]) {
+    output = computed(() {
+      trigger.output.value;
+      return source.output.peek().toString();
+    });
   }
 }

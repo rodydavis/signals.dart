@@ -77,6 +77,17 @@ class _EditorState extends State<Editor> {
                 tooltip: 'Clear selection',
               );
             }),
+            Watch((context) {
+              if (nodes.isEmpty) return const SizedBox.shrink();
+              return IconButton(
+                onPressed: () {
+                  selection.clear();
+                  nodes.clear();
+                },
+                icon: const Icon(Icons.clear_all),
+                tooltip: 'Clear all nodes',
+              );
+            }),
           ],
         ),
         body: Watch.builder(
@@ -264,6 +275,42 @@ class _EditorState extends State<Editor> {
                             ],
                           ],
                           if (selection.length > 1) ...[
+                            if (selection.length == 2 &&
+                                () {
+                                  final list = selection.toList();
+                                  final trigger =
+                                      list[1] is Node<dynamic, Object>;
+                                  return trigger;
+                                }()) ...[
+                              nodePreview(size, () {
+                                final list = selection.toList();
+                                final val = list[0];
+                                final trigger =
+                                    list[1] as Node<dynamic, Object>;
+                                return DynamicToTextOnTrigger.fromSource(
+                                  val,
+                                  trigger,
+                                );
+                              }),
+                            ],
+                            if (selection.length == 2 &&
+                                () {
+                                  final list = selection.toList();
+                                  final inc = list[0] is Node<dynamic, Object>;
+                                  final dec = list[1] is Node<dynamic, Object>;
+                                  return inc && dec;
+                                }()) ...[
+                              nodePreview(size, () {
+                                final list = selection.toList();
+                                final inc = list[0] as Node<dynamic, Object>;
+                                final dec = list[1] as Node<dynamic, Object>;
+                                return StepperNode.fromTriggers(
+                                  0,
+                                  increment: inc,
+                                  decrement: dec,
+                                );
+                              }),
+                            ],
                             if (selection.length == 3 &&
                                 () {
                                   final list = selection.toList();
