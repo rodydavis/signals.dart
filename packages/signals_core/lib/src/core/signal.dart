@@ -1,6 +1,6 @@
 part of 'signals.dart';
 
-typedef Signalequality<T> = bool Function(T previous, T value);
+typedef SignalEquality<T> = bool Function(T previous, T value);
 
 abstract class ReadonlySignal<T> {
   List<_Listenable> get _allTargets;
@@ -120,7 +120,7 @@ class _Signal<T> extends Signal<T> {
   @override
   final String? debugLabel;
 
-  final Signalequality<T>? equality;
+  final SignalEquality<T>? equality;
 
   _Signal(
     this._value, {
@@ -346,7 +346,7 @@ class _Signal<T> extends Signal<T> {
 Signal<T> signal<T>(
   T value, {
   String? debugLabel,
-  Signalequality? equality,
+  SignalEquality? equality,
 }) {
   return _Signal<T>(
     value,
@@ -359,7 +359,7 @@ Signal<T> signal<T>(
 ReadonlySignal<T> readonlySignal<T>(
   T value, {
   String? debugLabel,
-  Signalequality? equality,
+  SignalEquality? equality,
 }) {
   return signal(
     value,

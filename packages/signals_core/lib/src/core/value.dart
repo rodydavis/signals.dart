@@ -22,7 +22,7 @@ class ValueSignal<T> extends _Signal<T> implements Signal<T> {
 ValueSignal<T> valueSignal<T>(
   T value, {
   String? debugLabel,
-  Signalequality? equality,
+  SignalEquality? equality,
 }) {
   return ValueSignal<T>(
     value,

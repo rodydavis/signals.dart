@@ -57,7 +57,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
   bool _initialized = false;
   late T _value, _previousValue, _initialValue;
 
-  final Signalequality<T>? equality;
+  final SignalEquality<T>? equality;
 
   @override
   bool operator ==(Object other) {
@@ -324,7 +324,7 @@ typedef ComputedCallback<T> = T Function();
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
-  Signalequality? equality,
+  SignalEquality? equality,
 }) {
   return _Computed<T>(
     compute,

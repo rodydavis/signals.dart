@@ -89,7 +89,7 @@ StreamSignal<T> streamSignal<T>(
   bool? cancelOnError,
   String? debugLabel,
   void Function()? onDone,
-  Signalequality? equality,
+  SignalEquality? equality,
 }) {
   return StreamSignal(
     stream: stream(),
