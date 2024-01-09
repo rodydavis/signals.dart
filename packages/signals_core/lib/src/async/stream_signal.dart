@@ -10,7 +10,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
     T? initialValue,
     this.cancelOnError,
     super.debugLabel,
-    super.equalityCheck,
+    super.equality,
     void Function()? onDone,
   }) : super(initialValue != null
             ? AsyncState.data(initialValue)
@@ -89,7 +89,7 @@ StreamSignal<T> streamSignal<T>(
   bool? cancelOnError,
   String? debugLabel,
   void Function()? onDone,
-  SignalEqualityCheck? equalityCheck,
+  Signalequality? equality,
 }) {
   return StreamSignal(
     stream: stream(),
@@ -97,6 +97,6 @@ StreamSignal<T> streamSignal<T>(
     cancelOnError: cancelOnError,
     debugLabel: debugLabel,
     onDone: onDone,
-    equalityCheck: equalityCheck,
+    equality: equality,
   );
 }

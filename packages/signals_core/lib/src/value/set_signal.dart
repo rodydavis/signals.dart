@@ -6,7 +6,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   SetSignal(
     super.value, {
     super.debugLabel,
-    super.equalityCheck,
+    super.equality,
   });
 
   @override

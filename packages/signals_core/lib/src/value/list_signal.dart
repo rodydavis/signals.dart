@@ -8,7 +8,7 @@ class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
   ListSignal(
     super.value, {
     super.debugLabel,
-    super.equalityCheck,
+    super.equality,
   });
 
   @override

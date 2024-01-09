@@ -6,7 +6,7 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
   MapSignal(
     super.value, {
     super.debugLabel,
-    super.equalityCheck,
+    super.equality,
   });
 
   @override

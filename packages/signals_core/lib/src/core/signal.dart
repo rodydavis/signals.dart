@@ -1,6 +1,6 @@
 part of 'signals.dart';
 
-typedef SignalEqualityCheck<T> = bool Function(T previous, T value);
+typedef Signalequality<T> = bool Function(T previous, T value);
 
 abstract class ReadonlySignal<T> {
   List<_Listenable> get _allTargets;
@@ -120,12 +120,12 @@ class _Signal<T> extends Signal<T> {
   @override
   final String? debugLabel;
 
-  final SignalEqualityCheck<T>? equalityCheck;
+  final Signalequality<T>? equality;
 
   _Signal(
     this._value, {
     this.debugLabel,
-    this.equalityCheck,
+    this.equality,
   })  : _version = 0,
         _previousValue = _value,
         _initialValue = _value,
@@ -270,8 +270,8 @@ class _Signal<T> extends Signal<T> {
     if (_evalContext is Computed) {
       _mutationDetected();
     }
-    final equalityCheck = this.equalityCheck ?? ((a, b) => a == b);
-    if (!equalityCheck(val, this._value)) {
+    final equality = this.equality ?? ((a, b) => a == b);
+    if (!equality(val, this._value)) {
       _updateValue(val);
     }
   }
@@ -346,12 +346,12 @@ class _Signal<T> extends Signal<T> {
 Signal<T> signal<T>(
   T value, {
   String? debugLabel,
-  SignalEqualityCheck? equalityCheck,
+  Signalequality? equality,
 }) {
   return _Signal<T>(
     value,
     debugLabel: debugLabel,
-    equalityCheck: equalityCheck,
+    equality: equality,
   );
 }
 
@@ -359,11 +359,11 @@ Signal<T> signal<T>(
 ReadonlySignal<T> readonlySignal<T>(
   T value, {
   String? debugLabel,
-  SignalEqualityCheck? equalityCheck,
+  Signalequality? equality,
 }) {
   return signal(
     value,
     debugLabel: debugLabel,
-    equalityCheck: equalityCheck,
+    equality: equality,
   ).readonly();
 }

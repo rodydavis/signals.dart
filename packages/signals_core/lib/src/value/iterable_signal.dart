@@ -7,7 +7,7 @@ class IterableSignal<E> extends ValueSignal<Iterable<E>>
   IterableSignal(
     super.value, {
     super.debugLabel,
-    super.equalityCheck,
+    super.equality,
   });
 
   @override

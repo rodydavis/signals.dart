@@ -17,7 +17,7 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   AsyncSignal(
     super.value, {
     super.debugLabel,
-    super.equalityCheck,
+    super.equality,
   }) : _initialValue = value;
 
   final AsyncState<T> _initialValue;
@@ -77,11 +77,11 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
 AsyncSignal<T> asyncSignal<T>(
   AsyncState<T> value, {
   String? debugLabel,
-  SignalEqualityCheck? equalityCheck,
+  Signalequality? equality,
 }) {
   return AsyncSignal<T>(
     value,
     debugLabel: debugLabel,
-    equalityCheck: equalityCheck,
+    equality: equality,
   );
 }
