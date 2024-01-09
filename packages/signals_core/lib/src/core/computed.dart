@@ -142,7 +142,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
       final value = _compute();
       if ((this._flags & HAS_ERROR) != 0 ||
           !_initialized ||
-          equalityCheck(_value, value) ||
+          !equalityCheck(_value, value) ||
           _version == 0) {
         if (!_initialized) {
           _previousValue = value;
