@@ -13,6 +13,16 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
     subscribe((_) => controller.add(value));
     return controller.stream;
   }
+
+  /// Select a value and return a computed signal to listen for changes
+  ///
+  /// ```dart
+  /// final a = signal({'a': 1, 'b': 2});
+  /// final b = a.select((val) => val()['a'] as int);
+  /// ```
+  ReadonlySignal<R> select<R>(R Function(ReadonlySignal<T>) selector) {
+    return computed(() => selector(this));
+  }
 }
 
 /// Mutable signal utils
