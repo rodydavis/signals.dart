@@ -77,7 +77,7 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
 AsyncSignal<T> asyncSignal<T>(
   AsyncState<T> value, {
   String? debugLabel,
-  SignalEquality? equality,
+  SignalEquality<AsyncState<T>>? equality,
 }) {
   return AsyncSignal<T>(
     value,

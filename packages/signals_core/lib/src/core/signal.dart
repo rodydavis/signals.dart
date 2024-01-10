@@ -366,7 +366,7 @@ class _Signal<T> extends Signal<T> {
 Signal<T> signal<T>(
   T value, {
   String? debugLabel,
-  SignalEquality? equality,
+  SignalEquality<T>? equality,
 }) {
   return _Signal<T>(
     value,
@@ -379,7 +379,7 @@ Signal<T> signal<T>(
 ReadonlySignal<T> readonlySignal<T>(
   T value, {
   String? debugLabel,
-  SignalEquality? equality,
+  SignalEquality<T>? equality,
 }) {
   return signal(
     value,

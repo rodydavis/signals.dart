@@ -28,5 +28,6 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 /// Mutable signal utils
 extension SignalUtils<T> on Signal<T> {
   /// Restrict API to readonly signal
+  @Deprecated('use [readonly] instead')
   ReadonlySignal<T> toReadonlySignal() => this;
 }

@@ -324,7 +324,7 @@ typedef ComputedCallback<T> = T Function();
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
-  SignalEquality? equality,
+  SignalEquality<T>? equality,
 }) {
   return _Computed<T>(
     compute,

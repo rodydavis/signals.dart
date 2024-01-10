@@ -118,7 +118,7 @@ FutureSignal<T> futureSignal<T>(
   String? debugLabel,
   bool fireImmediately = false,
   List<ReadonlySignal<dynamic>> dependencies = const [],
-  SignalEquality? equality,
+  SignalEquality<AsyncState<T>>? equality,
 }) {
   return FutureSignal(
     future: future,
