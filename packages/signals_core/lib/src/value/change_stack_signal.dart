@@ -91,6 +91,8 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   }
 }
 
+/// Signal change that contains a snapshot of the 
+/// previous value and next value
 typedef SignalChange<T> = ({
   T previousValue,
   T value,
