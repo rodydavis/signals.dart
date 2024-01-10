@@ -99,7 +99,7 @@ typedef SignalChange<T> = ({
 /// Change stack signal that can be used to call undo/redo on a value.
 ///
 /// ```dart
-/// final s = signal(0);
+/// final s = changeStack(0);
 /// s.value = 1;
 /// s.value = 2;
 /// s.value = 3;
