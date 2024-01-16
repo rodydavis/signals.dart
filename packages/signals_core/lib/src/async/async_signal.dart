@@ -3,15 +3,6 @@ import 'dart:async';
 import '../core/signals.dart';
 import 'async_state.dart';
 
-/// Builder on a successful [AsyncSignal] value
-typedef AsyncSignalValueBuilder<R, T> = R Function(T value);
-
-/// Builder on a [AsyncSignal] error
-typedef AsyncSignalErrorBuilder<R> = R Function(Object? error);
-
-/// Builder on a [AsyncSignal] callback
-typedef AsyncSignalBuilder<R> = R Function();
-
 /// A [Signal] that stores value in [AsyncState]
 class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   AsyncSignal(

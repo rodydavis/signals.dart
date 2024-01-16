@@ -22,6 +22,7 @@ part of 'signals.dart';
 /// ```
 typedef SignalEquality<T> = bool Function(T previous, T value);
 
+/// Read only signals can just retrive a value but not update or cause mutations
 abstract class ReadonlySignal<T> {
   List<_Listenable> get _allTargets;
 
