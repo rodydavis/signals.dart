@@ -1,3 +1,12 @@
+## 3.0.0
+
+- adding readonlySignalContainer to be existing signalContainer API
+- updating signalContainer to allow for mutable signals
+- adding SignalEquality to allow override of ==
+- adding `select` for signals to return a computed value
+- fix memory leak on signal container
+- adding ChangeStackSignal
+
 ## 2.1.10
 
 - Updating `signals_flutter` package to **1.0.8**

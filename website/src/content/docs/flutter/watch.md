@@ -18,6 +18,23 @@ Widget build(BuildContext context) {
 
 This will also automatically unsubscribe when the widget is disposed.
 
+Any inherited widgets referenced to inside the Watch scope will be subscribed to for updates ([MediaQuery](https://api.flutter.dev/flutter/widgets/MediaQuery-class.html), [Theme](https://api.flutter.dev/flutter/material/Theme-class.html), etc.) and retrigger the builder method.
+
+There is also a drop in replacement for builder:
+
+```diff
+final signal = signal(10);
+...
+@override
+Widget build(BuildContext context) {
+-  return Builder(
++  return Watch.builder(
+    builder: (context) => Text('$signal'),
+  );
+}
+```
+
+
 ## .watch(context)
 
 If you need to map to a widget property use the `watch` extension method. This will infer the type and subscribe to the signal.
@@ -95,6 +112,18 @@ With signals instead of using `select` you instead create a new `computed` signa
 ```dart
 final signal = signal((a: 1, b: 2));
 final computed = computed(() => signal.value.a);
+...
+@override
+Widget build(BuildContext context) {
+  return Watch((_) => Text('$computed'));
+}
+```
+
+It is also possible to select from the signal directly:
+
+```dart
+final signal = signal((a: 1, b: 2));
+final computed = signal.select((s) => s.value.a);
 ...
 @override
 Widget build(BuildContext context) {
