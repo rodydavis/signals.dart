@@ -13,44 +13,28 @@ export default defineConfig({
       sidebar: [
         {
           label: "Reference",
+          autogenerate: { directory: "reference" },
+        },
+        {
+          label: "Dart",
           items: [
-            { label: "Overview", link: "/reference/overview" },
-            { label: "Installing", link: "/reference/installing" },
             {
-              label: "Core Methods",
-              items: [
-                { label: "Signal", link: "/reference/signal" },
-                { label: "Computed", link: "/reference/computed" },
-                { label: "Effect", link: "/reference/effect" },
-                { label: "Untracked", link: "/reference/untracked" },
-                { label: "Batch", link: "/reference/batch" },
-                { label: "Connect", link: "/reference/connect" },
+              label: "Core", items: [
+                { label: "Signal", link: "dart/core/signal" },
+                { label: "Computed", link: "dart/core/computed" },
+                { label: "Effect", link: "dart/core/effect" },
+                { label: "Untracked", link: "dart/core/untracked" },
+                { label: "Batch", link: "dart/core/batch" },
               ],
             },
-            {
-              label: "Value Types",
-              items: [
-                { label: "List", link: "/reference/list" },
-                { label: "Set", link: "/reference/set" },
-                { label: "Map", link: "/reference/map" },
-                { label: "Iterable", link: "/reference/iterable" },
-                { label: "Future", link: "/reference/future" },
-                { label: "Stream", link: "/reference/stream" },
-              ],
-            },
-            {
-              label: "Flutter",
-              items: [
-                { label: "Watch", link: "/reference/watch" },
-                {
-                  label: "ValueListenable",
-                  link: "/reference/value-listenable",
-                },
-                { label: "ValueNotifier", link: "/reference/value-notifier" },
-              ],
-            },
-            { label: "DevTools", link: "/reference/devtools" },
+            { label: "Value", autogenerate: { directory: "dart/value" }, },
+            { label: "Async", autogenerate: { directory: "dart/async" }, },
+            { label: "Utilities", autogenerate: { directory: "dart/utilities" }, },
           ],
+        },
+        {
+          label: "Flutter",
+          autogenerate: { directory: "flutter" },
         },
         {
           label: "Examples",

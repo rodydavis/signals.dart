@@ -3,7 +3,9 @@ title: Connect
 description: Connect a signal to a set of streams
 ---
 
-## connect
+The idea for `connect` comes from Anguar Signals with RxJS:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/R7-KdADEq0A?si=kK8XasbBedE3sPrR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 Start with a signal and then use the `connect` method to create a connector.
 Streams will feed Signal value.
