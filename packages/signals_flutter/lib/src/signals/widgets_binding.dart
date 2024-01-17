@@ -1,0 +1,41 @@
+import 'package:flutter/widgets.dart';
+
+import '../../signals_flutter.dart';
+
+final appLifecycleSignal = signal<AppLifecycleState>(AppLifecycleState.resumed);
+late Signal<int?> accessibilityFocusSignal;
+
+bool _setup = false;
+
+/// Call this method in main to setup the signals to
+/// react to the WidgetsBinding instance
+///
+/// ```dart
+/// void main() {
+///   ...
+///   initWidgetsBindingSignals();
+///   runApp(...);
+/// }
+/// ```
+///
+/// Then in your application you can react to the app lifecycle
+/// and accessibility focus signal.
+///
+/// ```dart
+/// effect(() {
+///   print('current lifecycle: $appLifecycleSignal');
+/// });
+///
+/// effect(() {
+///   print("current accessibility focus: $accessibilityFocusSignal");
+/// });
+/// ```
+void initWidgetsBindingSignals([WidgetsBinding? binding]) {
+  if (_setup) return;
+  _setup = true;
+
+  final widgetsBinding = binding ?? WidgetsBinding.instance;
+  accessibilityFocusSignal = widgetsBinding.accessibilityFocus.toSignal();
+  final observer = AppLifecycleListener(onStateChange: appLifecycleSignal.set);
+  widgetsBinding.addObserver(observer);
+}

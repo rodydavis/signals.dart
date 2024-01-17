@@ -35,4 +35,5 @@ export 'src/core/signals.dart'
         Computed,
         Signal,
         ValueSignal,
-        ReadonlySignal;
+        ReadonlySignal,
+        SignalEquality;
