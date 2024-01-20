@@ -1,8 +1,8 @@
 /// Error builder for [AsyncState]
 typedef AsyncErrorBuilder<E> = E Function(
-  Object error,
+  Object error, [
   StackTrace? stackTrace,
-);
+]);
 
 /// Value builder for [AsyncState]
 typedef AsyncDataBuilder<E, T> = E Function(
