@@ -10,6 +10,7 @@ export 'src/extensions/set.dart';
 export 'src/extensions/stream.dart';
 export 'src/extensions/signal.dart';
 export 'src/extensions/callback.dart';
+export 'src/extensions/object.dart';
 export 'src/utils/timer.dart';
 export 'src/async/async_state.dart';
 export 'src/async/async_signal.dart';
