@@ -6,7 +6,9 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
   /// Convert an existing [ValueListenable] to [ReadonlySignal]
   ReadonlySignal<T> toSignal({String? debugLabel}) {
     final s = signal<T>(value, debugLabel: debugLabel);
-    addListener(() => s.value = value);
+    void update() => s.value = value;
+    addListener(update);
+    s.onDispose(() => removeListener(update));
     return s;
   }
 }
