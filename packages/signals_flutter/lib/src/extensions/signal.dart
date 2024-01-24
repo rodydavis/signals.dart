@@ -59,9 +59,8 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// and other existing widgets like [ValueListenableBuilder]
   ValueListenable<T> toValueListenable() {
     final notifier = ValueNotifier(this());
-    subscribe((_) {
-      notifier.value = this();
-    });
+    subscribe((v) => notifier.value = v);
+    onDispose(notifier.dispose);
     return notifier;
   }
 }
@@ -73,8 +72,9 @@ extension FlutterSignalUtils<T> on Signal<T> {
   /// and allow for mutation
   ValueNotifier<T> toValueNotifier() {
     final notifier = ValueNotifier(value);
-    subscribe((_) => notifier.value = value);
+    subscribe((v) => notifier.value = v);
     notifier.addListener(() => value = notifier.value);
+    onDispose(notifier.dispose);
     return notifier;
   }
 }

@@ -1,8 +1,8 @@
 /// Error builder for [AsyncState]
 typedef AsyncErrorBuilder<E> = E Function(
-  Object error,
+  Object error, [
   StackTrace? stackTrace,
-);
+]);
 
 /// Value builder for [AsyncState]
 typedef AsyncDataBuilder<E, T> = E Function(
@@ -31,8 +31,8 @@ sealed class AsyncState<T> {
   }
 
   /// Create a state with an error
-  factory AsyncState.error(Object error, StackTrace? stackTrace) {
-    return AsyncError<T>(error, stackTrace);
+  factory AsyncState.error(Object error, [StackTrace? stackTrace]) {
+    return AsyncError<T>(error, stackTrace ?? StackTrace.current);
   }
 
   /// Create a state with a loading state

@@ -156,7 +156,7 @@ Instead of `map` and `maybeMap` it is also possible to use [dart switch expressi
 final signal = asyncSignal<int>(AsyncState.data(1));
 final value = switch (signal.value) {
     AsyncData<int> data => 'value: ${data.value}',
-    AsyncError<int> error => 'error: ${data.error}',
+    AsyncError<int> error => 'error: ${error.error}',
     AsyncLoading<int>() => 'loading',
 };
 ```
