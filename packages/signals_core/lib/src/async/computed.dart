@@ -12,7 +12,7 @@ import 'state.dart';
 /// late final movie = computedFrom([movieId], ([id]) => fetchMovie(id));
 /// ```
 FutureSignal<T> computedFrom<T>(
-  List<ReadonlySignal<dynamic>> signals,
+  List<ReadonlySignal> signals,
   Future<T> Function(List<dynamic> args) callback, {
   T? initialValue,
   String? debugLabel,
@@ -45,11 +45,10 @@ FutureSignal<T> computedAsync<T>(
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
 }) {
-  final s = computed(callback);
   return FutureSignal<T>(
-    future: s.call,
+    future: callback,
     fireImmediately: true,
-    dependencies: [s],
+    dependencies: [computed(callback)],
     initialValue: initialValue,
     debugLabel: debugLabel,
     equality: equality,

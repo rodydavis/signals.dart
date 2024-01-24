@@ -12,6 +12,7 @@ export 'src/async/state.dart';
 export 'src/async/signal.dart';
 export 'src/async/stream.dart';
 export 'src/async/future.dart';
+export 'src/async/computed.dart';
 export 'src/value/iterable.dart';
 export 'src/value/list.dart';
 export 'src/value/map.dart';
