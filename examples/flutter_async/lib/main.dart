@@ -76,7 +76,7 @@ class _ExampleState extends State<Example> {
                         style: Theme.of(context).textTheme.headlineMedium!,
                       );
                     },
-                    error: (error, _) {
+                    error: (error) {
                       return Text(
                         'error:$error',
                         style: Theme.of(context).textTheme.headlineMedium!,

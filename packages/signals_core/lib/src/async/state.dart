@@ -1,8 +1,9 @@
 /// Error builder for [AsyncState]
-typedef AsyncErrorBuilder<E> = E Function(
-  Object error, [
-  StackTrace? stackTrace,
-]);
+///
+/// The `Function` below stands for one of two types:
+/// - (dynamic) -> FutureOr<T>
+/// - (dynamic, StackTrace) -> FutureOr<T>
+typedef AsyncErrorBuilder<E> = Function;
 
 /// Value builder for [AsyncState]
 typedef AsyncDataBuilder<E, T> = E Function(
@@ -79,6 +80,10 @@ sealed class AsyncState<T> {
   ///  loading: () => 'Loading...',
   /// );
   /// ```
+  ///
+  /// The error `Function` below can be one of two types:
+  /// - (dynamic) -> FutureOr<T>
+  /// - (dynamic, StackTrace) -> FutureOr<T>
   E map<E>({
     required AsyncDataBuilder<E, T> data,
     required AsyncErrorBuilder<E> error,
@@ -102,6 +107,10 @@ sealed class AsyncState<T> {
   ///  orElse: () => 'Loading...',
   /// );
   /// ```
+  ///
+  /// The error `Function` below can be one of two types:
+  /// - (dynamic) -> FutureOr<T>
+  /// - (dynamic, StackTrace) -> FutureOr<T>
   E maybeMap<E>({
     AsyncDataBuilder<E, T>? data,
     AsyncErrorBuilder<E>? error,
@@ -189,15 +198,3 @@ class AsyncLoading<T> extends AsyncState<T> {
   @override
   final bool hasError;
 }
-
-@Deprecated('Use [AsyncState] instead')
-typedef AsyncSignalState<T> = AsyncState<T>;
-
-@Deprecated('Use [AsyncLoading] instead')
-typedef AsyncSignalStateLoading<T> = AsyncLoading<T>;
-
-@Deprecated('Use [AsyncData] instead')
-typedef AsyncSignalStateData<T> = AsyncData<T>;
-
-@Deprecated('Use [AsyncError] instead')
-typedef AsyncSignalStateError<T> = AsyncError<T>;
