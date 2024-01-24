@@ -1,5 +1,28 @@
 part of 'signals.dart';
 
+/// Check if 2 signals are the same and change when updates happen.
+///
+/// If using an object or class that does not override the hashCode and == operator
+/// then checking for an id getter would return the boolean.
+///
+/// ```dart
+/// final s = signal(
+///   User(1, 'Bob'),
+///   equality: (a, b) => a.id == b.id,
+/// );
+/// ```
+///
+/// If using a package like collection then list checks could be used:
+///
+/// ```dart
+/// final list = listSignal(
+///   [1, 2, 3],
+///   equality: const ListEquality().check,
+/// );
+/// ```
+typedef SignalEquality<T> = bool Function(T previous, T value);
+
+/// Read only signals can just retrive a value but not update or cause mutations
 abstract class ReadonlySignal<T> {
   List<_Listenable> get _allTargets;
 
@@ -101,24 +124,30 @@ typedef SignalCleanup = void Function();
 /// Changing a signal's value synchronously updates every `computed`
 /// and `effect` that depends on that signal, ensuring your app state
 /// is always consistent.
-
 abstract class Signal<T> implements ReadonlySignal<T> {
   /// Update the current value
   set value(T value);
 
   /// Set the current value
   void set(T value);
+
+  ReadonlySignal<T> readonly() => this as ReadonlySignal<T>;
 }
 
-class _Signal<T> implements Signal<T> {
+class _Signal<T> extends Signal<T> {
   @override
   final int globalId;
 
   @override
   final String? debugLabel;
 
-  _Signal(this._value, {this.debugLabel})
-      : _version = 0,
+  final SignalEquality<T>? equality;
+
+  _Signal(
+    this._value, {
+    this.debugLabel,
+    this.equality,
+  })  : _version = 0,
         _previousValue = _value,
         _initialValue = _value,
         brand = identifier,
@@ -262,8 +291,8 @@ class _Signal<T> implements Signal<T> {
     if (_evalContext is Computed) {
       _mutationDetected();
     }
-
-    if (val != this._value) {
+    final equality = this.equality ?? ((a, b) => a == b);
+    if (!equality(val, this._value)) {
       _updateValue(val);
     }
   }
@@ -335,17 +364,27 @@ class _Signal<T> implements Signal<T> {
 /// Changing a signal's value synchronously updates every `computed`
 /// and `effect` that depends on that signal, ensuring your app state is
 /// always consistent.
-Signal<T> signal<T>(T value, {String? debugLabel}) {
+Signal<T> signal<T>(
+  T value, {
+  String? debugLabel,
+  SignalEquality<T>? equality,
+}) {
   return _Signal<T>(
     value,
     debugLabel: debugLabel,
+    equality: equality,
   );
 }
 
 /// Create a read only signal
-ReadonlySignal<T> readonlySignal<T>(T value, {String? debugLabel}) {
-  return _Signal<T>(
+ReadonlySignal<T> readonlySignal<T>(
+  T value, {
+  String? debugLabel,
+  SignalEquality<T>? equality,
+}) {
+  return signal(
     value,
     debugLabel: debugLabel,
-  );
+    equality: equality,
+  ).readonly();
 }

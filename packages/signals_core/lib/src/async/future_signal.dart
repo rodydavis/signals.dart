@@ -1,3 +1,4 @@
+import '../core/signals.dart';
 import 'async_signal.dart';
 import 'async_state.dart';
 
@@ -6,18 +7,30 @@ class FutureSignal<T> extends AsyncSignal<T> {
   final Future<T> Function()? _initialFuture;
   final bool fireImmediately;
   bool _fetching = false;
+  EffectCleanup? _cleanup;
 
   FutureSignal({
     Future<T> Function()? future,
     this.fireImmediately = false,
     super.debugLabel,
+    super.equality,
     T? initialValue,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
   })  : _future = future,
         _initialFuture = future,
         super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
-    if (fireImmediately) init();
+    if (dependencies.isNotEmpty) {
+      _cleanup = effect(() {
+        for (final dependency in dependencies) {
+          dependency.value;
+        }
+        reset();
+      });
+    } else {
+      if (fireImmediately) init();
+    }
   }
 
   Future<void> _execute() async {
@@ -85,6 +98,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
   @override
   void dispose() {
     super.dispose();
+    _cleanup?.call();
     if (_initialFuture != null) {
       resetFuture(_initialFuture!);
     } else {
@@ -103,11 +117,15 @@ FutureSignal<T> futureSignal<T>(
   T? initialValue,
   String? debugLabel,
   bool fireImmediately = false,
+  List<ReadonlySignal<dynamic>> dependencies = const [],
+  SignalEquality<AsyncState<T>>? equality,
 }) {
   return FutureSignal(
     future: future,
     initialValue: initialValue,
     debugLabel: debugLabel,
     fireImmediately: fireImmediately,
+    dependencies: dependencies,
+    equality: equality,
   );
 }

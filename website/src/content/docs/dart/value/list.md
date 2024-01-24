@@ -1,5 +1,5 @@
 ---
-title: List Signal
+title: ListSignal
 description: Creates a signal that implements List
 ---
 
@@ -7,7 +7,7 @@ List signals can be created by extension or method and implement the [List](http
 
 This makes them useful for creating signals from existing lists, or for creating signals that can be used as lists.
 
-### listSignal
+### listSignal, ListSignal
 
 ```dart
 final s = listSignal([1, 2, 3]);

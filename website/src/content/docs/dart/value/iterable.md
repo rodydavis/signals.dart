@@ -1,11 +1,11 @@
 ---
-title: Iterable Signal
+title: IterableSignal
 description: Creates a signal that implements Iterable
 ---
 
 Iterable signals can be created by extension or method and implement the [Iterable](https://api.dart.dev/stable/3.2.1/dart-core/Iterable-class.html) interface.
 
-### iterableSignal
+### iterableSignal, IterableSignal
 
 ```dart
 final iterable = () sync* {...};

@@ -3,20 +3,12 @@ import 'dart:async';
 import '../core/signals.dart';
 import 'async_state.dart';
 
-/// Builder on a successful [AsyncSignal] value
-typedef AsyncSignalValueBuilder<R, T> = R Function(T value);
-
-/// Builder on a [AsyncSignal] error
-typedef AsyncSignalErrorBuilder<R> = R Function(Object? error);
-
-/// Builder on a [AsyncSignal] callback
-typedef AsyncSignalBuilder<R> = R Function();
-
-/// A compound [Signal] that wraps a [Stream] or [Future]
+/// A [Signal] that stores value in [AsyncState]
 class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   AsyncSignal(
     super.value, {
     super.debugLabel,
+    super.equality,
   }) : _initialValue = value;
 
   final AsyncState<T> _initialValue;
@@ -70,4 +62,17 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   }
 
   T get requireValue => super.value.requireValue;
+}
+
+/// A [Signal] that stores value in [AsyncState]
+AsyncSignal<T> asyncSignal<T>(
+  AsyncState<T> value, {
+  String? debugLabel,
+  SignalEquality<AsyncState<T>>? equality,
+}) {
+  return AsyncSignal<T>(
+    value,
+    debugLabel: debugLabel,
+    equality: equality,
+  );
 }

@@ -1,5 +1,5 @@
 ---
-title: Set Signal
+title: SetSignal
 description: Creates a signal that implements Set
 ---
 
@@ -7,7 +7,7 @@ Set signals can be created by extension or method and implement the [Set](https:
 
 This makes them useful for creating signals from existing sets, or for creating signals that can be used as sets.
 
-### setSignal
+### setSignal, SetSignal
 
 ```dart
 final s = setSignal({1, 2, 3});
