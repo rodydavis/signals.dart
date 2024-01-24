@@ -2,7 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../../signals_flutter.dart';
+import '../../../signals_flutter.dart';
 import 'scheduler_binding.dart';
 
 /// Ticker signal used to drive animations and can create animation controllers

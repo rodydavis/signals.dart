@@ -1,9 +1,8 @@
 import 'package:flutter/widgets.dart';
 
-import '../../signals_flutter.dart';
+import '../../../signals_flutter.dart';
 
 final appLifecycleSignal = signal<AppLifecycleState>(AppLifecycleState.resumed);
-late Signal<int?> accessibilityFocusSignal;
 
 bool _setup = false;
 
@@ -35,7 +34,6 @@ void initWidgetsBindingSignals([WidgetsBinding? binding]) {
   _setup = true;
 
   final widgetsBinding = binding ?? WidgetsBinding.instance;
-  accessibilityFocusSignal = widgetsBinding.accessibilityFocus.toSignal();
   final observer = AppLifecycleListener(onStateChange: appLifecycleSignal.set);
   widgetsBinding.addObserver(observer);
 }

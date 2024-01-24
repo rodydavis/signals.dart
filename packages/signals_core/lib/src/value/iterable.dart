@@ -158,3 +158,14 @@ IterableSignal<T> iterableSignal<T>(
     debugLabel: debugLabel,
   );
 }
+
+/// Extension on future to provide helpful methods for signals
+extension SignalIterableUtils<T> on Iterable<T> {
+  /// Convert an existing list to [IterableSignal]
+  IterableSignal<T> toSignal({String? debugLabel}) {
+    return IterableSignal<T>(
+      this,
+      debugLabel: debugLabel,
+    );
+  }
+}

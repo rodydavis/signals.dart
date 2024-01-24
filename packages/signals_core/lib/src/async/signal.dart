@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import '../core/signals.dart';
-import 'async_state.dart';
+import 'state.dart';
 
 /// A [Signal] that stores value in [AsyncState]
 class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {

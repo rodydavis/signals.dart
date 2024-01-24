@@ -1,6 +1,6 @@
 import 'package:flutter/scheduler.dart';
 
-import '../../signals_flutter.dart';
+import '../../../signals_flutter.dart';
 
 final onPersistentFrameSignal = signal<Duration>(Duration.zero);
 
