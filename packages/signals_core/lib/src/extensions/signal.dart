@@ -9,9 +9,14 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   Stream<T> toStream() {
     // ignore: close_sinks
     final controller = StreamController<T>();
+
     controller.add(value);
-    subscribe((_) => controller.add(value));
-    return controller.stream;
+
+    subscribe(controller.add);
+
+    onDispose(controller.close);
+
+    return controller.stream.asBroadcastStream();
   }
 }
 
