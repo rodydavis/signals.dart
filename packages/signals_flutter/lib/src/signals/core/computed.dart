@@ -4,6 +4,24 @@ import '../../../signals_flutter.dart';
 
 final _signals = <WeakReference<Element>, Map<int, Computed>>{};
 
+/// Create and watch a computed signal in a build method
+///
+/// ```dart
+/// class MyWidget extends ... {
+///  @override
+///  Widget build(BuildContext context) {
+///    final count = useSignal(context, 0);
+///    final isEven = useComputed(context, () => count.value % 2 == 0);
+///    return Row(
+///     children: [
+///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
+///       Text('$count event=$isEven),
+///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
+///    ],
+///   );
+///  }
+/// }
+/// ```
 Computed<T> useComputed<T>(
   BuildContext context,
   T Function() value, {
