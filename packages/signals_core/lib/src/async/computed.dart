@@ -9,11 +9,11 @@ import 'state.dart';
 ///
 /// ```dart
 /// final movieId = signal('id');
-/// late final movie = computedFrom([movieId], ([id]) => fetchMovie(id));
+/// late final movie = computedFrom(args, ([movieId]) => fetchMovie(args.first));
 /// ```
-FutureSignal<T> computedFrom<T>(
-  List<ReadonlySignal> signals,
-  Future<T> Function(List<dynamic> args) callback, {
+FutureSignal<T> computedFrom<T, A>(
+  List<ReadonlySignal<A>> signals,
+  Future<T> Function(List<A> args) callback, {
   T? initialValue,
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
