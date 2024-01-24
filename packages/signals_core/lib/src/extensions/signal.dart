@@ -6,7 +6,7 @@ import '../core/signals.dart';
 extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Convert a signal to a [Stream] to be consumed as
   /// a read only stream and also be used in a [StreamBuilder]
-  Stream<T> toStream() {
+  Stream<T> toStream({bool broadcast = false}) {
     final controller = StreamController<T>();
 
     controller.add(value);
@@ -15,7 +15,9 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 
     onDispose(controller.close);
 
-    return controller.stream.asBroadcastStream();
+    return broadcast
+        ? controller.stream.asBroadcastStream()
+        : controller.stream;
   }
 }
 
