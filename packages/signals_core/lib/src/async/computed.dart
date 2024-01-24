@@ -3,7 +3,7 @@ import 'future.dart';
 import 'state.dart';
 
 /// Async Computed is syntax sugar around [FutureSignal].
-/// 
+///
 /// computedFrom takes a list of [signals] and a [callback] function to
 /// compute the value of the signal every time one of the [signals] changes.
 ///
@@ -29,15 +29,15 @@ FutureSignal<T> computedFrom<T>(
 }
 
 /// Async Computed is syntax sugar around [FutureSignal].
-/// 
-/// computedAsync takes a [callback] function to compute the value 
+///
+/// computedAsync takes a [callback] function to compute the value
 /// of the signal. This callback is converted into a [Computed] signal.
-/// 
+///
 /// ```dart
 /// final movieId = signal('id');
 /// late final movie = computedAsync(() => fetchMovie(movieId()));
 /// ```
-/// 
+///
 /// It is important that signals are called before any async gaps with await.
 FutureSignal<T> computedAsync<T>(
   Future<T> Function() callback, {
@@ -45,10 +45,11 @@ FutureSignal<T> computedAsync<T>(
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
 }) {
+  final s = computed(callback);
   return FutureSignal<T>(
-    future: computed(callback).call,
+    future: s.call,
     fireImmediately: true,
-    dependencies: [],
+    dependencies: [s],
     initialValue: initialValue,
     debugLabel: debugLabel,
     equality: equality,
