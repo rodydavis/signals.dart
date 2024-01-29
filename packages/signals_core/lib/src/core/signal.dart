@@ -131,7 +131,7 @@ abstract class Signal<T> implements ReadonlySignal<T> {
   /// Set the current value
   void set(T value);
 
-  ReadonlySignal<T> readonly() => this as ReadonlySignal<T>;
+  ReadonlySignal<T> readonly() => this;
 }
 
 class _Signal<T> extends Signal<T> {
@@ -386,5 +386,5 @@ ReadonlySignal<T> readonlySignal<T>(
     value,
     debugLabel: debugLabel,
     equality: equality,
-  ).readonly();
+  );
 }
