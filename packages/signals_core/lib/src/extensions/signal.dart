@@ -2,22 +2,37 @@ import 'dart:async';
 
 import '../core/signals.dart';
 
+final Map<int, Stream<dynamic>> _streamCache = {};
+
 /// Signal extensions
 extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Convert a signal to a [Stream] to be consumed as
   /// a read only stream and also be used in a [StreamBuilder]
-  Stream<T> toStream({bool broadcast = false}) {
+  Stream<T> toStream({
+    @Deprecated('No longer needed') bool broadcast = false,
+  }) {
+    final existing = _streamCache[globalId];
+
+    if (existing != null) {
+      return existing as Stream<T>;
+    }
+
     final controller = StreamController<T>();
+
+    final stream = controller.stream.asBroadcastStream();
+
+    _streamCache[globalId] = stream;
 
     controller.add(value);
 
     subscribe(controller.add);
 
-    onDispose(controller.close);
+    onDispose(() {
+      _streamCache.remove(globalId);
+      controller.close();
+    });
 
-    return broadcast
-        ? controller.stream.asBroadcastStream()
-        : controller.stream;
+    return stream;
   }
 
   /// Select a value and return a computed signal to listen for changes
