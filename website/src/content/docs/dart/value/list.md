@@ -21,10 +21,9 @@ final s = [1, 2, 3].toSignal();
 
 ## Methods
 
-List modifications are done directly on the underlying list, and will trigger signals as expected.
+List modifications are done directly on the underlying list and will trigger signals as expected.
 
 ```dart
-
 final s1 = listSignal([1, 2, 3]);
 
 // by index
@@ -37,5 +36,4 @@ s1.first = 1;
 
 // extended operators
 final s2 = s1 & [3, 4, 5];
-
 ```
