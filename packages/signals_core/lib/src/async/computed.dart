@@ -17,6 +17,7 @@ FutureSignal<T> computedFrom<T, A>(
   T? initialValue,
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
+  bool autoDispose = false,
 }) {
   return FutureSignal<T>(
     () => callback(signals.map((e) => e()).toList()),
@@ -24,6 +25,7 @@ FutureSignal<T> computedFrom<T, A>(
     initialValue: initialValue,
     debugLabel: debugLabel,
     equality: equality,
+    autoDispose: autoDispose,
   );
 }
 
@@ -43,6 +45,7 @@ FutureSignal<T> computedAsync<T>(
   T? initialValue,
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
+  bool autoDispose = false,
 }) {
   return FutureSignal<T>(
     callback,
@@ -50,5 +53,6 @@ FutureSignal<T> computedAsync<T>(
     initialValue: initialValue,
     debugLabel: debugLabel,
     equality: equality,
+    autoDispose: autoDispose,
   );
 }

@@ -8,6 +8,7 @@ class IterableSignal<E> extends ValueSignal<Iterable<E>>
     super.value, {
     super.debugLabel,
     super.equality,
+    super.autoDispose,
   });
 
   @override
@@ -152,20 +153,30 @@ class IterableSignal<E> extends ValueSignal<Iterable<E>>
 IterableSignal<T> iterableSignal<T>(
   Iterable<T> iterable, {
   String? debugLabel,
+  bool autoDispose = false,
+  SignalEquality<Iterable<T>>? equality,
 }) {
   return IterableSignal<T>(
     iterable,
     debugLabel: debugLabel,
+    autoDispose: autoDispose,
+    equality: equality,
   );
 }
 
 /// Extension on future to provide helpful methods for signals
 extension SignalIterableUtils<T> on Iterable<T> {
   /// Convert an existing list to [IterableSignal]
-  IterableSignal<T> toSignal({String? debugLabel}) {
+  IterableSignal<T> toSignal({
+    String? debugLabel,
+    bool autoDispose = false,
+    SignalEquality<Iterable<T>>? equality,
+  }) {
     return IterableSignal<T>(
       this,
       debugLabel: debugLabel,
+      autoDispose: autoDispose,
+      equality: equality,
     );
   }
 }

@@ -7,6 +7,7 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
     super.value, {
     super.debugLabel,
     super.equality,
+    super.autoDispose,
   });
 
   @override
@@ -153,6 +154,8 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
 MapSignal<K, V> mapSignal<K, V>(
   Map<K, V> map, {
   String? debugLabel,
+  bool autoDispose = false,
+  SignalEquality<Map<K, V>>? equality,
 }) {
   return MapSignal<K, V>(
     map,
@@ -163,10 +166,16 @@ MapSignal<K, V> mapSignal<K, V>(
 /// Extension on future to provide helpful methods for signals
 extension SignalMapUtils<K, V> on Map<K, V> {
   /// Convert an existing list to [MapSignal]
-  MapSignal<K, V> toSignal({String? debugLabel}) {
+  MapSignal<K, V> toSignal({
+    String? debugLabel,
+    bool autoDispose = false,
+    SignalEquality<Map<K, V>>? equality,
+  }) {
     return MapSignal<K, V>(
       this,
       debugLabel: debugLabel,
+      autoDispose: autoDispose,
+      equality: equality,
     );
   }
 }

@@ -6,6 +6,7 @@ class ValueSignal<T> extends _Signal<T> implements Signal<T> {
     super.value, {
     super.debugLabel,
     super.equality,
+    super.autoDispose,
   });
 
   /// Should only be called to update the value of a signal if checks for equality

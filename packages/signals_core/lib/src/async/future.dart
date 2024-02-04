@@ -12,6 +12,7 @@ class FutureSignal<T> extends StreamSignal<T> {
     super.dependencies,
     super.equality,
     super.lazy,
+    super.autoDispose,
   }) : super(
           () => callback().asStream(),
           cancelOnError: true,
@@ -25,6 +26,7 @@ FutureSignal<T> futureSignal<T>(
   List<ReadonlySignal<dynamic>> dependencies = const [],
   SignalEquality<AsyncState<T>>? equality,
   bool lazy = true,
+  bool autoDispose = false,
 }) {
   return FutureSignal(
     callback,
@@ -33,5 +35,6 @@ FutureSignal<T> futureSignal<T>(
     dependencies: dependencies,
     equality: equality,
     lazy: lazy,
+    autoDispose: autoDispose,
   );
 }

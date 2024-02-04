@@ -9,6 +9,7 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
     super.value, {
     super.debugLabel,
     super.equality,
+    super.autoDispose,
   }) : _initialValue = value;
   final AsyncState<T> _initialValue;
   bool _initialized = false;
@@ -101,10 +102,12 @@ AsyncSignal<T> asyncSignal<T>(
   AsyncState<T> value, {
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
+  bool autoDispose = false,
 }) {
   return AsyncSignal<T>(
     value,
     debugLabel: debugLabel,
     equality: equality,
+    autoDispose: autoDispose,
   );
 }

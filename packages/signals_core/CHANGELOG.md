@@ -8,6 +8,7 @@
 - Adding computedAsync/computedFrom for similar API to angular
 - Adding `.set(..., force: true)` to Signal/Computed to force a rebuild
 - Adding `.recompute()` for Computed to recall the callback
+- Adding autoDispose for Signal/Computed
 
 ## 3.0.0
 

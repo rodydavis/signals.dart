@@ -7,6 +7,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
     super.value, {
     super.debugLabel,
     super.equality,
+    super.autoDispose,
   });
 
   @override
@@ -259,20 +260,30 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
 SetSignal<T> setSignal<T>(
   Set<T> list, {
   String? debugLabel,
+  bool autoDispose = false,
+  SignalEquality<Set<T>>? equality,
 }) {
   return SetSignal<T>(
     list,
     debugLabel: debugLabel,
+    autoDispose: autoDispose,
+    equality: equality,
   );
 }
 
 /// Extension on future to provide helpful methods for signals
 extension SignalSetUtils<T> on Set<T> {
   /// Convert an existing list to [SetSignal]
-  SetSignal<T> toSignal({String? debugLabel}) {
+  SetSignal<T> toSignal({
+    String? debugLabel,
+    bool autoDispose = false,
+    SignalEquality<Set<T>>? equality,
+  }) {
     return SetSignal(
       this,
       debugLabel: debugLabel,
+      autoDispose: autoDispose,
+      equality: equality,
     );
   }
 }

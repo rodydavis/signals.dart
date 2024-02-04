@@ -20,6 +20,8 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
     super.value, {
     super.debugLabel,
     this.limit,
+    super.autoDispose,
+    super.equality,
   });
 
   /// Max values to keep in history
@@ -91,7 +93,7 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   }
 }
 
-/// Signal change that contains a snapshot of the 
+/// Signal change that contains a snapshot of the
 /// previous value and next value
 typedef SignalChange<T> = ({
   T previousValue,
@@ -115,10 +117,14 @@ ChangeStackSignal<T> changeStack<T>(
   T value, {
   String? debugLabel,
   int? limit,
+  bool autoDispose = false,
+  SignalEquality<T>? equality,
 }) {
   return ChangeStackSignal<T>(
     value,
     debugLabel: debugLabel,
     limit: limit,
+    autoDispose: autoDispose,
+    equality: equality,
   );
 }

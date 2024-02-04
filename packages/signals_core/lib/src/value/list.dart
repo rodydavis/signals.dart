@@ -9,6 +9,7 @@ class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
     super.value, {
     super.debugLabel,
     super.equality,
+    super.autoDispose,
   });
 
   @override
@@ -370,20 +371,30 @@ class ListSignal<E> extends ValueSignal<List<E>> implements List<E> {
 ListSignal<T> listSignal<T>(
   List<T> list, {
   String? debugLabel,
+  bool autoDispose = false,
+  SignalEquality<List<T>>? equality,
 }) {
   return ListSignal<T>(
     list,
     debugLabel: debugLabel,
+    autoDispose: autoDispose,
+    equality: equality,
   );
 }
 
 /// Extension on future to provide helpful methods for signals
 extension SignalListUtils<T> on List<T> {
   /// Convert an existing list to [ListSignal]
-  ListSignal<T> toSignal({String? debugLabel}) {
+  ListSignal<T> toSignal({
+    String? debugLabel,
+    bool autoDispose = false,
+    SignalEquality<List<T>>? equality,
+  }) {
     return ListSignal<T>(
       this,
       debugLabel: debugLabel,
+      autoDispose: autoDispose,
+      equality: equality,
     );
   }
 }

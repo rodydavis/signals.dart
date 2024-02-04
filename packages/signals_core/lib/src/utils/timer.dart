@@ -12,6 +12,7 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
     required this.every,
     String super.debugLabel = 'Timer',
     super.cancelOnError,
+    super.autoDispose,
   }) : super(
           () => Stream<TimerSignalEvent>.periodic(
             every,

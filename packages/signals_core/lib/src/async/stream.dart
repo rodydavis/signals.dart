@@ -27,6 +27,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
     this.dependencies = const [],
     void Function()? onDone,
     bool lazy = true,
+    super.autoDispose,
   })  : _onDone = onDone,
         super(initialValue != null
             ? AsyncState.data(initialValue)
@@ -144,6 +145,7 @@ StreamSignal<T> streamSignal<T>(
   void Function()? onDone,
   bool? cancelOnError,
   bool lazy = true,
+  bool autoDispose = false,
 }) {
   return StreamSignal(
     callback,
@@ -154,5 +156,6 @@ StreamSignal<T> streamSignal<T>(
     onDone: onDone,
     cancelOnError: cancelOnError,
     lazy: lazy,
+    autoDispose: autoDispose,
   );
 }
