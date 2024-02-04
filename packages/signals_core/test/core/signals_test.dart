@@ -31,16 +31,7 @@ void main() {
       expect(s.value, v);
     });
 
-    group('autoDispose', () {
-      test('default should not throw on dispose', () {
-        final v = [1, 2];
-        final s = signal(v);
-        expect(s.value, v);
-        s.dispose();
-        s.value = [3];
-        expect(s.disposed, true);
-        expect(s.value, [3]);
-      });
+    group('dispose', () {
       test('check onDispose callback', () {
         int calls = 0;
         final v = [1, 2];
@@ -51,7 +42,23 @@ void main() {
         expect(s.disposed, true);
         expect(calls, 1);
       });
-      test('dispose should throw when true', () {
+      group('autoDispose', () {
+        test('check last subscriber disposes', () {
+          final s = signal(1, autoDispose: true);
+          final dispose = s.subscribe((_) => {});
+          expect(s.disposed, false);
+          dispose();
+          expect(s.disposed, true);
+        });
+        test('check last subscriber does not disposes', () {
+          final s = signal(1, autoDispose: false);
+          final dispose = s.subscribe((_) => {});
+          expect(s.disposed, false);
+          dispose();
+          expect(s.disposed, false);
+        });
+      });
+      test('read/write after dispose should throw', () {
         int calls = 0;
         final v = [1, 2];
         final s = signal(v, autoDispose: true);
@@ -59,10 +66,9 @@ void main() {
         expect(s.value, v);
         final dispose = s.subscribe((_) => {});
         dispose();
-        s.value = [3];
         expect(s.disposed, true);
-        expect(calls, 1);
-        throwsA(isA<SignalsError>);
+        expect(() => s.value = [3], throwsA(isA<SignalsError>()));
+        expect(() => s.value, throwsA(isA<SignalsError>()));
       });
     });
 

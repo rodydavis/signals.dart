@@ -22,7 +22,7 @@ void main() {
   });
 
   group('computed', () {
-    group('autoDispose', () {
+    group('dispose', () {
       test('check onDispose callback', () {
         int calls = 0;
         final v = [1, 2];
@@ -33,6 +33,22 @@ void main() {
         s.dispose();
         expect(s.disposed, true);
         expect(calls, 1);
+      });
+    });
+    group('autoDispose', () {
+      test('check last subscriber disposes', () {
+        final s = computed(() => 1, autoDispose: true);
+        final dispose = s.subscribe((_) => {});
+        expect(s.disposed, false);
+        dispose();
+        expect(s.disposed, true);
+      });
+      test('check last subscriber does not disposes', () {
+        final s = computed(() => 1, autoDispose: false);
+        final dispose = s.subscribe((_) => {});
+        expect(s.disposed, false);
+        dispose();
+        expect(s.disposed, false);
       });
     });
 
