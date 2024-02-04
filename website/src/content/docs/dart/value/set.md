@@ -18,3 +18,20 @@ final s = setSignal({1, 2, 3});
 ```dart
 final s = {1, 2, 3}.toSignal();
 ```
+
+## Methods
+
+Set modifications are done directly on the underlying set and will trigger signals as expected.
+
+```dart
+final s1 = setSignal({1, 2, 3});
+
+// mutations
+s1.add(4);
+s1.remove(2);
+
+// expose common Dart Set interfaces
+s1.length;                   // 3
+s1.contains(3);              // true
+s1.intersection({6, 2, 1});  // {1}
+```
