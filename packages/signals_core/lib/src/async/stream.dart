@@ -50,17 +50,22 @@ class StreamSignal<T> extends AsyncSignal<T> {
       _subscription = src.listen(
         setValue,
         onError: setError,
-        onDone: () async {
-          _done = true;
-          _onDone?.call();
-          await _subscription?.cancel();
-          _subscription = null;
-        },
+        onDone: _finish,
         cancelOnError: cancelOnError,
       );
     } catch (error, stackTrace) {
       setError(error, stackTrace);
+      if (cancelOnError ?? true) {
+        _finish();
+      }
     }
+  }
+
+  void _finish() async {
+    _done = true;
+    _onDone?.call();
+    await _subscription?.cancel();
+    _subscription = null;
   }
 
   bool get isPaused => _subscription?.isPaused ?? false;
