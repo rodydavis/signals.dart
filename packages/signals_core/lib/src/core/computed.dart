@@ -287,17 +287,17 @@ class _Computed<T> implements Computed<T>, _Listenable {
     return _Signal.__signalSubscribe(this, fn);
   }
 
-  final _disposeCallbacks = <Function>{};
+  final _disposeCallbacks = <void Function()>{};
 
   @override
-  void onDispose(Function cleanup) {
+  void onDispose(void Function() cleanup) {
     _disposeCallbacks.add(cleanup);
   }
 
   @override
   void dispose() {
     for (final cleanup in _disposeCallbacks) {
-      cleanup(this);
+      cleanup();
     }
     _disposeCallbacks.clear();
     _flags |= DISPOSED;
