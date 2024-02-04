@@ -164,6 +164,9 @@ class AsyncData<T> extends AsyncState<T> {
 
   @override
   bool get hasError => false;
+
+  @override
+  T get value => super.value as T;
 }
 
 /// State for an [AsyncState] with an error
@@ -180,6 +183,9 @@ class AsyncError<T> extends AsyncState<T> {
 
   @override
   bool get hasError => true;
+
+  @override
+  Object get error => super.error!;
 }
 
 /// State for an [AsyncState] with a loading state
