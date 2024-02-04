@@ -12,7 +12,10 @@ class FutureSignal<T> extends StreamSignal<T> {
     super.dependencies,
     super.equality,
     super.lazy,
-  }) : super(() => callback().asStream());
+  }) : super(
+          () => callback().asStream(),
+          cancelOnError: true,
+        );
 }
 
 FutureSignal<T> futureSignal<T>(
