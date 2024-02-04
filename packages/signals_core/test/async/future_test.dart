@@ -137,38 +137,26 @@ void main() {
       expect(signal.value.error, null);
     });
 
-    test('check dispose call', () async {
-      int calls = 0;
+    test('dependencies', () async {
+      final prefix = signal('a');
+      final val = signal(0);
+      final f = futureSignal(() async {
+        final p = prefix();
+        final v = val();
+        await Future.delayed(const Duration(seconds: 1));
+        return '$p$v';
+      });
+      expect(f.peek().isLoading, true);
 
-      Future<int> future(int value) async {
-        calls++;
-        await Future.delayed(const Duration(milliseconds: 5));
-        return value;
-      }
+      var result = await f.future;
 
-      final signal = futureSignal(() => future(10));
-      expect(signal.peek().isLoading, true);
-      expect(calls, 0);
+      expect(result, 'a0');
 
-      await signal.future;
+      prefix.value = 'b';
+      await f.future;
+      result = f.requireValue;
 
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
-
-      signal.resetFuture(() => future(20));
-      await signal.future;
-
-      expect(calls, 2);
-      expect(signal.value.value, 20);
-      expect(signal.value.error, null);
-
-      signal.dispose();
-      await signal.future;
-
-      expect(calls, 3);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
+      expect(result, 'b0');
     });
   });
 }

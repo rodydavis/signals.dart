@@ -2,10 +2,6 @@ import 'package:signals/signals.dart';
 
 /// AsyncSignal emissions
 void main() {
-  /// Fetch id value as Future
-  Future<String> fetch(int id) async =>
-      Future.delayed(const Duration(milliseconds: 5), () => 'Future::$id');
-
   /// Emit temporised values
   Stream<int> idEmitter() async* {
     yield 1;
@@ -19,18 +15,22 @@ void main() {
   /// idEmitter stream
   final id = streamSignal(idEmitter, initialValue: 0);
 
+  /// Fetch id value as Future
+  Future<String> fetch() async {
+    final _id = id().value; // Rebuilds the Future when id.value changes
+    await Future.delayed(const Duration(milliseconds: 5));
+    return 'user$_id';
+  }
+
   /// Sync on user emitted value with a default emission of 'guest'
-  final user = fetch(id.value.requireValue).toSignal(initialValue: 'guest');
+  final user = fetch().toSignal(initialValue: 'guest');
 
   /// When user Future resolve
-  final greeting = computed(() => 'Hello, ${user.value}');
+  final greeting = computed(() => 'Hello, ${user.value.value}');
 
   effect(() {
     /// Register to $id AsyncSignal
     print('current id: ${id.requireValue}');
-
-    /// Configure new emission after Fetch resolve with id.value
-    user.resetFuture(() => fetch(id.value.requireValue));
   });
 
   /// Computed Greeting emitted a new Salutation after user.value completed

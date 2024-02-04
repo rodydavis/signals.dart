@@ -299,3 +299,9 @@ void _cleanupSources(_Listenable target) {
 
   target._sources = head;
 }
+
+/// Signal usage error
+class SignalsError extends Error {
+  final String message;
+  SignalsError(this.message);
+}

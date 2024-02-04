@@ -13,7 +13,10 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
     String super.debugLabel = 'Timer',
     super.cancelOnError,
   }) : super(
-          stream: Stream<TimerSignalEvent>.periodic(every, (c) => _emit(c + 1)),
+          () => Stream<TimerSignalEvent>.periodic(
+            every,
+            (c) => _emit(c + 1),
+          ),
           initialValue: _emit(0),
         );
 

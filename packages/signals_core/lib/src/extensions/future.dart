@@ -13,13 +13,11 @@ extension SignalFutureUtils<T> on Future<T> {
   FutureSignal<T> toSignal({
     Duration? timeout,
     String? debugLabel,
-    bool fireImmediately = false,
     T? initialValue,
   }) {
     return futureSignal(
       () => timeout != null ? this.timeout(timeout) : this,
       debugLabel: debugLabel,
-      fireImmediately: fireImmediately,
       initialValue: initialValue,
     );
   }

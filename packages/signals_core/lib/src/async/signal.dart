@@ -10,7 +10,6 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
     super.debugLabel,
     super.equality,
   }) : _initialValue = value;
-
   final AsyncState<T> _initialValue;
   bool _initialized = false;
   Completer<T> _completer = Completer<T>();
@@ -53,6 +52,39 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   void init() async {
     if (_initialized) return;
     _initialized = true;
+  }
+
+  /// Reload the future
+  Future<void> reload() async {
+    value = switch (value) {
+      AsyncData<T> data => AsyncLoading<T>(
+          value: data.value as T,
+          hasValue: true,
+          isLoading: false,
+        ),
+      AsyncError<T> err => AsyncLoading<T>(
+          error: (err.error!, err.stackTrace),
+          hasError: true,
+          isLoading: false,
+        ),
+      AsyncLoading<T>() => AsyncLoading<T>(),
+    };
+  }
+
+  /// Refresh the future
+  Future<void> refresh() async {
+    value = switch (value) {
+      AsyncData<T> data => AsyncData<T>(
+          data.value as T,
+          isLoading: true,
+        ),
+      AsyncError<T> err => AsyncError<T>(
+          err.error!,
+          err.stackTrace,
+          isLoading: true,
+        ),
+      AsyncLoading<T>() => AsyncLoading<T>(),
+    };
   }
 
   @override

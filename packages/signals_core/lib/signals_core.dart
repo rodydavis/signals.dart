@@ -34,4 +34,5 @@ export 'src/core/signals.dart'
         Signal,
         ValueSignal,
         ReadonlySignal,
-        SignalEquality;
+        SignalEquality,
+        SignalsError;

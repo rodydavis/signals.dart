@@ -19,8 +19,7 @@ FutureSignal<T> computedFrom<T, A>(
   SignalEquality<AsyncState<T>>? equality,
 }) {
   return FutureSignal<T>(
-    future: () => callback(signals.map((e) => e()).toList()),
-    fireImmediately: true,
+    () => callback(signals.map((e) => e()).toList()),
     dependencies: signals,
     initialValue: initialValue,
     debugLabel: debugLabel,
@@ -46,8 +45,7 @@ FutureSignal<T> computedAsync<T>(
   SignalEquality<AsyncState<T>>? equality,
 }) {
   return FutureSignal<T>(
-    future: callback,
-    fireImmediately: true,
+    callback,
     dependencies: [computed(callback)],
     initialValue: initialValue,
     debugLabel: debugLabel,

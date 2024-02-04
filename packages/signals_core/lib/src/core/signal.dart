@@ -24,7 +24,16 @@ typedef SignalEquality<T> = bool Function(T previous, T value);
 
 /// Read only signals can just retrieve a value but not update or cause mutations
 abstract class ReadonlySignal<T> {
-  List<_Listenable> get _allTargets;
+  /// Throws and error if read after dispose and can be
+  /// disposed on last unsubscribe.
+  bool get autoDispose;
+
+  /// Returns true if dispose has been called and will throw and
+  /// error on value read
+  bool get disposed;
+  set disposed(bool value);
+
+  Iterable<_Listenable> get _allTargets;
 
   /// Debug label for Debug Mode
   String? get debugLabel;
@@ -129,7 +138,7 @@ abstract class Signal<T> implements ReadonlySignal<T> {
   set value(T value);
 
   /// Set the current value
-  void set(T value);
+  void set(T value, {bool force = false});
 
   ReadonlySignal<T> readonly() => this;
 }
@@ -143,10 +152,17 @@ class _Signal<T> extends Signal<T> {
 
   final SignalEquality<T>? equality;
 
+  @override
+  final bool autoDispose;
+
+  @override
+  bool disposed = false;
+
   _Signal(
     this._value, {
     this.debugLabel,
     this.equality,
+    this.autoDispose = false,
   })  : _version = 0,
         _previousValue = _value,
         _initialValue = _value,
@@ -214,6 +230,9 @@ class _Signal<T> extends Signal<T> {
         signal._targets = next;
       }
     }
+    if (signal.autoDispose && signal._allTargets.isEmpty) {
+      signal.dispose();
+    }
   }
 
   @override
@@ -225,13 +244,11 @@ class _Signal<T> extends Signal<T> {
   }
 
   @override
-  List<_Listenable> get _allTargets {
-    final results = <_Listenable>[];
+  Iterable<_Listenable> get _allTargets sync* {
     _Node? root = _targets;
     for (var node = root; node != null; node = node._nextTarget) {
-      results.add(node._target);
+      yield node._target;
     }
-    return results;
   }
 
   static EffectCleanup __signalSubscribe<T>(
@@ -267,12 +284,19 @@ class _Signal<T> extends Signal<T> {
   T get() => value;
 
   @override
-  void set(T value) => this.value = value;
+  void set(T value, {bool force = false}) => _set(value, force);
 
   final Symbol brand;
 
   @override
   T get value {
+    if (autoDispose && disposed) {
+      throw SignalsError(
+        'A $runtimeType was read after being disposed.\n'
+        'Once you have called dispose() on a $runtimeType, it '
+        'can no longer be used when autoDispose is set to true.',
+      );
+    }
     final node = _addDependency(this);
     if (node != null) {
       node._version = this._version;
@@ -287,12 +311,14 @@ class _Signal<T> extends Signal<T> {
   T get initialValue => this._initialValue;
 
   @override
-  set value(T val) {
+  set value(T val) => _set(val, false);
+
+  void _set(T val, bool force) {
     if (_evalContext is Computed) {
       _mutationDetected();
     }
     final equality = this.equality ?? ((a, b) => a == b);
-    if (!equality(val, this._value)) {
+    if (!equality(val, this._value) || force) {
       _updateValue(val);
     }
   }
@@ -337,10 +363,10 @@ class _Signal<T> extends Signal<T> {
     for (final cleanup in _disposeCallbacks) {
       cleanup();
     }
-    _disposeCallbacks.clear();
     if (_node != null) _unsubscribe(_node!);
     _value = _initialValue;
     _previousValue = _initialValue;
+    disposed = true;
   }
 }
 
@@ -368,11 +394,13 @@ Signal<T> signal<T>(
   T value, {
   String? debugLabel,
   SignalEquality<T>? equality,
+  bool autoDispose = false,
 }) {
   return _Signal<T>(
     value,
     debugLabel: debugLabel,
     equality: equality,
+    autoDispose: autoDispose,
   );
 }
 
@@ -381,10 +409,12 @@ ReadonlySignal<T> readonlySignal<T>(
   T value, {
   String? debugLabel,
   SignalEquality<T>? equality,
+  bool autoDispose = false,
 }) {
   return signal(
     value,
     debugLabel: debugLabel,
     equality: equality,
+    autoDispose: autoDispose,
   );
 }

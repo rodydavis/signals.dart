@@ -5,98 +5,149 @@ import 'signal.dart';
 import 'state.dart';
 
 class StreamSignal<T> extends AsyncSignal<T> {
-  StreamSignal({
-    Stream<T>? stream,
-    T? initialValue,
+  late final Computed<Stream<T>> _stream;
+  bool _fetching = false;
+  final bool? cancelOnError;
+  StreamSubscription<T>? _subscription;
+  final void Function()? _onDone;
+  bool _done = false;
+  bool get isDone => _done;
+  final List<ReadonlySignal<dynamic>> dependencies;
+  EffectCleanup? _cleanup;
+
+  Future<T> get last => _stream.value.last;
+  Future<T> get first => _stream.value.first;
+
+  StreamSignal(
+    Stream<T> Function() callback, {
     this.cancelOnError,
     super.debugLabel,
     super.equality,
+    T? initialValue,
+    this.dependencies = const [],
     void Function()? onDone,
-  }) : super(initialValue != null
+    bool lazy = true,
+  })  : _onDone = onDone,
+        super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
-    if (stream != null) {
-      addStream(
-        stream,
+    _stream = computed(
+      () {
+        for (final dep in dependencies) {
+          dep.value;
+        }
+        return callback();
+      },
+      equality: identical,
+    );
+    if (!lazy) value;
+  }
+
+  Future<void> execute(Stream<T> src) async {
+    if (_done || _fetching) return;
+    _fetching = true;
+    try {
+      _subscription = src.listen(
+        setValue,
+        onError: setError,
+        onDone: () async {
+          _done = true;
+          _onDone?.call();
+          await _subscription?.cancel();
+          _subscription = null;
+        },
         cancelOnError: cancelOnError,
-        onDone: onDone,
       );
+    } catch (error, stackTrace) {
+      setError(error, stackTrace);
     }
   }
 
-  final _subscriptions = <(StreamSubscription<T>, void Function()?)>[];
-  bool? cancelOnError;
+  bool get isPaused => _subscription?.isPaused ?? false;
+
+  void pause([Future<void>? resume]) {
+    _subscription?.pause(resume);
+    set(value, force: true);
+  }
+
+  void resume() {
+    _subscription?.resume();
+    set(value, force: true);
+  }
+
+  Future<void> cancel() async {
+    _subscription?.cancel();
+    _subscription = null;
+  }
+
+  @override
+  Future<void> reload() async {
+    super.reload();
+    _stream.recompute();
+    _fetching = false;
+    _done = false;
+    _subscription?.cancel();
+    _subscription = null;
+    await execute(_stream.value);
+  }
+
+  @override
+  Future<void> refresh() async {
+    super.refresh();
+    _stream.recompute();
+    _fetching = false;
+    _done = false;
+    _subscription?.cancel();
+    _subscription = null;
+    await execute(_stream.value);
+  }
 
   @override
   void reset() {
     super.reset();
-    for (final (sub, cb) in _subscriptions) {
-      sub.cancel();
-      cb?.call();
-    }
-    _subscriptions.clear();
-  }
-
-  /// Add a stream to listen to for updating the signal.
-  ///
-  /// This will not cancel any previous streams and will continue to listen to
-  /// all streams until the signal is disposed.
-  void addStream(
-    Stream<T> stream, {
-    bool? cancelOnError,
-    void Function()? onDone,
-  }) {
-    final subscription = stream.listen(
-      setValue,
-      onError: setError,
-      cancelOnError: cancelOnError,
-    );
-    _subscriptions.add((subscription, onDone));
-    subscription.onDone(() {
-      onDone?.call();
-      _subscriptions.removeWhere((e) => e.$1 == subscription);
-    });
-  }
-
-  /// Reset the signal and add a new stream to listen to for
-  /// updating the signal.
-  ///
-  /// This will cancel any previous streams and will continue to listen to
-  /// the new stream until the signal is disposed.
-  void resetStream(
-    Stream<T> stream, {
-    bool? cancelOnError,
-    void Function()? onDone,
-  }) {
-    reset();
-    addStream(
-      stream,
-      cancelOnError: cancelOnError,
-      onDone: onDone,
-    );
+    _fetching = false;
+    _done = false;
+    _subscription?.cancel();
+    _subscription = null;
+    init();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _cleanup?.call();
+    _subscription?.cancel();
     reset();
+  }
+
+  @override
+  AsyncState<T> get value {
+    _cleanup ??= _stream.subscribe((src) {
+      reset();
+      execute(src);
+    });
+    return super.value;
   }
 }
 
 StreamSignal<T> streamSignal<T>(
-  Stream<T> Function() stream, {
+  Stream<T> Function() callback, {
   T? initialValue,
-  bool? cancelOnError,
   String? debugLabel,
-  void Function()? onDone,
+  List<ReadonlySignal<dynamic>> dependencies = const [],
   SignalEquality<AsyncState<T>>? equality,
+  void Function()? onDone,
+  bool? cancelOnError,
+  bool lazy = true,
 }) {
   return StreamSignal(
-    stream: stream(),
+    callback,
     initialValue: initialValue,
-    cancelOnError: cancelOnError,
     debugLabel: debugLabel,
-    onDone: onDone,
+    dependencies: dependencies,
     equality: equality,
+    onDone: onDone,
+    cancelOnError: cancelOnError,
+    lazy: lazy,
   );
 }

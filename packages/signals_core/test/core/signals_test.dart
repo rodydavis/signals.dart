@@ -31,6 +31,41 @@ void main() {
       expect(s.value, v);
     });
 
+    group('autoDispose', () {
+      test('default should not throw on dispose', () {
+        final v = [1, 2];
+        final s = signal(v);
+        expect(s.value, v);
+        s.dispose();
+        s.value = [3];
+        expect(s.disposed, true);
+        expect(s.value, [3]);
+      });
+      test('check onDispose callback', () {
+        int calls = 0;
+        final v = [1, 2];
+        final s = signal(v);
+        s.onDispose(() => calls++);
+        expect(s.value, v);
+        s.dispose();
+        expect(s.disposed, true);
+        expect(calls, 1);
+      });
+      test('dispose should throw when true', () {
+        int calls = 0;
+        final v = [1, 2];
+        final s = signal(v, autoDispose: true);
+        s.onDispose(() => calls++);
+        expect(s.value, v);
+        final dispose = s.subscribe((_) => {});
+        dispose();
+        s.value = [3];
+        expect(s.disposed, true);
+        expect(calls, 1);
+        throwsA(isA<SignalsError>);
+      });
+    });
+
     test('should inherit from Signal', () {
       // ignore: unnecessary_type_check
       expect(signal(0) is Signal, true);
