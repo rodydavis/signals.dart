@@ -49,12 +49,12 @@ class FutureSignal<T> extends AsyncSignal<T> {
   Future<void> reload() async {
     value = switch (value) {
       AsyncData<T> data => AsyncLoading<T>(
-          value: data.value as T,
+          value: data.value,
           hasValue: true,
           isLoading: false,
         ),
       AsyncError<T> err => AsyncLoading<T>(
-          error: (err.error!, err.stackTrace),
+          error: (err.error, err.stackTrace),
           hasError: true,
           isLoading: false,
         ),
@@ -68,11 +68,11 @@ class FutureSignal<T> extends AsyncSignal<T> {
   Future<void> refresh() async {
     value = switch (value) {
       AsyncData<T> data => AsyncData<T>(
-          data.value as T,
+          data.value,
           isLoading: true,
         ),
       AsyncError<T> err => AsyncError<T>(
-          err.error!,
+          err.error,
           err.stackTrace,
           isLoading: true,
         ),
