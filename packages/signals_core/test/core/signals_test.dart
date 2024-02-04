@@ -32,16 +32,6 @@ void main() {
     });
 
     group('dispose', () {
-      test('check onDispose callback', () {
-        int calls = 0;
-        final v = [1, 2];
-        final s = signal(v);
-        s.onDispose(() => calls++);
-        expect(s.value, v);
-        s.dispose();
-        expect(s.disposed, true);
-        expect(calls, 1);
-      });
       group('autoDispose', () {
         test('check last subscriber disposes', () {
           final s = signal(1, autoDispose: true);
@@ -58,6 +48,18 @@ void main() {
           expect(s.disposed, false);
         });
       });
+
+      test('check onDispose callback', () {
+        int calls = 0;
+        final v = [1, 2];
+        final s = signal(v);
+        s.onDispose(() => calls++);
+        expect(s.value, v);
+        s.dispose();
+        expect(s.disposed, true);
+        expect(calls, 1);
+      });
+
       test('read/write after dispose should throw', () {
         int calls = 0;
         final v = [1, 2];
