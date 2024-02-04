@@ -1,3 +1,14 @@
+## 4.0.0
+
+- StreamSignal now will rebuild with signals are read in the callback to create the stream
+- Stream/Future signal both can take an optional list of dependencies to rebuild on
+- FutureSignal now extends StreamSignal
+- StreamSignal can now rebuild/refresh
+- StreamSignal can now pause/resume
+- Adding computedAsync/computedFrom for similar API to angular
+- Adding `.set(..., force: true)` to Signal/Computed to force a rebuild
+- Adding `.recompute()` for Computed to recall the callback
+
 ## 3.0.0
 
 - adding readonlySignalContainer to be existing signalContainer API

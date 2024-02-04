@@ -107,11 +107,8 @@ abstract class ReadonlySignal<T> {
 
   void dispose();
 
-  void onDispose(SignalCleanup cleanup);
+  void onDispose(Function cleanup);
 }
-
-/// Cleanup function for signal dispose
-typedef SignalCleanup = void Function();
 
 /// The `signal` function creates a new signal. A signal is a container for
 /// a value that can change over time. You can read a signal's value or
@@ -351,10 +348,10 @@ class _Signal<T> extends Signal<T> {
   @override
   _Node? _targets;
 
-  final _disposeCallbacks = <SignalCleanup>{};
+  final _disposeCallbacks = <Function>{};
 
   @override
-  void onDispose(SignalCleanup cleanup) {
+  void onDispose(Function cleanup) {
     _disposeCallbacks.add(cleanup);
   }
 

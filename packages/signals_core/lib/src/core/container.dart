@@ -76,7 +76,7 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
   S call(Arg arg) {
     if (cache) {
       return store.putIfAbsent(arg, () {
-        return _create(arg)..onDispose(() => store.remove(arg));
+        return _create(arg)..onDispose((_) => store.remove(arg));
       });
     } else {
       return _create(arg);
