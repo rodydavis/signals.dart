@@ -1,4 +1,4 @@
-import '../async/stream_signal.dart';
+import '../async/stream.dart';
 
 /// Extension on stream to provide helpful methods for signals
 extension SignalStreamUtils<T> on Stream<T> {

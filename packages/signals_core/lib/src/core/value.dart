@@ -2,7 +2,12 @@ part of 'signals.dart';
 
 /// Signal that can be extended and used as a class
 class ValueSignal<T> extends _Signal<T> implements Signal<T> {
-  ValueSignal(super.value, {super.debugLabel, super.equality});
+  ValueSignal(
+    super.value, {
+    super.debugLabel,
+    super.equality,
+    super.autoDispose,
+  });
 
   /// Should only be called to update the value of a signal if checks for equality
   /// have already been made.
@@ -14,7 +19,7 @@ class ValueSignal<T> extends _Signal<T> implements Signal<T> {
       final same = equality!(value, val);
       if (same) return;
     }
-    _updateValue(val ?? value);
+    set(val ?? value, force: true);
   }
 }
 

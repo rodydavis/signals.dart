@@ -95,13 +95,11 @@ class _Effect implements _Listenable {
     _onEffectCreated(this);
   }
 
-  List<ReadonlySignal> get _allSources {
-    final results = <ReadonlySignal>[];
+  Iterable<ReadonlySignal> get _allSources sync* {
     _Node? root = _sources;
     for (var node = root; node != null; node = node._nextSource) {
-      results.add(node._source);
+      yield node._source;
     }
-    return results;
   }
 
   void _callback() {
@@ -145,10 +143,10 @@ class _Effect implements _Listenable {
     }
   }
 
-  final _disposeCallbacks = <EffectCallback>{};
+  final _disposeCallbacks = <void Function()>{};
 
   @override
-  void onDispose(EffectCleanup cleanup) {
+  void onDispose(void Function() cleanup) {
     _disposeCallbacks.add(cleanup);
   }
 
@@ -212,7 +210,10 @@ class _Effect implements _Listenable {
 /// // that no one listens to it.
 /// surname.value = "Doe 2";
 /// ```
-EffectCleanup effect(EffectCallback compute, {String? debugLabel}) {
+EffectCleanup effect(
+  EffectCallback compute, {
+  String? debugLabel,
+}) {
   final effect = _Effect(compute, debugLabel: debugLabel);
   try {
     effect._callback();

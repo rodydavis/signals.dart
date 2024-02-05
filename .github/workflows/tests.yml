@@ -14,3 +14,5 @@ jobs:
 
       - run: cd packages/signals_core && dart pub get
       - run: cd packages/signals_core && dart test
+      - run: cd packages/signals_flutter && flutter pub get
+      - run: cd packages/signals_flutter && flutter test

@@ -194,7 +194,7 @@ abstract class _Listenable {
 
   void _notify();
 
-  void onDispose(EffectCleanup cleanup);
+  void onDispose(void Function() cleanup);
 
   void dispose();
 }
@@ -298,4 +298,10 @@ void _cleanupSources(_Listenable target) {
   }
 
   target._sources = head;
+}
+
+/// Signal usage error
+class SignalsError extends Error {
+  final String message;
+  SignalsError(this.message);
 }

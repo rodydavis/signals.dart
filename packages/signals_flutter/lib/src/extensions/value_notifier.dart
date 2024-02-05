@@ -6,8 +6,10 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   /// Convert an existing [ValueNotifier] to [Signal]
   Signal<T> toSignal({String? debugLabel}) {
     final s = signal<T>(value, debugLabel: debugLabel);
-    addListener(() => s.value = value);
+    void update() => () => s.value = value;
+    addListener(update);
     s.subscribe((_) => value = s.value);
+    s.onDispose(() => removeListener(update));
     return s;
   }
 }

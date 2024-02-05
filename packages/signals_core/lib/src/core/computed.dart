@@ -29,14 +29,22 @@ part of 'signals.dart';
 /// function will be automatically subscribed to and tracked as a
 /// dependency of the computed signal.
 abstract class Computed<T> implements ReadonlySignal<T> {
-  List<ReadonlySignal> get _allSources;
+  Iterable<ReadonlySignal> get _allSources;
 
   @override
-  List<_Listenable> get _allTargets;
+  Iterable<_Listenable> get _allTargets;
+
+  void recompute();
 }
 
 class _Computed<T> implements Computed<T>, _Listenable {
   final ComputedCallback<T> _compute;
+
+  @override
+  final bool autoDispose;
+
+  @override
+  bool disposed = false;
 
   @override
   final int globalId;
@@ -73,29 +81,26 @@ class _Computed<T> implements Computed<T>, _Listenable {
   }
 
   @override
-  List<ReadonlySignal> get _allSources {
-    final results = <ReadonlySignal>[];
+  Iterable<ReadonlySignal> get _allSources sync* {
     _Node? root = _sources;
     for (var node = root; node != null; node = node._nextSource) {
-      results.add(node._source);
+      yield node._source;
     }
-    return results;
   }
 
   @override
-  List<_Listenable> get _allTargets {
-    final results = <_Listenable>[];
+  Iterable<_Listenable> get _allTargets sync* {
     _Node? root = _targets;
     for (var node = root; node != null; node = node._nextTarget) {
-      results.add(node._target);
+      yield node._target;
     }
-    return results;
   }
 
   _Computed(
     ComputedCallback<T> compute, {
     this.debugLabel,
     this.equality,
+    this.autoDispose = false,
   })  : _compute = compute,
         _version = 0,
         _globalVersion = globalVersion - 1,
@@ -199,6 +204,13 @@ class _Computed<T> implements Computed<T>, _Listenable {
   }
 
   @override
+  void recompute() {
+    this.value;
+    _previousValue = _value;
+    this._value = _compute();
+  }
+
+  @override
   void _notify() {
     if (!((_flags & NOTIFIED) != 0)) {
       _flags |= OUTDATED | NOTIFIED;
@@ -225,6 +237,13 @@ class _Computed<T> implements Computed<T>, _Listenable {
 
   @override
   T get value {
+    if (disposed) {
+      throw SignalsError(
+        'A $runtimeType was read after being disposed.\n'
+        'Once you have called dispose() on a $runtimeType, it '
+        'can no longer be used.',
+      );
+    }
     if ((_flags & RUNNING) != 0) {
       _cycleDetected();
     }
@@ -268,10 +287,10 @@ class _Computed<T> implements Computed<T>, _Listenable {
     return _Signal.__signalSubscribe(this, fn);
   }
 
-  final _disposeCallbacks = <SignalCleanup>{};
+  final _disposeCallbacks = <void Function()>{};
 
   @override
-  void onDispose(SignalCleanup cleanup) {
+  void onDispose(void Function() cleanup) {
     _disposeCallbacks.add(cleanup);
   }
 
@@ -285,6 +304,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
     if (_node != null) _unsubscribe(_node!);
     _value = _initialValue;
     _previousValue = _initialValue;
+    disposed = true;
   }
 
   @override
@@ -325,10 +345,12 @@ Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
   SignalEquality<T>? equality,
+  bool autoDispose = false,
 }) {
   return _Computed<T>(
     compute,
     debugLabel: debugLabel,
     equality: equality,
+    autoDispose: autoDispose,
   );
 }

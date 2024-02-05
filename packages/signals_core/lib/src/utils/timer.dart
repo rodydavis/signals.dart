@@ -1,4 +1,4 @@
-import '../async/stream_signal.dart';
+import '../async/stream.dart';
 
 /// Time event to react to
 typedef TimerSignalEvent = ({int iteration, int millis});
@@ -12,8 +12,12 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
     required this.every,
     String super.debugLabel = 'Timer',
     super.cancelOnError,
+    super.autoDispose,
   }) : super(
-          stream: Stream<TimerSignalEvent>.periodic(every, (c) => _emit(c + 1)),
+          () => Stream<TimerSignalEvent>.periodic(
+            every,
+            (c) => _emit(c + 1),
+          ),
           initialValue: _emit(0),
         );
 
