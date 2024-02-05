@@ -1,3 +1,7 @@
+## 4.0.1
+
+- Adding SignalsWriteAfterDisposeError/SignalsReadAfterDisposeError for better error handling
+
 ## 4.0.0
 
 - StreamSignal now will rebuild with signals are read in the callback to create the stream

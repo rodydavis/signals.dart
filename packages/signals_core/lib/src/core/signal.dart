@@ -288,11 +288,7 @@ class _Signal<T> extends Signal<T> {
   @override
   T get value {
     if (disposed) {
-      throw SignalsError(
-        'A $runtimeType was read after being disposed.\n'
-        'Once you have called dispose() on a $runtimeType, it '
-        'can no longer be used.',
-      );
+      throw SignalsReadAfterDisposeError(this);
     }
     final node = _addDependency(this);
     if (node != null) {
@@ -310,11 +306,7 @@ class _Signal<T> extends Signal<T> {
   @override
   set value(T val) {
     if (disposed) {
-      throw SignalsError(
-        'A $runtimeType value was set after being disposed.\n'
-        'Once you have called dispose() on a $runtimeType, it '
-        'can no longer be used.',
-      );
+      throw SignalsWriteAfterDisposeError(this);
     }
     _set(val, false);
   }
