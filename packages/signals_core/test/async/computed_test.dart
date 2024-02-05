@@ -26,6 +26,28 @@ void main() {
       expect(result, 10);
     });
 
+    test('computedFrom', () async {
+      Future<int> future(List<int> ids) async {
+        await Future.delayed(const Duration(milliseconds: 5));
+        return 10;
+      }
+
+      final id = signal(1);
+      final s = computedFrom([id], (ids) => future(ids));
+      expect(s.peek().isLoading, true);
+
+      final completer = Completer<int>();
+      effect(() {
+        s.value;
+        if (s.value.hasValue) {
+          completer.complete(s.peek().requireValue);
+        }
+      });
+      final result = await completer.future;
+
+      expect(result, 10);
+    });
+
     test('check repeated calls', () async {
       int calls = 0;
 
