@@ -237,9 +237,8 @@ class _Computed<T> implements Computed<T>, _Listenable {
 
   @override
   T get value {
-    if (disposed) {
-      throw SignalsReadAfterDisposeError(this);
-    }
+    if (disposed) return this._value;
+
     if ((_flags & RUNNING) != 0) {
       _cycleDetected();
     }
