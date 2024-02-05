@@ -1,3 +1,7 @@
+## 4.0.1
+
+- Fix for listen causing multiple callbacks on non static methods
+
 ## 4.0.0
 
 - StreamSignal now will rebuild with signals are read in the callback to create the stream
