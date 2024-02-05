@@ -72,10 +72,10 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<List<TodoEntryWithCategory>> search(String query) {
+  Selectable<TodoEntryWithCategory> search(String query) {
     return _search(query).map((row) {
       return TodoEntryWithCategory(entry: row.todos, category: row.cat);
-    }).get();
+    });
   }
 
   Stream<List<CategoryWithCount>> categoriesWithCount() {

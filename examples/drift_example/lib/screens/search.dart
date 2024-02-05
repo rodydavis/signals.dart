@@ -21,7 +21,7 @@ class _SearchPageState extends State<SearchPage> {
       setState(() {
         if (_text != _controller.text && _controller.text.isNotEmpty) {
           _text = _controller.text;
-          _search = AppDatabase.instance().search(_text);
+          _search = AppDatabase.instance().search(_text).get();
         }
       });
     });
