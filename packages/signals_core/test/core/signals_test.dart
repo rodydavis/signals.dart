@@ -5,6 +5,18 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('should work', () {
+    final a = signal(0);
+    final b = signal(0);
+
+    final c = computed(() => a.value + b.value);
+
+    a.dispose();
+
+    b.value = 1;
+
+    expect(c.value, 1);
+  });
   test('init', () {
     // Create signals
     final count = signal(0);
@@ -70,7 +82,7 @@ void main() {
         dispose();
         expect(s.disposed, true);
         expect(() => s.value = [3], throwsA(isA<SignalsError>()));
-        expect(() => s.value, throwsA(isA<SignalsError>()));
+        // expect(() => s.value, throwsA(isA<SignalsError>()));
       });
     });
 
