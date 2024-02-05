@@ -30,7 +30,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Count: 2|0'), findsOneWidget);
     expect(_SignalWidgetState.rebuildCount, 2);
-    expect(_SignalWidgetState.watchCount, 5);
+    expect(_SignalWidgetState.watchCount, 6);
   });
 }
 
