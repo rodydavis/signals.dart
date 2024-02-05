@@ -11,7 +11,7 @@ class ElementWatcher {
   final _listenCleanup = <int, EffectCleanup>{};
 
   bool _watch = false;
-  final _listeners = <int, Set<VoidCallback>>{};
+  final _listeners = <int, VoidCallback>{};
   final _watchSignals = <int, ReadonlySignal>{};
   final _listenSignals = <int, ReadonlySignal>{};
 
@@ -42,8 +42,7 @@ class ElementWatcher {
       _listenSignals[value.globalId] = value;
       subscribeListen(value);
     }
-    _listeners[value.globalId] ??= {};
-    _listeners[value.globalId]!.add(cb);
+    _listeners[value.globalId] = cb;
   }
 
   void unlisten(ReadonlySignal value, VoidCallback cb) {
@@ -52,8 +51,7 @@ class ElementWatcher {
       final cleanup = _listenCleanup.remove(value.globalId);
       cleanup?.call();
     }
-    _listeners[value.globalId] ??= {};
-    _listeners[value.globalId]!.remove(cb);
+    _listeners.remove(value.globalId);
   }
 
   void subscribeWatch() {
@@ -89,10 +87,8 @@ class ElementWatcher {
   }
 
   void notify(ReadonlySignal signal) {
-    final listeners = _listeners[signal.globalId] ?? {};
-    for (final listener in listeners) {
-      listener();
-    }
+    final listener = _listeners[signal.globalId];
+    listener?.call();
   }
 
   void rebuild() {
