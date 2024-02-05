@@ -287,9 +287,8 @@ class _Signal<T> extends Signal<T> {
 
   @override
   T get value {
-    if (disposed) {
-      throw SignalsReadAfterDisposeError(this);
-    }
+    if (disposed) return this._value;
+
     final node = _addDependency(this);
     if (node != null) {
       node._version = this._version;
