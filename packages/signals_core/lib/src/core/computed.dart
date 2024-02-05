@@ -238,11 +238,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
   @override
   T get value {
     if (disposed) {
-      throw SignalsError(
-        'A $runtimeType was read after being disposed.\n'
-        'Once you have called dispose() on a $runtimeType, it '
-        'can no longer be used.',
-      );
+      throw SignalsReadAfterDisposeError(this);
     }
     if ((_flags & RUNNING) != 0) {
       _cycleDetected();

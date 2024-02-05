@@ -1,3 +1,7 @@
+## 4.0.2
+
+- Adding SignalsWriteAfterDisposeError/SignalsReadAfterDisposeError for better error handling
+
 ## 4.0.1
 
 - Fix for listen causing multiple callbacks on non static methods

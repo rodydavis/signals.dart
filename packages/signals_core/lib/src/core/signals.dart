@@ -304,4 +304,23 @@ void _cleanupSources(_Listenable target) {
 class SignalsError extends Error {
   final String message;
   SignalsError(this.message);
+
+  @override
+  String toString() => message;
+}
+
+class SignalsReadAfterDisposeError extends SignalsError {
+  SignalsReadAfterDisposeError(ReadonlySignal instance)
+      : super(
+          'A ${instance.runtimeType} signal was read after being disposed.\n'
+          'Once you have called dispose() on a signal, it can no longer be used.',
+        );
+}
+
+class SignalsWriteAfterDisposeError extends SignalsError {
+  SignalsWriteAfterDisposeError(ReadonlySignal instance)
+      : super(
+          'A ${instance.runtimeType} signal was written after being disposed.\n'
+          'Once you have called dispose() on a signal, it can no longer be used.',
+        );
 }
