@@ -1,3 +1,7 @@
+## 4.0.3
+
+- Removing SignalsReadAfterDisposeError in favor of debug print warning
+
 ## 4.0.1
 
 - Adding SignalsWriteAfterDisposeError/SignalsReadAfterDisposeError for better error handling

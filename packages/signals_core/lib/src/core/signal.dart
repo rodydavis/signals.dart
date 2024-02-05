@@ -287,7 +287,13 @@ class _Signal<T> extends Signal<T> {
 
   @override
   T get value {
-    if (disposed) return this._value;
+    if (disposed) {
+      if (kDebugMode) {
+        print(
+            'signal warning: [$globalId|$debugLabel] has been read after disposed');
+      }
+      return this._value;
+    }
 
     final node = _addDependency(this);
     if (node != null) {

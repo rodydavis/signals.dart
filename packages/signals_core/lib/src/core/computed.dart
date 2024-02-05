@@ -237,7 +237,12 @@ class _Computed<T> implements Computed<T>, _Listenable {
 
   @override
   T get value {
-    if (disposed) return this._value;
+    if (disposed) {
+      if (kDebugMode) {
+        print('computed warning: [$globalId|$debugLabel] has been read after disposed');
+      }
+      return this._value;
+    }
 
     if ((_flags & RUNNING) != 0) {
       _cycleDetected();
