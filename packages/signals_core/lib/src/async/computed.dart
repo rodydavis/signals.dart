@@ -46,10 +46,11 @@ FutureSignal<T> computedAsync<T>(
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
   bool autoDispose = false,
+  List<ReadonlySignal<dynamic>> dependencies = const [],
 }) {
   return FutureSignal<T>(
     callback,
-    dependencies: [computed(callback)],
+    dependencies: dependencies,
     initialValue: initialValue,
     debugLabel: debugLabel,
     equality: equality,

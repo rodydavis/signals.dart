@@ -13,12 +13,13 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
   }) : _initialValue = value;
   final AsyncState<T> _initialValue;
   bool _initialized = false;
-  Completer<T> _completer = Completer<T>();
+  Completer<bool> _completer = Completer<bool>();
 
   /// The future of the signal completer
-  Future<T> get future {
+  Future<T> get future async {
     value;
-    return _completer.future;
+    await _completer.future;
+    return value.requireValue;
   }
 
   /// Returns true if the signal is completed an error or data
@@ -29,25 +30,25 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
 
   void setError(Object error, [StackTrace? stackTrace]) {
     value = AsyncState.error(error, stackTrace);
-    if (_completer.isCompleted) _completer = Completer<T>();
-    _completer.completeError(error, stackTrace);
+    if (_completer.isCompleted) _completer = Completer<bool>();
+    _completer.complete(true);
   }
 
   void setValue(T value) {
     this.value = AsyncState.data(value);
-    if (_completer.isCompleted) _completer = Completer<T>();
-    _completer.complete(value);
+    if (_completer.isCompleted) _completer = Completer<bool>();
+    _completer.complete(true);
   }
 
   void setLoading([AsyncState<T>? state]) {
     value = state ?? AsyncState.loading();
-    _completer = Completer<T>();
+    _completer = Completer<bool>();
   }
 
   void reset() {
     value = _initialValue;
     _initialized = false;
-    _completer = Completer<T>();
+    _completer = Completer<bool>();
   }
 
   void init() async {
