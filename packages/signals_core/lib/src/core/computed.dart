@@ -201,6 +201,9 @@ class _Computed<T> implements Computed<T>, _Listenable {
         }
       }
     }
+    if (autoDispose && _allTargets.isEmpty) {
+      dispose();
+    }
   }
 
   @override
@@ -239,7 +242,8 @@ class _Computed<T> implements Computed<T>, _Listenable {
   T get value {
     if (disposed) {
       if (kDebugMode) {
-        print('computed warning: [$globalId|$debugLabel] has been read after disposed');
+        print(
+            'computed warning: [$globalId|$debugLabel] has been read after disposed');
       }
       return this._value;
     }
@@ -296,19 +300,22 @@ class _Computed<T> implements Computed<T>, _Listenable {
 
   @override
   void dispose() {
+    if (disposed) return;
     for (final cleanup in _disposeCallbacks) {
       cleanup();
     }
     _disposeCallbacks.clear();
     _flags |= DISPOSED;
-    if (_node != null) _unsubscribe(_node!);
-    _value = _initialValue;
-    _previousValue = _initialValue;
     disposed = true;
   }
 
   @override
   T get initialValue => _initialValue;
+
+  void reset([T? value]) {
+    _value = value ?? _initialValue;
+    _previousValue = value ?? _initialValue;
+  }
 }
 
 typedef ComputedCallback<T> = T Function();
