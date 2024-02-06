@@ -1,6 +1,6 @@
 name: signals_flutter
 description: Flutter extensions for signals_core
-version: 4.0.3
+version: 4.1.0
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://rodydavis.github.io/signals.dart
 documentation: https://rodydavis.github.io/signals.dart
@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals_core: ^4.0.3
+  signals_core: ^4.1.0
 
 dev_dependencies:
   flutter_test:
