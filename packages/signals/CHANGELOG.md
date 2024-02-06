@@ -1,3 +1,8 @@
+## 4.1.0
+
+- Fix bug in auto dispose where signal dispose causes cycle
+- Dispose does not reset to initial value and will read the last value with a warning
+
 ## 4.0.3
 
 - Removing SignalsReadAfterDisposeError in favor of debug print warning

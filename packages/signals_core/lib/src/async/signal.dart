@@ -45,8 +45,9 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
     _completer = Completer<bool>();
   }
 
-  void reset() {
-    value = _initialValue;
+  @override
+  void reset([AsyncState<T>? value]) {
+    this.value = value ?? _initialValue;
     _initialized = false;
     _completer = Completer<bool>();
   }

@@ -109,8 +109,8 @@ class StreamSignal<T> extends AsyncSignal<T> {
   }
 
   @override
-  void reset() {
-    super.reset();
+  void reset([AsyncState<T>? value]) {
+    super.reset(value);
     _fetching = false;
     _done = false;
     _subscription?.cancel();
