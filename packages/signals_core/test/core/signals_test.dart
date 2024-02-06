@@ -5,6 +5,18 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('should work', () {
+    final a = signal(0);
+    final b = signal(0);
+
+    final c = computed(() => a.value + b.value);
+
+    a.dispose();
+
+    b.value = 1;
+
+    expect(c.value, 1);
+  });
   test('init', () {
     // Create signals
     final count = signal(0);
@@ -70,7 +82,46 @@ void main() {
         dispose();
         expect(s.disposed, true);
         expect(() => s.value = [3], throwsA(isA<SignalsError>()));
-        expect(() => s.value, throwsA(isA<SignalsError>()));
+        // expect(() => s.value, throwsA(isA<SignalsError>()));
+      });
+
+      test('should autoDispose signal when it has no listeners', () {
+        var count = signal(2, autoDispose: true);
+        var multiple = signal(2);
+        var product = computed(() => count() * multiple());
+
+        expect(count.value, 2);
+        expect(multiple.value, 2);
+        expect(product.value, 4);
+
+        count.onDispose(() => print('disposed count'));
+        product.onDispose(() => print('disposed doubled'));
+
+        count.value = 3;
+        multiple.value = 3;
+
+        expect(count.value, 3);
+        expect(multiple.value, 3);
+        expect(product.value, 9);
+
+        // simulate widget listeners
+        var unmount = effect(() {
+          print('count: ${count.value}');
+          print('product: ${product.value}');
+        });
+
+        // simulate widget unmount
+        unmount();
+
+        expect(count.disposed, isTrue);
+        expect(multiple.disposed, isFalse);
+        expect(product.disposed, isFalse);
+
+        multiple.value = 4; // update signal that's not autodisposed
+
+        print('count: ${product.value}');
+
+        expect(product.value, 12);
       });
     });
 

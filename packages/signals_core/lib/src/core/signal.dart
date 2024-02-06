@@ -227,13 +227,15 @@ class _Signal<T> extends Signal<T> {
         signal._targets = next;
       }
     }
-    if (signal.autoDispose && signal._allTargets.isEmpty) {
-      signal.dispose();
-    }
   }
 
   @override
-  void _unsubscribe(_Node node) => __unsubscribe(this, node);
+  void _unsubscribe(_Node node) {
+    __unsubscribe(this, node);
+    if (autoDispose && _allTargets.isEmpty) {
+      dispose();
+    }
+  }
 
   @override
   EffectCleanup subscribe(void Function(T value) fn) {
@@ -288,8 +290,13 @@ class _Signal<T> extends Signal<T> {
   @override
   T get value {
     if (disposed) {
-      throw SignalsReadAfterDisposeError(this);
+      if (kDebugMode) {
+        print(
+            'signal warning: [$globalId|$debugLabel] has been read after disposed');
+      }
+      return this._value;
     }
+
     final node = _addDependency(this);
     if (node != null) {
       node._version = this._version;
@@ -358,13 +365,16 @@ class _Signal<T> extends Signal<T> {
 
   @override
   void dispose() {
+    if (disposed) return;
     for (final cleanup in _disposeCallbacks) {
       cleanup();
     }
-    if (_node != null) _unsubscribe(_node!);
-    _value = _initialValue;
-    _previousValue = _initialValue;
     disposed = true;
+  }
+
+  void reset([T? value]) {
+    _value = value ?? _initialValue;
+    _previousValue = value ?? _initialValue;
   }
 }
 

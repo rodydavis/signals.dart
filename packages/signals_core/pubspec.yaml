@@ -1,6 +1,6 @@
 name: signals_core
 description: Reactivity made simple. Do more by doing less.
-version: 4.0.1
+version: 4.1.0
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://rodydavis.github.io/signals.dart
 documentation: https://rodydavis.github.io/signals.dart
