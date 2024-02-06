@@ -21,10 +21,10 @@ final _signals = <WeakReference<Element>, Map<int, Signal>>{};
 ///  }
 /// }
 /// ```
-/// 
+///
 /// If you are defining multiple signals in a widget with the same type you
 /// need to give it a label to differentiate them:
-/// 
+///
 /// ```dart
 /// class MyWidget extends ... {
 ///  @override
