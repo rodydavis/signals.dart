@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../signals_flutter.dart';
 
-final _signals = <WeakReference<Element>, Map<int, Signal>>{};
+final _store = <WeakReference<Element>, Map<int, Signal>>{};
 
 /// Create and watch a signal in a build method
 ///
@@ -49,7 +49,7 @@ Signal<T> useSignal<T>(
 }) {
   assert(context is Element);
   final key = (value, debugLabel).hashCode;
-  final current = _signals.entries.firstWhere(
+  final current = _store.entries.firstWhere(
     (e) => e.key.target == context,
     orElse: () => MapEntry(WeakReference(context as Element), {}),
   );
@@ -73,6 +73,6 @@ Signal<T> useSignal<T>(
       return MapEntry(key, s);
     },
   );
-  _signals[current.key] = current.value;
+  _store[current.key] = current.value;
   return result.value as Signal<T>;
 }

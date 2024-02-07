@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../signals_flutter.dart';
 
-final _signals = <WeakReference<Element>, Map<int, Computed>>{};
+final _store = <WeakReference<Element>, Map<int, Computed>>{};
 
 /// Create and watch a computed signal in a build method
 ///
@@ -30,7 +30,7 @@ Computed<T> useComputed<T>(
 }) {
   assert(context is Element);
   final key = (value, debugLabel).hashCode;
-  final current = _signals.entries.firstWhere(
+  final current = _store.entries.firstWhere(
     (e) => e.key.target == context,
     orElse: () => MapEntry(WeakReference(context as Element), {}),
   );
@@ -54,6 +54,6 @@ Computed<T> useComputed<T>(
       return MapEntry(key, s);
     },
   );
-  _signals[current.key] = current.value;
+  _store[current.key] = current.value;
   return result.value as Computed<T>;
 }
