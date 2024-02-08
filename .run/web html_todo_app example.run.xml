@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="web html_todo_app example" type="DartWebdevConfigurationType" factoryName="Dart Web">
+    <option name="htmlFilePath" value="$PROJECT_DIR$/examples/html_todo_app/web/index.html" />
+    <method v="2">
+      <option name="LaunchBrowser.Before.Run" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
+    </method>
+  </configuration>
+</component>

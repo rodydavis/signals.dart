@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="auth_flow example" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/examples/auth_flow/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

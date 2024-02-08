@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="timer example" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <option name="filePath" value="$PROJECT_DIR$/examples/dart_examples/bin/timer.dart" />
+    <method v="2" />
+  </configuration>
+</component>

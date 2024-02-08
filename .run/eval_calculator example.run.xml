@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="eval_calculator example" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/examples/eval_calculator/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

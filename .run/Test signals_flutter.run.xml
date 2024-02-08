@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test signals_flutter" type="FlutterTestConfigType" factoryName="Flutter Test" singleton="false">
+    <option name="testDir" value="$PROJECT_DIR$/packages/signals_flutter/test" />
+    <option name="useRegexp" value="false" />
+    <option name="additionalArgs" value="" />
+    <method v="2" />
+  </configuration>
+</component>

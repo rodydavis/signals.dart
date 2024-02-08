@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="html_todo_app example" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/examples/html_todo_app/web/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

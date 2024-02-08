@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="flutter_colorband example" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/examples/flutter_colorband/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

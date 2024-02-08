@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="node_based_editor example" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/examples/node_based_editor/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

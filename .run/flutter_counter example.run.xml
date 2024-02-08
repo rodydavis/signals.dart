@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="flutter_counter example" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/examples/flutter_counter/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
