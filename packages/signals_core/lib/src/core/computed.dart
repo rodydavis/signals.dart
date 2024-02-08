@@ -156,6 +156,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
           _previousValue = _value;
         }
         _value = value;
+        _onComputedUpdated(this, this._value);
         if (!_initialized) _initialized = true;
         _flags &= ~HAS_ERROR;
         _version++;
@@ -259,7 +260,6 @@ class _Computed<T> implements Computed<T>, _Listenable {
     if ((_flags & HAS_ERROR) != 0) {
       throw _error!;
     }
-    _onComputedUpdated(this, this._value);
     return this._value;
   }
 
