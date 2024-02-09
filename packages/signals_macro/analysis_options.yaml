@@ -1,0 +1,8 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  enable-experiment:
+    - macros
+  exclude:
+    # TODO: remove these when the analyzer supports macros enough to run them
+    - bin/checks_main.dart
