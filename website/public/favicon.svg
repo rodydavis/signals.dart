@@ -2,6 +2,7 @@
     xmlns:svgjs="http://svgjs.dev/svgjs" width="128" height="128" preserveAspectRatio="none"
     viewBox="0 0 100 100">
     <g mask="url(&quot;#SvgjsMask1459&quot;)" fill="none">
+        <rect width="100" height="100" x="0" y="0" fill="rgba(0, 0, 0, 1)"></rect>
         <g mask="url(&quot;#SvgjsMask1460&quot;)">
             <path d="M15 25L45 25L65 5L95 5" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
             <path
