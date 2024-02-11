@@ -28,3 +28,61 @@ print(fullName.value);
 Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
 
 > Computed signals are both lazily evaluated and memoized
+
+## Force Re-evaluation
+
+You can force a computed signal to re-evaluate by calling its `.recompute` method. This will re-run the computed callback and update the computed signal's value.
+
+```dart
+final name = signal("Jane");
+final surname = signal("Doe");
+final fullName = computed(() => name.value + " " + surname.value);
+
+fullName.recompute(); // Re-runs the computed callback
+```
+
+## Disposing
+
+### Auto Dispose
+
+If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
+
+```dart
+final s = computed(() => 0, autoDispose: true);
+s.onDispose(() => print('Signal destroyed'));
+final dispose = s.subscribe((_) {});
+dispose();
+final value = s.value; // 0
+// prints: Signal destroyed
+```
+
+A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
+
+This means that it will no longer react to changes in its dependencies.
+
+```dart
+final s = computed(() => 0);
+s.dispose();
+final value = s.value; // 0
+final b = computed(() => s.value); // 0
+// b will not react to changes in s
+```
+
+You can check if a signal is disposed by calling the `.disposed` method.
+
+```dart
+final s = computed(() => 0);
+print(s.disposed); // false
+s.dispose();
+print(s.disposed); // true
+```
+
+### On Dispose Callback
+
+You can attach a callback to a signal that will be called when the signal is destroyed.
+
+```dart
+final s = computed(() => 0);
+s.onDispose(() => print('Signal destroyed'));
+s.dispose();
+```

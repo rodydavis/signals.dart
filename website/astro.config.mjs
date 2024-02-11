@@ -10,6 +10,10 @@ export default defineConfig({
       social: {
         github: "https://github.com/rodydavis/signals.dart",
       },
+      customCss: [
+        "/src/styles/custom.css",
+        "/src/fonts/font-face.css",
+      ],
       sidebar: [
         {
           label: "Reference",
@@ -19,7 +23,8 @@ export default defineConfig({
           label: "Dart",
           items: [
             {
-              label: "Core", items: [
+              label: "Core",
+              items: [
                 { label: "Signal", link: "dart/core/signal" },
                 { label: "Computed", link: "dart/core/computed" },
                 { label: "Effect", link: "dart/core/effect" },
@@ -27,9 +32,12 @@ export default defineConfig({
                 { label: "Batch", link: "dart/core/batch" },
               ],
             },
-            { label: "Value", autogenerate: { directory: "dart/value" }, },
-            { label: "Async", autogenerate: { directory: "dart/async" }, },
-            { label: "Utilities", autogenerate: { directory: "dart/utilities" }, },
+            { label: "Value", autogenerate: { directory: "dart/value" } },
+            { label: "Async", autogenerate: { directory: "dart/async" } },
+            {
+              label: "Utilities",
+              autogenerate: { directory: "dart/utilities" },
+            },
           ],
         },
         {

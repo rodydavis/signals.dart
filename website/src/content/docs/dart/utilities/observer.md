@@ -8,13 +8,9 @@ You can observe all signal values in the dart application by providing an implem
 ```dart
 abstract class SignalsObserver {
   void onSignalCreated(Signal instance);
-
   void onSignalUpdated(Signal instance, dynamic value);
-
   void onComputedCreated(Computed instance);
-
   void onComputedUpdated(Computed instance, dynamic value);
-
   static SignalsObserver? instance;
 }
 ```

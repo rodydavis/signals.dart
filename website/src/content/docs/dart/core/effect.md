@@ -41,6 +41,41 @@ dispose();
 surname.value = "Doe 2";
 ```
 
+## Cleanup Callback
+
+You can also return a cleanup function from an effect. This function will be called when the effect is destroyed.
+
+```dart
+import 'package:signals/signals.dart';
+
+final s = signal(0);
+
+final dispose = effect(() {
+  print(s.value);
+  return () => print('Effect destroyed');
+});
+
+// Destroy effect and subscriptions
+dispose();
+```
+
+## On Dispose Callback
+
+You can also pass a callback to `effect` that will be called when the effect is destroyed.
+
+```dart
+import 'package:signals/signals.dart';
+
+final s = signal(0);
+
+final dispose = effect(() {
+  print(s.value);
+}, onDispose: () => print('Effect destroyed'));
+
+// Destroy effect and subscriptions
+dispose();
+```
+
 ## Warning About Cycles
 
 Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](/signals.dart/dart/core/untracked) to read a signal without subscribing to it.

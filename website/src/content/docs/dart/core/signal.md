@@ -74,3 +74,55 @@ effect(() {
 
 counter.value = 1;
 ```
+
+## Force Update
+
+If you want to force an update for a signal, you can call the `.set(..., force: true)` method. This will trigger all effects and mark all computed as dirty.
+
+```dart
+final counter = signal(0);
+counter.set(1, force: true);
+```
+
+## Disposing
+
+### Auto Dispose
+
+If a signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
+
+```dart
+final s = signal(0, autoDispose: true);
+s.onDispose(() => print('Signal destroyed'));
+final dispose = s.subscribe((_) {});
+dispose();
+final value = s.value; // 0
+// prints: Signal destroyed
+```
+
+A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
+
+```dart
+final s = signal(0);
+s.dispose();
+final c = computed(() => s.value);
+// c will not react to changes in s
+```
+
+You can check if a signal is disposed by calling the `.disposed` method.
+
+```dart
+final s = signal(0);
+print(s.disposed); // false
+s.dispose();
+print(s.disposed); // true
+```
+
+### On Dispose Callback
+
+You can attach a callback to a signal that will be called when the signal is destroyed.
+
+```dart
+final s = signal(0);
+s.onDispose(() => print('Signal destroyed'));
+s.dispose();
+```
