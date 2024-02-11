@@ -134,7 +134,8 @@ class _Computed<T> implements Computed<T>, _Listenable {
     // Mark this computed signal running before checking the dependencies for value
     // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
     this._flags |= RUNNING;
-    if (_version > 0 && !_needsToRecompute(this)) {
+    final needsUpdate = _needsToRecompute(this);
+    if (_version > 0 && !needsUpdate) {
       this._flags &= ~RUNNING;
       return true;
     }
@@ -148,6 +149,7 @@ class _Computed<T> implements Computed<T>, _Listenable {
       if ((this._flags & HAS_ERROR) != 0 ||
           !_initialized ||
           !equality(_value, value) ||
+          needsUpdate ||
           _version == 0) {
         if (!_initialized) {
           _previousValue = value;

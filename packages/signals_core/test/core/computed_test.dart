@@ -2,26 +2,26 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('init', () {
-    // Create signals
-    final count = signal(0);
-    final multiplier = signal(2);
+  group('computed', () {
+    test('init', () {
+      // Create signals
+      final count = signal(0);
+      final multiplier = signal(2);
 
-    // Creating a computed value
-    final multipliedCount = computed(() {
-      return count.value * multiplier.value;
+      // Creating a computed value
+      final multipliedCount = computed(() {
+        return count.value * multiplier.value;
+      });
+
+      expect(multipliedCount.value, 0);
+
+      count.value = 1;
+      expect(multipliedCount.value, 2);
+
+      multiplier.value = 3;
+      expect(multipliedCount.value, 3);
     });
 
-    expect(multipliedCount.value, 0);
-
-    count.value = 1;
-    expect(multipliedCount.value, 2);
-
-    multiplier.value = 3;
-    expect(multipliedCount.value, 3);
-  });
-
-  group('computed', () {
     group('dispose', () {
       test('check onDispose callback', () {
         int calls = 0;
@@ -58,6 +58,30 @@ void main() {
       now.recompute();
       final second = now.value;
       expect(first != second, true);
+    });
+
+    test('should respect force set', () {
+      final a = signal(1);
+      final b = computed(() => a());
+      var aCalled = 0;
+      var bCalled = 0;
+
+      a.subscribe((_) => aCalled++);
+      b.subscribe((_) => bCalled++);
+
+      expect(b.value, 1);
+      expect(aCalled, 1);
+      expect(bCalled, 1);
+
+      a.value = 10;
+      expect(b.value, 10);
+      expect(aCalled, 2);
+      expect(bCalled, 2);
+
+      a.set(10, force: true);
+      expect(b.value, 10);
+      expect(aCalled, 3);
+      expect(bCalled, 3); // fails here: bCalled is still 2
     });
   });
 }
