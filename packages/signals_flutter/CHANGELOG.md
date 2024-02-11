@@ -1,3 +1,7 @@
+## 4.2.1
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/155.
+
 ## 4.2.0
 
  - **FIX**: https://github.com/rodydavis/signals.dart/issues/156.
