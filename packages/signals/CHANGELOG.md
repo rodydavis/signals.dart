@@ -1,3 +1,7 @@
+## 4.1.1
+
+ - **FIX**: Doc comment package import.
+
 ## 4.1.0
 
 - Fix bug in auto dispose where signal dispose causes cycle

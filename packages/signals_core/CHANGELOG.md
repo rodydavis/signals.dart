@@ -1,3 +1,7 @@
+## 4.1.1
+
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/156.
+
 ## 4.1.0
 
 - Fix bug in auto dispose where signal dispose causes cycle

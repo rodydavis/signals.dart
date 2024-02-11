@@ -1,3 +1,7 @@
+## 4.1.1
+
+ - Update a dependency to the latest release.
+
 ## 4.1.0
 
 - Fix bug in auto dispose where signal dispose causes cycle
