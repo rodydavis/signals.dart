@@ -1,6 +1,9 @@
-## 4.1.1
+## 4.2.0
 
  - **FIX**: https://github.com/rodydavis/signals.dart/issues/156.
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/162.
+ - Add onDispose callback for effect
+ - Fixing computed not updating on signal forced change
 
 ## 4.1.0
 
