@@ -1,3 +1,8 @@
+## 4.2.2
+
+- Updating `signals_core` package to **4.2.0**
+- Update to `signals_flutter` to **4.2.2**
+
 ## 4.2.1
 
 - **FIX**: https://github.com/rodydavis/signals.dart/issues/155.
