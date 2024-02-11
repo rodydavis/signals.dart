@@ -213,6 +213,7 @@ class _Effect implements _Listenable {
 EffectCleanup effect(
   EffectCallback compute, {
   String? debugLabel,
+  EffectCallback? onDispose,
 }) {
   final effect = _Effect(compute, debugLabel: debugLabel);
   try {
@@ -227,5 +228,6 @@ EffectCleanup effect(
   return () {
     effect._dispose();
     _onEffectRemoved(effect);
+    onDispose?.call();
   };
 }
