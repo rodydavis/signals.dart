@@ -1,6 +1,7 @@
 :root {
   --sl-content-width: 50rem;
   --sl-text-5xl: 3.5rem;
+  --sl-font: "Jura", serif;
 }
 
 .main-pane {
@@ -15,8 +16,14 @@
     bottom: 0;
     background: url("/background.svg") no-repeat center center fixed;
     background-size: cover;
-    opacity: 0.1;
+    opacity: 0.07;
     z-index: -1;
+  }
+}
+
+:root[data-theme="light"] .main-pane {
+  &::after {
+    opacity: 0.05;
   }
 }
 
@@ -24,12 +31,6 @@ a[rel="prev"],
 a[rel="next"] {
   background-color: var(--sl-color-black);
   opacity: 0.8;
-}
-
-:root[data-theme="light"] .main-pane {
-  &::after {
-    opacity: 0.05;
-  }
 }
 
 iframe {
@@ -40,30 +41,31 @@ iframe {
 
 /* Dark mode colors. */
 :root {
-  --sl-color-accent-low: #252600;
-  --sl-color-accent: #6d6f00;
-  --sl-color-accent-high: #cacd98;
+  --sl-color-accent-low: #282500;
+  --sl-color-accent: #746c00;
+  --sl-color-accent-high: #d1cc87;
   --sl-color-white: #ffffff;
-  --sl-color-gray-1: #e8edff;
-  --sl-color-gray-2: #b9c1dc;
-  --sl-color-gray-3: #7a89bc;
-  --sl-color-gray-4: #495584;
-  --sl-color-gray-5: #2a3461;
-  --sl-color-gray-6: #1a224d;
-  --sl-color-black: #12172a;
+  --sl-color-gray-1: #edeeef;
+  --sl-color-gray-2: #c1c2c3;
+  --sl-color-gray-3: #898c8e;
+  --sl-color-gray-4: #56585a;
+  --sl-color-gray-5: #36393a;
+  --sl-color-gray-6: #252729;
+  --sl-color-black: #171819;
 }
 /* Light mode colors. */
 :root[data-theme="light"] {
-  --sl-color-accent-low: #d8dbb3;
-  --sl-color-accent: #6f7100;
-  --sl-color-accent-high: #343500;
-  --sl-color-white: #12172a;
-  --sl-color-gray-1: #1a224d;
-  --sl-color-gray-2: #2a3461;
-  --sl-color-gray-3: #495584;
-  --sl-color-gray-4: #7a89bc;
-  --sl-color-gray-5: #b9c1dc;
-  --sl-color-gray-6: #e8edff;
-  --sl-color-gray-7: #f3f6ff;
+  --sl-color-accent-low: #dddaa7;
+  --sl-color-accent: #766e00;
+  --sl-color-accent-high: #383400;
+  --sl-color-white: #171819;
+  --sl-color-gray-1: #252729;
+  --sl-color-gray-2: #36393a;
+  --sl-color-gray-3: #56585a;
+  --sl-color-gray-4: #898c8e;
+  --sl-color-gray-5: #c1c2c3;
+  --sl-color-gray-6: #edeeef;
+  --sl-color-gray-7: #f6f6f7;
   --sl-color-black: #ffffff;
 }
+

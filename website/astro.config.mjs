@@ -6,6 +6,7 @@ export default defineConfig({
   base: "/signals.dart/",
   integrations: [
     starlight({
+      // site: "https://rodydavis.github.io/signals.dart",
       title: "Signals.dart",
       social: {
         github: "https://github.com/rodydavis/signals.dart",
