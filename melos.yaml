@@ -6,6 +6,8 @@ packages:
   - packages/*
 
 scripts:
+  examples:
+    exec: dart scripts/examples.dart
   analyze:
     exec: dart analyze .
   flutter:test:
