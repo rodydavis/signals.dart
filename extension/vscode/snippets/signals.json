@@ -1,0 +1,40 @@
+{
+    "signal":{
+        "scope":"dart",
+        "prefix":"sig",
+        "description":"A Signal Object",
+        "body":[
+            "final $1Signal= signal<$2>($3);"
+        ]
+    },
+    "Async Signal":{
+        "scope":"dart",
+        "prefix":"asig",
+        "description":"An async Signal Object",
+        "body":[
+            "final $1Signal= asyncSignal<$2>($3);"
+        ]
+    },
+    "Computed":{
+        "scope":"dart",
+        "prefix":"comp",
+        "description":" The computed function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal’s value.",
+        "body":[
+            "final $1Computed= computed((){",
+                "\treturn $2;",
+            "});"
+        ]
+    },
+    "AsyncComputed":{
+        "scope":"dart",
+        "prefix":"comp",
+        "description":" Async Computed is syntax sugar around [FutureSignal].",
+        "body":[
+            "final $1Computed= computedAsync((){",
+                "\treturn $2;",
+            "});"
+        ]
+    }
+   
+}
+
