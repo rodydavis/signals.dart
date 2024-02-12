@@ -1,5 +1,5 @@
 name: eval_calculator
-description: "A new Flutter project."
+description: Calculator that is driven by dynamic signals at runtime
 version: 1.0.0+1
 publish_to: 'none'
 

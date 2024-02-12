@@ -1,5 +1,5 @@
 name: rxdart_example
-description: An absolute bare-bones web app.
+description: RxDart + signals
 version: 1.0.0
 publish_to: "none"
 

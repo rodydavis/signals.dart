@@ -1,5 +1,5 @@
 name: html_todo_app
-description: An absolute bare-bones web app.
+description: Todo HTML web app with signals
 version: 1.0.0
 publish_to: 'none'
 

@@ -1,5 +1,5 @@
 name: signals_dart_examples
-description: Demonstrates Signals
+description: Pure dart examples using signals
 version: 1.0.0
 publish_to: "none"
 

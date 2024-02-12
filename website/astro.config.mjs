@@ -11,14 +11,16 @@ export default defineConfig({
       social: {
         github: "https://github.com/rodydavis/signals.dart",
       },
-      customCss: [
-        "/src/styles/custom.css",
-        "/src/fonts/font-face.css",
-      ],
+      customCss: ["/src/styles/custom.css", "/src/fonts/font-face.css"],
       sidebar: [
         {
           label: "Reference",
-          autogenerate: { directory: "reference" },
+          // autogenerate: { directory: "reference" },
+          items: [
+            { label: "Installing", link: "reference/install" },
+            { label: "Overview", link: "reference/overview" },
+            { label: "Examples", link: "reference/examples" },
+          ],
         },
         {
           label: "Dart",
@@ -45,10 +47,10 @@ export default defineConfig({
           label: "Flutter",
           autogenerate: { directory: "flutter" },
         },
-        {
-          label: "Examples",
-          autogenerate: { directory: "examples" },
-        },
+        // {
+        //   label: "Examples",
+        //   autogenerate: { directory: "examples" },
+        // },
       ],
     }),
   ],

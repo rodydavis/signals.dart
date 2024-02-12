@@ -130,17 +130,6 @@ class _CounterExampleState extends State<CounterExample> {
               icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
             );
           }),
-          IconButton(
-            onPressed: () {
-              if (mounted) {
-                setState(() {
-                  counter.dispose();
-                });
-              }
-            },
-            tooltip: 'Dispose signal',
-            icon: const Icon(Icons.restore),
-          ),
         ],
       ),
       body: Center(

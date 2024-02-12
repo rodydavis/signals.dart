@@ -4,33 +4,23 @@
   --sl-font: "Jura", serif;
 }
 
-.main-pane {
-  position: relative;
+body:has(.hero) {
+  .main-pane {
+    position: relative;
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url("/background.svg") no-repeat center center fixed;
-    background-size: cover;
-    opacity: 0.03;
-    z-index: -1;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("/background.svg") no-repeat center center fixed;
+      background-size: cover;
+      z-index: -1;
+      opacity: 0.1;
+    }
   }
-}
-
-:root[data-theme="light"] .main-pane {
-  &::after {
-    opacity: 0.01;
-  }
-}
-
-a[rel="prev"],
-a[rel="next"] {
-  background-color: var(--sl-color-black);
-  opacity: 0.8;
 }
 
 iframe {
@@ -68,4 +58,3 @@ iframe {
   --sl-color-gray-7: #f6f6f7;
   --sl-color-black: #ffffff;
 }
-
