@@ -137,21 +137,21 @@ packages:
       path: "../../packages/signals"
       relative: true
     source: path
-    version: "4.1.0"
+    version: "4.2.2"
   signals_core:
     dependency: "direct overridden"
     description:
       path: "../../packages/signals_core"
       relative: true
     source: path
-    version: "4.1.0"
+    version: "4.2.0"
   signals_flutter:
     dependency: "direct overridden"
     description:
       path: "../../packages/signals_flutter"
       relative: true
     source: path
-    version: "4.1.0"
+    version: "4.2.2"
   sky_engine:
     dependency: transitive
     description: flutter
