@@ -4,31 +4,6 @@
   --sl-font: "Jura", serif;
 }
 
-body:has(.hero) {
-  .main-pane {
-    position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url("/background.svg") no-repeat center center fixed;
-      background-size: cover;
-      z-index: -1;
-      opacity: 0.1;
-    }
-  }
-}
-
-iframe {
-  border: none;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-}
-
 /* Dark mode colors. */
 :root {
   --sl-color-accent-low: #282500;
@@ -45,8 +20,8 @@ iframe {
 }
 /* Light mode colors. */
 :root[data-theme="light"] {
-  --sl-color-accent-low: #dddaa7;
-  --sl-color-accent: #766e00;
+  --sl-color-accent-low: #adaa78;
+  --sl-color-accent: #5e5800;
   --sl-color-accent-high: #383400;
   --sl-color-white: #171819;
   --sl-color-gray-1: #252729;
@@ -57,4 +32,45 @@ iframe {
   --sl-color-gray-6: #edeeef;
   --sl-color-gray-7: #f6f6f7;
   --sl-color-black: #ffffff;
+}
+
+body:has(.hero) {
+  .main-pane {
+    position: relative;
+
+    background-color: black;
+    color: white;
+    --sl-color-white: white;
+    --sl-color-black: #191700;
+    --sl-color-gray-2: #c8cfcf;
+    --sl-color-gray-5: #36393a;
+    --sl-color-text-accent: #d1cc87;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("/background.svg") no-repeat center center fixed;
+      background-size: cover;
+      z-index: -1;
+      opacity: 0.2;
+    }
+  }
+
+  .icon {
+    --sl-card-bg: transparent;
+  }
+}
+
+.card {
+  border-radius: 0.5rem;
+}
+
+iframe {
+  border: none;
+  width: 100%;
+  aspect-ratio: 16 / 9;
 }
