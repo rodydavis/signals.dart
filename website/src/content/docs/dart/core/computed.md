@@ -5,7 +5,7 @@ description: Create a signal that derives its value from other signals
 
 Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
 
-> `Computed` class extends the [`Signal`](/signals.dart/dart/core/signal/) class, so you can use it anywhere you would use a signal.
+> `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
 
 ```dart
 import 'package:signals/signals.dart';

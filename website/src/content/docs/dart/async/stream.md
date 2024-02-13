@@ -25,7 +25,7 @@ final s = stream.toSignal();
 
 ## .value, .peek()
 
-Returns [`AsyncState<T>`](/signals.dart/dart/async/state) for the value and can handle the various states.
+Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
 
 The `value` getter returns the value of the stream if it completed successfully.
 
