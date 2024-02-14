@@ -1,5 +1,5 @@
 {
-  "name": "signal-flutter",
+  "name": "signals-vscode-flutter",
   "displayName": "Signal Flutter",
   "description": "VS Code Extension for Signals -Flutter",
   "version": "0.0.1",
@@ -9,13 +9,15 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:dart"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "signal-flutter.helloWorld",
-        "title": "Hello World"
+        "command": "myExtension.myCommand",
+        "title": " My Command"
       }
     ]
   },
