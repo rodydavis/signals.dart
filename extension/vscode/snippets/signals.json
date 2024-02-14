@@ -4,7 +4,7 @@
         "prefix":"sig",
         "description":"A Signal Object",
         "body":[
-            "final $1Signal= signal<$2>($3);"
+            "final $1Signal= signal<$2>($3,autoDispose:$4);"
         ]
     },
     "Async Signal":{
