@@ -21,6 +21,11 @@ jobs:
           path: website
           node-version: 19
           package-manager: pnpm@7.26.1
+      - name: Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: website/dist
 
   deploy:
     needs: build
