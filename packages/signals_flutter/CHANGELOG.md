@@ -1,3 +1,8 @@
+## 4.2.3
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/171
+- Update to `signals_core` 4.2.1
+
 ## 4.2.2
 
 - Update to `signals_core` 4.2.0
