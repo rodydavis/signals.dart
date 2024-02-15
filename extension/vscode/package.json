@@ -42,5 +42,6 @@
   },
   "author": "Deepraj Baidya <https://github.com/deepraj02> (https://github.com/deepraj02)"
   ,
-  "homepage": " https://dartsignals.dev/"
+  "homepage": " https://dartsignals.dev/",
+  "icon": "assets/icon.png"
 }
