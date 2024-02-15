@@ -1,50 +1,46 @@
 {
-  "name": "signals-vscode-flutter",
-  "displayName": "Signal Flutter",
+  "name": "signal-flutter",
+  "displayName": "Flutter Signals Snippets",
   "description": "VS Code Extension for Signals -Flutter",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "publisher": "Deepraj Baidya",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Snippets"
+  ],
+  "keywords":[
+    "flutter",
+    "signals",
+    "flutter signals",
+    "signals flutter",
+    "signals dart",
+    "dart signals",
+    "dart",
+    "flutter signals snippets",
+    "flutter signals extension",
+    "signals extension",
+    "signals snippets"
   ],
   "activationEvents": [
     "onLanguage:dart"
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
+    "snippets": [
       {
-        "command": "myExtension.myCommand",
-        "title": " My Command"
+        "language": "dart",
+        "path": "./snippets/signals.json"
       }
     ]
+    
   },
-  "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rodydavis/signals.dart"
   },
-  "devDependencies": {
-    "@types/vscode": "^1.85.0",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "@typescript-eslint/eslint-plugin": "^6.4.1",
-    "@typescript-eslint/parser": "^6.4.1",
-    "eslint": "^8.47.0",
-    "glob": "^10.3.3",
-    "mocha": "^10.2.0",
-    "typescript": "^5.1.6",
-    "ts-loader": "^9.4.4",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "@vscode/test-electron": "^2.3.4"
-  }
+  "author": "Deepraj Baidya <https://github.com/deepraj02> (https://github.com/deepraj02)"
+  ,
+  "homepage": " https://dartsignals.dev/"
 }
