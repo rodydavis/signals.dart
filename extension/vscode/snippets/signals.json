@@ -196,6 +196,16 @@
             "$1",
             "});"
         ]
+    },
+    "Value Signal":{
+        "scope":"dart",
+        "prefix":"valsig",
+        "description":"Value Signal Class",
+        "body":[
+            "class $1Signal extends ValueSignal<$2>{",
+                "$3",
+                "}"
+        ]
     }
 }
 

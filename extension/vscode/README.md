@@ -35,5 +35,6 @@ Provides a set of snippets for the `signal` - State Management Library of Flutte
 | `watchb` | To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree. |
 | `wat`    | .watch() shorthand for Watch.builder.                                                                                                     |
 | `lisn`    | .listen()                                                                                                     |
+| `valsig`    | Extends the ValueSignal Class                                                                                                    |
 
 
