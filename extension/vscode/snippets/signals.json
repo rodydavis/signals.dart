@@ -10,7 +10,7 @@
     "Async Signal":{
         "scope":"dart",
         "prefix":"asig",
-        "description":"An async Signal Object",
+        "description":"An async Signal Object" ,
         "body":[
             "final $1Signal= asyncSignal<$2>($3);"
         ]
@@ -27,14 +27,175 @@
     },
     "AsyncComputed":{
         "scope":"dart",
-        "prefix":"comp",
+        "prefix":"ascomp",
         "description":" Async Computed is syntax sugar around [FutureSignal].",
         "body":[
-            "final $1Computed= computedAsync((){",
+            "final $1asyncComputed= computedAsync((){",
                 "\treturn $2;",
             "});"
         ]
+    },
+    "ChangeStackSignal":{
+        "scope":"dart",
+        "prefix":"csk",
+        "description":"Change stack is a way to track the signal values overtime and undo or redo values.",
+        "body":[
+            "final $1tackSignal= ChangeStackSignal($2,limit:$3);"
+            
+        ]
+    },
+    "IterableSignal":{
+        "scope":"dart",
+        "prefix":"its",
+        "description":"Iterable signals can be created by extension or method and implement the Iterable interface.",
+        "body":[
+            "final $1iterableSignal= iterableSignal($2);"
+            
+        ]
+    },
+    "ListSignal":{
+        "scope":"dart",
+        "prefix":"lts",
+        "description":"List signals can be created by extension or method and implement the List interface.",
+        "body":[
+            "final $1listSignal= listSignal([$2]);"
+            
+        ]
+    },
+    "MapSignal":{
+        "scope":"dart",
+        "prefix":"mps",
+        "description":"Map signals can be created by extension or method and implement the Map interface.",
+        "body":[
+            "final $1mapSignal= mapSignal({$2});"
+            
+        ]
+    },
+    "SetSignal":{
+        "scope":"dart",
+        "prefix":"sets",
+        "description":"Set signals can be created by extension or method and implement the Set interface.",
+        "body":[
+            "final $1setSignal= setSignal({$2});"
+            
+        ]
+    },
+    "Connect":{
+        "scope":"dart",
+        "prefix":"cnct",
+        "description":"Start with a signal and then use the connect method to create a connector. Streams will feed Signal value.",
+        "body":[
+            "final $1Connect= connect({$2});"
+            
+        ]
+    },
+    "FutureSignal":{
+        "scope":"dart",
+        "prefix":"futs",
+        "description":"Returns AsyncState<T> for the value and can handle the various states.",
+        "body":[
+            "final $1FutureSignal= futureSignal(() async{",
+                "\treturn $2;",
+            "});"
+            
+        ]
+    },
+    "Read-only Signal Container":{
+        "scope":"dart",
+        "prefix":"rdsc",
+        "description":"Returns a read-only Signal Container.",
+        "body":[
+            "final $1Container= readonlySignalContainer<$2,$3>((e){;",
+            "return $4;",
+            "});"
+        ]
+    },
+    "Signal Container":{
+        "scope":"dart",
+        "prefix":"sigcon",
+        "description":"Returns a Signal Container.",
+        "body":[
+            "final $1Container= signalContainer<$2,$3>((e){;",
+            "return $4;",
+            "});"
+        ]
+    },
+    "StreamSignal":{
+        "scope":"dart",
+        "prefix":"strms",
+        "description":"Returns a streamSignal instance.",
+        "body":[
+            "final $1FutureSignal= futureSignal(()=> $2);"
+        ]
+    },
+    "toSignal()":{
+        "scope":"dart",
+        "prefix":"tos",
+        "description":".toSignal()",
+        "body":[
+            ".toSignal();"
+        ]
+    },
+    "isCompleted()":{
+        "scope":"dart",
+        "prefix":"iscom",
+        "description":".isCompleted()",
+        "body":[
+            ".isCompleted();"
+        ]
+    },
+    ".reset()":{
+        "scope":"dart",
+        "prefix":"rst",
+        "description":".reset()",
+        "body":[
+            ".reset();"
+        ]
+    },
+    ".dispose()":{
+        "scope":"dart",
+        "prefix":"disp",
+        "description":".reset()",
+        "body":[
+            ".dispose();"
+        ]
+    },
+    ".toValueNotifier()":{
+        "scope":"dart",
+        "prefix":"valnot",
+        "description":".toValueNotifier()",
+        "body":[
+            ".toValueNotifier();"
+        ]
+    },
+    "Watch builder":{
+        "scope":"dart",
+        "prefix":"watchb",
+        "description":"To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree.",
+        "body":[
+            "Watch.builder(",
+                "builder: (context) {",
+                    "return $1;",
+                "}),"
+        ]
+    },
+    ".watch()":{
+        "scope":"dart",
+        "prefix":"wat",
+        "description":".watch() shorthand for Watch.builder.",
+        "body":[
+            ".watch();"
+        ]
+    },
+    ".listen()":{
+        "scope":"dart",
+        "prefix":"wat",
+        "description":"",
+        "body":[
+            ".listen(context,(){",
+            "$1",
+            "});"
+        ]
     }
-   
 }
 
