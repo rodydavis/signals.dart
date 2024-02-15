@@ -37,18 +37,6 @@ Or if you're using Flutter:
 $ flutter pub add signals
 ```
 
-### Usage
-
-```dart
-import 'package:signals/signals.dart';
-```
-
-or if you're using Flutter:
-
-```dart
-import 'package:signals/signals_flutter.dart';
-```
-
 ## Unstable
 
 To reference the package from GitHub:
@@ -59,4 +47,16 @@ dependencies:
     git:
       url: https://github.com/rodydavis/signals.dart
       ref: main
+```
+
+## Usage
+
+```dart
+import 'package:signals/signals.dart';
+```
+
+or if you're using Flutter:
+
+```dart
+import 'package:signals/signals_flutter.dart';
 ```

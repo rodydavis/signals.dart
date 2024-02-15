@@ -18,7 +18,6 @@ export default defineConfig({
           items: [
             { label: "Installing", link: "reference/install" },
             { label: "Overview", link: "reference/overview" },
-            { label: "Examples", link: "reference/examples" },
           ],
         },
         {
@@ -46,10 +45,11 @@ export default defineConfig({
           label: "Flutter",
           autogenerate: { directory: "flutter" },
         },
-        // {
-        //   label: "Examples",
-        //   autogenerate: { directory: "examples" },
-        // },
+        {
+          label: "Guides",
+          autogenerate: { directory: "guides" },
+        },
+        { label: "Examples", link: "examples" },
       ],
     }),
   ],
