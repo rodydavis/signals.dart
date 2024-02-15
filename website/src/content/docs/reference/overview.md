@@ -59,7 +59,7 @@ print(e.value); // 2
 // Only the callbacks that need to be updated
 // will be called
 b.value = 1;
-print(e.value); // 4
+print(e.value); // 3
 ```
 
 ## Further reading

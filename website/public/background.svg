@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:svgjs="http://svgjs.dev/svgjs" width="2500" height="2500" preserveAspectRatio="none"
     viewBox="0 0 2500 2500">
-    <g mask="url(&quot;#SvgjsMask1131&quot;)" fill="none">
+    <g mask="url(&quot;#SvgjsMask1131&quot;)" fill="none" opacity="0.3">
         <rect width="2500" height="2500" x="0" y="0" fill="rgba(0, 0, 0, 1)"></rect>
         <g mask="url(&quot;#SvgjsMask1132&quot;)">
             <path d="M51 1411L119 1411L255 1275L255 1139L561 833" stroke-width="5.67"

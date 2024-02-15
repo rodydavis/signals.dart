@@ -11,12 +11,12 @@ _Signals is a single package that contains the imports for flutter and dart and 
 
 `Signals.dart` is available on pub.dev:
 
-| Package                                       | Pub                                                                                                              |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| [`signals`](packages/signals)                 | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                         |
-| [`signals_core`](packages/signals_core)       | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
-| [`signals_flutter`](packages/signals_flutter) | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |
-| [`signals_lint`](packages/signals_lint)       | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint)          |
+| Package           | Pub                                                                                                              |
+|-------------------|------------------------------------------------------------------------------------------------------------------|
+| `signals`         | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                         |
+| `signals_core`    | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
+| `signals_flutter` | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |
+| `signals_lint`    | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint)          |
 
 Add the following to your `pubspec.yaml`:
 

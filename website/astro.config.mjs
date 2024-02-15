@@ -3,7 +3,6 @@ import starlight from "@astrojs/starlight";
 
 // https://astro.build/config
 export default defineConfig({
-  base: "/signals.dart/",
   integrations: [
     starlight({
       // site: "https://rodydavis.github.io/signals.dart",

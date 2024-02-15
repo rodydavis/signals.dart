@@ -36,29 +36,22 @@
 }
 
 body:has(.hero) {
+  background-color: black;
+  color: white;
+  background-image: url("/background.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+
   .main-pane {
     position: relative;
 
-    background-color: black;
-    color: white;
     --sl-color-white: white;
     --sl-color-black: #191700;
     --sl-color-gray-2: #c8cfcf;
     --sl-color-gray-5: #36393a;
     --sl-color-text-accent: #d1cc87;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url("/background.svg") no-repeat center center fixed;
-      background-size: cover;
-      z-index: -1;
-      opacity: 0.2;
-    }
   }
 
   .icon {

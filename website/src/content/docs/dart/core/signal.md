@@ -25,7 +25,7 @@ In Flutter do not create signals inside `build` methods, as this will create a n
 
 ## Writing to a signal
 
-Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/signals.dart/dart/core/computed) and [effect](/signals.dart/dart/core/effect) that depends on that signal, ensuring your app state is always consistent.
+Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/dart/core/computed) and [effect](/dart/core/effect) that depends on that signal, ensuring your app state is always consistent.
 
 ## .peek()
 
