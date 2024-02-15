@@ -30,9 +30,10 @@ Provides a set of snippets for the `signal` - State Management Library of Flutte
 | `tos`    | .toSignal()                                                                                                                               |
 | `iscom`  | .isCompleted()                                                                                                                            |
 | `rst`    | .reset()                                                                                                                                  |
-| `disp`   | .reset()                                                                                                                                  |
+| `disp`   | .dispose()                                                                                                                                  |
 | `valnot` | .toValueNotifier()                                                                                                                        |
 | `watchb` | To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree. |
 | `wat`    | .watch() shorthand for Watch.builder.                                                                                                     |
+| `lisn`    | .listen()                                                                                                     |
 
 
