@@ -1,3 +1,7 @@
+## 4.3.0
+
+- Add valueNotifierToSignal, valueListenableToSignal
+
 ## 4.2.3
 
 - **FIX**: https://github.com/rodydavis/signals.dart/issues/171

@@ -13,3 +13,8 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
     return s;
   }
 }
+
+/// Convert a [ValueNotifier] to [Signal] to be used in builders
+Signal<T> valueNotifierToSignal<T>(ValueNotifier<T> valueNotifier) {
+  return valueNotifier.toSignal();
+}

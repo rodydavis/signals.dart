@@ -1,3 +1,8 @@
+## 4.3.0
+
+- Add valueNotifierToSignal, valueListenableToSignal
+- Update to `signals_flutter` **4.3.0**
+
 ## 4.2.3
 
 - **FIX**: https://github.com/rodydavis/signals.dart/issues/171

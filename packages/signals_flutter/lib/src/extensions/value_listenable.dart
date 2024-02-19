@@ -12,3 +12,10 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
     return s;
   }
 }
+
+/// Convert a [ValueListenable] to [ReadonlySignal] to be used in builders
+/// and other existing widgets like [ValueListenableBuilder]
+ReadonlySignal<T> valueListenableToSignal<T>(
+    ValueListenable<T> valueListenable) {
+  return valueListenable.toSignal();
+}
