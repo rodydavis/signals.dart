@@ -18,6 +18,7 @@ FutureSignal<T> computedFrom<T, A>(
   String? debugLabel,
   SignalEquality<AsyncState<T>>? equality,
   bool autoDispose = false,
+  bool lazy = true,
 }) {
   return FutureSignal<T>(
     () => callback(signals.map((e) => e()).toList()),
@@ -26,6 +27,7 @@ FutureSignal<T> computedFrom<T, A>(
     debugLabel: debugLabel,
     equality: equality,
     autoDispose: autoDispose,
+    lazy: lazy,
   );
 }
 
@@ -47,6 +49,7 @@ FutureSignal<T> computedAsync<T>(
   SignalEquality<AsyncState<T>>? equality,
   bool autoDispose = false,
   List<ReadonlySignal<dynamic>> dependencies = const [],
+  bool lazy = true,
 }) {
   return FutureSignal<T>(
     callback,
@@ -55,5 +58,6 @@ FutureSignal<T> computedAsync<T>(
     debugLabel: debugLabel,
     equality: equality,
     autoDispose: autoDispose,
+    lazy: lazy,
   );
 }

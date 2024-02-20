@@ -28,10 +28,12 @@ ValueSignal<T> valueSignal<T>(
   T value, {
   String? debugLabel,
   SignalEquality<T>? equality,
+  bool autoDispose = false,
 }) {
   return ValueSignal<T>(
     value,
     debugLabel: debugLabel,
     equality: equality,
+    autoDispose: autoDispose,
   );
 }
