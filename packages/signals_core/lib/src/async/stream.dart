@@ -123,7 +123,6 @@ class StreamSignal<T> extends AsyncSignal<T> {
     super.dispose();
     _cleanup?.call();
     _subscription?.cancel();
-    reset();
   }
 
   @override

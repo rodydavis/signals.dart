@@ -160,6 +160,8 @@ MapSignal<K, V> mapSignal<K, V>(
   return MapSignal<K, V>(
     map,
     debugLabel: debugLabel,
+    autoDispose: autoDispose,
+    equality: equality,
   );
 }
 
