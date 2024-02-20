@@ -1,4 +1,6 @@
+import '../async/state.dart';
 import '../async/stream.dart';
+import '../core/signals.dart';
 
 /// Extension on stream to provide helpful methods for signals
 extension SignalStreamUtils<T> on Stream<T> {
@@ -19,12 +21,22 @@ extension SignalStreamUtils<T> on Stream<T> {
     bool? cancelOnError,
     String? debugLabel,
     T? initialValue,
+    bool autoDispose = false,
+    bool lazy = true,
+    SignalEquality<AsyncState<T>>? equality,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    void Function()? onDone,
   }) {
     return streamSignal<T>(
       () => this,
       cancelOnError: cancelOnError,
       debugLabel: debugLabel,
       initialValue: initialValue,
+      autoDispose: autoDispose,
+      lazy: lazy,
+      equality: equality,
+      dependencies: dependencies,
+      onDone: onDone,
     );
   }
 }
