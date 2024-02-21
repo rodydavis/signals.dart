@@ -1,0 +1,149 @@
+{
+  "signal": {
+    "scope": "dart",
+    "prefix": "sig",
+    "description": "A Signal Object (with label and auto dispose)",
+    "body": [
+      "final $1 = signal($2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Async Signal": {
+    "scope": "dart",
+    "prefix": "asig",
+    "description": "An async Signal Object",
+    "body": [
+      "final $1 = asyncSignal(AsyncState.data($2), debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Computed": {
+    "scope": "dart",
+    "prefix": "comp",
+    "description": " The computed function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal’s value.",
+    "body": [
+      "final $1 = computed(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "AsyncComputed": {
+    "scope": "dart",
+    "prefix": "ascomp",
+    "description": " Async Computed is syntax sugar around [FutureSignal].",
+    "body": [
+      "final $1 = computedAsync(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "ChangeStackSignal": {
+    "scope": "dart",
+    "prefix": "undosig",
+    "description": "Change stack is a way to track the signal values overtime and undo or redo values.",
+    "body": [
+      "final $1 = changeStack($2, limit:${3:null}, debugLabel: '$1', autoDispose: ${4:false});"
+    ]
+  },
+  "IterableSignal": {
+    "scope": "dart",
+    "prefix": "itrsig",
+    "description": "Iterable signals can be created by extension or method and implement the Iterable interface.",
+    "body": [
+      "final $1 = iterableSignal($2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "ListSignal": {
+    "scope": "dart",
+    "prefix": "lstsig",
+    "description": "List signals can be created by extension or method and implement the List interface.",
+    "body": [
+      "final $1 = listSignal([$2], debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "MapSignal": {
+    "scope": "dart",
+    "prefix": "mpsig",
+    "description": "Map signals can be created by extension or method and implement the Map interface.",
+    "body": [
+      "final $1 = mapSignal({$2}, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "SetSignal": {
+    "scope": "dart",
+    "prefix": "stsig",
+    "description": "Set signals can be created by extension or method and implement the Set interface.",
+    "body": [
+      "final $1 = setSignal({$2}, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "FutureSignal": {
+    "scope": "dart",
+    "prefix": "fusig",
+    "description": "Returns AsyncState<T> for the value and can handle the various states.",
+    "body": [
+      "final $1 = futureSignal(() async => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Signal Container (Read-only)": {
+    "scope": "dart",
+    "prefix": "rsigcon",
+    "description": "Returns a read-only Signal Container.",
+    "body": [
+      "final $1 = readonlySignalContainer<$2,$3>((arg) {;",
+      "       return computed<$2>(() => $4);",
+      "   },",
+      "   debugLabel: '$1',",
+      "   autoDispose: ${4:false},",
+      ");"
+    ]
+  },
+  "Signal Container": {
+    "scope": "dart",
+    "prefix": "sigcon",
+    "description": "Returns a Signal Container.",
+    "body": [
+      "final $1 = signalContainer<$2,$3>((arg) {;",
+      "       return signal<$2>($4);",
+      "   },",
+      "   debugLabel: '$1',",
+      "   autoDispose: ${4:false},",
+      ");"
+    ]
+  },
+  "StreamSignal": {
+    "scope": "dart",
+    "prefix": "stsig",
+    "description": "Returns a streamSignal instance.",
+    "body": [
+      "final $1 = futureSignal(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Watch builder": {
+    "scope": "dart",
+    "prefix": "watchb",
+    "description": "To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree.",
+    "body": [
+      "Watch.builder(",
+      "   builder: (context) {",
+      "       return $1;",
+      "   },",
+      "),"
+    ]
+  },
+  "Watch": {
+    "scope": "dart",
+    "prefix": "watch",
+    "description": "To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree.",
+    "body": ["Watch((context) => $1),"]
+  },
+  "Value Signal": {
+    "scope": "dart",
+    "prefix": "valsig",
+    "description": "Value Signal Class",
+    "body": [
+      "class $1 extends ValueSignal<$2> {",
+      " $1(",
+      "     super.value, {",
+      "     super.autoDispose,",
+      "     super.equality,",
+      "     super.debugLabel = '$1',",
+      " });",
+      "}"
+    ]
+  }
+}
