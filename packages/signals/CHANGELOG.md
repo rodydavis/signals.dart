@@ -1,3 +1,12 @@
+## 4.4.0
+
+- adding overrideWith
+- fix autoDispose not passed in for some signals
+- fix equality not being passed in for some signals
+- fix for completed not being reset on async signal
+- Update to `signals_core` 4.4.0
+- Update to `signals_flutter` 4.4.0
+
 ## 4.3.0
 
 - Add valueNotifierToSignal, valueListenableToSignal

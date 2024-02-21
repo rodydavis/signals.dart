@@ -1,3 +1,10 @@
+## 4.4.0
+
+- adding overrideWith
+- fix autoDispose not passed in for some signals
+- fix equality not being passed in for some signals
+- fix for completed not being reset on async signal
+
 ## 4.2.1
 
 - **FIX**: https://github.com/rodydavis/signals.dart/issues/171
