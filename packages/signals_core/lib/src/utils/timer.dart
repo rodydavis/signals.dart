@@ -1,4 +1,4 @@
-import '../async/stream.dart';
+import 'package:signals_core/signals_core.dart';
 
 /// Time event to react to
 typedef TimerSignalEvent = ({int iteration, int millis});
@@ -13,6 +13,7 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
     String super.debugLabel = 'Timer',
     super.cancelOnError,
     super.autoDispose,
+    super.equality,
   }) : super(
           () => Stream<TimerSignalEvent>.periodic(
             every,
@@ -29,11 +30,18 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
 
 /// Expose Duration as a [TimerSignal]
 extension TimerSignalDurationUtils on Duration {
-  TimerSignal toSignal({String debugLabel = 'Timer', bool? cancelOnError}) {
+  TimerSignal toSignal({
+    String debugLabel = 'Timer',
+    bool? cancelOnError,
+    bool autoDispose = false,
+    SignalEquality<AsyncState<TimerSignalEvent>>? equality,
+  }) {
     return TimerSignal(
       every: this,
       debugLabel: debugLabel,
       cancelOnError: cancelOnError,
+      autoDispose: autoDispose,
+      equality: equality,
     );
   }
 }
@@ -43,10 +51,14 @@ TimerSignal timerSignal(
   Duration every, {
   String debugLabel = 'Timer',
   bool? cancelOnError,
+  bool autoDispose = false,
+  SignalEquality<AsyncState<TimerSignalEvent>>? equality,
 }) {
   return TimerSignal(
     every: every,
     debugLabel: debugLabel,
     cancelOnError: cancelOnError,
+    autoDispose: autoDispose,
+    equality: equality,
   );
 }

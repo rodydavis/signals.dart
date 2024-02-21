@@ -1,0 +1,19 @@
+{
+	"name": "Visual Studio Code - Insiders",
+	"short_name": "Code - Insiders",
+	"start_url": "/",
+	"lang": "en-US",
+	"display": "standalone",
+	"icons": [
+		{
+			"src": "code-192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "code-512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	]
+}
