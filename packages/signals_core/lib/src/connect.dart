@@ -4,7 +4,9 @@ import 'core/signals.dart';
 
 /// Connects a [Stream] to a [Signal].
 class Connect<T> {
+  /// Connects a [Stream] to a [Signal].
   Connect(this.signal);
+  /// Internal signal to connect to.
   final Signal<T> signal;
   final Map<int, StreamSubscription> _subscriptions = {};
 

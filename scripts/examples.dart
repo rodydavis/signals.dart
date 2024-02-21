@@ -29,7 +29,8 @@ void main(List<String> args) {
     final title = yaml['name'];
     final description = yaml['description'];
     final filename = e.path.split('/').last;
-    final link = 'https://github.com/rodydavis/signals.dart/tree/main/examples/$filename';
+    final link =
+        'https://github.com/rodydavis/signals.dart/tree/main/examples/$filename';
     // final readmeFile = File('${outDir.path}/$filename.md');
     // readmeFile.writeAsStringSync(createMd(
     //   title,

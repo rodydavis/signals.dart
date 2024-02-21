@@ -22,6 +22,22 @@ scripts:
       scope: "*signals_core*"
   test:
     exec: melos run dart:test --no-select && melos run flutter:test --no-select
+ 
+  merge-trace-files:
+    description: Merge all packages coverage trace files ignoring data related to generated files.
+    run: >
+      coverde rm MELOS_ROOT_PATH/coverage/filtered.lcov.info &&
+      melos exec --file-exists=coverage/lcov.info -- "coverde filter --input ./coverage/lcov.info --output MELOS_ROOT_PATH/coverage/filtered.lcov.info --paths-parent MELOS_PACKAGE_PATH --filters '\.g\.dart'"
+
+  coverage-report:
+    run: >
+      melos run merge-trace-files &&
+      coverde value -i coverage/filtered.lcov.info
+
+  coverage-report-html:
+    run: >
+      melos run merge-trace-files &&
+      coverde report -i coverage/filtered.lcov.info -o coverage/html/
 
 command:
   version:
@@ -29,3 +45,4 @@ command:
       preCommit: |
         # Make changes to the version commit here.
         # You need to stage changes that you make yourself.
+  

@@ -31,7 +31,6 @@ abstract class ReadonlySignal<T> {
   /// Returns true if dispose has been called and will throw and
   /// error on value read
   bool get disposed;
-  set disposed(bool value);
 
   Iterable<_Listenable> get _allTargets;
 
@@ -46,10 +45,11 @@ abstract class ReadonlySignal<T> {
 
   /// Get the last value before the last update or the initial value
   ///
-  /// This does not subscribe in an effect and is the equivalent to peek()
+  /// This does not subscribe in an effect (this is the equivalent to peek())
   T get previousValue;
 
-  /// Get the value the signal was created with
+  /// Get the value the signal was created with and does not subscribe in an 
+  /// effect (this is the equivalent to peek())
   T get initialValue;
 
   @override

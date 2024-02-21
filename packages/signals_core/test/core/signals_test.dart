@@ -43,6 +43,13 @@ void main() {
       expect(s.value, v);
     });
 
+    test('overrideWith', () {
+      final a = signal(1);
+      expect(a.value, 1);
+      a.overrideWith(2);
+      expect(a.value, 2);
+    });
+
     group('dispose', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {

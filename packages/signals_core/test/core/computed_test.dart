@@ -60,6 +60,15 @@ void main() {
       expect(first != second, true);
     });
 
+    test('overrideWith', () {
+      final a = signal(1);
+      final b = signal(2);
+      final c = computed(() => a() + b());
+      expect(c.value, 3);
+      c.overrideWith(10);
+      expect(c.value, 10);
+    });
+
     test('should respect force set', () {
       final a = signal(1);
       final b = computed(() => a());
