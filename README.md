@@ -8,6 +8,8 @@ Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-sig
 
 Documentation Site: https://dartsignals.dev/
 
+VS Code Extension: https://marketplace.visualstudio.com/items?itemName=rodydavis.signals-dart
+
 | Package                                                             | Pub                                                                                                              |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | [`signals`](packages/signals)                                       | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                         |
