@@ -23,21 +23,34 @@ scripts:
   test:
     exec: melos run dart:test --no-select && melos run flutter:test --no-select
  
-  merge-trace-files:
-    description: Merge all packages coverage trace files ignoring data related to generated files.
-    run: >
-      coverde rm MELOS_ROOT_PATH/coverage/filtered.lcov.info &&
-      melos exec --file-exists=coverage/lcov.info -- "coverde filter --input ./coverage/lcov.info --output MELOS_ROOT_PATH/coverage/filtered.lcov.info --paths-parent MELOS_PACKAGE_PATH --filters '\.g\.dart'"
+  # merge-trace-files:
+  #   description: Merge all packages coverage trace files ignoring data related to generated files.
+  #   run: >
+  #     coverde rm MELOS_ROOT_PATH/coverage/filtered.lcov.info &&
+  #     melos exec --file-exists=coverage/lcov.info -- "coverde filter --input ./coverage/lcov.info --output MELOS_ROOT_PATH/coverage/filtered.lcov.info --paths-parent MELOS_PACKAGE_PATH --filters '\.g\.dart'"
 
-  coverage-report:
-    run: >
-      melos run merge-trace-files &&
-      coverde value -i coverage/filtered.lcov.info
+  # coverage-report:
+  #   run: >
+  #     melos run merge-trace-files &&
+  #     coverde value -i coverage/filtered.lcov.info
 
-  coverage-report-html:
-    run: >
-      melos run merge-trace-files &&
-      coverde report -i coverage/filtered.lcov.info -o coverage/html/
+  # coverage-report-html:
+  #   run: >
+  #     melos run merge-trace-files &&
+  #     coverde report -i coverage/filtered.lcov.info -o coverage/html/
+  
+  coverage:dart:
+    exec: dart pub global run coverage:test_with_coverage
+    packageFilters:
+      flutter: false
+      scope: "*signals_core*"
+  coverage:flutter:
+    exec: flutter test --coverage
+    packageFilters:
+      flutter: true
+      scope: "*signals_flutter*"
+  coverage:report:
+    exec: genhtml coverage/lcov.info -o coverage/html
 
 command:
   version:

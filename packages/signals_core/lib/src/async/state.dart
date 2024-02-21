@@ -15,6 +15,7 @@ typedef AsyncStateBuilder<E> = E Function();
 
 /// State for an [AsyncSignal]
 sealed class AsyncState<T> {
+  /// Check if the state is a loading state
   final bool isLoading;
   final T? _value;
   final (Object, StackTrace?)? _error;
@@ -94,7 +95,15 @@ sealed class AsyncState<T> {
     if (isRefreshing) if (refreshing != null) return refreshing();
     if (isReloading) if (reloading != null) return reloading();
     if (hasValue) return data(value as T);
-    if (hasError) return error(this.error!, stackTrace);
+    if (hasError) {
+      if (error is Function(dynamic, dynamic)) {
+        return error(this.error, stackTrace);
+      } else if (error is Function(dynamic)) {
+        return error(this.error);
+      } else {
+        return error();
+      }
+    }
     return loading();
   }
 
@@ -122,7 +131,17 @@ sealed class AsyncState<T> {
     if (isRefreshing) if (refreshing != null) return refreshing();
     if (isReloading) if (reloading != null) return reloading();
     if (hasValue) if (data != null) return data(value as T);
-    if (hasError) if (error != null) return error(this.error!, stackTrace);
+    if (hasError) {
+      if (error != null) {
+        if (error is Function(Object, StackTrace?)) {
+          return error(this.error as Object, stackTrace);
+        } else if (error is Function(Object)) {
+          return error(this.error as Object);
+        } else {
+          return error();
+        }
+      }
+    }
     if (loading != null) return loading();
     return orElse();
   }
@@ -153,6 +172,7 @@ sealed class AsyncState<T> {
 
 /// State for an [AsyncState] with a value
 class AsyncData<T> extends AsyncState<T> {
+  /// State for an [AsyncState] with a value
   AsyncData(
     T data, {
     super.isLoading = false,
@@ -171,6 +191,7 @@ class AsyncData<T> extends AsyncState<T> {
 
 /// State for an [AsyncState] with an error
 class AsyncError<T> extends AsyncState<T> {
+  /// State for an [AsyncState] with an error
   AsyncError(
     Object error,
     StackTrace? stackTrace, {
@@ -185,11 +206,12 @@ class AsyncError<T> extends AsyncState<T> {
   bool get hasError => true;
 
   @override
-  Object get error => super.error!;
+  Object get error => super.error as Object;
 }
 
 /// State for an [AsyncState] with a loading state
 class AsyncLoading<T> extends AsyncState<T> {
+  /// State for an [AsyncState] with a loading state
   AsyncLoading({
     super.value,
     super.error,

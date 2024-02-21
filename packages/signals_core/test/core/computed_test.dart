@@ -112,5 +112,95 @@ void main() {
 
       expect(values, [0, 6]);
     });
+
+    test('hashCode', () {
+      final s = computed(() => 1);
+      final value = s.hashCode;
+      expect(value != 0, true);
+    });
+
+    test('error in callback', () {
+      final s = computed(() => throw Exception('error'));
+
+      expect(() => s.recompute(), throwsException);
+    });
+
+    test('previousValue', () {
+      int i = 0;
+      final s = computed(() => i++);
+      s.recompute();
+      s.recompute();
+      expect(s.previousValue, 1);
+      expect(s.value, 2);
+    });
+
+    test('initialValue', () {
+      final s = computed(() => 1);
+      expect(s.value, 1);
+      expect(s.initialValue, 1);
+    });
+
+    test('toString()', () {
+      final s = computed(() => 1);
+      expect(s.toString(), '1');
+    });
+
+    test('toJson()', () {
+      final s = computed(() => 1);
+      expect(s.toJson(), 1);
+    });
+
+    test('call()', () {
+      final s = computed(() => 1);
+      expect(s(), 1);
+    });
+
+    test('get()', () {
+      final s = computed(() => 1);
+      expect(s.get(), 1);
+    });
+
+    test('peek()', () {
+      final s = computed(() => 1);
+      s.recompute();
+      expect(s.peek(), 1);
+    });
+
+    group('cycle error', () {
+      test('.value', () {
+        final a = signal(1);
+        final b = computed(() => a.value++);
+
+        a.value = 2;
+
+        expect(() => b.value, throwsA(isA<MutationDetectedError>()));
+      });
+
+      test('.peek()', () {
+        final a = signal(1);
+        final b = computed(() => a.value++);
+
+        expect(() => b.peek(), throwsA(isA<MutationDetectedError>()));
+      });
+
+      test('read after disposed', () {
+        final b = computed(() => 1);
+        b.value;
+        b.dispose();
+        expect(
+          () => b.value,
+          prints(contains('computed warning:')),
+        );
+      });
+
+      test('cycle after first read', () {
+        final cycle = signal(false);
+        final a = signal(0);
+        final b = computed(() => cycle.value ? a.value++ : 0);
+        b.value;
+        cycle.value = true;
+        expect(() => b.value, throwsA(isA<MutationDetectedError>()));
+      });
+    });
   });
 }

@@ -4,20 +4,33 @@ import '../core/signals.dart';
 import 'signal.dart';
 import 'state.dart';
 
+/// A [Signal] that stores value in [AsyncState] and
+/// fetches data from a [Stream]
 class StreamSignal<T> extends AsyncSignal<T> {
   late final Computed<Stream<T>> _stream;
   bool _fetching = false;
-  final bool? cancelOnError;
   StreamSubscription<T>? _subscription;
   final void Function()? _onDone;
   bool _done = false;
-  bool get isDone => _done;
-  final List<ReadonlySignal<dynamic>> dependencies;
   EffectCleanup? _cleanup;
 
+  /// Check if the signal is done
+  bool get isDone => _done;
+
+  /// Cancel the subscription on error
+  final bool? cancelOnError;
+
+  /// List of dependencies to recompute the stream
+  final List<ReadonlySignal<dynamic>> dependencies;
+
+  /// First value of the stream
   Future<T> get last => _stream.value.last;
+
+  /// Last value of the stream
   Future<T> get first => _stream.value.first;
 
+  /// A [Signal] that stores value in [AsyncState] and
+  /// fetches data from a [Stream]
   StreamSignal(
     Stream<T> Function() callback, {
     this.cancelOnError,
@@ -44,46 +57,43 @@ class StreamSignal<T> extends AsyncSignal<T> {
     if (!lazy) value;
   }
 
+  /// Execute the stream
   Future<void> execute(Stream<T> src) async {
     if (_done || _fetching) return;
     _fetching = true;
-    try {
-      _subscription = src.listen(
-        setValue,
-        onError: setError,
-        onDone: _finish,
-        cancelOnError: cancelOnError,
-      );
-    } catch (error, stackTrace) {
-      setError(error, stackTrace);
-      if (cancelOnError ?? true) {
-        _finish();
-      }
-    }
+    _subscription = src.listen(
+      setValue,
+      onError: setError,
+      onDone: _finish,
+      cancelOnError: cancelOnError,
+    );
   }
 
-  void _finish() async {
+  Future<void> _finish() async {
     _done = true;
     _onDone?.call();
     await _subscription?.cancel();
     _subscription = null;
   }
 
+  /// Check if the subscription is paused
   bool get isPaused => _subscription?.isPaused ?? false;
 
+  /// Pause the subscription
   void pause([Future<void>? resume]) {
     _subscription?.pause(resume);
     set(value, force: true);
   }
 
+  /// Resume the subscription
   void resume() {
     _subscription?.resume();
     set(value, force: true);
   }
 
+  /// Cancel the subscription
   Future<void> cancel() async {
-    _subscription?.cancel();
-    _subscription = null;
+    await _finish();
   }
 
   @override
@@ -133,8 +143,17 @@ class StreamSignal<T> extends AsyncSignal<T> {
     });
     return super.value;
   }
+
+  @override
+  void setError(Object error, [StackTrace? stackTrace]) {
+    super.setError(error, stackTrace);
+    if (cancelOnError == true) {
+      _finish();
+    }
+  }
 }
 
+/// Create a [StreamSignal] from a [Stream]
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() callback, {
   T? initialValue,

@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'core/signals.dart';
+import '../core/signals.dart';
 
 /// Connects a [Stream] to a [Signal].
 class Connect<T> {
   /// Connects a [Stream] to a [Signal].
   Connect(this.signal);
+
   /// Internal signal to connect to.
   final Signal<T> signal;
   final Map<int, StreamSubscription> _subscriptions = {};
@@ -59,6 +60,7 @@ class Connect<T> {
       subscription.cancel();
     }
     _subscriptions.clear();
+    signal.dispose();
   }
 }
 

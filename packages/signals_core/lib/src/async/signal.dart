@@ -5,6 +5,7 @@ import 'state.dart';
 
 /// A [Signal] that stores value in [AsyncState]
 class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
+  /// A [Signal] that stores value in [AsyncState]
   AsyncSignal(
     super.value, {
     super.debugLabel,
@@ -28,29 +29,34 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
     return _completer.isCompleted;
   }
 
+  /// Set the error with optional stackTrace to [AsyncError]
   void setError(Object error, [StackTrace? stackTrace]) {
     value = AsyncState.error(error, stackTrace);
     if (_completer.isCompleted) _completer = Completer<bool>();
     _completer.complete(true);
   }
 
+  /// Set the value to [AsyncData]
   void setValue(T value) {
     this.value = AsyncState.data(value);
     if (_completer.isCompleted) _completer = Completer<bool>();
     _completer.complete(true);
   }
 
+  /// Set the loading state to [AsyncLoading]
   void setLoading([AsyncState<T>? state]) {
     value = state ?? AsyncState.loading();
     _completer = Completer<bool>();
   }
 
+  /// Reset the signal to the initial value
   void reset([AsyncState<T>? value]) {
     this.value = value ?? _initialValue;
     _initialized = false;
     if (_completer.isCompleted) _completer = Completer<bool>();
   }
 
+  /// Initialize the signal
   void init() async {
     if (_initialized) return;
     _initialized = true;
@@ -95,6 +101,7 @@ class AsyncSignal<T> extends ValueSignal<AsyncState<T>> {
     return super.value;
   }
 
+  /// Returns the value of the signal
   T get requireValue => super.value.requireValue;
 }
 

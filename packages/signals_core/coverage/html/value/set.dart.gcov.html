@@ -1,0 +1,365 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - lcov.info - value/set.dart</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">value</a> - set.dart<span style="font-size: 80%;"> (source / <a href="set.dart.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">lcov.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">20.7&nbsp;%</td>
+            <td class="headerCovTableEntry">116</td>
+            <td class="headerCovTableEntry">24</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2024-02-20 20:02:17</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : import '../core/signals.dart';</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span>              : /// A [Signal] that holds a [Set].</span>
+<span id="L4"><span class="lineNum">       4</span>              : class SetSignal&lt;E&gt; extends ValueSignal&lt;Set&lt;E&gt;&gt; implements Set&lt;E&gt; {</span>
+<span id="L5"><span class="lineNum">       5</span>              :   /// Creates a [SetSignal] with the given [value].</span>
+<span id="L6"><span class="lineNum">       6</span> <span class="tlaGNC tlaBgGNC">           1 :   SetSignal(</span></span>
+<span id="L7"><span class="lineNum">       7</span>              :     super.value, {</span>
+<span id="L8"><span class="lineNum">       8</span>              :     super.debugLabel,</span>
+<span id="L9"><span class="lineNum">       9</span>              :     super.equality,</span>
+<span id="L10"><span class="lineNum">      10</span>              :     super.autoDispose,</span>
+<span id="L11"><span class="lineNum">      11</span>              :   });</span>
+<span id="L12"><span class="lineNum">      12</span>              : </span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">           1 :   @override</span></span>
+<span id="L14"><span class="lineNum">      14</span>              :   bool add(E value) {</span>
+<span id="L15"><span class="lineNum">      15</span> <span class="tlaGNC">           2 :     final result = this.value.add(value);</span></span>
+<span id="L16"><span class="lineNum">      16</span> <span class="tlaGNC">           2 :     forceUpdate(this.value);</span></span>
+<span id="L17"><span class="lineNum">      17</span>              :     return result;</span>
+<span id="L18"><span class="lineNum">      18</span>              :   }</span>
+<span id="L19"><span class="lineNum">      19</span>              : </span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaUNC tlaBgUNC">           0 :   @override</span></span>
+<span id="L21"><span class="lineNum">      21</span>              :   void addAll(Iterable&lt;E&gt; elements) {</span>
+<span id="L22"><span class="lineNum">      22</span> <span class="tlaUNC">           0 :     value.addAll(elements);</span></span>
+<span id="L23"><span class="lineNum">      23</span> <span class="tlaUNC">           0 :     forceUpdate(value);</span></span>
+<span id="L24"><span class="lineNum">      24</span>              :   }</span>
+<span id="L25"><span class="lineNum">      25</span>              : </span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L27"><span class="lineNum">      27</span>              :   bool any(bool Function(E element) test) {</span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaUNC">           0 :     return value.any(test);</span></span>
+<span id="L29"><span class="lineNum">      29</span>              :   }</span>
+<span id="L30"><span class="lineNum">      30</span>              : </span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L32"><span class="lineNum">      32</span>              :   Set&lt;R&gt; cast&lt;R&gt;() {</span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaUNC">           0 :     return value.cast&lt;R&gt;();</span></span>
+<span id="L34"><span class="lineNum">      34</span>              :   }</span>
+<span id="L35"><span class="lineNum">      35</span>              : </span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC tlaBgGNC">           1 :   @override</span></span>
+<span id="L37"><span class="lineNum">      37</span>              :   void clear() {</span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           2 :     value.clear();</span></span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           2 :     forceUpdate(value);</span></span>
+<span id="L40"><span class="lineNum">      40</span>              :   }</span>
+<span id="L41"><span class="lineNum">      41</span>              : </span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">           1 :   @override</span></span>
+<span id="L43"><span class="lineNum">      43</span>              :   bool contains(Object? value) {</span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           2 :     return this.value.contains(value);</span></span>
+<span id="L45"><span class="lineNum">      45</span>              :   }</span>
+<span id="L46"><span class="lineNum">      46</span>              : </span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaUNC tlaBgUNC">           0 :   @override</span></span>
+<span id="L48"><span class="lineNum">      48</span>              :   bool containsAll(Iterable&lt;Object?&gt; other) {</span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaUNC">           0 :     return value.containsAll(other);</span></span>
+<span id="L50"><span class="lineNum">      50</span>              :   }</span>
+<span id="L51"><span class="lineNum">      51</span>              : </span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L53"><span class="lineNum">      53</span>              :   Set&lt;E&gt; difference(Set&lt;Object?&gt; other) {</span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaUNC">           0 :     return value.difference(other);</span></span>
+<span id="L55"><span class="lineNum">      55</span>              :   }</span>
+<span id="L56"><span class="lineNum">      56</span>              : </span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L58"><span class="lineNum">      58</span>              :   E elementAt(int index) {</span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaUNC">           0 :     return value.elementAt(index);</span></span>
+<span id="L60"><span class="lineNum">      60</span>              :   }</span>
+<span id="L61"><span class="lineNum">      61</span>              : </span>
+<span id="L62"><span class="lineNum">      62</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L63"><span class="lineNum">      63</span>              :   bool every(bool Function(E element) test) {</span>
+<span id="L64"><span class="lineNum">      64</span> <span class="tlaUNC">           0 :     return value.every(test);</span></span>
+<span id="L65"><span class="lineNum">      65</span>              :   }</span>
+<span id="L66"><span class="lineNum">      66</span>              : </span>
+<span id="L67"><span class="lineNum">      67</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L68"><span class="lineNum">      68</span>              :   Iterable&lt;T&gt; expand&lt;T&gt;(Iterable&lt;T&gt; Function(E element) toElements) {</span>
+<span id="L69"><span class="lineNum">      69</span> <span class="tlaUNC">           0 :     return value.expand(toElements);</span></span>
+<span id="L70"><span class="lineNum">      70</span>              :   }</span>
+<span id="L71"><span class="lineNum">      71</span>              : </span>
+<span id="L72"><span class="lineNum">      72</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaUNC">           0 :   E get first =&gt; value.first;</span></span>
+<span id="L74"><span class="lineNum">      74</span>              : </span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L76"><span class="lineNum">      76</span>              :   E firstWhere(bool Function(E element) test, {E Function()? orElse}) {</span>
+<span id="L77"><span class="lineNum">      77</span> <span class="tlaUNC">           0 :     return value.firstWhere(test, orElse: orElse);</span></span>
+<span id="L78"><span class="lineNum">      78</span>              :   }</span>
+<span id="L79"><span class="lineNum">      79</span>              : </span>
+<span id="L80"><span class="lineNum">      80</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L81"><span class="lineNum">      81</span>              :   T fold&lt;T&gt;(T initialValue, T Function(T previousValue, E element) combine) {</span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaUNC">           0 :     return value.fold(initialValue, combine);</span></span>
+<span id="L83"><span class="lineNum">      83</span>              :   }</span>
+<span id="L84"><span class="lineNum">      84</span>              : </span>
+<span id="L85"><span class="lineNum">      85</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L86"><span class="lineNum">      86</span>              :   Iterable&lt;E&gt; followedBy(Iterable&lt;E&gt; other) {</span>
+<span id="L87"><span class="lineNum">      87</span> <span class="tlaUNC">           0 :     return value.followedBy(other);</span></span>
+<span id="L88"><span class="lineNum">      88</span>              :   }</span>
+<span id="L89"><span class="lineNum">      89</span>              : </span>
+<span id="L90"><span class="lineNum">      90</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L91"><span class="lineNum">      91</span>              :   void forEach(void Function(E element) action) {</span>
+<span id="L92"><span class="lineNum">      92</span> <span class="tlaUNC">           0 :     value.forEach(action);</span></span>
+<span id="L93"><span class="lineNum">      93</span> <span class="tlaUNC">           0 :     forceUpdate(value);</span></span>
+<span id="L94"><span class="lineNum">      94</span>              :   }</span>
+<span id="L95"><span class="lineNum">      95</span>              : </span>
+<span id="L96"><span class="lineNum">      96</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L97"><span class="lineNum">      97</span>              :   Set&lt;E&gt; intersection(Set&lt;Object?&gt; other) {</span>
+<span id="L98"><span class="lineNum">      98</span> <span class="tlaUNC">           0 :     return value.intersection(other);</span></span>
+<span id="L99"><span class="lineNum">      99</span>              :   }</span>
+<span id="L100"><span class="lineNum">     100</span>              : </span>
+<span id="L101"><span class="lineNum">     101</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L102"><span class="lineNum">     102</span> <span class="tlaUNC">           0 :   bool get isEmpty =&gt; value.isEmpty;</span></span>
+<span id="L103"><span class="lineNum">     103</span>              : </span>
+<span id="L104"><span class="lineNum">     104</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L105"><span class="lineNum">     105</span> <span class="tlaUNC">           0 :   bool get isNotEmpty =&gt; value.isNotEmpty;</span></span>
+<span id="L106"><span class="lineNum">     106</span>              : </span>
+<span id="L107"><span class="lineNum">     107</span> <span class="tlaGNC tlaBgGNC">           1 :   @override</span></span>
+<span id="L108"><span class="lineNum">     108</span> <span class="tlaGNC">           2 :   Iterator&lt;E&gt; get iterator =&gt; value.iterator;</span></span>
+<span id="L109"><span class="lineNum">     109</span>              : </span>
+<span id="L110"><span class="lineNum">     110</span> <span class="tlaUNC tlaBgUNC">           0 :   @override</span></span>
+<span id="L111"><span class="lineNum">     111</span>              :   String join([String separator = &quot;&quot;]) {</span>
+<span id="L112"><span class="lineNum">     112</span> <span class="tlaUNC">           0 :     return value.join(separator);</span></span>
+<span id="L113"><span class="lineNum">     113</span>              :   }</span>
+<span id="L114"><span class="lineNum">     114</span>              : </span>
+<span id="L115"><span class="lineNum">     115</span> <span class="tlaGNC tlaBgGNC">           1 :   @override</span></span>
+<span id="L116"><span class="lineNum">     116</span> <span class="tlaGNC">           2 :   E get last =&gt; value.last;</span></span>
+<span id="L117"><span class="lineNum">     117</span>              : </span>
+<span id="L118"><span class="lineNum">     118</span> <span class="tlaUNC tlaBgUNC">           0 :   @override</span></span>
+<span id="L119"><span class="lineNum">     119</span>              :   E lastWhere(bool Function(E element) test, {E Function()? orElse}) {</span>
+<span id="L120"><span class="lineNum">     120</span> <span class="tlaUNC">           0 :     return value.lastWhere(test, orElse: orElse);</span></span>
+<span id="L121"><span class="lineNum">     121</span>              :   }</span>
+<span id="L122"><span class="lineNum">     122</span>              : </span>
+<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC tlaBgGNC">           1 :   @override</span></span>
+<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC">           2 :   int get length =&gt; value.length;</span></span>
+<span id="L125"><span class="lineNum">     125</span>              : </span>
+<span id="L126"><span class="lineNum">     126</span>              :   /// Inject: Update current signal value with iterable</span>
+<span id="L127"><span class="lineNum">     127</span> <span class="tlaUNC tlaBgUNC">           0 :   SetSignal&lt;E&gt; operator &lt;&lt;(Set&lt;E&gt; other) {</span></span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaUNC">           0 :     value.addAll(other);</span></span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaUNC">           0 :     forceUpdate(value);</span></span>
+<span id="L130"><span class="lineNum">     130</span>              :     return this;</span>
+<span id="L131"><span class="lineNum">     131</span>              :   }</span>
+<span id="L132"><span class="lineNum">     132</span>              : </span>
+<span id="L133"><span class="lineNum">     133</span>              :   /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter</span>
+<span id="L134"><span class="lineNum">     134</span> <span class="tlaUNC">           0 :   SetSignal&lt;E&gt; operator &amp;(Set&lt;E&gt; other) {</span></span>
+<span id="L135"><span class="lineNum">     135</span> <span class="tlaUNC">           0 :     final rs = Set&lt;E&gt;.from(peek())..addAll(other);</span></span>
+<span id="L136"><span class="lineNum">     136</span> <span class="tlaUNC">           0 :     return SetSignal(rs);</span></span>
+<span id="L137"><span class="lineNum">     137</span>              :   }</span>
+<span id="L138"><span class="lineNum">     138</span>              : </span>
+<span id="L139"><span class="lineNum">     139</span>              :   /// Pipe: create a new signal by sending value from source to other</span>
+<span id="L140"><span class="lineNum">     140</span> <span class="tlaUNC">           0 :   SetSignal&lt;E&gt; operator |(Signal&lt;Iterable&lt;E&gt;&gt; other) {</span></span>
+<span id="L141"><span class="lineNum">     141</span> <span class="tlaUNC">           0 :     final rs = Set&lt;E&gt;.from(peek())..addAll(other.peek());</span></span>
+<span id="L142"><span class="lineNum">     142</span> <span class="tlaUNC">           0 :     return SetSignal(rs);</span></span>
+<span id="L143"><span class="lineNum">     143</span>              :   }</span>
+<span id="L144"><span class="lineNum">     144</span>              : </span>
+<span id="L145"><span class="lineNum">     145</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L146"><span class="lineNum">     146</span>              :   E? lookup(Object? object) {</span>
+<span id="L147"><span class="lineNum">     147</span> <span class="tlaUNC">           0 :     return value.lookup(object);</span></span>
+<span id="L148"><span class="lineNum">     148</span>              :   }</span>
+<span id="L149"><span class="lineNum">     149</span>              : </span>
+<span id="L150"><span class="lineNum">     150</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L151"><span class="lineNum">     151</span>              :   Iterable&lt;T&gt; map&lt;T&gt;(T Function(E e) toElement) {</span>
+<span id="L152"><span class="lineNum">     152</span> <span class="tlaUNC">           0 :     return value.map&lt;T&gt;(toElement);</span></span>
+<span id="L153"><span class="lineNum">     153</span>              :   }</span>
+<span id="L154"><span class="lineNum">     154</span>              : </span>
+<span id="L155"><span class="lineNum">     155</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L156"><span class="lineNum">     156</span>              :   E reduce(E Function(E value, E element) combine) {</span>
+<span id="L157"><span class="lineNum">     157</span> <span class="tlaUNC">           0 :     return value.reduce(combine);</span></span>
+<span id="L158"><span class="lineNum">     158</span>              :   }</span>
+<span id="L159"><span class="lineNum">     159</span>              : </span>
+<span id="L160"><span class="lineNum">     160</span> <span class="tlaGNC tlaBgGNC">           1 :   @override</span></span>
+<span id="L161"><span class="lineNum">     161</span>              :   bool remove(Object? value) {</span>
+<span id="L162"><span class="lineNum">     162</span> <span class="tlaGNC">           2 :     final result = this.value.remove(value);</span></span>
+<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">           2 :     forceUpdate(this.value);</span></span>
+<span id="L164"><span class="lineNum">     164</span>              :     return result;</span>
+<span id="L165"><span class="lineNum">     165</span>              :   }</span>
+<span id="L166"><span class="lineNum">     166</span>              : </span>
+<span id="L167"><span class="lineNum">     167</span> <span class="tlaUNC tlaBgUNC">           0 :   @override</span></span>
+<span id="L168"><span class="lineNum">     168</span>              :   void removeAll(Iterable&lt;Object?&gt; elements) {</span>
+<span id="L169"><span class="lineNum">     169</span> <span class="tlaUNC">           0 :     value.removeAll(elements);</span></span>
+<span id="L170"><span class="lineNum">     170</span> <span class="tlaUNC">           0 :     forceUpdate(value);</span></span>
+<span id="L171"><span class="lineNum">     171</span>              :   }</span>
+<span id="L172"><span class="lineNum">     172</span>              : </span>
+<span id="L173"><span class="lineNum">     173</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L174"><span class="lineNum">     174</span>              :   void removeWhere(bool Function(E element) test) {</span>
+<span id="L175"><span class="lineNum">     175</span> <span class="tlaUNC">           0 :     value.removeWhere(test);</span></span>
+<span id="L176"><span class="lineNum">     176</span> <span class="tlaUNC">           0 :     forceUpdate(value);</span></span>
+<span id="L177"><span class="lineNum">     177</span>              :   }</span>
+<span id="L178"><span class="lineNum">     178</span>              : </span>
+<span id="L179"><span class="lineNum">     179</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L180"><span class="lineNum">     180</span>              :   void retainAll(Iterable&lt;Object?&gt; elements) {</span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaUNC">           0 :     value.retainAll(elements);</span></span>
+<span id="L182"><span class="lineNum">     182</span> <span class="tlaUNC">           0 :     forceUpdate(value);</span></span>
+<span id="L183"><span class="lineNum">     183</span>              :   }</span>
+<span id="L184"><span class="lineNum">     184</span>              : </span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L186"><span class="lineNum">     186</span>              :   void retainWhere(bool Function(E element) test) {</span>
+<span id="L187"><span class="lineNum">     187</span> <span class="tlaUNC">           0 :     value.retainWhere(test);</span></span>
+<span id="L188"><span class="lineNum">     188</span> <span class="tlaUNC">           0 :     forceUpdate(value);</span></span>
+<span id="L189"><span class="lineNum">     189</span>              :   }</span>
+<span id="L190"><span class="lineNum">     190</span>              : </span>
+<span id="L191"><span class="lineNum">     191</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L192"><span class="lineNum">     192</span> <span class="tlaUNC">           0 :   E get single =&gt; value.single;</span></span>
+<span id="L193"><span class="lineNum">     193</span>              : </span>
+<span id="L194"><span class="lineNum">     194</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L195"><span class="lineNum">     195</span>              :   E singleWhere(bool Function(E element) test, {E Function()? orElse}) {</span>
+<span id="L196"><span class="lineNum">     196</span> <span class="tlaUNC">           0 :     return value.singleWhere(test, orElse: orElse);</span></span>
+<span id="L197"><span class="lineNum">     197</span>              :   }</span>
+<span id="L198"><span class="lineNum">     198</span>              : </span>
+<span id="L199"><span class="lineNum">     199</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L200"><span class="lineNum">     200</span>              :   Iterable&lt;E&gt; skip(int count) {</span>
+<span id="L201"><span class="lineNum">     201</span> <span class="tlaUNC">           0 :     return value.skip(count);</span></span>
+<span id="L202"><span class="lineNum">     202</span>              :   }</span>
+<span id="L203"><span class="lineNum">     203</span>              : </span>
+<span id="L204"><span class="lineNum">     204</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L205"><span class="lineNum">     205</span>              :   Iterable&lt;E&gt; skipWhile(bool Function(E value) test) {</span>
+<span id="L206"><span class="lineNum">     206</span> <span class="tlaUNC">           0 :     return value.skipWhile(test);</span></span>
+<span id="L207"><span class="lineNum">     207</span>              :   }</span>
+<span id="L208"><span class="lineNum">     208</span>              : </span>
+<span id="L209"><span class="lineNum">     209</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L210"><span class="lineNum">     210</span>              :   Iterable&lt;E&gt; take(int count) {</span>
+<span id="L211"><span class="lineNum">     211</span> <span class="tlaUNC">           0 :     return value.take(count);</span></span>
+<span id="L212"><span class="lineNum">     212</span>              :   }</span>
+<span id="L213"><span class="lineNum">     213</span>              : </span>
+<span id="L214"><span class="lineNum">     214</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L215"><span class="lineNum">     215</span>              :   Iterable&lt;E&gt; takeWhile(bool Function(E value) test) {</span>
+<span id="L216"><span class="lineNum">     216</span> <span class="tlaUNC">           0 :     return value.takeWhile(test);</span></span>
+<span id="L217"><span class="lineNum">     217</span>              :   }</span>
+<span id="L218"><span class="lineNum">     218</span>              : </span>
+<span id="L219"><span class="lineNum">     219</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L220"><span class="lineNum">     220</span>              :   List&lt;E&gt; toList({bool growable = true}) {</span>
+<span id="L221"><span class="lineNum">     221</span> <span class="tlaUNC">           0 :     return value.toList(growable: growable);</span></span>
+<span id="L222"><span class="lineNum">     222</span>              :   }</span>
+<span id="L223"><span class="lineNum">     223</span>              : </span>
+<span id="L224"><span class="lineNum">     224</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L225"><span class="lineNum">     225</span>              :   Set&lt;E&gt; toSet() {</span>
+<span id="L226"><span class="lineNum">     226</span> <span class="tlaUNC">           0 :     return value.toSet();</span></span>
+<span id="L227"><span class="lineNum">     227</span>              :   }</span>
+<span id="L228"><span class="lineNum">     228</span>              : </span>
+<span id="L229"><span class="lineNum">     229</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L230"><span class="lineNum">     230</span>              :   Set&lt;E&gt; union(Set&lt;E&gt; other) {</span>
+<span id="L231"><span class="lineNum">     231</span> <span class="tlaUNC">           0 :     return value.union(other);</span></span>
+<span id="L232"><span class="lineNum">     232</span>              :   }</span>
+<span id="L233"><span class="lineNum">     233</span>              : </span>
+<span id="L234"><span class="lineNum">     234</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L235"><span class="lineNum">     235</span>              :   Iterable&lt;E&gt; where(bool Function(E element) test) {</span>
+<span id="L236"><span class="lineNum">     236</span> <span class="tlaUNC">           0 :     return value.where(test);</span></span>
+<span id="L237"><span class="lineNum">     237</span>              :   }</span>
+<span id="L238"><span class="lineNum">     238</span>              : </span>
+<span id="L239"><span class="lineNum">     239</span> <span class="tlaUNC">           0 :   @override</span></span>
+<span id="L240"><span class="lineNum">     240</span>              :   Iterable&lt;T&gt; whereType&lt;T&gt;() {</span>
+<span id="L241"><span class="lineNum">     241</span> <span class="tlaUNC">           0 :     return value.whereType&lt;T&gt;();</span></span>
+<span id="L242"><span class="lineNum">     242</span>              :   }</span>
+<span id="L243"><span class="lineNum">     243</span>              : </span>
+<span id="L244"><span class="lineNum">     244</span> <span class="tlaGNC tlaBgGNC">           1 :   @override</span></span>
+<span id="L245"><span class="lineNum">     245</span>              :   bool operator ==(Object other) {</span>
+<span id="L246"><span class="lineNum">     246</span> <span class="tlaGNC">           1 :     return other is SetSignal&lt;E&gt; &amp;&amp; value == other.value;</span></span>
+<span id="L247"><span class="lineNum">     247</span>              :   }</span>
+<span id="L248"><span class="lineNum">     248</span>              : </span>
+<span id="L249"><span class="lineNum">     249</span> <span class="tlaUNC tlaBgUNC">           0 :   @override</span></span>
+<span id="L250"><span class="lineNum">     250</span>              :   int get hashCode {</span>
+<span id="L251"><span class="lineNum">     251</span> <span class="tlaUNC">           0 :     return Object.hashAll([</span></span>
+<span id="L252"><span class="lineNum">     252</span> <span class="tlaUNC">           0 :       globalId.hashCode,</span></span>
+<span id="L253"><span class="lineNum">     253</span> <span class="tlaUNC">           0 :       value.hashCode,</span></span>
+<span id="L254"><span class="lineNum">     254</span> <span class="tlaUNC">           0 :       for (final item in value) item.hashCode</span></span>
+<span id="L255"><span class="lineNum">     255</span>              :     ]);</span>
+<span id="L256"><span class="lineNum">     256</span>              :   }</span>
+<span id="L257"><span class="lineNum">     257</span>              : }</span>
+<span id="L258"><span class="lineNum">     258</span>              : </span>
+<span id="L259"><span class="lineNum">     259</span>              : /// Create an [SetSignal] from [Set]</span>
+<span id="L260"><span class="lineNum">     260</span> <span class="tlaGNC tlaBgGNC">           1 : SetSignal&lt;T&gt; setSignal&lt;T&gt;(</span></span>
+<span id="L261"><span class="lineNum">     261</span>              :   Set&lt;T&gt; list, {</span>
+<span id="L262"><span class="lineNum">     262</span>              :   String? debugLabel,</span>
+<span id="L263"><span class="lineNum">     263</span>              :   bool autoDispose = false,</span>
+<span id="L264"><span class="lineNum">     264</span>              :   SignalEquality&lt;Set&lt;T&gt;&gt;? equality,</span>
+<span id="L265"><span class="lineNum">     265</span>              : }) {</span>
+<span id="L266"><span class="lineNum">     266</span> <span class="tlaGNC">           1 :   return SetSignal&lt;T&gt;(</span></span>
+<span id="L267"><span class="lineNum">     267</span>              :     list,</span>
+<span id="L268"><span class="lineNum">     268</span>              :     debugLabel: debugLabel,</span>
+<span id="L269"><span class="lineNum">     269</span>              :     autoDispose: autoDispose,</span>
+<span id="L270"><span class="lineNum">     270</span>              :     equality: equality,</span>
+<span id="L271"><span class="lineNum">     271</span>              :   );</span>
+<span id="L272"><span class="lineNum">     272</span>              : }</span>
+<span id="L273"><span class="lineNum">     273</span>              : </span>
+<span id="L274"><span class="lineNum">     274</span>              : /// Extension on future to provide helpful methods for signals</span>
+<span id="L275"><span class="lineNum">     275</span>              : extension SignalSetUtils&lt;T&gt; on Set&lt;T&gt; {</span>
+<span id="L276"><span class="lineNum">     276</span>              :   /// Convert an existing list to [SetSignal]</span>
+<span id="L277"><span class="lineNum">     277</span> <span class="tlaGNC">           1 :   SetSignal&lt;T&gt; toSignal({</span></span>
+<span id="L278"><span class="lineNum">     278</span>              :     String? debugLabel,</span>
+<span id="L279"><span class="lineNum">     279</span>              :     bool autoDispose = false,</span>
+<span id="L280"><span class="lineNum">     280</span>              :     SignalEquality&lt;Set&lt;T&gt;&gt;? equality,</span>
+<span id="L281"><span class="lineNum">     281</span>              :   }) {</span>
+<span id="L282"><span class="lineNum">     282</span> <span class="tlaGNC">           1 :     return SetSignal(</span></span>
+<span id="L283"><span class="lineNum">     283</span>              :       this,</span>
+<span id="L284"><span class="lineNum">     284</span>              :       debugLabel: debugLabel,</span>
+<span id="L285"><span class="lineNum">     285</span>              :       autoDispose: autoDispose,</span>
+<span id="L286"><span class="lineNum">     286</span>              :       equality: equality,</span>
+<span id="L287"><span class="lineNum">     287</span>              :     );</span>
+<span id="L288"><span class="lineNum">     288</span>              :   }</span>
+<span id="L289"><span class="lineNum">     289</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

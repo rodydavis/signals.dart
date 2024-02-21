@@ -34,10 +34,12 @@ abstract class Computed<T> implements ReadonlySignal<T> {
   @override
   Iterable<_Listenable> get _allTargets;
 
+  /// Call the computed function and return the value
   void recompute();
 
   void _reset(T? value);
 
+  /// Override the current value with a new value
   Computed<T> overrideWith(T value) {
     this._reset(value);
     return this;
@@ -69,7 +71,6 @@ class _Computed<T> extends Computed<T> implements _Listenable {
 
   Object? _error;
 
-  bool _initialized = false;
   late T _value, _previousValue, _initialValue;
 
   final SignalEquality<T>? equality;
@@ -153,20 +154,16 @@ class _Computed<T> extends Computed<T> implements _Listenable {
       _evalContext = this;
       final value = _compute();
       final equality = this.equality ?? ((a, b) => a == b);
-      if ((this._flags & HAS_ERROR) != 0 ||
-          !_initialized ||
-          needsUpdate ||
-          _version == 0) {
-        if (!_initialized) {
+      if ((this._flags & HAS_ERROR) != 0 || needsUpdate || _version == 0) {
+        if (_version == 0) {
           _previousValue = value;
           _initialValue = value;
         } else {
           _previousValue = _value;
         }
-        if (!_initialized || !equality(_value, value)) {
+        if (_version == 0 || !equality(_value, value)) {
           _value = value;
           _onComputedUpdated(this, this._value);
-          if (!_initialized) _initialized = true;
           _flags &= ~HAS_ERROR;
           _version++;
         }
@@ -241,7 +238,7 @@ class _Computed<T> extends Computed<T> implements _Listenable {
       _cycleDetected();
     }
     if ((_flags & HAS_ERROR) != 0) {
-      throw _value!;
+      throw _error!;
     }
     return _value;
   }
@@ -252,10 +249,8 @@ class _Computed<T> extends Computed<T> implements _Listenable {
   @override
   T get value {
     if (disposed) {
-      if (kDebugMode) {
-        print(
-            'computed warning: [$globalId|$debugLabel] has been read after disposed');
-      }
+      print(
+          'computed warning: [$globalId|$debugLabel] has been read after disposed');
       return this._value;
     }
 
