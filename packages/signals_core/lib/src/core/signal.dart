@@ -137,7 +137,14 @@ abstract class Signal<T> implements ReadonlySignal<T> {
   /// Set the current value
   void set(T value, {bool force = false});
 
+  void _reset(T? value);
+
   ReadonlySignal<T> readonly() => this;
+
+  Signal<T> overrideWith(T value) {
+    this._reset(value);
+    return this;
+  }
 }
 
 class _Signal<T> extends Signal<T> {
@@ -372,9 +379,11 @@ class _Signal<T> extends Signal<T> {
     disposed = true;
   }
 
-  void reset([T? value]) {
+  @override
+  void _reset(T? value) {
     _value = value ?? _initialValue;
     _previousValue = value ?? _initialValue;
+    _version = 0;
   }
 }
 

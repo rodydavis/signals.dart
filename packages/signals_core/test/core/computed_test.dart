@@ -81,7 +81,27 @@ void main() {
       a.set(10, force: true);
       expect(b.value, 10);
       expect(aCalled, 3);
-      expect(bCalled, 3); // fails here: bCalled is still 2
+      expect(bCalled, 2); // 2 because the value is the same
+    });
+
+    test('check if value is the same and cached', () {
+      final a = signal(1);
+      final b = signal(0);
+      final c = computed(() => a() * b());
+
+      final values = <int>[];
+
+      final dispose = effect(() {
+        print('c: ${c.value}');
+        values.add(c.value);
+      });
+
+      a.value = 2;
+      b.value = 3;
+
+      dispose();
+
+      expect(values, [0, 6]);
     });
   });
 }

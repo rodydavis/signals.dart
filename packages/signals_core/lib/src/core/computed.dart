@@ -35,9 +35,16 @@ abstract class Computed<T> implements ReadonlySignal<T> {
   Iterable<_Listenable> get _allTargets;
 
   void recompute();
+
+  void _reset(T? value);
+
+  Computed<T> overrideWith(T value) {
+    this._reset(value);
+    return this;
+  }
 }
 
-class _Computed<T> implements Computed<T>, _Listenable {
+class _Computed<T> extends Computed<T> implements _Listenable {
   final ComputedCallback<T> _compute;
 
   @override
@@ -148,7 +155,6 @@ class _Computed<T> implements Computed<T>, _Listenable {
       final equality = this.equality ?? ((a, b) => a == b);
       if ((this._flags & HAS_ERROR) != 0 ||
           !_initialized ||
-          !equality(_value, value) ||
           needsUpdate ||
           _version == 0) {
         if (!_initialized) {
@@ -157,11 +163,13 @@ class _Computed<T> implements Computed<T>, _Listenable {
         } else {
           _previousValue = _value;
         }
-        _value = value;
-        _onComputedUpdated(this, this._value);
-        if (!_initialized) _initialized = true;
-        _flags &= ~HAS_ERROR;
-        _version++;
+        if (!_initialized || !equality(_value, value)) {
+          _value = value;
+          _onComputedUpdated(this, this._value);
+          if (!_initialized) _initialized = true;
+          _flags &= ~HAS_ERROR;
+          _version++;
+        }
       }
     } catch (err) {
       _error = err;
@@ -314,9 +322,11 @@ class _Computed<T> implements Computed<T>, _Listenable {
   @override
   T get initialValue => _initialValue;
 
-  void reset([T? value]) {
+  @override
+  void _reset(T? value) {
     _value = value ?? _initialValue;
     _previousValue = value ?? _initialValue;
+    _version = 0;
   }
 }
 
