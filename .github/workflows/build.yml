@@ -32,7 +32,7 @@ jobs:
         run: melos exec flutter pub get
       
       - name: Analyze packages
-        run: melos exec --ignore="signals_lint" -- dart analyze .
+        run: melos exec --no-private -- dart analyze .
 
       - name: Test packages
         run: melos run test
