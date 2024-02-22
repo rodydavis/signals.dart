@@ -1,8 +1,8 @@
 part of 'signals.dart';
 
 /// Signal that can be extended and used as a class
-class ValueSignal<T> extends _Signal<T> implements Signal<T> {
-/// Signal that can be extended and used as a class
+class ValueSignal<T> extends _SignalBase<T> implements Signal<T> {
+  /// Signal that can be extended and used as a class
   ValueSignal(
     super.value, {
     super.debugLabel,
@@ -15,12 +15,14 @@ class ValueSignal<T> extends _Signal<T> implements Signal<T> {
   ///
   /// This is primarily used by the `ValueSignal` class to update the value
   /// since the reference is always the same.
-  void forceUpdate([T? val]) {
+  T forceUpdate([T? val]) {
     if (equality != null && val != null) {
       final same = equality!(value, val);
-      if (same) return;
+      if (same) return value;
     }
-    set(val ?? value, force: true);
+    final newValue = val ?? value;
+    set(newValue, force: true);
+    return newValue;
   }
 }
 

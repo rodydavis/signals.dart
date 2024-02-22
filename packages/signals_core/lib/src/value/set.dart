@@ -12,15 +12,17 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
 
   @override
   bool add(E value) {
-    final result = this.value.add(value);
-    forceUpdate(this.value);
+    final list = this.value;
+    final result = list.add(value);
+    forceUpdate(list);
     return result;
   }
 
   @override
   void addAll(Iterable<E> elements) {
-    value.addAll(elements);
-    forceUpdate(value);
+    final list = value;
+    list.addAll(elements);
+    forceUpdate(list);
   }
 
   @override
@@ -34,10 +36,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   }
 
   @override
-  void clear() {
-    value.clear();
-    forceUpdate(value);
-  }
+  void clear() => forceUpdate({});
 
   @override
   bool contains(Object? value) {
@@ -89,8 +88,9 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
 
   @override
   void forEach(void Function(E element) action) {
-    value.forEach(action);
-    forceUpdate(value);
+    final list = value;
+    list.forEach(action);
+    forceUpdate(list);
   }
 
   @override
@@ -125,20 +125,23 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
 
   /// Inject: Update current signal value with iterable
   SetSignal<E> operator <<(Set<E> other) {
-    value.addAll(other);
-    forceUpdate(value);
-    return this;
+    final list = value;
+    list.addAll(other);
+    forceUpdate(list);
+    return SetSignal(list);
   }
 
   /// Fork: create a new signal with value is the concatenation of source signal and iterable parameter
   SetSignal<E> operator &(Set<E> other) {
-    final rs = Set<E>.from(peek())..addAll(other);
+    final list = value;
+    final rs = Set<E>.from(list)..addAll(other);
     return SetSignal(rs);
   }
 
   /// Pipe: create a new signal by sending value from source to other
   SetSignal<E> operator |(Signal<Iterable<E>> other) {
-    final rs = Set<E>.from(peek())..addAll(other.peek());
+    final list = value;
+    final rs = Set<E>.from(list)..addAll(other.peek());
     return SetSignal(rs);
   }
 
@@ -159,33 +162,38 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
 
   @override
   bool remove(Object? value) {
-    final result = this.value.remove(value);
-    forceUpdate(this.value);
+    final list = this.value;
+    final result = list.remove(value);
+    forceUpdate(list);
     return result;
   }
 
   @override
   void removeAll(Iterable<Object?> elements) {
-    value.removeAll(elements);
-    forceUpdate(value);
+    final list = value;
+    list.removeAll(elements);
+    forceUpdate(list);
   }
 
   @override
   void removeWhere(bool Function(E element) test) {
-    value.removeWhere(test);
-    forceUpdate(value);
+    final list = value;
+    list.removeWhere(test);
+    forceUpdate(list);
   }
 
   @override
   void retainAll(Iterable<Object?> elements) {
-    value.retainAll(elements);
-    forceUpdate(value);
+    final list = value;
+    list.retainAll(elements);
+    forceUpdate(list);
   }
 
   @override
   void retainWhere(bool Function(E element) test) {
-    value.retainWhere(test);
-    forceUpdate(value);
+    final list = value;
+    list.retainWhere(test);
+    forceUpdate(list);
   }
 
   @override
@@ -223,7 +231,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
 
   @override
   Set<E> toSet() {
-    return value.toSet();
+    return value;
   }
 
   @override

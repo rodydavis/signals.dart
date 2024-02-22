@@ -43,15 +43,6 @@ abstract class ReadonlySignal<T> {
   /// Compute the current value
   T get value;
 
-  /// Get the last value before the last update or the initial value
-  ///
-  /// This does not subscribe in an effect (this is the equivalent to peek())
-  T get previousValue;
-
-  /// Get the value the signal was created with and does not subscribe in an 
-  /// effect (this is the equivalent to peek())
-  T get initialValue;
-
   @override
   String toString();
 
@@ -110,19 +101,31 @@ abstract class ReadonlySignal<T> {
   void dispose();
 
   /// Add a cleanup function to be called when the signal is disposed
-  /// 
+  ///
   /// ```dart
   /// final counter = signal(0);
   /// final effectCount = signal(0);
-  /// 
+  ///
   /// final cleanup = counter.onDispose(() {
   ///  print('Counter has been disposed');
   /// });
-  /// 
+  ///
   /// // Remove the cleanup function
   /// cleanup();
   /// ```
   EffectCleanup onDispose(void Function() cleanup);
+}
+
+/// A signal tracks the previous value and the initial value
+abstract class TrackedReadonlySignal<T> extends ReadonlySignal<T> {
+  /// Get the last value before the last update or the initial value
+  ///
+  /// This does not subscribe in an effect (this is the equivalent to peek())
+  T? get previousValue;
+
+  /// Get the value the signal was created with and does not subscribe in an
+  /// effect (this is the equivalent to peek())
+  T get initialValue;
 }
 
 /// The `signal` function creates a new signal. A signal is a container for
@@ -158,12 +161,12 @@ abstract class Signal<T> implements ReadonlySignal<T> {
   ReadonlySignal<T> readonly() => this;
 
   /// Override the current signal with a new value as if it was created with it
-  /// 
+  ///
   /// This does not trigger any updates
-  /// 
+  ///
   /// ```dart
   /// var counter = signal(0);
-  /// 
+  ///
   /// // Override the signal with a new value
   /// counter = counter.overrideWith(1);
   /// ```
@@ -173,7 +176,7 @@ abstract class Signal<T> implements ReadonlySignal<T> {
   }
 }
 
-class _Signal<T> extends Signal<T> {
+class _SignalBase<T> extends Signal<T> {
   @override
   final int globalId;
 
@@ -188,14 +191,13 @@ class _Signal<T> extends Signal<T> {
   @override
   bool disposed = false;
 
-  _Signal(
-    this._value, {
+  _SignalBase(
+    T val, {
     this.debugLabel,
     this.equality,
     this.autoDispose = false,
   })  : _version = 0,
-        _previousValue = _value,
-        _initialValue = _value,
+        _value = val,
         brand = identifier,
         globalId = ++_lastGlobalId {
     _onSignalCreated(this);
@@ -203,8 +205,6 @@ class _Signal<T> extends Signal<T> {
 
   // @internal
   T _value;
-  T _previousValue;
-  final T _initialValue;
 
   /// @internal
   /// Version numbers should always be >= 0, because the special value -1 is used
@@ -338,12 +338,6 @@ class _Signal<T> extends Signal<T> {
   }
 
   @override
-  T get previousValue => this._previousValue;
-
-  @override
-  T get initialValue => this._initialValue;
-
-  @override
   set value(T val) {
     if (disposed) {
       throw SignalsWriteAfterDisposeError(this);
@@ -366,7 +360,6 @@ class _Signal<T> extends Signal<T> {
       _cycleDetected();
     }
 
-    this._previousValue = _value;
     this._value = val;
     this._version++;
     globalVersion++;
@@ -411,9 +404,43 @@ class _Signal<T> extends Signal<T> {
 
   @override
   void _reset(T? value) {
-    _value = value ?? _initialValue;
-    _previousValue = value ?? _initialValue;
+    if (value != null) _value = value;
     _version = 0;
+  }
+}
+
+/// A signal that tracks the previous value
+class _Signal<T> extends _SignalBase<T> implements TrackedReadonlySignal<T> {
+  /// Create a signal that tracks the previous value
+  _Signal(
+    super.val, {
+    super.debugLabel,
+    super.equality,
+    super.autoDispose,
+  }) : _initialValue = val;
+
+  T _initialValue;
+  T? _previousValue;
+
+  @override
+  void _updateValue(T val) {
+    _previousValue = _value;
+    super._updateValue(val);
+  }
+
+  /// Get the value the signal was created with
+  @override
+  T get initialValue => _initialValue;
+
+  /// Get the previous value if present
+  @override
+  T? get previousValue => _previousValue;
+
+  @override
+  void _reset(T? value) {
+    _previousValue = value ?? _initialValue;
+    _initialValue = value ?? _initialValue;
+    super._reset(value);
   }
 }
 

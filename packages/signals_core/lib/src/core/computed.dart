@@ -28,7 +28,8 @@ part of 'signals.dart';
 /// Any signal that is accessed inside the `computed`'s callback
 /// function will be automatically subscribed to and tracked as a
 /// dependency of the computed signal.
-abstract class Computed<T> implements ReadonlySignal<T> {
+abstract class Computed<T>
+    implements ReadonlySignal<T>, TrackedReadonlySignal<T> {
   Iterable<ReadonlySignal> get _allSources;
 
   @override
@@ -190,14 +191,14 @@ class _Computed<T> extends Computed<T> implements _Listenable {
         node._source._subscribe(node);
       }
     }
-    _Signal.__subscribe(this, node);
+    _SignalBase.__subscribe(this, node);
   }
 
   @override
   void _unsubscribe(_Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (_targets != null) {
-      _Signal.__unsubscribe(this, node);
+      _SignalBase.__unsubscribe(this, node);
 
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
@@ -293,7 +294,7 @@ class _Computed<T> extends Computed<T> implements _Listenable {
 
   @override
   EffectCleanup subscribe(void Function(T value) fn) {
-    return _Signal.__signalSubscribe(this, fn);
+    return _SignalBase.__signalSubscribe(this, fn);
   }
 
   final _disposeCallbacks = <void Function()>{};
