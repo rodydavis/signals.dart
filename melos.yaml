@@ -52,6 +52,9 @@ scripts:
   coverage:report:
     exec: genhtml coverage/lcov.info -o coverage/html
 
+  combine_coverage:
+    run: melos exec -- "\$MELOS_ROOT_PATH/scripts/combine_coverage.sh"
+
 command:
   version:
     hooks:
