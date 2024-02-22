@@ -79,6 +79,15 @@ void main() {
         expect(calls, 1);
       });
 
+      test('should remove dispose callback', () {
+        final a = signal(10);
+        var calls = 0;
+        final cancel = a.onDispose(() => calls++);
+        cancel();
+        a.dispose();
+        expect(calls, 0);
+      });
+
       test('read/write after dispose should throw', () {
         int calls = 0;
         final v = [1, 2];

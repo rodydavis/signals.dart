@@ -299,8 +299,12 @@ class _Computed<T> extends Computed<T> implements _Listenable {
   final _disposeCallbacks = <void Function()>{};
 
   @override
-  void onDispose(void Function() cleanup) {
+  EffectCleanup onDispose(void Function() cleanup) {
     _disposeCallbacks.add(cleanup);
+
+    return () {
+      _disposeCallbacks.remove(cleanup);
+    };
   }
 
   @override
