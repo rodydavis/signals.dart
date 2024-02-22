@@ -133,7 +133,7 @@ void main() {
         expect(multiple.disposed, isFalse);
         expect(product.disposed, isFalse);
 
-        multiple.value = 4; // update signal that's not autodisposed
+        multiple.value = 4; // update signal that's not autoDisposed
 
         print('count: ${product.value}');
 
