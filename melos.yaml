@@ -9,19 +9,22 @@ scripts:
     exec: dart scripts/examples.dart
   analyze:
     run: melos exec --no-private --ignore="signals_lint" -- dart analyze .
-  flutter:test:
-    exec: flutter test --coverage
-    packageFilters:
-      flutter: true
-      scope: "*signals_flutter*"
-  dart:test:
-    exec: dart pub global run coverage:test_with_coverage
-    packageFilters:
-      flutter: false
-      scope: "*signals_core*"
-  test:
-    exec: melos run dart:test --no-select && melos run flutter:test --no-select && melos exec -- "\$MELOS_ROOT_PATH/scripts/combine_coverage.sh"
+  # flutter:test:
+  #   exec: flutter test --coverage
+  #   packageFilters:
+  #     flutter: true
+  #     scope: "*signals_flutter*"
+  # dart:test:
+  #   exec: dart pub global run coverage:test_with_coverage
+  #   packageFilters:
+  #     flutter: false
+  #     scope: "*signals_core*"
+  # test:
+  #   exec: melos run dart:test --no-select && melos run flutter:test --no-select && melos exec -- "\$MELOS_ROOT_PATH/scripts/combine_coverage.sh"
   
+  test:
+    run: melos exec --dir-exists="test" --no-private --ignore="signals_lint" -- flutter test --coverage
+ 
   coverage:dart:
     exec: dart pub global run coverage:test_with_coverage
     packageFilters:
