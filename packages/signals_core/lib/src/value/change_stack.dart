@@ -16,6 +16,19 @@ import '../core/signals.dart';
 /// print(s.value); // 3
 /// ```
 class ChangeStackSignal<T> extends ValueSignal<T> {
+  /// Change stack signal that can be used to call undo/redo on a value.
+  ///
+  /// ```dart
+  /// final s = ChangeStackSignal(0, limit: 5);
+  /// s.value = 1;
+  /// s.value = 2;
+  /// s.value = 3;
+  /// print(s.value); // 3
+  /// s.undo();
+  /// print(s.value); // 2
+  /// s.redo();
+  /// print(s.value); // 3
+  /// ```
   ChangeStackSignal(
     super.value, {
     super.debugLabel,

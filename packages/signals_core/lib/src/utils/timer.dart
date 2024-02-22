@@ -5,9 +5,10 @@ typedef TimerSignalEvent = ({int iteration, int millis});
 
 /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
 class TimerSignal extends StreamSignal<TimerSignalEvent> {
-  // Trigger an [TimerEvent] every duration
+  /// Trigger an [TimerEvent] every duration
   final Duration every;
 
+  /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
   TimerSignal({
     required this.every,
     String super.debugLabel = 'Timer',
@@ -30,6 +31,7 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
 
 /// Expose Duration as a [TimerSignal]
 extension TimerSignalDurationUtils on Duration {
+  /// Expose Duration as a [TimerSignal]
   TimerSignal toSignal({
     String debugLabel = 'Timer',
     bool? cancelOnError,

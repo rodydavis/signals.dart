@@ -71,6 +71,7 @@ Map<String, dynamic> _getNodes() {
   };
 }
 
+/// Reload the signals devTools
 void reloadSignalsDevTools() {
   _debugPostEvent('ext.signals.reassemble', () => _getNodes());
 }

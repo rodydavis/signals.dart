@@ -61,6 +61,7 @@ abstract class ReadonlySignal<T> {
   /// Return the value when invoked
   T call();
 
+  /// Get the current value
   T get();
 
   /// In the rare instance that you have an effect that should write to
@@ -105,8 +106,22 @@ abstract class ReadonlySignal<T> {
 
   bool _refresh();
 
+  /// Dispose the signal
   void dispose();
 
+  /// Add a cleanup function to be called when the signal is disposed
+  /// 
+  /// ```dart
+  /// final counter = signal(0);
+  /// final effectCount = signal(0);
+  /// 
+  /// final cleanup = counter.onDispose(() {
+  ///  print('Counter has been disposed');
+  /// });
+  /// 
+  /// // Remove the cleanup function
+  /// cleanup();
+  /// ```
   EffectCleanup onDispose(void Function() cleanup);
 }
 
@@ -139,8 +154,19 @@ abstract class Signal<T> implements ReadonlySignal<T> {
 
   void _reset(T? value);
 
+  /// Returns a readonly signal
   ReadonlySignal<T> readonly() => this;
 
+  /// Override the current signal with a new value as if it was created with it
+  /// 
+  /// This does not trigger any updates
+  /// 
+  /// ```dart
+  /// var counter = signal(0);
+  /// 
+  /// // Override the signal with a new value
+  /// counter = counter.overrideWith(1);
+  /// ```
   Signal<T> overrideWith(T value) {
     this._reset(value);
     return this;

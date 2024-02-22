@@ -4,7 +4,9 @@ import '../core/signals.dart';
 import 'state.dart';
 import 'stream.dart';
 
+/// Creates a signal that wraps a [Future].
 class FutureSignal<T> extends StreamSignal<T> {
+  /// Creates a signal that wraps a [Future].
   FutureSignal(
     Future<T> Function() callback, {
     super.initialValue,
@@ -19,6 +21,7 @@ class FutureSignal<T> extends StreamSignal<T> {
         );
 }
 
+/// Creates a signal that wraps a [Future].
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() callback, {
   T? initialValue,

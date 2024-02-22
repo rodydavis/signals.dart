@@ -2,6 +2,7 @@ part of 'signals.dart';
 
 /// Signal that can be extended and used as a class
 class ValueSignal<T> extends _Signal<T> implements Signal<T> {
+/// Signal that can be extended and used as a class
   ValueSignal(
     super.value, {
     super.debugLabel,

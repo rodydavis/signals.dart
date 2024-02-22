@@ -63,7 +63,9 @@ void main() {
         try {
           c.from(s, onError: items.add);
           await Future.delayed(const Duration(milliseconds: 100));
-        } catch (e) {}
+        } catch (e) {
+          print('error: $e');
+        }
 
         expect(items.first, isA<Exception>());
 

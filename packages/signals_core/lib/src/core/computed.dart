@@ -329,6 +329,7 @@ class _Computed<T> extends Computed<T> implements _Listenable {
   }
 }
 
+/// A callback that is executed inside a computed.
 typedef ComputedCallback<T> = T Function();
 
 /// Data is often derived from other pieces of existing data. The `computed`

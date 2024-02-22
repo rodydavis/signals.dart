@@ -45,6 +45,7 @@ void _endBatch() {
   }
 }
 
+/// A callback that is executed inside a batch.
 typedef BatchCallback<T> = T Function();
 
 /// The `batch` function allows you to combine multiple signal writes into one

@@ -1,17 +1,24 @@
 import 'signals.dart';
 
+/// A class that listens to signals and computed changes.
 abstract class SignalsObserver {
+  /// Called when a signal is created.
   void onSignalCreated(Signal instance);
 
+  /// Called when a signal is updated.
   void onSignalUpdated(Signal instance, dynamic value);
 
+  /// Called when a computed is created.
   void onComputedCreated(Computed instance);
 
+  /// Called when a computed is updated.
   void onComputedUpdated(Computed instance, dynamic value);
 
+  /// The current observer instance.
   static SignalsObserver? instance;
 }
 
+/// Logs all signals and computed changes to the console.
 class LoggingSignalsObserver extends SignalsObserver {
   @override
   void onComputedCreated(Computed instance) {
@@ -33,6 +40,6 @@ class LoggingSignalsObserver extends SignalsObserver {
     log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
   }
 
-  // ignore: avoid_print
+  /// Logs a message to the console.
   void log(String message) => print(message);
 }

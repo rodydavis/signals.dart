@@ -59,7 +59,7 @@ extension on SqliteDatabase {
     Set<String> triggerOnTables = const {},
     List<Object?> parameters = const [],
   }) async* {
-    yield await this.getAll(sql, parameters);
+    yield await getAll(sql, parameters);
     final stream = watch(
       sql,
       parameters: parameters,

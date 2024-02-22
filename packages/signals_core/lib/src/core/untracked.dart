@@ -2,6 +2,7 @@ part of 'signals.dart';
 
 int _untrackedDepth = 0;
 
+/// A callback that is executed inside a computed.
 typedef UntrackedCallback<T> = T Function();
 
 /// In case when you're receiving a callback that can read some signals,

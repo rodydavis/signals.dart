@@ -2,7 +2,7 @@ import 'package:signals/signals.dart';
 
 /// AsyncSignal emissions
 void main() {
-  /// Emit temporised values
+  /// Emit temporized values
   Stream<int> idEmitter() async* {
     yield 1;
     await Future.delayed(const Duration(milliseconds: 10));
@@ -17,6 +17,7 @@ void main() {
 
   /// Fetch id value as Future
   Future<String> fetch() async {
+    // ignore: no_leading_underscores_for_local_identifiers
     final _id = id().value; // Rebuilds the Future when id.value changes
     await Future.delayed(const Duration(milliseconds: 5));
     return 'user$_id';

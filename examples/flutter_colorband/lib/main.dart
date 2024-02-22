@@ -71,7 +71,7 @@ class Signals {
         nameCtrl.add(name);
 
         if (name != memo) {
-          print("sending name $name from $memo");
+          debugPrint("sending name $name from $memo");
           memo = name;
           colorNameSignal.value = name;
         }
