@@ -8,7 +8,7 @@ scripts:
   examples:
     exec: dart scripts/examples.dart
   analyze:
-    exec: dart analyze .
+    run: melos exec --no-private --ignore="signals_lint" -- dart analyze .
   flutter:test:
     exec: flutter test --coverage
     packageFilters:

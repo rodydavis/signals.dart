@@ -29,10 +29,10 @@ jobs:
           channel: "stable"
 
       - name: Install dependencies
-        run: melos exec flutter pub get
+        run: melos exec --no-private flutter pub get
       
       - name: Analyze packages
-        run: melos exec --no-private -- dart analyze .
+        run: melos run analyze
 
       - name: Test packages
         run: melos run test
