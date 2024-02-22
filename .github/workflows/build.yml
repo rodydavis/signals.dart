@@ -20,6 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.5.0
+
+      - name: Install melos
+        run: dart pub global activate melos
+
       - uses: subosito/flutter-action@v2.10.0
         with:
           channel: "stable"
@@ -34,8 +38,6 @@ jobs:
         run: dart pub get
         working-directory: ./packages/signals_core
 
-      - name: Install melos
-        run: dart pub global activate melos
 
       - name: Analyze packages
         run: melos run analyze
