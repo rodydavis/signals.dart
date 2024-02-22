@@ -35,6 +35,12 @@ jobs:
         run: flutter pub get
         working-directory: ./packages/signals_flutter
       - name: Install dependencies
+        run: flutter pub get
+        working-directory: ./packages/signals_devtools_extension
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: ./packages/signals_lint
+      - name: Install dependencies
         run: dart pub get
         working-directory: ./packages/signals_core
 
