@@ -63,3 +63,7 @@ class _CounterState extends State<Counter> {
     );
   }
 }
+
+class CounterSignal extends ValueSignal<int> {
+  CounterSignal([int initialValue = 0]) : super(initialValue);
+}

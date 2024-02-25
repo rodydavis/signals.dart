@@ -148,17 +148,116 @@ abstract class TrackedReadonlySignal<T> extends ReadonlySignal<T> {
 /// Changing a signal's value synchronously updates every `computed`
 /// and `effect` that depends on that signal, ensuring your app state
 /// is always consistent.
-abstract class Signal<T> implements ReadonlySignal<T> {
+abstract class MutableSignal<T> implements ReadonlySignal<T> {
   /// Update the current value
   set value(T value);
 
   /// Set the current value
   void set(T value, {bool force = false});
+}
 
-  void _reset(T? value);
+/// A signal that tracks the previous value
+class TrackedSignal<T> extends Signal<T> implements TrackedReadonlySignal<T> {
+  /// Create a signal that tracks the previous value
+  TrackedSignal(
+    super.val, {
+    super.debugLabel,
+    super.equality,
+    super.autoDispose,
+  }) : _initialValue = val;
 
-  /// Returns a readonly signal
-  ReadonlySignal<T> readonly() => this;
+  T _initialValue;
+  T? _previousValue;
+
+  @override
+  void _updateValue(T val) {
+    _previousValue = _value;
+    super._updateValue(val);
+  }
+
+  /// Get the value the signal was created with
+  @override
+  T get initialValue => _initialValue;
+
+  /// Get the previous value if present
+  @override
+  T? get previousValue => _previousValue;
+
+  @override
+  void _reset(T? value) {
+    _previousValue = value ?? _initialValue;
+    _initialValue = value ?? _initialValue;
+    super._reset(value);
+  }
+}
+
+/// The `signal` function creates a new signal. A signal is a container for
+/// a value that can change over time. You can read a signal's value or
+/// subscribe to value updates by accessing its `.value` property.
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// final counter = signal(0);
+///
+/// // Read value from signal, logs: 0
+/// print(counter.value);
+///
+/// // Write to a signal
+/// counter.value = 1;
+/// ```
+///
+/// Writing to a signal is done by setting its `.value` property.
+/// Changing a signal's value synchronously updates every `computed`
+/// and `effect` that depends on that signal, ensuring your app state
+/// is always consistent.
+class Signal<T> implements MutableSignal<T> {
+  @override
+  final int globalId;
+
+  @override
+  final String? debugLabel;
+
+  /// Check the equality of the signal
+  final SignalEquality<T>? equality;
+
+  @override
+  final bool autoDispose;
+
+  @override
+  bool disposed = false;
+
+  /// The `signal` function creates a new signal. A signal is a container for
+  /// a value that can change over time. You can read a signal's value or
+  /// subscribe to value updates by accessing its `.value` property.
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final counter = signal(0);
+  ///
+  /// // Read value from signal, logs: 0
+  /// print(counter.value);
+  ///
+  /// // Write to a signal
+  /// counter.value = 1;
+  /// ```
+  ///
+  /// Writing to a signal is done by setting its `.value` property.
+  /// Changing a signal's value synchronously updates every `computed`
+  /// and `effect` that depends on that signal, ensuring your app state
+  /// is always consistent.
+  Signal(
+    T val, {
+    this.debugLabel,
+    this.equality,
+    this.autoDispose = false,
+  })  : _version = 0,
+        _value = val,
+        brand = identifier,
+        globalId = ++_lastGlobalId {
+    _onSignalCreated(this);
+  }
 
   /// Override the current signal with a new value as if it was created with it
   ///
@@ -174,34 +273,17 @@ abstract class Signal<T> implements ReadonlySignal<T> {
     this._reset(value);
     return this;
   }
-}
 
-class _SignalBase<T> extends Signal<T> {
-  @override
-  final int globalId;
+  /// Returns a readonly signal
+  ReadonlySignal<T> readonly() => this;
 
-  @override
-  final String? debugLabel;
-
-  final SignalEquality<T>? equality;
-
-  @override
-  final bool autoDispose;
-
-  @override
-  bool disposed = false;
-
-  _SignalBase(
-    T val, {
-    this.debugLabel,
-    this.equality,
-    this.autoDispose = false,
-  })  : _version = 0,
-        _value = val,
-        brand = identifier,
-        globalId = ++_lastGlobalId {
-    _onSignalCreated(this);
-  }
+  /// Create a tracked signal that tracks the previous value
+  TrackedSignal<T> tracked() => TrackedSignal(
+        _value,
+        debugLabel: debugLabel,
+        equality: equality,
+        autoDispose: autoDispose,
+      );
 
   // @internal
   T _value;
@@ -318,6 +400,7 @@ class _SignalBase<T> extends Signal<T> {
   @override
   void set(T value, {bool force = false}) => _set(value, force);
 
+  /// @internal
   final Symbol brand;
 
   @override
@@ -402,45 +485,9 @@ class _SignalBase<T> extends Signal<T> {
     disposed = true;
   }
 
-  @override
   void _reset(T? value) {
     if (value != null) _value = value;
     _version = 0;
-  }
-}
-
-/// A signal that tracks the previous value
-class _Signal<T> extends _SignalBase<T> implements TrackedReadonlySignal<T> {
-  /// Create a signal that tracks the previous value
-  _Signal(
-    super.val, {
-    super.debugLabel,
-    super.equality,
-    super.autoDispose,
-  }) : _initialValue = val;
-
-  T _initialValue;
-  T? _previousValue;
-
-  @override
-  void _updateValue(T val) {
-    _previousValue = _value;
-    super._updateValue(val);
-  }
-
-  /// Get the value the signal was created with
-  @override
-  T get initialValue => _initialValue;
-
-  /// Get the previous value if present
-  @override
-  T? get previousValue => _previousValue;
-
-  @override
-  void _reset(T? value) {
-    _previousValue = value ?? _initialValue;
-    _initialValue = value ?? _initialValue;
-    super._reset(value);
   }
 }
 
@@ -470,7 +517,7 @@ Signal<T> signal<T>(
   SignalEquality<T>? equality,
   bool autoDispose = false,
 }) {
-  return _Signal<T>(
+  return Signal<T>(
     value,
     debugLabel: debugLabel,
     equality: equality,

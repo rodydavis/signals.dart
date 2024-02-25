@@ -191,14 +191,14 @@ class _Computed<T> extends Computed<T> implements _Listenable {
         node._source._subscribe(node);
       }
     }
-    _SignalBase.__subscribe(this, node);
+    Signal.__subscribe(this, node);
   }
 
   @override
   void _unsubscribe(_Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (_targets != null) {
-      _SignalBase.__unsubscribe(this, node);
+      Signal.__unsubscribe(this, node);
 
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
@@ -294,7 +294,7 @@ class _Computed<T> extends Computed<T> implements _Listenable {
 
   @override
   EffectCleanup subscribe(void Function(T value) fn) {
-    return _SignalBase.__signalSubscribe(this, fn);
+    return Signal.__signalSubscribe(this, fn);
   }
 
   final _disposeCallbacks = <void Function()>{};

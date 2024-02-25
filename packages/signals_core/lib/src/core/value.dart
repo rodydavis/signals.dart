@@ -1,7 +1,7 @@
 part of 'signals.dart';
 
 /// Signal that can be extended and used as a class
-class ValueSignal<T> extends _SignalBase<T> implements Signal<T> {
+class ValueSignal<T> extends Signal<T> {
   /// Signal that can be extended and used as a class
   ValueSignal(
     super.value, {
