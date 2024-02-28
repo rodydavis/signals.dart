@@ -9,6 +9,7 @@
         "fullscreen",
         "genhtml",
         "graphview",
+        "konami",
         "lcov",
         "lerp",
         "millis",
