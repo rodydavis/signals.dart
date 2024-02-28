@@ -23,8 +23,6 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 
     _streamCache[globalId] = stream;
 
-    controller.add(value);
-
     subscribe(controller.add);
 
     onDispose(() {

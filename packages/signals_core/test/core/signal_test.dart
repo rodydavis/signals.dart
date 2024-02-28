@@ -146,6 +146,30 @@ void main() {
       expect(signal(0) is Signal, true);
     });
 
+    test('test as stream', () {
+      final s = signal(0);
+      final stream = s.toStream();
+
+      s.value = 1;
+      s.value = 2;
+      s.value = 3;
+
+      expect(stream, emitsInOrder([0, 1, 2, 3]));
+    });
+
+    test('test override', () {
+      final s = signal(0).overrideWith(-1);
+
+      final stream = s.toStream();
+
+      s.value = 1;
+      s.value = 2;
+      s.value = 2; // check if skipped
+      s.value = 3;
+
+      expect(stream, emitsInOrder([-1, 1, 2, 3]));
+    });
+
     test('should support .toString()', () {
       final s = signal(123);
       expect(s.toString(), '123');

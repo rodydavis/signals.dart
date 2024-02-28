@@ -86,3 +86,43 @@ final s = computed(() => 0);
 s.onDispose(() => print('Signal destroyed'));
 s.dispose();
 ```
+
+## Testing
+
+Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
+
+```dart
+test('test as stream', () {
+    final a = signal(0);
+    final s = computed(() => a());
+    final stream = s.toStream();
+
+    a.value = 1;
+    a.value = 2;
+    a.value = 3;
+
+    expect(stream, emitsInOrder([0, 1, 2, 3]));
+});
+```
+
+`emitsInOrder` is a matcher that will check if the stream emits the values in the correct order which in this case is each value after a signal is updated.
+
+You can also override the initial value of a computed signal when testing. This is is useful for mocking and testing specific value implementations.
+
+```dart
+test('test with override', () {
+    final a = signal(0);
+    final s = computed(() => a()).overrideWith(-1);
+
+    final stream = s.toStream();
+
+    a.value = 1;
+    a.value = 2;
+    a.value = 2; // check if skipped
+    a.value = 3;
+
+    expect(stream, emitsInOrder([-1, 1, 2, 3]));
+});
+```
+
+`overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.

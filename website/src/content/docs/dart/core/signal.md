@@ -126,3 +126,40 @@ final s = signal(0);
 s.onDispose(() => print('Signal destroyed'));
 s.dispose();
 ```
+
+## Testing
+
+Testing signals is possible by converting a signal to a stream and testing it like any other stream in Dart.
+
+```dart
+test('test as stream', () {
+  final s = signal(0);
+  final stream = s.toStream(); // create a stream of values
+
+  s.value = 1;
+  s.value = 2;
+  s.value = 3;
+
+  expect(stream, emitsInOrder([0, 1, 2, 3]));
+});
+```
+
+`emitsInOrder` is a matcher that will check if the stream emits the values in the correct order which in this case is each value after a signal is updated.
+
+You can also override the initial value of a signal when testing. This is is useful for mocking and testing specific value implementations.
+
+```dart
+test('test with override', () {
+  final s = signal(0).overrideWith(-1);
+
+  final stream = s.toStream();
+
+  s.value = 1;
+  s.value = 2;
+  s.value = 3;
+
+  expect(stream, emitsInOrder([-1, 1, 2, 3]));
+});
+```
+
+`overrideWith` returns a new signal with the same global id sets the value as if it was created with it. This can be useful when using async signals or global signals used for dependency injection.

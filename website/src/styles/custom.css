@@ -35,30 +35,6 @@
   --sl-color-black: #ffffff;
 }
 
-body:has(.hero) {
-  background-color: black;
-  color: white;
-  background-image: url("/background.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
-
-  .main-pane {
-    position: relative;
-
-    --sl-color-white: white;
-    --sl-color-black: #191700;
-    --sl-color-gray-2: #c8cfcf;
-    --sl-color-gray-5: #36393a;
-    --sl-color-text-accent: #d1cc87;
-  }
-
-  .icon {
-    --sl-card-bg: transparent;
-  }
-}
-
 .card {
   border-radius: 0.5rem;
 }
