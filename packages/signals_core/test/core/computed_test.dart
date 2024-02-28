@@ -69,6 +69,32 @@ void main() {
       expect(c.value, 10);
     });
 
+    test('test as stream', () {
+      final a = signal(0);
+      final s = computed(() => a());
+      final stream = s.toStream();
+
+      a.value = 1;
+      a.value = 2;
+      a.value = 3;
+
+      expect(stream, emitsInOrder([0, 1, 2, 3]));
+    });
+
+    test('test override', () {
+      final a = signal(0);
+      final s = computed(() => a()).overrideWith(-1);
+
+      final stream = s.toStream();
+
+      a.value = 1;
+      a.value = 2;
+      a.value = 2; // check if skipped
+      a.value = 3;
+
+      expect(stream, emitsInOrder([-1, 1, 2, 3]));
+    });
+
     test('should respect force set', () {
       final a = signal(1);
       final b = computed(() => a());

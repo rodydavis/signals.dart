@@ -324,9 +324,9 @@ class _Computed<T> extends Computed<T> implements _Listenable {
 
   @override
   void _reset(T? value) {
+    _refresh();
     _value = value ?? _initialValue;
     _previousValue = value ?? _initialValue;
-    _version = 0;
   }
 }
 

@@ -164,6 +164,7 @@ void main() {
 
       s.value = 1;
       s.value = 2;
+      s.value = 2; // check if skipped
       s.value = 3;
 
       expect(stream, emitsInOrder([-1, 1, 2, 3]));
