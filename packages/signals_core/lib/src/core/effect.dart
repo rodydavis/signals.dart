@@ -251,6 +251,7 @@ class _Effect implements _Listenable {
 ///   await completer.future;
 /// }
 /// ```
+/// @link https://dartsignals.dev/dart/core/effect
 /// {@endtemplate}
 EffectCleanup effect(
   EffectCallback compute, {

@@ -20,6 +20,7 @@ typedef UntrackedCallback<T> = T Function();
 /// 	effectCount.value = untracked(fn);
 /// });
 /// ```
+/// @link https://dartsignals.dev/dart/core/untracked
 /// {@endtemplate}
 T untracked<T>(UntrackedCallback<T> callback) {
   if (_untrackedDepth > 0) {

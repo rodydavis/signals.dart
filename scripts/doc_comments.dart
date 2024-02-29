@@ -6,16 +6,44 @@ void main(List<String> args) {
   replaceCoreDoc('effect');
   replaceCoreDoc('batch');
   replaceCoreDoc('untracked');
+  replaceAsyncDoc('connect');
+  replaceAsyncDoc('future');
+  replaceAsyncDoc('stream');
+  replaceAsyncDoc('state');
+  replaceComment(
+    'signal',
+    'website/src/content/docs/dart/async/state.md',
+    'packages/signals_core/lib/src/async/signal.dart',
+  );
 }
 
 void replaceCoreDoc(String token) {
-  final doc = File('website/src/content/docs/dart/core/$token.md');
-  final file = File('packages/signals_core/lib/src/core/$token.dart');
+  replaceComment(
+    token,
+    'website/src/content/docs/dart/core/$token.md',
+    'packages/signals_core/lib/src/core/$token.dart',
+  );
+}
 
+void replaceAsyncDoc(String token) {
+  replaceComment(
+    token,
+    'website/src/content/docs/dart/async/$token.md',
+    'packages/signals_core/lib/src/async/$token.dart',
+  );
+}
+
+void replaceComment(String token, String documentation, String code) {
+  final doc = File(documentation);
+  final file = File(code);
+  final link = documentation
+      .replaceFirst('website/src/content/docs/', 'https://dartsignals.dev/')
+      .replaceFirst('.md', '');
   final result = replaceContent(
     file.readAsStringSync(),
     doc.readAsStringSync(),
     ('/// {@template $token}', '/// {@endtemplate}'),
+    link,
   );
   // print(result);
   file.writeAsStringSync(result);
@@ -25,6 +53,7 @@ String replaceContent(
   String source,
   String replace,
   (String, String) tokens,
+  String link,
 ) {
   final (startToken, endToken) = tokens;
   final startIdx = source.indexOf(startToken);
@@ -44,6 +73,7 @@ String replaceContent(
   sb.write(prefix);
   sb.writeln(startToken);
   sb.writeln(afterDash);
+  sb.writeln('/// @link $link');
   sb.writeln(endToken);
   sb.writeln(suffix);
   return sb.toString().trim();

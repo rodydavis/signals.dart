@@ -457,6 +457,7 @@ typedef ComputedCallback<T> = T Function();
 /// ```
 /// 
 /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
+/// @link https://dartsignals.dev/dart/core/computed
 /// {@endtemplate}
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {

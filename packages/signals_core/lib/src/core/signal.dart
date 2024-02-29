@@ -606,6 +606,7 @@ class _Signal<T> extends _SignalBase<T> implements TrackedReadonlySignal<T> {
 /// ```
 /// 
 /// `overrideWith` returns a new signal with the same global id sets the value as if it was created with it. This can be useful when using async signals or global signals used for dependency injection.
+/// @link https://dartsignals.dev/dart/core/signal
 /// {@endtemplate}
 Signal<T> signal<T>(
   T value, {

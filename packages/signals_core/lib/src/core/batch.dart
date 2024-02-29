@@ -108,6 +108,7 @@ typedef BatchCallback<T> = T Function();
 /// });
 /// // Now the callback completed and we'll trigger the effect.
 /// ```
+/// @link https://dartsignals.dev/dart/core/batch
 /// {@endtemplate}
 T batch<T>(BatchCallback<T> callback) {
   if (_batchDepth > 0) {
