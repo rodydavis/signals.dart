@@ -3,7 +3,26 @@ import 'package:signals_core/signals_core.dart';
 
 /// Extension on [ValueListenable] to provide helpful methods for signals
 extension SignalValueListenableUtils<T> on ValueListenable<T> {
-  /// Convert an existing [ValueListenable] to [ReadonlySignal]
+  /// {@template value}
+  /// ## ReadonlySignal from ValueListenable
+  /// 
+  /// To create a readonly signal from a `ValueListenable`, use the `toSignal` extension:
+  /// 
+  /// ```dart
+  /// final ValueListenable listenable = ValueNotifier(10);
+  /// final signal = listenable.toSignal();
+  /// ```
+  /// 
+  /// ## ValueListenable from ReadonlySignal
+  /// 
+  /// To create a `ValueListenable` from a readonly signal, use the `toValueListenable` extension:
+  /// 
+  /// ```dart
+  /// final signal = Signal(10);
+  /// final listenable = signal.toValueListenable();
+  /// ```
+  /// @link https://dartsignals.dev/flutter/value-listenable
+  /// {@endtemplate}
   ReadonlySignal<T> toSignal({String? debugLabel}) {
     final s = signal<T>(value, debugLabel: debugLabel);
     void update() => s.value = value;
@@ -13,9 +32,28 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
   }
 }
 
-/// Convert a [ValueListenable] to [ReadonlySignal] to be used in builders
-/// and other existing widgets like [ValueListenableBuilder]
+/// {@template value}
+/// ## ReadonlySignal from ValueListenable
+/// 
+/// To create a readonly signal from a `ValueListenable`, use the `toSignal` extension:
+/// 
+/// ```dart
+/// final ValueListenable listenable = ValueNotifier(10);
+/// final signal = listenable.toSignal();
+/// ```
+/// 
+/// ## ValueListenable from ReadonlySignal
+/// 
+/// To create a `ValueListenable` from a readonly signal, use the `toValueListenable` extension:
+/// 
+/// ```dart
+/// final signal = Signal(10);
+/// final listenable = signal.toValueListenable();
+/// ```
+/// @link https://dartsignals.dev/flutter/value-listenable
+/// {@endtemplate}
 ReadonlySignal<T> valueListenableToSignal<T>(
-    ValueListenable<T> valueListenable) {
+  ValueListenable<T> valueListenable,
+) {
   return valueListenable.toSignal();
 }

@@ -171,8 +171,7 @@ void _onEffectCreated(_Effect instance) {
 
 void _onEffectCalled(_Effect instance) {
   if (!_devToolsEnabled) return;
-  _effectCount[instance.globalId] ?? 0;
-  var count = _effectCount[instance.globalId]!;
+  var count = _effectCount[instance.globalId] ??= 0;
   _effectCount[instance.globalId] = ++count;
   _debugPostEvent('ext.signals.effectCalled', () {
     return {
