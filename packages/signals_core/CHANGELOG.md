@@ -1,3 +1,10 @@
+## 4.5.0
+
+- Updating documentation comments
+- Fixing signals observer bug on effect
+- Removing previousValue from value signal
+- Add ability to remove an onDispose callback
+
 ## 4.4.0
 
 - adding overrideWith
