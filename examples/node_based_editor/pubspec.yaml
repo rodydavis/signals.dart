@@ -30,6 +30,6 @@ flutter:
 scripts:
   build: dart pub run build_runner build
   nodes:
-    - dart scripts/nodes.dart
+    - dart run -r scripts/nodes.dart
     - dart pub run build_runner build
     - dart format .
