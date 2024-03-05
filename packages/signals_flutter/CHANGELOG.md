@@ -1,3 +1,7 @@
+## 4.5.1
+
+- Fixing Watch in hot reload with auto dispose signals
+
 ## 4.5.0
 
 - Updating documentation comments
