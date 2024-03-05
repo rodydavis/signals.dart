@@ -147,14 +147,7 @@ Widget _input(String type, MapEntry<String, NodeInput> e) {
       children: [
         _type(type, e.value.value),
         const SizedBox(width: 4),
-        Expanded(
-          child: _control(
-            e.key,
-            type,
-            e.value.value,
-            e.value.link == null,
-          ),
-        ),
+        Expanded(child: Text(e.key)),
       ],
     ),
   );
@@ -198,88 +191,88 @@ Widget _type(String type, ReadonlySignal e) {
   );
 }
 
-Widget _control(String key, String type, ReadonlySignal e, bool enabled) {
-  if (enabled && e is Signal) {
-    const numberTypes = [
-      'num',
-      'num?',
-      'int',
-      'int?',
-      'double',
-      'double?',
-    ];
-    const stringTypes = [
-      'String',
-      'String?',
-    ];
-    const boolTypes = [
-      'bool',
-      'bool?',
-    ];
-    const textFieldTypes = [
-      ...numberTypes,
-      ...stringTypes,
-    ];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(key),
-        Expanded(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: () {
-              if (boolTypes.contains(type)) {
-                return Checkbox(
-                  tristate: type.endsWith('?'),
-                  value: e.value,
-                  onChanged: (val) {
-                    if (type.endsWith('?')) {
-                      e.value = val;
-                    } else {
-                      e.value = val!;
-                    }
-                  },
-                );
-              }
-              if (textFieldTypes.contains(type)) {
-                return TextFormField(
-                  decoration: const InputDecoration(border: InputBorder.none),
-                  initialValue: e.value?.toString(),
-                  validator: (val) {
-                    if (!type.endsWith('?') && (val == null || val.isEmpty)) {
-                      return 'Cannot be empty';
-                    }
-                    if (numberTypes.contains(type)) {
-                      final value = num.tryParse(val!);
-                      if (value == null) return 'Not a valid number';
-                    }
-                    return null;
-                  },
-                  onChanged: (val) {
-                    if (numberTypes.contains(type)) {
-                      final value = num.tryParse(val);
-                      if (e is Signal<int> || e is Signal<int?>) {
-                        e.value = value?.toInt();
-                      } else if (e is Signal<double> || e is Signal<double?>) {
-                        e.value = value?.toDouble();
-                      } else if (e is Signal<num> || e is Signal<num?>) {
-                        e.value = value;
-                      }
-                    } else {
-                      e.value = val;
-                    }
-                  },
-                );
-              }
-              return const SizedBox.shrink();
-            }(),
-          ),
-        ),
-      ],
-    );
-  }
-  return Text(key);
-}
+// Widget _control(String key, String type, ReadonlySignal e, bool enabled) {
+//   if (enabled && e is Signal) {
+//     const numberTypes = [
+//       'num',
+//       'num?',
+//       'int',
+//       'int?',
+//       'double',
+//       'double?',
+//     ];
+//     const stringTypes = [
+//       'String',
+//       'String?',
+//     ];
+//     const boolTypes = [
+//       'bool',
+//       'bool?',
+//     ];
+//     const textFieldTypes = [
+//       ...numberTypes,
+//       ...stringTypes,
+//     ];
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         Text(key),
+//         Expanded(
+//           child: Align(
+//             alignment: Alignment.centerRight,
+//             child: () {
+//               if (boolTypes.contains(type)) {
+//                 return Checkbox(
+//                   tristate: type.endsWith('?'),
+//                   value: e.value,
+//                   onChanged: (val) {
+//                     if (type.endsWith('?')) {
+//                       e.value = val;
+//                     } else {
+//                       e.value = val!;
+//                     }
+//                   },
+//                 );
+//               }
+//               if (textFieldTypes.contains(type)) {
+//                 return TextFormField(
+//                   decoration: const InputDecoration(border: InputBorder.none),
+//                   initialValue: e.value?.toString(),
+//                   validator: (val) {
+//                     if (!type.endsWith('?') && (val == null || val.isEmpty)) {
+//                       return 'Cannot be empty';
+//                     }
+//                     if (numberTypes.contains(type)) {
+//                       final value = num.tryParse(val!);
+//                       if (value == null) return 'Not a valid number';
+//                     }
+//                     return null;
+//                   },
+//                   onChanged: (val) {
+//                     if (numberTypes.contains(type)) {
+//                       final value = num.tryParse(val);
+//                       if (e is Signal<int> || e is Signal<int?>) {
+//                         e.value = value?.toInt();
+//                       } else if (e is Signal<double> || e is Signal<double?>) {
+//                         e.value = value?.toDouble();
+//                       } else if (e is Signal<num> || e is Signal<num?>) {
+//                         e.value = value;
+//                       }
+//                     } else {
+//                       e.value = val;
+//                     }
+//                   },
+//                 );
+//               }
+//               return const SizedBox.shrink();
+//             }(),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+//   return Text(key);
+// }
 
 (String, Color) _signalType(String type, ReadonlySignal e) {
   switch (type) {
