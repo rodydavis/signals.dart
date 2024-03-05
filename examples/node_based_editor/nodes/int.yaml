@@ -1,0 +1,646 @@
+name: Int
+path: lib/src/generated/nodes/int
+nodes:
+  int_node:
+    group: value
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!()
+  optional_int_node:
+    group: value
+    inputs:
+      value:
+        type: int?
+        value: 0
+    outputs:
+      value:
+        type: int?
+        code: input<int?>('value')?.call()
+  int_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: '0'
+    outputs:
+      value:
+        type: int
+        code: int.parse(input<String>('value')!())
+  int_try_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: '0'
+    outputs:
+      value:
+        type: int?
+        code: int.tryParse(input<String>('value')!())
+  int_add:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() + input<int>('b')!()
+  int_subtract:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() - input<int>('b')!()
+  int_divide:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: double
+        code: input<int>('a')!() / input<int>('b')!()
+  int_multiply:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() * input<int>('b')!()
+  int_modulo:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() % input<int>('b')!()
+  int_less_than:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('a')!() < input<int>('b')!()
+  int_less_than_equal:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('a')!() <= input<int>('b')!()
+  int_greater_than:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('a')!() > input<int>('b')!()
+  int_greater_than_equal:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('a')!() >= input<int>('b')!()
+  int_equal:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('a')!() == input<int>('b')!()
+  int_truncating_division:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() ~/ input<int>('b')!()
+  int_bitwise_and:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() & input<int>('b')!()
+  int_bitwise_or:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() | input<int>('b')!()
+  int_bitwise_shift_left:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() << input<int>('b')!()
+  int_bitwise_shift_right:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() >> input<int>('b')!()
+  int_bitwise_unsigned_shift_right:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() >>> input<int>('b')!()
+  int_bitwise_exclusive_or:
+    group: operator
+    inputs:
+      a:
+        type: int
+        value: 0
+      b:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('a')!() ^ input<int>('b')!()
+  int_bitwise_negate:
+    group: operator
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: ~(input<int>('value')!())
+  int_negate:
+    group: operator
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: -input<int>('value')!()
+  int_to_num:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: num
+        code: input<int>('value')!()
+  int_to_double:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: double
+        code: input<int>('value')!().toDouble()
+  int_is_finite:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('value')!().isFinite
+  int_is_even:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('value')!().isEven
+  int_is_odd:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('value')!().isOdd
+  int_bit_length:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().bitLength
+  int_is_infinite:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('value')!().isInfinite
+  int_is_nan:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('value')!().isNaN
+  int_is_negative:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<int>('value')!().isNegative
+  int_sign:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().sign
+  int_abs:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().abs()
+  int_ceil:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().ceil()
+  int_ceil_to_double:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: double
+        code: input<int>('value')!().ceilToDouble()
+  int_clamp:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      lower_limit:
+        type: int
+        value: 0
+      upper_limit:
+        type: int
+        value: 1
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().clamp(input<int>('lower_limit')!(), input<int>('upper_limit')!())
+  int_compare_to:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      other:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().compareTo(input<int>('other')!())
+  int_floor:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().floor()
+  int_floor_to_double:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: double
+        code: input<int>('value')!().floorToDouble()
+  int_remainder:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      other:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().remainder(input<int>('other')!())
+  int_round:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().round()
+  int_round_to_double:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: double
+        code: input<int>('value')!().roundToDouble()
+  int_to_string:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: String
+        code: input<int>('value')!().toString()
+  int_to_string_as_exponential:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      fraction_digits:
+        type: int?
+        value: null
+    outputs:
+      value:
+        type: String
+        code: input<int>('value')!().toStringAsExponential(input<int?>('fraction_digits')!())
+  int_to_string_as_fixed:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      fraction_digits:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: String
+        code: input<int>('value')!().toStringAsFixed(input<int>('fraction_digits')!())
+  int_to_string_as_precision:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      precision:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: String
+        code: input<int>('value')!().toStringAsPrecision(input<int>('precision')!())
+  int_truncate:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().truncate()
+  int_truncate_to_double:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: double
+        code: input<int>('value')!().truncateToDouble()
+  int_gcd:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      other:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().gcd(input<int>('other')!())
+  int_mod_inverse:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      modulus:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().modInverse(input<int>('modulus')!())
+  int_mod_pow:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      exponent:
+        type: int
+        value: 0
+      modulus:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().modPow(input<int>('exponent')!(), input<int>('modulus')!())
+  int_to_radix_string:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      radix:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: String
+        code: input<int>('value')!().toRadixString(input<int>('radix')!())
+  int_to_signed:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      width:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().toSigned(input<int>('width')!())
+  int_to_unsigned:
+    group: property
+    inputs:
+      value:
+        type: int
+        value: 0
+      width:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: int
+        code: input<int>('value')!().toUnsigned(input<int>('width')!())

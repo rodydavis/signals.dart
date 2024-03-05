@@ -1,0 +1,390 @@
+name: String
+path: lib/src/generated/nodes/string
+nodes:
+  string_node:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!()
+  optional_string_node:
+    group: value
+    inputs:
+      value:
+        type: String?
+        value: "Text Here"
+    outputs:
+      value:
+        type: String?
+        code: input<String?>('value')?.call()
+  string_multiply:
+    group: operator
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      times:
+        type: int
+        value: 1
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!() * input<int>('times')!()
+  string_add:
+    group: operator
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      other:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!() + input<String>('other')!()
+  string_equals:
+    group: operator
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      other:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: bool
+        code: input<String>('value')!() == input<String>('other')!()
+  string_index:
+    group: operator
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      index:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!()[input<int>('index')!()]
+  string_code_units:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: List<int>
+        code: input<String>('value')!().codeUnits
+  string_to_pattern:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: Pattern
+        code: input<String>('value')!()
+  string_is_empty:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: bool
+        code: input<String>('value')!().isEmpty
+  string_is_not_empty:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: bool
+        code: input<String>('value')!().isNotEmpty
+  string_length:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: int
+        code: input<String>('value')!().length
+  string_code_unit_at:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      index:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<String>('value')!().codeUnitAt(input<int>('index')!())
+  string_compare_to:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      other:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: int
+        code: input<String>('value')!().compareTo(input<String>('other')!())
+  string_contains:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      pattern:
+        type: Pattern
+        value: "Text Here"
+      start_index:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: bool
+        code: input<String>('value')!().contains(input<Pattern>('pattern')!(), input<int>('start_index')!())
+  string_ends_with:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      other:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: bool
+        code: input<String>('value')!().endsWith(input<String>('other')!())
+  string_starts_with:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      other:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: bool
+        code: input<String>('value')!().startsWith(input<String>('other')!())
+  string_index_of:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      pattern:
+        type: Pattern
+        value: "Text Here"
+      start:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<String>('value')!().indexOf(input<Pattern>('pattern')!(), input<int>('start')!())
+  string_last_index_of:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      pattern:
+        type: Pattern
+        value: "Text Here"
+      start:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: int
+        code: input<String>('value')!().lastIndexOf(input<Pattern>('pattern')!(), input<int>('start')!())
+  string_pad_left:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      width:
+        type: int
+        value: 0
+      padding:
+        type: String
+        value: " "
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().padLeft(input<int>('width')!(), input<String>('padding')!())
+  string_pad_right:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      width:
+        type: int
+        value: 0
+      padding:
+        type: String
+        value: " "
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().padRight(input<int>('width')!(), input<String>('padding')!())
+  string_replace_all:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      from:
+        type: Pattern
+        value: "Text Here"
+      replace:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().replaceAll(input<Pattern>('from')!(), input<String>('replace')!())
+  string_replace_first:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      from:
+        type: Pattern
+        value: "Text Here"
+      to:
+        type: String
+        value: "Text Here"
+      start_index:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().replaceFirst(input<Pattern>('from')!(), input<String>('to')!(), input<int>('start_index')!())
+  string_replace_range:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      start:
+        type: int
+        value: 0
+      end:
+        type: int?
+        value: null
+      replacement:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().replaceRange(input<int>('start')!(), input<int?>('end')!(), input<String>('replacement')!())
+  string_split:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      pattern:
+        type: Pattern
+        value: "Text Here"
+    outputs:
+      value:
+        type: List<String>
+        code: input<String>('value')!().split(input<Pattern>('pattern')!())
+  string_substring:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      start:
+        type: int
+        value: 0
+      end:
+        type: int?
+        value: null
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().substring(input<int>('start')!(), input<int?>('end')!())
+  string_to_lower_case:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().toLowerCase()
+  string_to_upper_case:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().toUpperCase()
+  string_trim:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().trim()
+  string_trim_left:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().trimLeft()
+  string_trim_right:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: input<String>('value')!().trimRight()

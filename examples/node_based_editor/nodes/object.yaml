@@ -1,0 +1,180 @@
+name: Object
+path: lib/src/generated/nodes/object
+nodes:
+  object_node:
+    group: value
+    inputs:
+      value:
+        type: Object
+        value: Object()
+    outputs:
+      value:
+        type: Object
+        code: input<Object>('value')!()
+  optional_object_node:
+    group: value
+    inputs:
+      value:
+        type: Object?
+        value: false
+    outputs:
+      value:
+        type: Object?
+        code: input<Object?>('value')?.call()
+  object_equals_string:
+    group: operator
+    inputs:
+      a:
+        type: Object
+        value: Object()
+      b:
+        type: Object
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object>('a')!() == input<Object>('b')!()
+  object_not_null:
+    group: operator
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() != null
+  object_to_string:
+    group: property
+    inputs:
+      value:
+        type: Object
+        value: Object()
+    outputs:
+      value:
+        type: String
+        code: input<Object>('value')!().toString()
+  optional_object_to_string:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: String
+        code: input<Object?>('value')!()?.toString() ?? ''
+  optional_object_fallback:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+      fallback:
+        type: Object
+        value: Object()
+    outputs:
+      value:
+        type: Object
+        code: input<Object?>('value')!() ?? input<Object>('fallback')!()
+  object_is:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() is String
+  object_is_num:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() is num
+  object_is_int:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() is int
+  object_is_double:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() is double
+  object_is_map:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() is Map
+  object_is_list:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() is List
+  object_is_set:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() is Set
+  object_is_null:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() == null
+  object_is_not_null:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: bool
+        code: input<Object?>('value')!() != null
+  object_unwrap:
+    group: property
+    inputs:
+      value:
+        type: Object?
+        value: Object()
+    outputs:
+      value:
+        type: Object
+        code: input<Object?>('value')!()!
+  

@@ -1,0 +1,447 @@
+name: Num
+path: lib/src/generated/nodes/num
+nodes:
+  num_node:
+    group: value
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('value')!()
+  optional_num_node:
+    group: value
+    inputs:
+      value:
+        type: num?
+        value: 0.0
+    outputs:
+      value:
+        type: num?
+        code: input<num?>('value')?.call()
+  num_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: '0.0'
+    outputs:
+      value:
+        type: num
+        code: num.parse(input<String>('value')!())
+  num_try_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: '0.0'
+    outputs:
+      value:
+        type: num?
+        code: num.tryParse(input<String>('value')!())
+  num_add:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('a')!() + input<num>('b')!()
+  num_subtract:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('a')!() - input<num>('b')!()
+  num_divide:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('a')!() / input<num>('b')!()
+  num_multiply:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('a')!() * input<num>('b')!()
+  num_modulo:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('a')!() % input<num>('b')!()
+  num_less_than:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('a')!() < input<num>('b')!()
+  num_less_than_equal:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('a')!() <= input<num>('b')!()
+  num_greater_than:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('a')!() > input<num>('b')!()
+  num_greater_than_equal:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('a')!() >= input<num>('b')!()
+  num_equal:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('a')!() == input<num>('b')!()
+  num_truncating_division:
+    group: operator
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<num>('a')!() ~/ input<num>('b')!()
+  num_negate:
+    group: operator
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: -input<num>('value')!()
+  num_is_finite:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('value')!().isFinite
+  num_is_infinite:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('value')!().isInfinite
+  num_is_nan:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('value')!().isNaN
+  num_is_negative:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<num>('value')!().isNegative
+  num_sign:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('value')!().sign
+  num_abs:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('value')!().abs()
+  num_ceil:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<num>('value')!().ceil()
+  num_ceil_to_double:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<num>('value')!().ceilToDouble()
+  num_clamp:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+      lower_limit:
+        type: num
+        value: 0.0
+      upper_limit:
+        type: num
+        value: 1.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('value')!().clamp(input<num>('lower_limit')!(), input<num>('upper_limit')!())
+  num_compare_to:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+      other:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<num>('value')!().compareTo(input<num>('other')!())
+  num_floor:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<num>('value')!().floor()
+  num_floor_to_double:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<num>('value')!().floorToDouble()
+  num_remainder:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+      other:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: input<num>('value')!().remainder(input<num>('other')!())
+  num_round:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<num>('value')!().round()
+  num_round_to_double:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<num>('value')!().roundToDouble()
+  num_to_double:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<num>('value')!().toDouble()
+  num_to_int:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<num>('value')!().toInt()
+  num_to_string:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: String
+        code: input<num>('value')!().toString()
+  num_to_string_as_exponential:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+      fraction_digits:
+        type: int?
+        value: null
+    outputs:
+      value:
+        type: String
+        code: input<num>('value')!().toStringAsExponential(input<int?>('fraction_digits')!())
+  num_to_string_as_fixed:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+      fraction_digits:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: String
+        code: input<num>('value')!().toStringAsFixed(input<int>('fraction_digits')!())
+  num_to_string_as_precision:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+      precision:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: String
+        code: input<num>('value')!().toStringAsPrecision(input<int>('precision')!())
+  num_truncate:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<num>('value')!().truncate()
+  num_truncate_to_double:
+    group: property
+    inputs:
+      value:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<num>('value')!().truncateToDouble()
