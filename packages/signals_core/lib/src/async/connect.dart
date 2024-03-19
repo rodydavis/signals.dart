@@ -48,7 +48,7 @@ import '../core/signals.dart';
 /// ```
 /// @link https://dartsignals.dev/dart/async/connect
 /// {@endtemplate}
-class Connect<T> {
+class Connect<T, S extends T> {
   /// Connects a [Stream] to a [Signal].
   Connect(this.signal);
 
@@ -69,8 +69,8 @@ class Connect<T> {
   ///
   /// c.dispose();
   /// ```
-  Connect<T> from(
-    Stream<T> source, {
+  Connect<T,S> from(
+    Stream<S> source, {
     bool? cancelOnError,
     Function? onError,
     Function? onDone,
@@ -97,7 +97,7 @@ class Connect<T> {
   }
 
   /// Synonym for `from(Stream<T> source)`
-  Connect<T> operator <<(Stream<T> source) => from(source);
+  Connect<T,S> operator <<(Stream<S> source) => from(source);
 
   /// Cancels all subscriptions.
   void dispose() {
@@ -155,8 +155,8 @@ class Connect<T> {
 /// ```
 /// @link https://dartsignals.dev/dart/async/connect
 /// {@endtemplate}
-Connect<T> connect<T>(Signal<T> signal, [Stream<T>? stream]) {
-  final instance = Connect(signal);
+Connect<T,S> connect<T,S extends T>(Signal<T> signal, [Stream<S>? stream]) {
+  final instance = Connect<T,S>(signal);
   if (stream != null) instance << stream;
   return instance;
 }
