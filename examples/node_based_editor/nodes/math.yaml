@@ -1,0 +1,222 @@
+name: Math
+path: lib/src/generated/nodes/math
+nodes:
+  math_e:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.e
+  math_ln10:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.ln10
+  math_ln2:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.ln2
+  math_log10e:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.log10e
+  math_log2e:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.log2e
+  math_pi:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.pi
+  math_sqrt1_2:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.sqrt1_2
+  math_sqrt2:
+    group: static
+    imports:
+      math: "dart:math"
+    outputs:
+      value:
+        type: double
+        code: math.sqrt2
+  math_acos:
+    imports:
+      math: "dart:math"
+    inputs:
+      x:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.acos(input<num>('x')!())
+  math_asin:
+    imports:
+      math: "dart:math"
+    inputs:
+      x:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.asin(input<num>('x')!())
+  math_atan:
+    imports:
+      math: "dart:math"
+    inputs:
+      x:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.atan(input<num>('x')!())
+  math_atan2:
+    imports:
+      math: "dart:math"
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.atan2(input<num>('a')!(), input<num>('b')!())
+  math_cos:
+    imports:
+      math: "dart:math"
+    inputs:
+      radians:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.cos(input<num>('radians')!())
+  math_exp:
+    imports:
+      math: "dart:math"
+    inputs:
+      x:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.exp(input<num>('x')!())
+  math_log:
+    imports:
+      math: "dart:math"
+    inputs:
+      x:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.log(input<num>('x')!())
+  math_max:
+    imports:
+      math: "dart:math"
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: math.max(input<num>('a')!(), input<num>('b')!())
+  math_min:
+    imports:
+      math: "dart:math"
+    inputs:
+      a:
+        type: num
+        value: 0.0
+      b:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: math.min(input<num>('a')!(), input<num>('b')!())
+  math_pow:
+    imports:
+      math: "dart:math"
+    inputs:
+      x:
+        type: num
+        value: 0.0
+      exponent:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: num
+        code: math.pow(input<num>('x')!(), input<num>('exponent')!())
+  math_sin:
+    imports:
+      math: "dart:math"
+    inputs:
+      radians:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.sin(input<num>('radians')!())
+  math_sqrt:
+    imports:
+      math: "dart:math"
+    inputs:
+      x:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.sqrt(input<num>('x')!())
+  math_tan:
+    imports:
+      math: "dart:math"
+    inputs:
+      radians:
+        type: num
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: math.tan(input<num>('radians')!())

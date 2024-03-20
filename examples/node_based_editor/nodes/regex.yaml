@@ -1,0 +1,101 @@
+name: Regex
+path: lib/src/generated/nodes/regex
+nodes:
+  regex_node:
+    group: value
+    inputs:
+      source:
+        type: String
+        value: "Text Here"
+      multi_line:
+        type: bool
+        value: false
+      case_sensitive:
+        type: bool
+        value: true
+      unicode:
+        type: bool
+        value: false
+      dot_all:
+        type: bool
+        value: false
+    outputs:
+      value:
+        type: Pattern
+        code: "RegExp(input<String>('source')!(), multiLine: input<bool>('multi_line')!(), caseSensitive: input<bool>('case_sensitive')!(), unicode: input<bool>('unicode')!(), dotAll: input<bool>('dot_all')!())"
+  regex_escape:
+    group: static
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String
+        code: RegExp.escape(input<String>('value')!())
+  regex_to_pattern:
+    group: property
+    inputs:
+      value:
+        type: RegExp
+        value: RegExp("Regex Here")
+    outputs:
+      value:
+        type: Pattern
+        code: input<RegExp>('value')!()
+  regex_all_matches:
+    group: property
+    inputs:
+      value:
+        type: RegExp
+        value: RegExp("Regex Here")
+      input:
+        type: String
+        value: "Text Here"
+      start:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: Iterable<RegExpMatch>
+        code: input<RegExp>('value')!().allMatches(input<String>('input')!(), input<int>('start')!())
+  regex_first_match:
+    group: property
+    inputs:
+      value:
+        type: RegExp
+        value: RegExp("Regex Here")
+      input:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: RegExpMatch?
+        code: input<RegExp>('value')!().firstMatch(input<String>('input')!())
+  regex_has_match:
+    group: property
+    inputs:
+      value:
+        type: RegExp
+        value: RegExp("Regex Here")
+      input:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: bool
+        code: input<RegExp>('value')!().hasMatch(input<String>('input')!())
+  regex_string_match:
+    group: property
+    inputs:
+      value:
+        type: RegExp
+        value: RegExp("Regex Here")
+      input:
+        type: String
+        value: "Text Here"
+    outputs:
+      value:
+        type: String?
+        code: input<RegExp>('value')!().stringMatch(input<String>('input')!())
+  

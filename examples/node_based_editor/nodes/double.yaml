@@ -1,0 +1,488 @@
+name: Double
+path: lib/src/generated/nodes/double
+nodes:
+  double_node:
+    group: value
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!()
+  optional_double_node:
+    group: value
+    inputs:
+      value:
+        type: double?
+        value: 0.0
+    outputs:
+      value:
+        type: double?
+        code: input<double?>('value')?.call()
+  double_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: '0.0'
+    outputs:
+      value:
+        type: double
+        code: double.parse(input<String>('value')!())
+  double_try_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: '0.0'
+    outputs:
+      value:
+        type: double?
+        code: double.tryParse(input<String>('value')!())
+  double_infinity:
+    group: static
+    outputs:
+      value:
+        type: double
+        code: double.infinity
+  double_max_finite:
+    group: static
+    outputs:
+      value:
+        type: double
+        code: double.maxFinite
+  double_min_positive:
+    group: static
+    outputs:
+      value:
+        type: double
+        code: double.minPositive
+  double_nan:
+    group: static
+    outputs:
+      value:
+        type: double
+        code: double.nan
+  double_negative_infinity:
+    group: static
+    outputs:
+      value:
+        type: double
+        code: double.negativeInfinity
+
+  double_add:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('a')!() + input<double>('b')!()
+  double_subtract:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('a')!() - input<double>('b')!()
+  double_divide:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('a')!() / input<double>('b')!()
+  double_multiply:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('a')!() * input<double>('b')!()
+  double_modulo:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('a')!() % input<double>('b')!()
+  double_less_than:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('a')!() < input<double>('b')!()
+  double_less_than_equal:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('a')!() <= input<double>('b')!()
+  double_greater_than:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('a')!() > input<double>('b')!()
+  double_greater_than_equal:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('a')!() >= input<double>('b')!()
+  double_equal:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('a')!() == input<double>('b')!()
+  double_truncating_division:
+    group: operator
+    inputs:
+      a:
+        type: double
+        value: 0.0
+      b:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<double>('a')!() ~/ input<double>('b')!()
+  double_negate:
+    group: operator
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: -input<double>('value')!()
+  double_to_num:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0
+    outputs:
+      value:
+        type: num
+        code: input<double>('value')!()
+  double_is_finite:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('value')!().isFinite
+  double_is_infinite:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('value')!().isInfinite
+  double_is_nan:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('value')!().isNaN
+  double_is_negative:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: bool
+        code: input<double>('value')!().isNegative
+  double_sign:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().sign
+  double_abs:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().abs()
+  double_ceil:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<double>('value')!().ceil()
+  double_ceil_to_double:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().ceilToDouble()
+  double_clamp:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+      lower_limit:
+        type: double
+        value: 0.0
+      upper_limit:
+        type: double
+        value: 1.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().clamp(input<double>('lower_limit')!(), input<double>('upper_limit')!())
+  double_compare_to:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+      other:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<double>('value')!().compareTo(input<double>('other')!())
+  double_floor:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<double>('value')!().floor()
+  double_floor_to_double:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().floorToDouble()
+  double_remainder:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+      other:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().remainder(input<double>('other')!())
+  double_round:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<double>('value')!().round()
+  double_round_to_double:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().roundToDouble()
+  double_to_double:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().toDouble()
+  double_to_int:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<double>('value')!().toInt()
+  double_to_string:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: String
+        code: input<double>('value')!().toString()
+  double_to_string_as_exponential:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+      fraction_digits:
+        type: int?
+        value: null
+    outputs:
+      value:
+        type: String
+        code: input<double>('value')!().toStringAsExponential(input<int?>('fraction_digits')!())
+  double_to_string_as_fixed:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+      fraction_digits:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: String
+        code: input<double>('value')!().toStringAsFixed(input<int>('fraction_digits')!())
+  double_to_string_as_precision:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+      precision:
+        type: int
+        value: 2
+    outputs:
+      value:
+        type: String
+        code: input<double>('value')!().toStringAsPrecision(input<int>('precision')!())
+  double_truncate:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: int
+        code: input<double>('value')!().truncate()
+  double_truncate_to_double:
+    group: property
+    inputs:
+      value:
+        type: double
+        value: 0.0
+    outputs:
+      value:
+        type: double
+        code: input<double>('value')!().truncateToDouble()

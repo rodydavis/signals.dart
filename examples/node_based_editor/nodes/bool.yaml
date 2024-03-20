@@ -1,0 +1,95 @@
+name: Bool
+path: lib/src/generated/nodes/bool
+nodes:
+  bool_node:
+    group: value
+    inputs:
+      value:
+        type: bool
+        value: false
+    outputs:
+      value:
+        type: bool
+        code: input<bool>('value')!()
+  optional_bool_node:
+    group: value
+    inputs:
+      value:
+        type: bool?
+        value: false
+    outputs:
+      value:
+        type: bool?
+        code: input<bool?>('value')?.call()
+  bool_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: 'false'
+    outputs:
+      value:
+        type: bool
+        code: bool.parse(input<String>('value')!())
+  bool_try_parse:
+    group: value
+    inputs:
+      value:
+        type: String
+        value: 'false'
+    outputs:
+      value:
+        type: bool?
+        code: bool.tryParse(input<String>('value')!())
+  bool_and:
+    group: operator
+    inputs:
+      a:
+        type: bool
+        value: false
+      b:
+        type: bool
+        value: false
+    outputs:
+      value:
+        type: bool
+        code: input<bool>('a')!() & input<bool>('b')!()
+  bool_equals:
+    group: operator
+    inputs:
+      a:
+        type: bool
+        value: false
+      b:
+        type: bool
+        value: false
+    outputs:
+      value:
+        type: bool
+        code: input<bool>('a')!() == input<bool>('b')!()
+  bool_exclusive_or:
+    group: operator
+    inputs:
+      a:
+        type: bool
+        value: false
+      b:
+        type: bool
+        value: false
+    outputs:
+      value:
+        type: bool
+        code: input<bool>('a')!() ^ input<bool>('b')!()
+  bool_inclusive_or:
+    group: operator
+    inputs:
+      a:
+        type: bool
+        value: false
+      b:
+        type: bool
+        value: false
+    outputs:
+      value:
+        type: bool
+        code: input<bool>('a')!() | input<bool>('b')!()

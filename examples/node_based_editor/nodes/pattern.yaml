@@ -1,0 +1,36 @@
+name: Pattern
+path: lib/src/generated/nodes/pattern
+nodes:
+  pattern_all_matches:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      pattern:
+        type: Pattern
+        value: "Text Here"
+      start:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: Iterable<Match>
+        code: input<Pattern>('pattern')!().allMatches(input<String>('value')!(), input<int>('start')!())
+  pattern_match_as_prefix:
+    group: property
+    inputs:
+      value:
+        type: String
+        value: "Text Here"
+      pattern:
+        type: Pattern
+        value: "Text Here"
+      start:
+        type: int
+        value: 0
+    outputs:
+      value:
+        type: Match?
+        code: input<Pattern>('pattern')!().matchAsPrefix(input<String>('value')!(), input<int>('start')!())
+  
