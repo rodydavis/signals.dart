@@ -62,6 +62,7 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
   /// If true then signals will be cached when created
   final bool cache;
 
+  /// Store of created signals (if cache is true)
   final store = mapSignal<Arg, S>({});
 
   final S Function(Arg) _create;
@@ -94,9 +95,10 @@ class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
 
   /// Dispose of all created signals
   void dispose() {
-    for (final signal in store.values) {
+    for (final signal in store.values.toList()) {
       signal.dispose();
     }
+    store.dispose();
   }
 }
 

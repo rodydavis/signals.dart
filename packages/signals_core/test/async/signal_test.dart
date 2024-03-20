@@ -12,6 +12,13 @@ void main() {
       expect(s.requireValue, 0);
     });
 
+    test('isCompleted', () async {
+      final s = asyncSignal(AsyncState<int>.data(0));
+      expect(s.isCompleted, false);
+      s.setValue(1);
+      expect(s.isCompleted, true);
+    });
+
     test('error', () async {
       final s = asyncSignal(AsyncState<int>.error('error'));
       expect(s.peek().isLoading, false);
@@ -45,6 +52,48 @@ void main() {
       expect(s().isLoading, true);
       expect(s().hasError, false);
       expect(s().hasValue, false);
+    });
+
+    group('reload', () {
+      test('data', () async {
+        final s = asyncSignal(AsyncState<int>.data(0));
+        s.reload();
+        expect(s.value is AsyncLoading, true);
+      });
+
+      test('error', () async {
+        final s = asyncSignal(AsyncState<int>.error('error'));
+        s.reload();
+        expect(s.value is AsyncLoading, true);
+      });
+
+      test('loading', () async {
+        final s = asyncSignal(AsyncState<int>.loading());
+        s.reload();
+        expect(s.value is AsyncLoading, true);
+      });
+    });
+
+    group('refresh', () {
+      test('data', () async {
+        final s = asyncSignal(AsyncState<int>.data(0));
+        s.refresh();
+        expect(s.value is AsyncData, true);
+        expect(s.value.isLoading, true);
+      });
+
+      test('error', () async {
+        final s = asyncSignal(AsyncState<int>.error('error'));
+        s.refresh();
+        expect(s.value is AsyncError, true);
+        expect(s.value.isLoading, true);
+      });
+
+      test('loading', () async {
+        final s = asyncSignal(AsyncState<int>.loading());
+        s.refresh();
+        expect(s.value is AsyncLoading, true);
+      });
     });
   });
 }

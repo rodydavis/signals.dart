@@ -16,9 +16,19 @@ void _debugPostEvent(
 bool _devToolsInitialized = false;
 bool _devToolsEnabled = kDebugMode;
 
+/// Check if devTools is enabled
+bool get signalsDevToolsEnabled => _devToolsEnabled;
+
+/// Enable/Disable devTools
+set signalsDevToolsEnabled(bool value) {
+  _devToolsEnabled = value;
+  _devToolsInitialized = value;
+}
+
+/// Disable devTools
+@Deprecated('Use signalsDevToolsEnabled = false instead')
 void disableSignalsDevTools() {
-  _devToolsEnabled = false;
-  _devToolsInitialized = false;
+  signalsDevToolsEnabled = false;
 }
 
 Map<String, dynamic> _getNodes() {
@@ -61,6 +71,7 @@ Map<String, dynamic> _getNodes() {
   };
 }
 
+/// Reload the signals devTools
 void reloadSignalsDevTools() {
   _debugPostEvent('ext.signals.reassemble', () => _getNodes());
 }
@@ -160,8 +171,7 @@ void _onEffectCreated(_Effect instance) {
 
 void _onEffectCalled(_Effect instance) {
   if (!_devToolsEnabled) return;
-  _effectCount[instance.globalId] ?? 0;
-  var count = _effectCount[instance.globalId]!;
+  var count = _effectCount[instance.globalId] ??= 0;
   _effectCount[instance.globalId] = ++count;
   _debugPostEvent('ext.signals.effectCalled', () {
     return {

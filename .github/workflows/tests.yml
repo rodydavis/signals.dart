@@ -5,14 +5,28 @@ on:
   push:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
+
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1.5.0
 
-      - run: cd packages/signals_core && dart pub get
-      - run: cd packages/signals_core && dart test
-      - run: cd packages/signals_flutter && flutter pub get
-      - run: cd packages/signals_flutter && flutter test
+      - name: Install melos
+        run: dart pub global activate melos
+
+      - uses: subosito/flutter-action@v2.10.0
+        with:
+          channel: "stable"
+
+      - name: Install dependencies
+        run: melos exec --no-private flutter pub get
+      
+      - name: Analyze packages
+        run: melos run analyze
+
+      - name: Test packages
+        run: melos run test

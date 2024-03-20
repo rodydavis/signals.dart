@@ -11,9 +11,19 @@ extension SignalsCallbackFunctionUtils<T> on SignalsCallbackFunction<T> {
   /// final element = document.querySelector('#id')!;
   /// final s = element.addEventListener.toSignal();
   /// ```
-  ReadonlySignal<T> toSignal(T initialValue) {
-    final s = signal<T>(initialValue);
-    this((val) => s.set(val));
+  ReadonlySignal<T> toSignal(
+    T initialValue, {
+    bool autoDispose = false,
+    String? debugLabel,
+    SignalEquality<T>? equality,
+  }) {
+    final s = signal<T>(
+      initialValue,
+      debugLabel: debugLabel,
+      equality: equality,
+      autoDispose: autoDispose,
+    );
+    this(s.set);
     return s;
   }
 }

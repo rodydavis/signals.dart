@@ -1,74 +1,53 @@
-<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="300" height="300" rx="38" fill="#EEEEEE" />
-    <circle cx="246.084" cy="133.567" r="41.1988" fill="url(#paint0_linear_1_2)" />
-    <g filter="url(#filter0_d_1_2)">
-        <path
-            d="M207.558 120.367C208.06 120.137 208.281 119.544 208.052 119.042L204.31 110.856C204.08 110.354 203.487 110.133 202.985 110.363C202.482 110.592 202.261 111.186 202.491 111.688L205.817 118.964L198.541 122.29C198.039 122.519 197.818 123.113 198.048 123.615C198.277 124.117 198.871 124.338 199.373 124.109L207.558 120.367ZM91.6623 77.5025L206.793 120.394L207.491 118.52L92.3605 75.6284L91.6623 77.5025Z"
-            fill="#303030" />
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="100" height="100" preserveAspectRatio="none" viewBox="0 0 100 100">
+    <g mask="url(&quot;#SvgjsMask1459&quot;)" fill="none">
+        <g mask="url(&quot;#SvgjsMask1460&quot;)">
+            <path d="M15 25L45 25L65 5L95 5" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M12.5 25 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M55 55L95 55" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M52.5 55 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 55 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M25 65L25 95" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M22.5 65 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM22.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M55 75L65 65L95 65" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M52.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 65 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M15 75L15 95" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M12.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM12.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M35 65L35 45L25 35L15 35L5 45L5 95" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M32.5 65 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM2.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M25 5L35 15L45 15L55 5" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M22.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM52.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M85 95L35 95" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M82.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM32.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M45 75L55 85L65 85L75 75L95 75" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M42.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M15 5L15 15L5 25L5 35" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M12.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM2.5 35 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M45 55L45 45L75 15L85 15L95 25L95 45" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M42.5 55 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 45 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M65 35L75 25L85 25" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M62.5 35 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM82.5 25 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M85 45L55 45" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path d="M82.5 45 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM52.5 45 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z" fill="rgba(202, 205, 152, 1)"></path>
+        </g>
     </g>
-    <g filter="url(#filter1_d_1_2)">
-        <path
-            d="M103.968 199.357C104.459 199.611 105.062 199.418 105.316 198.928L109.447 190.932C109.701 190.441 109.508 189.838 109.018 189.585C108.527 189.331 107.924 189.523 107.67 190.014L103.998 197.121L96.8907 193.449C96.4 193.196 95.7967 193.388 95.5432 193.879C95.2897 194.369 95.482 194.973 95.9726 195.226L103.968 199.357ZM70.7414 96.0576L103.475 198.772L105.38 198.165L72.647 95.4503L70.7414 96.0576Z"
-            fill="#303030" />
-    </g>
-    <g filter="url(#filter2_d_1_2)">
-        <path
-            d="M218.298 163.549C218.338 162.998 217.923 162.52 217.372 162.481L208.395 161.839C207.844 161.8 207.366 162.215 207.326 162.766C207.287 163.316 207.702 163.795 208.253 163.834L216.232 164.404L215.662 172.384C215.623 172.935 216.038 173.413 216.588 173.453C217.139 173.492 217.618 173.077 217.657 172.526L218.298 163.549ZM150.232 222.928L217.956 164.234L216.646 162.722L148.922 221.417L150.232 222.928Z"
-            fill="#303030" />
-    </g>
-    <circle cx="54.1988" cy="60.1988" r="41.1988" fill="url(#paint1_linear_1_2)" />
-    <circle cx="112.893" cy="239.668" r="41.1988" fill="url(#paint2_linear_1_2)" />
     <defs>
-        <filter id="filter0_d_1_2" x="87.6623" y="75.6284" width="124.48" height="56.5711"
-            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-            <feColorMatrix in="SourceAlpha" type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-            <feOffset dy="4" />
-            <feGaussianBlur stdDeviation="2" />
-            <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2" />
-            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape" />
-        </filter>
-        <filter id="filter1_d_1_2" x="66.7414" y="95.4503" width="46.8175" height="112.019"
-            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-            <feColorMatrix in="SourceAlpha" type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-            <feOffset dy="4" />
-            <feGaussianBlur stdDeviation="2" />
-            <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2" />
-            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape" />
-        </filter>
-        <filter id="filter2_d_1_2" x="144.922" y="161.837" width="77.379" height="69.0911"
-            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-            <feColorMatrix in="SourceAlpha" type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-            <feOffset dy="4" />
-            <feGaussianBlur stdDeviation="2" />
-            <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2" />
-            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape" />
-        </filter>
-        <linearGradient id="paint0_linear_1_2" x1="246.084" y1="92.3677" x2="246.084" y2="174.765"
-            gradientUnits="userSpaceOnUse">
-            <stop stop-color="#1729CF" />
-            <stop offset="1" stop-color="#2A26F1" />
-        </linearGradient>
-        <linearGradient id="paint1_linear_1_2" x1="54.1988" y1="19" x2="54.1988" y2="101.398"
-            gradientUnits="userSpaceOnUse">
-            <stop stop-color="#CF1717" />
-            <stop offset="1" stop-color="#D00000" />
-        </linearGradient>
-        <linearGradient id="paint2_linear_1_2" x1="112.893" y1="198.469" x2="112.893" y2="280.866"
-            gradientUnits="userSpaceOnUse">
-            <stop stop-color="#1BCF17" />
-            <stop offset="1" stop-color="#209E00" />
-        </linearGradient>
+        <mask id="SvgjsMask1459">
+            <rect width="100" height="100" fill="#ffffff"></rect>
+        </mask>
+        <mask id="SvgjsMask1460">
+            <rect width="100" height="100" fill="white"></rect>
+            <path d="M13.75 25 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M53.75 55 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 55 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M23.75 65 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM23.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M53.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 65 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M13.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM13.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M33.75 65 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM3.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M23.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM53.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M83.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM33.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M43.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M13.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM3.75 35 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M43.75 55 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 45 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M63.75 35 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM83.75 25 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+            <path d="M83.75 45 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM53.75 45 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z" fill="black"></path>
+        </mask>
     </defs>
 </svg>

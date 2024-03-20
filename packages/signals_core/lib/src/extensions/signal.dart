@@ -23,8 +23,6 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
 
     _streamCache[globalId] = stream;
 
-    controller.add(value);
-
     subscribe(controller.add);
 
     onDispose(() {
@@ -41,14 +39,24 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// final a = signal({'a': 1, 'b': 2});
   /// final b = a.select((val) => val()['a'] as int);
   /// ```
-  ReadonlySignal<R> select<R>(R Function(ReadonlySignal<T>) selector) {
-    return computed(() => selector(this));
+  ReadonlySignal<R> select<R>(
+    R Function(ReadonlySignal<T>) selector, {
+    bool autoDispose = false,
+    String? debugLabel,
+    SignalEquality<R>? equality,
+  }) {
+    return computed(
+      () => selector(this),
+      autoDispose: autoDispose,
+      debugLabel: debugLabel,
+      equality: equality,
+    );
   }
 }
 
 /// Mutable signal utils
 extension SignalUtils<T> on Signal<T> {
   /// Restrict API to readonly signal
-  @Deprecated('use [readonly] instead')
+  @Deprecated('use [.readonly()] instead')
   ReadonlySignal<T> toReadonlySignal() => this;
 }

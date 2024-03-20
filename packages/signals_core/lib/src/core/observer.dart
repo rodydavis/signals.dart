@@ -1,17 +1,50 @@
 import 'signals.dart';
 
+/// {@template observer}
+/// You can observe all signal values in the dart application by providing an implementation of `SignalsObserver`:
+/// 
+/// ```dart
+/// abstract class SignalsObserver {
+///   void onSignalCreated(Signal instance);
+///   void onSignalUpdated(Signal instance, dynamic value);
+///   void onComputedCreated(Computed instance);
+///   void onComputedUpdated(Computed instance, dynamic value);
+///   static SignalsObserver? instance;
+/// }
+/// ```
+/// 
+/// > There is a prebuilt `LoggingSignalsObserver` for printing updates to the console.
+/// 
+/// To add the observer override the instance at the start of the application:
+/// 
+/// ```dart
+/// void main() {
+///     SignalsObserver.instance = LoggingSignalsObserver(); // or custom observer
+///     ...
+/// }
+/// ```
+/// 
+/// This will have a slight performance hit since every update will be tracked via the observer. It is recommended to only set the `SignalsObserver.instance` in debug or profile mode.
+/// @link https://dartsignals.dev/dart/utilities/observer
+/// {@endtemplate}
 abstract class SignalsObserver {
+  /// Called when a signal is created.
   void onSignalCreated(Signal instance);
 
+  /// Called when a signal is updated.
   void onSignalUpdated(Signal instance, dynamic value);
 
+  /// Called when a computed is created.
   void onComputedCreated(Computed instance);
 
+  /// Called when a computed is updated.
   void onComputedUpdated(Computed instance, dynamic value);
 
+  /// The current observer instance.
   static SignalsObserver? instance;
 }
 
+/// Logs all signals and computed changes to the console.
 class LoggingSignalsObserver extends SignalsObserver {
   @override
   void onComputedCreated(Computed instance) {
@@ -33,6 +66,6 @@ class LoggingSignalsObserver extends SignalsObserver {
     log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
   }
 
-  // ignore: avoid_print
+  /// Logs a message to the console.
   void log(String message) => print(message);
 }

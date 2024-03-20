@@ -38,6 +38,24 @@ class _SpreadsheetCalculatorState extends State<SpreadsheetCalculator> {
     }
   }
 
+  void save() {
+    var str = textController.text.trim();
+    if (str.isNotEmpty) {
+      if (str.startsWith('=')) str = str.substring(1);
+      final val = '${editCell()!.description}=$str';
+      if (cells[editCell()!]?.definition != val) {
+        final node = evalContext.addRow(context, val);
+        if (node != null) {
+          cells[editCell()!] = node;
+        }
+      }
+    } else {
+      cells.remove(editCell()!);
+    }
+    editCell.value = null;
+    textController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     const cellSize = 30.0;
@@ -54,30 +72,17 @@ class _SpreadsheetCalculatorState extends State<SpreadsheetCalculator> {
               Container(
                 padding: const EdgeInsets.all(8),
                 child: TextField(
+                  autofocus: true,
                   controller: textController,
                   decoration: InputDecoration(
                     labelText: 'Edit cell: ${editCell()!.description}',
-                    hintText: 'd = a * b',
+                    hintText: 'Value (0, 20.0, -1) or Formula (=A1 * B2)',
                     suffix: IconButton(
                       icon: const Icon(Icons.save),
-                      onPressed: () {
-                        final str = textController.text.trim();
-                        if (str.isNotEmpty &&
-                            str != '${editCell()!.description}=') {
-                          if (cells[editCell()!]?.definition != str) {
-                            final node = evalContext.addRow(context, str);
-                            if (node != null) {
-                              cells[editCell()!] = node;
-                            }
-                          }
-                        } else {
-                          cells.remove(editCell()!);
-                        }
-                        editCell.value = null;
-                        textController.clear();
-                      },
+                      onPressed: save,
                     ),
                   ),
+                  onEditingComplete: save,
                 ),
               ),
             Expanded(
@@ -100,11 +105,14 @@ class _SpreadsheetCalculatorState extends State<SpreadsheetCalculator> {
                         onTap: () {
                           if (editCell.value == null) {
                             editCell.value = cell;
+                            String val = '';
                             if (current != null) {
-                              textController.text = current.definition;
+                              val = current.definition;
                             } else {
-                              textController.text = '${cell.description}=';
+                              val = '${cell.description}=';
                             }
+                            val = val.split('=').last;
+                            textController.text = val;
                           } else {
                             textController.text += cell.description;
                           }

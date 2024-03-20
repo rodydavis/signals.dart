@@ -194,8 +194,6 @@ abstract class _Listenable {
 
   void _notify();
 
-  void onDispose(void Function() cleanup);
-
   void dispose();
 }
 

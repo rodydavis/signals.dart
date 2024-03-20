@@ -1,5 +1,5 @@
 name: flutter_counter
-description: "A new Flutter project."
+description: Default flutter counter example using signals
 publish_to: "none"
 version: 1.0.0+1
 environment:

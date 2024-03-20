@@ -10,7 +10,7 @@ class NodeLayout extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     for (final nodeEntry in nodes.entries) {
-      final nodeRect = nodeEntry.value &  nodeEntry.key.size();
+      final nodeRect = nodeEntry.value & nodeEntry.key.size();
       final transformedRect = MatrixUtils.transformRect(matrix, nodeRect);
       layoutChild(nodeEntry.key.id, BoxConstraints.tight(transformedRect.size));
       positionChild(nodeEntry.key.id, transformedRect.topLeft);

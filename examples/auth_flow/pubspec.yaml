@@ -1,5 +1,5 @@
 name: auth_flow
-description: "A new Flutter project."
+description: Example with a user signal and authenticated flow
 
 publish_to: "none"
 

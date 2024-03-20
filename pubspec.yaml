@@ -4,4 +4,7 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dev_dependencies:
+  combine_coverage: ^1.0.1
+  lints: ^3.0.0
   melos: ^3.4.0
+  yaml: ^3.1.2

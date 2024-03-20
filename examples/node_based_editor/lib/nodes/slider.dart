@@ -37,7 +37,6 @@ class SliderNode extends ValueNode<double> {
   Size size() => const Size(180, 40);
 }
 
-
 class IntSliderNode extends ValueNode<int> {
   IntSliderNode(
     super.value, {

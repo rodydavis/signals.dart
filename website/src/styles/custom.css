@@ -1,0 +1,46 @@
+:root {
+  --sl-content-width: 50rem;
+  --sl-text-5xl: 3.5rem;
+  /* --sl-font: "Jura", serif; */
+}
+
+/* Dark mode colors. */
+:root {
+  --sl-color-accent-low: #282500;
+  --sl-color-accent: #746c00;
+  --sl-color-accent-high: #d1cc87;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #edeeef;
+  --sl-color-gray-2: #c1c2c3;
+  --sl-color-gray-3: #898c8e;
+  --sl-color-gray-4: #56585a;
+  --sl-color-gray-5: #36393a;
+  --sl-color-gray-6: #252729;
+  --sl-color-black: #171819;
+}
+
+/* Light mode colors. */
+:root[data-theme="light"] {
+  --sl-color-accent-low: #adaa78;
+  --sl-color-accent: #5e5800;
+  --sl-color-accent-high: #383400;
+  --sl-color-white: #171819;
+  --sl-color-gray-1: #252729;
+  --sl-color-gray-2: #36393a;
+  --sl-color-gray-3: #56585a;
+  --sl-color-gray-4: #898c8e;
+  --sl-color-gray-5: #c1c2c3;
+  --sl-color-gray-6: #edeeef;
+  --sl-color-gray-7: #f6f6f7;
+  --sl-color-black: #ffffff;
+}
+
+.card {
+  border-radius: 0.5rem;
+}
+
+iframe {
+  border: none;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}

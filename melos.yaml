@@ -1,22 +1,17 @@
 name: signals
-sdkPath: .fvm/flutter_sdk
 
 packages:
   - examples/*
   - packages/*
 
 scripts:
+  examples:
+    exec: dart scripts/examples.dart
   analyze:
-    exec: dart analyze .
-  flutter:test:
-    exec: flutter test
-    packageFilters:
-      flutter: true
-      scope: "*signals_flutter*"
-  dart:test:
-    exec: dart test
-    packageFilters:
-      flutter: false
-      scope: "*signals_core*"
+    run: melos exec --no-private --ignore="signals_lint" -- dart analyze .
   test:
-    exec: melos run dart:test --no-select && melos run flutter:test --no-select
+    run: melos exec --dir-exists="test" --no-private --ignore="signals_lint" -- flutter test --coverage
+  combine_coverage:
+    run: melos exec -- "\$MELOS_ROOT_PATH/scripts/combine_coverage.sh"
+  docs:
+    run: dart scripts/doc_comments.dart

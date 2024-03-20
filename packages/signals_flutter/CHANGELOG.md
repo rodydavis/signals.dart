@@ -1,3 +1,47 @@
+## 4.5.1
+
+- Fixing Watch in hot reload with auto dispose signals
+
+## 4.5.0
+
+- Updating documentation comments
+- Fixing signals observer bug on effect
+- Removing previousValue from value signal
+- Add ability to remove an onDispose callback
+- Update to `signals_core` 4.5.0
+
+## 4.4.0
+
+- adding overrideWith
+- fix autoDispose not passed in for some signals
+- fix equality not being passed in for some signals
+- fix for completed not being reset on async signal
+- Update to `signals_core` 4.4.0
+
+## 4.3.0
+
+- Add valueNotifierToSignal, valueListenableToSignal
+
+## 4.2.3
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/171
+- Update to `signals_core` 4.2.1
+
+## 4.2.2
+
+- Update to `signals_core` 4.2.0
+
+## 4.2.1
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/155.
+
+## 4.2.0
+
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/156.
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/162.
+ - Add onDispose callback for effect
+ - Fixing computed not updating on signal forced change
+
 ## 4.1.0
 
 - Fix bug in auto dispose where signal dispose causes cycle
