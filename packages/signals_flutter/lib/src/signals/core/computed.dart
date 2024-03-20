@@ -2,58 +2,91 @@ import 'package:flutter/material.dart';
 
 import '../../../signals_flutter.dart';
 
-final _store = <WeakReference<Element>, Map<int, Computed>>{};
-
-/// Create and watch a computed signal in a build method
+/// Create and watch a computed signal and rebuild on changes.
 ///
 /// ```dart
-/// class MyWidget extends ... {
+/// class State extends ... {
+///  late final count = createSignal(context, 0);
+///  late final isEven = createComputed(context, () => count().isEven);
+///  late final isOdd = createComputed(context, () => count().isOdd);
+///
 ///  @override
 ///  Widget build(BuildContext context) {
-///    final count = useSignal(context, 0);
-///    final isEven = useComputed(context, () => count.value % 2 == 0);
 ///    return Row(
 ///     children: [
 ///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
-///       Text('$count event=$isEven),
+///       Text('$count, even=$isEven, odd=$isOdd'),
 ///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
 ///    ],
 ///   );
 ///  }
 /// }
 /// ```
-Computed<T> useComputed<T>(
-  BuildContext context,
-  T Function() value, {
+Computed<T> createComputed<T, S extends StatefulWidget>(
+  State<S> widget,
+  T Function() compute, {
   String? debugLabel,
   SignalEquality<T>? equality,
+  bool autoDispose = false,
+  dynamic Function(Computed<T>)? onDispose,
 }) {
-  assert(context is Element);
-  final key = (value, debugLabel).hashCode;
-  final current = _store.entries.firstWhere(
-    (e) => e.key.target == context,
-    orElse: () => MapEntry(WeakReference(context as Element), {}),
+  final target = computed<T>(
+    compute,
+    debugLabel: debugLabel,
+    equality: equality,
+    autoDispose: autoDispose,
   );
-  final result = current.value.entries.firstWhere(
-    (e) => e.key == key,
-    orElse: () {
-      final s = computed<T>(
-        value,
-        debugLabel: debugLabel,
-        equality: equality,
-      );
-      s.subscribe((value) {
-        if (current.key.target != null && current.key.target!.mounted) {
-          current.key.target!.markNeedsBuild();
-        }
-      });
-      s.onDispose(() {
-        current.value.remove(key);
-      });
-      current.value[key] = s;
-      return MapEntry(key, s);
+  return bindComputed(
+    widget,
+    target,
+    debugLabel: debugLabel,
+    equality: equality,
+    autoDispose: autoDispose,
+    onDispose: onDispose,
+  );
+}
+
+/// Bind an existing computed to a widget.
+///
+/// ```dart
+/// class State extends ... {
+///  late final count = createSignal(context, 0);
+///  late final isEven = computed(() => count().isEven);
+///  late final even = bindComputed(context, isEven);
+///
+///  @override
+///  Widget build(BuildContext context) {
+///    return Row(
+///     children: [
+///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
+///       Text('$count, even=$even'),
+///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
+///    ],
+///   );
+///  }
+/// }
+/// ```
+Computed<T> bindComputed<T, S extends StatefulWidget>(
+  State<S> widget,
+  Computed<T> target, {
+  String? debugLabel,
+  SignalEquality<T>? equality,
+  bool autoDispose = false,
+  dynamic Function(Computed<T>)? onDispose,
+}) {
+  final label = '${target.globalId}|${target.debugLabel}';
+  final dispose = createEffect(
+    widget,
+    () {
+      target.value;
+      final context = widget.context;
+      if (context is Element && context.mounted && !context.dirty) {
+        context.markNeedsBuild();
+      }
     },
+    debugLabel: '$label=>createComputed=>effect',
+    onDispose: () => onDispose?.call(target),
   );
-  _store[current.key] = current.value;
-  return result.value as Computed<T>;
+  target.onDispose(dispose);
+  return target;
 }

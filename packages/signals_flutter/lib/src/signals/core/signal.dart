@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../signals_flutter.dart';
 
-final _store = <WeakReference<Element>, Map<int, Signal>>{};
-
-/// Create and watch a signal in a build method
+/// Create and watch a signal and rebuild on changes.
 ///
 /// ```dart
-/// class MyWidget extends ... {
+/// class State extends ... {
+///  late final count = createSignal(context, 0);
+///
 ///  @override
 ///  Widget build(BuildContext context) {
-///    final count = useSignal(context, 0);
 ///    return Row(
 ///     children: [
 ///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
@@ -21,58 +20,70 @@ final _store = <WeakReference<Element>, Map<int, Signal>>{};
 ///  }
 /// }
 /// ```
-///
-/// If you are defining multiple signals in a widget with the same type you
-/// need to give it a label to differentiate them:
-///
-/// ```dart
-/// class MyWidget extends ... {
-///  @override
-///  Widget build(BuildContext context) {
-///    final count = useSignal(context, 0);
-///    final count2 = useSignal(context, 0, debugLabel: 'count2');
-///    return Row(
-///     children: [
-///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
-///       Text(count.value.toString()),
-///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
-///    ],
-///   );
-///  }
-/// }
-/// ```
-Signal<T> useSignal<T>(
-  BuildContext context,
+Signal<T> createSignal<T, S extends StatefulWidget>(
+  State<S> widget,
   T value, {
   String? debugLabel,
   SignalEquality<T>? equality,
+  bool autoDispose = false,
+  dynamic Function(Signal<T>)? onDispose,
 }) {
-  assert(context is Element);
-  final key = (value, debugLabel).hashCode;
-  final current = _store.entries.firstWhere(
-    (e) => e.key.target == context,
-    orElse: () => MapEntry(WeakReference(context as Element), {}),
+  final target = signal<T>(
+    value,
+    debugLabel: debugLabel,
+    equality: equality,
+    autoDispose: autoDispose,
   );
-  final result = current.value.entries.firstWhere(
-    (e) => e.key == key,
-    orElse: () {
-      final s = signal<T>(
-        value,
-        debugLabel: debugLabel,
-        equality: equality,
-      );
-      s.subscribe((value) {
-        if (current.key.target != null && current.key.target!.mounted) {
-          current.key.target!.markNeedsBuild();
-        }
-      });
-      s.onDispose(() {
-        current.value.remove(key);
-      });
-      current.value[key] = s;
-      return MapEntry(key, s);
+  return bindSignal(
+    widget,
+    target,
+    debugLabel: debugLabel,
+    equality: equality,
+    autoDispose: autoDispose,
+    onDispose: onDispose,
+  );
+}
+
+/// Bind an existing signal to a widget.
+///
+/// ```dart
+/// class State extends ... {
+///  final source = signal(0);
+///  late final count = bindSignal(context, source);
+///
+///  @override
+///  Widget build(BuildContext context) {
+///    return Row(
+///     children: [
+///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
+///       Text(count.value.toString()),
+///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
+///    ],
+///   );
+///  }
+/// }
+/// ```
+Signal<T> bindSignal<T, S extends StatefulWidget>(
+  State<S> widget,
+  Signal<T> target, {
+  String? debugLabel,
+  SignalEquality<T>? equality,
+  bool autoDispose = false,
+  dynamic Function(Signal<T>)? onDispose,
+}) {
+  final label = '${target.globalId}|${target.debugLabel}';
+  final dispose = createEffect(
+    widget,
+    () {
+      target.value;
+      final context = widget.context;
+      if (context is Element && context.mounted && !context.dirty) {
+        context.markNeedsBuild();
+      }
     },
+    debugLabel: '$label=>createSignal=>effect',
+    onDispose: () => onDispose?.call(target),
   );
-  _store[current.key] = current.value;
-  return result.value as Signal<T>;
+  target.onDispose(dispose);
+  return target;
 }

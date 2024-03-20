@@ -2,46 +2,50 @@ import 'package:flutter/material.dart';
 
 import '../../../signals_flutter.dart';
 
-final _store = <WeakReference<Element>, EffectCleanup?>{};
-
-/// Create an effect callback in the build method
+/// Create an effect then watch signals and only call the callback with the widget is mounted.
 ///
 /// ```dart
-/// import 'package:signals/signals_flutter.dart';
+/// class State extends ... {
+///  final count = createSignal(context, 0);
 ///
-/// class Counter extends ... {
-/// ...
-///   @override
-///   Widget build(BuildContext context) {
-/// 	  const count = useSignal(context, 0);
-/// 	  const doubleValue = useComputed(context, () => count.value * 2);
+///  @override
+///  void initState() {
+///    super.initState();
+///    createEffect(this, () {
+///      print('count: ${_counter()}');
+///    });
+///  }
 ///
-/// 	  useSignalEffect(context, () => {
-/// 	  	console.log(`Value: ${count.value}, value x 2 = ${doubleValue.value}`);
-/// 	  });
-///
-///     return Button(
-///        onPressed: () => count.value++,
-///        child: Text('Value: $count, value x 2 = $doubleValue');
-///     );
-///   }
+///  @override
+///  Widget build(BuildContext context) {
+///    return Row(
+///     children: [
+///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
+///       Text('$count, even=$isEven, odd=$isOdd'),
+///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
+///    ],
+///   );
+///  }
 /// }
 /// ```
-EffectCleanup useSignalEffect<T>(
-  BuildContext context,
+void Function() createEffect<S extends StatefulWidget>(
+  State<S> widget,
   dynamic Function() callback, {
   String? debugLabel,
+  dynamic Function()? onDispose,
 }) {
-  assert(context is Element);
-  final current = _store.entries.firstWhere(
-    (e) => e.key.target == context,
-    orElse: () => MapEntry(WeakReference(context as Element), null),
-  );
-  return _store[current.key] ??= effect(
-    callback,
-    debugLabel: debugLabel,
-    onDispose: () {
-      _store.removeWhere((k, v) => k.target == context);
+  final dispose = effect(
+    () {
+      final context = widget.context;
+      if (context is Element && context.mounted) {
+        return callback();
+      }
     },
+    debugLabel: debugLabel,
+    onDispose: onDispose,
   );
+  if (widget is SignalsAutoDisposeMixin) {
+    (widget as SignalsAutoDisposeMixin).addEffectDisposeCallback(dispose);
+  }
+  return dispose;
 }
