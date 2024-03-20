@@ -6,9 +6,9 @@ import '../../../signals_flutter.dart';
 ///
 /// ```dart
 /// class State extends ... {
-///  late final count = createSignal(context, 0);
-///  late final isEven = createComputed(context, () => count().isEven);
-///  late final isOdd = createComputed(context, () => count().isOdd);
+///  late final count = createSignal(this, 0);
+///  late final isEven = createComputed(this, () => count().isEven);
+///  late final isOdd = createComputed(this, () => count().isOdd);
 ///
 ///  @override
 ///  Widget build(BuildContext context) {
@@ -50,9 +50,9 @@ Computed<T> createComputed<T, S extends StatefulWidget>(
 ///
 /// ```dart
 /// class State extends ... {
-///  late final count = createSignal(context, 0);
+///  late final count = createSignal(this, 0);
 ///  late final isEven = computed(() => count().isEven);
-///  late final even = bindComputed(context, isEven);
+///  late final even = bindComputed(this, isEven);
 ///
 ///  @override
 ///  Widget build(BuildContext context) {

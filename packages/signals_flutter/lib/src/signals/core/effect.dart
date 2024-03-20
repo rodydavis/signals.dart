@@ -6,7 +6,7 @@ import '../../../signals_flutter.dart';
 ///
 /// ```dart
 /// class State extends ... {
-///  final count = createSignal(context, 0);
+///  final count = createSignal(this, 0);
 ///
 ///  @override
 ///  void initState() {
