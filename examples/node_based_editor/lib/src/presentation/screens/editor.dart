@@ -17,6 +17,7 @@ import '../../generated/menus/pattern.dart';
 import '../../generated/menus/regex.dart';
 import '../../generated/menus/string.dart';
 import '../../generated/nodes/base_node.dart';
+import '../../generated/nodes/int/int_node.dart';
 import '../widgets/actions.dart';
 import '../widgets/connector_painter.dart';
 import '../widgets/menus.dart';
@@ -328,6 +329,22 @@ class _EditorState extends State<Editor> {
                         resetUiState();
                         nodes.clear();
                         save();
+                      },
+                    ),
+                    MenuEntry(
+                      label: 'Preload',
+                      onPressed: () async {
+                        var i = 0;
+                        batch(() {
+                          for (var r = 0; r < 10; r++) {
+                            for (var c = 0; c < 10; c++) {
+                              final node = IntNode.defaults(++i);
+                              node.getNode = getNode;
+                              node.offset.value = (dx: 200.0 * r, dy: 200.0 * c);
+                              nodes.add(node);
+                            }
+                          }
+                        });
                       },
                     ),
                   ],
