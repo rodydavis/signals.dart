@@ -10,3 +10,4 @@ export 'src/signals/core/signal.dart';
 export 'src/signals/core/computed.dart';
 export 'src/signals/core/effect.dart';
 export 'src/signals/core/mixin.dart';
+export 'src/signals/flutter/ticker.dart';
