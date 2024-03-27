@@ -4,38 +4,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
-  testWidgets('Watch', (tester) async {
+  testWidgets('createComputed', (tester) async {
     const widget = _SignalWidget();
     expect(_SignalWidgetState.rebuildCount, 0);
-    expect(_SignalWidgetState.watchCount, 0);
 
     await tester.pumpWidget(widget);
     expect(_SignalWidgetState.rebuildCount, 1);
-    expect(_SignalWidgetState.watchCount, 1);
-    expect(find.text('Count: 0|1'), findsOneWidget);
+    expect(find.text('Brightness: light'), findsOneWidget);
+    expect(find.text('Count: 0'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-    expect(find.text('Count: 1|1'), findsOneWidget);
-    expect(_SignalWidgetState.rebuildCount, 1);
-    expect(_SignalWidgetState.watchCount, 2);
+    await tester.pumpAndSettle();
+    expect(_SignalWidgetState.rebuildCount, 2);
+    expect(find.text('Count: 1'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-    expect(find.text('Count: 2|1'), findsOneWidget);
-    expect(_SignalWidgetState.rebuildCount, 1);
-    expect(_SignalWidgetState.watchCount, 3);
+    await tester.pumpAndSettle();
+    expect(_SignalWidgetState.rebuildCount, 3);
+    expect(find.text('Count: 2'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.brightness_auto));
     await tester.pumpAndSettle();
-    expect(find.text('Count: 2|0'), findsOneWidget);
-    expect(_SignalWidgetState.rebuildCount, 2);
-    expect(_SignalWidgetState.watchCount, 6);
+    expect(_SignalWidgetState.rebuildCount, 4);
+    expect(find.text('Brightness: dark'), findsOneWidget);
   });
 }
 
 class _SignalWidget extends StatefulWidget {
   const _SignalWidget();
+
+  static final labelKey = UniqueKey();
 
   @override
   State<_SignalWidget> createState() => _SignalWidgetState();
@@ -43,17 +41,16 @@ class _SignalWidget extends StatefulWidget {
 
 class _SignalWidgetState extends State<_SignalWidget> {
   static int rebuildCount = 0;
-  static int watchCount = 0;
-  final counter = signal(0);
-  final dark = signal(false);
+  late final counter = createSignal(this, 0);
+  late final count = createComputed(this, () => counter());
+  late final dark = createSignal(this, false);
 
   @override
   Widget build(BuildContext context) {
     rebuildCount++;
-    final isDark = dark.watch(context);
     return MaterialApp(
       theme: ThemeData(
-        brightness: isDark ? Brightness.dark : Brightness.light,
+        brightness: dark() ? Brightness.dark : Brightness.light,
       ),
       home: Scaffold(
         appBar: AppBar(
@@ -65,11 +62,22 @@ class _SignalWidgetState extends State<_SignalWidget> {
             ),
           ],
         ),
-        body: Watch((context) {
-          watchCount++;
-          final theme = Theme.of(context).brightness;
-          return Text('Count: $counter|${theme.index}');
-        }),
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Count: $count',
+              key: _SignalWidget.labelKey,
+            ),
+            Builder(builder: (context) {
+              final theme = Theme.of(context).brightness;
+              return Text(
+                'Brightness: ${theme.name}',
+                key: _SignalWidget.labelKey,
+              );
+            }),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => counter.value++,
           tooltip: 'Increment',
