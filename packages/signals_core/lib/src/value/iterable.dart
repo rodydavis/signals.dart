@@ -1,13 +1,11 @@
 import '../core/signals.dart';
 
 /// A [Signal] that holds a [Iterable].
-class IterableSignal<E> extends ValueSignal<Iterable<E>>
-    implements Iterable<E> {
+class IterableSignal<E> extends Signal<Iterable<E>> implements Iterable<E> {
   /// Creates a [IterableSignal] with the given [value].
   IterableSignal(
     super.value, {
     super.debugLabel,
-    super.equality,
     super.autoDispose,
   });
 
@@ -62,7 +60,7 @@ class IterableSignal<E> extends ValueSignal<Iterable<E>>
   @override
   void forEach(void Function(E element) action) {
     value.forEach(action);
-    forceUpdate(value);
+    set(value, force: true);
   }
 
   @override
@@ -154,13 +152,11 @@ IterableSignal<T> iterableSignal<T>(
   Iterable<T> iterable, {
   String? debugLabel,
   bool autoDispose = false,
-  SignalEquality<Iterable<T>>? equality,
 }) {
   return IterableSignal<T>(
     iterable,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
-    equality: equality,
   );
 }
 
@@ -170,13 +166,11 @@ extension SignalIterableUtils<T> on Iterable<T> {
   IterableSignal<T> toSignal({
     String? debugLabel,
     bool autoDispose = false,
-    SignalEquality<Iterable<T>>? equality,
   }) {
     return IterableSignal<T>(
       this,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
-      equality: equality,
     );
   }
 }

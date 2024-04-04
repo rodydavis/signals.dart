@@ -1,26 +1,24 @@
 import '../core/signals.dart';
 import 'future.dart';
-import 'state.dart';
 
 /// Async Computed is syntax sugar around [FutureSignal].
-/// 
+///
 /// _Inspired by [computedFrom](https://ngxtension.netlify.app/utilities/signals/computed-from/) from Angular NgExtension._
-/// 
+///
 /// computedFrom takes a list of [signals] and a [callback] function to
 /// compute the value of the signal every time one of the [signals] changes.
-/// 
+///
 /// ```dart
 /// final movieId = signal('id');
 /// late final movie = computedFrom(args, ([movieId]) => fetchMovie(args.first));
 /// ```
-/// 
+///
 /// Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
 FutureSignal<T> computedFrom<T, A>(
   List<ReadonlySignal<A>> signals,
   Future<T> Function(List<A> args) callback, {
   T? initialValue,
   String? debugLabel,
-  SignalEquality<AsyncState<T>>? equality,
   bool autoDispose = false,
   bool lazy = true,
 }) {
@@ -29,7 +27,6 @@ FutureSignal<T> computedFrom<T, A>(
     dependencies: signals,
     initialValue: initialValue,
     debugLabel: debugLabel,
-    equality: equality,
     autoDispose: autoDispose,
     lazy: lazy,
   );
@@ -54,7 +51,6 @@ FutureSignal<T> computedAsync<T>(
   Future<T> Function() callback, {
   T? initialValue,
   String? debugLabel,
-  SignalEquality<AsyncState<T>>? equality,
   bool autoDispose = false,
   List<ReadonlySignal<dynamic>> dependencies = const [],
   bool lazy = true,
@@ -64,7 +60,6 @@ FutureSignal<T> computedAsync<T>(
     dependencies: dependencies,
     initialValue: initialValue,
     debugLabel: debugLabel,
-    equality: equality,
     autoDispose: autoDispose,
     lazy: lazy,
   );

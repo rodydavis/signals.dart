@@ -1,4 +1,3 @@
-import '../async/state.dart';
 import '../async/stream.dart';
 import '../core/signals.dart';
 
@@ -23,7 +22,6 @@ extension SignalStreamUtils<T> on Stream<T> {
     T? initialValue,
     bool autoDispose = false,
     bool lazy = true,
-    SignalEquality<AsyncState<T>>? equality,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     void Function()? onDone,
   }) {
@@ -34,7 +32,6 @@ extension SignalStreamUtils<T> on Stream<T> {
       initialValue: initialValue,
       autoDispose: autoDispose,
       lazy: lazy,
-      equality: equality,
       dependencies: dependencies,
       onDone: onDone,
     );

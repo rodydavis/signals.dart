@@ -2,49 +2,49 @@ part of 'signals.dart';
 
 /// {@template computed}
 /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
-/// 
+///
 /// > `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
-/// 
+///
 /// ```dart
 /// import 'package:signals/signals.dart';
-/// 
+///
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
-/// 
+///
 /// final fullName = computed(() => name.value + " " + surname.value);
-/// 
+///
 /// // Logs: "Jane Doe"
 /// print(fullName.value);
-/// 
+///
 /// // Updates flow through computed, but only if someone
 /// // subscribes to it. More on that later.
 /// name.value = "John";
 /// // Logs: "John Doe"
 /// print(fullName.value);
 /// ```
-/// 
+///
 /// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
-/// 
+///
 /// > Computed signals are both lazily evaluated and memoized
-/// 
+///
 /// ## Force Re-evaluation
-/// 
+///
 /// You can force a computed signal to re-evaluate by calling its `.recompute` method. This will re-run the computed callback and update the computed signal's value.
-/// 
+///
 /// ```dart
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
 /// final fullName = computed(() => name.value + " " + surname.value);
-/// 
+///
 /// fullName.recompute(); // Re-runs the computed callback
 /// ```
-/// 
+///
 /// ## Disposing
-/// 
+///
 /// ### Auto Dispose
-/// 
+///
 /// If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0, autoDispose: true);
 /// s.onDispose(() => print('Signal destroyed'));
@@ -53,11 +53,11 @@ part of 'signals.dart';
 /// final value = s.value; // 0
 /// // prints: Signal destroyed
 /// ```
-/// 
+///
 /// A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
-/// 
+///
 /// This means that it will no longer react to changes in its dependencies.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0);
 /// s.dispose();
@@ -65,88 +65,72 @@ part of 'signals.dart';
 /// final b = computed(() => s.value); // 0
 /// // b will not react to changes in s
 /// ```
-/// 
+///
 /// You can check if a signal is disposed by calling the `.disposed` method.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0);
 /// print(s.disposed); // false
 /// s.dispose();
 /// print(s.disposed); // true
 /// ```
-/// 
+///
 /// ### On Dispose Callback
-/// 
+///
 /// You can attach a callback to a signal that will be called when the signal is destroyed.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0);
 /// s.onDispose(() => print('Signal destroyed'));
 /// s.dispose();
 /// ```
-/// 
+///
 /// ## Testing
-/// 
+///
 /// Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
-/// 
+///
 /// ```dart
 /// test('test as stream', () {
 ///     final a = signal(0);
 ///     final s = computed(() => a());
 ///     final stream = s.toStream();
-/// 
+///
 ///     a.value = 1;
 ///     a.value = 2;
 ///     a.value = 3;
-/// 
+///
 ///     expect(stream, emitsInOrder([0, 1, 2, 3]));
 /// });
 /// ```
-/// 
+///
 /// `emitsInOrder` is a matcher that will check if the stream emits the values in the correct order which in this case is each value after a signal is updated.
-/// 
+///
 /// You can also override the initial value of a computed signal when testing. This is is useful for mocking and testing specific value implementations.
-/// 
+///
 /// ```dart
 /// test('test with override', () {
 ///     final a = signal(0);
 ///     final s = computed(() => a()).overrideWith(-1);
-/// 
+///
 ///     final stream = s.toStream();
-/// 
+///
 ///     a.value = 1;
 ///     a.value = 2;
 ///     a.value = 2; // check if skipped
 ///     a.value = 3;
-/// 
+///
 ///     expect(stream, emitsInOrder([-1, 1, 2, 3]));
 /// });
 /// ```
-/// 
+///
 /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
 /// @link https://dartsignals.dev/dart/core/computed
 /// {@endtemplate}
-abstract class Computed<T>
-    implements ReadonlySignal<T>, TrackedReadonlySignal<T> {
-  Iterable<ReadonlySignal> get _allSources;
-
-  @override
-  Iterable<_Listenable> get _allTargets;
-
-  /// Call the computed function and return the value
-  void recompute();
-
-  void _reset(T? value);
-
-  /// Override the current value with a new value
-  Computed<T> overrideWith(T value) {
-    this._reset(value);
-    return this;
-  }
-}
-
-class _Computed<T> extends Computed<T> implements _Listenable {
+class Computed<T> implements ReadonlySignal<T>, _Listenable {
   final ComputedCallback<T> _compute;
+
+  late T _initialValue;
+  T? _previousValue;
 
   @override
   final bool autoDispose;
@@ -170,9 +154,7 @@ class _Computed<T> extends Computed<T> implements _Listenable {
 
   Object? _error;
 
-  late T _value, _previousValue, _initialValue;
-
-  final SignalEquality<T>? equality;
+  late T _value;
 
   @override
   bool operator ==(Object other) {
@@ -187,7 +169,6 @@ class _Computed<T> extends Computed<T> implements _Listenable {
     ]);
   }
 
-  @override
   Iterable<ReadonlySignal> get _allSources sync* {
     _Node? root = _sources;
     for (var node = root; node != null; node = node._nextSource) {
@@ -203,10 +184,135 @@ class _Computed<T> extends Computed<T> implements _Listenable {
     }
   }
 
-  _Computed(
+  /// {@template computed}
+  /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
+  ///
+  /// > `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final name = signal("Jane");
+  /// final surname = signal("Doe");
+  ///
+  /// final fullName = computed(() => name.value + " " + surname.value);
+  ///
+  /// // Logs: "Jane Doe"
+  /// print(fullName.value);
+  ///
+  /// // Updates flow through computed, but only if someone
+  /// // subscribes to it. More on that later.
+  /// name.value = "John";
+  /// // Logs: "John Doe"
+  /// print(fullName.value);
+  /// ```
+  ///
+  /// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
+  ///
+  /// > Computed signals are both lazily evaluated and memoized
+  ///
+  /// ## Force Re-evaluation
+  ///
+  /// You can force a computed signal to re-evaluate by calling its `.recompute` method. This will re-run the computed callback and update the computed signal's value.
+  ///
+  /// ```dart
+  /// final name = signal("Jane");
+  /// final surname = signal("Doe");
+  /// final fullName = computed(() => name.value + " " + surname.value);
+  ///
+  /// fullName.recompute(); // Re-runs the computed callback
+  /// ```
+  ///
+  /// ## Disposing
+  ///
+  /// ### Auto Dispose
+  ///
+  /// If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
+  ///
+  /// ```dart
+  /// final s = computed(() => 0, autoDispose: true);
+  /// s.onDispose(() => print('Signal destroyed'));
+  /// final dispose = s.subscribe((_) {});
+  /// dispose();
+  /// final value = s.value; // 0
+  /// // prints: Signal destroyed
+  /// ```
+  ///
+  /// A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
+  ///
+  /// This means that it will no longer react to changes in its dependencies.
+  ///
+  /// ```dart
+  /// final s = computed(() => 0);
+  /// s.dispose();
+  /// final value = s.value; // 0
+  /// final b = computed(() => s.value); // 0
+  /// // b will not react to changes in s
+  /// ```
+  ///
+  /// You can check if a signal is disposed by calling the `.disposed` method.
+  ///
+  /// ```dart
+  /// final s = computed(() => 0);
+  /// print(s.disposed); // false
+  /// s.dispose();
+  /// print(s.disposed); // true
+  /// ```
+  ///
+  /// ### On Dispose Callback
+  ///
+  /// You can attach a callback to a signal that will be called when the signal is destroyed.
+  ///
+  /// ```dart
+  /// final s = computed(() => 0);
+  /// s.onDispose(() => print('Signal destroyed'));
+  /// s.dispose();
+  /// ```
+  ///
+  /// ## Testing
+  ///
+  /// Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
+  ///
+  /// ```dart
+  /// test('test as stream', () {
+  ///     final a = signal(0);
+  ///     final s = computed(() => a());
+  ///     final stream = s.toStream();
+  ///
+  ///     a.value = 1;
+  ///     a.value = 2;
+  ///     a.value = 3;
+  ///
+  ///     expect(stream, emitsInOrder([0, 1, 2, 3]));
+  /// });
+  /// ```
+  ///
+  /// `emitsInOrder` is a matcher that will check if the stream emits the values in the correct order which in this case is each value after a signal is updated.
+  ///
+  /// You can also override the initial value of a computed signal when testing. This is is useful for mocking and testing specific value implementations.
+  ///
+  /// ```dart
+  /// test('test with override', () {
+  ///     final a = signal(0);
+  ///     final s = computed(() => a()).overrideWith(-1);
+  ///
+  ///     final stream = s.toStream();
+  ///
+  ///     a.value = 1;
+  ///     a.value = 2;
+  ///     a.value = 2; // check if skipped
+  ///     a.value = 3;
+  ///
+  ///     expect(stream, emitsInOrder([-1, 1, 2, 3]));
+  /// });
+  /// ```
+  ///
+  /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
+  /// @link https://dartsignals.dev/dart/core/computed
+  /// {@endtemplate}
+  Computed(
     ComputedCallback<T> compute, {
     this.debugLabel,
-    this.equality,
     this.autoDispose = false,
   })  : _compute = compute,
         _version = 0,
@@ -215,6 +321,11 @@ class _Computed<T> extends Computed<T> implements _Listenable {
         brand = identifier,
         globalId = ++_lastGlobalId {
     _onComputedCreated(this);
+  }
+
+  Computed<T> overrideWith(T value) {
+    this._reset(value);
+    return this;
   }
 
   @override
@@ -252,15 +363,13 @@ class _Computed<T> extends Computed<T> implements _Listenable {
       _prepareSources(this);
       _evalContext = this;
       final value = _compute();
-      final equality = this.equality ?? ((a, b) => a == b);
       if ((this._flags & HAS_ERROR) != 0 || needsUpdate || _version == 0) {
-        if (_version == 0) {
-          _previousValue = value;
-          _initialValue = value;
-        } else {
-          _previousValue = _value;
-        }
-        if (_version == 0 || !equality(_value, value)) {
+        if (_version == 0 || value != _value) {
+          if (_version == 0) {
+            _initialValue = value;
+          } else {
+            _previousValue = _value;
+          }
           _value = value;
           _onComputedUpdated(this, this._value);
           _flags &= ~HAS_ERROR;
@@ -289,14 +398,14 @@ class _Computed<T> extends Computed<T> implements _Listenable {
         node._source._subscribe(node);
       }
     }
-    _SignalBase.__subscribe(this, node);
+    Signal.__subscribe(this, node);
   }
 
   @override
   void _unsubscribe(_Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (_targets != null) {
-      _SignalBase.__unsubscribe(this, node);
+      Signal.__unsubscribe(this, node);
 
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
@@ -313,11 +422,11 @@ class _Computed<T> extends Computed<T> implements _Listenable {
     }
   }
 
-  @override
+  /// Call the computed function and update the value
   void recompute() {
-    this.value;
+    value;
     _previousValue = _value;
-    this._value = _compute();
+    _value = _compute();
   }
 
   @override
@@ -349,7 +458,7 @@ class _Computed<T> extends Computed<T> implements _Listenable {
   T get value {
     if (disposed) {
       print(
-          'computed warning: [$globalId|$debugLabel] has been read after disposed');
+          'computed warning: [$globalId|$debugLabel] has been read after disposed: ${StackTrace.current}');
       return this._value;
     }
 
@@ -366,9 +475,6 @@ class _Computed<T> extends Computed<T> implements _Listenable {
     }
     return this._value;
   }
-
-  @override
-  T get previousValue => this._previousValue;
 
   @override
   T call() => this.value;
@@ -392,7 +498,7 @@ class _Computed<T> extends Computed<T> implements _Listenable {
 
   @override
   EffectCleanup subscribe(void Function(T value) fn) {
-    return _SignalBase.__signalSubscribe(this, fn);
+    return Signal.__signalSubscribe(this, fn);
   }
 
   final _disposeCallbacks = <void Function()>{};
@@ -417,15 +523,23 @@ class _Computed<T> extends Computed<T> implements _Listenable {
     disposed = true;
   }
 
-  @override
-  T get initialValue => _initialValue;
-
-  @override
   void _reset(T? value) {
     _refresh();
-    _value = value ?? _initialValue;
-    _previousValue = value ?? _initialValue;
+    if (value != null) {
+      _value = value;
+      _initialValue = value;
+      _previousValue = null;
+    }
   }
+
+  /// Value that the signal was created with
+  T get initialValue => _initialValue;
+
+  /// Previous value that was set before the current
+  T? get previousValue => _previousValue;
+
+  /// Returns a readonly signal
+  ReadonlySignal<T> readonly() => this;
 }
 
 /// A callback that is executed inside a computed.
@@ -433,49 +547,49 @@ typedef ComputedCallback<T> = T Function();
 
 /// {@template computed}
 /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
-/// 
+///
 /// > `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
-/// 
+///
 /// ```dart
 /// import 'package:signals/signals.dart';
-/// 
+///
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
-/// 
+///
 /// final fullName = computed(() => name.value + " " + surname.value);
-/// 
+///
 /// // Logs: "Jane Doe"
 /// print(fullName.value);
-/// 
+///
 /// // Updates flow through computed, but only if someone
 /// // subscribes to it. More on that later.
 /// name.value = "John";
 /// // Logs: "John Doe"
 /// print(fullName.value);
 /// ```
-/// 
+///
 /// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
-/// 
+///
 /// > Computed signals are both lazily evaluated and memoized
-/// 
+///
 /// ## Force Re-evaluation
-/// 
+///
 /// You can force a computed signal to re-evaluate by calling its `.recompute` method. This will re-run the computed callback and update the computed signal's value.
-/// 
+///
 /// ```dart
 /// final name = signal("Jane");
 /// final surname = signal("Doe");
 /// final fullName = computed(() => name.value + " " + surname.value);
-/// 
+///
 /// fullName.recompute(); // Re-runs the computed callback
 /// ```
-/// 
+///
 /// ## Disposing
-/// 
+///
 /// ### Auto Dispose
-/// 
+///
 /// If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0, autoDispose: true);
 /// s.onDispose(() => print('Signal destroyed'));
@@ -484,11 +598,11 @@ typedef ComputedCallback<T> = T Function();
 /// final value = s.value; // 0
 /// // prints: Signal destroyed
 /// ```
-/// 
+///
 /// A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
-/// 
+///
 /// This means that it will no longer react to changes in its dependencies.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0);
 /// s.dispose();
@@ -496,77 +610,75 @@ typedef ComputedCallback<T> = T Function();
 /// final b = computed(() => s.value); // 0
 /// // b will not react to changes in s
 /// ```
-/// 
+///
 /// You can check if a signal is disposed by calling the `.disposed` method.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0);
 /// print(s.disposed); // false
 /// s.dispose();
 /// print(s.disposed); // true
 /// ```
-/// 
+///
 /// ### On Dispose Callback
-/// 
+///
 /// You can attach a callback to a signal that will be called when the signal is destroyed.
-/// 
+///
 /// ```dart
 /// final s = computed(() => 0);
 /// s.onDispose(() => print('Signal destroyed'));
 /// s.dispose();
 /// ```
-/// 
+///
 /// ## Testing
-/// 
+///
 /// Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
-/// 
+///
 /// ```dart
 /// test('test as stream', () {
 ///     final a = signal(0);
 ///     final s = computed(() => a());
 ///     final stream = s.toStream();
-/// 
+///
 ///     a.value = 1;
 ///     a.value = 2;
 ///     a.value = 3;
-/// 
+///
 ///     expect(stream, emitsInOrder([0, 1, 2, 3]));
 /// });
 /// ```
-/// 
+///
 /// `emitsInOrder` is a matcher that will check if the stream emits the values in the correct order which in this case is each value after a signal is updated.
-/// 
+///
 /// You can also override the initial value of a computed signal when testing. This is is useful for mocking and testing specific value implementations.
-/// 
+///
 /// ```dart
 /// test('test with override', () {
 ///     final a = signal(0);
 ///     final s = computed(() => a()).overrideWith(-1);
-/// 
+///
 ///     final stream = s.toStream();
-/// 
+///
 ///     a.value = 1;
 ///     a.value = 2;
 ///     a.value = 2; // check if skipped
 ///     a.value = 3;
-/// 
+///
 ///     expect(stream, emitsInOrder([-1, 1, 2, 3]));
 /// });
 /// ```
-/// 
+///
 /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
 /// @link https://dartsignals.dev/dart/core/computed
 /// {@endtemplate}
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
   String? debugLabel,
-  SignalEquality<T>? equality,
   bool autoDispose = false,
 }) {
-  return _Computed<T>(
+  return Computed<T>(
     compute,
     debugLabel: debugLabel,
-    equality: equality,
     autoDispose: autoDispose,
   );
 }

@@ -15,7 +15,7 @@ import '../core/signals.dart';
 /// s.redo();
 /// print(s.value); // 3
 /// ```
-class ChangeStackSignal<T> extends ValueSignal<T> {
+class ChangeStackSignal<T> extends Signal<T> {
   /// Change stack signal that can be used to call undo/redo on a value.
   ///
   /// ```dart
@@ -31,10 +31,9 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   /// ```
   ChangeStackSignal(
     super.value, {
-    super.debugLabel,
     this.limit,
+    super.debugLabel,
     super.autoDispose,
-    super.equality,
   });
 
   /// Max values to keep in history
@@ -63,14 +62,14 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
     );
     _undo.addLast(change);
     _moveForward();
-    forceUpdate(val);
+    set(val, force: true);
   }
 
   /// Redo Previous Undo
   void redo() {
     if (!canRedo) return;
     final change = _redo.removeFirst();
-    forceUpdate(change.value);
+    set(change.value, force: true);
     _undo.addLast(change);
   }
 
@@ -78,7 +77,7 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   void undo() {
     if (!canUndo) return;
     final change = _undo.removeLast();
-    forceUpdate(change.previousValue);
+    set(change.previousValue, force: true);
     _redo.addFirst(change);
   }
 
@@ -131,13 +130,11 @@ ChangeStackSignal<T> changeStack<T>(
   String? debugLabel,
   int? limit,
   bool autoDispose = false,
-  SignalEquality<T>? equality,
 }) {
   return ChangeStackSignal<T>(
     value,
     debugLabel: debugLabel,
     limit: limit,
     autoDispose: autoDispose,
-    equality: equality,
   );
 }

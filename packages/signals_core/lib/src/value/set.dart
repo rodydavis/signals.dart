@@ -1,12 +1,11 @@
 import '../core/signals.dart';
 
 /// A [Signal] that holds a [Set].
-class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
+class SetSignal<E> extends Signal<Set<E>> implements Set<E> {
   /// Creates a [SetSignal] with the given [value].
   SetSignal(
     super.value, {
     super.debugLabel,
-    super.equality,
     super.autoDispose,
   });
 
@@ -14,7 +13,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   bool add(E value) {
     final list = this.value;
     final result = list.add(value);
-    forceUpdate(list);
+    set(list, force: true);
     return result;
   }
 
@@ -22,7 +21,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   void addAll(Iterable<E> elements) {
     final list = value;
     list.addAll(elements);
-    forceUpdate(list);
+    set(list, force: true);
   }
 
   @override
@@ -36,7 +35,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   }
 
   @override
-  void clear() => forceUpdate({});
+  void clear() => set({}, force: true);
 
   @override
   bool contains(Object? value) {
@@ -90,7 +89,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   void forEach(void Function(E element) action) {
     final list = value;
     list.forEach(action);
-    forceUpdate(list);
+    set(list, force: true);
   }
 
   @override
@@ -127,7 +126,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   SetSignal<E> operator <<(Set<E> other) {
     final list = value;
     list.addAll(other);
-    forceUpdate(list);
+    set(list, force: true);
     return SetSignal(list);
   }
 
@@ -164,7 +163,7 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   bool remove(Object? value) {
     final list = this.value;
     final result = list.remove(value);
-    forceUpdate(list);
+    set(list, force: true);
     return result;
   }
 
@@ -172,28 +171,28 @@ class SetSignal<E> extends ValueSignal<Set<E>> implements Set<E> {
   void removeAll(Iterable<Object?> elements) {
     final list = value;
     list.removeAll(elements);
-    forceUpdate(list);
+    set(list, force: true);
   }
 
   @override
   void removeWhere(bool Function(E element) test) {
     final list = value;
     list.removeWhere(test);
-    forceUpdate(list);
+    set(list, force: true);
   }
 
   @override
   void retainAll(Iterable<Object?> elements) {
     final list = value;
     list.retainAll(elements);
-    forceUpdate(list);
+    set(list, force: true);
   }
 
   @override
   void retainWhere(bool Function(E element) test) {
     final list = value;
     list.retainWhere(test);
-    forceUpdate(list);
+    set(list, force: true);
   }
 
   @override
@@ -269,13 +268,11 @@ SetSignal<T> setSignal<T>(
   Set<T> list, {
   String? debugLabel,
   bool autoDispose = false,
-  SignalEquality<Set<T>>? equality,
 }) {
   return SetSignal<T>(
     list,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
-    equality: equality,
   );
 }
 
@@ -285,13 +282,11 @@ extension SignalSetUtils<T> on Set<T> {
   SetSignal<T> toSignal({
     String? debugLabel,
     bool autoDispose = false,
-    SignalEquality<Set<T>>? equality,
   }) {
     return SetSignal(
       this,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
-      equality: equality,
     );
   }
 }

@@ -152,8 +152,6 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   void reassemble() {
     super.reassemble();
     reloadSignalsDevTools();
-    child = null;
-    rebuild();
   }
 
   @override

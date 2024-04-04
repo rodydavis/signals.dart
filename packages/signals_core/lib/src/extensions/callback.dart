@@ -15,12 +15,10 @@ extension SignalsCallbackFunctionUtils<T> on SignalsCallbackFunction<T> {
     T initialValue, {
     bool autoDispose = false,
     String? debugLabel,
-    SignalEquality<T>? equality,
   }) {
     final s = signal<T>(
       initialValue,
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
     this(s.set);

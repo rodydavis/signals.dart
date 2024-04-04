@@ -5,13 +5,11 @@ extension SignalObjectUtils<T extends Object> on T {
   /// Convert an existing Object to [Signal<T>]
   Signal<T> toSignal({
     String? debugLabel,
-    SignalEquality<T>? equality,
     bool autoDispose = false,
   }) {
     return signal<T>(
       this,
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }
@@ -22,13 +20,11 @@ extension SignalOptionalObjectUtils<T extends Object> on T? {
   /// Convert an existing nullable Object to [Signal<T?>]
   Signal<T?> toSignal({
     String? debugLabel,
-    SignalEquality<T?>? equality,
     bool autoDispose = false,
   }) {
     return signal<T?>(
       this,
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }

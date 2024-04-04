@@ -6,18 +6,18 @@ void main() {
     for (final instance in <(String, SetSignal<String> Function(Set<String>))>[
       ('Extension', (list) => list._extension()),
       ('Extension (autoDispose)', (list) => list._extension(autoDispose: true)),
-      ('Extension (equality)', (list) => list._extension(equality: identical)),
+      ('Extension (equality)', (list) => list._extension()),
       (
         'Extension (debugLabel)',
         (list) => list._extension(debugLabel: 'Set: $list')
       ),
       ('Method', (list) => list._method()),
       ('Method (autoDispose)', (list) => list._method(autoDispose: true)),
-      ('Method (equality)', (list) => list._method(equality: identical)),
+      ('Method (equality)', (list) => list._method()),
       ('Method (debugLabel)', (list) => list._method(debugLabel: 'Set: $list')),
       ('Class', (list) => list._class()),
       ('Class (autoDispose)', (list) => list._class(autoDispose: true)),
-      ('Class (equality)', (list) => list._class(equality: identical)),
+      ('Class (equality)', (list) => list._class()),
       ('Class (debugLabel)', (list) => list._class(debugLabel: 'Set: $list')),
     ]) {
       group('${instance.$1} ${instance.$2.runtimeType}', () {
@@ -69,44 +69,59 @@ void main() {
         expect(s.disposed, false);
       });
     });
+
+    test('setSignal keeps initial value', () {
+      final a = setSignal<int>({});
+      expect(a.initialValue, equals(Set.of({})));
+
+      a.value = {0};
+      a.value = {0, 1};
+
+      expect(a.initialValue, equals(Set.of({})));
+    });
+
+    test('setSignal keeps previous value', () {
+      final a = setSignal<int>({});
+      expect(a.previousValue, equals(null));
+
+      a.value = {0};
+      expect(a.previousValue, equals(Set.of({})));
+
+      a.value = {0, 1};
+      expect(a.previousValue, equals(Set.of({0})));
+    });
   });
 }
 
 extension on Set<String> {
   SetSignal<String> _class({
     String? debugLabel,
-    bool Function(Set<String>, Set<String>)? equality,
     bool autoDispose = false,
   }) {
     return SetSignal<String>(
       this,
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }
 
   SetSignal<String> _extension({
     String? debugLabel,
-    bool Function(Set<String>, Set<String>)? equality,
     bool autoDispose = false,
   }) {
     return toSignal(
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }
 
   SetSignal<String> _method({
     String? debugLabel,
-    bool Function(Set<String>, Set<String>)? equality,
     bool autoDispose = false,
   }) {
     return setSignal<String>(
       this,
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }

@@ -21,6 +21,10 @@ export default defineConfig({
           ],
         },
         {
+          label: "Guides",
+          autogenerate: { directory: "guides" },
+        },
+        {
           label: "Dart",
           items: [
             {
@@ -45,10 +49,7 @@ export default defineConfig({
           label: "Flutter",
           autogenerate: { directory: "flutter" },
         },
-        {
-          label: "Guides",
-          autogenerate: { directory: "guides" },
-        },
+
         { label: "Examples", link: "examples" },
       ],
     }),

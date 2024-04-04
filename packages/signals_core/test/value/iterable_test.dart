@@ -7,18 +7,18 @@ void main() {
     for (final instance in [
       ('Extension', list._extension()),
       ('Extension (autoDispose)', list._extension(autoDispose: true)),
-      ('Extension (equality)', list._extension(equality: identical)),
+      ('Extension (equality)', list._extension()),
       (
         'Extension (debugLabel)',
         list._extension(debugLabel: 'Iterable: $list')
       ),
       ('Method', list._method()),
       ('Method (autoDispose)', list._method(autoDispose: true)),
-      ('Method (equality)', list._method(equality: identical)),
+      ('Method (equality)', list._method()),
       ('Method (debugLabel)', list._method(debugLabel: 'Iterable: $list')),
       ('Class', list._class()),
       ('Class (autoDispose)', list._class(autoDispose: true)),
-      ('Class (equality)', list._class(equality: identical)),
+      ('Class (equality)', list._class()),
       ('Class (debugLabel)', list._class(debugLabel: 'Iterable: $list')),
     ]) {
       group('${instance.$1} ${instance.$2.runtimeType}', () {
@@ -52,38 +52,32 @@ void main() {
 extension on Iterable<String> {
   IterableSignal<String> _class({
     String? debugLabel,
-    bool Function(Iterable<String>, Iterable<String>)? equality,
     bool autoDispose = false,
   }) {
     return IterableSignal<String>(
       this,
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }
 
   IterableSignal<String> _extension({
     String? debugLabel,
-    bool Function(Iterable<String>, Iterable<String>)? equality,
     bool autoDispose = false,
   }) {
     return toSignal(
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }
 
   IterableSignal<String> _method({
     String? debugLabel,
-    bool Function(Iterable<String>, Iterable<String>)? equality,
     bool autoDispose = false,
   }) {
     return iterableSignal<String>(
       this,
       debugLabel: debugLabel,
-      equality: equality,
       autoDispose: autoDispose,
     );
   }
