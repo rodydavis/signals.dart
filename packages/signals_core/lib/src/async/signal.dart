@@ -189,29 +189,37 @@ class AsyncSignal<T> extends Signal<AsyncState<T>> {
 
   /// Set the error with optional stackTrace to [AsyncError]
   void setError(Object error, [StackTrace? stackTrace]) {
-    value = AsyncState.error(error, stackTrace);
-    if (_completer.isCompleted) _completer = Completer<bool>();
-    _completer.complete(true);
+    batch(() {
+      value = AsyncState.error(error, stackTrace);
+      if (_completer.isCompleted) _completer = Completer<bool>();
+      _completer.complete(true);
+    });
   }
 
   /// Set the value to [AsyncData]
   void setValue(T value) {
-    this.value = AsyncState.data(value);
-    if (_completer.isCompleted) _completer = Completer<bool>();
-    _completer.complete(true);
+    batch(() {
+      this.value = AsyncState.data(value);
+      if (_completer.isCompleted) _completer = Completer<bool>();
+      _completer.complete(true);
+    });
   }
 
   /// Set the loading state to [AsyncLoading]
   void setLoading([AsyncState<T>? state]) {
-    value = state ?? AsyncState.loading();
-    _completer = Completer<bool>();
+    batch(() {
+      value = state ?? AsyncState.loading();
+      _completer = Completer<bool>();
+    });
   }
 
   /// Reset the signal to the initial value
   void reset([AsyncState<T>? value]) {
-    this.value = value ?? _initialValue;
-    _initialized = false;
-    if (_completer.isCompleted) _completer = Completer<bool>();
+    batch(() {
+      this.value = value ?? _initialValue;
+      _initialized = false;
+      if (_completer.isCompleted) _completer = Completer<bool>();
+    });
   }
 
   /// Initialize the signal
