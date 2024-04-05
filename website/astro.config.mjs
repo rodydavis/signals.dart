@@ -21,35 +21,29 @@ export default defineConfig({
           ],
         },
         {
-          label: "Guides",
-          autogenerate: { directory: "guides" },
-        },
-        {
-          label: "Dart",
+          label: "Core",
           items: [
-            {
-              label: "Core",
-              items: [
-                { label: "Signal", link: "dart/core/signal" },
-                { label: "Computed", link: "dart/core/computed" },
-                { label: "Effect", link: "dart/core/effect" },
-                { label: "Untracked", link: "dart/core/untracked" },
-                { label: "Batch", link: "dart/core/batch" },
-              ],
-            },
-            { label: "Value", autogenerate: { directory: "dart/value" } },
-            { label: "Async", autogenerate: { directory: "dart/async" } },
-            {
-              label: "Utilities",
-              autogenerate: { directory: "dart/utilities" },
-            },
+            { label: "Signal", link: "core/signal" },
+            { label: "Computed", link: "core/computed" },
+            { label: "Effect", link: "core/effect" },
+            { label: "Untracked", link: "core/untracked" },
+            { label: "Batch", link: "core/batch" },
           ],
         },
+        { label: "Value", autogenerate: { directory: "value" } },
+        { label: "Async", autogenerate: { directory: "async" } },
         {
           label: "Flutter",
           autogenerate: { directory: "flutter" },
         },
-
+        {
+          label: "Utilities",
+          autogenerate: { directory: "utilities" },
+        },
+        {
+          label: "Guides",
+          autogenerate: { directory: "guides" },
+        },
         { label: "Examples", link: "examples" },
       ],
     }),

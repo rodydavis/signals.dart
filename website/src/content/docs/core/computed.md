@@ -5,7 +5,7 @@ description: Create a signal that derives its value from other signals
 
 Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
 
-> `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
+> `Computed` class extends the [`Signal`](/core/signal/) class, so you can use it anywhere you would use a signal.
 
 ```dart
 import 'package:signals/signals.dart';
@@ -86,6 +86,49 @@ final s = computed(() => 0);
 s.onDispose(() => print('Signal destroyed'));
 s.dispose();
 ```
+
+
+## Flutter
+
+In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createComputed` inside a stateful widget.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:signals/signals_flutter.dart';
+
+class CounterWidget extends StatefulWidget {
+  @override
+  _CounterWidgetState createState() => _CounterWidgetState();
+}
+
+class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+  late final counter = createSignal(this, 0);
+  late final isEven = createComputed(this, () => counter.value.isEven);
+  late final isOdd = createComputed(this, () => counter.value.isOdd);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Counter: even=$isEven, odd=$isOdd'),
+            ElevatedButton(
+              onPressed: () => counter.value++,
+              child: Text('Increment'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+
+The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
 
 ## Testing
 
