@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import '../core/signals.dart';
+import 'iterable.dart';
 
 /// A [Signal] that holds a [List].
-class ListSignal<E> extends Signal<List<E>> implements List<E> {
+class ListSignal<E> extends IterableSignal<E> implements List<E> {
   /// Creates a [ListSignal] with the given [value].
   ListSignal(
     super.value, {
@@ -12,7 +13,7 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   });
 
   @override
-  E get first => value.first;
+  List<E> get value => super.value as List<E>;
 
   @override
   set first(E val) {
@@ -28,9 +29,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
     value.last = val;
     set(value, force: true);
   }
-
-  @override
-  int get length => value.length;
 
   @override
   set length(int value) {
@@ -86,11 +84,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   }
 
   @override
-  bool any(bool Function(E element) test) {
-    return value.any(test);
-  }
-
-  @override
   Map<int, E> asMap() {
     return value.asMap();
   }
@@ -109,16 +102,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   @override
   bool contains(Object? element) {
     return value.contains(element);
-  }
-
-  @override
-  E elementAt(int index) {
-    return value.elementAt(index);
-  }
-
-  @override
-  bool every(bool Function(E element) test) {
-    return value.every(test);
   }
 
   @override
@@ -145,12 +128,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   @override
   Iterable<E> followedBy(Iterable<E> other) {
     return value.followedBy(other);
-  }
-
-  @override
-  void forEach(void Function(E element) action) {
-    value.forEach(action);
-    set(value, force: true);
   }
 
   @override
@@ -181,20 +158,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   }
 
   @override
-  bool get isEmpty => value.isEmpty;
-
-  @override
-  bool get isNotEmpty => value.isNotEmpty;
-
-  @override
-  Iterator<E> get iterator => value.iterator;
-
-  @override
-  String join([String separator = ""]) {
-    return value.join(separator);
-  }
-
-  @override
   int lastIndexOf(E element, [int? start]) {
     return value.lastIndexOf(element, start);
   }
@@ -202,21 +165,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   @override
   int lastIndexWhere(bool Function(E element) test, [int? start]) {
     return value.lastIndexWhere(test, start);
-  }
-
-  @override
-  E lastWhere(bool Function(E element) test, {E Function()? orElse}) {
-    return value.lastWhere(test, orElse: orElse);
-  }
-
-  @override
-  Iterable<T> map<T>(T Function(E e) toElement) {
-    return value.map(toElement);
-  }
-
-  @override
-  E reduce(E Function(E value, E element) combine) {
-    return value.reduce(combine);
   }
 
   @override
@@ -286,24 +234,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   }
 
   @override
-  E get single => value.single;
-
-  @override
-  E singleWhere(bool Function(E element) test, {E Function()? orElse}) {
-    return value.singleWhere(test, orElse: orElse);
-  }
-
-  @override
-  Iterable<E> skip(int count) {
-    return value.skip(count);
-  }
-
-  @override
-  Iterable<E> skipWhile(bool Function(E value) test) {
-    return value.skipWhile(test);
-  }
-
-  @override
   void sort([int Function(E a, E b)? compare]) {
     value.sort(compare);
     set(value, force: true);
@@ -319,50 +249,6 @@ class ListSignal<E> extends Signal<List<E>> implements List<E> {
   @override
   List<E> sublist(int start, [int? end]) {
     return value.sublist(start, end);
-  }
-
-  @override
-  Iterable<E> take(int count) {
-    return value.take(count);
-  }
-
-  @override
-  Iterable<E> takeWhile(bool Function(E value) test) {
-    return value.takeWhile(test);
-  }
-
-  @override
-  List<E> toList({bool growable = true}) {
-    return value.toList(growable: growable);
-  }
-
-  @override
-  Set<E> toSet() {
-    return value.toSet();
-  }
-
-  @override
-  Iterable<E> where(bool Function(E element) test) {
-    return value.where(test);
-  }
-
-  @override
-  Iterable<T> whereType<T>() {
-    return value.whereType<T>();
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is ListSignal<E> && value == other.value;
-  }
-
-  @override
-  int get hashCode {
-    return Object.hashAll([
-      globalId.hashCode,
-      value.hashCode,
-      for (final item in value) item.hashCode
-    ]);
   }
 }
 

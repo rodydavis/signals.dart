@@ -42,10 +42,10 @@ class ChangeStackSignal<T> extends Signal<T> {
   final Queue<SignalChange<T>> _redo = ListQueue();
 
   /// List of changes in the history
-  SignalChange<T>? get history => _undo.lastOrNull;
+  Iterable<SignalChange<T>> get history => _undo;
 
   /// List of changes in the redo stack
-  SignalChange<T>? get redos => _redo.firstOrNull;
+  Iterable<SignalChange<T>> get redos => _redo;
 
   /// Can redo the previous change
   bool get canRedo => _redo.isNotEmpty;
@@ -53,16 +53,17 @@ class ChangeStackSignal<T> extends Signal<T> {
   /// Can undo the previous change
   bool get canUndo => _undo.isNotEmpty;
 
-  /// Add new change and clear redo stack
   @override
-  set value(T val) {
-    final SignalChange<T> change = (
+  void set(T value, {bool force = false}) {
+    _undo.addLast((
       previousValue: super.value,
-      value: val,
-    );
-    _undo.addLast(change);
-    _moveForward();
-    set(val, force: true);
+      value: value,
+    ));
+    _redo.clear();
+    if (limit != null && _undo.length > limit!) {
+      _undo.removeFirst();
+    }
+    super.set(value, force: force);
   }
 
   /// Redo Previous Undo
@@ -95,13 +96,6 @@ class ChangeStackSignal<T> extends Signal<T> {
   /// Clear redo stack
   void clearRedo() {
     _redo.clear();
-  }
-
-  void _moveForward() {
-    _redo.clear();
-    if (limit != null && _undo.length > limit! + 1) {
-      _undo.removeFirst();
-    }
   }
 }
 

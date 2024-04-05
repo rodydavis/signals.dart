@@ -423,7 +423,7 @@ class Signal<T> implements ReadonlySignal<T> {
     if (disposed) {
       throw SignalsWriteAfterDisposeError(this);
     }
-    _set(val, false);
+    set(val);
   }
 
   /// Type of signal

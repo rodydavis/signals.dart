@@ -145,6 +145,20 @@ class IterableSignal<E> extends Signal<Iterable<E>> implements Iterable<E> {
   Iterable<T> whereType<T>() {
     return value.whereType<T>();
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is IterableSignal<E> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+      for (final item in value) item.hashCode
+    ]);
+  }
 }
 
 /// Create an [IterableSignal] from [Iterable]
