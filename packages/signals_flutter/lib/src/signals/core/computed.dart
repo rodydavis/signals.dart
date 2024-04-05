@@ -26,24 +26,15 @@ Computed<T> createComputed<T, S extends StatefulWidget>(
   State<S> widget,
   T Function() compute, {
   String? debugLabel,
-  SignalEquality<T>? equality,
   bool autoDispose = false,
   dynamic Function(Computed<T>)? onDispose,
 }) {
   final target = computed<T>(
     compute,
     debugLabel: debugLabel,
-    equality: equality,
     autoDispose: autoDispose,
   );
-  return bindComputed(
-    widget,
-    target,
-    debugLabel: debugLabel,
-    equality: equality,
-    autoDispose: autoDispose,
-    onDispose: onDispose,
-  );
+  return bindComputed(widget, target, onDispose: onDispose);
 }
 
 /// Bind an existing computed to a widget.
@@ -69,9 +60,6 @@ Computed<T> createComputed<T, S extends StatefulWidget>(
 Computed<T> bindComputed<T, S extends StatefulWidget>(
   State<S> widget,
   Computed<T> target, {
-  String? debugLabel,
-  SignalEquality<T>? equality,
-  bool autoDispose = false,
   dynamic Function(Computed<T>)? onDispose,
 }) {
   final label = '${target.globalId}|${target.debugLabel}';

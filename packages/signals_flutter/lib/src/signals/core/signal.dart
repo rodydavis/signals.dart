@@ -24,24 +24,15 @@ Signal<T> createSignal<T, S extends StatefulWidget>(
   State<S> widget,
   T value, {
   String? debugLabel,
-  SignalEquality<T>? equality,
   bool autoDispose = false,
   dynamic Function(Signal<T>)? onDispose,
 }) {
   final target = signal<T>(
     value,
     debugLabel: debugLabel,
-    equality: equality,
     autoDispose: autoDispose,
   );
-  return bindSignal(
-    widget,
-    target,
-    debugLabel: debugLabel,
-    equality: equality,
-    autoDispose: autoDispose,
-    onDispose: onDispose,
-  );
+  return bindSignal(widget, target, onDispose: onDispose);
 }
 
 /// Bind an existing signal to a widget.
@@ -66,9 +57,6 @@ Signal<T> createSignal<T, S extends StatefulWidget>(
 Signal<T> bindSignal<T, S extends StatefulWidget>(
   State<S> widget,
   Signal<T> target, {
-  String? debugLabel,
-  SignalEquality<T>? equality,
-  bool autoDispose = false,
   dynamic Function(Signal<T>)? onDispose,
 }) {
   final label = '${target.globalId}|${target.debugLabel}';
