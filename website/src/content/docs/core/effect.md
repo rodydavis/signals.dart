@@ -3,7 +3,7 @@ title: Effect
 description: Effects are used to perform side effects from signals
 ---
 
-The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](/dart/core/computed). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
+The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](/core/computed). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
 
 ```dart
 import 'package:signals/signals.dart';
@@ -78,7 +78,7 @@ dispose();
 
 ## Warning About Cycles
 
-Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](/dart/core/untracked) to read a signal without subscribing to it.
+Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](/core/untracked) to read a signal without subscribing to it.
 
 ```dart
 import 'dart:async';
@@ -97,3 +97,49 @@ Future<void> main() async {
   await completer.future;
 }
 ```
+
+## Flutter
+
+In Flutter if you want to create an effect that automatically disposes itself when the widget is removed from the widget tree, you can use the `createEffect` inside a stateful widget.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:signals/signals_flutter.dart';
+
+class CounterWidget extends StatefulWidget {
+  @override
+  _CounterWidgetState createState() => _CounterWidgetState();
+}
+
+class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+  late final counter = createSignal(this, 0);
+  
+  @override
+  void initState() {
+    super.initState();
+    createEffect(this, () {
+      print('Counter: ${counter.value}');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Counter: $counter'),
+            ElevatedButton(
+              onPressed: () => counter.value++,
+              child: Text('Increment'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.

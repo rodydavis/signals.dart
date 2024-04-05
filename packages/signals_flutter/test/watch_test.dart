@@ -5,7 +5,7 @@ import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
   testWidgets('Watch', (tester) async {
-    const widget = SignalWidget();
+    const widget = _SignalWidget();
     expect(_SignalWidgetState.rebuildCount, 0);
     expect(_SignalWidgetState.watchCount, 0);
 
@@ -34,14 +34,14 @@ void main() {
   });
 }
 
-class SignalWidget extends StatefulWidget {
-  const SignalWidget({super.key});
+class _SignalWidget extends StatefulWidget {
+  const _SignalWidget();
 
   @override
-  State<SignalWidget> createState() => _SignalWidgetState();
+  State<_SignalWidget> createState() => _SignalWidgetState();
 }
 
-class _SignalWidgetState extends State<SignalWidget> {
+class _SignalWidgetState extends State<_SignalWidget> {
   static int rebuildCount = 0;
   static int watchCount = 0;
   final counter = signal(0);

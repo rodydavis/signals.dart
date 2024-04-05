@@ -1,3 +1,19 @@
+## 5.0.0
+
+- Adding `previousValue`/`initialValue` to `Signal`
+- Removing `SignalEquality`
+- Deprecating `ValueSignal` in favor of `Signal`
+- Deprecating `.forceUpdate` in favor of `.set(..., force: true)`
+- Removing old deprecated methods
+- Adding more inline code documentation
+- ListSignal/SetSignal now extends IterableSignal
+- Fixing ChnageStackSignal getters for history/redos to return an iterable list
+- Fixing async signal isCompleted race condition
+- Adding `createSignal`/`createComputed`/`createEffect` for Flutter
+- Adding `SignalsAutoDisposeMixin` for Flutter
+- Update to `signals_core` 5.0.0
+- Update to `signals_flutter` 5.0.0
+
 ## 4.5.1
 
 - Fixing Watch in hot reload with auto dispose signals

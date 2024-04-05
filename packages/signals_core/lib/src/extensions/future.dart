@@ -1,5 +1,4 @@
 import '../async/future.dart';
-import '../async/state.dart';
 import '../core/signals.dart';
 
 /// Extension on future to provide helpful methods for signals
@@ -18,7 +17,6 @@ extension SignalFutureUtils<T> on Future<T> {
     T? initialValue,
     bool autoDispose = false,
     bool lazy = true,
-    SignalEquality<AsyncState<T>>? equality,
     List<ReadonlySignal<dynamic>> dependencies = const [],
   }) {
     return futureSignal(
@@ -27,7 +25,6 @@ extension SignalFutureUtils<T> on Future<T> {
       initialValue: initialValue,
       autoDispose: autoDispose,
       lazy: lazy,
-      equality: equality,
       dependencies: dependencies,
     );
   }

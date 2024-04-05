@@ -14,7 +14,6 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
     String super.debugLabel = 'Timer',
     super.cancelOnError,
     super.autoDispose,
-    super.equality,
   }) : super(
           () => Stream<TimerSignalEvent>.periodic(
             every,
@@ -36,14 +35,12 @@ extension TimerSignalDurationUtils on Duration {
     String debugLabel = 'Timer',
     bool? cancelOnError,
     bool autoDispose = false,
-    SignalEquality<AsyncState<TimerSignalEvent>>? equality,
   }) {
     return TimerSignal(
       every: this,
       debugLabel: debugLabel,
       cancelOnError: cancelOnError,
       autoDispose: autoDispose,
-      equality: equality,
     );
   }
 }
@@ -54,13 +51,11 @@ TimerSignal timerSignal(
   String debugLabel = 'Timer',
   bool? cancelOnError,
   bool autoDispose = false,
-  SignalEquality<AsyncState<TimerSignalEvent>>? equality,
 }) {
   return TimerSignal(
     every: every,
     debugLabel: debugLabel,
     cancelOnError: cancelOnError,
     autoDispose: autoDispose,
-    equality: equality,
   );
 }

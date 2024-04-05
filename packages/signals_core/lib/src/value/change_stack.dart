@@ -15,7 +15,7 @@ import '../core/signals.dart';
 /// s.redo();
 /// print(s.value); // 3
 /// ```
-class ChangeStackSignal<T> extends ValueSignal<T> {
+class ChangeStackSignal<T> extends Signal<T> {
   /// Change stack signal that can be used to call undo/redo on a value.
   ///
   /// ```dart
@@ -31,10 +31,9 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   /// ```
   ChangeStackSignal(
     super.value, {
-    super.debugLabel,
     this.limit,
+    super.debugLabel,
     super.autoDispose,
-    super.equality,
   });
 
   /// Max values to keep in history
@@ -43,10 +42,10 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   final Queue<SignalChange<T>> _redo = ListQueue();
 
   /// List of changes in the history
-  SignalChange<T>? get history => _undo.lastOrNull;
+  Iterable<SignalChange<T>> get history => _undo;
 
   /// List of changes in the redo stack
-  SignalChange<T>? get redos => _redo.firstOrNull;
+  Iterable<SignalChange<T>> get redos => _redo;
 
   /// Can redo the previous change
   bool get canRedo => _redo.isNotEmpty;
@@ -54,23 +53,24 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   /// Can undo the previous change
   bool get canUndo => _undo.isNotEmpty;
 
-  /// Add new change and clear redo stack
   @override
-  set value(T val) {
-    final SignalChange<T> change = (
+  void set(T value, {bool force = false}) {
+    _undo.addLast((
       previousValue: super.value,
-      value: val,
-    );
-    _undo.addLast(change);
-    _moveForward();
-    forceUpdate(val);
+      value: value,
+    ));
+    _redo.clear();
+    if (limit != null && _undo.length > limit!) {
+      _undo.removeFirst();
+    }
+    super.set(value, force: force);
   }
 
   /// Redo Previous Undo
   void redo() {
     if (!canRedo) return;
     final change = _redo.removeFirst();
-    forceUpdate(change.value);
+    set(change.value, force: true);
     _undo.addLast(change);
   }
 
@@ -78,7 +78,7 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   void undo() {
     if (!canUndo) return;
     final change = _undo.removeLast();
-    forceUpdate(change.previousValue);
+    set(change.previousValue, force: true);
     _redo.addFirst(change);
   }
 
@@ -96,13 +96,6 @@ class ChangeStackSignal<T> extends ValueSignal<T> {
   /// Clear redo stack
   void clearRedo() {
     _redo.clear();
-  }
-
-  void _moveForward() {
-    _redo.clear();
-    if (limit != null && _undo.length > limit! + 1) {
-      _undo.removeFirst();
-    }
   }
 }
 
@@ -131,13 +124,11 @@ ChangeStackSignal<T> changeStack<T>(
   String? debugLabel,
   int? limit,
   bool autoDispose = false,
-  SignalEquality<T>? equality,
 }) {
   return ChangeStackSignal<T>(
     value,
     debugLabel: debugLabel,
     limit: limit,
     autoDispose: autoDispose,
-    equality: equality,
   );
 }

@@ -43,20 +43,11 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
     R Function(ReadonlySignal<T>) selector, {
     bool autoDispose = false,
     String? debugLabel,
-    SignalEquality<R>? equality,
   }) {
     return computed(
       () => selector(this),
       autoDispose: autoDispose,
       debugLabel: debugLabel,
-      equality: equality,
     );
   }
-}
-
-/// Mutable signal utils
-extension SignalUtils<T> on Signal<T> {
-  /// Restrict API to readonly signal
-  @Deprecated('use [.readonly()] instead')
-  ReadonlySignal<T> toReadonlySignal() => this;
 }

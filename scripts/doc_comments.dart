@@ -12,12 +12,12 @@ void main(List<String> args) {
   replaceAsyncDoc('state');
   replaceComment(
     'signal',
-    'website/src/content/docs/dart/async/state.md',
+    'website/src/content/docs/async/state.md',
     'packages/signals_core/lib/src/async/signal.dart',
   );
   replaceComment(
     'observer',
-    'website/src/content/docs/dart/utilities/observer.md',
+    'website/src/content/docs/utilities/observer.md',
     'packages/signals_core/lib/src/core/observer.dart',
   );
   replaceComment(
@@ -40,7 +40,7 @@ void main(List<String> args) {
 void replaceCoreDoc(String token) {
   replaceComment(
     token,
-    'website/src/content/docs/dart/core/$token.md',
+    'website/src/content/docs/core/$token.md',
     'packages/signals_core/lib/src/core/$token.dart',
   );
 }
@@ -48,7 +48,7 @@ void replaceCoreDoc(String token) {
 void replaceAsyncDoc(String token) {
   replaceComment(
     token,
-    'website/src/content/docs/dart/async/$token.md',
+    'website/src/content/docs/async/$token.md',
     'packages/signals_core/lib/src/async/$token.dart',
   );
 }

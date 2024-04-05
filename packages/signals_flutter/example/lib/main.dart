@@ -11,35 +11,44 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Counter(),
+      home: const MyHomePage(title: 'Example'),
     );
   }
 }
 
-class Counter extends StatefulWidget {
-  const Counter({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
 
   @override
-  State<Counter> createState() => _CounterState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _CounterState extends State<Counter> {
-  final _counter = signal(0);
+class _MyHomePageState extends State<MyHomePage> with SignalsAutoDisposeMixin {
+  late final _counter = createSignal(this, 0);
 
   void _incrementCounter() => _counter.value++;
+
+  @override
+  void initState() {
+    super.initState();
+    createEffect(this, () {
+      debugPrint('count: ${_counter()}');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Counter'),
+        title: Text(widget.title),
       ),
       body: Center(
         child: Column(
@@ -49,7 +58,7 @@ class _CounterState extends State<Counter> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '${_counter.watch(context)}',
+              '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],

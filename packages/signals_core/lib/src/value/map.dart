@@ -1,12 +1,11 @@
 import '../core/signals.dart';
 
 /// A [Signal] that holds a [Map].
-class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
+class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
   /// Creates a [MapSignal] with the given [value].
   MapSignal(
     super.value, {
     super.debugLabel,
-    super.equality,
     super.autoDispose,
   });
 
@@ -18,13 +17,13 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
   @override
   void operator []=(K key, V value) {
     this.value[key] = value;
-    forceUpdate(this.value);
+    set(this.value, force: true);
   }
 
   /// Inject: Update current signal value with iterable
   MapSignal<K, V> operator <<(Map<K, V> other) {
     value.addAll(other);
-    forceUpdate(value);
+    set(value, force: true);
     return this;
   }
 
@@ -43,13 +42,13 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
   @override
   void addAll(Map<K, V> other) {
     value.addAll(other);
-    forceUpdate(value);
+    set(value, force: true);
   }
 
   @override
   void addEntries(Iterable<MapEntry<K, V>> newEntries) {
     value.addEntries(newEntries);
-    forceUpdate(value);
+    set(value, force: true);
   }
 
   @override
@@ -60,7 +59,7 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
   @override
   void clear() {
     value.clear();
-    forceUpdate(value);
+    set(value, force: true);
   }
 
   @override
@@ -79,7 +78,7 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
   @override
   void forEach(void Function(K key, V value) action) {
     value.forEach(action);
-    forceUpdate(value);
+    set(value, force: true);
   }
 
   @override
@@ -102,34 +101,34 @@ class MapSignal<K, V> extends ValueSignal<Map<K, V>> implements Map<K, V> {
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
     final result = value.putIfAbsent(key, ifAbsent);
-    forceUpdate(value);
+    set(value, force: true);
     return result;
   }
 
   @override
   V? remove(Object? key) {
     final result = value.remove(key);
-    forceUpdate(value);
+    set(value, force: true);
     return result;
   }
 
   @override
   void removeWhere(bool Function(K key, V value) test) {
     value.removeWhere(test);
-    forceUpdate(value);
+    set(value, force: true);
   }
 
   @override
   V update(K key, V Function(V value) update, {V Function()? ifAbsent}) {
     final result = value.update(key, update, ifAbsent: ifAbsent);
-    forceUpdate(value);
+    set(value, force: true);
     return result;
   }
 
   @override
   void updateAll(V Function(K key, V value) update) {
     value.updateAll(update);
-    forceUpdate(value);
+    set(value, force: true);
   }
 
   @override
@@ -155,13 +154,11 @@ MapSignal<K, V> mapSignal<K, V>(
   Map<K, V> map, {
   String? debugLabel,
   bool autoDispose = false,
-  SignalEquality<Map<K, V>>? equality,
 }) {
   return MapSignal<K, V>(
     map,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
-    equality: equality,
   );
 }
 
@@ -171,13 +168,11 @@ extension SignalMapUtils<K, V> on Map<K, V> {
   MapSignal<K, V> toSignal({
     String? debugLabel,
     bool autoDispose = false,
-    SignalEquality<Map<K, V>>? equality,
   }) {
     return MapSignal<K, V>(
       this,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
-      equality: equality,
     );
   }
 }
