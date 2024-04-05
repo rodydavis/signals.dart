@@ -117,7 +117,7 @@ abstract class ReadonlySignal<T> {
 ///
 /// ## Writing to a signal
 ///
-/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/dart/core/computed) and [effect](/dart/core/effect) that depends on that signal, ensuring your app state is always consistent.
+/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/core/computed) and [effect](/core/effect) that depends on that signal, ensuring your app state is always consistent.
 ///
 /// ## .peek()
 ///
@@ -219,6 +219,46 @@ abstract class ReadonlySignal<T> {
 /// s.dispose();
 /// ```
 ///
+/// ## Flutter
+///
+/// In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createSignal` inside a stateful widget.
+///
+/// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:signals/signals_flutter.dart';
+///
+/// class CounterWidget extends StatefulWidget {
+///   @override
+///   _CounterWidgetState createState() => _CounterWidgetState();
+/// }
+///
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+///   late final counter = createSignal(this, 0);
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Scaffold(
+///       body: Center(
+///         child: Column(
+///           mainAxisAlignment: MainAxisAlignment.center,
+///           children: [
+///             Text('Counter: $counter'),
+///             ElevatedButton(
+///               onPressed: () => counter.value++,
+///               child: Text('Increment'),
+///             ),
+///           ],
+///         ),
+///       ),
+///     );
+///   }
+/// }
+/// ```
+///
+/// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+///
+/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+///
 /// ## Testing
 ///
 /// Testing signals is possible by converting a signal to a stream and testing it like any other stream in Dart.
@@ -255,7 +295,7 @@ abstract class ReadonlySignal<T> {
 /// ```
 ///
 /// `overrideWith` returns a new signal with the same global id sets the value as if it was created with it. This can be useful when using async signals or global signals used for dependency injection.
-/// @link https://dartsignals.dev/dart/core/signal
+/// @link https://dartsignals.dev/core/signal
 /// {@endtemplate}
 class Signal<T> implements ReadonlySignal<T> {
   late T _initialValue;
@@ -589,7 +629,7 @@ class Signal<T> implements ReadonlySignal<T> {
 ///
 /// ## Writing to a signal
 ///
-/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/dart/core/computed) and [effect](/dart/core/effect) that depends on that signal, ensuring your app state is always consistent.
+/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/core/computed) and [effect](/core/effect) that depends on that signal, ensuring your app state is always consistent.
 ///
 /// ## .peek()
 ///
@@ -691,6 +731,46 @@ class Signal<T> implements ReadonlySignal<T> {
 /// s.dispose();
 /// ```
 ///
+/// ## Flutter
+///
+/// In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createSignal` inside a stateful widget.
+///
+/// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:signals/signals_flutter.dart';
+///
+/// class CounterWidget extends StatefulWidget {
+///   @override
+///   _CounterWidgetState createState() => _CounterWidgetState();
+/// }
+///
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+///   late final counter = createSignal(this, 0);
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Scaffold(
+///       body: Center(
+///         child: Column(
+///           mainAxisAlignment: MainAxisAlignment.center,
+///           children: [
+///             Text('Counter: $counter'),
+///             ElevatedButton(
+///               onPressed: () => counter.value++,
+///               child: Text('Increment'),
+///             ),
+///           ],
+///         ),
+///       ),
+///     );
+///   }
+/// }
+/// ```
+///
+/// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+///
+/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+///
 /// ## Testing
 ///
 /// Testing signals is possible by converting a signal to a stream and testing it like any other stream in Dart.
@@ -727,7 +807,7 @@ class Signal<T> implements ReadonlySignal<T> {
 /// ```
 ///
 /// `overrideWith` returns a new signal with the same global id sets the value as if it was created with it. This can be useful when using async signals or global signals used for dependency injection.
-/// @link https://dartsignals.dev/dart/core/signal
+/// @link https://dartsignals.dev/core/signal
 /// {@endtemplate}
 Signal<T> signal<T>(
   T value, {

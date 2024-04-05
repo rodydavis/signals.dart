@@ -85,7 +85,7 @@ import 'stream.dart';
 /// count.value = 1; // resets the future
 /// s.value; // state with count 1
 /// ```
-/// @link https://dartsignals.dev/dart/async/future
+/// @link https://dartsignals.dev/async/future
 /// {@endtemplate}
 class FutureSignal<T> extends StreamSignal<T> {
   /// {@template future}
@@ -170,7 +170,7 @@ class FutureSignal<T> extends StreamSignal<T> {
   /// count.value = 1; // resets the future
   /// s.value; // state with count 1
   /// ```
-  /// @link https://dartsignals.dev/dart/async/future
+  /// @link https://dartsignals.dev/async/future
   /// {@endtemplate}
   FutureSignal(
     Future<T> Function() callback, {
@@ -267,7 +267,7 @@ class FutureSignal<T> extends StreamSignal<T> {
 /// count.value = 1; // resets the future
 /// s.value; // state with count 1
 /// ```
-/// @link https://dartsignals.dev/dart/async/future
+/// @link https://dartsignals.dev/async/future
 /// {@endtemplate}
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() callback, {

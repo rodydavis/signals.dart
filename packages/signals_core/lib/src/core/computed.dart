@@ -3,7 +3,7 @@ part of 'signals.dart';
 /// {@template computed}
 /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
 ///
-/// > `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
+/// > `Computed` class extends the [`Signal`](/core/signal/) class, so you can use it anywhere you would use a signal.
 ///
 /// ```dart
 /// import 'package:signals/signals.dart';
@@ -85,6 +85,49 @@ part of 'signals.dart';
 /// s.dispose();
 /// ```
 ///
+///
+/// ## Flutter
+///
+/// In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createComputed` inside a stateful widget.
+///
+/// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:signals/signals_flutter.dart';
+///
+/// class CounterWidget extends StatefulWidget {
+///   @override
+///   _CounterWidgetState createState() => _CounterWidgetState();
+/// }
+///
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+///   late final counter = createSignal(this, 0);
+///   late final isEven = createComputed(this, () => counter.value.isEven);
+///   late final isOdd = createComputed(this, () => counter.value.isOdd);
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Scaffold(
+///       body: Center(
+///         child: Column(
+///           mainAxisAlignment: MainAxisAlignment.center,
+///           children: [
+///             Text('Counter: even=$isEven, odd=$isOdd'),
+///             ElevatedButton(
+///               onPressed: () => counter.value++,
+///               child: Text('Increment'),
+///             ),
+///           ],
+///         ),
+///       ),
+///     );
+///   }
+/// }
+/// ```
+///
+/// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+///
+/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+///
 /// ## Testing
 ///
 /// Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
@@ -124,7 +167,7 @@ part of 'signals.dart';
 /// ```
 ///
 /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
-/// @link https://dartsignals.dev/dart/core/computed
+/// @link https://dartsignals.dev/core/computed
 /// {@endtemplate}
 class Computed<T> implements ReadonlySignal<T>, _Listenable {
   final ComputedCallback<T> _compute;
@@ -187,7 +230,7 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
   /// {@template computed}
   /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
   ///
-  /// > `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
+  /// > `Computed` class extends the [`Signal`](/core/signal/) class, so you can use it anywhere you would use a signal.
   ///
   /// ```dart
   /// import 'package:signals/signals.dart';
@@ -269,6 +312,49 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
   /// s.dispose();
   /// ```
   ///
+  ///
+  /// ## Flutter
+  ///
+  /// In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createComputed` inside a stateful widget.
+  ///
+  /// ```dart
+  /// import 'package:flutter/material.dart';
+  /// import 'package:signals/signals_flutter.dart';
+  ///
+  /// class CounterWidget extends StatefulWidget {
+  ///   @override
+  ///   _CounterWidgetState createState() => _CounterWidgetState();
+  /// }
+  ///
+  /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+  ///   late final counter = createSignal(this, 0);
+  ///   late final isEven = createComputed(this, () => counter.value.isEven);
+  ///   late final isOdd = createComputed(this, () => counter.value.isOdd);
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Scaffold(
+  ///       body: Center(
+  ///         child: Column(
+  ///           mainAxisAlignment: MainAxisAlignment.center,
+  ///           children: [
+  ///             Text('Counter: even=$isEven, odd=$isOdd'),
+  ///             ElevatedButton(
+  ///               onPressed: () => counter.value++,
+  ///               child: Text('Increment'),
+  ///             ),
+  ///           ],
+  ///         ),
+  ///       ),
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+  ///
+  /// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+  ///
   /// ## Testing
   ///
   /// Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
@@ -308,7 +394,7 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
   /// ```
   ///
   /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
-  /// @link https://dartsignals.dev/dart/core/computed
+  /// @link https://dartsignals.dev/core/computed
   /// {@endtemplate}
   Computed(
     ComputedCallback<T> compute, {
@@ -548,7 +634,7 @@ typedef ComputedCallback<T> = T Function();
 /// {@template computed}
 /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
 ///
-/// > `Computed` class extends the [`Signal`](/dart/core/signal/) class, so you can use it anywhere you would use a signal.
+/// > `Computed` class extends the [`Signal`](/core/signal/) class, so you can use it anywhere you would use a signal.
 ///
 /// ```dart
 /// import 'package:signals/signals.dart';
@@ -630,6 +716,49 @@ typedef ComputedCallback<T> = T Function();
 /// s.dispose();
 /// ```
 ///
+///
+/// ## Flutter
+///
+/// In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createComputed` inside a stateful widget.
+///
+/// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:signals/signals_flutter.dart';
+///
+/// class CounterWidget extends StatefulWidget {
+///   @override
+///   _CounterWidgetState createState() => _CounterWidgetState();
+/// }
+///
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+///   late final counter = createSignal(this, 0);
+///   late final isEven = createComputed(this, () => counter.value.isEven);
+///   late final isOdd = createComputed(this, () => counter.value.isOdd);
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Scaffold(
+///       body: Center(
+///         child: Column(
+///           mainAxisAlignment: MainAxisAlignment.center,
+///           children: [
+///             Text('Counter: even=$isEven, odd=$isOdd'),
+///             ElevatedButton(
+///               onPressed: () => counter.value++,
+///               child: Text('Increment'),
+///             ),
+///           ],
+///         ),
+///       ),
+///     );
+///   }
+/// }
+/// ```
+///
+/// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+///
+/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+///
 /// ## Testing
 ///
 /// Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
@@ -669,7 +798,7 @@ typedef ComputedCallback<T> = T Function();
 /// ```
 ///
 /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
-/// @link https://dartsignals.dev/dart/core/computed
+/// @link https://dartsignals.dev/core/computed
 /// {@endtemplate}
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {

@@ -110,7 +110,7 @@ import 'state.dart';
 /// count.value = 1; // resets the future
 /// s.value; // state with count 1
 /// ```
-/// @link https://dartsignals.dev/dart/async/stream
+/// @link https://dartsignals.dev/async/stream
 /// {@endtemplate}
 class StreamSignal<T> extends AsyncSignal<T> {
   late final Computed<Stream<T>> _stream;
@@ -241,7 +241,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
   /// count.value = 1; // resets the future
   /// s.value; // state with count 1
   /// ```
-  /// @link https://dartsignals.dev/dart/async/stream
+  /// @link https://dartsignals.dev/async/stream
   /// {@endtemplate}
   StreamSignal(
     Stream<T> Function() callback, {
@@ -469,7 +469,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
 /// count.value = 1; // resets the future
 /// s.value; // state with count 1
 /// ```
-/// @link https://dartsignals.dev/dart/async/stream
+/// @link https://dartsignals.dev/async/stream
 /// {@endtemplate}
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() callback, {

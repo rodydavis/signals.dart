@@ -161,7 +161,7 @@ import 'state.dart';
 ///     AsyncLoading<int>() => 'loading',
 /// };
 /// ```
-/// @link https://dartsignals.dev/dart/async/state
+/// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
 class AsyncSignal<T> extends Signal<AsyncState<T>> {
   /// A [Signal] that stores value in [AsyncState]
@@ -429,7 +429,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>> {
 ///     AsyncLoading<int>() => 'loading',
 /// };
 /// ```
-/// @link https://dartsignals.dev/dart/async/state
+/// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
 AsyncSignal<T> asyncSignal<T>(
   AsyncState<T> value, {
