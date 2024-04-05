@@ -6,6 +6,9 @@
 - Deprecating `.forceUpdate` in favor of `.set(..., force: true)`
 - Removing old deprecated methods
 - Adding more inline code documentation
+- ListSignal/SetSignal now extends IterableSignal
+- Fixing ChnageStackSignal getters for history/redos to return an iterable list
+- Fixing async signal isCompleted race condition
 
 ## 4.5.0
 
