@@ -14,6 +14,5 @@ export 'src/async/stream.dart';
 export 'src/async/future.dart';
 export 'src/async/computed.dart';
 export 'src/value/value.dart';
-export 'src/core/observer.dart';
 export 'src/core/container.dart';
 export 'src/core/signals.dart';
