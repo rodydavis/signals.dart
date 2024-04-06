@@ -2,11 +2,9 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:signals_core/signals_core.dart';
-
-import 'observer.dart';
 import '../utils/constants.dart';
 
+part 'observer.dart';
 part 'devtool.dart';
 part 'effect.dart';
 part 'computed.dart';

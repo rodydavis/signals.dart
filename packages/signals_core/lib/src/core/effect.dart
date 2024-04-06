@@ -92,7 +92,10 @@ class _Effect implements _Listenable {
         _compute = compute,
         _cleanup = null,
         globalId = ++_lastGlobalId {
-    _onEffectCreated(this);
+    assert(() {
+      SignalsObserver.instance?._onEffectCreated(this);
+      return true;
+    }());
   }
 
   Iterable<ReadonlySignal> get _allSources sync* {
@@ -116,7 +119,10 @@ class _Effect implements _Listenable {
     } finally {
       finish();
     }
-    _onEffectCalled(this);
+    assert(() {
+      SignalsObserver.instance?._onEffectCalled(this);
+      return true;
+    }());
   }
 
   EffectCleanup _start() {
@@ -148,6 +154,10 @@ class _Effect implements _Listenable {
     if (!((_flags & RUNNING) != 0)) {
       _disposeEffect(this);
     }
+    assert(() {
+      SignalsObserver.instance?._onEffectRemoved(this);
+      return true;
+    }());
   }
 
   @override
@@ -309,14 +319,12 @@ EffectCleanup effect(
     effect._callback();
   } catch (e) {
     effect._dispose();
-    _onEffectRemoved(effect);
     rethrow;
   }
   // Return a bound function instead of a wrapper like `() => effect._dispose()`,
   // because bound functions seem to be just as fast and take up a lot less memory.
   return () {
     effect._dispose();
-    _onEffectRemoved(effect);
     onDispose?.call();
   };
 }

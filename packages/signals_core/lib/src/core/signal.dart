@@ -333,7 +333,10 @@ class Signal<T> implements ReadonlySignal<T> {
   })  : _version = 0,
         _value = val,
         globalId = ++_lastGlobalId {
-    _onSignalCreated(this);
+    assert(() {
+      SignalsObserver.instance?.onSignalCreated(this);
+      return true;
+    }());
     _initialValue = val;
   }
 
@@ -516,7 +519,10 @@ class Signal<T> implements ReadonlySignal<T> {
       _endBatch();
     }
 
-    _onSignalUpdated(this, val);
+    assert(() {
+      SignalsObserver.instance?.onSignalUpdated(this, val);
+      return true;
+    }());
   }
 
   @override

@@ -1,4 +1,4 @@
-import 'signals.dart';
+part of 'signals.dart';
 
 /// {@template observer}
 /// You can observe all signal values in the dart application by providing an implementation of `SignalsObserver`:
@@ -40,8 +40,14 @@ abstract class SignalsObserver {
   /// Called when a computed is updated.
   void onComputedUpdated(Computed instance, dynamic value);
 
+  void _onEffectCreated(_Effect instance) {}
+
+  void _onEffectCalled(_Effect instance) {}
+
+  void _onEffectRemoved(_Effect instance) {}
+
   /// The current observer instance.
-  static SignalsObserver? instance;
+  static SignalsObserver? instance = DevToolsSignalsObserver();
 }
 
 // coverage:ignore-start

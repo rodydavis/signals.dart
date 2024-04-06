@@ -405,7 +405,10 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
         globalId = ++_lastGlobalId {
-    _onComputedCreated(this);
+    assert(() {
+      SignalsObserver.instance?.onComputedCreated(this);
+      return true;
+    }());
   }
 
   /// Override the current signal with a new value as if it was created with it
@@ -466,7 +469,10 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
             _previousValue = _value;
           }
           _value = value;
-          _onComputedUpdated(this, this._value);
+          assert(() {
+            SignalsObserver.instance?.onComputedUpdated(this, value);
+            return true;
+          }());
           _flags &= ~HAS_ERROR;
           _version++;
         }

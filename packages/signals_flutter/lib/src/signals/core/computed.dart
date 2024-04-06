@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../signals_flutter.dart';
+import '../../watch/element_watcher.dart';
 
 /// Create and watch a computed signal and rebuild on changes.
 ///
@@ -62,19 +63,26 @@ Computed<T> bindComputed<T, S extends StatefulWidget>(
   Computed<T> target, {
   dynamic Function(Computed<T>)? onDispose,
 }) {
-  final label = '${target.globalId}|${target.debugLabel}';
-  final dispose = createEffect(
-    widget,
-    () {
-      target.value;
-      final context = widget.context;
-      if (context is Element && context.mounted && !context.dirty) {
-        context.markNeedsBuild();
-      }
-    },
-    debugLabel: '$label=>createComputed=>effect',
-    onDispose: () => onDispose?.call(target),
-  );
-  target.onDispose(dispose);
+  if (widget is SignalsAutoDisposeMixin) {
+    final label = '${target.globalId}|${target.debugLabel}';
+    final dispose = createEffect(
+      widget,
+      () {
+        target.value;
+        final context = widget.context;
+        if (context is Element && context.mounted && !context.dirty) {
+          context.markNeedsBuild();
+        }
+      },
+      debugLabel: '$label=>createComputed=>effect',
+      onDispose: () => onDispose?.call(target),
+    );
+    target.onDispose(dispose);
+  } else {
+    final element = widget.context as Element;
+    final key = element.hashCode;
+    final watcher = ElementWatcher(key, WeakReference(element));
+    watcher.watch(target);
+  }
   return target;
 }

@@ -8,18 +8,8 @@ import 'element_watcher.dart';
 
 final _elementRefs = <int, ElementWatcher>{};
 
-bool _initialized = false;
-void _init() {
-  if (_initialized) return;
-  _initialized = true;
-  WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
-    final items = _elementRefs.entries.toList();
-    for (final el in items) {
-      if (el.value.element.target == null || !el.value.active) {
-        _elementRefs.remove(el.key)?.dispose();
-      }
-    }
-  });
+void removeSignalWatchers() {
+  _elementRefs.removeWhere((key, value) => value.element.target == null);
 }
 
 /// Watch a signal value and rebuild the context of the [Element]
@@ -35,7 +25,6 @@ T watchSignal<T>(
     if (_elementRefs[key] == null) {
       final watcher = ElementWatcher(key, WeakReference(context));
       _elementRefs[key] = watcher;
-      _init();
     }
     _elementRefs[key]?.watch(signal);
   }
@@ -80,7 +69,6 @@ void listenSignal<T>(
     if (_elementRefs[key] == null) {
       final watcher = ElementWatcher(key, WeakReference(context));
       _elementRefs[key] = watcher;
-      _init();
     }
     _elementRefs[key]?.listen(signal, callback);
   }
