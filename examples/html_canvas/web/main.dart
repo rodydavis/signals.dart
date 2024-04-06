@@ -1,7 +1,6 @@
 import 'dart:js_interop';
-
-import 'package:signals/signals.dart';
 import 'package:web/helpers.dart';
+import 'package:signals/signals.dart';
 
 void main() {
   final example = Example();

@@ -1,11 +1,12 @@
-import 'dart:html';
+import 'dart:js_interop';
+import 'package:web/helpers.dart';
 import 'package:signals/signals.dart';
 
 typedef Task = ({String title, bool completed});
 
 void main() {
   final todoForm = document.getElementById("todoForm")!;
-  final todoInput = document.getElementById("todoInput") as InputElement;
+  final todoInput = document.getElementById("todoInput") as HTMLInputElement;
   final todoList = document.getElementById("todoList")!;
   final taskFilter = document.getElementById("taskFilter")!;
   final taskCounter = document.getElementById("taskCounter")!;
@@ -15,7 +16,7 @@ void main() {
 
   final filteredTasks = computed(() {
     final currentFilter = filter.value;
-    final currentTasks = tasks;
+    final currentTasks = tasks.value;
     if (currentFilter == "all") {
       return currentTasks.toList();
     } else if (currentFilter == "active") {
@@ -40,42 +41,60 @@ void main() {
     return taskCount.peek() - activeTaskCount.value;
   });
 
-  todoForm.addEventListener("submit", (event) {
-    event.preventDefault();
-    final taskTitle = todoInput.value?.trim();
-    if (taskTitle != null) {
-      final newTask = (title: taskTitle, completed: false);
-      tasks.add(newTask);
-      todoInput.value = "";
-    }
-  });
+  todoForm.addEventListener(
+      "submit",
+      (Event event) {
+        print('trigger!');
+        event.preventDefault();
+        final taskTitle = todoInput.value.trim();
+        final newTask = (title: taskTitle, completed: false);
+        tasks.add(newTask);
+        todoInput.value = "";
+      }.toJS);
 
-  taskFilter.addEventListener("change", (event) {
-    final target = event.target as InputElement;
-    filter.value = target.value ?? '';
-  });
+  taskFilter.addEventListener(
+      "change",
+      (Event event) {
+        final target = event.target as HTMLInputElement;
+        filter.value = target.value;
+      }.toJS);
 
   effect(() {
     final currentTasks = filteredTasks.value;
-    todoList.innerHtml = "";
-    for (var index = 0; index < currentTasks.length; index++) {
-      final task = currentTasks[index];
+    todoList.innerHTML = "";
+
+    final cleanup = <Function>[];
+
+    for (var i = 0; i < currentTasks.length; i++) {
+      final task = currentTasks[i];
       final listItem = document.createElement("li");
       final label = document.createElement("label");
-      final checkbox = document.createElement("input") as InputElement;
+      final checkbox = document.createElement("input") as HTMLInputElement;
       checkbox.type = "checkbox";
       checkbox.checked = task.completed;
-      checkbox.addEventListener("change", (e) {
-        tasks[index] = (
-          title: tasks[index].title,
-          completed: checkbox.checked ?? false,
-        );
-      });
-      label.append(checkbox);
-      label.append(Text(" ${task.title}"));
-      listItem.append(label);
-      todoList.append(listItem);
+      cleanup.add(effect(() {
+        final change = (Event e) {
+          tasks[i] = (
+            title: tasks[i].title,
+            completed: checkbox.checked,
+          );
+        }.toJS;
+        checkbox.addEventListener("change", change);
+        return () {
+          checkbox.removeEventListener("change", change);
+        };
+      }));
+      label.appendChild(checkbox);
+      label.append(" ${task.title}".toJS);
+      listItem.appendChild(label);
+      todoList.appendChild(listItem);
     }
+
+    return () {
+      for (final cb in cleanup) {
+        cb();
+      }
+    };
   });
 
   effect(() {
