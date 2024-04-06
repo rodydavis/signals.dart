@@ -8,13 +8,15 @@
 
 # Signals
 
-Complete dart port of [Preact signals](https://preactjs.com/blog/introducing-signals/) and takes full advantage of [signal boosting](https://preactjs.com/blog/signal-boosting/).
+Signals features:
 
-Supports Dart JS (HTML), Shelf Server, CLI (and Native), VM, Flutter (Web, Mobile and Desktop). Signals can be used in any Dart project!
+- 🪡 **Fine grained reactivity**: Based on [Preact Signals](https://preactjs.com/blog/signal-boosting/) and provides a fine grained reactivity system that will automatically track dependencies and free them when no longer needed
+- ⛓️ **Lazy evaluation**: Signals are lazy and will only compute values when read. If a signal is not read, it will not be computed
+- 🗜️ **Flexible API**: Every app is different and signals can be composed in multiple ways. There are a few rules to follow but the API surface is small
+- 🔬 **Surgical Rendering**: Widgets can be rebuilt surgically, only marking dirty the parts of the Widget tree that need to be updated and if mounted
+- 💙 **100% Dart Native**: Supports Dart JS (HTML), Shelf Server, CLI (and Native), VM, Flutter (Web, Mobile and Desktop). Signals can be used in any Dart project
 
-## Documentation
-
-Documentation is available [here](https://rodydavis.github.io/signals.dart/reference/overview/).
+To start using signals, check out the full [documentation](https://dartsignals.dev/).
 
 ## Guide / API
 
@@ -226,5 +228,13 @@ batch(() {
 
 There is an early version of a devtools extension included with this package.
 
-![](/doc/screenshots/graph.png)
-![](/doc/screenshots/list.png)
+![](https://github.com/rodydavis/signals.dart/blob/main/packages/signals//doc/screenshots/graph.png?raw=true)
+![](https://github.com/rodydavis/signals.dart/blob/main/packages/signals//doc/screenshots/list.png?raw=true)
+
+## Other packages
+
+| Package           | Pub                                                                                                              |
+|-------------------|------------------------------------------------------------------------------------------------------------------|
+| `signals_core`    | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
+| `signals_flutter` | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |
+| `signals_lint`    | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint)          |

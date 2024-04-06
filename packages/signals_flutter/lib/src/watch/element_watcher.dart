@@ -18,14 +18,13 @@ class ElementWatcher {
 
   EffectCleanup? _watchCleanup;
   final _listenCleanup = <int, EffectCleanup>{};
-  bool _watch = false;
   final _listeners = <int, VoidCallback>{};
   final _watchSignals = <int, ReadonlySignal>{};
   final _listenSignals = <int, ReadonlySignal>{};
 
   /// Check if the watcher is active via non empty listeners.
   bool get active {
-    final w = _watchSignals.isNotEmpty && _watch;
+    final w = _watchSignals.isNotEmpty;
     final l = _listenSignals.isNotEmpty && _listeners.isNotEmpty;
     return w || l;
   }
@@ -34,7 +33,6 @@ class ElementWatcher {
   void watch(ReadonlySignal value) {
     if (!_watchSignals.containsKey(value.globalId)) {
       _watchSignals[value.globalId] = value;
-      _watch = true;
       subscribeWatch();
     }
   }
@@ -43,7 +41,6 @@ class ElementWatcher {
   void unwatch(ReadonlySignal value) {
     if (_watchSignals.containsKey(value.globalId)) {
       _watchSignals.remove(value.globalId);
-      _watch = _watchSignals.isNotEmpty;
       subscribeWatch();
     }
   }
@@ -71,16 +68,10 @@ class ElementWatcher {
   void subscribeWatch() {
     _watchCleanup?.call();
     _watchCleanup = effect(() {
-      if (element.target == null) {
-        dispose();
-        return;
-      }
       for (final s in _watchSignals.values) {
         s.value;
       }
-      if (element.target?.mounted == true) {
-        if (_watch) rebuild();
-      }
+      if (_watchSignals.isNotEmpty) rebuild();
     });
   }
 
@@ -89,20 +80,20 @@ class ElementWatcher {
     _listenCleanup.putIfAbsent(
       signal.globalId,
       () => effect(() {
-        if (element.target == null) {
-          dispose();
-          return;
-        }
         signal.value;
-        if (element.target?.mounted == true) {
-          notify(signal);
-        }
+        notify(signal);
       }),
     );
   }
 
   /// Notify a listener for a given signal
   void notify(ReadonlySignal signal) {
+    final target = element.target;
+    if (target == null) {
+      dispose();
+      return;
+    }
+    if (!target.mounted) return;
     final listener = _listeners[signal.globalId];
     listener?.call();
   }
@@ -110,7 +101,11 @@ class ElementWatcher {
   /// Rebuild the widget
   void rebuild() {
     final target = element.target;
-    if (target == null) return;
+    if (target == null) {
+      dispose();
+      return;
+    }
+    if (!target.mounted) return;
     if (target.dirty) return;
     target.markNeedsBuild();
   }
@@ -123,6 +118,5 @@ class ElementWatcher {
     }
     _listenCleanup.clear();
     _listeners.clear();
-    _watch = false;
   }
 }
