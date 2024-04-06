@@ -216,6 +216,4 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 }
 
-
 // coverage:ignore-end
-
