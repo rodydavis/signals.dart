@@ -7,10 +7,8 @@ final Map<int, Stream<dynamic>> _streamCache = {};
 /// Signal extensions
 extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Convert a signal to a [Stream] to be consumed as
-  /// a read only stream and also be used in a [StreamBuilder]
-  Stream<T> toStream({
-    @Deprecated('No longer needed') bool broadcast = false,
-  }) {
+  /// a read only stream.
+  Stream<T> toStream() {
     final existing = _streamCache[globalId];
 
     if (existing != null) {

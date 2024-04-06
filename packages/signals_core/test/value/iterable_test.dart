@@ -133,6 +133,7 @@ void main() {
           final Iterable<String> iterable = <String>['a', 'b', 'c'];
           final s = create(iterable);
           String out = '';
+          // ignore: avoid_function_literals_in_foreach_calls
           s.forEach((e) {
             out += '_${e}_';
           });

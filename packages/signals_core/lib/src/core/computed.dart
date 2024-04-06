@@ -404,11 +404,20 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
         _version = 0,
         _globalVersion = globalVersion - 1,
         _flags = OUTDATED,
-        brand = identifier,
         globalId = ++_lastGlobalId {
     _onComputedCreated(this);
   }
 
+  /// Override the current signal with a new value as if it was created with it
+  ///
+  /// This does not trigger any updates
+  ///
+  /// ```dart
+  /// var counter = computed(() => 0);
+  ///
+  /// // Override the signal with a new value
+  /// counter = counter.overrideWith(1);
+  /// ```
   Computed<T> overrideWith(T value) {
     this._reset(value);
     return this;
@@ -579,8 +588,6 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
 
   @override
   int _version;
-
-  final Symbol brand;
 
   @override
   EffectCleanup subscribe(void Function(T value) fn) {

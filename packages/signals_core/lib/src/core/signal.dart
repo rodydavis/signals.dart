@@ -326,7 +326,6 @@ class Signal<T> implements ReadonlySignal<T> {
     this.autoDispose = false,
   })  : _version = 0,
         _value = val,
-        brand = identifier,
         globalId = ++_lastGlobalId {
     _onSignalCreated(this);
     _initialValue = val;
@@ -465,9 +464,6 @@ class Signal<T> implements ReadonlySignal<T> {
     }
     set(val);
   }
-
-  /// Type of signal
-  final Symbol brand;
 
   @override
   T get value {

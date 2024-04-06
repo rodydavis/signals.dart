@@ -1,6 +1,6 @@
 name: signals_flutter
-description: Flutter extensions for signals_core
-version: 5.0.0-beta.3
+description: The signals library exposes four core functions which are the building blocks to model any business logic you can think of.
+version: 5.0.0-beta.4
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://rodydavis.github.io/signals.dart
 documentation: https://rodydavis.github.io/signals.dart
@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals_core: ^5.0.0-beta.2
+  signals_core: ^5.0.0-beta.3
 
 dev_dependencies:
   flutter_test:

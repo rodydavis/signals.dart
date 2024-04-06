@@ -132,12 +132,33 @@ import 'package:signals_core/signals_core.dart';
 /// @link https://dartsignals.dev/flutter/watch
 /// {@endtemplate}
 class Watch<T extends Widget> extends StatefulWidget {
+  /// Minimal builder for signal changes that rerender a widget tree.
+  ///
+  /// ```dart
+  /// final counter = signal(0);
+  /// ...
+  /// Watch((context) => Text('$counter'))
+  /// ```
   const Watch(this.builder, {super.key, this.debugLabel});
 
+  /// Drop in replacement for the Flutter builder widget.
+  ///
+  /// ```diff
+  /// final counter = signal(0);
+  /// ...
+  /// - Builder(
+  /// + Watch.builder(
+  ///   builder: (context) {
+  ///     return Text('$counter');
+  ///   }
+  /// )
+  /// ```
   const Watch.builder({super.key, required this.builder, this.debugLabel});
 
   /// The widget to rebuild when any signals change
   final T Function(BuildContext context) builder;
+
+  /// Optional debug label to use for devtools
   final String? debugLabel;
 
   @override

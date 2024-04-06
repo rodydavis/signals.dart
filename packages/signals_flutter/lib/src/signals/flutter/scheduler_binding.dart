@@ -2,10 +2,19 @@ import 'package:flutter/scheduler.dart';
 
 import '../../../signals_flutter.dart';
 
+/// [SchedulerBinding] signal that tracks the persistent frame [Duration]
+///
+/// [initSchedulerBindingSignals] is required to be called in the main method
 final onPersistentFrameSignal = signal<Duration>(Duration.zero);
 
+/// [SchedulerBinding] signal that tracks the frame [Duration]
+///
+/// [initSchedulerBindingSignals] is required to be called in the main method
 final onScheduleFrameSignal = signal<Duration>(Duration.zero);
 
+/// [SchedulerBinding] signal that tracks the current [FrameTiming]
+///
+/// [initSchedulerBindingSignals] is required to be called in the main method
 final timingsSignal = listSignal<FrameTiming>([]);
 
 bool _setup = false;

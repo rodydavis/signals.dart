@@ -100,11 +100,6 @@ class ListSignal<E> extends IterableSignal<E> implements List<E> {
   }
 
   @override
-  bool contains(Object? element) {
-    return value.contains(element);
-  }
-
-  @override
   Iterable<T> expand<T>(Iterable<T> Function(E element) toElements) {
     return value.expand<T>(toElements);
   }

@@ -5,7 +5,7 @@ typedef TimerSignalEvent = ({int iteration, int millis});
 
 /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
 class TimerSignal extends StreamSignal<TimerSignalEvent> {
-  /// Trigger an [TimerEvent] every duration
+  /// Trigger an [TimerSignalEvent] every duration
   final Duration every;
 
   /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]

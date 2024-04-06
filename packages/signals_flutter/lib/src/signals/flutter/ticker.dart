@@ -17,7 +17,19 @@ import 'scheduler_binding.dart';
 ///   final alphaSignal = alpha.toSignal(); // can be converted to a signal
 /// }
 /// ```
-class TickerSignal extends ValueSignal<Duration> implements TickerProvider {
+class TickerSignal extends Signal<Duration> implements TickerProvider {
+  /// Ticker signal used to drive animations and can create animation controllers
+  ///
+  /// ```dart
+  /// void main() {
+  ///   final ticker = TickerSignal(); // could be a global
+  ///   final controller = ticker.toAnimationController(); // can be local or global
+  ///   final curve = CurvedAnimation(parent: controller, curve: Curves.easeOut); // can be used outside of widget tree
+  ///   final alpha = IntTween(begin: 0, end: 255).animate(curve);
+  ///   ...
+  ///   final alphaSignal = alpha.toSignal(); // can be converted to a signal
+  /// }
+  /// ```
   TickerSignal({
     Duration? initialDuration,
     super.debugLabel,
@@ -47,6 +59,7 @@ class TickerSignal extends ValueSignal<Duration> implements TickerProvider {
     super.dispose();
   }
 
+  /// Create a new [AnimationController]
   AnimationController toAnimationController({
     double? value,
     Duration? duration,

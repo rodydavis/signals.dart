@@ -171,6 +171,7 @@ void main() {
           final Set<String> list = <String>{'a', 'b', 'c'};
           final s = create(list);
           String out = '';
+          // ignore: avoid_function_literals_in_foreach_calls
           s.forEach((e) {
             out += '_${e}_';
           });

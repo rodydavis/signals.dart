@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 
 import '../../../signals_flutter.dart';
 
+/// [WidgetsBinding] signal that tracks the current [AppLifecycleState]
+///
+/// [initWidgetsBindingSignals] is required to be called in the main method
 final appLifecycleSignal = signal<AppLifecycleState>(AppLifecycleState.resumed);
 
 bool _setup = false;
