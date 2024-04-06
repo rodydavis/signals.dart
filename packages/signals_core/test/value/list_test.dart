@@ -15,8 +15,8 @@ void main() {
         final a = create<int>([]);
         expect(a.initialValue, equals(List.of({})));
 
-        a.value = {0};
-        a.value = {0, 1};
+        a.value = {0}.toList();
+        a.value = {0, 1}.toList();
 
         expect(a.initialValue, equals(List.of({})));
       });
@@ -25,10 +25,10 @@ void main() {
         final a = create<int>([]);
         expect(a.previousValue, equals(null));
 
-        a.value = {0};
+        a.value = {0}.toList();
         expect(a.previousValue, equals(List.of({})));
 
-        a.value = {0, 1};
+        a.value = {0, 1}.toList();
         expect(a.previousValue, equals(List.of({0})));
       });
 

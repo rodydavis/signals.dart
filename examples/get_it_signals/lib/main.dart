@@ -24,7 +24,7 @@ class Auth {
   final _controller = StreamController<User?>();
 
   // Listen to auth state changes and update the current user
-  late Connect<User?> _authListener;
+  late Connect<User?, User?> _authListener;
 
   Auth() {
     // Listen to the stream and update the current user

@@ -92,6 +92,12 @@ abstract class ReadonlySignal<T> {
   /// cleanup();
   /// ```
   EffectCleanup onDispose(void Function() cleanup);
+
+  /// Value that the signal was created with
+  T get initialValue;
+
+  /// Previous value that was set before the current
+  T? get previousValue;
 }
 
 /// {@template signal}
@@ -301,10 +307,10 @@ class Signal<T> implements ReadonlySignal<T> {
   late T _initialValue;
   T? _previousValue;
 
-  /// Value that the signal was created with
+  @override
   T get initialValue => _initialValue;
 
-  /// Previous value that was set before the current
+  @override
   T? get previousValue => _previousValue;
 
   @override

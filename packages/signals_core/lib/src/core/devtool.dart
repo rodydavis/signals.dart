@@ -1,4 +1,5 @@
 part of 'signals.dart';
+
 // coverage:ignore-start
 // ignore: public_member_api_docs
 void _debugPostEvent(

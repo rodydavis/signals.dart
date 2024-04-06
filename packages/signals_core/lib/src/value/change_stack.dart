@@ -1,6 +1,4 @@
-import 'dart:collection';
-
-import '../core/signals.dart';
+part of 'value.dart';
 
 /// Change stack signal that can be used to call undo/redo on a value.
 ///

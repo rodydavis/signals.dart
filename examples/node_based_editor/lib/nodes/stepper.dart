@@ -72,8 +72,8 @@ class StepperNode extends NumberNode {
                 ),
                 IconButton(
                   tooltip: 'Undo',
-                  onPressed: () =>
-                      (output as Signal<num>).value = output.previousValue,
+                  onPressed: () => (output as Signal<num>).value =
+                      output.previousValue ?? output.initialValue,
                   icon: const Icon(Icons.refresh),
                 ),
               ],

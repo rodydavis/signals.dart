@@ -625,10 +625,10 @@ class Computed<T> implements ReadonlySignal<T>, _Listenable {
     }
   }
 
-  /// Value that the signal was created with
+  @override
   T get initialValue => _initialValue;
 
-  /// Previous value that was set before the current
+  @override
   T? get previousValue => _previousValue;
 
   /// Returns a readonly signal

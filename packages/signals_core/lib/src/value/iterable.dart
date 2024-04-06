@@ -1,9 +1,33 @@
-import '../core/signals.dart';
+part of 'value.dart';
 
 /// A [Signal] that holds a [Iterable].
-class IterableSignal<E> extends Signal<Iterable<E>> implements Iterable<E> {
+class IterableSignal<E> extends _IterableSignal<E, Iterable<E>>
+    implements Signal<Iterable<E>> {
   /// Creates a [IterableSignal] with the given [value].
   IterableSignal(
+    super.value, {
+    super.debugLabel,
+    super.autoDispose,
+  });
+
+  @override
+  bool operator ==(Object other) {
+    return other is IterableSignal<E> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+      for (final item in value) item.hashCode
+    ]);
+  }
+}
+
+class _IterableSignal<E, V extends Iterable<E>> extends Signal<V>
+    implements Iterable<E> {
+  _IterableSignal(
     super.value, {
     super.debugLabel,
     super.autoDispose,
@@ -144,20 +168,6 @@ class IterableSignal<E> extends Signal<Iterable<E>> implements Iterable<E> {
   @override
   Iterable<T> whereType<T>() {
     return value.whereType<T>();
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is IterableSignal<E> && value == other.value;
-  }
-
-  @override
-  int get hashCode {
-    return Object.hashAll([
-      globalId.hashCode,
-      value.hashCode,
-      for (final item in value) item.hashCode
-    ]);
   }
 }
 

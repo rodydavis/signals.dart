@@ -62,11 +62,11 @@ void main() {
       // ignore: unnecessary_type_check
       expect(b is ReadonlySignal, true);
     });
-   
+
     test('valueSignal', () {
       // ignore: deprecated_member_use_from_same_package
       final a = valueSignal(1);
-      
+
       expect(a.value, 1);
     });
 

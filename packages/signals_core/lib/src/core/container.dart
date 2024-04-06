@@ -1,4 +1,4 @@
-import '../value/map.dart';
+import '../value/value.dart';
 import 'signals.dart';
 
 /// Signal container used to create signals based on args
