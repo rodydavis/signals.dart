@@ -817,20 +817,6 @@ Signal<T> signal<T>(
   );
 }
 
-/// Create a read only signal
-@Deprecated('Use signal<T>(...).readonly() instead')
-ReadonlySignal<T> readonlySignal<T>(
-  T value, {
-  String? debugLabel,
-  bool autoDispose = false,
-}) {
-  return signal(
-    value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-  );
-}
-
 /// Alias for Signal
 @Deprecated('Use Signal<T> instead')
 typedef ValueSignal<T> = Signal<T>;

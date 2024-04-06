@@ -1,5 +1,5 @@
 part of 'signals.dart';
-
+// coverage:ignore-start
 // ignore: public_member_api_docs
 void _debugPostEvent(
   String eventKind,
@@ -198,3 +198,5 @@ void _onEffectRemoved(_Effect instance) {
     };
   });
 }
+
+// coverage:ignore-end

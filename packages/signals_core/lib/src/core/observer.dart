@@ -44,6 +44,7 @@ abstract class SignalsObserver {
   static SignalsObserver? instance;
 }
 
+// coverage:ignore-start
 /// Logs all signals and computed changes to the console.
 class LoggingSignalsObserver extends SignalsObserver {
   @override
@@ -69,3 +70,4 @@ class LoggingSignalsObserver extends SignalsObserver {
   /// Logs a message to the console.
   void log(String message) => print(message);
 }
+// coverage:ignore-end

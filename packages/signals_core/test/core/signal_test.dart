@@ -41,6 +41,11 @@ void main() {
       final v = [1, 2];
       final s = signal(v);
       expect(s.value, v);
+      expect(s.get(), v);
+      expect(s.toString(), v.toString());
+      expect(s(), v);
+      expect(s.toJson(), v);
+      expect(s.peek(), v);
     });
 
     test('overrideWith', () {
@@ -48,6 +53,29 @@ void main() {
       expect(a.value, 1);
       a.overrideWith(2);
       expect(a.value, 2);
+    });
+
+    test('readonly', () {
+      final a = signal(1);
+      final b = a.readonly();
+
+      // ignore: unnecessary_type_check
+      expect(b is ReadonlySignal, true);
+    });
+   
+    test('valueSignal', () {
+      // ignore: deprecated_member_use_from_same_package
+      final a = valueSignal(1);
+      
+      expect(a.value, 1);
+    });
+
+    test('hashcode/==', () {
+      final a = signal(1);
+      final b = signal(1);
+
+      expect(a == b, true);
+      expect(a.hashCode != b.hashCode, true);
     });
 
     group('dispose', () {
