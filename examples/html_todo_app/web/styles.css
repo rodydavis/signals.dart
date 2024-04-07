@@ -4,7 +4,17 @@ body {
   padding: 2rem;
 }
 
+#todoForm {
+  margin-bottom: 10px;
+}
+
 ul {
   list-style: none;
   padding: 0;
+}
+
+table {
+  & th {
+    text-align: start;
+  }
 }
