@@ -3,37 +3,32 @@ import 'package:web/helpers.dart';
 import 'package:signals/signals.dart';
 
 void main() {
-  final todoForm = document.getElementById("todoForm")!;
+  final todoForm = document.getElementById("todoForm") as HTMLFormElement;
   final todoInput = document.getElementById("todoInput") as HTMLInputElement;
-  final todoList = document.getElementById("todoList")!;
-  final taskFilter = document.getElementById("taskFilter")!;
+  final todoList = document.getElementById("todoList") as HTMLLIElement;
+  final taskFilter = document.getElementById("taskFilter") as HTMLInputElement;
 
   final app = TasksApp();
 
-  todoForm.addEventListener(
-    "submit",
-    (Event event) {
-      event.preventDefault();
-      final title = todoInput.value.trim();
-      if (title.isEmpty) return;
-      final task = TaskElement.create((title: title, completed: false));
-      app.tasks.add(task);
-      todoInput.value = "";
-    }.toJS,
-  );
+  todoForm.onsubmit = (Event event) {
+    event.preventDefault();
+    final title = todoInput.value.trim();
+    if (title.isEmpty) return;
+    final task = TaskElement.create((title: title, completed: false));
+    app.tasks.add(task);
+    todoInput.value = "";
+  }.toJS;
 
-  taskFilter.addEventListener(
-    "change",
-    (Event event) {
-      final target = event.target as HTMLInputElement;
-      app.filter.value = target.value;
-    }.toJS,
-  );
+  taskFilter.onchange = (Event event) {
+    final target = event.target as HTMLInputElement;
+    app.filter.value = target.value;
+  }.toJS;
 
   effect(() {
     todoList.innerHTML = '';
-    for (var i = 0; i < app.filteredTasks.value.length; i++) {
-      final task = app.filteredTasks.value[i];
+    final tasks = app.filteredTasks.value;
+    for (var i = 0; i < tasks.length; i++) {
+      final task = tasks[i];
       todoList.appendChild(task.root);
     }
   });
