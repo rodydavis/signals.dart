@@ -345,7 +345,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
     super.autoDispose,
   })  : _compute = compute,
         _globalVersion = globalVersion - 1,
-        _flags = OUTDATED,
+        _flags = _OUTDATED,
         super._(globalId: ++_lastGlobalId) {
     assert(() {
       SignalsObserver.instance?.onComputedCreated(this);
@@ -390,19 +390,19 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
 
   @override
   bool _refresh() {
-    this._flags &= ~NOTIFIED;
+    this._flags &= ~_NOTIFIED;
 
-    if ((this._flags & RUNNING) != 0) {
+    if ((this._flags & _RUNNING) != 0) {
       return false;
     }
 
     // If this computed signal has subscribed to updates from its dependencies
     // (TRACKING flag set) and none of them have notified about changes (OUTDATED
     // flag not set), then the computed value can't have changed.
-    if ((this._flags & (OUTDATED | TRACKING)) == TRACKING) {
+    if ((this._flags & (_OUTDATED | _TRACKING)) == _TRACKING) {
       return true;
     }
-    this._flags &= ~OUTDATED;
+    this._flags &= ~_OUTDATED;
 
     if (this._globalVersion == globalVersion) {
       return true;
@@ -411,10 +411,10 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
 
     // Mark this computed signal running before checking the dependencies for value
     // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
-    this._flags |= RUNNING;
+    this._flags |= _RUNNING;
     final needsUpdate = _needsToRecompute(this);
     if (_version > 0 && !needsUpdate) {
-      this._flags &= ~RUNNING;
+      this._flags &= ~_RUNNING;
       return true;
     }
 
@@ -423,7 +423,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
       _prepareSources(this);
       _evalContext = this;
       final val = _compute();
-      if ((this._flags & HAS_ERROR) != 0 || needsUpdate || _version == 0) {
+      if ((this._flags & _HAS_ERROR) != 0 || needsUpdate || _version == 0) {
         if (_version == 0 || val != _value) {
           if (_version == 0) {
             _initialValue = val;
@@ -431,7 +431,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
             _previousValue = _value;
           }
           _value = val;
-          _flags &= ~HAS_ERROR;
+          _flags &= ~_HAS_ERROR;
           _version++;
           assert(() {
             SignalsObserver.instance?.onComputedUpdated(this, val);
@@ -441,19 +441,19 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
       }
     } catch (err) {
       _error = err;
-      _flags |= HAS_ERROR;
+      _flags |= _HAS_ERROR;
       _version++;
     }
     _evalContext = prevContext;
     _cleanupSources(this);
-    _flags &= ~RUNNING;
+    _flags &= ~_RUNNING;
     return true;
   }
 
   @override
   void _subscribe(_Node node) {
     if (_targets == null) {
-      _flags |= OUTDATED | TRACKING;
+      _flags |= _OUTDATED | _TRACKING;
 
       // A computed signal subscribes lazily to its dependencies when the it
       // gets its first subscriber.
@@ -473,7 +473,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
       if (_targets == null) {
-        _flags &= ~TRACKING;
+        _flags &= ~_TRACKING;
 
         for (var node = _sources; node != null; node = node._nextSource) {
           node._source._unsubscribe(node);
@@ -494,8 +494,8 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
 
   @override
   void _notify() {
-    if (!((_flags & NOTIFIED) != 0)) {
-      _flags |= OUTDATED | NOTIFIED;
+    if (!((_flags & _NOTIFIED) != 0)) {
+      _flags |= _OUTDATED | _NOTIFIED;
       _notifyAllTargets();
     }
   }
@@ -505,7 +505,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
     if (!_refresh()) {
       _cycleDetected();
     }
-    if ((_flags & HAS_ERROR) != 0) {
+    if ((_flags & _HAS_ERROR) != 0) {
       throw _error!;
     }
     return _value;
@@ -519,7 +519,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
       return this._value;
     }
 
-    if ((_flags & RUNNING) != 0) {
+    if ((_flags & _RUNNING) != 0) {
       _cycleDetected();
     }
     final node = _addDependency(this);
@@ -527,7 +527,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
     if (node != null) {
       node._version = _version;
     }
-    if ((_flags & HAS_ERROR) != 0) {
+    if ((_flags & _HAS_ERROR) != 0) {
       throw _error!;
     }
     return this._value;
@@ -536,7 +536,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
   @override
   void dispose() {
     super.dispose();
-    _flags |= DISPOSED;
+    _flags |= _DISPOSED;
   }
 
   void _reset(T? value) {

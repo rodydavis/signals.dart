@@ -22,9 +22,9 @@ void _endBatch() {
     while (effect != null) {
       final _Effect? next = effect._nextBatchedEffect;
       effect._nextBatchedEffect = null;
-      effect._flags &= ~NOTIFIED;
+      effect._flags &= ~_NOTIFIED;
 
-      if (!((effect._flags & DISPOSED) != 0) && _needsToRecompute(effect)) {
+      if (!((effect._flags & _DISPOSED) != 0) && _needsToRecompute(effect)) {
         try {
           effect._callback();
         } catch (err) {

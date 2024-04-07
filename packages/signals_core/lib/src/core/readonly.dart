@@ -76,8 +76,8 @@ abstract class ReadonlySignal<T> {
     return effect(() {
       final effect = _currentEffect!;
       final val = this.value;
-      final flag = effect._flags & TRACKING;
-      effect._flags &= ~TRACKING;
+      final flag = effect._flags & _TRACKING;
+      effect._flags &= ~_TRACKING;
       try {
         fn(val);
       } finally {

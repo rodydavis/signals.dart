@@ -34,12 +34,12 @@ void _mutationDetected() {
 }
 
 /// Flags for Computed and Effect.
-const RUNNING = 1 << 0;
-const NOTIFIED = 1 << 1;
-const OUTDATED = 1 << 2;
-const DISPOSED = 1 << 3;
-const HAS_ERROR = 1 << 4;
-const TRACKING = 1 << 5;
+const _RUNNING = 1 << 0;
+const _NOTIFIED = 1 << 1;
+const _OUTDATED = 1 << 2;
+const _DISPOSED = 1 << 3;
+const _HAS_ERROR = 1 << 4;
+const _TRACKING = 1 << 5;
 
 // A linked list node used to track dependencies (sources) and dependents (targets).
 // Also used to remember the source's last version number that the target saw.
@@ -133,7 +133,7 @@ _Node? _addDependency(ReadonlySignal signal) {
 
     // Subscribe to change notifications from this dependency if we're in an effect
     // OR evaluating a computed signal that in turn has subscribers.
-    if ((_evalContext!._flags & TRACKING) != 0) {
+    if ((_evalContext!._flags & _TRACKING) != 0) {
       signal._subscribe(node);
     }
     return node;

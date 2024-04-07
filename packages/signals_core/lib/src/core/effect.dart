@@ -13,8 +13,8 @@ void _cleanupEffect(_Effect effect) {
     try {
       cleanup();
     } catch (e) {
-      effect._flags &= ~RUNNING;
-      effect._flags |= DISPOSED;
+      effect._flags &= ~_RUNNING;
+      effect._flags |= _DISPOSED;
       _disposeEffect(effect);
       rethrow;
     } finally {
@@ -41,8 +41,8 @@ void _endEffect(_Effect effect, _Listenable? prevContext) {
   _cleanupSources(effect);
   _evalContext = prevContext;
 
-  effect._flags &= ~RUNNING;
-  if ((effect._flags & DISPOSED) != 0) {
+  effect._flags &= ~_RUNNING;
+  if ((effect._flags & _DISPOSED) != 0) {
     _disposeEffect(effect);
   }
   _endBatch();
@@ -78,7 +78,7 @@ class _Effect implements _Listenable {
   _Effect(
     EffectCallback compute, {
     this.debugLabel,
-  })  : _flags = TRACKING,
+  })  : _flags = _TRACKING,
         _compute = compute,
         _cleanup = null,
         globalId = ++_lastGlobalId {
@@ -98,7 +98,7 @@ class _Effect implements _Listenable {
   void _callback() {
     final finish = _start();
     try {
-      if ((_flags & DISPOSED) != 0) return;
+      if ((_flags & _DISPOSED) != 0) return;
       if (_compute == null) return;
       _currentEffect = this;
       final cleanup = _compute!();
@@ -116,11 +116,11 @@ class _Effect implements _Listenable {
   }
 
   EffectCleanup _start() {
-    if ((_flags & RUNNING) != 0) {
+    if ((_flags & _RUNNING) != 0) {
       _cycleDetected();
     }
-    _flags |= RUNNING;
-    _flags &= ~DISPOSED;
+    _flags |= _RUNNING;
+    _flags &= ~_DISPOSED;
     _cleanupEffect(this);
     _prepareSources(this);
 
@@ -132,16 +132,16 @@ class _Effect implements _Listenable {
 
   @override
   void _notify() {
-    if (!((_flags & NOTIFIED) != 0)) {
-      _flags |= NOTIFIED;
+    if (!((_flags & _NOTIFIED) != 0)) {
+      _flags |= _NOTIFIED;
       _nextBatchedEffect = _batchedEffect;
       _batchedEffect = this;
     }
   }
 
   void _dispose() {
-    _flags |= DISPOSED;
-    if (!((_flags & RUNNING) != 0)) {
+    _flags |= _DISPOSED;
+    if (!((_flags & _RUNNING) != 0)) {
       _disposeEffect(this);
     }
     assert(() {
