@@ -89,10 +89,11 @@ class TasksApp {
 }
 
 class TaskElement {
-  TaskElement(this.state, this.root, this.cleanup);
   final Element root;
   final Function cleanup;
   final Signal<Task> state;
+
+  TaskElement(this.state, this.root, this.cleanup);
 
   static TaskElement create(Task task) {
     final listItem = document.createElement("li");
