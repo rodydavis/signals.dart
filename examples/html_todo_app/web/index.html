@@ -19,36 +19,33 @@
     <script defer src="main.dart.js"></script>
   </head>
   <body>
-    <h1>Tasks</h1>
-    <form id="todoForm">
-      <input type="text" id="todoInput" placeholder="Add a new task" />
-      <button type="submit">Add</button>
-    </form>
-    <div id="taskFilter">
-      <label>
-        <input type="radio" name="filter" value="all" checked /> All
-      </label>
-      <label>
-        <input type="radio" name="filter" value="active" /> Active
-      </label>
-      <label>
-        <input type="radio" name="filter" value="completed" /> Completed
-      </label>
-    </div>
-    <ul id="todoList"></ul>
-    <table>
-     <tr>
-      <th>Total:</th>
-      <td id="tasks-total">0</th>
-     </tr>
-     <tr>
-      <th>Active:</th>
-      <td id="tasks-active">0</th>
-     </tr>
-     <tr>
-      <th>Completed:</th>
-      <td id="tasks-completed">0</th>
-     </tr>
-    </table>
+    <header>
+      <h1>Tasks</h1>
+      <form id="todoForm">
+        <input type="text" id="todoInput" placeholder="Add a new task" />
+        <button type="submit">Add</button>
+      </form>
+    </header>
+    <main>
+      <div id="taskFilter">
+        <label>
+          <input type="radio" name="filter" value="all" checked /> All (<output
+            id="tasks-total"
+            >0</output
+          >)
+        </label>
+        <label>
+          <input type="radio" name="filter" value="active" /> Active (<output
+            id="tasks-active"
+            >0</output
+          >)
+        </label>
+        <label>
+          <input type="radio" name="filter" value="completed" /> Completed
+          (<output id="tasks-completed">0</output>)
+        </label>
+      </div>
+      <ul id="todoList"></ul>
+    </main>
   </body>
 </html>
