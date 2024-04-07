@@ -44,8 +44,8 @@ void Function() createEffect<S extends StatefulWidget>(
     debugLabel: debugLabel,
     onDispose: onDispose,
   );
-  if (widget is SignalsAutoDisposeMixin) {
-    (widget as SignalsAutoDisposeMixin).addEffectDisposeCallback(dispose);
+  if (widget case SignalsAutoDisposeMixin w) {
+    w.addEffectDisposeCallback(dispose);
   }
   return dispose;
 }
