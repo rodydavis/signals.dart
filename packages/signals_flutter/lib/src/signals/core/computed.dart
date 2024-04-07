@@ -68,7 +68,7 @@ Computed<T> bindComputed<T, S extends StatefulWidget>(
     () {
       target.value;
       final context = widget.context;
-      if (context is Element && context.mounted && !context.dirty) {
+      if (context is Element && context.mounted) {
         context.markNeedsBuild();
       }
     },
