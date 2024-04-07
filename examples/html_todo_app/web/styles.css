@@ -41,3 +41,12 @@ header {
     }
   }
 }
+
+table {
+  width: 100%;
+  margin-top: 10px;
+
+  & thead {
+    font-weight: bold;
+  }
+}
