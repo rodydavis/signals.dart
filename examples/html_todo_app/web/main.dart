@@ -61,15 +61,12 @@ class TasksApp {
   final filter = signal("all");
 
   late final filteredTasks = computed(() {
-    final currentFilter = filter.value;
-    final currentTasks = tasks.value;
-    if (currentFilter == "all") {
-      return currentTasks.toList();
-    } else if (currentFilter == "active") {
-      return currentTasks.where((task) => !task.state.value.completed).toList();
-    } else {
-      return currentTasks.where((task) => task.state.value.completed).toList();
-    }
+    final tasks = this.tasks.value;
+    return switch (filter.value) {
+      'all' => tasks.toList(),
+      'active' => tasks.where((task) => !task.state.value.completed).toList(),
+      (_) => tasks.where((task) => task.state.value.completed).toList(),
+    };
   });
 
   late final taskCount = computed(() {
