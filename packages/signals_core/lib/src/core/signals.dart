@@ -11,6 +11,7 @@ part 'computed.dart';
 part 'signal.dart';
 part 'batch.dart';
 part 'untracked.dart';
+part 'readonly.dart';
 
 const _maxCallDepth = 100;
 
@@ -32,9 +33,7 @@ void _mutationDetected() {
   throw MutationDetectedError();
 }
 
-const identifier = Symbol('signals');
-
-// Flags for Computed and Effect.
+/// Flags for Computed and Effect.
 const RUNNING = 1 << 0;
 const NOTIFIED = 1 << 1;
 const OUTDATED = 1 << 2;
@@ -304,6 +303,7 @@ class SignalsError extends Error {
   String toString() => message;
 }
 
+/// Error to throw if a signal is read after it is disposed
 class SignalsReadAfterDisposeError extends SignalsError {
   SignalsReadAfterDisposeError(ReadonlySignal instance)
       : super(
@@ -312,6 +312,7 @@ class SignalsReadAfterDisposeError extends SignalsError {
         );
 }
 
+/// Error to throw if a signal is written to after it is disposed
 class SignalsWriteAfterDisposeError extends SignalsError {
   SignalsWriteAfterDisposeError(ReadonlySignal instance)
       : super(

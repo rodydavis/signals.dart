@@ -75,16 +75,6 @@ class _Effect implements _Listenable {
   @override
   int _flags;
 
-  @override
-  bool operator ==(Object other) {
-    return other is _Effect && globalId == other.globalId;
-  }
-
-  @override
-  int get hashCode {
-    return globalId.hashCode;
-  }
-
   _Effect(
     EffectCallback compute, {
     this.debugLabel,
