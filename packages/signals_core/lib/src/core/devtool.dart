@@ -7,6 +7,23 @@ void reloadSignalsDevTools() {
   observer.reassemble();
 }
 
+/// Check if the signals devtools are enabled
+bool get signalsDevToolsEnabled {
+  final target = SignalsObserver.instance;
+  if (target is DevToolsSignalsObserver) {
+    return target.enabled;
+  }
+  return false;
+}
+
+/// Manually enable/disable signals devtools
+set signalsDevToolsEnabled(bool value) {
+  final target = SignalsObserver.instance;
+  if (target is DevToolsSignalsObserver) {
+    target.enabled = value;
+  }
+}
+
 /// Signals DevTools observer
 class DevToolsSignalsObserver implements SignalsObserver {
   final Set<WeakReference<ReadonlySignal>> _signals = {};
