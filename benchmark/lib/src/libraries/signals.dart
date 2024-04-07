@@ -12,8 +12,16 @@ class SignalsBenchmark extends Benchmark {
   }
 
   @override
-  ComputedValueContainer<T, dynamic> createComputed<T>(T Function() cb) {
+  ComputedValueContainer<T, dynamic> createComputed<T>(
+    T Function() cb,
+  ) {
     return _Computed<T>(cb);
+  }
+
+  @override
+  void setup() {
+    super.setup();
+    SignalsObserver.instance = null;
   }
 }
 
@@ -25,6 +33,11 @@ class _Value<T> extends ValueContainer<T, Signal<T>> {
 
   @override
   T get value => instance.value;
+
+  @override
+  Function subscribe(Function(T) cb) {
+    return instance.subscribe(cb);
+  }
 }
 
 class _Computed<T> extends ComputedValueContainer<T, Computed<T>> {
@@ -35,4 +48,9 @@ class _Computed<T> extends ComputedValueContainer<T, Computed<T>> {
 
   @override
   T get value => instance.value;
+
+  @override
+  Function subscribe(Function(T) cb) {
+    return instance.subscribe(cb);
+  }
 }

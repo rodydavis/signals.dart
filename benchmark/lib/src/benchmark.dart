@@ -2,7 +2,14 @@ abstract class Benchmark {
   String get name;
 
   ValueContainer<T, dynamic> createValue<T>(T value);
-  ComputedValueContainer<T, dynamic> createComputed<T>(T Function() cb);
+
+  ComputedValueContainer<T, dynamic> createComputed<T>(
+    T Function() cb,
+  );
+
+  void setup() {}
+
+  void teardown() {}
 }
 
 abstract class ReadonlyValueContainer<T, O> {
@@ -10,6 +17,8 @@ abstract class ReadonlyValueContainer<T, O> {
   ReadonlyValueContainer(this.instance);
 
   T get value;
+
+  Function subscribe(Function(T) cb);
 }
 
 abstract class ValueContainer<T, O> extends ReadonlyValueContainer<T, O> {

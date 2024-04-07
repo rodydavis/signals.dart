@@ -15,6 +15,14 @@ class StateBeaconBenchmark extends Benchmark {
   ComputedValueContainer<T, dynamic> createComputed<T>(T Function() cb) {
     return _Computed<T>(cb);
   }
+
+  @override
+  void setup() {
+    super.setup();
+    BeaconScheduler.setCustomScheduler(() {
+      BeaconScheduler.flush();
+    });
+  }
 }
 
 class _Value<T> extends ValueContainer<T, WritableBeacon<T>> {
@@ -25,6 +33,11 @@ class _Value<T> extends ValueContainer<T, WritableBeacon<T>> {
 
   @override
   T get value => instance.value;
+
+  @override
+  Function subscribe(Function(T) cb) {
+    return instance.subscribe(cb, synchronous: true);
+  }
 }
 
 class _Computed<T> extends ComputedValueContainer<T, ReadableBeacon<T>> {
@@ -35,4 +48,9 @@ class _Computed<T> extends ComputedValueContainer<T, ReadableBeacon<T>> {
 
   @override
   T get value => instance.value;
+
+  @override
+  Function subscribe(Function(T) cb) {
+    return instance.subscribe(cb, synchronous: true);
+  }
 }

@@ -13,6 +13,7 @@ import 'src/benchmark.dart';
 import 'src/libraries/signals.dart';
 import 'src/libraries/solidart.dart';
 import 'src/libraries/state_beacon.dart';
+import 'src/libraries/value_notifier.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           SignalsBenchmark(),
           SolidartBenchmark(),
           StateBeaconBenchmark(),
+          ValueNotifierBenchmark(),
         ],
         units: 10000,
       ),
@@ -59,7 +61,6 @@ class BenchmarkViewer extends StatefulWidget {
 
 class _BenchmarkViewerState extends State<BenchmarkViewer> {
   StringBuffer sb = StringBuffer();
-  // final controller = TextEditingController();
   final output = StreamController<String>();
   bool active = false;
 
@@ -82,137 +83,63 @@ class _BenchmarkViewerState extends State<BenchmarkViewer> {
   void run() async {
     sb = StringBuffer();
     active = true;
-    output.add('Running benchmark...');
-    output.add('');
-    final numbers = List.generate(widget.units, (i) => i);
-    for (final benchmark in widget.benchmarks) {
-      output.add('## ${benchmark.name}');
-      output.add('');
-      {
-        final signals = {for (var n in numbers) benchmark.createValue(n)};
-        runTest('increment int value', () {
-          for (final instance in signals) {
-            instance.value++;
-          }
-        });
-      }
-      {
-        final signals = <(ValueContainer, ComputedValueContainer)>[];
-        for (var n in numbers) {
-          final source = benchmark.createValue(n);
-          final computed = benchmark.createComputed(() => source.value);
-          signals.add((source, computed));
-        }
-        runTest('1 value + 1 computed', () {
-          for (final instance in signals) {
-            final (source, computed) = instance;
-            computed.value;
-            source.value++;
-            computed.value;
-          }
-        });
-      }
-      {
-        final signals = <(ValueContainer, List<ComputedValueContainer>)>[];
-        const depth = 100;
-        for (var n in numbers) {
-          final source = benchmark.createValue(n);
-          final computed = <ComputedValueContainer>[
-            benchmark.createComputed(() => source.value)
-          ];
-          for (var i = 0; i < depth; i++) {
-            final last = computed.last;
-            computed.add(benchmark.createComputed(() => last.value));
-          }
+    addHeader();
+    await Future.delayed(const Duration(milliseconds: 5));
 
-          signals.add((source, computed));
-        }
-        runTest('1 value + $depth computed', () {
-          for (final instance in signals) {
-            final (source, computed) = instance;
-            computed.last.value;
-            source.value++;
-            computed.last.value;
-          }
-        });
+    for (final benchmark in widget.benchmarks) {
+      benchmark.setup();
+      const counts = [
+        0,
+        1,
+        10,
+        100,
+        // 1000,
+      ];
+      for (final count in counts) {
+        await testIncrementWithSubsribers(benchmark, count);
       }
-      {
-        // 5 x 5 x 5
-        const count = 5;
-        final layer1 = <ValueContainer>[];
-        final layer2 = <ComputedValueContainer>[];
-        final layer3 = <ComputedValueContainer>[];
-        for (var i = 0; i < count; i++) {
-          layer1.add(benchmark.createValue(i));
-        }
-        for (var i = 0; i < count; i++) {
-          layer2.add(benchmark.createComputed(() {
-            num sum = 0;
-            for (final item in layer1) {
-              sum += (item.value as num);
-            }
-            return sum;
-          }));
-        }
-        for (var i = 0; i < count; i++) {
-          layer3.add(benchmark.createComputed(() {
-            num sum = 0;
-            for (final item in layer2) {
-              sum += (item.value as num);
-            }
-            return sum;
-          }));
-        }
-        runTest('$count value x $count computed x $count computed', () {
-          for (var i = 0; i < widget.units; i++) {
-            for (final instance in layer3) {
-              instance.value;
-            }
-            for (final instance in layer1) {
-              final val = instance.value as num;
-              instance.value = val + 1;
-            }
-            for (final instance in layer2) {
-              instance.value;
-            }
-            for (final instance in layer1) {
-              final val = instance.value as num;
-              instance.value = val + 1;
-            }
-            for (final instance in layer3) {
-              instance.value;
-            }
-          }
-        });
-      }
+      benchmark.teardown();
     }
     active = false;
-    output.add('Benchmark complete!');
     output.add('');
   }
 
-  void runTest(
-    String name,
-    void Function() cb, {
-    int? units,
-  }) {
-    final count = units ?? widget.units;
+  Future<void> runTest(String name, void Function() cb) async {
     final result = syncBenchmark(name, cb);
-    output.add('### $name');
+    addResult(name, result);
+    await Future.delayed(const Duration(milliseconds: 5));
+  }
+
+  void addHeader() {
+    output.add('## Results');
+    output.add('Date: ${DateTime.now().toIso8601String()}');
     output.add('');
-    output.add('| key | value |');
-    output.add('| -- | -- |');
-    output.add('| total runs | ${result.runs} |');
-    output.add(
-        '| total time | ${Printer.formatMicroseconds(result.totalRunTime.inMicroseconds)} |');
-    output.add(
-        '| average run | ${Printer.formatMicroseconds(result.averageRunTime.inMicroseconds)} |');
-    output.add('| runs/second | ${result.runsPerSecond} |');
-    output.add('| units | $count |');
-    output.add('| units/second | ${result.unitsPerSecond(count)} |');
-    output.add(
-        '| time per unit | ${Printer.formatMicroseconds(result.microsecondsPerUnit(count))} |');
-    output.add('');
+    const columns = [
+      'name',
+      'total runs',
+      'average run',
+      'runs/second',
+      'units/second',
+      'time per unit',
+      'total time',
+      'units',
+    ];
+    output.add('| ${columns.join(' | ')} |');
+    output.add('| ${columns.map((e) => '--').join(' | ')} |');
+  }
+
+  void addResult(String name, BenchmarkResult result) {
+    final row = [
+      name,
+      '${result.runs}',
+      Printer.formatMicroseconds(result.averageRunTime.inMicroseconds),
+      (result.runsPerSecond.toStringAsFixed(2)),
+      (result.unitsPerSecond(widget.units).toStringAsFixed(2)),
+      Printer.formatMicroseconds(result.microsecondsPerUnit(widget.units)),
+      Printer.formatMicroseconds(result.totalRunTime.inMicroseconds),
+      '${widget.units}',
+    ];
+    output.add('| ${row.join(' | ')} |');
   }
 
   @override
@@ -245,5 +172,49 @@ class _BenchmarkViewerState extends State<BenchmarkViewer> {
         child: Icon(active ? Icons.stop : Icons.play_arrow),
       ),
     );
+  }
+
+  Future<void> testIncrementWithSubsribers(
+    Benchmark benchmark,
+    int count,
+  ) async {
+    var name = '${benchmark.name}: signal => $count subscribers';
+    final cleanup = <Function>[];
+    final actions = <Function>[];
+    final result = syncBenchmark(
+      name,
+      () {
+        for (var i = 0; i < actions.length; i++) {
+          final instance = actions.elementAt(i);
+          instance();
+        }
+      },
+      setup: () {
+        final numbers = List.generate(widget.units, (i) => i);
+        final signals = <ValueContainer<int, dynamic>>{};
+        for (var n in numbers) {
+          signals.add(benchmark.createValue(n));
+        }
+        final cleanup = <Function>[];
+        for (final item in signals) {
+          for (var i = 0; i < count; i++) {
+            cleanup.add(item.subscribe((_) {}));
+          }
+        }
+        for (var i = 0; i < signals.length; i++) {
+          final instance = signals.elementAt(i);
+          actions.add(() {
+            instance.value++;
+          });
+        }
+      },
+      teardown: () {
+        for (final cb in cleanup) {
+          cb();
+        }
+      },
+    );
+    addResult(name, result);
+    await Future.delayed(const Duration(milliseconds: 5));
   }
 }

@@ -25,6 +25,15 @@ class _Value<T> extends ValueContainer<T, Signal<T>> {
 
   @override
   T get value => instance.value;
+
+  @override
+  Function subscribe(Function(T) cb) {
+    final effect = Effect((_) {
+      final value = this.value;
+      cb(value);
+    });
+    return effect.dispose;
+  }
 }
 
 class _Computed<T> extends ComputedValueContainer<T, Computed<T>> {
@@ -35,4 +44,13 @@ class _Computed<T> extends ComputedValueContainer<T, Computed<T>> {
 
   @override
   T get value => instance.value;
+
+  @override
+  Function subscribe(Function(T) cb) {
+    final effect = Effect((_) {
+      final value = this.value;
+      cb(value);
+    });
+    return effect.dispose;
+  }
 }

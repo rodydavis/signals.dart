@@ -65,14 +65,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      sha256: d57953e10f9f8327ce64a508a355f0b1ec902193f66288e8cb5070e7c47eeb2d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.6"
   fake_async:
     dependency: transitive
     description:
@@ -201,23 +193,21 @@ packages:
       path: "../packages/signals"
       relative: true
     source: path
-    version: "5.0.0-beta.11"
+    version: "5.0.0-beta.12"
   signals_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_core
-      sha256: "6439a55b8395214073216853b4233685a07eb293caba3c09884f898bbf7c820e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0-beta.7"
+      path: "../packages/signals_core"
+      relative: true
+    source: path
+    version: "5.0.0-beta.8"
   signals_flutter:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_flutter
-      sha256: "1b249c9e914174e0dcb1e82719a2de9ca8254c15befb4ce4f366e4667c48b5af"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0-beta.9"
+      path: "../packages/signals_flutter"
+      relative: true
+    source: path
+    version: "5.0.0-beta.10"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -279,14 +269,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  styled_text:
-    dependency: "direct main"
-    description:
-      name: styled_text
-      sha256: fd624172cf629751b4f171dd0ecf9acf02a06df3f8a81bb56c0caa4f1df706c3
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.1.0"
   term_glyph:
     dependency: transitive
     description:
@@ -319,14 +301,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "13.0.0"
-  xmlstream:
-    dependency: transitive
-    description:
-      name: xmlstream
-      sha256: cfc14e3f256997897df9481ae630d94c2d85ada5187ebeb868bb1aabc2c977b4
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
 sdks:
   dart: ">=3.3.0 <4.0.0"
   flutter: ">=3.19.0"
