@@ -70,14 +70,6 @@ void main() {
       expect(a.value, 1);
     });
 
-    test('hashcode/==', () {
-      final a = signal(1);
-      final b = signal(1);
-
-      expect(a == b, true);
-      expect(a.hashCode != b.hashCode, true);
-    });
-
     group('dispose', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {

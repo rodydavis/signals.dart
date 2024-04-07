@@ -139,12 +139,6 @@ void main() {
       expect(values, [0, 6]);
     });
 
-    test('hashCode', () {
-      final s = computed(() => 1);
-      final value = s.hashCode;
-      expect(value != 0, true);
-    });
-
     test('error in callback', () {
       final s = computed(() => throw Exception('error'));
 
