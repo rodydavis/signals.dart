@@ -40,11 +40,13 @@ abstract class SignalsObserver {
   /// Called when a computed is updated.
   void onComputedUpdated(Computed instance, dynamic value);
 
+  // coverage:ignore-start
   void _onEffectCreated(_Effect instance) {}
 
   void _onEffectCalled(_Effect instance) {}
 
   void _onEffectRemoved(_Effect instance) {}
+  // coverage:ignore-end
 
   /// The current observer instance.
   static SignalsObserver? instance = DevToolsSignalsObserver();

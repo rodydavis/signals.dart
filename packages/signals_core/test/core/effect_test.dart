@@ -22,6 +22,32 @@ void main() {
         expect(calls, 1);
         expect(called, true);
       });
+
+      test('cleanup', () {
+        var calls = 0;
+        var called = false;
+        final dispose = effect(
+          () {
+            calls++;
+            return () => called = true;
+          },
+        );
+        dispose();
+        expect(calls, 1);
+        expect(called, true);
+      });
+
+      test('error in callback', () {
+        final a = signal(0);
+
+        expect(
+          () => effect(() {
+            a.value;
+            throw Exception();
+          }),
+          throwsException,
+        );
+      });
     });
   });
 }

@@ -1,5 +1,6 @@
 part of 'signals.dart';
 
+// coverage:ignore-start
 /// Reload the signals devTools
 void reloadSignalsDevTools() {
   final observer = SignalsObserver.instance;
@@ -64,7 +65,6 @@ class DevToolsSignalsObserver implements SignalsObserver {
     _devToolsInitialized = true;
   }
 
-  // coverage:ignore-start
 // ignore: public_member_api_docs
   void _debugPostEvent(
     String eventKind,

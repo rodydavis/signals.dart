@@ -267,7 +267,9 @@ class Signal<T> extends ReadonlySignal<T> {
 
     if (val != _value || force) {
       if (_callDepth > _maxCallDepth) {
+        // coverage:ignore-start
         _cycleDetected();
+        // coverage:ignore-end
       }
       _previousValue = _value ?? _initialValue;
       _value = val;

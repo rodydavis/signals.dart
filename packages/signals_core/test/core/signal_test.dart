@@ -70,6 +70,15 @@ void main() {
       expect(a.value, 1);
     });
 
+    test('forceUpdate', () {
+      final a = signal(0);
+
+      // ignore: deprecated_member_use_from_same_package
+      a.forceUpdate(1);
+
+      expect(a.value, 1);
+    });
+
     group('dispose', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {

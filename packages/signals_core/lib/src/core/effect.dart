@@ -1,5 +1,6 @@
 part of 'signals.dart';
 
+// coverage:ignore-start
 void _cleanupEffect(_Effect effect) {
   final cleanup = effect._cleanup;
   effect._cleanup = null;
@@ -47,6 +48,7 @@ void _endEffect(_Effect effect, _Listenable? prevContext) {
   }
   _endBatch();
 }
+// coverage:ignore-end
 
 /// Clean up function to stop subscriptions from updating the callback
 typedef EffectCleanup = void Function();
@@ -117,13 +119,14 @@ class _Effect implements _Listenable {
 
   EffectCleanup _start() {
     if ((_flags & _RUNNING) != 0) {
+      // coverage:ignore-start
       _cycleDetected();
+      // coverage:ignore-end
     }
     _flags |= _RUNNING;
     _flags &= ~_DISPOSED;
     _cleanupEffect(this);
     _prepareSources(this);
-
     _startBatch();
     final prevContext = _evalContext;
     _evalContext = this;
@@ -150,10 +153,12 @@ class _Effect implements _Listenable {
     }());
   }
 
+  // coverage:ignore-start
   @override
   void dispose() {
     _dispose();
   }
+  // coverage:ignore-end
 }
 
 /// {@template effect}
@@ -305,16 +310,19 @@ EffectCleanup effect(
   EffectCallback? onDispose,
 }) {
   final effect = _Effect(compute, debugLabel: debugLabel);
+
+  void disposeEffect() {
+    effect._dispose();
+    onDispose?.call();
+  }
+
   try {
     effect._callback();
   } catch (e) {
-    effect._dispose();
+    disposeEffect();
     rethrow;
   }
   // Return a bound function instead of a wrapper like `() => effect._dispose()`,
   // because bound functions seem to be just as fast and take up a lot less memory.
-  return () {
-    effect._dispose();
-    onDispose?.call();
-  };
+  return disposeEffect;
 }

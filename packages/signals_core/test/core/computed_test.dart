@@ -22,6 +22,14 @@ void main() {
       expect(multipliedCount.value, 3);
     });
 
+    test('readonly', () {
+      final a = computed(() => 1);
+      final b = a.readonly();
+
+      // ignore: unnecessary_type_check
+      expect(b is ReadonlySignal, true);
+    });
+
     group('dispose', () {
       test('check onDispose callback', () {
         int calls = 0;

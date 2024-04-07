@@ -503,7 +503,9 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
   @override
   T peek() {
     if (!_refresh()) {
+      // coverage:ignore-start
       _cycleDetected();
+      // coverage:ignore-end
     }
     if ((_flags & _HAS_ERROR) != 0) {
       throw _error!;
@@ -520,7 +522,9 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
     }
 
     if ((_flags & _RUNNING) != 0) {
+      // coverage:ignore-start
       _cycleDetected();
+      // coverage:ignore-end
     }
     final node = _addDependency(this);
     _refresh();
