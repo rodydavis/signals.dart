@@ -13,23 +13,16 @@ part 'batch.dart';
 part 'untracked.dart';
 part 'readonly.dart';
 
-const _maxCallDepth = 100;
-
-/// Cycle detection usually means you have updated
-/// a signal inside an effect and are reading by value.
-class EffectCycleDetectionError extends Error {}
+// A global version number for signals, used for fast-pathing repeated
+// computed.peek()/computed.value calls when nothing has changed globally.
+int globalVersion = 0;
 
 // coverage:ignore-start
+const _maxCallDepth = 100;
+
 void _cycleDetected() {
   throw EffectCycleDetectionError();
 }
-// coverage:ignore-end
-
-/// Mutation detection usually means you have updated
-/// a signal inside a computed.
-///
-/// Computed cannot have side-effects
-class MutationDetectedError extends Error {}
 
 void _mutationDetected() {
   throw MutationDetectedError();
@@ -93,11 +86,8 @@ _Effect? _batchedEffect;
 int _batchDepth = 0;
 int _callDepth = 0;
 
-// A global version number for signals, used for fast-pathing repeated
-// computed.peek()/computed.value calls when nothing has changed globally.
-int globalVersion = 0;
+int _lastGlobalId = 0;
 
-// coverage:ignore-start
 _Node? _addDependency(ReadonlySignal signal) {
   if (_evalContext == null) {
     return null;
@@ -177,8 +167,6 @@ _Node? _addDependency(ReadonlySignal signal) {
   }
   return null;
 }
-
-int _lastGlobalId = 0;
 
 abstract class _Listenable {
   _Node? _sources;
@@ -296,20 +284,16 @@ void _cleanupSources(_Listenable target) {
 
   target._sources = head;
 }
-// coverage:ignore-end
 
 /// Signal usage error
 class SignalsError extends Error {
   final String message;
   SignalsError(this.message);
 
-  // coverage:ignore-start
   @override
   String toString() => message;
-  // coverage:ignore-end
 }
 
-// coverage:ignore-start
 /// Error to throw if a signal is read after it is disposed
 class SignalsReadAfterDisposeError extends SignalsError {
   SignalsReadAfterDisposeError(ReadonlySignal instance)
@@ -329,3 +313,13 @@ class SignalsWriteAfterDisposeError extends SignalsError {
           'Once you have called dispose() on a signal, it can no longer be used.',
         );
 }
+
+/// Cycle detection usually means you have updated
+/// a signal inside an effect and are reading by value.
+class EffectCycleDetectionError extends Error {}
+
+/// Mutation detection usually means you have updated
+/// a signal inside a computed.
+///
+/// Computed cannot have side-effects
+class MutationDetectedError extends Error {}
