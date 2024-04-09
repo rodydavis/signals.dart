@@ -63,14 +63,14 @@ Computed<T> bindComputed<T, S extends StatefulWidget>(
   Computed<T> target, {
   dynamic Function(Computed<T>)? onDispose,
 }) {
-  if (widget is SignalsAutoDisposeMixin) {
+ if (widget is SignalsAutoDisposeMixin) {
     final label = '${target.globalId}|${target.debugLabel}';
     final dispose = createEffect(
       widget,
       () {
         target.value;
         final context = widget.context;
-        if (context is Element && context.mounted && !context.dirty) {
+        if (context is Element && context.mounted) {
           context.markNeedsBuild();
         }
       },
