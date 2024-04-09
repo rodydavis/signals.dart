@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:signals_core/signals_core.dart';
 
-import '../watch/extension.dart';
+import '../watch/watch.dart';
 
 /// Signal extensions
 extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {

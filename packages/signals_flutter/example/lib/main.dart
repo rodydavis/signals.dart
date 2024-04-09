@@ -31,14 +31,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with SignalsAutoDisposeMixin {
-  late final _counter = createSignal(this, 0);
+  late final _counter = createSignal(context, 0);
 
   void _incrementCounter() => _counter.value++;
 
   @override
   void initState() {
     super.initState();
-    createEffect(this, () {
+    createEffect(context, () {
       debugPrint('count: ${_counter()}');
     });
   }

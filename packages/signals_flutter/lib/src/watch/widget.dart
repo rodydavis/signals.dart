@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:signals_core/signals_core.dart';
+part of 'watch.dart';
 
 /// {@template watch}
 /// ## Watch
@@ -172,7 +171,10 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   @override
   void reassemble() {
     super.reassemble();
-    reloadSignalsDevTools();
+    final target = SignalsObserver.instance;
+    if (target is DevToolsSignalsObserver) {
+      target.reassemble();
+    }
   }
 
   @override
@@ -187,13 +189,16 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
     super.dispose();
   }
 
-  void rebuild() {
+  void rebuild() async {
     if (!mounted) return;
     final result = widget.builder(context);
     if (result == child) return;
     child = result;
-    final el = context as Element;
-    if (!el.dirty) el.markNeedsBuild();
+    if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.idle) {
+      await SchedulerBinding.instance.endOfFrame;
+    }
+    if (!context.mounted) return;
+    (context as Element).markNeedsBuild();
   }
 
   @override

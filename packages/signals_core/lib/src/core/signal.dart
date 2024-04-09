@@ -211,8 +211,7 @@ class Signal<T> extends ReadonlySignal<T> {
     T val, {
     super.debugLabel,
     super.autoDispose,
-  })  : _version = 0,
-        _value = val,
+  })  : _value = val,
         super._(globalId: ++_lastGlobalId) {
     _initialValue = val;
     assert(() {
@@ -233,12 +232,6 @@ class Signal<T> extends ReadonlySignal<T> {
 
   // @internal
   T _value;
-
-  /// @internal
-  /// Version numbers should always be >= 0, because the special value -1 is used
-  /// by Nodes to signify potentially unused but recyclable nodes.
-  @override
-  int _version;
 
   @override
   bool _refresh() {
@@ -310,7 +303,7 @@ class Signal<T> extends ReadonlySignal<T> {
 
     final node = _addDependency(this);
     if (node != null) {
-      node._version = this._version;
+      node._version = _version;
     }
     return this._value;
   }

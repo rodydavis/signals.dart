@@ -1,16 +1,29 @@
-import 'package:flutter/widgets.dart';
+part of 'watch.dart';
 
-import '../../signals_flutter.dart';
+final _elementRefs = <int, _ElementWatcher>{};
+bool _removing = false;
+
+void _removeSignalWatchers() {
+  if (_removing) return;
+  _removing = true;
+  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    _elementRefs.removeWhere((key, value) => value.element.target == null);
+    _removing = false;
+  });
+}
 
 /// Helper class to track signals and effects
 /// with the lifecycle of an element.
-class ElementWatcher {
+class _ElementWatcher {
   /// Helper class to track signals and effects
   /// with the lifecycle of an element.
-  ElementWatcher(this.id, this.element);
+  _ElementWatcher(this.id, this.label, this.element);
 
   /// Unique id to store with the element
   final int id;
+
+  /// Internal label used to track the current widget
+  final String label;
 
   /// Flutter element that is usually a widget
   ///
@@ -34,6 +47,7 @@ class ElementWatcher {
     if (!_watchSignals.containsKey(value.globalId)) {
       _watchSignals[value.globalId] = value;
       subscribeWatch();
+      value.onDispose(() => unwatch(value));
     }
   }
 
@@ -50,6 +64,7 @@ class ElementWatcher {
     if (!_listenSignals.containsKey(value.globalId)) {
       _listenSignals[value.globalId] = value;
       subscribeListen(value);
+      value.onDispose(() => unlisten(value, cb));
     }
     _listeners[value.globalId] = cb;
   }
@@ -67,22 +82,28 @@ class ElementWatcher {
   /// Restart the subsribers
   void subscribeWatch() {
     _watchCleanup?.call();
-    _watchCleanup = effect(() {
-      for (final s in _watchSignals.values) {
-        s.value;
-      }
-      if (_watchSignals.isNotEmpty) rebuild();
-    });
+    _watchCleanup = effect(
+      () {
+        for (final s in _watchSignals.values) {
+          s.value;
+        }
+        if (_watchSignals.isNotEmpty) rebuild();
+      },
+      debugLabel: 'watch=>$label',
+    );
   }
 
   /// Restart the listeners
   void subscribeListen(ReadonlySignal signal) {
     _listenCleanup.putIfAbsent(
       signal.globalId,
-      () => effect(() {
-        signal.value;
-        notify(signal);
-      }),
+      () => effect(
+        () {
+          signal.value;
+          notify(signal);
+        },
+        debugLabel: 'listen=>$label',
+      ),
     );
   }
 
@@ -99,14 +120,16 @@ class ElementWatcher {
   }
 
   /// Rebuild the widget
-  void rebuild() {
+  void rebuild() async {
     final target = element.target;
     if (target == null) {
       dispose();
       return;
     }
+    if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.idle) {
+      await SchedulerBinding.instance.endOfFrame;
+    }
     if (!target.mounted) return;
-    if (target.dirty) return;
     target.markNeedsBuild();
   }
 
@@ -116,7 +139,6 @@ class ElementWatcher {
     for (final cleanup in _listenCleanup.values) {
       cleanup();
     }
-    _listenCleanup.clear();
-    _listeners.clear();
+    _removeSignalWatchers();
   }
 }

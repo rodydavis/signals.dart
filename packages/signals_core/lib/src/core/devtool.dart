@@ -1,13 +1,6 @@
 part of 'signals.dart';
 
 // coverage:ignore-start
-/// Reload the signals devTools
-void reloadSignalsDevTools() {
-  final observer = SignalsObserver.instance;
-  if (observer is! DevToolsSignalsObserver) return;
-  observer.reassemble();
-}
-
 /// Check if the signals devtools are enabled
 bool get signalsDevToolsEnabled {
   final target = SignalsObserver.instance;

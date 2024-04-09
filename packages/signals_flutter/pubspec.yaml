@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals_core: ^5.0.0-beta.8
+  signals_core: ^5.0.0-beta.9
 
 dev_dependencies:
   flutter_test:

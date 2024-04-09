@@ -490,6 +490,8 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
     value;
     _previousValue = _value;
     _value = _compute();
+    _flags |= _OUTDATED | _NOTIFIED;
+    _notifyAllTargets();
   }
 
   @override
