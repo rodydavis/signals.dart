@@ -24,10 +24,13 @@ import '../../../signals_flutter.dart';
 S bindSignal<T, S extends ReadonlySignal<T>>(
   BuildContext context,
   S target, {
-  String? debugLabel,
+  String? label,
 }) {
-  assert(context is StatefulElement, 'bindSignal must be called in a StatefulElement like State<T>');
-  watchSignal<T>(context, target);
+  watchSignal<T>(
+    context,
+    target,
+    debugLabel: label,
+  );
   return target;
 }
 
@@ -52,16 +55,44 @@ S bindSignal<T, S extends ReadonlySignal<T>>(
 Signal<T> createSignal<T>(
   BuildContext context,
   T value, {
-  String? debugLabel,
+  String? label,
   bool autoDispose = false,
 }) {
-  assert(context is StatefulElement, 'createSignal must be called in a StatefulElement like State<T>');
-  return bindSignal<T, Signal<T>>(
-    context,
-    signal<T>(
-      value,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    ),
+  assert(
+    allowSignalsCreatedInBuildContext ? true : context is StatefulElement,
+    'createSignal must be called in a StatefulElement like State<T>',
   );
+  Signal<T> result;
+  if (allowSignalsCreatedInBuildContext) {
+    final key = (value, label, autoDispose).hashCode;
+    if (_signals[key]?.target == null || _signals[key]?.target is! Signal<T>) {
+      _signals.remove(key);
+    }
+    final target = _signals[key] ??= () {
+      final source = signal<T>(
+        value,
+        debugLabel: label,
+        autoDispose: autoDispose,
+      );
+      final ref = WeakReference(source);
+      source.onDispose(() => _signals.remove(key));
+      return ref;
+    }();
+    result = target.target as Signal<T>;
+  } else {
+    result = signal<T>(
+      value,
+      debugLabel: label,
+      autoDispose: autoDispose,
+    );
+  }
+  return bindSignal<T, Signal<T>>(context, result);
 }
+
+final _signals = <int, WeakReference<Signal>>{};
+
+/// If true it would allow creating signals inside the build method.
+///
+/// This comes at the cost of needing to be unique with the starting value,
+/// debug label and auto dispose flag
+bool allowSignalsCreatedInBuildContext = false;

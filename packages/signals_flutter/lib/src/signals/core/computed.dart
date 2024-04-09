@@ -25,13 +25,12 @@ import '../../../signals_flutter.dart';
 Computed<T> bindComputed<T>(
   BuildContext context,
   Computed<T> target, {
-  String? debugLabel,
+  String? label,
 }) {
-  assert(context is StatefulElement, 'bindComputed must be called in a StatefulElement like State<T>');
   return bindSignal<T, Computed<T>>(
     context,
     target,
-    debugLabel: debugLabel,
+    label: label,
   );
 }
 
@@ -58,16 +57,38 @@ Computed<T> bindComputed<T>(
 Computed<T> createComputed<T>(
   BuildContext context,
   T Function() compute, {
-  String? debugLabel,
+  String? label,
   bool autoDispose = false,
 }) {
-  assert(context is StatefulElement, 'createComputed must be called in a StatefulElement like State<T>');
-  return bindComputed(
-    context,
-    computed<T>(
-      compute,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    ),
+  assert(
+    allowSignalsCreatedInBuildContext ? true : context is StatefulElement,
+    'createComputed must be called in a StatefulElement like State<T>',
   );
+  Computed<T> result;
+  if (allowSignalsCreatedInBuildContext) {
+    final key = (compute, label, autoDispose).hashCode;
+    if (_signals[key]?.target == null || _signals[key]?.target is! Signal<T>) {
+      _signals.remove(key);
+    }
+    final target = _signals[key] ??= () {
+      final source = computed<T>(
+        compute,
+        debugLabel: label,
+        autoDispose: autoDispose,
+      );
+      final ref = WeakReference(source);
+      source.onDispose(() => _signals.remove(key));
+      return ref;
+    }();
+    result = target.target as Computed<T>;
+  } else {
+    result = computed<T>(
+      compute,
+      debugLabel: label,
+      autoDispose: autoDispose,
+    );
+  }
+  return bindComputed(context, result);
 }
+
+final _signals = <int, WeakReference<Computed>>{};

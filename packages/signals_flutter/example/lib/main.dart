@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> with SignalsAutoDisposeMixin {
   @override
   void initState() {
     super.initState();
-    createEffect(context, () {
+    effect(() {
       debugPrint('count: ${_counter()}');
     });
   }
