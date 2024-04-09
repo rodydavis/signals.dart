@@ -7,7 +7,7 @@ import '../../../signals_flutter.dart';
 /// ```dart
 /// class State extends ... {
 ///  final source = signal(0);
-///  late final count = bindSignal(this, source);
+///  late final count = bindSignal(context, source);
 ///
 ///  @override
 ///  Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ S bindSignal<T, S extends ReadonlySignal<T>>(
 ///
 /// ```dart
 /// class State extends ... {
-///  late final count = createSignal(this, 0);
+///  late final count = createSignal(context, 0);
 ///
 ///  @override
 ///  Widget build(BuildContext context) {

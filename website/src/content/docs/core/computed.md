@@ -102,9 +102,9 @@ class CounterWidget extends StatefulWidget {
 }
 
 class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
-  late final counter = createSignal(this, 0);
-  late final isEven = createComputed(this, () => counter.value.isEven);
-  late final isOdd = createComputed(this, () => counter.value.isOdd);
+  late final counter = createSignal(context, 0);
+  late final isEven = createComputed(context, () => counter.value.isEven);
+  late final isOdd = createComputed(context, () => counter.value.isOdd);
 
   @override
   Widget build(BuildContext context) {
