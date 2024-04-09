@@ -48,5 +48,28 @@ void main() {
       expect(calls, 2);
       expect(find.text('Count: 1'), findsOneWidget);
     });
+
+    group('Watch.builder', () {
+      testWidgets('signal', (tester) async {
+        int calls = 0;
+        final widget = Counter(
+          watch: true,
+          builder: true,
+          createSource: (context) => signal(0),
+          callback: () => calls++,
+        );
+
+        await tester.pumpWidget(widget);
+
+        expect(calls, 1);
+        expect(find.text('Count: 0'), findsOneWidget);
+
+        await tester.tap(find.byIcon(Icons.add));
+        await tester.pumpAndSettle();
+
+        expect(calls, 2);
+        expect(find.text('Count: 1'), findsOneWidget);
+      });
+    });
   });
 }

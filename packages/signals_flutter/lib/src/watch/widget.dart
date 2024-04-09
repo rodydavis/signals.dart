@@ -168,6 +168,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   Widget? child;
   EffectCleanup? fn;
 
+  // coverage:ignore-start
   @override
   void reassemble() {
     super.reassemble();
@@ -176,6 +177,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
       target.reassemble();
     }
   }
+  // coverage:ignore-end
 
   @override
   void didChangeDependencies() {

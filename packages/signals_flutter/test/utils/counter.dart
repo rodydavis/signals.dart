@@ -8,12 +8,14 @@ class Counter extends StatefulWidget {
     required this.callback,
     super.key,
     this.watch = true,
+    this.builder = false,
     this.init,
   });
 
   final VoidCallback callback;
   final void Function(BuildContext)? init;
   final bool watch;
+  final bool builder;
   final Signal<int> Function(BuildContext context) createSource;
   final ReadonlySignal<int> Function(BuildContext context)? createReader;
 
@@ -37,10 +39,15 @@ class CounterState extends State<Counter> {
       home: Scaffold(
         appBar: AppBar(),
         body: widget.watch
-            ? Watch.builder(builder: (context) {
-                widget.callback();
-                return Text('Count: $display');
-              })
+            ? widget.builder
+                ? Watch.builder(builder: (context) {
+                    widget.callback();
+                    return Text('Count: $display');
+                  })
+                : Watch((context) {
+                    widget.callback();
+                    return Text('Count: $display');
+                  })
             : () {
                 widget.callback();
                 return Text('Count: ${display.watch(context)}');
