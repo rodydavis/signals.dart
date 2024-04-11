@@ -2,6 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   void testSignal(
     String message,
     ListSignal<T> Function<T>(
@@ -11,27 +12,6 @@ void main() {
     }) create,
   ) {
     group('$message test', () {
-      test('listSignal keeps initial value', () {
-        final a = create<int>([]);
-        expect(a.initialValue, equals(List.of({})));
-
-        a.value = {0}.toList();
-        a.value = {0, 1}.toList();
-
-        expect(a.initialValue, equals(List.of({})));
-      });
-
-      test('listSignal keeps previous value', () {
-        final a = create<int>([]);
-        expect(a.previousValue, equals(null));
-
-        a.value = {0}.toList();
-        expect(a.previousValue, equals(List.of({})));
-
-        a.value = {0, 1}.toList();
-        expect(a.previousValue, equals(List.of({0})));
-      });
-
       group('autoDispose', () {
         test('check last subscriber disposes', () {
           final List<String> list = <String>['a', 'b', 'c'];

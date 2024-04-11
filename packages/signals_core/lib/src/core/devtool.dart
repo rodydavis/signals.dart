@@ -1,5 +1,20 @@
 part of 'signals.dart';
 
+/// Reload the devtools
+@Deprecated('Use the DevToolsSignalsObserver instead')
+void reloadSignalsDevTools() {
+  final target = SignalsObserver.instance;
+  if (target is DevToolsSignalsObserver) {
+    target.reassemble();
+  }
+}
+
+/// Disable the devtools
+@Deprecated('Use the "signalsDevToolsEnabled = false" instead')
+void disableSignalsDevTools() {
+  signalsDevToolsEnabled = false;
+}
+
 // coverage:ignore-start
 /// Check if the signals devtools are enabled
 bool get signalsDevToolsEnabled {

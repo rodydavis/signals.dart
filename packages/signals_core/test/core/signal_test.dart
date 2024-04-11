@@ -5,6 +5,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   test('should work', () {
     final a = signal(0);
     final b = signal(0);

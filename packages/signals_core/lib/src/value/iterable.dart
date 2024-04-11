@@ -2,6 +2,7 @@ part of 'value.dart';
 
 /// A [Signal] that holds a [Iterable].
 class IterableSignal<E> extends _IterableSignal<E, Iterable<E>>
+    with ValueSignalMixin
     implements Signal<Iterable<E>> {
   /// Creates a [IterableSignal] with the given [value].
   IterableSignal(

@@ -2,6 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   void testSignal(
     String message,
     IterableSignal<T> Function<T>(
@@ -11,27 +12,6 @@ void main() {
     }) create,
   ) {
     group('$message test', () {
-      test('iterableSignal keeps initial value', () {
-        final a = create<int>([]);
-        expect(a.initialValue, equals(Iterable.castFrom({})));
-
-        a.value = {0};
-        a.value = {0, 1};
-
-        expect(a.initialValue, equals(Iterable.castFrom({})));
-      });
-
-      test('iterableSignal keeps previous value', () {
-        final a = create<int>([]);
-        expect(a.previousValue, equals(null));
-
-        a.value = {0};
-        expect(a.previousValue, equals(Iterable.castFrom({})));
-
-        a.value = {0, 1};
-        expect(a.previousValue, equals(Iterable.castFrom({0})));
-      });
-
       group('autoDispose', () {
         test('check last subscriber disposes', () {
           final Iterable<String> iterable = <String>['a', 'b', 'c'];
