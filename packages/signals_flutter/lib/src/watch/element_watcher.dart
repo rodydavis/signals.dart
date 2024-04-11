@@ -1,6 +1,6 @@
 part of 'watch.dart';
-
-final _elementRefs = <int, _ElementWatcher>{};
+// coverage:ignore-start
+final _elementRefs = <int, ElementWatcher>{};
 bool _removing = false;
 
 void _removeSignalWatchers() {
@@ -14,10 +14,14 @@ void _removeSignalWatchers() {
 
 /// Helper class to track signals and effects
 /// with the lifecycle of an element.
-class _ElementWatcher {
+@visibleForTesting
+class ElementWatcher {
   /// Helper class to track signals and effects
   /// with the lifecycle of an element.
-  _ElementWatcher(this.id, this.label, this.element);
+  ElementWatcher(this.id, this.label, this.element);
+
+  /// Get [ElementWatcher] for a given signal id
+  static ElementWatcher? get(int id) => _elementRefs[id];
 
   /// Unique id to store with the element
   final int id;
@@ -142,3 +146,4 @@ class _ElementWatcher {
     _removeSignalWatchers();
   }
 }
+// coverage:ignore-end

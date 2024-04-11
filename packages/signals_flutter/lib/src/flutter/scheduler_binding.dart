@@ -1,6 +1,7 @@
 import 'package:flutter/scheduler.dart';
 
-import '../../../signals_flutter.dart';
+import '../../signals_flutter.dart';
+// coverage:ignore-start
 
 /// [SchedulerBinding] signal that tracks the persistent frame [Duration]
 ///
@@ -58,3 +59,4 @@ void initSchedulerBindingSignals([SchedulerBinding? binding]) {
     ..addTimingsCallback(timingsSignal.set)
     ..scheduleFrameCallback(onScheduleFrameSignal.set, rescheduling: false);
 }
+// coverage:ignore-end

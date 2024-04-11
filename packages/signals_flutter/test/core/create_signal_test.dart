@@ -3,17 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:signals_flutter/signals_flutter.dart';
 
-import '../../utils/counter.dart';
+import '../utils/counter.dart';
 
 void main() {
   group('.watch()', () {
-    testWidgets('bindComputed', (tester) async {
+    testWidgets('createSignal', (tester) async {
       int calls = 0;
-      final value = signal(0);
       final widget = Counter(
         watch: false,
-        createSource: (context) => value,
-        createReader: (context) => bindComputed(context, computed(() => value.value)),
+        createSource: (context) => createSignal(context, 0),
         callback: () => calls++,
       );
 
@@ -31,13 +29,11 @@ void main() {
   });
 
   group('Watch', () {
-    testWidgets('bindComputed', (tester) async {
+    testWidgets('createSignal', (tester) async {
       int calls = 0;
-      final value = signal(0);
       final widget = Counter(
         watch: true,
-        createSource: (context) => value,
-        createReader: (context) => bindComputed(context, computed(() => value.value)),
+        createSource: (context) => createSignal(context, 0),
         callback: () => calls++,
       );
 
@@ -57,6 +53,34 @@ void main() {
 
       expect(calls, 5);
       expect(find.text('Count: 2'), findsOneWidget);
+    });
+    testWidgets('createSignal in context', (tester) async {
+      int calls = 0;
+      allowSignalsCreatedInBuildContext = true;
+      final widget = Counter(
+        watch: true,
+        createSource: (context) => createSignal(context, 0),
+        callback: () => calls++,
+      );
+
+      await tester.pumpWidget(widget);
+
+      expect(calls, 1);
+      expect(find.text('Count: 0'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(calls, 3);
+      expect(find.text('Count: 1'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(calls, 5);
+      expect(find.text('Count: 2'), findsOneWidget);
+
+      allowSignalsCreatedInBuildContext = false;
     });
   });
 }

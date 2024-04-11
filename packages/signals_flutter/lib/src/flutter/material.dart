@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../signals_flutter.dart';
+import '../../signals_flutter.dart';
+// coverage:ignore-start
 
 /// Material signal that tracks the current [ThemeData]
 ///
@@ -27,3 +28,4 @@ void updateMaterialSignals(BuildContext context) {
 
   themeDataSignal.value = Theme.of(context);
 }
+// coverage:ignore-end

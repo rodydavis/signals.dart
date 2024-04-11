@@ -13,7 +13,7 @@ T watchSignal<T>(
     if (_elementRefs[key] == null) {
       final label =
           'widget=${context.widget.runtimeType}:${context.widget.hashCode}';
-      final watcher = _ElementWatcher(
+      final watcher = ElementWatcher(
         key,
         label,
         WeakReference(context),
@@ -64,7 +64,7 @@ void listenSignal<T>(
     if (_elementRefs[key] == null) {
       final label =
           'widget=${context.widget.runtimeType}:${context.widget.hashCode}';
-      final watcher = _ElementWatcher(key, label, WeakReference(context));
+      final watcher = ElementWatcher(key, label, WeakReference(context));
       _elementRefs[key] = watcher;
       _removeSignalWatchers();
     }

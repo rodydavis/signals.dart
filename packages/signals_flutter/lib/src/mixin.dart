@@ -1,27 +1,29 @@
 import 'package:flutter/widgets.dart';
-
+// coverage:ignore-start
 /// Auto dispose any signal/computed/effect created within the state class
 mixin SignalsAutoDisposeMixin<T extends StatefulWidget> on State<T> {
-  final _callbacks = <void Function()>{};
+  /// Internal list of callbacks to dispose effects
+  @visibleForTesting
+  final callbacks = <void Function()>{};
 
   /// Add a new effect dispose callback to call when the widget is disposed
   void addEffectDisposeCallback(void Function() callback) {
-    _callbacks.add(callback);
+    callbacks.add(callback);
   }
 
   /// Remove am effect dispose callback
   void removeEffectDisposeCallback(void Function() callback) {
-    _callbacks.remove(callback);
+    callbacks.remove(callback);
   }
 
   /// Remove all effect dispose callbacks
   void clearEffectDisposeCallbacks() {
-    _callbacks.clear();
+    callbacks.clear();
   }
 
   /// Call all of the effect dispose callbacks
   void disposeEffectDisposeCallbacks() {
-    for (final callback in _callbacks) {
+    for (final callback in callbacks) {
       callback();
     }
   }
@@ -32,3 +34,4 @@ mixin SignalsAutoDisposeMixin<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 }
+// coverage:ignore-end

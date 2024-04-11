@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../signals_flutter.dart';
+import '../../signals_flutter.dart';
 
 /// Bind an existing computed to a widget.
 ///

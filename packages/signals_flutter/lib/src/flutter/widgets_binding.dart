@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import '../../../signals_flutter.dart';
-
+import '../../signals_flutter.dart';
+// coverage:ignore-start
 /// [WidgetsBinding] signal that tracks the current [AppLifecycleState]
 ///
 /// [initWidgetsBindingSignals] is required to be called in the main method
@@ -40,3 +40,4 @@ void initWidgetsBindingSignals([WidgetsBinding? binding]) {
   final observer = AppLifecycleListener(onStateChange: appLifecycleSignal.set);
   widgetsBinding.addObserver(observer);
 }
+// coverage:ignore-end

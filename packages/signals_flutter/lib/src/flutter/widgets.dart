@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import '../../../signals_flutter.dart';
+import '../../signals_flutter.dart';
+// coverage:ignore-start
 
 /// Widgets signal that tracks the current [MediaQueryData]
 ///
@@ -48,3 +49,4 @@ void updateWidgetsSignals(BuildContext context) {
   directionalitySignal.value = Directionality.of(context);
   defaultTextStyleSignal.value = DefaultTextStyle.of(context);
 }
+// coverage:ignore-end

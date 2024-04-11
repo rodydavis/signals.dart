@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:signals_core/signals_core.dart';
 
 import '../watch/watch.dart';
+import '../core/signal_value_listenable.dart';
 
 /// Signal extensions
 extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
@@ -50,6 +51,11 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
     );
   }
 
+  /// Stop subscriptions to updates on a signal for listeners
+  void unlisten(BuildContext context, void Function() callback) {
+    unlistenSignal(context, this, callback);
+  }
+
   /// Stop subscriptions to updates on a signal for watchers
   void unwatch(BuildContext context) {
     unwatchSignal(context, this);
@@ -57,11 +63,10 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
 
   /// Convert a signal to [ValueListenable] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
-  ValueListenable<T> toValueListenable() {
-    final notifier = ValueNotifier(this());
-    subscribe((v) => notifier.value = v);
-    onDispose(notifier.dispose);
-    return notifier;
+  SignalValueListenable<T, ValueListenable<T>, ReadonlySignal<T>>
+      toValueListenable() {
+    return SignalValueListenable<T, ValueListenable<T>,
+        ReadonlySignal<T>>.fromSignal(this);
   }
 }
 
@@ -70,11 +75,7 @@ extension FlutterSignalUtils<T> on Signal<T> {
   /// Convert a [ValueListenable] to [Signal] to be used in builders
   /// and other existing widgets like [ValueListenableBuilder]
   /// and allow for mutation
-  ValueNotifier<T> toValueNotifier() {
-    final notifier = ValueNotifier(value);
-    subscribe((v) => notifier.value = v);
-    notifier.addListener(() => value = notifier.value);
-    onDispose(notifier.dispose);
-    return notifier;
+  SignalValueNotifier<T> toValueNotifier() {
+    return SignalValueNotifier<T>.fromSignal(this);
   }
 }

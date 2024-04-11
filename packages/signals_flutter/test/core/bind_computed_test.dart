@@ -3,17 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:signals_flutter/signals_flutter.dart';
 
-import '../../utils/counter.dart';
+import '../utils/counter.dart';
 
 void main() {
   group('.watch()', () {
-    testWidgets('createComputed', (tester) async {
+    testWidgets('bindComputed', (tester) async {
       int calls = 0;
       final value = signal(0);
       final widget = Counter(
         watch: false,
         createSource: (context) => value,
-        createReader: (context) => createComputed(context, () => value.value),
+        createReader: (context) => bindComputed(context, computed(() => value.value)),
         callback: () => calls++,
       );
 
@@ -31,13 +31,13 @@ void main() {
   });
 
   group('Watch', () {
-    testWidgets('createComputed', (tester) async {
+    testWidgets('bindComputed', (tester) async {
       int calls = 0;
       final value = signal(0);
       final widget = Counter(
         watch: true,
         createSource: (context) => value,
-        createReader: (context) => createComputed(context, () => value.value),
+        createReader: (context) => bindComputed(context, computed(() => value.value)),
         callback: () => calls++,
       );
 
