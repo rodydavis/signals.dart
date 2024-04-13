@@ -31,6 +31,29 @@ void main() {
       expect(b is ReadonlySignal, true);
     });
 
+    test('check sources', () {
+      final c = signal<int>(0);
+      final a = computed<int>(() => c.value);
+      final b = computed<int>(() => c.value);
+
+      final instance = Effect(() {
+        a.value;
+      });
+
+      expect(instance.sources.contains(a), true);
+      expect(instance.sources.contains(b), false);
+      expect(a.targets.contains(instance), true);
+      expect(b.targets.contains(instance), false);
+      expect(a.sources.contains(c), true);
+
+      instance.disposed = true;
+
+      expect(instance.sources.contains(a), false);
+      expect(instance.sources.contains(b), false);
+      expect(a.targets.contains(instance), false);
+      expect(b.targets.contains(instance), false);
+    });
+
     group('dispose', () {
       test('check onDispose callback', () {
         int calls = 0;

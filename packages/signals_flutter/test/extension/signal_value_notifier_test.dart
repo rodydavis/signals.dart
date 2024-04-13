@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   group('SignalValueNotifier', () {
     testWidgets('signalValueNotifier', (tester) async {
       final s = SignalValueNotifier<int>(0);
@@ -160,6 +161,31 @@ void main() {
 
       expect(s.value, 2);
       expect(calls, 1);
+    });
+
+    test('make sure Signal and ValueNotifier is in sync', () {
+      final source = ValueNotifier(0);
+      final target = signal(0);
+      final result = SignalValueNotifier.merge(source, target);
+
+      expect(source.value, target.value);
+      expect(source.value, result.value);
+      expect(target.value, result.value);
+      expect(result.value, 0);
+
+      source.value = 1;
+
+      expect(source.value, target.value);
+      expect(source.value, result.value);
+      expect(target.value, result.value);
+      expect(result.value, 1);
+
+      target.value = 2;
+
+      expect(source.value, target.value);
+      expect(source.value, result.value);
+      expect(target.value, result.value);
+      expect(result.value, 2);
     });
   });
 }

@@ -170,6 +170,12 @@ class _IterableSignal<E, V extends Iterable<E>> extends Signal<V>
   Iterable<T> whereType<T>() {
     return value.whereType<T>();
   }
+
+  @override
+  V get initialValue => ValueSignalMixin.initialValueExcpetion();
+
+  @override
+  V get previousValue => ValueSignalMixin.previousValueExcpetion();
 }
 
 /// Create an [IterableSignal] from [Iterable]

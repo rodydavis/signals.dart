@@ -25,12 +25,12 @@ import '../../signals_flutter.dart';
 Computed<T> bindComputed<T>(
   BuildContext context,
   Computed<T> target, {
-  String? label,
+  String? debugLabel,
 }) {
   return bindSignal<T, Computed<T>>(
     context,
     target,
-    label: label,
+    debugLabel: debugLabel,
   );
 }
 
@@ -57,7 +57,7 @@ Computed<T> bindComputed<T>(
 Computed<T> createComputed<T>(
   BuildContext context,
   T Function() compute, {
-  String? label,
+  String? debugLabel,
   bool autoDispose = false,
 }) {
   assert(
@@ -66,14 +66,14 @@ Computed<T> createComputed<T>(
   );
   Computed<T> result;
   if (allowSignalsCreatedInBuildContext) {
-    final key = (compute, label, autoDispose).hashCode;
+    final key = (compute, debugLabel, autoDispose).hashCode;
     if (_signals[key]?.target == null || _signals[key]?.target is! Signal<T>) {
       _signals.remove(key);
     }
     final target = _signals[key] ??= () {
       final source = computed<T>(
         compute,
-        debugLabel: label,
+        debugLabel: debugLabel,
         autoDispose: autoDispose,
       );
       final ref = WeakReference(source);
@@ -84,7 +84,7 @@ Computed<T> createComputed<T>(
   } else {
     result = computed<T>(
       compute,
-      debugLabel: label,
+      debugLabel: debugLabel,
       autoDispose: autoDispose,
     );
   }

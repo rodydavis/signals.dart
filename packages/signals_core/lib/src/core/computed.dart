@@ -169,7 +169,7 @@ part of 'signals.dart';
 /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
 /// @link https://dartsignals.dev/core/computed
 /// {@endtemplate}
-class Computed<T> extends ReadonlySignal<T> implements _Listenable {
+class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   /// {@template computed}
   /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
   ///
@@ -367,7 +367,9 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
 
   late T _value;
 
-  Iterable<ReadonlySignal> get _allSources sync* {
+  /// @internal for testing getter to track all the signals currently
+  /// subscribed in the signal
+  Iterable<ReadonlySignal> get sources sync* {
     for (var node = _sources; node != null; node = node._nextSource) {
       yield node._source;
     }
@@ -480,7 +482,7 @@ class Computed<T> extends ReadonlySignal<T> implements _Listenable {
         }
       }
     }
-    if (autoDispose && _allTargets.isEmpty) {
+    if (autoDispose && targets.isEmpty) {
       dispose();
     }
   }

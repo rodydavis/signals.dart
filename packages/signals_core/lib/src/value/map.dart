@@ -149,6 +149,12 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
       for (final item in value.entries) item.hashCode
     ]);
   }
+
+  @override
+  Map<K, V> get initialValue => ValueSignalMixin.initialValueExcpetion();
+
+  @override
+  Map<K, V> get previousValue => ValueSignalMixin.previousValueExcpetion();
 }
 
 /// Create an [MapSignal] from [Map]

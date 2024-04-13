@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   testWidgets('listen/unlisten', (tester) async {
     final key = GlobalKey();
     int calls = 0;

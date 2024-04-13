@@ -41,11 +41,11 @@ abstract class SignalsObserver {
   void onComputedUpdated(Computed instance, dynamic value);
 
   // coverage:ignore-start
-  void _onEffectCreated(_Effect instance) {}
+  void _onEffectCreated(Effect instance) {}
 
-  void _onEffectCalled(_Effect instance) {}
+  void _onEffectCalled(Effect instance) {}
 
-  void _onEffectRemoved(_Effect instance) {}
+  void _onEffectRemoved(Effect instance) {}
   // coverage:ignore-end
 
   /// The current observer instance.

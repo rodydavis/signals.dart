@@ -6,6 +6,7 @@ import 'package:signals_flutter/signals_flutter.dart';
 import '../utils/counter.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   group('.watch()', () {
     testWidgets('bindComputed', (tester) async {
       int calls = 0;
@@ -13,7 +14,8 @@ void main() {
       final widget = Counter(
         watch: false,
         createSource: (context) => value,
-        createReader: (context) => bindComputed(context, computed(() => value.value)),
+        createReader: (context) =>
+            bindComputed(context, computed(() => value.value)),
         callback: () => calls++,
       );
 
@@ -37,7 +39,8 @@ void main() {
       final widget = Counter(
         watch: true,
         createSource: (context) => value,
-        createReader: (context) => bindComputed(context, computed(() => value.value)),
+        createReader: (context) =>
+            bindComputed(context, computed(() => value.value)),
         callback: () => calls++,
       );
 

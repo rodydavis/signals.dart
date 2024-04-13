@@ -1,5 +1,6 @@
 part of 'signals.dart';
 
+// coverage:ignore-start
 /// Reload the devtools
 @Deprecated('Use the DevToolsSignalsObserver instead')
 void reloadSignalsDevTools() {
@@ -15,7 +16,6 @@ void disableSignalsDevTools() {
   signalsDevToolsEnabled = false;
 }
 
-// coverage:ignore-start
 /// Check if the signals devtools are enabled
 bool get signalsDevToolsEnabled {
   final target = SignalsObserver.instance;
@@ -38,7 +38,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   final Set<WeakReference<ReadonlySignal>> _signals = {};
   final Set<WeakReference<Computed>> _computed = {};
   final Map<int, int> _effectCount = {};
-  final Set<WeakReference<_Effect>> _effects = {};
+  final Set<WeakReference<Effect>> _effects = {};
 
   bool _devToolsInitialized = false;
   bool _devToolsEnabled = kDebugMode;
@@ -93,8 +93,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': instance._allSources.map((e) => e.globalId).join(','),
-        'targets': instance._allTargets.map((e) => e.globalId).join(','),
+        'sources': instance.sources.map((e) => e.globalId).join(','),
+        'targets': instance.targets.map((e) => e.globalId).join(','),
         'value': '',
         'type': 'computed',
       };
@@ -111,8 +111,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'sources': instance._allSources.map((e) => e.globalId).join(','),
-        'targets': instance._allTargets.map((e) => e.globalId).join(','),
+        'sources': instance.sources.map((e) => e.globalId).join(','),
+        'targets': instance.targets.map((e) => e.globalId).join(','),
         'type': 'computed',
       };
     });
@@ -127,7 +127,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': instance.peek()?.toString(),
-        'targets': instance._allTargets.map((e) => e.globalId).join(','),
+        'targets': instance.targets.map((e) => e.globalId).join(','),
         'type': 'signal',
       };
     });
@@ -143,7 +143,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'targets': instance._allTargets.map((e) => e.globalId).join(','),
+        'targets': instance.targets.map((e) => e.globalId).join(','),
         'type': 'signal',
       };
     });
@@ -153,7 +153,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   void log(String message) => print(message);
 
   @override
-  void _onEffectCreated(_Effect instance) {
+  void _onEffectCreated(Effect instance) {
     if (!enabled) return;
     _effectCount[instance.globalId] = 0;
     _effects.add(WeakReference(instance));
@@ -161,7 +161,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': instance._allSources.map((e) => e.globalId).join(','),
+        'sources': instance.sources.map((e) => e.globalId).join(','),
         'value': '0',
         'type': 'effect',
       };
@@ -169,7 +169,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void _onEffectCalled(_Effect instance) {
+  void _onEffectCalled(Effect instance) {
     if (!enabled) return;
     var count = _effectCount[instance.globalId] ??= 0;
     _effectCount[instance.globalId] = ++count;
@@ -177,7 +177,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': instance._allSources.map((e) => e.globalId).join(','),
+        'sources': instance.sources.map((e) => e.globalId).join(','),
         'value': '$count',
         'type': 'effect',
       };
@@ -185,7 +185,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void _onEffectRemoved(_Effect instance) {
+  void _onEffectRemoved(Effect instance) {
     if (!enabled) return;
     _effectCount.remove(instance.globalId);
     _effects.removeWhere((e) => e.target == instance);
@@ -193,7 +193,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        // 'sources': instance._allSources.map((e) => e.globalId).join(','),
+        // 'sources': instance.sources.map((e) => e.globalId).join(','),
         'value': '-1',
         'type': 'effect',
       };
@@ -208,7 +208,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'id': e.globalId,
               'label': e.debugLabel,
               'value': e.toString(),
-              'targets': e._allTargets.map((e) => e.globalId).join(','),
+              'targets': e.targets.map((e) => e.globalId).join(','),
               'type': 'signal',
             })
         .toList();
@@ -219,8 +219,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'id': e.globalId,
               'label': e.debugLabel,
               'value': e.toString(),
-              'targets': e._allTargets.map((e) => e.globalId).join(','),
-              'sources': e._allSources.map((e) => e.globalId).join(','),
+              'targets': e.targets.map((e) => e.globalId).join(','),
+              'sources': e.sources.map((e) => e.globalId).join(','),
               'type': 'computed',
             })
         .toList();
@@ -231,7 +231,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'id': e.globalId,
               'label': e.debugLabel,
               'value': '${_effectCount[e.globalId] ?? 0}',
-              'sources': e._allSources.map((e) => e.globalId).join(','),
+              'sources': e.sources.map((e) => e.globalId).join(','),
               'type': 'effect',
             })
         .toList();

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 // coverage:ignore-start
 /// Auto dispose any signal/computed/effect created within the state class
 mixin SignalsAutoDisposeMixin<T extends StatefulWidget> on State<T> {

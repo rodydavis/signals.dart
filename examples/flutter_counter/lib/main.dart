@@ -6,48 +6,13 @@ void main() {
   runApp(const App());
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({super.key});
 
-  static AppState of(BuildContext context) {
-    return context.findAncestorStateOfType<AppState>()!;
-  }
-
-  @override
-  State<App> createState() => AppState();
-}
-
-// Demonstration of ValueSignal to expose value as typed instance
-class ColorSignal extends ValueSignal<Color> {
-  ColorSignal() : super(Colors.amber);
-}
-
-class AppState extends State<App> {
-  final color = ColorSignal();
-  final brightness = signal(Brightness.light, debugLabel: 'Brightness');
-
-  late final isDark = computed(
-    () => brightness.value == Brightness.dark,
-    debugLabel: 'Is Dark',
-  );
-
-  late final themeMode = computed(
-    () => isDark.value ? ThemeMode.dark : ThemeMode.light,
-    debugLabel: 'Theme Mode',
-  );
-
-  @override
-  void dispose() {
-    brightness.dispose();
-    isDark.dispose();
-    themeMode.dispose();
-    super.dispose();
-  }
-
-  ThemeData _theme(BuildContext context, Brightness brightness) {
+  ThemeData createTheme(BuildContext context, Brightness brightness) {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
-        seedColor: color.watch(context),
+        seedColor: Colors.blue,
         brightness: brightness,
       ),
       brightness: brightness,
@@ -60,12 +25,9 @@ class AppState extends State<App> {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: _theme(context, Brightness.light),
-      darkTheme: _theme(context, Brightness.dark),
-      themeMode: themeMode.watch(
-        context,
-        debugLabel: 'Material app theme mode',
-      ),
+      theme: createTheme(context, Brightness.light),
+      darkTheme: createTheme(context, Brightness.dark),
+      themeMode: ThemeMode.system,
       home: const CounterExample(),
     );
   }
@@ -79,58 +41,17 @@ class CounterExample extends StatefulWidget {
 }
 
 class _CounterExampleState extends State<CounterExample> {
-  late final Signal<int> counter = signal(0, debugLabel: 'Counter');
+  late final Signal<int> counter = createSignal(context, 0);
 
   void _incrementCounter() {
     counter.value++;
   }
 
   @override
-  void initState() {
-    super.initState();
-    counter.onDispose(() {
-      debugPrint('counter signal disposed');
-    });
-  }
-
-  @override
-  void dispose() {
-    counter.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    counter.listen(
-      context,
-      () {
-        if (counter.value == 10) {
-          final messenger = ScaffoldMessenger.of(context);
-          messenger.hideCurrentSnackBar();
-          messenger.showSnackBar(
-            const SnackBar(content: Text('You hit 10 clicks!')),
-          );
-        }
-      },
-      debugLabel: 'Counter Listener',
-    );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counter Example'),
-        actions: [
-          Builder(builder: (context) {
-            final dark = App.of(context)
-                .isDark
-                .watch(context, debugLabel: 'Dark mode toggle');
-            return IconButton(
-              onPressed: () {
-                App.of(context).brightness.value =
-                    dark ? Brightness.light : Brightness.dark;
-              },
-              icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
-            );
-          }),
-        ],
+        title: const Text('Flutter Counter'),
       ),
       body: Center(
         child: Column(
@@ -139,14 +60,9 @@ class _CounterExampleState extends State<CounterExample> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Watch(
-              (context) {
-                return Text(
-                  '$counter',
-                  style: Theme.of(context).textTheme.headlineMedium!,
-                );
-              },
-              debugLabel: 'Counter text',
+            Text(
+              '$counter',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 part of 'watch.dart';
+
 // coverage:ignore-start
 final _elementRefs = <int, ElementWatcher>{};
 bool _removing = false;

@@ -12,7 +12,7 @@ class SignalValueListenable<T, N extends ValueListenable<T>,
   final N notifier;
 
   /// [Signal] + [ValueListenable]
-  SignalValueListenable._(this.notifier, super.source) {
+  SignalValueListenable.merge(this.notifier, super.source) {
     _SetSource? target;
 
     source.subscribe((val) {
@@ -43,7 +43,7 @@ class SignalValueListenable<T, N extends ValueListenable<T>,
     String? debugLabel,
     bool autoDispose = false,
   }) {
-    return SignalValueListenable._(
+    return SignalValueListenable.merge(
       ValueNotifier<T>(val) as N,
       signal<T>(
         val,
@@ -55,7 +55,7 @@ class SignalValueListenable<T, N extends ValueListenable<T>,
 
   /// [SignalValueListenable] from [ReadonlySignal]
   factory SignalValueListenable.fromSignal(S val) {
-    return SignalValueListenable._(
+    return SignalValueListenable.merge(
       ValueNotifier<T>(val.value) as N,
       val,
     );
@@ -67,7 +67,7 @@ class SignalValueListenable<T, N extends ValueListenable<T>,
     String? debugLabel,
     bool autoDispose = false,
   }) {
-    return SignalValueListenable._(
+    return SignalValueListenable.merge(
       val,
       signal<T>(
         val.value,

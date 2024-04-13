@@ -6,6 +6,7 @@ import 'package:signals_flutter/signals_flutter.dart';
 import '../utils/counter.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   group('.watch()', () {
     testWidgets('createSignal', (tester) async {
       int calls = 0;

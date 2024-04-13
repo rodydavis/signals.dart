@@ -3,11 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   group('SignalValueListenable', () {
     testWidgets('signalValueNotifier', (tester) async {
-      final s =
-          SignalValueListenable<int, ValueListenable<int>, ReadonlySignal<int>>(
-              0);
+      final s = SignalValueListenable(0);
       final b = signalValueListenable<int>(0);
 
       expect(b.value, s.value);
@@ -107,7 +106,9 @@ void main() {
       final a = computed(() => 0);
       final s = a.toValueListenable() as ValueListenable<int>;
       final b = s.toSignal();
+      final d = SignalValueListenable.merge(s, a);
 
+      expect(b.value, d.value);
       expect(b.value, s.value);
       expect(s.value, 0);
     });

@@ -55,7 +55,13 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
   T get value => source.value;
 
   @override
+  int get version => source.version;
+
+  @override
   void dispose() => source.dispose();
+
+  @override
+  Iterable<SignalListenable> get targets => source.targets;
 }
 
 /// Wrap a [Signal] and implement the same API

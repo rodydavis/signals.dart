@@ -12,6 +12,14 @@ void main() {
     }) create,
   ) {
     group('$message test', () {
+      test('initialValue/previousValue throw an error', () {
+        final Set<String> list = <String>{'a', 'b', 'c'};
+        final s = create(list, autoDispose: true);
+
+        expect(() => s.initialValue, throwsA(isA<Exception>()));
+        expect(() => s.previousValue, throwsA(isA<Exception>()));
+      });
+
       group('autoDispose', () {
         test('check last subscriber disposes', () {
           final Iterable<String> iterable = <String>['a', 'b', 'c'];

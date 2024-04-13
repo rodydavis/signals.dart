@@ -241,7 +241,7 @@ class Signal<T> extends ReadonlySignal<T> {
   @override
   void _unsubscribe(_Node node) {
     super._unsubscribe(node);
-    if (autoDispose && _allTargets.isEmpty) {
+    if (autoDispose && targets.isEmpty) {
       dispose();
     }
   }

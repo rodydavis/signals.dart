@@ -24,12 +24,12 @@ import '../../signals_flutter.dart';
 S bindSignal<T, S extends ReadonlySignal<T>>(
   BuildContext context,
   S target, {
-  String? label,
+  String? debugLabel,
 }) {
   watchSignal<T>(
     context,
     target,
-    debugLabel: label,
+    debugLabel: debugLabel,
   );
   return target;
 }
@@ -55,7 +55,7 @@ S bindSignal<T, S extends ReadonlySignal<T>>(
 Signal<T> createSignal<T>(
   BuildContext context,
   T value, {
-  String? label,
+  String? debugLabel,
   bool autoDispose = false,
 }) {
   assert(
@@ -64,14 +64,14 @@ Signal<T> createSignal<T>(
   );
   Signal<T> result;
   if (allowSignalsCreatedInBuildContext) {
-    final key = (value, label, autoDispose).hashCode;
+    final key = (value, debugLabel, autoDispose).hashCode;
     if (_signals[key]?.target == null || _signals[key]?.target is! Signal<T>) {
       _signals.remove(key);
     }
     final target = _signals[key] ??= () {
       final source = signal<T>(
         value,
-        debugLabel: label,
+        debugLabel: debugLabel,
         autoDispose: autoDispose,
       );
       final ref = WeakReference(source);
@@ -82,7 +82,7 @@ Signal<T> createSignal<T>(
   } else {
     result = signal<T>(
       value,
-      debugLabel: label,
+      debugLabel: debugLabel,
       autoDispose: autoDispose,
     );
   }

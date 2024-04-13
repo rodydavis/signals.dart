@@ -1,64 +1,155 @@
 part of 'signals.dart';
 
-// coverage:ignore-start
-void _cleanupEffect(_Effect effect) {
-  final cleanup = effect._cleanup;
-  effect._cleanup = null;
-
-  if (cleanup != null) {
-    _startBatch();
-
-    // Run cleanup functions always outside of any context.
-    final prevContext = _evalContext;
-    _evalContext = null;
-    try {
-      cleanup();
-    } catch (e) {
-      effect._flags &= ~_RUNNING;
-      effect._flags |= _DISPOSED;
-      _disposeEffect(effect);
-      rethrow;
-    } finally {
-      _evalContext = prevContext;
-      _endBatch();
-    }
-  }
-}
-
-void _disposeEffect(_Effect effect) {
-  for (var node = effect._sources; node != null; node = node._nextSource) {
-    node._source._unsubscribe(node);
-  }
-  effect._compute = null;
-  effect._sources = null;
-
-  _cleanupEffect(effect);
-}
-
-void _endEffect(_Effect effect, _Listenable? prevContext) {
-  if (_evalContext != effect) {
-    throw Exception('Out-of-order effect');
-  }
-  _cleanupSources(effect);
-  _evalContext = prevContext;
-
-  effect._flags &= ~_RUNNING;
-  if ((effect._flags & _DISPOSED) != 0) {
-    _disposeEffect(effect);
-  }
-  _endBatch();
-}
-// coverage:ignore-end
-
 /// Clean up function to stop subscriptions from updating the callback
 typedef EffectCleanup = void Function();
 
 /// Function called when signals in the callback change
 typedef EffectCallback = Function();
 
-_Effect? _currentEffect;
-
-class _Effect implements _Listenable {
+/// {@template effect}
+/// The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](/core/computed). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// final name = signal("Jane");
+/// final surname = signal("Doe");
+/// final fullName = computed(() => name.value + " " + surname.value);
+///
+/// // Logs: "Jane Doe"
+/// effect(() => print(fullName.value));
+///
+/// // Updating one of its dependencies will automatically trigger
+/// // the effect above, and will print "John Doe" to the console.
+/// name.value = "John";
+/// ```
+///
+/// You can destroy an effect and unsubscribe from all signals it was subscribed to, by calling the returned function.
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// final name = signal("Jane");
+/// final surname = signal("Doe");
+/// final fullName = computed(() => name.value + " " + surname.value);
+///
+/// // Logs: "Jane Doe"
+/// final dispose = effect(() => print(fullName.value));
+///
+/// // Destroy effect and subscriptions
+/// dispose();
+///
+/// // Update does nothing, because no one is subscribed anymore.
+/// // Even the computed `fullName` signal won't change, because it knows
+/// // that no one listens to it.
+/// surname.value = "Doe 2";
+/// ```
+///
+/// ## Cleanup Callback
+///
+/// You can also return a cleanup function from an effect. This function will be called when the effect is destroyed.
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// final s = signal(0);
+///
+/// final dispose = effect(() {
+///   print(s.value);
+///   return () => print('Effect destroyed');
+/// });
+///
+/// // Destroy effect and subscriptions
+/// dispose();
+/// ```
+///
+/// ## On Dispose Callback
+///
+/// You can also pass a callback to `effect` that will be called when the effect is destroyed.
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// final s = signal(0);
+///
+/// final dispose = effect(() {
+///   print(s.value);
+/// }, onDispose: () => print('Effect destroyed'));
+///
+/// // Destroy effect and subscriptions
+/// dispose();
+/// ```
+///
+/// ## Warning About Cycles
+///
+/// Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](/core/untracked) to read a signal without subscribing to it.
+///
+/// ```dart
+/// import 'dart:async';
+///
+/// import 'package:signals/signals.dart';
+///
+/// Future<void> main() async {
+///   final completer = Completer<void>();
+///   final age = signal(0);
+///
+///   effect(() {
+///     print('You are ${age.value} years old');
+///     age.value++; // <-- This will throw a cycle error
+///   });
+///
+///   await completer.future;
+/// }
+/// ```
+///
+/// ## Flutter
+///
+/// In Flutter if you want to create an effect that automatically disposes itself when the widget is removed from the widget tree, you can use the `createEffect` inside a stateful widget.
+///
+/// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:signals/signals_flutter.dart';
+///
+/// class CounterWidget extends StatefulWidget {
+///   @override
+///   _CounterWidgetState createState() => _CounterWidgetState();
+/// }
+///
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+///   late final counter = createSignal(this, 0);
+///
+///   @override
+///   void initState() {
+///     super.initState();
+///     createEffect(this, () {
+///       print('Counter: ${counter.value}');
+///     });
+///   }
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Scaffold(
+///       body: Center(
+///         child: Column(
+///           mainAxisAlignment: MainAxisAlignment.center,
+///           children: [
+///             Text('Counter: $counter'),
+///             ElevatedButton(
+///               onPressed: () => counter.value++,
+///               child: Text('Increment'),
+///             ),
+///           ],
+///         ),
+///       ),
+///     );
+///   }
+/// }
+/// ```
+///
+/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+/// @link https://dartsignals.dev/core/effect
+/// {@endtemplate}
+class Effect implements SignalListenable {
   EffectCallback? _compute;
 
   @override
@@ -72,12 +163,157 @@ class _Effect implements _Listenable {
   @override
   _Node? _sources;
 
-  _Effect? _nextBatchedEffect;
+  Effect? _nextBatchedEffect;
 
   @override
   int _flags;
 
-  _Effect(
+  final _disposeCallbacks = <void Function()>{};
+
+  /// {@template effect}
+  /// The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](/core/computed). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final name = signal("Jane");
+  /// final surname = signal("Doe");
+  /// final fullName = computed(() => name.value + " " + surname.value);
+  ///
+  /// // Logs: "Jane Doe"
+  /// effect(() => print(fullName.value));
+  ///
+  /// // Updating one of its dependencies will automatically trigger
+  /// // the effect above, and will print "John Doe" to the console.
+  /// name.value = "John";
+  /// ```
+  ///
+  /// You can destroy an effect and unsubscribe from all signals it was subscribed to, by calling the returned function.
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final name = signal("Jane");
+  /// final surname = signal("Doe");
+  /// final fullName = computed(() => name.value + " " + surname.value);
+  ///
+  /// // Logs: "Jane Doe"
+  /// final dispose = effect(() => print(fullName.value));
+  ///
+  /// // Destroy effect and subscriptions
+  /// dispose();
+  ///
+  /// // Update does nothing, because no one is subscribed anymore.
+  /// // Even the computed `fullName` signal won't change, because it knows
+  /// // that no one listens to it.
+  /// surname.value = "Doe 2";
+  /// ```
+  ///
+  /// ## Cleanup Callback
+  ///
+  /// You can also return a cleanup function from an effect. This function will be called when the effect is destroyed.
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final s = signal(0);
+  ///
+  /// final dispose = effect(() {
+  ///   print(s.value);
+  ///   return () => print('Effect destroyed');
+  /// });
+  ///
+  /// // Destroy effect and subscriptions
+  /// dispose();
+  /// ```
+  ///
+  /// ## On Dispose Callback
+  ///
+  /// You can also pass a callback to `effect` that will be called when the effect is destroyed.
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final s = signal(0);
+  ///
+  /// final dispose = effect(() {
+  ///   print(s.value);
+  /// }, onDispose: () => print('Effect destroyed'));
+  ///
+  /// // Destroy effect and subscriptions
+  /// dispose();
+  /// ```
+  ///
+  /// ## Warning About Cycles
+  ///
+  /// Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](/core/untracked) to read a signal without subscribing to it.
+  ///
+  /// ```dart
+  /// import 'dart:async';
+  ///
+  /// import 'package:signals/signals.dart';
+  ///
+  /// Future<void> main() async {
+  ///   final completer = Completer<void>();
+  ///   final age = signal(0);
+  ///
+  ///   effect(() {
+  ///     print('You are ${age.value} years old');
+  ///     age.value++; // <-- This will throw a cycle error
+  ///   });
+  ///
+  ///   await completer.future;
+  /// }
+  /// ```
+  ///
+  /// ## Flutter
+  ///
+  /// In Flutter if you want to create an effect that automatically disposes itself when the widget is removed from the widget tree, you can use the `createEffect` inside a stateful widget.
+  ///
+  /// ```dart
+  /// import 'package:flutter/material.dart';
+  /// import 'package:signals/signals_flutter.dart';
+  ///
+  /// class CounterWidget extends StatefulWidget {
+  ///   @override
+  ///   _CounterWidgetState createState() => _CounterWidgetState();
+  /// }
+  ///
+  /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+  ///   late final counter = createSignal(this, 0);
+  ///
+  ///   @override
+  ///   void initState() {
+  ///     super.initState();
+  ///     createEffect(this, () {
+  ///       print('Counter: ${counter.value}');
+  ///     });
+  ///   }
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Scaffold(
+  ///       body: Center(
+  ///         child: Column(
+  ///           mainAxisAlignment: MainAxisAlignment.center,
+  ///           children: [
+  ///             Text('Counter: $counter'),
+  ///             ElevatedButton(
+  ///               onPressed: () => counter.value++,
+  ///               child: Text('Increment'),
+  ///             ),
+  ///           ],
+  ///         ),
+  ///       ),
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+  /// @link https://dartsignals.dev/core/effect
+  /// {@endtemplate}
+  Effect(
     EffectCallback compute, {
     this.debugLabel,
   })  : _flags = _TRACKING,
@@ -88,9 +324,17 @@ class _Effect implements _Listenable {
       SignalsObserver.instance?._onEffectCreated(this);
       return true;
     }());
+    try {
+      _callback();
+    } catch (e) {
+      dispose();
+      rethrow;
+    }
   }
 
-  Iterable<ReadonlySignal> get _allSources sync* {
+  /// @internal for testing getter to track all the signals currently
+  /// subscribed in the effect
+  Iterable<ReadonlySignal> get sources sync* {
     _Node? root = _sources;
     for (var node = root; node != null; node = node._nextSource) {
       yield node._source;
@@ -153,12 +397,47 @@ class _Effect implements _Listenable {
     }());
   }
 
-  // coverage:ignore-start
   @override
   void dispose() {
+    if (_disposed) return;
     _dispose();
+    for (final cleanup in _disposeCallbacks) {
+      cleanup();
+    }
+    _disposed = true;
   }
-  // coverage:ignore-end
+
+  bool _disposed = false;
+
+  /// Check if the effect is disposed
+  bool get disposed => _disposed;
+
+  /// Force an effect to be disposed
+  set disposed(bool value) {
+    if (_disposed == value) return;
+    if (!_disposed && value) dispose();
+    _disposed = value;
+  }
+
+  /// Add a cleanup function to be called when the signal is disposed
+  ///
+  /// ```dart
+  /// final counter = signal(0);
+  /// final effectCount = signal(0);
+  ///
+  /// final cleanup = counter.onDispose(() {
+  ///  print('Counter has been disposed');
+  /// });
+  ///
+  /// // Remove the cleanup function
+  /// cleanup();
+  /// ```
+  EffectCleanup onDispose(void Function() cleanup) {
+    _disposeCallbacks.add(cleanup);
+    return () {
+      _disposeCallbacks.remove(cleanup);
+    };
+  }
 }
 
 /// {@template effect}
@@ -309,20 +588,14 @@ EffectCleanup effect(
   String? debugLabel,
   EffectCallback? onDispose,
 }) {
-  final effect = _Effect(compute, debugLabel: debugLabel);
-
-  void disposeEffect() {
-    effect._dispose();
-    onDispose?.call();
-  }
-
-  try {
-    effect._callback();
-  } catch (e) {
-    disposeEffect();
-    rethrow;
+  final instance = Effect(
+    compute,
+    debugLabel: debugLabel,
+  );
+  if (onDispose != null) {
+    instance._disposeCallbacks.add(onDispose);
   }
   // Return a bound function instead of a wrapper like `() => effect._dispose()`,
   // because bound functions seem to be just as fast and take up a lot less memory.
-  return disposeEffect;
+  return instance.dispose;
 }

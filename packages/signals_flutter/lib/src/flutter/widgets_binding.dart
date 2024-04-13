@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../../signals_flutter.dart';
+
 // coverage:ignore-start
 /// [WidgetsBinding] signal that tracks the current [AppLifecycleState]
 ///

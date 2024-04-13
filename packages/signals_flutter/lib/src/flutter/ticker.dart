@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 
 import '../../signals_flutter.dart';
 import 'scheduler_binding.dart';
+
 // coverage:ignore-start
 /// Ticker signal used to drive animations and can create animation controllers
 ///

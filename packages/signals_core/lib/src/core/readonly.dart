@@ -16,7 +16,9 @@ abstract class ReadonlySignal<T> {
   /// error on value read
   bool disposed = false;
 
-  Iterable<_Listenable> get _allTargets sync* {
+  /// @internal for testing getter to track all the effects currently
+  /// effected in the signal
+  Iterable<SignalListenable> get targets sync* {
     for (var node = _targets; node != null; node = node._nextTarget) {
       yield node._target;
     }
@@ -90,6 +92,9 @@ abstract class ReadonlySignal<T> {
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
   int _version = 0;
+
+  /// Version number is used to track changes and will increment for every set
+  int get version => _version;
 
   // @internal
   _Node? _node;

@@ -9,7 +9,7 @@ class SignalValueNotifier<T>
     T val, {
     String? debugLabel,
     bool autoDispose = false,
-  }) : super._(
+  }) : super.merge(
           ValueNotifier<T>(val),
           signal<T>(
             val,
@@ -18,9 +18,12 @@ class SignalValueNotifier<T>
           ),
         );
 
+  /// Merge [ValueNotifier] and [Signal]
+  SignalValueNotifier.merge(super.notifier, super.source) : super.merge();
+
   /// [SignalValueNotifier] from [Signal]
   SignalValueNotifier.fromSignal(Signal<T> val)
-      : super._(
+      : super.merge(
           ValueNotifier<T>(val.value),
           val,
         );
@@ -30,7 +33,7 @@ class SignalValueNotifier<T>
     ValueNotifier<T> val, {
     String? debugLabel,
     bool autoDispose = false,
-  }) : super._(
+  }) : super.merge(
           val,
           signal<T>(
             val.value,

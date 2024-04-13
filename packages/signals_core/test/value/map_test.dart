@@ -4,6 +4,14 @@ import 'package:test/test.dart';
 void main() {
   SignalsObserver.instance = null;
   group('map signal', () {
+    test('initialValue/previousValue throw an error', () {
+      final map = <String, int>{'a': 1, 'b': 2, 'c': 3};
+      final s = map.toSignal();
+
+      expect(() => s.initialValue, throwsA(isA<Exception>()));
+      expect(() => s.previousValue, throwsA(isA<Exception>()));
+    });
+
     test('make sure list is the same object', () {
       final map = <String, int>{'a': 1, 'b': 2, 'c': 3};
       final s = map.toSignal();
