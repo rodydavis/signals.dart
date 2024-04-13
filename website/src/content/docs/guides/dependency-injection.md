@@ -62,15 +62,14 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  final getIt = GetIt.instance;
-  getIt.registerSingleton<Signal<int>>(signal(0));
+  GetIt.I.registerSingleton<Signal<int>>(signal(0));
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = GetIt.instance<Signal<int>>();
+    final counter = GetIt.I.get<Signal<int>>();
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -130,9 +129,11 @@ class MyApp extends ConsumerWidget {
 }
 ```
 
-## InheritedWidget (Experimental)
+## InheritedWidget
 
 InheritedWidget is a simple built in way to provide objects to your widgets. This comes at the cost of storing a single signal per type.
+
+> Note: This is a new feature added in version 5.0.0 and is still experimental.
 
 ```dart
 import 'package:signals/signals_flutter.dart';
@@ -170,6 +171,22 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+```
+
+If you want to define multiple signals with the same type, then you will need to create custom classes for the container.
+
+```dart
+class Counter extends Signal<int> {
+  Counter(int value) : super(value);
+}
+...
+home: SignalProvider<Counter>(
+  instance: Counter(0),
+  child: MyApp(),
+),
+...
+final counter = SignalProvider.of<Counter>(context);
+counter.value++;
 ```
 
 ## Zones
