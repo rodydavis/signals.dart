@@ -242,6 +242,24 @@ final countListenable = isEven.toValueListenable();
 
 These extensions will also dispose the ValueNotifier and ValueListenable when the signal is disposed.
 
+### SignalValueNotifier
+
+If you need to use both ValueNotifier and Signal you can use `SignalValueNotifier` which is a ValueNotifier that will update the signal when the value is set.
+
+```dart
+import 'package:signals/signals_flutter.dart';
+
+final count = signalValueNotifier<int>(0); // or SignalValueNotifier<int>(0);
+
+expect(count.value, 0);
+expect(count is Signal<int>, true);
+expect(count is ValueNotifier<int>, true);
+
+count.value = 1; // 1
+
+expect(count.value, 1);
+```
+
 ## Outside of Flutter
 
 Signals can be used in pure dart applications. This means you can have the same logic for server side, flutter, CLIs, html web apps and more.
