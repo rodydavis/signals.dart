@@ -1,10 +1,8 @@
-import 'dart:math';
-
-import '../core/signals.dart';
-import 'iterable.dart';
+part of 'value.dart';
 
 /// A [Signal] that holds a [List].
-class ListSignal<E> extends IterableSignal<E> implements List<E> {
+class ListSignal<E> extends _IterableSignal<E, List<E>>
+    implements List<E>, Signal<List<E>> {
   /// Creates a [ListSignal] with the given [value].
   ListSignal(
     super.value, {
@@ -13,7 +11,9 @@ class ListSignal<E> extends IterableSignal<E> implements List<E> {
   });
 
   @override
-  List<E> get value => super.value as List<E>;
+  List<R> cast<R>() {
+    return value.cast<R>();
+  }
 
   @override
   set first(E val) {
@@ -89,19 +89,9 @@ class ListSignal<E> extends IterableSignal<E> implements List<E> {
   }
 
   @override
-  List<R> cast<R>() {
-    return value.cast<R>();
-  }
-
-  @override
   void clear() {
     value.clear();
     set(value, force: true);
-  }
-
-  @override
-  bool contains(Object? element) {
-    return value.contains(element);
   }
 
   @override
@@ -249,6 +239,20 @@ class ListSignal<E> extends IterableSignal<E> implements List<E> {
   @override
   List<E> sublist(int start, [int? end]) {
     return value.sublist(start, end);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ListSignal<E> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+      for (final item in value) item.hashCode
+    ]);
   }
 }
 

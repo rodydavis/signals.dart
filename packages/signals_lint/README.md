@@ -61,3 +61,11 @@ class Widget extends StatelessWidget {
   }
 }
 ```
+
+## Other packages
+
+| Package           | Pub                                                                                                              |
+|-------------------|------------------------------------------------------------------------------------------------------------------|
+| `signals`         | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                         |
+| `signals_core`    | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
+| `signals_flutter` | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |

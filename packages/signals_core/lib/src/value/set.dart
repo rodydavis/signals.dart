@@ -1,17 +1,14 @@
-import '../core/signals.dart';
-import 'iterable.dart';
+part of 'value.dart';
 
 /// A [Signal] that holds a [Set].
-class SetSignal<E> extends IterableSignal<E> implements Set<E> {
+class SetSignal<E> extends _IterableSignal<E, Set<E>>
+    implements Set<E>, Signal<Set<E>> {
   /// Creates a [SetSignal] with the given [value].
   SetSignal(
     super.value, {
     super.debugLabel,
     super.autoDispose,
   });
-
-  @override
-  Set<E> get value => super.value as Set<E>;
 
   @override
   bool add(E value) {
@@ -117,6 +114,20 @@ class SetSignal<E> extends IterableSignal<E> implements Set<E> {
   @override
   Set<E> union(Set<E> other) {
     return value.union(other);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SetSignal<E> && value == other.value;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      globalId.hashCode,
+      value.hashCode,
+      for (final item in value) item.hashCode
+    ]);
   }
 }
 

@@ -2,47 +2,40 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:signals_core/signals_core.dart';
-
-import 'observer.dart';
 import '../utils/constants.dart';
 
+part 'observer.dart';
 part 'devtool.dart';
 part 'effect.dart';
+part 'listenable.dart';
 part 'computed.dart';
 part 'signal.dart';
 part 'batch.dart';
 part 'untracked.dart';
+part 'readonly.dart';
 
+// A global version number for signals, used for fast-pathing repeated
+// computed.peek()/computed.value calls when nothing has changed globally.
+int globalVersion = 0;
+
+// coverage:ignore-start
 const _maxCallDepth = 100;
-
-/// Cycle detection usually means you have updated
-/// a signal inside an effect and are reading by value.
-class EffectCycleDetectionError extends Error {}
 
 void _cycleDetected() {
   throw EffectCycleDetectionError();
 }
 
-/// Mutation detection usually means you have updated
-/// a signal inside a computed.
-///
-/// Computed cannot have side-effects
-class MutationDetectedError extends Error {}
-
 void _mutationDetected() {
   throw MutationDetectedError();
 }
 
-const identifier = Symbol('signals');
-
-// Flags for Computed and Effect.
-const RUNNING = 1 << 0;
-const NOTIFIED = 1 << 1;
-const OUTDATED = 1 << 2;
-const DISPOSED = 1 << 3;
-const HAS_ERROR = 1 << 4;
-const TRACKING = 1 << 5;
+/// Flags for Computed and Effect.
+const _RUNNING = 1 << 0;
+const _NOTIFIED = 1 << 1;
+const _OUTDATED = 1 << 2;
+const _DISPOSED = 1 << 3;
+const _HAS_ERROR = 1 << 4;
+const _TRACKING = 1 << 5;
 
 // A linked list node used to track dependencies (sources) and dependents (targets).
 // Also used to remember the source's last version number that the target saw.
@@ -53,7 +46,7 @@ class _Node {
   _Node? _nextSource;
 
   // A target that depends on the source and should be notified when the source changes.
-  final _Listenable _target;
+  final SignalListenable _target;
   _Node? _prevTarget;
   _Node? _nextTarget;
 
@@ -71,7 +64,7 @@ class _Node {
     required ReadonlySignal source,
     _Node? prevSource,
     _Node? nextSource,
-    required _Listenable target,
+    required SignalListenable target,
     _Node? prevTarget,
     _Node? nextTarget,
     required int version,
@@ -87,16 +80,14 @@ class _Node {
 }
 
 // Currently evaluated computed or effect.
-_Listenable? _evalContext;
+SignalListenable? _evalContext;
 
 // Effects collected into a batch.
-_Effect? _batchedEffect;
+Effect? _batchedEffect;
 int _batchDepth = 0;
 int _callDepth = 0;
 
-// A global version number for signals, used for fast-pathing repeated
-// computed.peek()/computed.value calls when nothing has changed globally.
-int globalVersion = 0;
+int _lastGlobalId = 0;
 
 _Node? _addDependency(ReadonlySignal signal) {
   if (_evalContext == null) {
@@ -136,7 +127,7 @@ _Node? _addDependency(ReadonlySignal signal) {
 
     // Subscribe to change notifications from this dependency if we're in an effect
     // OR evaluating a computed signal that in turn has subscribers.
-    if ((_evalContext!._flags & TRACKING) != 0) {
+    if ((_evalContext!._flags & _TRACKING) != 0) {
       signal._subscribe(node);
     }
     return node;
@@ -178,25 +169,7 @@ _Node? _addDependency(ReadonlySignal signal) {
   return null;
 }
 
-int _lastGlobalId = 0;
-
-abstract class _Listenable {
-  _Node? _sources;
-
-  int get _flags;
-
-  /// Debug label for Debug Mode
-  String? get debugLabel;
-
-  /// Global ID of the signal
-  int get globalId;
-
-  void _notify();
-
-  void dispose();
-}
-
-bool _needsToRecompute(_Listenable target) {
+bool _needsToRecompute(SignalListenable target) {
   // Check the dependencies for changed values. The dependency list is already
   // in order of use. Therefore if multiple dependencies have changed values, only
   // the first used dependency is re-evaluated at this point.
@@ -215,7 +188,7 @@ bool _needsToRecompute(_Listenable target) {
   return false;
 }
 
-void _prepareSources(_Listenable target) {
+void _prepareSources(SignalListenable target) {
   /**
    * 1. Mark all current sources as re-usable nodes (version: -1)
    * 2. Set a rollback node if the current node is being used in a different context
@@ -243,7 +216,7 @@ void _prepareSources(_Listenable target) {
   }
 }
 
-void _cleanupSources(_Listenable target) {
+void _cleanupSources(SignalListenable target) {
   var node = target._sources;
   _Node? head;
 
@@ -306,6 +279,7 @@ class SignalsError extends Error {
   String toString() => message;
 }
 
+/// Error to throw if a signal is read after it is disposed
 class SignalsReadAfterDisposeError extends SignalsError {
   SignalsReadAfterDisposeError(ReadonlySignal instance)
       : super(
@@ -314,6 +288,59 @@ class SignalsReadAfterDisposeError extends SignalsError {
         );
 }
 
+Effect? _currentEffect;
+
+void _cleanupEffect(Effect effect) {
+  final cleanup = effect._cleanup;
+  effect._cleanup = null;
+
+  if (cleanup != null) {
+    _startBatch();
+
+    // Run cleanup functions always outside of any context.
+    final prevContext = _evalContext;
+    _evalContext = null;
+    try {
+      cleanup();
+    } catch (e) {
+      effect._flags &= ~_RUNNING;
+      effect._flags |= _DISPOSED;
+      _disposeEffect(effect);
+      rethrow;
+    } finally {
+      _evalContext = prevContext;
+      _endBatch();
+    }
+  }
+}
+
+void _disposeEffect(Effect effect) {
+  for (var node = effect._sources; node != null; node = node._nextSource) {
+    node._source._unsubscribe(node);
+  }
+  effect._compute = null;
+  effect._sources = null;
+
+  _cleanupEffect(effect);
+}
+
+void _endEffect(Effect effect, SignalListenable? prevContext) {
+  if (_evalContext != effect) {
+    throw Exception('Out-of-order effect');
+  }
+  _cleanupSources(effect);
+  _evalContext = prevContext;
+
+  effect._flags &= ~_RUNNING;
+  if ((effect._flags & _DISPOSED) != 0) {
+    _disposeEffect(effect);
+  }
+  _endBatch();
+}
+
+// coverage:ignore-end
+
+/// Error to throw if a signal is written to after it is disposed
 class SignalsWriteAfterDisposeError extends SignalsError {
   SignalsWriteAfterDisposeError(ReadonlySignal instance)
       : super(
@@ -321,3 +348,13 @@ class SignalsWriteAfterDisposeError extends SignalsError {
           'Once you have called dispose() on a signal, it can no longer be used.',
         );
 }
+
+/// Cycle detection usually means you have updated
+/// a signal inside an effect and are reading by value.
+class EffectCycleDetectionError extends Error {}
+
+/// Mutation detection usually means you have updated
+/// a signal inside a computed.
+///
+/// Computed cannot have side-effects
+class MutationDetectedError extends Error {}

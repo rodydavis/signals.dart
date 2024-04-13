@@ -31,7 +31,7 @@ class _EditorState extends State<Editor> {
   final nodes = mapSignal<Node, Offset>({});
   final selection = setSignal<Node>({});
   final pressed = setSignal<Node>({});
-  final matrix = ValueSignal(Matrix4.identity());
+  final matrix = Signal(Matrix4.identity());
   final toolbox = signal(true);
   final draggableOffset = signal<Offset?>(null);
   final dragAccept = signal(false);

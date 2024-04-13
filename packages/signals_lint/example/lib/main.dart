@@ -23,10 +23,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final counter = signal(1);
+  late final counter = createSignal(context, 1);
 
   @override
   Widget build(BuildContext context) {
     return Text('Count: $counter');
   }
+}
+
+class Counter extends ValueNotifier<int> {
+  Counter(super.value);
 }

@@ -1,3 +1,3 @@
-library signals_flutter;
+library signals_flutter_extended;
 
 export 'package:signals_flutter/extended.dart';

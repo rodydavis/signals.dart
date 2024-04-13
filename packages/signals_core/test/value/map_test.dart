@@ -2,7 +2,16 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   group('map signal', () {
+    test('initialValue/previousValue throw an error', () {
+      final map = <String, int>{'a': 1, 'b': 2, 'c': 3};
+      final s = map.toSignal();
+
+      expect(() => s.initialValue, throwsA(isA<Exception>()));
+      expect(() => s.previousValue, throwsA(isA<Exception>()));
+    });
+
     test('make sure list is the same object', () {
       final map = <String, int>{'a': 1, 'b': 2, 'c': 3};
       final s = map.toSignal();
@@ -42,27 +51,6 @@ void main() {
 
       expect(s.length, 2);
       expect(s.containsKey('c'), false);
-    });
-
-    test('mapSignal keeps initial value', () {
-      final a = mapSignal<int, int>({});
-      expect(a.initialValue, equals(Map.of({})));
-
-      a.value = {1: 1};
-      a.value = {0: 0, 1: 1};
-
-      expect(a.initialValue, equals(Map.of({})));
-    });
-
-    test('mapSignal keeps previous value', () {
-      final a = mapSignal<int, int>({});
-      expect(a.previousValue, equals(null));
-
-      a.value = {0: 0};
-      expect(a.previousValue, equals(Map.of({})));
-
-      a.value = {0: 0, 1: 1};
-      expect(a.previousValue, equals(Map.of({0: 0})));
     });
 
     test('<<', () {

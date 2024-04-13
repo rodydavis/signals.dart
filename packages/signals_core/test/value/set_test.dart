@@ -2,6 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   void testSignal(
     String message,
     SetSignal<T> Function<T>(
@@ -11,25 +12,12 @@ void main() {
     }) create,
   ) {
     group('$message test', () {
-      test('setSignal keeps initial value', () {
-        final a = create({});
-        expect(a.initialValue, equals(Set.of({})));
+      test('initialValue/previousValue throw an error', () {
+        final Set<String> list = <String>{'a', 'b', 'c'};
+        final s = create(list, autoDispose: true);
 
-        a.value = {0};
-        a.value = {0, 1};
-
-        expect(a.initialValue, equals(Set.of({})));
-      });
-
-      test('setSignal keeps previous value', () {
-        final a = create({});
-        expect(a.previousValue, equals(null));
-
-        a.value = {0};
-        expect(a.previousValue, equals(Set.of({})));
-
-        a.value = {0, 1};
-        expect(a.previousValue, equals(Set.of({0})));
+        expect(() => s.initialValue, throwsA(isA<Exception>()));
+        expect(() => s.previousValue, throwsA(isA<Exception>()));
       });
 
       group('autoDispose', () {
@@ -171,6 +159,7 @@ void main() {
           final Set<String> list = <String>{'a', 'b', 'c'};
           final s = create(list);
           String out = '';
+          // ignore: avoid_function_literals_in_foreach_calls
           s.forEach((e) {
             out += '_${e}_';
           });

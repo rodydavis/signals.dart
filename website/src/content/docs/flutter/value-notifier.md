@@ -3,6 +3,22 @@ title: ValueNotifier
 description: Easy conversion between ValueNotifier and Signal
 ---
 
+## SignalValueNotifier
+
+To create a `ValueNotifier` that is also a `Signal`:
+
+```dart
+final signal = SignalValueNotifier<int>(10);
+// or
+final signal = signalValueNotifier<int>(10);
+
+expect(signal.value, 10);
+expect(signal is Signal<int>, true);
+expect(signal is ValueNotifier<int>, true);
+```
+
+> Setting the value on the signal will update the notifier and vice versa.
+
 ## Signal from ValueNotifier
 
 To create a mutable signal from a `ValueNotifier`, use the `toSignal` extension:

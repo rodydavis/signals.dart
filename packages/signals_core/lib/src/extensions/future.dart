@@ -3,7 +3,7 @@ import '../core/signals.dart';
 
 /// Extension on future to provide helpful methods for signals
 extension SignalFutureUtils<T> on Future<T> {
-  /// Convert an existing future to [FutureAsyncSignal]
+  /// Convert an existing future to [FutureSignal]
   ///
   /// ```dart
   /// import 'package:signals/signals.dart';

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:signals_core/signals_core.dart';
 
+import '../core/signal_value_listenable.dart';
+
 /// Extension on [ValueListenable] to provide helpful methods for signals
 extension SignalValueListenableUtils<T> on ValueListenable<T> {
   /// {@template value}
@@ -23,12 +25,10 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
   /// ```
   /// @link https://dartsignals.dev/flutter/value-listenable
   /// {@endtemplate}
-  ReadonlySignal<T> toSignal({String? debugLabel}) {
-    final s = signal<T>(value, debugLabel: debugLabel);
-    void update() => s.value = value;
-    addListener(update);
-    s.onDispose(() => removeListener(update));
-    return s;
+  SignalValueListenable<T, ValueListenable<T>, ReadonlySignal<T>> toSignal(
+      {String? debugLabel}) {
+    return SignalValueListenable<T, ValueListenable<T>,
+        ReadonlySignal<T>>.fromValueListenable(this);
   }
 }
 
@@ -52,8 +52,10 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
 /// ```
 /// @link https://dartsignals.dev/flutter/value-listenable
 /// {@endtemplate}
-ReadonlySignal<T> valueListenableToSignal<T>(
+SignalValueListenable<T, ValueListenable<T>, ReadonlySignal<T>>
+    valueListenableToSignal<T>(
   ValueListenable<T> valueListenable,
 ) {
-  return valueListenable.toSignal();
+  return SignalValueListenable<T, ValueListenable<T>,
+      ReadonlySignal<T>>.fromValueListenable(valueListenable);
 }

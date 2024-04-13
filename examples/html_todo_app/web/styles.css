@@ -4,7 +4,49 @@ body {
   padding: 2rem;
 }
 
+#todoForm {
+  margin-bottom: 10px;
+}
+
 ul {
   list-style: none;
   padding: 0;
+}
+
+table {
+  & th {
+    text-align: start;
+  }
+}
+
+header {
+  display: flex;
+  align-items: center;
+
+  & h1 {
+    padding: 0;
+    margin: 0;
+  }
+
+  & #todoForm {
+    padding: 0;
+    margin: 0;
+    margin-left: 10px;
+    flex: 1;
+    display: flex;
+
+    & input {
+      flex: 1;
+      margin-right: 10px;
+    }
+  }
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+
+  & thead {
+    font-weight: bold;
+  }
 }

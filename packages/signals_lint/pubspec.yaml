@@ -1,8 +1,9 @@
 name: signals_lint
 description: linter and developer tool for signals
-version: 4.2.0
+version: 5.0.0
 repository: https://github.com/rodydavis/signals.dart
-documentation: https://rodydavis.github.io/signals.dart/
+homepage: https://dartsignals.dev/
+documentation: https://dartsignals.dev/
 topics:
   - state-management
   - state

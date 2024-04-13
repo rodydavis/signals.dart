@@ -177,14 +177,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-  coverage:
-    dependency: transitive
-    description:
-      name: coverage
-      sha256: "8acabb8306b57a409bf4c83522065672ee13179297a6bb0cb9ead73948df7c76"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.7.2"
   crypto:
     dependency: transitive
     description:
@@ -334,14 +326,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  node_preamble:
-    dependency: transitive
-    description:
-      name: node_preamble
-      sha256: "6e7eac89047ab8a8d26cf16127b5ed26de65209847630400f9aefd7cd5c730db"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.2"
   package_config:
     dependency: transitive
     description:
@@ -422,22 +406,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  shelf_packages_handler:
-    dependency: transitive
-    description:
-      name: shelf_packages_handler
-      sha256: "89f967eca29607c933ba9571d838be31d67f53f6e4ee15147d5dc2934fee1b1e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.2"
-  shelf_static:
-    dependency: transitive
-    description:
-      name: shelf_static
-      sha256: a41d3f53c4adf0f57480578c1d61d90342cd617de7fc8077b1304643c2d85c1e
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.2"
   shelf_web_socket:
     dependency: transitive
     description:
@@ -452,34 +420,28 @@ packages:
       path: "../../packages/signals"
       relative: true
     source: path
-    version: "4.4.0"
+    version: "5.0.0-beta.9"
   signals_core:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../packages/signals_core"
-      relative: true
-    source: path
-    version: "4.4.0"
+      name: signals_core
+      sha256: eefc955c575004c5becda547c1b8372e4f167e27a498746d02e536d477de1f47
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0-beta.5"
   signals_flutter:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../packages/signals_flutter"
-      relative: true
-    source: path
-    version: "4.4.0"
+      name: signals_flutter
+      sha256: "00bfcbd812dba8c44dd68b092007a0c238f142cf50c458e79fa5efc24985609b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0-beta.7"
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.99"
-  source_map_stack_trace:
-    dependency: transitive
-    description:
-      name: source_map_stack_trace
-      sha256: "84cf769ad83aa6bb61e0aa5a18e53aea683395f196a6f39c4c881fb90ed4f7ae"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.1"
   source_maps:
     dependency: transitive
     description:
@@ -536,14 +498,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
-  test:
-    dependency: "direct main"
-    description:
-      name: test
-      sha256: "7ee446762c2c50b3bd4ea96fe13ffac69919352bd3b4b17bac3f3465edc58073"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.25.2"
   test_api:
     dependency: transitive
     description:
@@ -552,14 +506,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.0"
-  test_core:
-    dependency: transitive
-    description:
-      name: test_core
-      sha256: "2bc4b4ecddd75309300d8096f781c0e3280ca1ef85beda558d33fcbedc2eead4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   timing:
     dependency: transitive
     description:
@@ -584,14 +530,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  vm_service:
-    dependency: transitive
-    description:
-      name: vm_service
-      sha256: e7d5ecd604e499358c5fe35ee828c0298a320d54455e791e9dcf73486bc8d9f0
-      url: "https://pub.dev"
-    source: hosted
-    version: "14.1.0"
   watcher:
     dependency: transitive
     description:
@@ -608,14 +546,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
-  webkit_inspection_protocol:
-    dependency: transitive
-    description:
-      name: webkit_inspection_protocol
-      sha256: "87d3f2333bb240704cd3f1c6b5b7acd8a10e7f0bc28c28dcf14e782014f4a572"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.1"
   yaml:
     dependency: transitive
     description:
@@ -625,4 +555,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0 <3.4.0"
+  dart: ">=3.2.0-0 <3.4.0"
+  flutter: ">=1.17.0"

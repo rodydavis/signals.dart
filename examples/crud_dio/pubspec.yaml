@@ -14,6 +14,7 @@ dependencies:
 
   cupertino_icons: ^1.0.6
   signals:
+    path: ../../packages/signals
   dio: ^5.4.0
   retrofit: ^4.0.3
   json_annotation: ^4.8.1

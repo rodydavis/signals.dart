@@ -2,6 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   group('computed', () {
     test('init', () {
       // Create signals
@@ -20,6 +21,37 @@ void main() {
 
       multiplier.value = 3;
       expect(multipliedCount.value, 3);
+    });
+
+    test('readonly', () {
+      final a = computed(() => 1);
+      final b = a.readonly();
+
+      // ignore: unnecessary_type_check
+      expect(b is ReadonlySignal, true);
+    });
+
+    test('check sources', () {
+      final c = signal<int>(0);
+      final a = computed<int>(() => c.value);
+      final b = computed<int>(() => c.value);
+
+      final instance = Effect(() {
+        a.value;
+      });
+
+      expect(instance.sources.contains(a), true);
+      expect(instance.sources.contains(b), false);
+      expect(a.targets.contains(instance), true);
+      expect(b.targets.contains(instance), false);
+      expect(a.sources.contains(c), true);
+
+      instance.disposed = true;
+
+      expect(instance.sources.contains(a), false);
+      expect(instance.sources.contains(b), false);
+      expect(a.targets.contains(instance), false);
+      expect(b.targets.contains(instance), false);
     });
 
     group('dispose', () {
@@ -137,12 +169,6 @@ void main() {
       dispose();
 
       expect(values, [0, 6]);
-    });
-
-    test('hashCode', () {
-      final s = computed(() => 1);
-      final value = s.hashCode;
-      expect(value != 0, true);
     });
 
     test('error in callback', () {

@@ -1,7 +1,9 @@
-import '../core/signals.dart';
+part of 'value.dart';
 
 /// A [Signal] that holds a [Map].
-class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
+class MapSignal<K, V> extends Signal<Map<K, V>>
+    with ValueSignalMixin
+    implements Map<K, V> {
   /// Creates a [MapSignal] with the given [value].
   MapSignal(
     super.value, {
@@ -147,6 +149,12 @@ class MapSignal<K, V> extends Signal<Map<K, V>> implements Map<K, V> {
       for (final item in value.entries) item.hashCode
     ]);
   }
+
+  @override
+  Map<K, V> get initialValue => ValueSignalMixin.initialValueExcpetion();
+
+  @override
+  Map<K, V> get previousValue => ValueSignalMixin.previousValueExcpetion();
 }
 
 /// Create an [MapSignal] from [Map]

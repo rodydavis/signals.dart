@@ -16,3 +16,8 @@ dart run devtools_extensions build_and_copy \
     --source=. \
     --dest=../signals/extension/devtools 
 ```
+
+## Screenshots
+
+![](doc/screenshots/graph.png)
+![](doc/screenshots/list.png)

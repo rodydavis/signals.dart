@@ -4,6 +4,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  SignalsObserver.instance = null;
   group('Future', () {
     test('futureSignal', () async {
       Future<int> future() async {

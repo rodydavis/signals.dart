@@ -1,99 +1,5 @@
 part of 'signals.dart';
 
-/// Read only signals can just retrieve a value but not update or cause mutations
-abstract class ReadonlySignal<T> {
-  /// Throws and error if read after dispose and can be
-  /// disposed on last unsubscribe.
-  bool get autoDispose;
-
-  /// Returns true if dispose has been called and will throw and
-  /// error on value read
-  bool get disposed;
-
-  Iterable<_Listenable> get _allTargets;
-
-  /// Debug label for Debug Mode
-  String? get debugLabel;
-
-  /// Global ID of the signal
-  int get globalId;
-
-  /// Compute the current value
-  T get value;
-
-  @override
-  String toString();
-
-  /// Convert value to JSON
-  T toJson();
-
-  /// Return the value when invoked
-  T call();
-
-  /// Get the current value
-  T get();
-
-  /// In the rare instance that you have an effect that should write to
-  /// another signal based on the previous value, but you _don't_ want the
-  /// effect to be subscribed to that signal, you can read a signals's
-  /// previous value via `signal.peek()`.
-  ///
-  /// ```dart
-  /// final counter = signal(0);
-  /// final effectCount = signal(0);
-  ///
-  /// effect(() {
-  /// 	print(counter.value);
-  ///
-  /// 	// Whenever this effect is triggered, increase `effectCount`.
-  /// 	// But we don't want this signal to react to `effectCount`
-  /// 	effectCount.value = effectCount.peek() + 1;
-  /// });
-  /// ```
-  ///
-  /// Note that you should only use `signal.peek()` if you really need it.
-  /// Reading a signal's value via `signal.value` is the preferred way in most scenarios.
-  T peek();
-
-  /// Subscribe to value changes
-  EffectCleanup subscribe(void Function(T value) fn);
-
-  void _subscribe(_Node node);
-
-  void _unsubscribe(_Node node);
-
-  /// @internal
-  /// Version numbers should always be >= 0, because the special value -1 is used
-  /// by Nodes to signify potentially unused but recyclable nodes.
-  int get _version;
-
-  // @internal
-  _Node? _node;
-
-  // @internal
-  _Node? _targets;
-
-  bool _refresh();
-
-  /// Dispose the signal
-  void dispose();
-
-  /// Add a cleanup function to be called when the signal is disposed
-  ///
-  /// ```dart
-  /// final counter = signal(0);
-  /// final effectCount = signal(0);
-  ///
-  /// final cleanup = counter.onDispose(() {
-  ///  print('Counter has been disposed');
-  /// });
-  ///
-  /// // Remove the cleanup function
-  /// cleanup();
-  /// ```
-  EffectCleanup onDispose(void Function() cleanup);
-}
-
 /// {@template signal}
 /// The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
 ///
@@ -297,40 +203,26 @@ abstract class ReadonlySignal<T> {
 /// `overrideWith` returns a new signal with the same global id sets the value as if it was created with it. This can be useful when using async signals or global signals used for dependency injection.
 /// @link https://dartsignals.dev/core/signal
 /// {@endtemplate}
-class Signal<T> implements ReadonlySignal<T> {
-  late T _initialValue;
-  T? _previousValue;
-
-  /// Value that the signal was created with
-  T get initialValue => _initialValue;
-
-  /// Previous value that was set before the current
-  T? get previousValue => _previousValue;
-
-  @override
-  final int globalId;
-
-  @override
-  final String? debugLabel;
-
-  @override
-  final bool autoDispose;
-
-  @override
-  bool disposed = false;
-
-  /// Core signal type
+class Signal<T> extends ReadonlySignal<T> {
+  /// {@template signal}
+  /// ...
+  /// {@endtemplate}
   Signal(
     T val, {
-    this.debugLabel,
-    this.autoDispose = false,
-  })  : _version = 0,
-        _value = val,
-        brand = identifier,
-        globalId = ++_lastGlobalId {
-    _onSignalCreated(this);
+    super.debugLabel,
+    super.autoDispose,
+  })  : _value = val,
+        super._(globalId: ++_lastGlobalId) {
     _initialValue = val;
+    assert(() {
+      SignalsObserver.instance?.onSignalCreated(this);
+      return true;
+    }());
   }
+
+  @override
+  T get initialValue => _initialValue;
+  late T _initialValue;
 
   /// Force update a value
   @Deprecated('Use .set(..., force: true) instead')
@@ -341,121 +233,54 @@ class Signal<T> implements ReadonlySignal<T> {
   // @internal
   T _value;
 
-  /// @internal
-  /// Version numbers should always be >= 0, because the special value -1 is used
-  /// by Nodes to signify potentially unused but recyclable nodes.
-  @override
-  int _version;
-
   @override
   bool _refresh() {
     return true;
   }
 
   @override
-  bool operator ==(Object other) {
-    return other is Signal<T> && value == other.value;
-  }
-
-  @override
-  int get hashCode {
-    return Object.hashAll([
-      globalId.hashCode,
-      value.hashCode,
-    ]);
-  }
-
-  static void __subscribe(ReadonlySignal signal, _Node node) {
-    if (signal._targets != node && node._prevTarget == null) {
-      node._nextTarget = signal._targets;
-      if (signal._targets != null) {
-        signal._targets!._prevTarget = node;
-      }
-      signal._targets = node;
-    }
-  }
-
-  @override
-  void _subscribe(_Node node) => __subscribe(this, node);
-
-  static void __unsubscribe(ReadonlySignal signal, _Node node) {
-    // Only run the unsubscribe step if the signal has any subscribers to begin with.
-    if (signal._targets != null) {
-      final prev = node._prevTarget;
-      final next = node._nextTarget;
-      if (prev != null) {
-        prev._nextTarget = next;
-        node._prevTarget = null;
-      }
-      if (next != null) {
-        next._prevTarget = prev;
-        node._nextTarget = null;
-      }
-      if (node == signal._targets) {
-        signal._targets = next;
-      }
-    }
-  }
-
-  @override
   void _unsubscribe(_Node node) {
-    __unsubscribe(this, node);
-    if (autoDispose && _allTargets.isEmpty) {
+    super._unsubscribe(node);
+    if (autoDispose && targets.isEmpty) {
       dispose();
     }
   }
 
   @override
-  EffectCleanup subscribe(void Function(T value) fn) {
-    return __signalSubscribe(this, fn);
-  }
-
-  @override
-  Iterable<_Listenable> get _allTargets sync* {
-    _Node? root = _targets;
-    for (var node = root; node != null; node = node._nextTarget) {
-      yield node._target;
-    }
-  }
-
-  static EffectCleanup __signalSubscribe<T>(
-    ReadonlySignal<T> signal,
-    void Function(T value) fn,
-  ) {
-    return effect(() {
-      final effect = _currentEffect!;
-      final value = signal.value;
-      final flag = effect._flags & TRACKING;
-      effect._flags &= ~TRACKING;
-      try {
-        fn(value);
-      } finally {
-        effect._flags |= flag;
-      }
-    });
-  }
-
-  @override
-  T call() => this.value;
-
-  @override
-  String toString() => '$value';
-
-  @override
-  T toJson() => value;
-
-  @override
   T peek() => this._value;
-
-  @override
-  T get() => value;
 
   /// Update the current value.
   ///
   /// `force` an update if needed (if the update would
   /// not pass the == check)
-  void set(T value, {bool force = false}) {
-    _set(value, force);
+  void set(T val, {bool force = false}) {
+    if (_evalContext is Computed) {
+      _mutationDetected();
+    }
+
+    if (val != _value || force) {
+      if (_callDepth > _maxCallDepth) {
+        // coverage:ignore-start
+        _cycleDetected();
+        // coverage:ignore-end
+      }
+      _previousValue = _value ?? _initialValue;
+      _value = val;
+      _version++;
+      globalVersion++;
+
+      _startBatch();
+      try {
+        _notifyAllTargets();
+      } finally {
+        _endBatch();
+      }
+
+      assert(() {
+        SignalsObserver.instance?.onSignalUpdated(this, val);
+        return true;
+      }());
+    }
   }
 
   /// Set the current value
@@ -465,9 +290,6 @@ class Signal<T> implements ReadonlySignal<T> {
     }
     set(val);
   }
-
-  /// Type of signal
-  final Symbol brand;
 
   @override
   T get value {
@@ -481,66 +303,9 @@ class Signal<T> implements ReadonlySignal<T> {
 
     final node = _addDependency(this);
     if (node != null) {
-      node._version = this._version;
+      node._version = _version;
     }
     return this._value;
-  }
-
-  void _set(T val, bool force) {
-    if (_evalContext is Computed) {
-      _mutationDetected();
-    }
-
-    if (val != _value || force) {
-      _updateValue(val);
-    }
-  }
-
-  void _updateValue(T val) {
-    if (_callDepth > _maxCallDepth) {
-      _cycleDetected();
-    }
-    _previousValue = _value ?? _initialValue;
-    _value = val;
-    _version++;
-    globalVersion++;
-
-    _startBatch();
-    try {
-      for (var node = _targets; node != null; node = node._nextTarget) {
-        node._target._notify();
-      }
-    } finally {
-      _endBatch();
-    }
-
-    _onSignalUpdated(this, val);
-  }
-
-  @override
-  _Node? _node;
-
-  @override
-  _Node? _targets;
-
-  final _disposeCallbacks = <void Function()>{};
-
-  @override
-  EffectCleanup onDispose(void Function() cleanup) {
-    _disposeCallbacks.add(cleanup);
-
-    return () {
-      _disposeCallbacks.remove(cleanup);
-    };
-  }
-
-  @override
-  void dispose() {
-    if (disposed) return;
-    for (final cleanup in _disposeCallbacks) {
-      cleanup();
-    }
-    disposed = true;
   }
 
   void _reset(T? value) {
@@ -815,20 +580,6 @@ Signal<T> signal<T>(
   bool autoDispose = false,
 }) {
   return Signal<T>(
-    value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-  );
-}
-
-/// Create a read only signal
-@Deprecated('Use signal<T>(...).readonly() instead')
-ReadonlySignal<T> readonlySignal<T>(
-  T value, {
-  String? debugLabel,
-  bool autoDispose = false,
-}) {
-  return signal(
     value,
     debugLabel: debugLabel,
     autoDispose: autoDispose,

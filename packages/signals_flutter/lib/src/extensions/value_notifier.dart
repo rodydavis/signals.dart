@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:signals_core/signals_core.dart';
+
+import '../core/signal_value_listenable.dart';
 
 /// Extension on [ValueNotifier] to provide helpful methods for signals
 extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
@@ -27,13 +28,11 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   /// > Setting the value on the signal or notifier will update the other.
   /// @link https://dartsignals.dev/flutter/value-notifier
   /// {@endtemplate}
-  Signal<T> toSignal({String? debugLabel}) {
-    final s = signal<T>(value, debugLabel: debugLabel);
-    void update() => () => s.value = value;
-    addListener(update);
-    s.subscribe((_) => value = s.value);
-    s.onDispose(() => removeListener(update));
-    return s;
+  SignalValueNotifier<T> toSignal({
+    String? debugLabel,
+    bool autoDispose = false,
+  }) {
+    return SignalValueNotifier<T>.fromValueNotifier(this);
   }
 }
 
@@ -61,8 +60,14 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
 /// > Setting the value on the signal or notifier will update the other.
 /// @link https://dartsignals.dev/flutter/value-notifier
 /// {@endtemplate}
-Signal<T> valueNotifierToSignal<T>(
-  ValueNotifier<T> valueNotifier,
-) {
-  return valueNotifier.toSignal();
+SignalValueNotifier<T> valueNotifierToSignal<T>(
+  ValueNotifier<T> valueNotifier, {
+  String? debugLabel,
+  bool autoDispose = false,
+}) {
+  return SignalValueNotifier<T>.fromValueNotifier(
+    valueNotifier,
+    debugLabel: debugLabel,
+    autoDispose: autoDispose,
+  );
 }

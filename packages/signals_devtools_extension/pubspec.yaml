@@ -1,7 +1,7 @@
 name: signals_devtools_extension
 description: Signals DevTools extension.
 publish_to: "none"
-version: 1.0.3
+version: 1.1.0
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
@@ -23,3 +23,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+scripts:
+  dev: flutter run -d chrome --dart-define=use_simulated_environment=true
+  build:
+    - flutter pub get
+    - dart run devtools_extensions build_and_copy \
+      --source=. \
+      --dest=../signals/extension/devtools 

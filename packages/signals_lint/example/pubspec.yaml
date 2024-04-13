@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals: ^1.4.1
+  signals:
+    path: ../../signals
 
 dev_dependencies:
   custom_lint: ^0.5.5
