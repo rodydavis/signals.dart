@@ -154,7 +154,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = SignalProvider.of<Signal<int>>(context);
+    final counter = SignalProvider.of<int>(context);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -187,6 +187,59 @@ home: SignalProvider<Counter>(
 ...
 final counter = SignalProvider.of<Counter>(context);
 counter.value++;
+```
+
+## Lite Ref
+
+[Lite Ref](https://pub.dev/packages/lite_ref) is a simple way to provide disposable objects to your widgets.
+
+```dart
+final counterRef = Ref.scoped(
+  (_) => signal(0),
+  dispose: (instance) => instance.dispose(),
+);
+
+void main() {
+  runApp(LiteRefScope(child: MyApp()));
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counter = counterRef.of(context);
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Signals with Zones'),
+        ),
+        body: Center(
+          child: Watch((context) => Text('Value: $counter')),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => counter.value++,
+          child: Icon(Icons.add),
+        ),
+      ),
+    );
+  }
+}
+```
+
+You can use any class that implements `Disposable` and it will be disposed when the widget is removed from the widget tree. You also don't need to provide a `dispose` function for the ScopedRef.
+
+```dart
+class Counter implements Disposable {
+  final value = signal(0);
+  final doubled = computed(() => value.value * 2);
+
+  @override
+  void dispose() {
+    value.dispose();
+    doubled.dispose();
+  }
+}
+
+final counterRef = Ref.scoped((_) => Counter());
 ```
 
 ## Zones
