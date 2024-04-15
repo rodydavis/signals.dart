@@ -332,7 +332,7 @@ sealed class AsyncState<T> {
 /// State for an [AsyncState] with a value
 class AsyncData<T> extends AsyncState<T> {
   /// State for an [AsyncState] with a value
-  AsyncData(
+  const AsyncData(
     T data, {
     super.isLoading = false,
     super.error,
@@ -351,7 +351,7 @@ class AsyncData<T> extends AsyncState<T> {
 /// State for an [AsyncState] with an error
 class AsyncError<T> extends AsyncState<T> {
   /// State for an [AsyncState] with an error
-  AsyncError(
+  const AsyncError(
     Object error,
     StackTrace? stackTrace, {
     super.isLoading = false,
@@ -371,7 +371,7 @@ class AsyncError<T> extends AsyncState<T> {
 /// State for an [AsyncState] with a loading state
 class AsyncLoading<T> extends AsyncState<T> {
   /// State for an [AsyncState] with a loading state
-  AsyncLoading({
+  const AsyncLoading({
     super.value,
     super.error,
     super.isLoading = true,
