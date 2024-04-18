@@ -1,17 +1,17 @@
 name: signals_dart_examples
 description: Pure dart examples using signals
 version: 1.0.0
-publish_to: "none"
+publish_to: 'none'
 
 environment:
-  sdk: ^3.1.0
+  sdk: ^3.3.0
 
 dependencies:
-  collection:
+  collection: ^1.18.0
   signals:
     path: ../../packages/signals
-  sqlite_async: ^0.5.2
+  sqlite_async: ^0.6.1
   test: ^1.25.2
 
 dev_dependencies:
-  lints: ^2.0.0
+  lints: ^3.0.0

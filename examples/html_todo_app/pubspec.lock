@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: eef6c46b622e0494a36c5a12d10d77fb4e855501a91c1b9ef9339326e58f0596
+      sha256: "7cf60b9f0cc88203c5a190b4cd62a99feea42759a7fa695010eb5de1c0b2252a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "2.5.0"
   async:
     dependency: transitive
     description:
@@ -412,23 +412,23 @@ packages:
       path: "../../packages/signals"
       relative: true
     source: path
-    version: "5.0.0-beta.12"
+    version: "5.0.0"
   signals_core:
     dependency: transitive
     description:
       name: signals_core
-      sha256: "8bd75066a9a1ba8a5411ede94109d261ce430f64c2d33760bdaf0abb61e97382"
+      sha256: c46c4997379999311e2cce120f07cf5c61db3ffb28d58e2429a12755846aca68
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0-beta.8"
+    version: "5.0.0"
   signals_flutter:
     dependency: transitive
     description:
       name: signals_flutter
-      sha256: "4ae9c3a19f088f81fa6d0b4d664120670ba063dbb37b907ef486d38dcbe9e3b4"
+      sha256: "66622d32baddc50b9d119d630cf24d74ca7fcc3824c4045135e1233f46f91d67"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0-beta.10"
+    version: "5.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -534,18 +534,18 @@ packages:
     dependency: "direct main"
     description:
       name: web
-      sha256: "4188706108906f002b3a293509234588823c8c979dc83304e229ff400c996b05"
+      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.2"
+    version: "0.5.1"
   web_socket_channel:
     dependency: transitive
     description:
       name: web_socket_channel
-      sha256: "939ab60734a4f8fa95feacb55804fa278de28bdeef38e616dc08e44a84adea23"
+      sha256: "58c6666b342a38816b2e7e50ed0f1e261959630becd4c879c4f26bfa14aa5a42"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.3"
+    version: "2.4.5"
   yaml:
     dependency: transitive
     description:
