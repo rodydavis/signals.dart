@@ -11,7 +11,7 @@ import '../../database/connection/native.dart';
 import '../../database/database.dart';
 
 class BackupIcon extends StatelessWidget {
-  const BackupIcon({Key? key}) : super(key: key);
+  const BackupIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class BackupIcon extends StatelessWidget {
 }
 
 class BackupDialog extends StatelessWidget {
-  const BackupDialog({Key? key}) : super(key: key);
+  const BackupDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
