@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.3"
+  archive:
+    dependency: transitive
+    description:
+      name: archive
+      sha256: "22600aa1e926be775fa5fe7e6894e7fb3df9efda8891c73f70fb3262399a432d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.10"
   args:
     dependency: transitive
     description:
@@ -41,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  bazel_worker:
+    dependency: transitive
+    description:
+      name: bazel_worker
+      sha256: "4eef19cc486c289e4b06c69d0f6f3192e85cc93c25d4d15d02afb205e388d2f0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -50,7 +66,7 @@ packages:
     source: hosted
     version: "2.1.1"
   build:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: build
       sha256: "80184af8b6cb3e5c1c4ec6d8544d27711700bc3e6d2efad04238c7b5290889f0"
@@ -73,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.1"
+  build_modules:
+    dependency: transitive
+    description:
+      name: build_modules
+      sha256: "9987d67a29081872e730468295fc565e9a2b377ca3673337c1d4e41d57c6cd7c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.8"
   build_resolvers:
     dependency: transitive
     description:
@@ -97,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.3.0"
+  build_web_compilers:
+    dependency: "direct dev"
+    description:
+      name: build_web_compilers
+      sha256: "9071a94aa67787cebdd9e76837c9d2af61fb5242db541244f6a0b6249afafb46"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.10"
   built_collection:
     dependency: transitive
     description:
@@ -499,6 +531,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  pointycastle:
+    dependency: transitive
+    description:
+      name: pointycastle
+      sha256: "70fe966348fe08c34bf929582f1d8247d9d9408130723206472b4687227e4333"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.8.0"
   pool:
     dependency: transitive
     description:
@@ -507,6 +547,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   pub_semver:
     dependency: transitive
     description:
@@ -531,6 +579,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  scratch_space:
+    dependency: transitive
+    description:
+      name: scratch_space
+      sha256: "8510fbff458d733a58fc427057d1ac86303b376d609d6e1bc43f240aad9aa445"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   shelf:
     dependency: transitive
     description:
@@ -583,6 +639,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  source_maps:
+    dependency: transitive
+    description:
+      name: source_maps
+      sha256: "708b3f6b97248e5781f493b765c3337db11c5d2c81c3094f10904bfa8004c703"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.12"
   source_span:
     dependency: transitive
     description:
@@ -736,5 +800,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
+  dart: ">=3.3.0 <3.6.0"
   flutter: ">=3.16.0"
