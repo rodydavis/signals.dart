@@ -4,7 +4,7 @@ import '../../../signals_flutter.dart';
 import 'provider.dart';
 
 /// Convience method to pass signals with [InheritedWidget]
-class SignalProvider<T> extends InheritedSignal<T, Signal<T>>
+class SignalProvider<T> extends InheritedSignalProvider<T, Signal<T>>
     implements Signal<T> {
   /// Create a new [Signal] by value to provide in a widget tree
   SignalProvider({
@@ -22,7 +22,7 @@ class SignalProvider<T> extends InheritedSignal<T, Signal<T>>
 
   /// Look up a singal by its type
   static Signal<T> of<T>(BuildContext context, {bool listen = true}) {
-    return InheritedSignal.of<SignalProvider<T>>(
+    return InheritedSignalProvider.of<SignalProvider<T>>(
       context,
       listen: listen,
     )!

@@ -1,3 +1,14 @@
+## 5.1.0
+
+- Update to `signals_flutter` 5.1.0
+- Fix #247 - element watcher causing effect cycle error
+- Fix #245 - unmounted widget causing error on context read
+- Adding `InheritedSignalProvider` and `ReadonlySignalProvider` for Flutter
+- Update to `signals_core` 5.0.1
+- Switching `SignalsObserver` to use `log` instead of `print`
+- Only setting `SignalsObserver` to use `DevToolsSignalsObserver` in `kDebugMode`
+- Changing `SignalProvider` default constructor to use `create`
+
 ## 5.0.0
 
 - Adding `previousValue`/`initialValue` to `Signal`

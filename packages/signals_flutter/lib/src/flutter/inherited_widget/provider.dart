@@ -3,10 +3,10 @@ import 'package:flutter/widgets.dart';
 import '../../../signals_flutter.dart';
 
 /// [ReadonlySignal] based on [InheritedWidget]
-class InheritedSignal<T, S extends ReadonlySignal<T>> extends InheritedWidget
-    implements ReadonlySignal<T> {
+class InheritedSignalProvider<T, S extends ReadonlySignal<T>>
+    extends InheritedWidget implements ReadonlySignal<T> {
   /// Create a new [ReadonlySignal] and provide it in the tree
-  InheritedSignal({
+  InheritedSignalProvider({
     super.key,
     required S Function() create,
     required super.child,
@@ -14,7 +14,7 @@ class InheritedSignal<T, S extends ReadonlySignal<T>> extends InheritedWidget
         super();
 
   /// Pass a [ReadonlySignal] and provide it in the tree
-  const InheritedSignal.value({
+  const InheritedSignalProvider.value({
     super.key,
     required S value,
     required super.child,
@@ -24,7 +24,7 @@ class InheritedSignal<T, S extends ReadonlySignal<T>> extends InheritedWidget
   final S instance;
 
   @override
-  bool updateShouldNotify(InheritedSignal<T, S> oldWidget) {
+  bool updateShouldNotify(InheritedSignalProvider<T, S> oldWidget) {
     return oldWidget.instance.globalId == instance.globalId &&
         oldWidget.instance.version != instance.version;
   }
@@ -129,7 +129,7 @@ class InheritedSignalElement<T, S extends ReadonlySignal<T>>
   @override
   Widget build() {
     if (_dirty) {
-      final root = widget as InheritedSignal<T, S>;
+      final root = widget as InheritedSignalProvider<T, S>;
       notifyClients(root);
     }
     return super.build();

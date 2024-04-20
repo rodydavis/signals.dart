@@ -4,7 +4,7 @@ import '../../../signals_flutter.dart';
 import 'provider.dart';
 
 /// Convience method to pass signals with [InheritedWidget]
-class ComputedProvider<T> extends InheritedSignal<T, Computed<T>>
+class ComputedProvider<T> extends InheritedSignalProvider<T, Computed<T>>
     implements Computed<T> {
   /// Create a new [Computed] by value to provide in a widget tree
   ComputedProvider({
@@ -22,7 +22,7 @@ class ComputedProvider<T> extends InheritedSignal<T, Computed<T>>
 
   /// Look up a singal by its type
   static Computed<T> of<T>(BuildContext context, {bool listen = true}) {
-    return InheritedSignal.of<ComputedProvider<T>>(
+    return InheritedSignalProvider.of<ComputedProvider<T>>(
       context,
       listen: listen,
     )!

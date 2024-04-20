@@ -4,7 +4,7 @@ import '../../../signals_flutter.dart';
 import 'provider.dart';
 
 /// Convience method to pass signals with [InheritedWidget]
-class ReadonlySignalProvider<T> extends InheritedSignal<T, ReadonlySignal<T>> {
+class ReadonlySignalProvider<T> extends InheritedSignalProvider<T, ReadonlySignal<T>> {
   /// Create a new [ReadonlySignal] by value to provide in a widget tree
   ReadonlySignalProvider({
     super.key,
@@ -21,7 +21,7 @@ class ReadonlySignalProvider<T> extends InheritedSignal<T, ReadonlySignal<T>> {
 
   /// Look up a singal by its type
   static ReadonlySignal<T> of<T>(BuildContext context, {bool listen = true}) {
-    return InheritedSignal.of<ReadonlySignalProvider<T>>(
+    return InheritedSignalProvider.of<ReadonlySignalProvider<T>>(
       context,
       listen: listen,
     )!

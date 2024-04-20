@@ -93,6 +93,6 @@ class LoggingSignalsObserver extends SignalsObserver {
   }
 
   /// Logs a message to the console.
-  void log(String message) => print(message);
+  void log(String message) => developer.log(message);
 }
 // coverage:ignore-end
