@@ -1,11 +1,9 @@
-// ignore_for_file: public_member_api_docs, constant_identifier_names
-import 'dart:convert';
+// ignore_for_file: constant_identifier_names
+import '../devtool.dart';
+import '../utils/constants.dart';
 import 'dart:developer' as developer;
 
-import '../utils/constants.dart';
-
 part 'observer.dart';
-part 'devtool.dart';
 part 'effect.dart';
 part 'listenable.dart';
 part 'computed.dart';
@@ -272,7 +270,10 @@ void _cleanupSources(SignalListenable target) {
 
 /// Signal usage error
 class SignalsError extends Error {
+  /// Signals error pretty print message
   final String message;
+
+  /// Signal usage error
   SignalsError(this.message);
 
   @override
@@ -281,6 +282,7 @@ class SignalsError extends Error {
 
 /// Error to throw if a signal is read after it is disposed
 class SignalsReadAfterDisposeError extends SignalsError {
+  /// Error to throw if a signal is read after it is disposed
   SignalsReadAfterDisposeError(ReadonlySignal instance)
       : super(
           'A ${instance.runtimeType} signal was read after being disposed.\n'
@@ -342,6 +344,7 @@ void _endEffect(Effect effect, SignalListenable? prevContext) {
 
 /// Error to throw if a signal is written to after it is disposed
 class SignalsWriteAfterDisposeError extends SignalsError {
+  /// Error to throw if a signal is written to after it is disposed
   SignalsWriteAfterDisposeError(ReadonlySignal instance)
       : super(
           'A ${instance.runtimeType} signal was written after being disposed.\n'
