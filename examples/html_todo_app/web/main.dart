@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:js_interop';
-import 'package:web/helpers.dart';
+
 import 'package:signals/signals.dart';
+import 'package:web/web.dart';
 
 void main() {
   final todoForm = document.getElementById("todoForm") as HTMLFormElement;

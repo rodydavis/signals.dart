@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:benchmarking/benchmarking.dart' hide Benchmark;
-
 // ignore: implementation_imports
 import 'package:benchmarking/src/printer.dart';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -68,7 +67,9 @@ class _BenchmarkViewerState extends State<BenchmarkViewer> {
   void initState() {
     super.initState();
     output.stream.listen((event) {
-      print(event);
+      if (kDebugMode) {
+        print(event);
+      }
       sb.writeln(event);
       if (mounted) setState(() {});
     });
