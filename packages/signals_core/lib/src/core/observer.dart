@@ -40,16 +40,18 @@ abstract class SignalsObserver {
   /// Called when a computed is updated.
   void onComputedUpdated(Computed instance, dynamic value);
 
-  // coverage:ignore-start
-  void _onEffectCreated(Effect instance) {}
+  /// Called when a effect is created.
+  void onEffectCreated(Effect instance) {}
 
-  void _onEffectCalled(Effect instance) {}
+  /// Called when a effect is called.
+  void onEffectCalled(Effect instance) {}
 
-  void _onEffectRemoved(Effect instance) {}
-  // coverage:ignore-end
+  /// Called when a effect is disposed.
+  void onEffectRemoved(Effect instance) {}
 
   /// The current observer instance.
-  static SignalsObserver? instance = DevToolsSignalsObserver();
+  static SignalsObserver? instance =
+      kDebugMode ? DevToolsSignalsObserver() : null;
 }
 
 // coverage:ignore-start
@@ -73,6 +75,21 @@ class LoggingSignalsObserver extends SignalsObserver {
   @override
   void onSignalUpdated(Signal instance, value) {
     log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
+  }
+
+  @override
+  void onEffectCreated(Effect instance) {
+    log('effect created: [${instance.globalId}|${instance.debugLabel}]');
+  }
+
+  @override
+  void onEffectCalled(Effect instance) {
+    log('effect called: [${instance.globalId}|${instance.debugLabel}]');
+  }
+
+  @override
+  void onEffectRemoved(Effect instance) {
+    log('effect removed: [${instance.globalId}|${instance.debugLabel}]');
   }
 
   /// Logs a message to the console.

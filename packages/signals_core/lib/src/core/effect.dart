@@ -321,7 +321,7 @@ class Effect implements SignalListenable {
         _cleanup = null,
         globalId = ++_lastGlobalId {
     assert(() {
-      SignalsObserver.instance?._onEffectCreated(this);
+      SignalsObserver.instance?.onEffectCreated(this);
       return true;
     }());
     try {
@@ -356,7 +356,7 @@ class Effect implements SignalListenable {
       finish();
     }
     assert(() {
-      SignalsObserver.instance?._onEffectCalled(this);
+      SignalsObserver.instance?.onEffectCalled(this);
       return true;
     }());
   }
@@ -392,7 +392,7 @@ class Effect implements SignalListenable {
       _disposeEffect(this);
     }
     assert(() {
-      SignalsObserver.instance?._onEffectRemoved(this);
+      SignalsObserver.instance?.onEffectRemoved(this);
       return true;
     }());
   }
