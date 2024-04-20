@@ -16,22 +16,22 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Example'),
+      home: const Example(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class Example extends StatefulWidget {
+  const Example({super.key, this.title = 'Example'});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Example> createState() => _ExampleState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SignalsAutoDisposeMixin {
-  late final _counter = createSignal(context, 0);
+class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
+  final _counter = signal(0, debugLabel: 'Counter');
 
   void _incrementCounter() => _counter.value++;
 
@@ -57,10 +57,12 @@ class _MyHomePageState extends State<MyHomePage> with SignalsAutoDisposeMixin {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            Builder(builder: (context) {
+              return Text(
+                '${_counter.watch(context)}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              );
+            }),
           ],
         ),
       ),
