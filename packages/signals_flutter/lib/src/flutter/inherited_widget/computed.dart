@@ -1,42 +1,49 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../signals_flutter.dart';
+import 'provider.dart';
 
 /// Convience method to pass signals with [InheritedWidget]
-class ComputedProvider<T> extends InheritedWidget {
-  /// Convience method to pass signals with [InheritedWidget]
-  const ComputedProvider({
-    super.key,
-    required super.child,
-    required this.instance,
-  });
-
-  /// Internal signal instance
-  final Computed<T> instance;
-
+class ComputedProvider<T> extends InheritedSignal<T, Computed<T>>
+    implements Computed<T> {
   /// Create a new [Computed] by value to provide in a widget tree
-  ComputedProvider.value({
+  ComputedProvider({
     super.key,
     required super.child,
-    required T Function() compute,
-    String? debugLabel,
-    bool autoDispose = false,
-  }) : instance = computed<T>(
-          compute,
-          debugLabel: debugLabel,
-          autoDispose: autoDispose,
-        );
+    required super.create,
+  }) : super();
+
+  /// Pass a [Computed] by value to provide in a widget tree
+  const ComputedProvider.value({
+    super.key,
+    required super.child,
+    required super.value,
+  }) : super.value();
 
   /// Look up a singal by its type
-  static Computed<T> of<T>(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<ComputedProvider<T>>()!
+  static Computed<T> of<T>(BuildContext context, {bool listen = true}) {
+    return InheritedSignal.of<ComputedProvider<T>>(
+      context,
+      listen: listen,
+    )!
         .instance;
   }
 
   @override
-  bool updateShouldNotify(ComputedProvider<T> oldWidget) {
-    return oldWidget.instance.globalId == instance.globalId &&
-        oldWidget.instance.version != instance.version;
+  ReadonlySignal<T> readonly() {
+    return instance.readonly();
   }
+
+  @override
+  Computed<T> overrideWith(T value) {
+    return instance.overrideWith(value);
+  }
+
+  @override
+  void recompute() {
+    return instance.recompute();
+  }
+
+  @override
+  Iterable<ReadonlySignal> get sources => instance.sources;
 }
