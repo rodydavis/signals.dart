@@ -34,94 +34,41 @@ class ElementWatcher {
   ///
   final WeakReference<Element> element;
 
-  EffectCleanup? _watchCleanup;
-  final _listenCleanup = <int, EffectCleanup>{};
-  final _listeners = <int, VoidCallback>{};
-  final _watchSignals = <int, ReadonlySignal>{};
-  final _listenSignals = <int, ReadonlySignal>{};
+  final _watch = <int, VoidCallback>{};
+  final _listen = <int, VoidCallback>{};
+  final _batch = <VoidCallback>{};
 
   /// Check if the watcher is active via non empty listeners.
   bool get active {
-    final w = _watchSignals.isNotEmpty;
-    final l = _listenSignals.isNotEmpty && _listeners.isNotEmpty;
-    return w || l;
+    return _watch.isNotEmpty || _listen.isNotEmpty;
   }
 
   /// Watch a signal on am element
   void watch(ReadonlySignal value) {
-    if (!_watchSignals.containsKey(value.globalId)) {
-      _watchSignals[value.globalId] = value;
-      subscribeWatch();
-      value.onDispose(() => unwatch(value));
-    }
+    _watch.putIfAbsent(
+      value.globalId,
+      () => value.subscribe((val) => rebuild()),
+    );
   }
 
   /// Remove the listener of an element for a given signal
   void unwatch(ReadonlySignal value) {
-    if (_watchSignals.containsKey(value.globalId)) {
-      _watchSignals.remove(value.globalId);
-      subscribeWatch();
-    }
+    final dispose = _watch.remove(value.globalId);
+    dispose?.call();
   }
 
   /// Attach a callback to the widget
   void listen(ReadonlySignal value, VoidCallback cb) {
-    if (!_listenSignals.containsKey(value.globalId)) {
-      _listenSignals[value.globalId] = value;
-      subscribeListen(value);
-      value.onDispose(() => unlisten(value, cb));
-    }
-    _listeners[value.globalId] = cb;
+    _listen.putIfAbsent(
+      value.globalId,
+      () => value.subscribe((val) => _callback(cb)),
+    );
   }
 
   /// Stop calling the callback for a signal
   void unlisten(ReadonlySignal value, VoidCallback cb) {
-    if (!_listenSignals.containsKey(value.globalId)) {
-      _listenSignals.remove(value.globalId);
-      final cleanup = _listenCleanup.remove(value.globalId);
-      cleanup?.call();
-    }
-    _listeners.remove(value.globalId);
-  }
-
-  /// Restart the subsribers
-  void subscribeWatch() {
-    _watchCleanup?.call();
-    _watchCleanup = effect(
-      () {
-        for (final s in _watchSignals.values) {
-          s.value;
-        }
-        if (_watchSignals.isNotEmpty) rebuild();
-      },
-      debugLabel: 'watch=>$label',
-    );
-  }
-
-  /// Restart the listeners
-  void subscribeListen(ReadonlySignal signal) {
-    _listenCleanup.putIfAbsent(
-      signal.globalId,
-      () => effect(
-        () {
-          signal.value;
-          notify(signal);
-        },
-        debugLabel: 'listen=>$label',
-      ),
-    );
-  }
-
-  /// Notify a listener for a given signal
-  void notify(ReadonlySignal signal) {
-    final target = element.target;
-    if (target == null) {
-      dispose();
-      return;
-    }
-    if (!target.mounted) return;
-    final listener = _listeners[signal.globalId];
-    listener?.call();
+    final dispose = _listen.remove(value.globalId);
+    dispose?.call();
   }
 
   /// Rebuild the widget
@@ -131,6 +78,8 @@ class ElementWatcher {
       dispose();
       return;
     }
+    if (!target.mounted) return;
+    if (target.dirty) return;
     if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.idle) {
       await SchedulerBinding.instance.endOfFrame;
     }
@@ -138,10 +87,33 @@ class ElementWatcher {
     target.markNeedsBuild();
   }
 
+  void _callback(VoidCallback cb) async {
+    final target = element.target;
+    if (target == null) {
+      dispose();
+      return;
+    }
+    if (!target.mounted) return;
+    if (_batch.contains(cb)) return;
+    _batch.add(cb);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _call();
+    });
+  }
+
+  void _call() {
+    for (final cb in _batch) {
+      cb();
+    }
+    _batch.clear();
+  }
+
   /// Dispose of the element watcher and all the listeners
   void dispose() {
-    _watchCleanup?.call();
-    for (final cleanup in _listenCleanup.values) {
+    for (final cleanup in _watch.values) {
+      cleanup();
+    }
+    for (final cleanup in _listen.values) {
       cleanup();
     }
     _removeSignalWatchers();
