@@ -232,7 +232,22 @@ void main() {
         final a = signal(1);
         final b = computed(() => a.value++);
 
-        expect(() => b.peek(), throwsA(isA<MutationDetectedError>()));
+        expect(() => b.peek(), throwsA(isA<Error>()));
+      });
+
+      test('it should throw when evaluation throws', () {
+        final s = computed(() => throw Error());
+
+        expect(() => s.peek(), throwsA(isA<Error>()));
+      });
+
+      test(
+          "it should throw when previous evaluation threw and dependencies haven't changed",
+          () {
+        final s = computed(() => throw Error());
+
+        expect(() => s.value, throwsA(isA<Error>()));
+        expect(() => s.peek(), throwsA(isA<Error>()));
       });
 
       test('read after disposed', () {

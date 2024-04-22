@@ -224,14 +224,14 @@ class Signal<T> extends ReadonlySignal<T> {
   T get initialValue => _initialValue;
   late T _initialValue;
 
+  @override
+  T _value;
+
   /// Force update a value
   @Deprecated('Use .set(..., force: true) instead')
   void forceUpdate([T? val]) {
     this.set(val ?? value, force: true);
   }
-
-  // @internal
-  T _value;
 
   @override
   bool _refresh() {
@@ -245,9 +245,6 @@ class Signal<T> extends ReadonlySignal<T> {
       dispose();
     }
   }
-
-  @override
-  T peek() => this._value;
 
   /// Update the current value.
   ///
@@ -298,14 +295,14 @@ class Signal<T> extends ReadonlySignal<T> {
         print(
             'signal warning: [$globalId|$debugLabel] has been read after disposed: ${StackTrace.current}');
       }
-      return this._value;
+      return _value;
     }
 
     final node = _addDependency(this);
     if (node != null) {
       node._version = _version;
     }
-    return this._value;
+    return _value;
   }
 
   void _reset(T? value) {

@@ -39,6 +39,8 @@ abstract class ReadonlySignal<T> {
   /// Compute the current value
   T get value;
 
+  T get _value;
+
   @override
   String toString() => '$value';
 
@@ -71,7 +73,15 @@ abstract class ReadonlySignal<T> {
   ///
   /// Note that you should only use `signal.peek()` if you really need it.
   /// Reading a signal's value via `signal.value` is the preferred way in most scenarios.
-  T peek();
+  T peek() {
+    final prevContext = _evalContext;
+    _evalContext = null;
+    try {
+      return _value;
+    } finally {
+      _evalContext = prevContext;
+    }
+  }
 
   /// Subscribe to value changes
   EffectCleanup subscribe(void Function(T value) fn) {

@@ -353,6 +353,9 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     }());
   }
 
+  @override
+  late T _value;
+
   final ComputedCallback<T> _compute;
 
   @override
@@ -364,8 +367,6 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   int _flags;
 
   Object? _error;
-
-  late T _value;
 
   /// @internal for testing getter to track all the signals currently
   /// subscribed in the signal
@@ -505,24 +506,11 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   }
 
   @override
-  T peek() {
-    if (!_refresh()) {
-      // coverage:ignore-start
-      throw EffectCycleDetectionError();
-      // coverage:ignore-end
-    }
-    if ((_flags & _HAS_ERROR) != 0) {
-      throw _error!;
-    }
-    return _value;
-  }
-
-  @override
   T get value {
     if (disposed) {
       print(
           'computed warning: [$globalId|$debugLabel] has been read after disposed: ${StackTrace.current}');
-      return this._value;
+      return _value;
     }
 
     if ((_flags & _RUNNING) != 0) {
@@ -538,7 +526,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     if ((_flags & _HAS_ERROR) != 0) {
       throw _error!;
     }
-    return this._value;
+    return _value;
   }
 
   @override
