@@ -340,10 +340,10 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   /// @link https://dartsignals.dev/core/computed
   /// {@endtemplate}
   Computed(
-    ComputedCallback<T> compute, {
+    ComputedCallback<T> fn, {
     super.debugLabel,
     super.autoDispose,
-  })  : _compute = compute,
+  })  : _fn = fn,
         __globalVersion = _globalVersion - 1,
         _flags = _OUTDATED,
         super._(globalId: ++_lastGlobalId) {
@@ -356,7 +356,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   @override
   late T _value;
 
-  final ComputedCallback<T> _compute;
+  final ComputedCallback<T> _fn;
 
   @override
   _Node? _sources;
@@ -425,7 +425,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     try {
       _prepareSources(this);
       _evalContext = this;
-      final val = _compute();
+      final val = _fn();
       if ((this._flags & _HAS_ERROR) != 0 || needsUpdate || _version == 0) {
         if (_version == 0 || val != _value) {
           if (_version == 0) {
@@ -492,7 +492,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   void recompute() {
     value;
     _previousValue = _value;
-    _value = _compute();
+    _value = _fn();
     _flags |= _OUTDATED | _NOTIFIED;
     _notifyAllTargets();
   }
