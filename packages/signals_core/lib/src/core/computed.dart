@@ -457,7 +457,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     if (_targets == null) {
       _flags |= _OUTDATED | _TRACKING;
 
-      // A computed signal subscribes lazily to its dependencies when the it
+      // A computed signal subscribes lazily to its dependencies when it
       // gets its first subscriber.
       for (var node = _sources; node != null; node = node._nextSource) {
         node._source._subscribe(node);

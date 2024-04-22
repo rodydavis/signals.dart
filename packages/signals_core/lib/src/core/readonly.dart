@@ -76,15 +76,8 @@ abstract class ReadonlySignal<T> {
   /// Subscribe to value changes
   EffectCleanup subscribe(void Function(T value) fn) {
     return effect(() {
-      final effect = _currentEffect!;
-      final val = this.value;
-      final flag = effect._flags & _TRACKING;
-      effect._flags &= ~_TRACKING;
-      try {
-        fn(val);
-      } finally {
-        effect._flags |= flag;
-      }
+      final value = this.value;
+      untracked(() => fn(value));
     });
   }
 
