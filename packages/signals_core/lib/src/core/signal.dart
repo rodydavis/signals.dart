@@ -251,10 +251,6 @@ class Signal<T> extends ReadonlySignal<T> {
   /// `force` an update if needed (if the update would
   /// not pass the == check)
   void set(T val, {bool force = false}) {
-    if (_evalContext is Computed) {
-      _mutationDetected();
-    }
-
     if (val != _value || force) {
       if (_callDepth > _maxCallDepth) {
         // coverage:ignore-start
