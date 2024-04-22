@@ -1,29 +1,27 @@
 name: flutter_colorband
 description: Generative color examples
-publish_to: "none"
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
-  signals:
-  rxdart:
-  flutter_xlider:
-  layout:
-  http:
-  dart_mappable:
+  signals: ^5.0.0
+  rxdart: ^0.27.7
+  flutter_xlider: ^3.5.0
+  layout: ^1.0.5
+  http: ^1.2.1
+  dart_mappable: ^4.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  build_runner:
-  dart_mappable_builder:
-  flutter_lints:
+  build_runner: ^2.4.9
+  dart_mappable_builder: ^4.2.3
+  flutter_lints: ^3.0.2
 
 flutter:
   uses-material-design: true

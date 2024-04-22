@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: eef6c46b622e0494a36c5a12d10d77fb4e855501a91c1b9ef9339326e58f0596
+      sha256: "7cf60b9f0cc88203c5a190b4cd62a99feea42759a7fa695010eb5de1c0b2252a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "2.5.0"
   async:
     dependency: transitive
     description:
@@ -61,10 +61,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      sha256: d57953e10f9f8327ce64a508a355f0b1ec902193f66288e8cb5070e7c47eeb2d
+      sha256: ba631d1c7f7bef6b729a622b7b752645a2d076dba9976925b8f25725a30e1ee6
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.8"
   devtools_app_shared:
     dependency: "direct main"
     description:
@@ -265,23 +265,23 @@ packages:
       path: "../signals"
       relative: true
     source: path
-    version: "5.0.0-beta.17"
+    version: "5.0.0"
   signals_core:
     dependency: transitive
     description:
       name: signals_core
-      sha256: "77aaed3a7b9cf6fe65a6716f4da0eb48acc32a0bdef9f9b7b795605789630c04"
+      sha256: c46c4997379999311e2cce120f07cf5c61db3ffb28d58e2429a12755846aca68
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0-beta.14"
+    version: "5.0.0"
   signals_flutter:
     dependency: transitive
     description:
       name: signals_flutter
-      sha256: "07e179e901e882ae03d9981e6bdc15bef35cc5f852c16289ca9bd1e4a442dfde"
+      sha256: "66622d32baddc50b9d119d630cf24d74ca7fcc3824c4045135e1233f46f91d67"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0-beta.15"
+    version: "5.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -299,10 +299,10 @@ packages:
     dependency: transitive
     description:
       name: sse
-      sha256: "3ff9088cac3f45aa8b91336f1962e3ea6c81baaba0bbba361c05f8aa7fb59442"
+      sha256: "8168874cdbd42c36ea118ba9f88a656ad97f604f28c976c61cb6d5b281c5319c"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.2"
+    version: "4.1.4"
   stack_trace:
     dependency: transitive
     description:
@@ -387,10 +387,10 @@ packages:
     dependency: transitive
     description:
       name: web_socket_channel
-      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
+      sha256: "939ab60734a4f8fa95feacb55804fa278de28bdeef38e616dc08e44a84adea23"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.4.3"
   webkit_inspection_protocol:
     dependency: transitive
     description:
@@ -411,10 +411,10 @@ packages:
     dependency: transitive
     description:
       name: yaml_edit
-      sha256: "1579d4a0340a83cf9e4d580ea51a16329c916973bffd5bd4b45e911b25d46bfd"
+      sha256: c566f4f804215d84a7a2c377667f546c6033d5b34b4f9e60dfb09d17c4e97826
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.2.0"
 sdks:
   dart: ">=3.3.0-91.0.dev <4.0.0"
   flutter: ">=3.17.0-0.0.pre"

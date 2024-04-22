@@ -27,7 +27,7 @@ class CartController {
         if (_cart.value case AsyncData<Cart>(:final value)) {
           try {
             _cartService.add(item);
-            _cart.value = AsyncData(Cart(items: [...value!.items, item]));
+            _cart.value = AsyncData(Cart(items: [...value.items, item]));
           } catch (e, s) {
             _cart.value = AsyncError(e, s);
           }
@@ -39,7 +39,7 @@ class CartController {
             _cartService.remove(item);
             _cart.value = AsyncData(
               Cart(
-                items: [...value!.items]..remove(event.item),
+                items: [...value.items]..remove(event.item),
               ),
             );
           } catch (e, s) {

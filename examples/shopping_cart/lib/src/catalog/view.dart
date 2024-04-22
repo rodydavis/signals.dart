@@ -35,7 +35,7 @@ class CatalogView extends StatelessWidget {
                   (context, index) => CatalogGridItem(
                     catalog.getByPosition(index),
                   ),
-                  childCount: catalog!.products.length,
+                  childCount: catalog.products.length,
                 ),
               ),
             _ => const SliverFillRemaining(
@@ -95,7 +95,7 @@ class AddButton extends StatelessWidget {
       AsyncError() => const Text('Something went wrong!'),
       AsyncData(value: final cart) => Builder(
           builder: (context) {
-            final isInCart = cart!.items.contains(item);
+            final isInCart = cart.items.contains(item);
             return TextButton(
               style: TextButton.styleFrom(
                   disabledForegroundColor: theme.primaryColor,
@@ -126,7 +126,7 @@ class CatalogAppBar extends StatelessWidget {
     int count = 0;
 
     if (cart is AsyncData<Cart>) {
-      count = cart.value!.items.length;
+      count = cart.value.items.length;
     }
 
     return SliverAppBar(

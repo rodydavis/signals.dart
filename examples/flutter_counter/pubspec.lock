@@ -45,10 +45,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      sha256: d57953e10f9f8327ce64a508a355f0b1ec902193f66288e8cb5070e7c47eeb2d
+      sha256: ba631d1c7f7bef6b729a622b7b752645a2d076dba9976925b8f25725a30e1ee6
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.8"
   fake_async:
     dependency: transitive
     description:
@@ -145,23 +145,23 @@ packages:
       path: "../../packages/signals"
       relative: true
     source: path
-    version: "5.0.0-beta.16"
+    version: "5.0.0"
   signals_core:
     dependency: transitive
     description:
       name: signals_core
-      sha256: b665b7ce73d82f6be70191133512328ae8e97685b24e73df9d8690c65ef105e7
+      sha256: c46c4997379999311e2cce120f07cf5c61db3ffb28d58e2429a12755846aca68
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0-beta.13"
+    version: "5.0.0"
   signals_flutter:
     dependency: transitive
     description:
       name: signals_flutter
-      sha256: b74a4ccd9428a5c0a0c4a9a42df7a93a02af8c0c35d4189f3128bd9b26ae07bb
+      sha256: "66622d32baddc50b9d119d630cf24d74ca7fcc3824c4045135e1233f46f91d67"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0-beta.14"
+    version: "5.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -232,5 +232,5 @@ packages:
     source: hosted
     version: "13.0.0"
 sdks:
-  dart: ">=3.2.0-0 <4.0.0"
+  dart: ">=3.3.0 <4.0.0"
   flutter: ">=1.17.0"

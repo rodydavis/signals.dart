@@ -1,34 +1,31 @@
 name: crud_dio
-description: "A new Flutter project."
-
-publish_to: "none"
-
+description: 'A new Flutter project.'
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
   signals:
     path: ../../packages/signals
-  dio: ^5.4.0
-  retrofit: ^4.0.3
+  dio: ^5.4.3+1
+  retrofit: ^4.1.0
   json_annotation: ^4.8.1
-  copy_with_extension: ^4.0.0
+  copy_with_extension: ^5.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^3.0.0
-  build_runner: ^2.4.7
+  flutter_lints: ^3.0.2
+  build_runner: ^2.4.9
   json_serializable: ^6.7.1
-  copy_with_extension_gen: ^4.0.0
-  retrofit_generator: ">=7.0.0 <8.0.0"
+  copy_with_extension_gen: ^5.0.4
+  retrofit_generator: '>=8.1.0'
 
 flutter:
   uses-material-design: true

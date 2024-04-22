@@ -9,7 +9,7 @@ final _dateFormat = DateFormat.yMMMd();
 class TodoEditDialog extends StatefulWidget {
   final TodoEntry entry;
 
-  const TodoEditDialog({Key? key, required this.entry}) : super(key: key);
+  const TodoEditDialog({super.key, required this.entry});
 
   @override
   State<TodoEditDialog> createState() => _TodoEditDialogState();
