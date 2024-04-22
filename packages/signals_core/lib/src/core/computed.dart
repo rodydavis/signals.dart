@@ -344,7 +344,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     super.debugLabel,
     super.autoDispose,
   })  : _compute = compute,
-        _globalVersion = globalVersion - 1,
+        __globalVersion = _globalVersion - 1,
         _flags = _OUTDATED,
         super._(globalId: ++_lastGlobalId) {
     assert(() {
@@ -358,7 +358,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   @override
   _Node? _sources;
 
-  int _globalVersion;
+  int __globalVersion;
 
   @override
   int _flags;
@@ -406,10 +406,10 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     }
     this._flags &= ~_OUTDATED;
 
-    if (this._globalVersion == globalVersion) {
+    if (this.__globalVersion == _globalVersion) {
       return true;
     }
-    this._globalVersion = globalVersion;
+    this.__globalVersion = _globalVersion;
 
     // Mark this computed signal running before checking the dependencies for value
     // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
@@ -508,7 +508,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   T peek() {
     if (!_refresh()) {
       // coverage:ignore-start
-      _cycleDetected();
+      throw EffectCycleDetectionError();
       // coverage:ignore-end
     }
     if ((_flags & _HAS_ERROR) != 0) {
@@ -527,7 +527,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
 
     if ((_flags & _RUNNING) != 0) {
       // coverage:ignore-start
-      _cycleDetected();
+      throw EffectCycleDetectionError();
       // coverage:ignore-end
     }
     final node = _addDependency(this);

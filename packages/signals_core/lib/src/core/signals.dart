@@ -14,14 +14,10 @@ part 'readonly.dart';
 
 // A global version number for signals, used for fast-pathing repeated
 // computed.peek()/computed.value calls when nothing has changed globally.
-int globalVersion = 0;
+int _globalVersion = 0;
 
 // coverage:ignore-start
 const _maxCallDepth = 100;
-
-void _cycleDetected() {
-  throw EffectCycleDetectionError();
-}
 
 void _mutationDetected() {
   throw MutationDetectedError();

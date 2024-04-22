@@ -261,13 +261,13 @@ class Signal<T> extends ReadonlySignal<T> {
     if (val != _value || force) {
       if (_callDepth > _maxCallDepth) {
         // coverage:ignore-start
-        _cycleDetected();
+        throw EffectCycleDetectionError();
         // coverage:ignore-end
       }
       _previousValue = _value ?? _initialValue;
       _value = val;
       _version++;
-      globalVersion++;
+      _globalVersion++;
 
       _startBatch();
       try {
