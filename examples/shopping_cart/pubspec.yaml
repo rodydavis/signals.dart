@@ -13,7 +13,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   lite_ref: ^0.7.0
-  signals: ^5.0.0
+  signals:
+    path: ../../packages/signals
 
 dev_dependencies:
   flutter_lints: ^3.0.2
