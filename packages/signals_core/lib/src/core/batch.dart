@@ -110,13 +110,13 @@ typedef BatchCallback<T> = T Function();
 /// ```
 /// @link https://dartsignals.dev/core/batch
 /// {@endtemplate}
-T batch<T>(BatchCallback<T> callback) {
+T batch<T>(BatchCallback<T> fn) {
   if (_batchDepth > 0) {
-    return callback();
+    return fn();
   }
-  _startBatch();
+   _startBatch();
   try {
-    return callback();
+    return fn();
   } finally {
     _endBatch();
   }

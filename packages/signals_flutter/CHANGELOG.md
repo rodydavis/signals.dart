@@ -1,3 +1,11 @@
+## 5.2.0
+
+- Update to `signals_core` 5.1.0
+- Sync core implementation with [`@preactjs/signals`](https://github.com/preactjs/signals/commit/26cd3ab41313ebccbc38ed0b7af605a4e868b93b) package
+- Allow mutations in computed
+- Share peek implementation for signal/computed
+- Inline various methods for performance
+
 ## 5.1.0
 
 - Fix #247 - element watcher causing effect cycle error

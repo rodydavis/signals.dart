@@ -14,18 +14,10 @@ part 'readonly.dart';
 
 // A global version number for signals, used for fast-pathing repeated
 // computed.peek()/computed.value calls when nothing has changed globally.
-int globalVersion = 0;
+int _globalVersion = 0;
 
 // coverage:ignore-start
 const _maxCallDepth = 100;
-
-void _cycleDetected() {
-  throw EffectCycleDetectionError();
-}
-
-void _mutationDetected() {
-  throw MutationDetectedError();
-}
 
 /// Flags for Computed and Effect.
 const _RUNNING = 1 << 0;
@@ -355,9 +347,3 @@ class SignalsWriteAfterDisposeError extends SignalsError {
 /// Cycle detection usually means you have updated
 /// a signal inside an effect and are reading by value.
 class EffectCycleDetectionError extends Error {}
-
-/// Mutation detection usually means you have updated
-/// a signal inside a computed.
-///
-/// Computed cannot have side-effects
-class MutationDetectedError extends Error {}

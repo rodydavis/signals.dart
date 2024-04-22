@@ -219,20 +219,26 @@ void main() {
     });
 
     group('cycle error', () {
-      test('.value', () {
-        final a = signal(1);
-        final b = computed(() => a.value++);
-
-        a.value = 2;
-
-        expect(() => b.value, throwsA(isA<MutationDetectedError>()));
-      });
-
       test('.peek()', () {
         final a = signal(1);
         final b = computed(() => a.value++);
 
-        expect(() => b.peek(), throwsA(isA<MutationDetectedError>()));
+        expect(() => b.peek(), throwsA(isA<Error>()));
+      });
+
+      test('should throw when evaluation throws', () {
+        final s = computed(() => throw Error());
+
+        expect(() => s.peek(), throwsA(isA<Error>()));
+      });
+
+      test(
+          "should throw when previous evaluation threw and dependencies haven't changed",
+          () {
+        final s = computed(() => throw Error());
+
+        expect(() => s.value, throwsA(isA<Error>()));
+        expect(() => s.peek(), throwsA(isA<Error>()));
       });
 
       test('read after disposed', () {
@@ -245,13 +251,23 @@ void main() {
         );
       });
 
-      test('cycle after first read', () {
-        final cycle = signal(false);
+      test(
+          'should recompute if a dependency changes during computation after becoming a dependency',
+          () {
+        var calls = 0;
+
         final a = signal(0);
-        final b = computed(() => cycle.value ? a.value++ : 0);
-        b.value;
-        cycle.value = true;
-        expect(() => b.value, throwsA(isA<MutationDetectedError>()));
+
+        int trigger() {
+          calls++;
+          return a.value++;
+        }
+
+        final c = computed(trigger);
+        c.value;
+        expect(calls, 1);
+        c.value;
+        expect(calls, 2);
       });
     });
   });

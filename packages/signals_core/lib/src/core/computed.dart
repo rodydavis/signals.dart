@@ -340,11 +340,11 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   /// @link https://dartsignals.dev/core/computed
   /// {@endtemplate}
   Computed(
-    ComputedCallback<T> compute, {
+    ComputedCallback<T> fn, {
     super.debugLabel,
     super.autoDispose,
-  })  : _compute = compute,
-        _globalVersion = globalVersion - 1,
+  })  : _fn = fn,
+        __globalVersion = _globalVersion - 1,
         _flags = _OUTDATED,
         super._(globalId: ++_lastGlobalId) {
     assert(() {
@@ -353,19 +353,20 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     }());
   }
 
-  final ComputedCallback<T> _compute;
+  @override
+  late T _value;
+
+  final ComputedCallback<T> _fn;
 
   @override
   _Node? _sources;
 
-  int _globalVersion;
+  int __globalVersion;
 
   @override
   int _flags;
 
   Object? _error;
-
-  late T _value;
 
   /// @internal for testing getter to track all the signals currently
   /// subscribed in the signal
@@ -406,10 +407,10 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     }
     this._flags &= ~_OUTDATED;
 
-    if (this._globalVersion == globalVersion) {
+    if (this.__globalVersion == _globalVersion) {
       return true;
     }
-    this._globalVersion = globalVersion;
+    this.__globalVersion = _globalVersion;
 
     // Mark this computed signal running before checking the dependencies for value
     // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
@@ -424,7 +425,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     try {
       _prepareSources(this);
       _evalContext = this;
-      final val = _compute();
+      final val = _fn();
       if ((this._flags & _HAS_ERROR) != 0 || needsUpdate || _version == 0) {
         if (_version == 0 || val != _value) {
           if (_version == 0) {
@@ -457,7 +458,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     if (_targets == null) {
       _flags |= _OUTDATED | _TRACKING;
 
-      // A computed signal subscribes lazily to its dependencies when the it
+      // A computed signal subscribes lazily to its dependencies when it
       // gets its first subscriber.
       for (var node = _sources; node != null; node = node._nextSource) {
         node._source._subscribe(node);
@@ -491,7 +492,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   void recompute() {
     value;
     _previousValue = _value;
-    _value = _compute();
+    _value = _fn();
     _flags |= _OUTDATED | _NOTIFIED;
     _notifyAllTargets();
   }
@@ -505,29 +506,16 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   }
 
   @override
-  T peek() {
-    if (!_refresh()) {
-      // coverage:ignore-start
-      _cycleDetected();
-      // coverage:ignore-end
-    }
-    if ((_flags & _HAS_ERROR) != 0) {
-      throw _error!;
-    }
-    return _value;
-  }
-
-  @override
   T get value {
     if (disposed) {
       print(
           'computed warning: [$globalId|$debugLabel] has been read after disposed: ${StackTrace.current}');
-      return this._value;
+      return _value;
     }
 
     if ((_flags & _RUNNING) != 0) {
       // coverage:ignore-start
-      _cycleDetected();
+      throw EffectCycleDetectionError();
       // coverage:ignore-end
     }
     final node = _addDependency(this);
@@ -538,7 +526,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     if ((_flags & _HAS_ERROR) != 0) {
       throw _error!;
     }
-    return this._value;
+    return _value;
   }
 
   @override

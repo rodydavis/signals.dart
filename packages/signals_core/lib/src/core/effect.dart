@@ -364,7 +364,7 @@ class Effect implements SignalListenable {
   EffectCleanup _start() {
     if ((_flags & _RUNNING) != 0) {
       // coverage:ignore-start
-      _cycleDetected();
+      throw EffectCycleDetectionError();
       // coverage:ignore-end
     }
     _flags |= _RUNNING;
