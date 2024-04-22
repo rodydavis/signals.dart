@@ -44,7 +44,7 @@ class CartList extends StatelessWidget {
 
     return switch (state) {
       AsyncData(value: final cart) => ListView.separated(
-          itemCount: cart!.items.length,
+          itemCount: cart.items.length,
           separatorBuilder: (_, __) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
             final item = cart.items[index];
@@ -102,7 +102,7 @@ class CartTotal extends StatelessWidget {
               AsyncData(value: final cart) => Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    '\$${cart!.totalPrice}',
+                    '\$${cart.totalPrice}',
                     style: hugeStyle,
                   ),
                 ),

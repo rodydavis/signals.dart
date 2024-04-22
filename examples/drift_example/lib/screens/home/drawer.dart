@@ -7,7 +7,7 @@ import '../../database/database.dart';
 import 'state.dart';
 
 class CategoriesDrawer extends StatefulWidget {
-  const CategoriesDrawer({Key? key}) : super(key: key);
+  const CategoriesDrawer({super.key});
 
   @override
   State<CategoriesDrawer> createState() => _CategoriesDrawerState();
@@ -53,7 +53,7 @@ class _CategoriesDrawerState extends State<CategoriesDrawer> {
 class _CategoryDrawerEntry extends StatelessWidget {
   final CategoryWithCount entry;
 
-  const _CategoryDrawerEntry({Key? key, required this.entry}) : super(key: key);
+  const _CategoryDrawerEntry({required this.entry});
 
   @override
   Widget build(BuildContext context) {
@@ -181,25 +181,6 @@ Future<Color?> _selectColor(BuildContext context, Color initial) {
             pickerColor: initial,
             onColorChanged: (color) => Navigator.pop(context, color),
           ),
-          // Use Material color picker:
-          //
-          // child: MaterialPicker(
-          //   pickerColor: pickerColor,
-          //   onColorChanged: changeColor,
-          //   showLabel: true, // only on portrait mode
-          // ),
-          //
-          // Use Block color picker:
-          //
-          // child: BlockPicker(
-          //   pickerColor: currentColor,
-          //   onColorChanged: changeColor,
-          // ),
-          //
-          // child: MultipleChoiceBlockPicker(
-          //   pickerColors: currentColors,
-          //   onColorsChanged: changeColors,
-          // ),
         ),
       );
     },
