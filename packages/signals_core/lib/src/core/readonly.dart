@@ -87,7 +87,14 @@ abstract class ReadonlySignal<T> {
   EffectCleanup subscribe(void Function(T value) fn) {
     return effect(() {
       final value = this.value;
-      untracked(() => fn(value));
+
+      final prevContext = _evalContext;
+      _evalContext = null;
+      try {
+        fn(value);
+      } finally {
+        _evalContext = prevContext;
+      }
     });
   }
 

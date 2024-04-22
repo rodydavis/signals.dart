@@ -242,6 +242,19 @@ void main() {
       expect(a.value, 1);
     });
 
+    test('should run the callback when the signal value changes', () {
+      int calls = 0;
+      void trigger(int val) => calls++;
+
+      final a = signal(1);
+
+      a.subscribe(trigger);
+
+      a.value = 2;
+
+      expect(calls, 2);
+    });
+
     group('dispose', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {
