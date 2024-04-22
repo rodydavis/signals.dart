@@ -27,7 +27,7 @@
 - Removing old deprecated methods
 - Adding more inline code documentation
 - ListSignal/SetSignal now extends IterableSignal
-- Fixing ChnageStackSignal getters for history/redos to return an iterable list
+- Fixing ChangeStackSignal getters for history/redos to return an iterable list
 - Fixing async signal isCompleted race condition
 - Adding `createSignal`/`createComputed`/`createEffect` for Flutter
 - Adding `SignalsAutoDisposeMixin` for Flutter
