@@ -20,11 +20,11 @@ typedef UntrackedCallback<T> = T Function();
 /// ```
 /// @link https://dartsignals.dev/core/untracked
 /// {@endtemplate}
-T untracked<T>(UntrackedCallback<T> callback) {
+T untracked<T>(UntrackedCallback<T> fn) {
   final prevContext = _evalContext;
   _evalContext = null;
   try {
-    return callback();
+    return fn();
   } finally {
     _evalContext = prevContext;
   }
