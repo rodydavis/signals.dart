@@ -3,8 +3,7 @@
 /// by recursively comparing their elements.
 ///
 /// The [equals] method compares two objects for deep equality, handling maps,
-/// sets, and iterables. The [hash] method generates a hash code for an object,
-/// also handling maps, sets, and iterables.
+/// sets, and iterables.
 ///
 /// This class is useful when you need to compare complex data structures for
 /// equality or use them as keys in a hash-based data structure, such as a
@@ -59,7 +58,7 @@ class DeepCollectionEquality {
     return true;
   }
 
-  /// Compares two objects for deep equality.
+  /// Compares two objects for deep equality, handling maps, sets, and iterables.
   /// The objects are equal if they reference the same object
   /// or their types are equal and their fields are equal.
   bool equals(Object? obj1, Object? obj2) {
