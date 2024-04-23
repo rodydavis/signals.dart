@@ -1,35 +1,33 @@
 name: shopping_cart
 description: Shopping cart example
-
-# Prevent accidental publishing to pub.dev.
-publish_to: "none"
-
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-    sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
-    equatable: ^2.0.5
-    flutter:
-        sdk: flutter
-    flutter_localizations:
-        sdk: flutter
-    lite_ref: 0.3.0
-    signals:
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  lite_ref: ^0.7.0
+  signals:
+    path: ../../packages/signals
 
 dev_dependencies:
-    flutter_lints: ^2.0.0
-    flutter_test:
-        sdk: flutter
-    mocktail: ^1.0.2
+  flutter_lints: ^3.0.2
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.3
 
 flutter:
-    uses-material-design: true
+  uses-material-design: true
 
-    # Enable generation of localized Strings from arb files.
-    generate: true
+  # Enable generation of localized Strings from arb files.
+  generate: true
 
-    assets:
-        # Add assets from the images directory to the application.
-        - assets/images/
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/

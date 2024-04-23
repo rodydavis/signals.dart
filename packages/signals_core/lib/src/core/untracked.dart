@@ -1,7 +1,5 @@
 part of 'signals.dart';
 
-int _untrackedDepth = 0;
-
 /// A callback that is executed inside a computed.
 typedef UntrackedCallback<T> = T Function();
 
@@ -22,17 +20,12 @@ typedef UntrackedCallback<T> = T Function();
 /// ```
 /// @link https://dartsignals.dev/core/untracked
 /// {@endtemplate}
-T untracked<T>(UntrackedCallback<T> callback) {
-  if (_untrackedDepth > 0) {
-    return callback();
-  }
+T untracked<T>(UntrackedCallback<T> fn) {
   final prevContext = _evalContext;
   _evalContext = null;
-  _untrackedDepth++;
   try {
-    return callback();
+    return fn();
   } finally {
-    _untrackedDepth--;
     _evalContext = prevContext;
   }
 }

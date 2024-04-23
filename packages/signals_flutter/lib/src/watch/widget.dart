@@ -199,7 +199,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
     if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.idle) {
       await SchedulerBinding.instance.endOfFrame;
     }
-    if (!context.mounted) return;
+    if (!mounted) return;
     (context as Element).markNeedsBuild();
   }
 

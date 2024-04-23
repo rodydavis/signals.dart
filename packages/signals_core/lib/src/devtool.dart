@@ -1,6 +1,11 @@
-part of 'signals.dart';
-
 // coverage:ignore-start
+import 'dart:convert';
+
+import 'dart:developer' as developer;
+
+import 'core/signals.dart';
+import 'utils/constants.dart';
+
 /// Reload the devtools
 @Deprecated('Use the DevToolsSignalsObserver instead')
 void reloadSignalsDevTools() {
@@ -28,7 +33,9 @@ bool get signalsDevToolsEnabled {
 /// Manually enable/disable signals devtools
 set signalsDevToolsEnabled(bool value) {
   final target = SignalsObserver.instance;
-  if (target is DevToolsSignalsObserver) {
+  if (target is! DevToolsSignalsObserver && value) {
+    SignalsObserver.instance = DevToolsSignalsObserver();
+  } else if (target is DevToolsSignalsObserver) {
     target.enabled = value;
   }
 }
@@ -150,10 +157,10 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   /// Logs a message to the console.
-  void log(String message) => print(message);
+  void log(String message) => developer.log(message);
 
   @override
-  void _onEffectCreated(Effect instance) {
+  void onEffectCreated(Effect instance) {
     if (!enabled) return;
     _effectCount[instance.globalId] = 0;
     _effects.add(WeakReference(instance));
@@ -169,7 +176,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void _onEffectCalled(Effect instance) {
+  void onEffectCalled(Effect instance) {
     if (!enabled) return;
     var count = _effectCount[instance.globalId] ??= 0;
     _effectCount[instance.globalId] = ++count;
@@ -185,7 +192,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void _onEffectRemoved(Effect instance) {
+  void onEffectRemoved(Effect instance) {
     if (!enabled) return;
     _effectCount.remove(instance.globalId);
     _effects.removeWhere((e) => e.target == instance);

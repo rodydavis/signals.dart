@@ -1,11 +1,9 @@
-// ignore_for_file: public_member_api_docs, constant_identifier_names
-import 'dart:convert';
+// ignore_for_file: constant_identifier_names
+import '../devtool.dart';
+import '../utils/constants.dart';
 import 'dart:developer' as developer;
 
-import '../utils/constants.dart';
-
 part 'observer.dart';
-part 'devtool.dart';
 part 'effect.dart';
 part 'listenable.dart';
 part 'computed.dart';
@@ -16,18 +14,10 @@ part 'readonly.dart';
 
 // A global version number for signals, used for fast-pathing repeated
 // computed.peek()/computed.value calls when nothing has changed globally.
-int globalVersion = 0;
+int _globalVersion = 0;
 
 // coverage:ignore-start
 const _maxCallDepth = 100;
-
-void _cycleDetected() {
-  throw EffectCycleDetectionError();
-}
-
-void _mutationDetected() {
-  throw MutationDetectedError();
-}
 
 /// Flags for Computed and Effect.
 const _RUNNING = 1 << 0;
@@ -272,7 +262,10 @@ void _cleanupSources(SignalListenable target) {
 
 /// Signal usage error
 class SignalsError extends Error {
+  /// Signals error pretty print message
   final String message;
+
+  /// Signal usage error
   SignalsError(this.message);
 
   @override
@@ -281,6 +274,7 @@ class SignalsError extends Error {
 
 /// Error to throw if a signal is read after it is disposed
 class SignalsReadAfterDisposeError extends SignalsError {
+  /// Error to throw if a signal is read after it is disposed
   SignalsReadAfterDisposeError(ReadonlySignal instance)
       : super(
           'A ${instance.runtimeType} signal was read after being disposed.\n'
@@ -342,6 +336,7 @@ void _endEffect(Effect effect, SignalListenable? prevContext) {
 
 /// Error to throw if a signal is written to after it is disposed
 class SignalsWriteAfterDisposeError extends SignalsError {
+  /// Error to throw if a signal is written to after it is disposed
   SignalsWriteAfterDisposeError(ReadonlySignal instance)
       : super(
           'A ${instance.runtimeType} signal was written after being disposed.\n'
@@ -352,9 +347,3 @@ class SignalsWriteAfterDisposeError extends SignalsError {
 /// Cycle detection usually means you have updated
 /// a signal inside an effect and are reading by value.
 class EffectCycleDetectionError extends Error {}
-
-/// Mutation detection usually means you have updated
-/// a signal inside a computed.
-///
-/// Computed cannot have side-effects
-class MutationDetectedError extends Error {}

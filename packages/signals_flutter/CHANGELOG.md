@@ -1,3 +1,21 @@
+## 5.2.0
+
+- Update to `signals_core` 5.1.0
+- Sync core implementation with [`@preactjs/signals`](https://github.com/preactjs/signals/commit/26cd3ab41313ebccbc38ed0b7af605a4e868b93b) package
+- Allow mutations in computed
+- Share peek implementation for signal/computed
+- Inline various methods for performance
+
+## 5.1.0
+
+- Fix #247 - element watcher causing effect cycle error
+- Fix #245 - unmounted widget causing error on context read
+- Adding `InheritedSignalProvider` and `ReadonlySignalProvider` for Flutter
+- Update to `signals_core` 5.0.1
+- Switching `SignalsObserver` to use `log` instead of `print`
+- Only setting `SignalsObserver` to use `DevToolsSignalsObserver` in `kDebugMode`
+- Changing `SignalProvider` default constructor to use `create`
+
 ## 5.0.0
 
 - Adding `previousValue`/`initialValue` to `Signal`
@@ -7,7 +25,7 @@
 - Removing old deprecated methods
 - Adding more inline code documentation
 - ListSignal/SetSignal now extends IterableSignal
-- Fixing ChnageStackSignal getters for history/redos to return an iterable list
+- Fixing ChangeStackSignal getters for history/redos to return an iterable list
 - Fixing async signal isCompleted race condition
 - Adding `createSignal`/`createComputed`/`createEffect` for Flutter
 - Adding `SignalsAutoDisposeMixin` for Flutter
