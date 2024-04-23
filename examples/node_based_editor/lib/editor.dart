@@ -446,14 +446,14 @@ class _EditorState extends State<Editor> {
                           return color.withOpacity(0.1);
                         }(),
                       ),
-                      onWillAccept: (data) {
+                      onWillAcceptWithDetails: (data) {
                         dragAccept.value = data != null;
                         return dragAccept();
                       },
                       onLeave: (_) {
                         dragAccept.value = false;
                       },
-                      onAccept: (data) {
+                      onAcceptWithDetails: (data) {
                         nodes[data] = draggableOffset()!;
                         selection.clear();
                       },

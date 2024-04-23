@@ -11,13 +11,13 @@ class CatalogController {
 
   final CatalogService _catalogService;
 
-  final _catalog = signal<AsyncState<Catalog>>(AsyncLoading());
+  final _catalog = signal<AsyncState<Catalog>>(const AsyncLoading());
   ReadonlySignal<AsyncState<Catalog>> get catalog => _catalog;
 
   Future<void> dispatch(CatalogEvent event) async {
     switch (event) {
       case CatalogEvent.started:
-        _catalog.value = AsyncLoading();
+        _catalog.value = const AsyncLoading();
         _catalogService
             .load()
             .then((catalog) => _catalog.value = AsyncData(Catalog(catalog)))

@@ -11,13 +11,13 @@ class CartController {
 
   final CartService _cartService;
 
-  late final _cart = signal<AsyncState<Cart>>(AsyncLoading());
+  late final _cart = signal<AsyncState<Cart>>(const AsyncLoading());
   ReadonlySignal<AsyncState<Cart>> get cart => _cart;
 
   Future<void> dispatch(CartEvent event) async {
     switch (event) {
       case CartStarted():
-        _cart.value = AsyncLoading();
+        _cart.value = const AsyncLoading();
         _cartService
             .loadProducts()
             .then((items) => _cart.value = AsyncData(Cart(items: [...items])))
