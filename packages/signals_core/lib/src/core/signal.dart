@@ -301,15 +301,6 @@ class Signal<T> extends ReadonlySignal<T> {
     return _value;
   }
 
-  void _reset(T? value) {
-    if (value != null) {
-      _value = value;
-      _initialValue = value;
-      _previousValue = null;
-    }
-    _version = 0;
-  }
-
   /// Returns a readonly signal
   ReadonlySignal<T> readonly() => this;
 
@@ -323,8 +314,10 @@ class Signal<T> extends ReadonlySignal<T> {
   /// // Override the signal with a new value
   /// counter = counter.overrideWith(1);
   /// ```
-  Signal<T> overrideWith(T value) {
-    this._reset(value);
+  Signal<T> overrideWith(T val) {
+    _version = 0;
+    _value = val;
+    _previousValue = null;
     return this;
   }
 }

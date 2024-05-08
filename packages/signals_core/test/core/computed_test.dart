@@ -93,12 +93,16 @@ void main() {
     });
 
     test('overrideWith', () {
-      final a = signal(1);
-      final b = signal(2);
-      final c = computed(() => a() + b());
-      expect(c.value, 3);
-      c.overrideWith(10);
-      expect(c.value, 10);
+      int calls = 0;
+      var c = computed(() {
+        calls++;
+        return 1;
+      });
+
+      c.overrideWith(2);
+
+      expect(c.value, 2);
+      expect(calls, 0);
     });
 
     test('test as stream', () {
@@ -113,18 +117,32 @@ void main() {
       expect(stream, emitsInOrder([0, 1, 2, 3]));
     });
 
-    test('test override', () {
-      final a = signal(0);
-      final s = computed(() => a()).overrideWith(-1);
+    test('test override subscribe', () {
+      final a = signal(1);
 
-      final stream = s.toStream();
+      int calls = 0;
+      List<int> results = [];
+      var c = computed(() {
+        calls++;
+        return a();
+      });
+
+      c.overrideWith(2);
+
+      expect(results, []);
+      expect(calls, 0);
+
+      final dispose = c.subscribe(results.add);
 
       a.value = 1;
       a.value = 2;
       a.value = 2; // check if skipped
       a.value = 3;
 
-      expect(stream, emitsInOrder([-1, 1, 2, 3]));
+      expect(calls, 0);
+      expect(results, [2]);
+
+      dispose();
     });
 
     test('should respect force set', () {

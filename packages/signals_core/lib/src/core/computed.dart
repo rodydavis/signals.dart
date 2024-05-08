@@ -356,7 +356,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   @override
   late T _value;
 
-  final ComputedCallback<T> _fn;
+  ComputedCallback<T> _fn;
 
   @override
   _Node? _sources;
@@ -386,8 +386,12 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   /// // Override the signal with a new value
   /// counter = counter.overrideWith(1);
   /// ```
-  Computed<T> overrideWith(T value) {
-    this._reset(value);
+  Computed<T> overrideWith(T val) {
+    _fn = () => val;
+    _flags = _OUTDATED;
+    // _version = 0;
+    _initialValue = val;
+    _previousValue = null;
     return this;
   }
 
@@ -533,15 +537,6 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   void dispose() {
     super.dispose();
     _flags |= _DISPOSED;
-  }
-
-  void _reset(T? value) {
-    _refresh();
-    if (value != null) {
-      _value = value;
-      _initialValue = value;
-      _previousValue = null;
-    }
   }
 
   @override
