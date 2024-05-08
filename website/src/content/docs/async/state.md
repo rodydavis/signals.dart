@@ -70,7 +70,7 @@ final s = asyncSignal<int>(AsyncState.loading());
 print(s.isRefreshing); // false
 s.value = AsyncState.error('error', null, isLoading: true);
 print(s.isRefreshing); // true
-s.value = AsyncState.data(1, isLoading: true);
+s.value = AsyncData(1, isLoading: true);
 print(s.isRefreshing); // true
 ```
 
