@@ -301,7 +301,7 @@ sealed class AsyncState<T> {
         }
       }
     }
-    if (loading != null) return loading();
+    if (isLoading) if (loading != null) return loading();
     return orElse();
   }
 
