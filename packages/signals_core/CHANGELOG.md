@@ -1,3 +1,8 @@
+## 5.2.0
+
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/258
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/262
+
 ## 5.1.0
 
 - Sync core implementation with [`@preactjs/signals`](https://github.com/preactjs/signals/commit/26cd3ab41313ebccbc38ed0b7af605a4e868b93b) package

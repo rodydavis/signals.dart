@@ -114,7 +114,7 @@ T batch<T>(BatchCallback<T> fn) {
   if (_batchDepth > 0) {
     return fn();
   }
-   _startBatch();
+  _startBatch();
   try {
     return fn();
   } finally {
