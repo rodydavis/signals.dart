@@ -282,6 +282,7 @@ class SignalsReadAfterDisposeError extends SignalsError {
         );
 }
 
+// ignore: unused_element
 Effect? _currentEffect;
 
 void _cleanupEffect(Effect effect) {

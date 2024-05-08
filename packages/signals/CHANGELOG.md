@@ -1,3 +1,10 @@
+## 5.2.1
+
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/258
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/262
+ - Update to `signals_core` 5.2.0
+ - Update to `signals_flutter` 5.2.1
+
 ## 5.2.0
 
 - Update to `signals_flutter` 5.2.0
