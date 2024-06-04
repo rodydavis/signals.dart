@@ -68,7 +68,7 @@ class ChangeStackSignal<T> extends Signal<T> {
   void redo() {
     if (!canRedo) return;
     final change = _redo.removeFirst();
-    set(change.value, force: true);
+    super.set(change.value, force: true);
     _undo.addLast(change);
   }
 
@@ -76,7 +76,7 @@ class ChangeStackSignal<T> extends Signal<T> {
   void undo() {
     if (!canUndo) return;
     final change = _undo.removeLast();
-    set(change.previousValue, force: true);
+    super.set(change.previousValue, force: true);
     _redo.addFirst(change);
   }
 

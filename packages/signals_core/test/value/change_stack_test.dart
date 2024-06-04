@@ -3,6 +3,32 @@ import 'package:test/test.dart';
 
 void main() {
   SignalsObserver.instance = null;
+
+  group('ChangeStack signal tests', () {
+    test(
+      'should do undo N times',
+      () {
+        final s = changeStack(0, limit: 2);
+        s.value = 1;
+        s.value = 2;
+        s.value = 3;
+        expect(s.value, 3);
+        s.undo();
+        s.undo();
+        expect(s.value, 1);
+        expect(s.canUndo, false);
+        s.redo();
+        expect(s.value, 2);
+        s.redo();
+        expect(s.canUndo, true);
+        s.undo();
+        s.value = -1;
+        expect(s.canRedo, false);
+        expect(s.value, -1);
+      },
+    );
+  });
+
   void testSignal(
     String message,
     ChangeStackSignal<T> Function<T>(
