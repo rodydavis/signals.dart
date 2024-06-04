@@ -61,7 +61,7 @@ class ElementWatcher {
   void listen(ReadonlySignal value, VoidCallback cb) {
     _listen.putIfAbsent(
       value.globalId,
-      () => value.subscribe((val) => _callback(cb)),
+      () => value.subscribe((val) => _callback(cb, listener: true)),
     );
   }
 
@@ -87,18 +87,22 @@ class ElementWatcher {
     target.markNeedsBuild();
   }
 
-  void _callback(VoidCallback cb) async {
+  void _callback(VoidCallback cb, {bool listener = false}) async {
     final target = element.target;
     if (target == null) {
       dispose();
       return;
     }
-    if (!target.mounted) return;
-    if (_batch.contains(cb)) return;
-    _batch.add(cb);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _call();
-    });
+    if (listener) {
+      cb();
+    } else {
+      if (!target.mounted) return;
+      if (_batch.contains(cb)) return;
+      _batch.add(cb);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _call();
+      });
+    }
   }
 
   void _call() {

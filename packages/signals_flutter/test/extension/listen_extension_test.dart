@@ -26,14 +26,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(state.count.value, 2);
-    expect(calls, 1);
+    expect(calls, 2);
 
     state.unlisten();
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
 
     expect(state.count.value, 3);
-    expect(calls, 1);
+    expect(calls, 2);
   });
 }
 
