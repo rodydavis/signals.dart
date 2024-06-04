@@ -1,3 +1,7 @@
+## 5.2.2
+
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/265
+
 ## 5.2.0
 
  - **FIX**: https://github.com/rodydavis/signals.dart/issues/258

@@ -1,8 +1,14 @@
+## 5.2.2
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/265
+- Update to `signals_core` 5.2.2
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/266
+
 ## 5.2.1
 
- - **FIX**: https://github.com/rodydavis/signals.dart/issues/258
- - **FIX**: https://github.com/rodydavis/signals.dart/issues/262
- - Update to `signals_core` 5.2.0
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/258
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/262
+- Update to `signals_core` 5.2.0
 
 ## 5.2.0
 
