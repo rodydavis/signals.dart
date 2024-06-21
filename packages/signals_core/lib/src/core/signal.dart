@@ -246,34 +246,40 @@ class Signal<T> extends ReadonlySignal<T> {
     }
   }
 
+  /// Optional method to check if to values are the same
+  bool Function(T a, T b) equalityCheck = (T a, T b) => a == b;
+
   /// Update the current value.
   ///
   /// `force` an update if needed (if the update would
   /// not pass the == check)
-  void set(T val, {bool force = false}) {
-    if (val != _value || force) {
-      if (_callDepth > _maxCallDepth) {
-        // coverage:ignore-start
-        throw EffectCycleDetectionError();
-        // coverage:ignore-end
-      }
-      _previousValue = _value ?? _initialValue;
-      _value = val;
-      _version++;
-      _globalVersion++;
-
-      _startBatch();
-      try {
-        _notifyAllTargets();
-      } finally {
-        _endBatch();
-      }
-
-      assert(() {
-        SignalsObserver.instance?.onSignalUpdated(this, val);
-        return true;
-      }());
+  bool set(T val, {bool force = false}) {
+    if (!(force || !equalityCheck(val, _value))) {
+      return false;
     }
+
+    if (_callDepth > _maxCallDepth) {
+      // coverage:ignore-start
+      throw EffectCycleDetectionError();
+      // coverage:ignore-end
+    }
+    _previousValue = _value ?? _initialValue;
+    _value = val;
+    _version++;
+    _globalVersion++;
+
+    _startBatch();
+    try {
+      _notifyAllTargets();
+    } finally {
+      _endBatch();
+    }
+
+    assert(() {
+      SignalsObserver.instance?.onSignalUpdated(this, val);
+      return true;
+    }());
+    return true;
   }
 
   /// Set the current value

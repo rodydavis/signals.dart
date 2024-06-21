@@ -172,10 +172,10 @@ class _IterableSignal<E, V extends Iterable<E>> extends Signal<V>
   }
 
   @override
-  V get initialValue => ValueSignalMixin.initialValueExcpetion();
+  V get initialValue => ValueSignalMixin.initialValueException();
 
   @override
-  V get previousValue => ValueSignalMixin.previousValueExcpetion();
+  V get previousValue => ValueSignalMixin.previousValueException();
 }
 
 /// Create an [IterableSignal] from [Iterable]

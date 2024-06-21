@@ -52,16 +52,19 @@ class ChangeStackSignal<T> extends Signal<T> {
   bool get canUndo => _undo.isNotEmpty;
 
   @override
-  void set(T val, {bool force = false}) {
-    _undo.addLast((
-      previousValue: super.value,
-      value: val,
-    ));
+  bool set(
+    T val, {
+    bool force = false,
+  }) {
+    final prev = super.value;
+    final updated = super.set(val, force: force);
+    if (!updated) return false;
+    _undo.addLast((previousValue: prev, value: val));
     _redo.clear();
     if (limit != null && _undo.length > limit!) {
       _undo.removeFirst();
     }
-    super.set(val, force: force);
+    return true;
   }
 
   /// Redo Previous Undo

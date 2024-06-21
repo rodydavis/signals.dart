@@ -151,10 +151,10 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
   }
 
   @override
-  Map<K, V> get initialValue => ValueSignalMixin.initialValueExcpetion();
+  Map<K, V> get initialValue => ValueSignalMixin.initialValueException();
 
   @override
-  Map<K, V> get previousValue => ValueSignalMixin.previousValueExcpetion();
+  Map<K, V> get previousValue => ValueSignalMixin.previousValueException();
 }
 
 /// Create an [MapSignal] from [Map]
