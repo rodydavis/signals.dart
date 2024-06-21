@@ -49,11 +49,16 @@ class SignalValueNotifier<T>
   void notifyListeners() => notifier.notifyListeners();
 
   @override
+  /// Optional method to check if to values are the same
+  bool Function(T a, T b) equalityCheck = (T a, T b) => a == b;
+
+  @override
   set value(T newValue) {
     source.value = newValue;
   }
 
   @override
+  @Deprecated('use set(..., force: true) instead')
   void forceUpdate([T? val]) {
     return source.forceUpdate(val);
   }
@@ -69,7 +74,7 @@ class SignalValueNotifier<T>
   }
 
   @override
-  void set(T val, {bool force = false}) {
+  bool set(T val, {bool force = false}) {
     return source.set(val, force: force);
   }
 }

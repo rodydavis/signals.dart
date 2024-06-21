@@ -125,7 +125,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
                     ),
                     TextButton(
                       style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(Colors.red),
+                        foregroundColor: WidgetStateProperty.all(Colors.red),
                       ),
                       onPressed: () {
                         Navigator.pop(context, true);

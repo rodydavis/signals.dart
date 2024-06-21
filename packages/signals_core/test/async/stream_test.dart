@@ -25,7 +25,7 @@ void main() {
 
     test('extension on Stream', () async {
       final stream = _stream();
-      final s = stream.toSignal();
+      final s = stream.toStreamSignal();
       expect(s.peek().isLoading, true);
 
       final completer = Completer<int>();

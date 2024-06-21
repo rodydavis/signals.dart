@@ -3,7 +3,8 @@ import 'package:flutter/widgets.dart';
 import '../../../signals_flutter.dart';
 import 'provider.dart';
 
-/// Convience method to pass signals with [InheritedWidget]
+/// Convenience method to pass signals with [InheritedWidget]
+// ignore: must_be_immutable
 class SignalProvider<T> extends InheritedSignalProvider<T, Signal<T>>
     implements Signal<T> {
   /// Create a new [Signal] by value to provide in a widget tree
@@ -14,13 +15,13 @@ class SignalProvider<T> extends InheritedSignalProvider<T, Signal<T>>
   }) : super();
 
   /// Pass a [Signal] by value to provide in a widget tree
-  const SignalProvider.value({
+  SignalProvider.value({
     super.key,
     required super.child,
     required super.value,
   }) : super.value();
 
-  /// Look up a singal by its type
+  /// Look up a signal by its type
   static Signal<T> of<T>(BuildContext context, {bool listen = true}) {
     return InheritedSignalProvider.of<SignalProvider<T>>(
       context,
@@ -30,6 +31,7 @@ class SignalProvider<T> extends InheritedSignalProvider<T, Signal<T>>
   }
 
   @override
+  @Deprecated('use .set(..., force: true) instead')
   void forceUpdate([T? val]) {
     return instance.forceUpdate(val);
   }
@@ -45,7 +47,7 @@ class SignalProvider<T> extends InheritedSignalProvider<T, Signal<T>>
   }
 
   @override
-  void set(T val, {bool force = false}) {
+  bool set(T val, {bool force = false}) {
     return instance.set(val, force: force);
   }
 
@@ -53,4 +55,8 @@ class SignalProvider<T> extends InheritedSignalProvider<T, Signal<T>>
   set value(T val) {
     instance.value = val;
   }
+
+  /// Optional method to check if to values are the same
+  @override
+  bool Function(T a, T b) equalityCheck = (a, b) => a == b;
 }
