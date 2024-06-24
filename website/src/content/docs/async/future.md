@@ -59,6 +59,15 @@ s.reload();
 print(s.value is AsyncLoading); // true
 ```
 
+## .refreshAndAwait()
+
+Refresh the future value and await the future to complete, unlike `refresh` which only changes the state and does not wait for the future to complete.
+
+```dart
+final s = futureSignal(() => Future.delayed(const Duration(seconds:2), () => 1));
+await s.refreshAndAwait(); // waits for 2 seconds
+```
+
 ## Dependencies
 
 By default the callback will be called once and the future will be cached unless a signal is read in the callback.
@@ -72,7 +81,7 @@ count.value = 1;
 await s.future; // 1
 ```
 
-If there are signals that need to be tracked across an async gap then use the `dependencies` when creating the `futureSignal` to [`reset`](#.reset()) every time any signal in the dependency array changes.
+If there are signals that need to be tracked across an async gap then use the `dependencies` when creating the `futureSignal` to [`reset`](<#.reset()>) every time any signal in the dependency array changes.
 
 ```dart
 final count = signal(0);
