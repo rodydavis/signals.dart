@@ -183,6 +183,26 @@ class FutureSignal<T> extends StreamSignal<T> {
           () => callback().asStream(),
           cancelOnError: true,
         );
+
+  /// `super.refresh()` but returns a future that completes when the future is done loading.
+  /// 
+  /// Good use in a [RefreshIndicator].
+  /// So that the refresh indicator will show until the future is done loading.
+  /// ```dart
+  /// final mySignal = futureSignal(() async => Future.delayed(Duration(seconds: 5), () => 1);
+  /// 
+  /// RefreshIndicator(
+  ///  onRefresh: mySignal.refreshAndAwait,
+  ///  child: ...
+  /// )
+  /// ```
+  /// 
+  Future<void> refreshAndAwait() async {
+    super.refresh();
+    return await Future.doWhile(
+      () => Future.delayed(Duration.zero, () => super.value.isLoading),
+    );
+  }
 }
 
 /// {@template future}
