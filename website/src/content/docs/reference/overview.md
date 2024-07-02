@@ -64,10 +64,6 @@ b.value = 1;
 print(e.value); // 3
 ```
 
-## Flutter DartPad
-
-<iframe src="https://dartpad.dev/?id=1b2f58d30c33ee2ee5c5a159b8867861?theme=dark"></iframe>
-
 ## Further reading
 
 - https://signia.tldraw.dev/docs/what-are-signals
