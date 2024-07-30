@@ -356,6 +356,9 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   @override
   late T _value;
 
+  @override
+  bool get isLazy => false;
+
   ComputedCallback<T> _fn;
 
   @override

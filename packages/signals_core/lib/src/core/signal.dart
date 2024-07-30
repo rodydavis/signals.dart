@@ -212,6 +212,7 @@ class Signal<T> extends ReadonlySignal<T> {
     super.debugLabel,
     super.autoDispose,
   })  : _value = val,
+        _lazy = false,
         super._(globalId: ++_lastGlobalId) {
     _initialValue = val;
     assert(() {
@@ -220,16 +221,41 @@ class Signal<T> extends ReadonlySignal<T> {
     }());
   }
 
+  /// Lazy signal that can be created with type T that
+  /// the value will be assigned later.
+  ///
+  /// ```dart
+  /// final db = Signal.lazy<DatabaseConnection>();
+  /// ...
+  /// db.value = DatabaseConnect(...);
+  /// ```
+  Signal.lazy({
+    super.debugLabel,
+    super.autoDispose,
+  })  : _lazy = true,
+        super._(globalId: ++_lastGlobalId) {
+    assert(() {
+      SignalsObserver.instance?.onSignalCreated(this);
+      return true;
+    }());
+  }
+
+  /// Check if the signal is lazy and has not had a value set
+  @override
+  bool get isLazy => _lazy == true;
+  bool _lazy = false;
+
   @override
   T get initialValue => _initialValue;
   late T _initialValue;
 
   @override
-  T _value;
+  late T _value;
 
   /// Force update a value
   @Deprecated('Use .set(..., force: true) instead')
   void forceUpdate([T? val]) {
+    assert(!_lazy && val != null, 'Lazy signal must be initilized first');
     this.set(val ?? value, force: true);
   }
 
@@ -251,7 +277,11 @@ class Signal<T> extends ReadonlySignal<T> {
   /// `force` an update if needed (if the update would
   /// not pass the == check)
   void set(T val, {bool force = false}) {
-    if (val != _value || force) {
+    if (_lazy) {
+      _value = val;
+      _initialValue = val;
+      _lazy = false;
+    } else if (val != _value || force) {
       if (_callDepth > _maxCallDepth) {
         // coverage:ignore-start
         throw EffectCycleDetectionError();
@@ -286,6 +316,9 @@ class Signal<T> extends ReadonlySignal<T> {
 
   @override
   T get value {
+    if (_lazy) {
+      throw LazySignalInitializationError(this);
+    }
     if (disposed) {
       if (kDebugMode) {
         print(
@@ -567,6 +600,24 @@ Signal<T> signal<T>(
 }) {
   return Signal<T>(
     value,
+    debugLabel: debugLabel,
+    autoDispose: autoDispose,
+  );
+}
+
+/// Lazy signal that can be created with type T that
+/// the value will be assigned later.
+///
+/// ```dart
+/// final db = lazySignal<DatabaseConnection>();
+/// ...
+/// db.value = DatabaseConnect(...);
+/// ```
+Signal<T> lazySignal<T>({
+  String? debugLabel,
+  bool autoDispose = false,
+}) {
+  return Signal<T>.lazy(
     debugLabel: debugLabel,
     autoDispose: autoDispose,
   );

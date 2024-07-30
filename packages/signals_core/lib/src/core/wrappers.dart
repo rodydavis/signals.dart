@@ -63,9 +63,11 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
   @override
   Iterable<SignalListenable> get targets => source.targets;
 
-  /// Check if there are any targets attached
   @override
   bool get hasTargets => source.hasTargets;
+
+  @override
+  bool get isLazy => source.isLazy;
 }
 
 /// Wrap a [Signal] and implement the same API

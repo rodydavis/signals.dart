@@ -1,3 +1,9 @@
+## 5.3.0
+
+- Add Signal.lazy and lazySignal
+- Add signal.isLazy and computed.isLazy
+- Add await future to refresh/reload for FutureSignal
+
 ## 5.2.3
 
 - **FIX**: https://github.com/rodydavis/signals.dart/issues/283
