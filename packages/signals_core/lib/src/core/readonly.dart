@@ -24,6 +24,9 @@ abstract class ReadonlySignal<T> {
     }
   }
 
+  /// Check if there are any targets attached
+  bool get hasTargets => _targets != null;
+
   void _notifyAllTargets() {
     for (var node = _targets; node != null; node = node._nextTarget) {
       node._target._notify();

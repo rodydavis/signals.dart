@@ -376,6 +376,9 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
     }
   }
 
+  /// Check if there are any targets attached
+  bool get hasSources => _sources != null;
+
   /// Override the current signal with a new value as if it was created with it
   ///
   /// This does not trigger any updates
