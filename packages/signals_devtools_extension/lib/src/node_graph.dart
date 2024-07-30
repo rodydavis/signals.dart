@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:graphview/graphview.dart';
+import 'package:graphview/GraphView.dart';
 import 'package:signals/signals.dart';
 
 import 'nodes_state.dart';

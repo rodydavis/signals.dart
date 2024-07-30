@@ -183,6 +183,18 @@ class FutureSignal<T> extends StreamSignal<T> {
           () => callback().asStream(),
           cancelOnError: true,
         );
+
+  @override
+  Future<void> refresh() async {
+    await super.refresh();
+    await future;
+  }
+
+  @override
+  Future<void> reload() async {
+    await super.reload();
+    await future;
+  }
 }
 
 /// {@template future}

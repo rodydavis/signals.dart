@@ -24,6 +24,12 @@ abstract class ReadonlySignal<T> {
     }
   }
 
+  /// Check if the signal is lazy and has not had a value set
+  bool get isLazy;
+
+  /// Check if there are any targets attached
+  bool get hasTargets => _targets != null;
+
   void _notifyAllTargets() {
     for (var node = _targets; node != null; node = node._nextTarget) {
       node._target._notify();
@@ -45,7 +51,7 @@ abstract class ReadonlySignal<T> {
   String toString() => '$value';
 
   /// Convert value to JSON
-  T toJson() => value;
+  dynamic toJson() => value;
 
   /// Return the value when invoked
   T call() => value;

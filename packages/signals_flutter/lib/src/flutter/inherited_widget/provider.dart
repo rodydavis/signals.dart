@@ -91,7 +91,7 @@ class InheritedSignalProvider<T, S extends ReadonlySignal<T>>
   Iterable<SignalListenable> get targets => instance.targets;
 
   @override
-  T toJson() => instance.toJson();
+  dynamic toJson() => instance.toJson();
 
   @override
   T get value => instance.value;
@@ -103,6 +103,12 @@ class InheritedSignalProvider<T, S extends ReadonlySignal<T>>
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return instance.toString();
   }
+
+  @override
+  bool get hasTargets => instance.hasTargets;
+
+  @override
+  bool get isLazy => instance.isLazy;
 }
 
 /// [ReadonlySignal] based on [InheritedElement]

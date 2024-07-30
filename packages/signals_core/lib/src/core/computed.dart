@@ -356,6 +356,9 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   @override
   late T _value;
 
+  @override
+  bool get isLazy => false;
+
   ComputedCallback<T> _fn;
 
   @override
@@ -375,6 +378,9 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
       yield node._source;
     }
   }
+
+  /// Check if there are any targets attached
+  bool get hasSources => _sources != null;
 
   /// Override the current signal with a new value as if it was created with it
   ///

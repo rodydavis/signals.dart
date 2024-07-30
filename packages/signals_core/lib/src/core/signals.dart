@@ -282,6 +282,15 @@ class SignalsReadAfterDisposeError extends SignalsError {
         );
 }
 
+/// Lazy signal must value value set before it is read
+class LazySignalInitializationError extends SignalsError {
+  /// Lazy signal must value value set before it is read
+  LazySignalInitializationError(ReadonlySignal instance)
+      : super(
+          'A ${instance.runtimeType} lazy signal signal was read before its value was set.',
+        );
+}
+
 // ignore: unused_element
 Effect? _currentEffect;
 

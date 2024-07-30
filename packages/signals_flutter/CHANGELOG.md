@@ -1,3 +1,19 @@
+## 5.3.0
+
+- Add Signal.lazy and lazySignal
+- Add signal.isLazy and computed.isLazy
+- Add await future to refresh/reload for FutureSignal
+- Update to `signals_core` 5.3.0
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/279
+- Fixing signal/computed not disposing in SignalsAutoDisposeMixin
+- createSignal/createComputed now are autoDispose=true by default
+
+## 5.2.3
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/283
+- Changing toJson from T to dynamic
+- Update to `signals_core` 5.2.3
+
 ## 5.2.2
 
 - **FIX**: https://github.com/rodydavis/signals.dart/issues/265

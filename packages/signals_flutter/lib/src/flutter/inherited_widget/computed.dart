@@ -46,4 +46,7 @@ class ComputedProvider<T> extends InheritedSignalProvider<T, Computed<T>>
 
   @override
   Iterable<ReadonlySignal> get sources => instance.sources;
+
+  @override
+  bool get hasSources => instance.hasSources;
 }

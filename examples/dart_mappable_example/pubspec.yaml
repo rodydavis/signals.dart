@@ -1,0 +1,24 @@
+name: dart_mappable_example
+description: "A new Flutter package project."
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  dart_mappable: ^4.2.2
+  flutter:
+    sdk: flutter
+  signals:
+    path: ../../packages/signals
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.11
+  dart_mappable_builder: ^4.2.3
+
+flutter:

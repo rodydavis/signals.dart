@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
@@ -23,6 +24,20 @@ void main() {
       expect(b.initialValue, 0);
       expect(b.previousValue, 0);
     });
+
+    test('lazy init', () {
+      final a = signal(0);
+      final b = lazySignal<int>();
+
+      expect(a.value, 0);
+      expect(() => b.value, throwsA(isA<LazySignalInitializationError>()));
+
+      b.value = 0;
+
+      expect(a.value, 0);
+      expect(b.value, 0);
+    });
+
     test('init', () {
       // Create signals
       final count = signal(0);

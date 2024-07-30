@@ -43,7 +43,7 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
   EffectCleanup subscribe(void Function(T value) fn) => source.subscribe(fn);
 
   @override
-  T toJson() => source.toJson();
+  dynamic toJson() => source.toJson();
 
   @override
   T call() => source.call();
@@ -62,6 +62,12 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
 
   @override
   Iterable<SignalListenable> get targets => source.targets;
+
+  @override
+  bool get hasTargets => source.hasTargets;
+
+  @override
+  bool get isLazy => source.isLazy;
 }
 
 /// Wrap a [Signal] and implement the same API
