@@ -12,8 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals_core: ^5.2.2
-  signals_flutter: ^5.2.2
+  signals_core: ^5.2.3
+  signals_flutter: ^5.2.3
 
 dev_dependencies:
   flutter_test:

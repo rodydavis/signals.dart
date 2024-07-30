@@ -45,7 +45,7 @@ abstract class ReadonlySignal<T> {
   String toString() => '$value';
 
   /// Convert value to JSON
-  T toJson() => value;
+  dynamic toJson() => value;
 
   /// Return the value when invoked
   T call() => value;

@@ -1,3 +1,10 @@
+## 5.2.3
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/283
+- Changing toJson from T to dynamic
+- Update to `signals_core` 5.2.3
+- Update to `signals_flutter` 5.2.3
+
 ## 5.2.2
 
 - **FIX**: https://github.com/rodydavis/signals.dart/issues/265

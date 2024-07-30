@@ -1,11 +1,16 @@
+## 5.2.3
+
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/283
+- Changing toJson from T to dynamic
+
 ## 5.2.2
 
- - **FIX**: https://github.com/rodydavis/signals.dart/issues/265
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/265
 
 ## 5.2.0
 
- - **FIX**: https://github.com/rodydavis/signals.dart/issues/258
- - **FIX**: https://github.com/rodydavis/signals.dart/issues/262
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/258
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/262
 
 ## 5.1.0
 
@@ -51,10 +56,10 @@
 
 ## 4.2.0
 
- - **FIX**: https://github.com/rodydavis/signals.dart/issues/156
- - **FIX**: https://github.com/rodydavis/signals.dart/issues/162
- - Add onDispose callback for effect
- - Fixing computed not updating on signal forced change
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/156
+- **FIX**: https://github.com/rodydavis/signals.dart/issues/162
+- Add onDispose callback for effect
+- Fixing computed not updating on signal forced change
 
 ## 4.1.0
 
