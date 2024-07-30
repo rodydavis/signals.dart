@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:signals_flutter/signals_flutter.dart';
+import 'package:signals_flutter/extended.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,14 +30,8 @@ class Example extends StatefulWidget {
   State<Example> createState() => _ExampleState();
 }
 
-class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
-  late final _counter = createSignal(
-    context,
-    0,
-    debugLabel: 'Counter',
-    autoDispose: true,
-  );
-
+class _ExampleState extends State<Example> with SignalsMixin {
+  late final _counter = createSignal(0);
   void _incrementCounter() => _counter.value++;
 
   @override
@@ -46,7 +40,7 @@ class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
     _counter.onDispose(() {
       debugPrint('disposed ${_counter.globalId} counter!');
     });
-    effect(() {
+    createEffect(() {
       debugPrint('count: ${_counter()}');
     });
   }
@@ -76,12 +70,10 @@ class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Builder(builder: (context) {
-              return Text(
-                '${_counter.watch(context)}',
-                style: Theme.of(context).textTheme.headlineMedium,
-              );
-            }),
+            Text(
+              '${watchSignal(_counter)}',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ],
         ),
       ),

@@ -138,7 +138,12 @@ class Watch<T extends Widget> extends StatefulWidget {
   /// ...
   /// Watch((context) => Text('$counter'))
   /// ```
-  const Watch(this.builder, {super.key, this.debugLabel});
+  const Watch(
+    this.builder, {
+    super.key,
+    this.debugLabel,
+    this.dependencies = const [],
+  });
 
   /// Drop in replacement for the Flutter builder widget.
   ///
@@ -152,13 +157,21 @@ class Watch<T extends Widget> extends StatefulWidget {
   ///   }
   /// )
   /// ```
-  const Watch.builder({super.key, required this.builder, this.debugLabel});
+  const Watch.builder({
+    super.key,
+    required this.builder,
+    this.debugLabel,
+    this.dependencies = const [],
+  });
 
   /// The widget to rebuild when any signals change
   final T Function(BuildContext context) builder;
 
   /// Optional debug label to use for devtools
   final String? debugLabel;
+
+  /// List of optional dependencies to watch
+  final List<ReadonlySignal<dynamic>> dependencies;
 
   @override
   State<Watch<T>> createState() => _WatchState<T>();
@@ -206,13 +219,18 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   @override
   void didUpdateWidget(covariant Watch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget != widget) rebuild();
+    if (oldWidget != widget || oldWidget.dependencies != widget.dependencies) {
+      rebuild();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     fn ??= effect(
       () {
+        for (final dep in widget.dependencies) {
+          dep.value;
+        }
         if (child == null) {
           child = widget.builder(context);
         } else {

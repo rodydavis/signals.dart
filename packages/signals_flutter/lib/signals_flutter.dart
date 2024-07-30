@@ -8,5 +8,5 @@ export 'src/core/signal_value_listenable.dart';
 export 'src/watch/watch.dart';
 export 'src/core/signal.dart';
 export 'src/core/computed.dart';
-export 'src/mixin.dart';
+export 'src/mixins/auto_dispose.dart';
 export 'src/flutter/ticker.dart';

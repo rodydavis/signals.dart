@@ -26,17 +26,18 @@ S bindSignal<T, S extends ReadonlySignal<T>>(
   S target, {
   String? debugLabel,
 }) {
+  final ctx = context;
+  if (ctx is StatefulElement) {
+    final state = ctx.state;
+    if (target.autoDispose == true && state is SignalsAutoDisposeMixin) {
+      state.cleanupCallbacks.add(target.dispose);
+    }
+  }
   watchSignal<T>(
     context,
     target,
     debugLabel: debugLabel,
   );
-  final ctx = context;
-  if (target.autoDispose == true &&
-      ctx is StatefulElement &&
-      ctx.state is SignalsAutoDisposeMixin) {
-    (ctx.state as SignalsAutoDisposeMixin).cleanupCallbacks.add(target.dispose);
-  }
   return target;
 }
 
