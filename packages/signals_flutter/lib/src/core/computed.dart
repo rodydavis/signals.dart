@@ -58,7 +58,7 @@ Computed<T> createComputed<T>(
   BuildContext context,
   T Function() compute, {
   String? debugLabel,
-  bool autoDispose = false,
+  bool autoDispose = true,
 }) {
   assert(
     allowSignalsCreatedInBuildContext ? true : context is StatefulElement,

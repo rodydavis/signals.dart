@@ -31,6 +31,12 @@ S bindSignal<T, S extends ReadonlySignal<T>>(
     target,
     debugLabel: debugLabel,
   );
+  final ctx = context;
+  if (target.autoDispose == true &&
+      ctx is StatefulElement &&
+      ctx.state is SignalsAutoDisposeMixin) {
+    (ctx.state as SignalsAutoDisposeMixin).cleanupCallbacks.add(target.dispose);
+  }
   return target;
 }
 
@@ -56,7 +62,7 @@ Signal<T> createSignal<T>(
   BuildContext context,
   T value, {
   String? debugLabel,
-  bool autoDispose = false,
+  bool autoDispose = true,
 }) {
   assert(
     allowSignalsCreatedInBuildContext ? true : context is StatefulElement,

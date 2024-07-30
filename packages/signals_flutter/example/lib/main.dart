@@ -31,13 +31,21 @@ class Example extends StatefulWidget {
 }
 
 class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
-  final _counter = signal(0, debugLabel: 'Counter');
+  late final _counter = createSignal(
+    context,
+    0,
+    debugLabel: 'Counter',
+    autoDispose: true,
+  );
 
   void _incrementCounter() => _counter.value++;
 
   @override
   void initState() {
     super.initState();
+    _counter.onDispose(() {
+      debugPrint('disposed ${_counter.globalId} counter!');
+    });
     effect(() {
       debugPrint('count: ${_counter()}');
     });
@@ -49,6 +57,17 @@ class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            tooltip: 'Open another counter',
+            icon: const Icon(Icons.add),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const Example(title: 'Another Counter'),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
