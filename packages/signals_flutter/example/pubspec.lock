@@ -135,17 +135,17 @@ packages:
     dependency: transitive
     description:
       name: signals_core
-      sha256: e5888685b9a3cff7c9814bd433195b1f76d0bfa3eae135e0a2f4ff5c48a56a1c
+      sha256: b71e52fc75d370425c005564b0000dd636cf08dc1ddfc94f3ef6b2a7fd089466
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.2"
+    version: "5.2.3"
   signals_flutter:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "5.2.2"
+    version: "5.2.3"
   sky_engine:
     dependency: transitive
     description: flutter
