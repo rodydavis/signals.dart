@@ -43,7 +43,7 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
   EffectCleanup subscribe(void Function(T value) fn) => source.subscribe(fn);
 
   @override
-  T toJson() => source.toJson();
+  dynamic toJson() => source.toJson();
 
   @override
   T call() => source.call();

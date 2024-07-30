@@ -91,7 +91,7 @@ class InheritedSignalProvider<T, S extends ReadonlySignal<T>>
   Iterable<SignalListenable> get targets => instance.targets;
 
   @override
-  T toJson() => instance.toJson();
+  dynamic toJson() => instance.toJson();
 
   @override
   T get value => instance.value;
