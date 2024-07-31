@@ -25,6 +25,16 @@
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/node_based_editor"
   },
   {
+    "title": "dart_mappable_example",
+    "description": "A new Flutter package project.",
+    "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/dart_mappable_example"
+  },
+  {
+    "title": "animations_example",
+    "description": "A new Flutter project.",
+    "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/animations_example"
+  },
+  {
     "title": "flutter_colorband",
     "description": "Generative color examples",
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/flutter_colorband"
@@ -35,6 +45,16 @@
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/rxdart"
   },
   {
+    "title": "crud_dio",
+    "description": "A new Flutter project.",
+    "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/crud_dio"
+  },
+  {
+    "title": "persist_shared_preferences",
+    "description": "A new Flutter project.",
+    "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/persist_shared_preferences"
+  },
+  {
     "title": "drift_example",
     "description": "SQLite via drift and signals",
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/drift_example"
@@ -43,6 +63,11 @@
     "title": "signals_dart_examples",
     "description": "Pure dart examples using signals",
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/dart_examples"
+  },
+  {
+    "title": "infinite_scroll",
+    "description": "A new Flutter project.",
+    "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/infinite_scroll"
   },
   {
     "title": "get_it_signals_example",
@@ -63,5 +88,10 @@
     "title": "shopping_cart",
     "description": "Shopping cart example",
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/shopping_cart"
+  },
+  {
+    "title": "html_canvas",
+    "description": "Signals and the canvas",
+    "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/html_canvas"
   }
 ]
