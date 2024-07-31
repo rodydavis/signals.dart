@@ -442,7 +442,7 @@ class Signal<T> extends ReadonlySignal<T> {
 
   /// Check if the signal is lazy and has not had a value set
   @override
-  bool get isLazy => _lazy == true;
+  bool get isInitialized => _lazy == false;
   bool _lazy = false;
 
   @override
@@ -455,7 +455,7 @@ class Signal<T> extends ReadonlySignal<T> {
   /// Force update a value
   @Deprecated('Use .set(..., force: true) instead')
   void forceUpdate([T? val]) {
-    assert(!_lazy && val != null, 'Lazy signal must be initilized first');
+    assert(!_lazy && val != null, 'Lazy signal must be initialized first');
     this.set(val ?? value, force: true);
   }
 

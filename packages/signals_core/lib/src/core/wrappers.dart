@@ -67,7 +67,7 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
   bool get hasTargets => source.hasTargets;
 
   @override
-  bool get isLazy => source.isLazy;
+  bool get isInitialized => source.isInitialized;
 }
 
 /// Wrap a [Signal] and implement the same API
