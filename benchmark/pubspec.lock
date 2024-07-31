@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: eef6c46b622e0494a36c5a12d10d77fb4e855501a91c1b9ef9339326e58f0596
+      sha256: "7cf60b9f0cc88203c5a190b4cd62a99feea42759a7fa695010eb5de1c0b2252a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "2.5.0"
   async:
     dependency: transitive
     description:
@@ -90,10 +90,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: "31c12de79262b5431c5492e9c89948aa789158435f707d3519a7fdef6af28af7"
+      sha256: "04c4722cc36ec5af38acc38ece70d22d3c2123c61305d555750a091517bbe504"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.22+1"
+    version: "0.6.23"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -135,10 +135,10 @@ packages:
     dependency: transitive
     description:
       name: lite_ref
-      sha256: "8b6a75279cb60a42147c5a2150cc2f59178f54ff8d718e8e90423757b0b1d979"
+      sha256: "2519ee5c20257ed8b8eec92c967b8ae2a3361895e9e5dd268569c681803df41b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.8.1"
   lite_ref_core:
     dependency: transitive
     description:
@@ -195,20 +195,18 @@ packages:
     source: path
     version: "5.3.0"
   signals_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_core
-      sha256: "2122bdf258af0b90d13d0b4bd6ce673158b3beace85bf02693804ab7f8b00c72"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../packages/signals_core"
+      relative: true
+    source: path
     version: "5.3.0"
   signals_flutter:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_flutter
-      sha256: "1f1c2026794091e5a07464d5c891006a70033936776d4d07e71f940ffbed3fd7"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../packages/signals_flutter"
+      relative: true
+    source: path
     version: "5.3.0"
   sky_engine:
     dependency: transitive
@@ -243,18 +241,18 @@ packages:
     dependency: "direct main"
     description:
       name: state_beacon
-      sha256: "7e345c09a799326ebf6d8effdd4d1ade9d47ba8ce715c11c656f3f2877923cec"
+      sha256: "74c2e403159a25c445faac8d60dbcf206bc39ff10f1488069fd01815dc3096be"
       url: "https://pub.dev"
     source: hosted
-    version: "0.45.0"
+    version: "0.45.2"
   state_beacon_core:
     dependency: transitive
     description:
       name: state_beacon_core
-      sha256: "7e6b3f157cb822acb77829f6696e562064a4b9a5cd687e4056d203288135c20c"
+      sha256: "389485a8629bd62199ec3a262fb53055204291ba48f8f0721c837728ce2c54af"
       url: "https://pub.dev"
     source: hosted
-    version: "0.43.5"
+    version: "0.43.6"
   stream_channel:
     dependency: transitive
     description:
