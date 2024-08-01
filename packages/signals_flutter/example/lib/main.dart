@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:signals_flutter/extended.dart';
+import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,10 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       home: const Example(),
     );
   }
@@ -31,7 +29,7 @@ class Example extends StatefulWidget {
 }
 
 class _ExampleState extends State<Example> with SignalsMixin {
-  late final _counter = createSignal(0);
+  late final _counter = this.createSignal(0);
   void _incrementCounter() => _counter.value++;
 
   @override
@@ -71,7 +69,7 @@ class _ExampleState extends State<Example> with SignalsMixin {
               'You have pushed the button this many times:',
             ),
             Text(
-              '${watchSignal(_counter)}',
+              '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],

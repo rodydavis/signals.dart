@@ -21,6 +21,7 @@ import '../../signals_flutter.dart';
 ///  }
 /// }
 /// ```
+@Deprecated('use SignalsMixin > bindSignal instead')
 S bindSignal<T, S extends ReadonlySignal<T>>(
   BuildContext context,
   S target, {
@@ -29,7 +30,9 @@ S bindSignal<T, S extends ReadonlySignal<T>>(
   final ctx = context;
   if (ctx is StatefulElement) {
     final state = ctx.state;
-    if (target.autoDispose == true && state is SignalsAutoDisposeMixin) {
+    if (state is SignalsMixin) {
+      return state.bindSignal<T, S>(target);
+    } else if (target.autoDispose == true && state is SignalsAutoDisposeMixin) {
       state.cleanupCallbacks.add(target.dispose);
     }
   }
@@ -59,6 +62,7 @@ S bindSignal<T, S extends ReadonlySignal<T>>(
 ///  }
 /// }
 /// ```
+@Deprecated('use SignalsMixin > createSignal instead')
 Signal<T> createSignal<T>(
   BuildContext context,
   T value, {
@@ -102,4 +106,5 @@ final _signals = <int, WeakReference<Signal>>{};
 ///
 /// This comes at the cost of needing to be unique with the starting value,
 /// debug label and auto dispose flag
+@Deprecated('use SignalsMixin instead')
 bool allowSignalsCreatedInBuildContext = false;

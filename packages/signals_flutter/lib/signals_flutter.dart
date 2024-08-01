@@ -10,3 +10,4 @@ export 'src/core/signal.dart';
 export 'src/core/computed.dart';
 export 'src/mixins/auto_dispose.dart';
 export 'src/flutter/ticker.dart';
+export 'src/mixins/signals.dart';
