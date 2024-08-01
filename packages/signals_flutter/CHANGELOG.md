@@ -1,3 +1,7 @@
+## 5.4.0
+
+- Add SignalsMixin to replace .watch, createComputed/createSignal, SignalsAutoDisposeMixin and implementation for Watch
+
 ## 5.3.0
 
 - Add Signal.lazy and lazySignal

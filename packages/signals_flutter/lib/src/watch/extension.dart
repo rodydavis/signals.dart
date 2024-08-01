@@ -2,6 +2,7 @@ part of 'watch.dart';
 
 /// Watch a signal value and rebuild the context of the [Element]
 /// if mounted and mark it as dirty
+@Deprecated('use SignalsMixin in StatefulWidget or Watch in StatelessWidget')
 T watchSignal<T>(
   BuildContext context,
   ReadonlySignal<T> signal, {
@@ -38,6 +39,7 @@ T watchSignal<T>(
 }
 
 /// Remove all subscribers for a given signal for watchers
+@Deprecated('use SignalsMixin in StatefulWidget or Watch in StatelessWidget')
 void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
   final ctx = context;
   if (ctx.widget is Watch) return;
@@ -70,6 +72,7 @@ void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
 /// ...
 /// }
 /// ```
+@Deprecated('use SignalsMixin in StatefulWidget')
 void listenSignal<T>(
   BuildContext context,
   ReadonlySignal<T> signal,
@@ -101,6 +104,7 @@ void listenSignal<T>(
 }
 
 /// Remove all subscribers for a given signal for watchers
+@Deprecated('use SignalsMixin in StatefulWidget')
 void unlistenSignal<T>(
   BuildContext context,
   ReadonlySignal<T> signal,

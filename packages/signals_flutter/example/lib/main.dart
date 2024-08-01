@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       home: const Example(),
@@ -52,7 +53,7 @@ class _ExampleState extends State<Example> with SignalsMixin {
         actions: [
           IconButton(
             tooltip: 'Open another counter',
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.timer),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const Example(title: 'Another Counter'),

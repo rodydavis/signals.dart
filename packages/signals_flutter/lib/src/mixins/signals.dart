@@ -12,7 +12,28 @@ typedef _SignalMetadata = ({
   ({Function cb, EffectCleanup cleanup})? listener,
 });
 
-/// Signals mixin for watching and disposing of signals
+/// Signals mixin that will automatically rebuild the widget tree when any of
+/// the signals change and dispose of any signals and effects created locally.
+///
+/// ```dart
+/// class MyWidget extends StatefulWidget {
+///  ...
+/// }
+/// 
+/// class _MyWidget extends State<MyWidget> with SignalsMixin {
+///   late var _signal = this.createSignal(0);
+///   late var _computed = this.createComputed(() => _signal() * 2);
+///
+///   @override
+///   void initState() {
+///     super.initState();
+///     this.createEffect(() {
+///       print('count: $_signal, double: $_computed');
+///     });
+///   }
+///   ...
+/// }
+/// ```
 mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   final _signals = HashMap.of(<int, _SignalMetadata>{});
   EffectCleanup? _cleanup;
@@ -123,15 +144,15 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     void Function() callback, {
     String? debugLabel,
   }) {
-    final current = _signals[target.globalId]?.listener;
-    if (current?.cb.hashCode == callback.hashCode) return;
-    current?.cleanup();
+    final current = _signals[target.globalId];
+    if (current?.listener?.cb.hashCode == callback.hashCode) return;
+    current?.listener?.cleanup();
     final cb = createEffect(
       callback,
       debugLabel: debugLabel,
     );
     _signals[target.globalId] = (
-      local: null,
+      local: current?.local,
       target: target,
       listener: (cb: callback, cleanup: cb),
     );
@@ -142,14 +163,21 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ReadonlySignal<dynamic> target,
     void Function() callback,
   ) {
-    final current = _signals[target.globalId]?.listener;
-    current?.cleanup();
+    final current = _signals[target.globalId];
+    if (current != null) {
+      current.listener?.cleanup();
+      _signals[target.globalId] = (
+        local: current.local,
+        target: target,
+        listener: null,
+      );
+    }
   }
 
   /// Create a effect.
-  /// 
+  ///
   /// Do not call inside the build method.
-  /// 
+  ///
   /// Calling this method in build() will create a new
   /// effect every render.
   EffectCleanup createEffect(
