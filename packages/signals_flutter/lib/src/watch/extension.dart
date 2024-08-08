@@ -2,21 +2,32 @@ part of 'watch.dart';
 
 /// Watch a signal value and rebuild the context of the [Element]
 /// if mounted and mark it as dirty
+@Deprecated('use SignalsMixin in StatefulWidget or Watch in StatelessWidget')
 T watchSignal<T>(
   BuildContext context,
   ReadonlySignal<T> signal, {
   String? debugLabel,
 }) {
-  if (context.widget is Watch) return signal.value;
-  if (context is Element) {
-    final key = context.hashCode;
+  final ctx = context;
+  if (ctx.widget is Watch) return signal.value;
+  if (ctx is StatefulElement) {
+    final state = ctx.state;
+    if (state is SignalsMixin) {
+      return state.watchSignal(signal);
+    }
+  }
+  if (ctx is Element) {
+    final key = ctx.hashCode;
     if (_elementRefs[key] == null) {
-      final label =
-          'widget=${context.widget.runtimeType}:${context.widget.hashCode}';
+      final label = [
+        'widget',
+        ctx.widget.runtimeType.toString(),
+        ctx.widget.hashCode.toString(),
+      ].join('=');
       final watcher = ElementWatcher(
         key,
         label,
-        WeakReference(context),
+        WeakReference(ctx),
       );
       _elementRefs[key] = watcher;
       _removeSignalWatchers();
@@ -28,9 +39,17 @@ T watchSignal<T>(
 }
 
 /// Remove all subscribers for a given signal for watchers
+@Deprecated('use SignalsMixin in StatefulWidget or Watch in StatelessWidget')
 void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
-  if (context.widget is Watch) return;
-  final key = context.hashCode;
+  final ctx = context;
+  if (ctx.widget is Watch) return;
+  if (ctx is StatefulElement) {
+    final state = ctx.state;
+    if (state is SignalsMixin) {
+      return state.unwatchSignal(signal);
+    }
+  }
+  final key = ctx.hashCode;
   _elementRefs.remove(key)?.unwatch(signal);
 }
 
@@ -53,18 +72,30 @@ void unwatchSignal<T>(BuildContext context, ReadonlySignal<T> signal) {
 /// ...
 /// }
 /// ```
+@Deprecated('use SignalsMixin in StatefulWidget')
 void listenSignal<T>(
   BuildContext context,
   ReadonlySignal<T> signal,
   void Function() callback, {
   String? debugLabel,
 }) {
-  if (context is Element) {
-    final key = context.hashCode;
+  final ctx = context;
+  if (ctx is StatefulElement) {
+    final state = ctx.state;
+    if (state is SignalsMixin) {
+      state.listenSignal(signal, callback, debugLabel: debugLabel);
+      return;
+    }
+  }
+  if (ctx is Element) {
+    final key = ctx.hashCode;
     if (_elementRefs[key] == null) {
-      final label =
-          'widget=${context.widget.runtimeType}:${context.widget.hashCode}';
-      final watcher = ElementWatcher(key, label, WeakReference(context));
+      final label = [
+        'widget',
+        ctx.widget.runtimeType.toString(),
+        ctx.widget.hashCode.toString(),
+      ].join('=');
+      final watcher = ElementWatcher(key, label, WeakReference(ctx));
       _elementRefs[key] = watcher;
       _removeSignalWatchers();
     }
@@ -73,12 +104,21 @@ void listenSignal<T>(
 }
 
 /// Remove all subscribers for a given signal for watchers
+@Deprecated('use SignalsMixin in StatefulWidget')
 void unlistenSignal<T>(
   BuildContext context,
   ReadonlySignal<T> signal,
   void Function() callback, {
   String? debugLabel,
 }) {
-  final key = context.hashCode;
+  final ctx = context;
+  if (ctx is StatefulElement) {
+    final state = ctx.state;
+    if (state is SignalsMixin) {
+      state.unlistenSignal(signal, callback);
+      return;
+    }
+  }
+  final key = ctx.hashCode;
   _elementRefs.remove(key)?.unlisten(signal, callback);
 }

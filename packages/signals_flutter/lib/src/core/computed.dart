@@ -22,6 +22,7 @@ import '../../signals_flutter.dart';
 ///  }
 /// }
 /// ```
+@Deprecated('use SignalsMixin > bindComputed instead')
 Computed<T> bindComputed<T>(
   BuildContext context,
   Computed<T> target, {
@@ -54,6 +55,7 @@ Computed<T> bindComputed<T>(
 ///  }
 /// }
 /// ```
+@Deprecated('use SignalsMixin > createComputed instead')
 Computed<T> createComputed<T>(
   BuildContext context,
   T Function() compute, {

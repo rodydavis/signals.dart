@@ -82,7 +82,7 @@ class _TodoEditDialogState extends State<TodoEditDialog> {
       actions: [
         TextButton(
           style: ButtonStyle(
-            textStyle: MaterialStateProperty.all(
+            textStyle: WidgetStateProperty.all(
               const TextStyle(color: Colors.black),
             ),
           ),

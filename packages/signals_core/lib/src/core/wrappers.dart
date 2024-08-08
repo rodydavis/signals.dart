@@ -67,7 +67,7 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
   bool get hasTargets => source.hasTargets;
 
   @override
-  bool get isLazy => source.isLazy;
+  bool get isInitialized => source.isInitialized;
 }
 
 /// Wrap a [Signal] and implement the same API
@@ -77,6 +77,7 @@ class WrappedSignal<T> extends WrappedReadonlySignal<T, Signal<T>>
   WrappedSignal(super.source);
 
   @override
+  @Deprecated('use .set(..., force: true) instead')
   void forceUpdate([T? val]) => source.forceUpdate(val);
 
   @override
@@ -85,8 +86,17 @@ class WrappedSignal<T> extends WrappedReadonlySignal<T, Signal<T>>
   @override
   ReadonlySignal<T> readonly() => source.readonly();
 
+  /// Optional method to check if to values are the same
   @override
-  void set(T val, {bool force = false}) => source.set(val, force: force);
+  bool Function(T a, T b) equalityCheck = (T a, T b) => a == b;
+
+  @override
+  bool set(
+    T val, {
+    bool force = false,
+  }) {
+    return source.set(val, force: force);
+  }
 
   @override
   set value(T val) => source.value = val;

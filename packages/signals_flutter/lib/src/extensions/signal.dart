@@ -8,6 +8,7 @@ import '../core/signal_value_listenable.dart';
 /// Signal extensions
 extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Rebuild the [Element] that the current signal is inside of
+  @Deprecated('use SignalsMixin in StatefulWidget or Watch in StatelessWidget')
   T watch(
     BuildContext context, {
     String? debugLabel,
@@ -17,6 +18,12 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
       this,
       debugLabel: debugLabel,
     );
+  }
+
+  /// Stop subscriptions to updates on a signal for watchers
+  @Deprecated('use SignalsMixin in StatefulWidget or Watch in StatelessWidget')
+  void unwatch(BuildContext context) {
+    unwatchSignal(context, this);
   }
 
   /// Used to listen for updates on a signal but not rebuild the nearest element
@@ -38,6 +45,7 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// ...
   /// }
   /// ```
+  @Deprecated('use SignalsMixin in StatefulWidget')
   void listen(
     BuildContext context,
     void Function() callback, {
@@ -52,13 +60,9 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   }
 
   /// Stop subscriptions to updates on a signal for listeners
+  @Deprecated('use SignalsMixin in StatefulWidget')
   void unlisten(BuildContext context, void Function() callback) {
     unlistenSignal(context, this, callback);
-  }
-
-  /// Stop subscriptions to updates on a signal for watchers
-  void unwatch(BuildContext context) {
-    unwatchSignal(context, this);
   }
 
   /// Convert a signal to [ValueListenable] to be used in builders

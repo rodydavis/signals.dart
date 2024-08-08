@@ -33,7 +33,7 @@ void main() {
         return 10;
       }
 
-      final signal = future().toSignal();
+      final signal = future().toFutureSignal();
       expect(signal.peek().isLoading, true);
 
       final completer = Completer<int>();

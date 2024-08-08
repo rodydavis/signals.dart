@@ -184,7 +184,7 @@ void main() {
         expect(b.value, 0);
 
         b.subscribe((val) => called = true);
-        b.forceUpdate(1);
+        b.set(force: true, 1);
 
         expect(called, true);
         expect(a.targets, b.targets);
@@ -223,6 +223,25 @@ void main() {
         expect(called, true);
         expect(a.targets, b.targets);
         expect(b.value, 1);
+      });
+
+      test('custom equality', () {
+        final a = signal('s_2');
+        final b = signal('s_1');
+
+        expect(a.equalityCheck(a.value, b.value), false);
+
+        a.equalityCheck = (a, b) {
+          final aP = a.split('_').first;
+          final bP = b.split('_').first;
+          return aP == bP;
+        };
+
+        expect(a.equalityCheck(a.value, b.value), true);
+
+        a.value = 's_3';
+
+        expect(a.value, 's_2');
       });
     });
 

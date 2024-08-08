@@ -44,7 +44,7 @@ void main() {
 
       expect(s.overrideWith(3).value, 3);
 
-      s.forceUpdate(3);
+      s.set(force: true, 3);
 
       expect(s(), 3);
 
@@ -111,7 +111,7 @@ void main() {
 
       expect(s.overrideWith(3).value, 3);
 
-      s.forceUpdate(3);
+      s.set(force: true, 3);
 
       expect(s(), 3);
 

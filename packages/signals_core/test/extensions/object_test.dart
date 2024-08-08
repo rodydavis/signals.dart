@@ -1,3 +1,4 @@
+import 'package:signals_core/extended.dart';
 import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
@@ -6,7 +7,14 @@ void main() {
   group('Object to signal extensions', () {
     test('Object', () {
       final val = Object();
-      final s = val.toSignal();
+      final s = val.asSignal();
+
+      expect(s.value, val);
+    });
+
+    test('Object', () {
+      final val = Object();
+      final s = val.$;
 
       expect(s.value, val);
     });

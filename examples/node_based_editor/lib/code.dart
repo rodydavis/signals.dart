@@ -32,7 +32,7 @@ class CodeView extends StatelessWidget {
         yield const TextSpan(text: "\n");
       }
       final selectedStyle = TextStyle(
-        color: Theme.of(context).colorScheme.onBackground,
+        color: Theme.of(context).colorScheme.onSurface,
       );
       for (final node in nodes) {
         final isSelected = selected.contains(node);
@@ -107,14 +107,14 @@ class CodeView extends StatelessWidget {
 
     return DefaultTextStyle(
       style: TextStyle(
-        color: Theme.of(context).colorScheme.onBackground,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
       child: Text.rich(
         TextSpan(
           children: generate().toList(),
         ),
         style: TextStyle(
-          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
         ),
       ),
     );

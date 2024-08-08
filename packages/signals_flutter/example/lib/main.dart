@@ -12,10 +12,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       home: const Example(),
     );
   }
@@ -30,14 +29,8 @@ class Example extends StatefulWidget {
   State<Example> createState() => _ExampleState();
 }
 
-class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
-  late final _counter = createSignal(
-    context,
-    0,
-    debugLabel: 'Counter',
-    autoDispose: true,
-  );
-
+class _ExampleState extends State<Example> with SignalsMixin {
+  late final _counter = this.createSignal(0);
   void _incrementCounter() => _counter.value++;
 
   @override
@@ -46,7 +39,7 @@ class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
     _counter.onDispose(() {
       debugPrint('disposed ${_counter.globalId} counter!');
     });
-    effect(() {
+    createEffect(() {
       debugPrint('count: ${_counter()}');
     });
   }
@@ -60,7 +53,7 @@ class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
         actions: [
           IconButton(
             tooltip: 'Open another counter',
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.timer),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const Example(title: 'Another Counter'),
@@ -76,12 +69,10 @@ class _ExampleState extends State<Example> with SignalsAutoDisposeMixin {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Builder(builder: (context) {
-              return Text(
-                '${_counter.watch(context)}',
-                style: Theme.of(context).textTheme.headlineMedium,
-              );
-            }),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ],
         ),
       ),

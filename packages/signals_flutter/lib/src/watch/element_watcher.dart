@@ -79,11 +79,11 @@ class ElementWatcher {
       return;
     }
     if (!target.mounted) return;
-    if (target.dirty) return;
+
     if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.idle) {
       await SchedulerBinding.instance.endOfFrame;
+      if (!target.mounted) return;
     }
-    if (!target.mounted) return;
     target.markNeedsBuild();
   }
 
@@ -99,9 +99,7 @@ class ElementWatcher {
       if (!target.mounted) return;
       if (_batch.contains(cb)) return;
       _batch.add(cb);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _call();
-      });
+      _call();
     }
   }
 

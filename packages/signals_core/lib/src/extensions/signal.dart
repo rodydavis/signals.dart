@@ -37,7 +37,7 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// final a = signal({'a': 1, 'b': 2});
   /// final b = a.select((val) => val()['a'] as int);
   /// ```
-  ReadonlySignal<R> select<R>(
+  Computed<R> select<R>(
     R Function(ReadonlySignal<T>) selector, {
     bool autoDispose = false,
     String? debugLabel,
