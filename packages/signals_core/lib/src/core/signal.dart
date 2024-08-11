@@ -281,6 +281,7 @@ class Signal<T> extends ReadonlySignal<T> {
       _value = val;
       _initialValue = val;
       _lazy = false;
+      SignalsObserver.instance?.onSignalCreated(this);
     } else if (val != _value || force) {
       if (_callDepth > _maxCallDepth) {
         // coverage:ignore-start
