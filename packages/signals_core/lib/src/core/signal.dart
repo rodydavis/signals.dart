@@ -235,7 +235,7 @@ class Signal<T> extends ReadonlySignal<T> {
   })  : _lazy = true,
         super._(globalId: ++_lastGlobalId) {
     assert(() {
-      SignalsObserver.instance?.onSignalCreated(this);
+      if (!_lazy) SignalsObserver.instance?.onSignalCreated(this);
       return true;
     }());
   }
