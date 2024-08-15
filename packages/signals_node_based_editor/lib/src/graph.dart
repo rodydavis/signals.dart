@@ -11,27 +11,27 @@ import 'widgets/background_painter.dart';
 import 'widgets/node_widget_render.dart';
 import 'package:graphs/graphs.dart' as graphs;
 
-typedef ConnectorInput = ({
-  GraphNode node,
+typedef ConnectorInput<Node extends GraphNode> = ({
+  Node node,
   PortMetadata<NodeWidgetInput> meta,
 });
 
-typedef ConnectorOutput = ({
-  GraphNode node,
+typedef ConnectorOutput<Node extends GraphNode> = ({
+  Node node,
   PortMetadata<NodeWidgetOutput> meta,
 });
 
-typedef ConnectorPair = ({
-  ConnectorInput input,
-  ConnectorOutput output,
+typedef ConnectorPair<Node extends GraphNode> = ({
+  ConnectorInput<Node> input,
+  ConnectorOutput<Node> output,
 });
 
 // TODO: Move forward / back
 // TODO: Marquee
 // TODO: Line connect
 
-class Graph {
-  late final nodes = listSignal<GraphNode>([]);
+class Graph<Node extends GraphNode> {
+  late final nodes = listSignal<Node>([]);
   final selection = setSignal<Selection>({});
   final target = signal<ActionTarget>(NoActionTarget());
   final mouse = signal<Offset?>(null);
@@ -66,7 +66,7 @@ class Graph {
     });
   }
 
-  void removeNode(GraphNode node) {
+  void removeNode(Node node) {
     selection.clear();
     batch(() {
       nodes.remove(node);
@@ -84,7 +84,7 @@ class Graph {
   }
 
   late final Computed<List<ConnectorPair>> connectors = computed(() {
-    final from = <(GraphNode, PortMetadata<NodeWidgetOutput>)>[];
+    final from = <(Node, PortMetadata<NodeWidgetOutput>)>[];
     // Get all outputs
     for (final node in nodes.value) {
       for (final output in node.outputsMetadata.value) {
@@ -269,8 +269,8 @@ class Graph {
           _toast('Cannot connect node to itself');
           return;
         }
-        (GraphNode, NodeWidgetInput)? input;
-        (GraphNode, NodeWidgetOutput)? output;
+        (Node, NodeWidgetInput)? input;
+        (Node, NodeWidgetOutput)? output;
         if (fromNode.$2.port is NodeWidgetInput) {
           input = (fromNode.$1, fromNode.$2.port as NodeWidgetInput);
         }
@@ -320,11 +320,11 @@ class Graph {
   }
 
   bool _detectCycle(
-    (GraphNode, NodeWidgetOutput) output,
-    (GraphNode, NodeWidgetInput) input,
+    (Node, NodeWidgetOutput) output,
+    (Node, NodeWidgetInput) input,
   ) {
     final graph = _graph();
-    final path = graphs.shortestPath<GraphNode>(
+    final path = graphs.shortestPath<Node>(
       output.$1,
       input.$1,
       (node) => graph[node] ?? [],
@@ -332,12 +332,12 @@ class Graph {
     return path != null;
   }
 
-  Map<GraphNode, Iterable<GraphNode>> _graph() {
-    final graph = <GraphNode, Iterable<GraphNode>>{};
+  Map<Node, Iterable<Node>> _graph() {
+    final graph = <Node, Iterable<Node>>{};
     for (final node in nodes) {
       graph.putIfAbsent(node, () {
         // Connected inputs
-        final results = <GraphNode>{};
+        final results = <Node>{};
         for (final item in node.inputsMetadata.value) {
           if (item.port.knob.readonly.value) {
             final result = nodes //
@@ -359,7 +359,7 @@ class Graph {
     messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
-  GraphNode? getNodeByKnob(Knob knob) {
+  Node? getNodeByKnob(Knob knob) {
     for (final node in nodes) {
       for (final input in node.inputs.value) {
         if (input.knob == knob) return node;
@@ -368,7 +368,7 @@ class Graph {
     return null;
   }
 
-  (GraphNode, PortMetadata)? getNodeByPort(PortMetadata port) {
+  (Node, PortMetadata)? getNodeByPort(PortMetadata port) {
     for (final node in nodes) {
       for (final input in node.inputsMetadata.value) {
         if (input.port == port.port) return (node, input);
@@ -495,16 +495,16 @@ class NoActionTarget extends ActionTarget {}
 
 class ActionViewTarget extends ActionTarget {}
 
-class ActionNodeTarget extends ActionTarget {
-  final GraphNode node;
+class ActionNodeTarget<Node extends GraphNode> extends ActionTarget {
+  final Node node;
   final NodeSelectionPart part;
   ActionNodeTarget(this.node, this.part);
 }
 
 sealed class Selection {}
 
-class NodeSelection extends Selection {
-  final GraphNode node;
+class NodeSelection<Node extends GraphNode> extends Selection {
+  final Node node;
   final NodeSelectionPart part;
   final PortMetadata? port;
   NodeSelection(this.node, this.part, this.port);
