@@ -48,7 +48,28 @@ class Knob<T> {
 
   Widget render() {
     return Watch((context) {
-      if (readonly.value) return Text(toString$());
+      final colors = Theme.of(context).colorScheme;
+      if (readonly.value) {
+        return Container(
+          decoration: BoxDecoration(
+            color: colors.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          width: double.infinity,
+          height: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 4,
+              horizontal: 8,
+            ),
+            child: Text(
+              toString$(),
+              style: TextStyle(color: colors.onSurface),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        );
+      }
       return build(context);
     });
   }
@@ -124,13 +145,19 @@ class OptionalBoolKnob extends OptionalKnob<bool> {
 class NumKnob<T extends num> extends Knob<T> {
   NumKnob(super.label, super.source);
 
+  T _convert(num val) {
+    if (this is NumKnob<int>) return val.toInt() as T;
+    if (this is NumKnob<double>) return val.toDouble() as T;
+    return val as T;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Watch((context) => NumberField(
           valueToString: (val) => val.toString(),
           valueFromString: num.tryParse,
           value: source.get(),
-          onChanged: (val) => value = val as T,
+          onChanged: (val) => value = _convert(val),
         ));
   }
 }
@@ -138,13 +165,19 @@ class NumKnob<T extends num> extends Knob<T> {
 class OptionalNumKnob<T extends num> extends OptionalKnob<T> {
   OptionalNumKnob(super.label, super.source);
 
+  T? _convert(num? val) {
+    if (this is OptionalNumKnob<int>) return val?.toInt() as T?;
+    if (this is OptionalNumKnob<double>) return val?.toDouble() as T?;
+    return val as T?;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Watch((context) => OptionalNumberField(
           valueToString: (val) => val?.toString() ?? '',
           valueFromString: num.tryParse,
           value: source.get(),
-          onChanged: (val) => value = val as T,
+          onChanged: (val) => value = _convert(val),
         ));
   }
 }

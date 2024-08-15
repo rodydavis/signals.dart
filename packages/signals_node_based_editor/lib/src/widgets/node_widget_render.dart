@@ -10,7 +10,7 @@ class NodeWidgetRender {
   final Signal<bool> collapsed$ = signal(false);
   final ReadonlySignal<String> label$ = signal('');
 
-  Widget previewBuilder(BuildContext context) {
+  Widget preview(BuildContext context) {
     return const SizedBox.shrink();
   }
 
@@ -205,7 +205,7 @@ class NodeWidgetRender {
                         child: Center(
                           child: SizedBox.fromSize(
                             size: previewSize.value,
-                            child: previewBuilder(context),
+                            child: preview(context),
                           ),
                         ),
                       ),

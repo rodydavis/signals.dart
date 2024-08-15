@@ -183,6 +183,17 @@ class Graph<Node extends GraphNode> {
     return point.topLeft;
   }
 
+  Size getSize() => viewport.value * getScale();
+
+  Rect getRect() => getOffset() & getSize();
+
+  Offset getCenter() => getRect().center;
+
+  void add(Node node, {bool center = false}) {
+    if (center) node.offset$.value = getCenter();
+    nodes.add(node);
+  }
+
   void onInteractionStart(ScaleStartDetails event) {
     // debugPrint(event.toString());
     // mouse.value = event.focalPoint;
@@ -286,13 +297,22 @@ class Graph<Node extends GraphNode> {
         if (input != null && output != null) {
           final prev = input.$2.knob.target.value;
           try {
+            bool mismatch = false;
             if (input.$2.type != output.$2.type) {
-              _toast('Type mismatch: ${output.$2.type} != ${input.$2.type}');
-              return;
+              mismatch = true;
+              for (final allowed in allowedConnections) {
+                if ((output.$2.type == allowed.from || allowed.from == '*') &&
+                    (input.$2.type == allowed.to || allowed.to == '*')) {
+                  mismatch = false;
+                  break;
+                }
+              }
+              if (mismatch) {
+                _toast('Type mismatch: ${output.$2.type} != ${input.$2.type}');
+                return;
+              }
             }
-            if (input.$2.type == output.$2.type &&
-                output.$2.optional &&
-                !input.$2.optional) {
+            if (!mismatch && output.$2.optional && !input.$2.optional) {
               _toast('Cannot connect nullable type to non-nullable type');
               return;
             }
@@ -318,6 +338,13 @@ class Graph<Node extends GraphNode> {
       }
     }
   }
+
+  static var allowedConnections = <({String from, String to})>[
+    (from: '*', to: 'Object'),
+    (from: 'int', to: 'num'),
+    (from: 'double', to: 'num'),
+    (from: 'String', to: 'Pattern'),
+  ];
 
   bool _detectCycle(
     (Node, NodeWidgetOutput) output,

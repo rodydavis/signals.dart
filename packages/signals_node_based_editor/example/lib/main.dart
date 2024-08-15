@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:signals_node_based_editor/signals_node_based_editor.dart';
 import 'package:signals/signals_flutter.dart';
 
-import 'nodes.dart';
+import 'nodes/variables.dart';
+import 'nodes/widgets.dart';
 
 void main() {
   runApp(const App());
@@ -53,6 +54,23 @@ class _ExampleState extends State<Example> {
               icon: const Icon(Icons.delete),
             );
           }),
+          PopupMenuButton(
+            icon: const Icon(Icons.widgets),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: const Text('Text'),
+                onTap: () => graph.nodes.add(
+                  TextWidgetNode(data: 'Hello World!'),
+                ),
+              ),
+              PopupMenuItem(
+                child: const Text('SizedBox'),
+                onTap: () => graph.nodes.add(
+                  SizedBoxNode(width: 100, height: 100),
+                ),
+              ),
+            ],
+          ),
           PopupMenuButton(
             icon: const Icon(Icons.add),
             itemBuilder: (context) => [
