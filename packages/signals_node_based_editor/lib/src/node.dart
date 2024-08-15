@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:signals/signals_flutter.dart';
 
-import '../widgets/node_widget_render.dart';
+import 'widgets/node_widget_render.dart';
 
 typedef NodePort<T> = ({
   String label,
@@ -15,8 +15,6 @@ abstract class GraphNode extends NodeWidgetRender {
 
   late final String id = 'graph_node_${label$.globalId}';
 
-  // ReadonlySignal<Size> get size$;
-
   late final rect$ = computed(() {
     return offset$.value & preferredSize.value;
   });
@@ -26,6 +24,15 @@ abstract class GraphNode extends NodeWidgetRender {
   static const previewPadding = EdgeInsets.all(8);
 
   late final nodeSize$ = computed(() => previewSize);
+
+  @override
+  bool operator ==(Object other) => other is GraphNode && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  String toString() => label$();
 
   // Could have been a signal
   Map<String, Object?> toJson() {
@@ -41,15 +48,10 @@ abstract class GraphNode extends NodeWidgetRender {
     };
   }
 
-  void linkNodes(Map<String, Object?> data, List<GraphNode> nodes);
-
   String get type$;
 }
 
 class FallbackNode extends GraphNode {
-  @override
-  void linkNodes(Map<String, Object?> data, List<GraphNode> nodes) {}
-
   @override
   Computed<Rect> rect$ = computed(() => Rect.zero);
 

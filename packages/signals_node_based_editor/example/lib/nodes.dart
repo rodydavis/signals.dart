@@ -12,11 +12,9 @@ abstract class VariableNode<T> extends GraphNode {
   String get type$ => 'variable_$type${optional ? '_optional' : ''}_node';
 
   @override
-  ReadonlySignal<String> get label$ =>
-      signal('Variable ($type${optional ? '?' : ''})');
-
-  @override
-  void linkNodes(Map<String, Object?> data, List<GraphNode> nodes) {}
+  late ReadonlySignal<String> label$ = signal(
+    'Variable ($type${optional ? '?' : ''})',
+  );
 
   @override
   late Computed<List<NodeWidgetInput>> inputs = computed(() {
@@ -31,6 +29,8 @@ abstract class VariableNode<T> extends GraphNode {
     return [
       ...super.outputs.value,
       NodeWidgetOutput(source.label, source.source, type, optional),
+      NodeWidgetOutput('toString', source.toString$, 'String', false),
+      NodeWidgetOutput('isNull', source.isNull$, 'bool', false),
     ];
   });
 }

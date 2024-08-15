@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-import 'nodes/base.dart';
+import 'node.dart';
 import 'widgets/number_field.dart';
 import 'widgets/string_field.dart';
 
@@ -15,6 +15,14 @@ class Knob<T> {
   set source(ReadonlySignal<T>? val) {
     _source.value = val ?? _fallback;
   }
+
+  late ReadonlySignal<String> toString$ = computed(
+    () => value.toString(),
+  );
+
+  late ReadonlySignal<bool> isNull$ = computed(
+    () => value == null,
+  );
 
   late final ReadonlySignal<T> source = computed(() {
     final src = _source.value;
@@ -40,7 +48,7 @@ class Knob<T> {
 
   Widget render() {
     return Watch((context) {
-      if (readonly.value) return const SizedBox.shrink();
+      if (readonly.value) return Text(toString$());
       return build(context);
     });
   }

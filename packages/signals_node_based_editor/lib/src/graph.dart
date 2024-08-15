@@ -5,10 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:signals/signals_flutter.dart';
 
 import 'knobs.dart';
-import 'nodes/base.dart';
+import 'node.dart';
 import 'utils/get_distance.dart';
 import 'widgets/background_painter.dart';
 import 'widgets/node_widget_render.dart';
+import 'package:graphs/graphs.dart' as graphs;
 
 typedef ConnectorInput = ({
   GraphNode node,
@@ -283,13 +284,10 @@ class Graph {
           output = (toNode.$1, toNode.$2.port as NodeWidgetOutput);
         }
         if (input != null && output != null) {
-          if (_hasCycle(output.$1, input.$1, {})) {
-            _toast('Cycle detected');
-            return;
-          }
+          final prev = input.$2.knob.target.value;
           try {
             if (input.$2.type != output.$2.type) {
-              _toast('Type mismatch');
+              _toast('Type mismatch: ${output.$2.type} != ${input.$2.type}');
               return;
             }
             if (input.$2.type == output.$2.type &&
@@ -298,9 +296,22 @@ class Graph {
               _toast('Cannot connect nullable type to non-nullable type');
               return;
             }
+            if (prev == output.$2.source) {
+              return;
+            }
+            final cycle = _detectCycle(output, input);
+            if (cycle) {
+              _toast('Cycle detected');
+              return;
+            }
             input.$2.knob.source = output.$2.source;
+            // input.$2.knob.source = prev;
           } catch (err) {
-            _toast('Error connecting types: $err');
+            if (err is StackOverflowError) {
+              _toast('Cycle detected');
+            } else {
+              _toast('Error connecting types: $err');
+            }
             return;
           }
         }
@@ -308,16 +319,37 @@ class Graph {
     }
   }
 
-  bool _hasCycle(GraphNode node, GraphNode target, Set<GraphNode> visited) {
-    if (node == target) return true;
-    visited.add(node);
-    for (final item in node.inputs.value) {
-      if (!item.knob.readonly.value) continue;
-      final match = getNodeByKnob(item.knob);
-      if (match == null) continue;
-      if (_hasCycle(match, target, visited)) return true;
+  bool _detectCycle(
+    (GraphNode, NodeWidgetOutput) output,
+    (GraphNode, NodeWidgetInput) input,
+  ) {
+    final graph = _graph();
+    final path = graphs.shortestPath<GraphNode>(
+      output.$1,
+      input.$1,
+      (node) => graph[node] ?? [],
+    );
+    return path != null;
+  }
+
+  Map<GraphNode, Iterable<GraphNode>> _graph() {
+    final graph = <GraphNode, Iterable<GraphNode>>{};
+    for (final node in nodes) {
+      graph.putIfAbsent(node, () {
+        // Connected inputs
+        final results = <GraphNode>{};
+        for (final item in node.inputsMetadata.value) {
+          if (item.port.knob.readonly.value) {
+            final result = nodes //
+                .where((e) => e.outputs.value
+                    .any((e) => e.source == item.port.knob.target.value));
+            results.addAll(result);
+          }
+        }
+        return results;
+      });
     }
-    return false;
+    return graph;
   }
 
   void _toast(String message) {

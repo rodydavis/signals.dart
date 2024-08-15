@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
 import '../../src/graph.dart';
-import '../../src/nodes/base.dart';
+import '../node.dart';
 import '../knobs.dart';
 import 'actions.dart';
 
