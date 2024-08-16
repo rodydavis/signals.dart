@@ -173,15 +173,14 @@ class ButtonWidgetNode extends WidgetNode<FilledButton> {
 class IncrementNode extends GraphNode {
   final IntKnob amount;
   final IntKnob value;
-  late final VoidFunctionKnob action;
+  final VoidFunctionKnob action;
 
   IncrementNode({
     int? amount,
     int? value,
   })  : amount = IntKnob('amount', amount ?? 1),
-        value = IntKnob('value', value ?? 0) {
-    action = VoidFunctionKnob('action');
-  }
+        value = IntKnob('value', value ?? 0),
+        action = VoidFunctionKnob('action');
 
   late final result = computed<int>(() {
     action.value;
@@ -195,6 +194,19 @@ class IncrementNode extends GraphNode {
 
   @override
   late ReadonlySignal<String> label$ = signal('Increment');
+
+  // @override
+  // Computed<Size> previewSize = computed(() => const Size(double.infinity, 100));
+
+  // @override
+  // Widget preview(BuildContext context) {
+  //   return Center(
+  //     child: OutlinedButton(
+  //       onPressed: result.recompute,
+  //       child: const Text('Increment'),
+  //     ),
+  //   );
+  // }
 
   @override
   late Computed<List<NodeWidgetInput>> inputs = computed(() {
@@ -211,6 +223,7 @@ class IncrementNode extends GraphNode {
     return [
       ...super.outputs.value,
       NodeWidgetOutput('result', result, 'int', false),
+      NodeWidgetOutput('action', action.source, 'void Function()', false),
     ];
   });
 }

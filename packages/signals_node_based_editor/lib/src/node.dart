@@ -10,7 +10,7 @@ typedef NodePort<T> = ({
   ReadonlySignal<dynamic> source,
 });
 
-// ToDO: Json Schema
+// TODO: Json Schema
 abstract class GraphNode extends NodeWidgetRender {
   final offset$ = signal<Offset>(Offset.zero);
 

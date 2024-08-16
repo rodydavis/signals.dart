@@ -36,28 +36,18 @@ abstract class VariableNode<T, K extends Knob<T>> extends GraphNode {
   });
 }
 
-class VoidFunctionVariableKnob extends VariableNode<void, VoidFunctionKnob> {
+class VoidFunctionVariableKnob
+    extends VariableNode<void Function(), VoidFunctionKnob> {
   VoidFunctionVariableKnob()
       : super(VoidFunctionKnob('Value'), 'void Function()', false);
 
   @override
-  Computed<Size> previewSize = computed(() => const Size(double.infinity, 100));
-
-  @override
-  Widget preview(BuildContext context) {
-    return Center(
-      child: OutlinedButton(
-        onPressed: source.call,
-        child: const Text('Click'),
-      ),
-    );
-  }
-}
-
-class OptionalVoidFunctionVariableKnob
-    extends VariableNode<void, OptionalVoidFunctionKnob> {
-  OptionalVoidFunctionVariableKnob()
-      : super(OptionalVoidFunctionKnob('Value'), 'void Function()', true);
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('calls', source.calls, 'int', false),
+    ];
+  });
 
   @override
   Computed<Size> previewSize = computed(() => const Size(double.infinity, 100));
@@ -72,6 +62,25 @@ class OptionalVoidFunctionVariableKnob
     );
   }
 }
+
+// class OptionalVoidFunctionVariableKnob
+//     extends VariableNode<void, OptionalVoidFunctionKnob> {
+//   OptionalVoidFunctionVariableKnob()
+//       : super(OptionalVoidFunctionKnob('Value'), 'void Function()', true);
+
+//   @override
+//   Computed<Size> previewSize = computed(() => const Size(double.infinity, 100));
+
+//   @override
+//   Widget preview(BuildContext context) {
+//     return Center(
+//       child: OutlinedButton(
+//         onPressed: source.call,
+//         child: const Text('Click'),
+//       ),
+//     );
+//   }
+// }
 
 class ObjectVariableNode extends VariableNode<Object, Knob<Object>> {
   ObjectVariableNode(Object val)

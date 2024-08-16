@@ -154,12 +154,12 @@ class _ExampleState extends State<Example> {
                   VoidFunctionVariableKnob(),
                 ),
               ),
-              PopupMenuItem(
-                child: const Text('void Function()?'),
-                onTap: () => graph.nodes.add(
-                  OptionalVoidFunctionVariableKnob(),
-                ),
-              ),
+              // PopupMenuItem(
+              //   child: const Text('void Function()?'),
+              //   onTap: () => graph.nodes.add(
+              //     OptionalVoidFunctionVariableKnob(),
+              //   ),
+              // ),
               PopupMenuItem(
                 child: const Text('ThemeMode'),
                 onTap: () => graph.nodes.add(

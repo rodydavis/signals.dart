@@ -367,10 +367,6 @@ class Graph<Node extends GraphNode> {
         final results = <Node>{};
         for (final item in node.inputsMetadata.value) {
           if (item.port.knob.readonly.value) {
-            // if (item.port.knob is EventKnob ||
-            //     item.port.knob is OptionalEventKnob) {
-            //   continue;
-            // }
             final result = nodes //
                 .where((e) => e.outputs.value
                     .any((e) => e.source == item.port.knob.target.value));

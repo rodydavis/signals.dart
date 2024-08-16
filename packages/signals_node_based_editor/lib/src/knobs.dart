@@ -95,24 +95,21 @@ class OptionalEventKnob<T> extends Knob<T?> {
   OptionalEventKnob(super.label, super.value);
 }
 
-class FunctionKnob<R, T extends R Function()> extends EventKnob<R> {
-  FunctionKnob(String label, this.cb) : super(label, cb());
+class FunctionKnob<T, R> extends EventKnob<R Function()> {
+  FunctionKnob(super.label, super.value);
 
-  final R Function() cb;
   final calls = signal<int>(0);
 
   R call() {
     calls.value++;
-    return value = cb();
+    final result = value();
+    super.value = () => result;
+    return result;
   }
 }
 
-class VoidFunctionKnob extends FunctionKnob<void, void Function()> {
+class VoidFunctionKnob extends FunctionKnob<void Function(), void> {
   VoidFunctionKnob(String label) : super(label, () => Object());
-}
-
-class OptionalVoidFunctionKnob extends FunctionKnob<void, void Function()> {
-  OptionalVoidFunctionKnob(String label) : super(label, () => Object());
 }
 
 class OptionalKnob<T> extends Knob<T?> {
