@@ -7,10 +7,14 @@ import 'widgets/string_field.dart';
 
 class Knob<T> {
   final String label;
-  final Signal<T> _fallback;
+  late ReadonlySignal<T> _fallback;
   late final Signal<ReadonlySignal<T>> _source = signal(_fallback);
   late final ReadonlySignal<ReadonlySignal<T>> target = _source;
   late final ReadonlySignal<T> original = _fallback;
+
+  set fallback(ReadonlySignal<T> val) {
+    _fallback = val;
+  }
 
   set source(ReadonlySignal<T>? val) {
     _source.value = val ?? _fallback;
@@ -38,13 +42,17 @@ class Knob<T> {
 
   set value(T val) {
     if (readonly.value) return;
-    _fallback.value = val;
+    if (_fallback is Signal<T>) {
+      (_fallback as Signal<T>).value = val;
+    }
   }
 
   Knob(
     this.label,
     T value,
   ) : _fallback = signal<T>(value);
+
+  Knob.lazy(this.label);
 
   Widget render() {
     return Watch((context) {
@@ -77,6 +85,34 @@ class Knob<T> {
   Widget build(BuildContext context) {
     return const SizedBox.shrink();
   }
+}
+
+class EventKnob<T> extends Knob<T> {
+  EventKnob(super.label, super.value);
+}
+
+class OptionalEventKnob<T> extends Knob<T?> {
+  OptionalEventKnob(super.label, super.value);
+}
+
+class FunctionKnob<R, T extends R Function()> extends EventKnob<R> {
+  FunctionKnob(String label, this.cb) : super(label, cb());
+
+  final R Function() cb;
+  final calls = signal<int>(0);
+
+  R call() {
+    calls.value++;
+    return value = cb();
+  }
+}
+
+class VoidFunctionKnob extends FunctionKnob<void, void Function()> {
+  VoidFunctionKnob(String label) : super(label, () => Object());
+}
+
+class OptionalVoidFunctionKnob extends FunctionKnob<void, void Function()> {
+  OptionalVoidFunctionKnob(String label) : super(label, () => Object());
 }
 
 class OptionalKnob<T> extends Knob<T?> {

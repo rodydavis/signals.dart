@@ -69,6 +69,20 @@ class _ExampleState extends State<Example> {
                   SizedBoxNode(width: 100, height: 100),
                 ),
               ),
+              PopupMenuItem(
+                child: const Text('Button'),
+                onTap: () => graph.nodes.add(
+                  ButtonWidgetNode(
+                    child: const Text('BUTTON'),
+                  ),
+                ),
+              ),
+              PopupMenuItem(
+                child: const Text('Inc'),
+                onTap: () => graph.nodes.add(
+                  IncrementNode(),
+                ),
+              ),
             ],
           ),
           PopupMenuButton(
@@ -132,6 +146,18 @@ class _ExampleState extends State<Example> {
                 child: const Text('bool?'),
                 onTap: () => graph.nodes.add(
                   OptionalBoolVariableNode(null),
+                ),
+              ),
+              PopupMenuItem(
+                child: const Text('void Function()'),
+                onTap: () => graph.nodes.add(
+                  VoidFunctionVariableKnob(),
+                ),
+              ),
+              PopupMenuItem(
+                child: const Text('void Function()?'),
+                onTap: () => graph.nodes.add(
+                  OptionalVoidFunctionVariableKnob(),
                 ),
               ),
               PopupMenuItem(

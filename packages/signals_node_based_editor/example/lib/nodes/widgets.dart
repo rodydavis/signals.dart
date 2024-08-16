@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:signals_node_based_editor/signals_node_based_editor.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -95,7 +94,7 @@ class SizedBoxNode extends WidgetNode<SizedBox> {
     Widget? child,
     double? width,
     double? height,
-  })  : child = OptionalWidgetKnob('child', null),
+  })  : child = OptionalWidgetKnob('child', child),
         width = OptionalDoubleKnob('width', width),
         height = OptionalDoubleKnob('height', height);
 
@@ -103,9 +102,6 @@ class SizedBoxNode extends WidgetNode<SizedBox> {
   late Computed<Size> previewSize = computed(() {
     return Size(width.value ?? 200, height.value ?? 200);
   });
-
-  @override
-  String get type$ => 'widget_sized_box';
 
   @override
   late ReadonlySignal<SizedBox> child$ = computed(() {
@@ -117,6 +113,9 @@ class SizedBoxNode extends WidgetNode<SizedBox> {
   });
 
   @override
+  String get type$ => 'widget_sized_box';
+
+  @override
   late ReadonlySignal<String> label$ = signal('SizedBox (Widget)');
 
   @override
@@ -126,6 +125,92 @@ class SizedBoxNode extends WidgetNode<SizedBox> {
       NodeWidgetInput(child, 'Widget', true),
       NodeWidgetInput(width, 'double', true),
       NodeWidgetInput(height, 'double', true),
+    ];
+  });
+}
+
+class ButtonWidgetNode extends WidgetNode<FilledButton> {
+  final OptionalWidgetKnob child;
+  final VoidFunctionKnob onPressed;
+
+  ButtonWidgetNode({
+    Widget? child,
+  })  : child = OptionalWidgetKnob('child', child),
+        onPressed = VoidFunctionKnob('onPressed');
+
+  @override
+  late ReadonlySignal<FilledButton> child$ = computed(() {
+    return FilledButton(
+      onPressed: onPressed.call,
+      child: child.value,
+    );
+  });
+
+  @override
+  String get type$ => 'button_node';
+
+  @override
+  late ReadonlySignal<String> label$ = signal('Button (Widget)');
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(child, 'Widget', false),
+      NodeWidgetInput(onPressed, 'void Function()', false),
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('onPressed', onPressed.source, 'void Function()', false),
+    ];
+  });
+}
+
+class IncrementNode extends GraphNode {
+  final IntKnob amount;
+  final IntKnob value;
+  late final VoidFunctionKnob action;
+
+  IncrementNode({
+    int? amount,
+    int? value,
+  })  : amount = IntKnob('amount', amount ?? 1),
+        value = IntKnob('value', value ?? 0) {
+    action = VoidFunctionKnob('action');
+  }
+
+  late final result = computed<int>(() {
+    action.value;
+    final val = value.source.peek();
+    final amount = this.amount.value;
+    return untracked(() => value.value = val + amount);
+  });
+
+  @override
+  String get type$ => 'inc_node';
+
+  @override
+  late ReadonlySignal<String> label$ = signal('Increment');
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(amount, 'int', false),
+      NodeWidgetInput(value, 'int', false),
+      NodeWidgetInput(action, 'void Function()', false),
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('result', result, 'int', false),
     ];
   });
 }
