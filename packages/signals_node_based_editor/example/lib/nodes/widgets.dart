@@ -131,17 +131,19 @@ class SizedBoxNode extends WidgetNode<SizedBox> {
 
 class ButtonWidgetNode extends WidgetNode<FilledButton> {
   final OptionalWidgetKnob child;
-  final VoidFunctionKnob onPressed;
+  final ObjectKnob<void Function()> onPressed;
 
   ButtonWidgetNode({
     Widget? child,
   })  : child = OptionalWidgetKnob('child', child),
-        onPressed = VoidFunctionKnob('onPressed');
+        onPressed = ObjectKnob('onPressed', () {
+          print('clicked!');
+        });
 
   @override
   late ReadonlySignal<FilledButton> child$ = computed(() {
     return FilledButton(
-      onPressed: onPressed.call,
+      onPressed: onPressed.source.value,
       child: child.value,
     );
   });
@@ -170,60 +172,60 @@ class ButtonWidgetNode extends WidgetNode<FilledButton> {
   });
 }
 
-class IncrementNode extends GraphNode {
-  final IntKnob amount;
-  final IntKnob value;
-  final VoidFunctionKnob action;
+// class IncrementNode extends GraphNode {
+//   final IntKnob amount;
+//   final IntKnob value;
+//   final VoidFunctionKnob action;
 
-  IncrementNode({
-    int? amount,
-    int? value,
-  })  : amount = IntKnob('amount', amount ?? 1),
-        value = IntKnob('value', value ?? 0),
-        action = VoidFunctionKnob('action');
+//   IncrementNode({
+//     int? amount,
+//     int? value,
+//   })  : amount = IntKnob('amount', amount ?? 1),
+//         value = IntKnob('value', value ?? 0),
+//         action = VoidFunctionKnob('action');
 
-  late final result = computed<int>(() {
-    action.value;
-    final val = value.source.peek();
-    final amount = this.amount.value;
-    return untracked(() => value.value = val + amount);
-  });
+//   late final result = computed<int>(() {
+//     action.value;
+//     final val = value.source.peek();
+//     final amount = this.amount.value;
+//     return untracked(() => value.value = val + amount);
+//   });
 
-  @override
-  String get type$ => 'inc_node';
+//   @override
+//   String get type$ => 'inc_node';
 
-  @override
-  late ReadonlySignal<String> label$ = signal('Increment');
+//   @override
+//   late ReadonlySignal<String> label$ = signal('Increment');
 
-  // @override
-  // Computed<Size> previewSize = computed(() => const Size(double.infinity, 100));
+//   // @override
+//   // Computed<Size> previewSize = computed(() => const Size(double.infinity, 100));
 
-  // @override
-  // Widget preview(BuildContext context) {
-  //   return Center(
-  //     child: OutlinedButton(
-  //       onPressed: result.recompute,
-  //       child: const Text('Increment'),
-  //     ),
-  //   );
-  // }
+//   // @override
+//   // Widget preview(BuildContext context) {
+//   //   return Center(
+//   //     child: OutlinedButton(
+//   //       onPressed: result.recompute,
+//   //       child: const Text('Increment'),
+//   //     ),
+//   //   );
+//   // }
 
-  @override
-  late Computed<List<NodeWidgetInput>> inputs = computed(() {
-    return [
-      ...super.inputs.value,
-      NodeWidgetInput(amount, 'int', false),
-      NodeWidgetInput(value, 'int', false),
-      NodeWidgetInput(action, 'void Function()', false),
-    ];
-  });
+//   @override
+//   late Computed<List<NodeWidgetInput>> inputs = computed(() {
+//     return [
+//       ...super.inputs.value,
+//       NodeWidgetInput(amount, 'int', false),
+//       NodeWidgetInput(value, 'int', false),
+//       NodeWidgetInput(action, 'void Function()', false),
+//     ];
+//   });
 
-  @override
-  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
-    return [
-      ...super.outputs.value,
-      NodeWidgetOutput('result', result, 'int', false),
-      NodeWidgetOutput('action', action.source, 'void Function()', false),
-    ];
-  });
-}
+//   @override
+//   late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+//     return [
+//       ...super.outputs.value,
+//       NodeWidgetOutput('result', result, 'int', false),
+//       NodeWidgetOutput('action', action.source, 'void Function()', false),
+//     ];
+//   });
+// }

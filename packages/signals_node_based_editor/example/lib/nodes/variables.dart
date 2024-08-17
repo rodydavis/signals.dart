@@ -2,6 +2,169 @@ import 'package:flutter/material.dart';
 import 'package:signals_node_based_editor/signals_node_based_editor.dart';
 import 'package:signals/signals_flutter.dart';
 
+abstract class ValueNode<T, K extends Knob<T>> extends GraphNode {
+  K get source;
+  String get type;
+  bool get optional;
+
+  @override
+  String get type$ => 'value_$type${optional ? '_optional' : ''}_node';
+
+  @override
+  late final label$ = signal('Value ($type${optional ? '?' : ''})');
+}
+
+mixin ReadableNode<T, K extends Knob<T>> on ValueNode<T, K> {
+  ReadonlySignal<T> get result;
+
+  @override
+  String get type$ => '${super.type$}_readable';
+
+  late ReadonlySignal<T> getter = computed(result.get);
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(source, type, optional),
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      // NodeWidgetOutput(source.label, source.source, type, optional),
+      // NodeWidgetOutput('toString', source.toString$, 'String', false),
+      // NodeWidgetOutput('isNull', source.isNull$, 'bool', false),
+      NodeWidgetOutput('value', result, type, optional),
+      NodeWidgetOutput('get', getter, '$type Function()', optional),
+    ];
+  });
+}
+
+mixin WriteableNodeNode<T, K extends Knob<T>> on ReadableNode<T, K> {
+  @override
+  Signal<T> get result;
+
+  @override
+  String get type$ => '${super.type$}_writeable';
+
+  late ReadonlySignal<void Function(T)> setter = computed(() {
+    return this.result.set;
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('set', setter, 'void Function($type)', optional),
+    ];
+  });
+}
+
+class SetIntNode extends GraphNode {
+  final IntKnob getter;
+  final ObjectKnob<void Function(int)> setter;
+
+  @override
+  String get type$ => 'set_int_knob';
+
+  @override
+  late final label$ = signal('Set Int');
+
+  SetIntNode(int val)
+      : getter = IntKnob('getter', val),
+        setter = ObjectKnob('setter', (val) {
+          print('set: $val');
+        });
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(getter, 'int', false),
+      NodeWidgetInput(setter, 'void Function(int)', false),
+    ];
+  });
+
+  late ReadonlySignal<void Function()> action = computed(() {
+    final setter = this.setter.value;
+    return () {
+      print('set $setter $getter');
+      return setter(getter.value + 1);
+    };
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('action', action, 'void Function()', false),
+    ];
+  });
+}
+
+class SumIntNode extends GraphNode {
+  final IntKnob a;
+  final IntKnob b;
+
+  @override
+  String get type$ => 'sum_int_knob';
+
+  @override
+  late final label$ = signal('Sum Int');
+
+  SumIntNode(int a, int b)
+      : a = IntKnob('a', a),
+        b = IntKnob('b', b);
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(a, 'int', false),
+      NodeWidgetInput(b, 'int', false),
+    ];
+  });
+
+  late ReadonlySignal<int> result = computed(() {
+    return a.value + b.value;
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('Result', result, 'int', false),
+    ];
+  });
+}
+
+class IncrementNode extends ValueNode<int, IntKnob>
+    with ReadableNode, WriteableNodeNode {
+  @override
+  final IntKnob source;
+
+  @override
+  final String type;
+
+  @override
+  final bool optional;
+
+  @override
+  late final label$ = signal('Increment');
+
+  IncrementNode(int val)
+      : source = IntKnob('Value', val),
+        result = signal<int>(val),
+        type = 'int',
+        optional = false;
+
+  @override
+  final Signal<int> result;
+}
+
 abstract class VariableNode<T, K extends Knob<T>> extends GraphNode {
   final K source;
   final String type;

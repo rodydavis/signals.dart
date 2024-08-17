@@ -78,9 +78,21 @@ class _ExampleState extends State<Example> {
                 ),
               ),
               PopupMenuItem(
-                child: const Text('Inc'),
+                child: const Text('Increment'),
                 onTap: () => graph.nodes.add(
-                  IncrementNode(),
+                  IncrementNode(0),
+                ),
+              ),
+              PopupMenuItem(
+                child: const Text('Set Int'),
+                onTap: () => graph.nodes.add(
+                  SetIntNode(0),
+                ),
+              ),
+              PopupMenuItem(
+                child: const Text('Sum Int'),
+                onTap: () => graph.nodes.add(
+                  SumIntNode(1, 1),
                 ),
               ),
             ],

@@ -52,8 +52,6 @@ class Knob<T> {
     T value,
   ) : _fallback = signal<T>(value);
 
-  Knob.lazy(this.label);
-
   Widget render() {
     return Watch((context) {
       final colors = Theme.of(context).colorScheme;
