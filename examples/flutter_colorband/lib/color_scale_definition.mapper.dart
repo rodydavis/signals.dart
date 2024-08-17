@@ -110,6 +110,7 @@ mixin ColorScaleDefMappable {
     return identical(this, other) ||
         (runtimeType == other.runtimeType &&
             ColorScaleDefMapper.ensureInitialized()
+                // ignore: deprecated_member_use
                 .isValueEqual(this as ColorScaleDef, other));
   }
 
