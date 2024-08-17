@@ -9,8 +9,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  devtools_extensions: ^0.0.9
-  devtools_app_shared: ^0.0.6
+  devtools_extensions: ^0.2.2
+  devtools_app_shared: ^0.2.2
   faker: ^2.1.0
   signals:
     path: ../signals
