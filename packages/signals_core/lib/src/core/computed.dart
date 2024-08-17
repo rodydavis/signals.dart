@@ -100,9 +100,9 @@ part of 'signals.dart';
 /// }
 ///
 /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
-///   late final counter = createSignal(this, 0);
-///   late final isEven = createComputed(this, () => counter.value.isEven);
-///   late final isOdd = createComputed(this, () => counter.value.isOdd);
+///   late final counter = createSignal(context, 0);
+///   late final isEven = createComputed(context, () => counter.value.isEven);
+///   late final isOdd = createComputed(context, () => counter.value.isOdd);
 ///
 ///   @override
 ///   Widget build(BuildContext context) {
@@ -270,9 +270,9 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   /// }
   ///
   /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
-  ///   late final counter = createSignal(this, 0);
-  ///   late final isEven = createComputed(this, () => counter.value.isEven);
-  ///   late final isOdd = createComputed(this, () => counter.value.isOdd);
+  ///   late final counter = createSignal(context, 0);
+  ///   late final isEven = createComputed(context, () => counter.value.isEven);
+  ///   late final isOdd = createComputed(context, () => counter.value.isOdd);
   ///
   ///   @override
   ///   Widget build(BuildContext context) {
@@ -357,7 +357,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   late T _value;
 
   @override
-  bool get isLazy => false;
+  bool get isInitialized => _version > 0;
 
   ComputedCallback<T> _fn;
 
@@ -656,9 +656,9 @@ typedef ComputedCallback<T> = T Function();
 /// }
 ///
 /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
-///   late final counter = createSignal(this, 0);
-///   late final isEven = createComputed(this, () => counter.value.isEven);
-///   late final isOdd = createComputed(this, () => counter.value.isOdd);
+///   late final counter = createSignal(context, 0);
+///   late final isEven = createComputed(context, () => counter.value.isEven);
+///   late final isOdd = createComputed(context, () => counter.value.isOdd);
 ///
 ///   @override
 ///   Widget build(BuildContext context) {

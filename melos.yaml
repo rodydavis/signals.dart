@@ -11,7 +11,7 @@ scripts:
     run: melos exec --no-private --ignore="signals_lint" -- dart analyze .
   test:
     run: melos exec --dir-exists="test" --no-private --ignore="signals_lint" -- flutter test --coverage
-  combine_coverage:
+  coverage:
     run: melos exec -- "\$MELOS_ROOT_PATH/scripts/combine_coverage.sh"
   docs:
     run: dart scripts/doc_comments.dart

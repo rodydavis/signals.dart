@@ -25,7 +25,7 @@ abstract class ReadonlySignal<T> {
   }
 
   /// Check if the signal is lazy and has not had a value set
-  bool get isLazy;
+  bool get isInitialized;
 
   /// Check if there are any targets attached
   bool get hasTargets => _targets != null;

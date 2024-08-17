@@ -138,7 +138,12 @@ class Watch<T extends Widget> extends StatefulWidget {
   /// ...
   /// Watch((context) => Text('$counter'))
   /// ```
-  const Watch(this.builder, {super.key, this.debugLabel});
+  const Watch(
+    this.builder, {
+    super.key,
+    this.debugLabel,
+    this.dependencies = const [],
+  });
 
   /// Drop in replacement for the Flutter builder widget.
   ///
@@ -152,7 +157,12 @@ class Watch<T extends Widget> extends StatefulWidget {
   ///   }
   /// )
   /// ```
-  const Watch.builder({super.key, required this.builder, this.debugLabel});
+  const Watch.builder({
+    super.key,
+    required this.builder,
+    this.debugLabel,
+    this.dependencies = const [],
+  });
 
   /// The widget to rebuild when any signals change
   final T Function(BuildContext context) builder;
@@ -160,13 +170,24 @@ class Watch<T extends Widget> extends StatefulWidget {
   /// Optional debug label to use for devtools
   final String? debugLabel;
 
+  /// List of optional dependencies to watch
+  final List<ReadonlySignal<dynamic>> dependencies;
+
   @override
   State<Watch<T>> createState() => _WatchState<T>();
 }
 
-class _WatchState<T extends Widget> extends State<Watch<T>> {
-  Widget? child;
-  EffectCleanup? fn;
+class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
+  late final result = this.createComputed(() => widget.builder(context));
+  bool _init = true;
+
+  @override
+  void initState() {
+    super.initState();
+    for (final dep in widget.dependencies) {
+      this.bindSignal(dep);
+    }
+  }
 
   // coverage:ignore-start
   @override
@@ -182,45 +203,28 @@ class _WatchState<T extends Widget> extends State<Watch<T>> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (child != null) rebuild();
-  }
-
-  @override
-  void dispose() {
-    fn?.call();
-    super.dispose();
-  }
-
-  void rebuild() async {
-    if (!mounted) return;
-    final result = widget.builder(context);
-    if (result == child) return;
-    child = result;
-    if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.idle) {
-      await SchedulerBinding.instance.endOfFrame;
+    if (_init) {
+      // Called on first build (we do not need to rebuild yet)
+      _init = false;
+      return;
     }
-    if (!mounted) return;
-    (context as Element).markNeedsBuild();
+    result.recompute();
   }
 
   @override
   void didUpdateWidget(covariant Watch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget != widget) rebuild();
+    if (oldWidget.dependencies != widget.dependencies) {
+      for (final dep in oldWidget.dependencies) {
+        final idx = widget.dependencies.indexOf(dep);
+        if (idx == -1) unbindSignal(dep);
+      }
+      for (final dep in widget.dependencies) {
+        this.bindSignal(dep);
+      }
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
-    fn ??= effect(
-      () {
-        if (child == null) {
-          child = widget.builder(context);
-        } else {
-          rebuild();
-        }
-      },
-      debugLabel: widget.debugLabel,
-    );
-    return child!;
-  }
+  Widget build(BuildContext context) => result.value;
 }

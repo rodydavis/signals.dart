@@ -108,7 +108,7 @@ class InheritedSignalProvider<T, S extends ReadonlySignal<T>>
   bool get hasTargets => instance.hasTargets;
 
   @override
-  bool get isLazy => instance.isLazy;
+  bool get isInitialized => instance.isInitialized;
 }
 
 /// [ReadonlySignal] based on [InheritedElement]

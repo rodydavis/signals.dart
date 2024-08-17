@@ -1,3 +1,10 @@
+## 5.4.0
+
+- Adding SignalsMixin to replace SignalsAutoDisposeMixin, bindSignal, bindComputed, etc.
+- Signals now render with fewer rebuilds
+- Adding new deprecated warnings
+- **Fix**: https://github.com/rodydavis/signals.dart/issues/292
+
 ## 5.3.0
 
 - Add Signal.lazy and lazySignal

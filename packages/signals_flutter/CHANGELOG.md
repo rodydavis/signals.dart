@@ -1,3 +1,11 @@
+## 5.4.0
+
+- Add SignalsMixin to replace .watch, createComputed/createSignal, SignalsAutoDisposeMixin and implementation for Watch
+- Signals now render with fewer rebuilds
+- Adding new deprecated warnings
+- **Fix**: https://github.com/rodydavis/signals.dart/issues/292
+- Update to `signals_core` 5.4.0
+
 ## 5.3.0
 
 - Add Signal.lazy and lazySignal

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../../../signals_flutter.dart';
 import 'provider.dart';
 
-/// Convience method to pass signals with [InheritedWidget]
+/// Convenience method to pass signals with [InheritedWidget]
 class ComputedProvider<T> extends InheritedSignalProvider<T, Computed<T>>
     implements Computed<T> {
   /// Create a new [Computed] by value to provide in a widget tree
@@ -20,7 +20,7 @@ class ComputedProvider<T> extends InheritedSignalProvider<T, Computed<T>>
     required super.value,
   }) : super.value();
 
-  /// Look up a singal by its type
+  /// Look up a signal by its type
   static Computed<T> of<T>(BuildContext context, {bool listen = true}) {
     return InheritedSignalProvider.of<ComputedProvider<T>>(
       context,
