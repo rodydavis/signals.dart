@@ -435,7 +435,7 @@ class Signal<T> extends ReadonlySignal<T> {
   })  : _lazy = true,
         super._(globalId: ++_lastGlobalId) {
     assert(() {
-      SignalsObserver.instance?.onSignalCreated(this);
+      if (!_lazy) SignalsObserver.instance?.onSignalCreated(this);
       return true;
     }());
   }
@@ -493,7 +493,13 @@ class Signal<T> extends ReadonlySignal<T> {
       _value = val;
       _initialValue = val;
       _lazy = false;
-    } else {
+      SignalsObserver.instance?.onSignalCreated(this);
+    } else if (val != _value || force) {
+      if (_callDepth > _maxCallDepth) {
+        // coverage:ignore-start
+        throw EffectCycleDetectionError();
+        // coverage:ignore-end
+      }
       _previousValue = _value ?? _initialValue;
       _value = val;
     }
