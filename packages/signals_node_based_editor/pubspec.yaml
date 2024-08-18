@@ -1,0 +1,20 @@
+name: signals_node_based_editor
+description: Reactive flow based editing with signals
+version: 0.0.1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  graphs: ^2.3.2
+  signals: ^5.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
