@@ -17,14 +17,14 @@ abstract class GraphNode extends NodeWidgetRender {
   late final String id = 'graph_node_${label$.globalId}';
 
   late final rect$ = computed(() {
-    return offset$.value & preferredSize.value;
+    return offset$.value & preferredSize$.value;
   });
 
   static const portSize = Size(200, 40);
 
   static const previewPadding = EdgeInsets.all(8);
 
-  late final nodeSize$ = computed(() => previewSize);
+  late final nodeSize$ = computed(() => previewSize$);
 
   @override
   bool operator ==(Object other) => other is GraphNode && other.id == id;

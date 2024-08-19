@@ -10,6 +10,10 @@ class NodeWidgetRender {
   final Signal<bool> collapsed$ = signal(false);
   final ReadonlySignal<String> label$ = signal('');
 
+  List<Widget> actions$(BuildContext context) {
+    return [];
+  }
+
   Widget preview(BuildContext context) {
     return const SizedBox.shrink();
   }
@@ -26,17 +30,17 @@ class NodeWidgetRender {
 
   final Computed<List<NodeWidgetOutput>> outputs = computed(() => []);
 
-  late Computed<Size> previewSize = computed(() {
+  late Computed<Size> previewSize$ = computed(() {
     return const Size(nodeWidth, 0);
   });
 
-  late Computed<Size> preferredSize = computed(() {
+  late Computed<Size> preferredSize$ = computed(() {
     var size = const Size(nodeWidth, headerHeight);
     if (collapsed$.value) return size;
     if (hasPreview) {
       size = Size(
         size.width,
-        size.height + previewSize.value.height,
+        size.height + previewSize$.value.height,
       );
     }
     final count = inputs.value.length + outputs.value.length;
@@ -48,12 +52,12 @@ class NodeWidgetRender {
     return size;
   });
 
-  bool get hasPreview => previewSize.value.height > 0;
+  bool get hasPreview => previewSize$.value.height > 0;
 
   late Computed<List<PortMetadata<NodeWidgetOutput>>> outputsMetadata =
       computed(() {
     final results = <PortMetadata<NodeWidgetOutput>>[];
-    var top = headerHeight + previewSize.value.height + portPadding;
+    var top = headerHeight + previewSize$.value.height + portPadding;
     for (var i = 0; i < outputs.value.length; i++) {
       final connector = Offset(
             collapsed$.value ? nodeWidth + -portWidth : nodeWidth,
@@ -78,7 +82,7 @@ class NodeWidgetRender {
       computed(() {
     final results = <PortMetadata<NodeWidgetInput>>[];
     final top = headerHeight +
-        previewSize.value.height +
+        previewSize$.value.height +
         portPadding +
         (outputs.value.length * portHeight);
     for (var i = 0; i < inputs.value.length; i++) {
@@ -107,7 +111,7 @@ class NodeWidgetRender {
     return const Offset(0, headerHeight) &
         Size(
           nodeWidth,
-          previewSize.value.height,
+          previewSize$.value.height,
         );
   });
 
@@ -118,7 +122,7 @@ class NodeWidgetRender {
           .any((e) => e is NodeSelection && e.node == node);
       final colors = Theme.of(context).colorScheme;
       return SizedBox.fromSize(
-        size: preferredSize.value,
+        size: preferredSize$.value,
         child: Container(
           decoration: BoxDecoration(
             color: colors.surface,
@@ -174,6 +178,7 @@ class NodeWidgetRender {
                                 ),
                               ),
                             ),
+                            ...actions$(context),
                             if (label$ is Signal<String>) ...[
                               const SizedBox(width: 4),
                               GestureDetector(
@@ -204,7 +209,7 @@ class NodeWidgetRender {
                         padding: const EdgeInsets.all(4),
                         child: Center(
                           child: SizedBox.fromSize(
-                            size: previewSize.value,
+                            size: previewSize$.value,
                             child: preview(context),
                           ),
                         ),

@@ -14,7 +14,7 @@ abstract class WidgetNode<T extends Widget> extends GraphNode {
   });
 
   @override
-  late Computed<Size> previewSize = computed(() {
+  late Computed<Size> previewSize$ = computed(() {
     return const Size(200, 200);
   });
 
@@ -99,7 +99,7 @@ class SizedBoxNode extends WidgetNode<SizedBox> {
         height = OptionalDoubleKnob('height', height);
 
   @override
-  late Computed<Size> previewSize = computed(() {
+  late Computed<Size> previewSize$ = computed(() {
     return Size(width.value ?? 200, height.value ?? 200);
   });
 

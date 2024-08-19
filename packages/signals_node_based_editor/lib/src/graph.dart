@@ -137,7 +137,7 @@ class Graph<Node extends GraphNode> {
       }
     }
     for (final node in nodes) {
-      var nodeRect = node.offset$.value & node.preferredSize.value;
+      var nodeRect = node.offset$.value & node.preferredSize$.value;
       // nodeRect = MatrixUtils.transformRect(transform.value, nodeRect);
       if (nodeRect.overlaps(point)) {
         final offset = node.offset$.value;

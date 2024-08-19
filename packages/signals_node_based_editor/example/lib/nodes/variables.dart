@@ -213,7 +213,8 @@ class VoidFunctionVariableKnob
   });
 
   @override
-  Computed<Size> previewSize = computed(() => const Size(double.infinity, 100));
+  Computed<Size> previewSize$ =
+      computed(() => const Size(double.infinity, 100));
 
   @override
   Widget preview(BuildContext context) {
