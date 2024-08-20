@@ -133,7 +133,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
 
   /// Create a [MapSignal]<T> and watch for changes
   MapSignal<K, V> createMapSignal<K, V>(
-    Map value, {
+    Map<K,V> value, {
     String? debugLabel,
     bool autoDispose = false,
   }) {
