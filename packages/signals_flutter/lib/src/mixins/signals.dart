@@ -101,6 +101,51 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return s;
   }
 
+    /// Create a [ListSignal]<T> and watch for changes
+  ListSignal<V> createListSignal<V>(
+    List<V> list, {
+    String? debugLabel,
+    bool autoDispose = false,
+  }) {
+    final s = ListSignal<V>(
+      list,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
+  /// Create a [SetSignal]<T> and watch for changes
+  SetSignal<V> createSetSignal<V>(
+    Set<V> set, {
+    String? debugLabel,
+    bool autoDispose = false,
+  }) {
+    final s = SetSignal<V>(
+      set,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
+  /// Create a [MapSignal]<T> and watch for changes
+  MapSignal<K, V> createMapSignal<K, V>(
+    Map value, {
+    String? debugLabel,
+    bool autoDispose = false,
+  }) {
+    final s = MapSignal<K, V>(
+      value,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
   /// Create a computed<T> and watch for changes
   Computed<V> createComputed<V>(
     V Function() cb, {
