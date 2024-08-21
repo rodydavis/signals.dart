@@ -105,7 +105,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
-    bool autoDispose = false,
+    bool autoDispose = true,
   }) {
     final s = ListSignal<V>(
       list,
@@ -120,7 +120,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   SetSignal<V> createSetSignal<V>(
     Set<V> set, {
     String? debugLabel,
-    bool autoDispose = false,
+    bool autoDispose = true,
   }) {
     final s = SetSignal<V>(
       set,
@@ -135,7 +135,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   MapSignal<K, V> createMapSignal<K, V>(
     Map<K,V> value, {
     String? debugLabel,
-    bool autoDispose = false,
+    bool autoDispose = true,
   }) {
     final s = MapSignal<K, V>(
       value,
