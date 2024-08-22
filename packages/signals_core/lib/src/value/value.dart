@@ -6,6 +6,7 @@ import '../core/signals.dart';
 part 'list.dart';
 part 'map.dart';
 part 'set.dart';
+part 'queue.dart';
 part 'iterable.dart';
 part 'change_stack.dart';
 
