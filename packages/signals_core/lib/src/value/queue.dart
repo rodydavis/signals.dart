@@ -1,8 +1,10 @@
 part of 'value.dart';
 
+/// A [Signal] that holds a [Queue].
 class QueueSignal<T> extends Signal<Queue<T>>
     with ValueSignalMixin
     implements Queue<T> {
+  /// Creates a [QueueSignal] with the given [value].
   QueueSignal(
     super.value, {
     super.debugLabel,
