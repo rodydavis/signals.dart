@@ -19,7 +19,7 @@ typedef _SignalMetadata = ({
 /// class MyWidget extends StatefulWidget {
 ///  ...
 /// }
-/// 
+///
 /// class _MyWidget extends State<MyWidget> with SignalsMixin {
 ///   late var _signal = this.createSignal(0);
 ///   late var _computed = this.createComputed(() => _signal() * 2);
@@ -101,7 +101,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return s;
   }
 
-    /// Create a [ListSignal]<T> and watch for changes
+  /// Create a [ListSignal]<T> and watch for changes
   ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
@@ -131,9 +131,24 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return s;
   }
 
+  /// Create a [QueueSignal]<T> and watch for changes
+  QueueSignal<V> createQueueSignal<V>(
+    Queue<V> queue, {
+    String? debugLabel,
+    bool autoDispose = true,
+  }) {
+    final s = QueueSignal<V>(
+      queue,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
   /// Create a [MapSignal]<T> and watch for changes
   MapSignal<K, V> createMapSignal<K, V>(
-    Map<K,V> value, {
+    Map<K, V> value, {
     String? debugLabel,
     bool autoDispose = true,
   }) {
