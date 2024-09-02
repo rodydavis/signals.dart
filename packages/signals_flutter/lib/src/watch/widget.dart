@@ -197,6 +197,11 @@ class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
     if (target is DevToolsSignalsObserver) {
       target.reassemble();
     }
+    print('hot reload! ${result.version}');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      result.recompute();
+      if (mounted) setState(() {});
+    });
   }
   // coverage:ignore-end
 
@@ -226,5 +231,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
   }
 
   @override
-  Widget build(BuildContext context) => result.value;
+  Widget build(BuildContext context) {
+    return result.value;
+  }
 }

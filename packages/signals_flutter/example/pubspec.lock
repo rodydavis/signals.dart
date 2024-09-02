@@ -132,12 +132,11 @@ packages:
     source: hosted
     version: "1.9.0"
   signals_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_core
-      sha256: "534843854cf805f0a9f58e47ab5c105fc8ef7f61c2f9a4cce6617adb503bc5b0"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../signals_core"
+      relative: true
+    source: path
     version: "5.4.0"
   signals_flutter:
     dependency: "direct main"

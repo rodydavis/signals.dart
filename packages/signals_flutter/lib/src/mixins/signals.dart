@@ -39,6 +39,14 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   EffectCleanup? _cleanup;
   final _effects = <EffectCleanup>[];
 
+  /// Dispose and remove signal
+  void disposeSignal(int id) {
+    final s = _signals.remove(id);
+    if (s == null) return;
+    s.target.dispose();
+    s.listener?.cleanup();
+  }
+
   Future<void> _rebuild() async {
     if (!mounted) return;
 
