@@ -60,14 +60,16 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   void _setup() {
-    final cb = effect(() {
-      for (final s in _signals.values.where((e) => e.local != null)) {
-        s.target.value;
-      }
-      _rebuild();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cb = effect(() {
+        for (final s in _signals.values.where((e) => e.local != null)) {
+          s.target.value;
+        }
+        _rebuild();
+      });
+      _cleanup?.call();
+      _cleanup = cb;
     });
-    _cleanup?.call();
-    _cleanup = cb;
   }
 
   void _watch(ReadonlySignal<dynamic> target, bool local) {
