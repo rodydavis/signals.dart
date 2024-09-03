@@ -1,6 +1,6 @@
 # Flutter Counter
 
-<a href="https://idx.google.com/new?url=https://github.com/rodydavis/signals.dart/tree/main/examples/flutter_counter">
+<a href="https://idx.google.com/import?url=https://github.com/rodydavis/signals.dart/tree/main/examples/flutter_counter">
   <img height="32" alt="Try in IDX" src="https://cdn.idx.dev/btn/try_dark_32.svg">
 </a>
 
