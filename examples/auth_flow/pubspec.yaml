@@ -11,8 +11,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  signals:
-    path: ../../packages/signals
+  signals: ^5.5.0
   go_router: ^13.2.4
 
 dev_dependencies:
