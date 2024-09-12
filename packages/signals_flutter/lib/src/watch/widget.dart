@@ -178,7 +178,7 @@ class Watch<T extends Widget> extends StatefulWidget {
 }
 
 class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
-  late final result = this.createComputed(() => widget.builder(context));
+  late final result = this.createComputed(() => widget.builder(context), debugLabel: widget.debugLabel);
   bool _init = true;
 
   @override
