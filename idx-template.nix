@@ -8,6 +8,7 @@
     ];
     bootstrap = ''
         mkdir "$out"/.idx
+        cp ${./dev.nix} "$out"/.idx/dev.nix
         ${
             if example == "animations_example" then "cp -r ${./examples/animations_example}/* \"$out\""
             else if example == "auth_flow" then "cp -r ${./examples/auth_flow}/* \"$out\""
@@ -31,7 +32,7 @@
             else if example == "flutter_counter" then "cp -r ${./examples/flutter_counter}/* \"$out\""
             else "cp -r ${./examples/flutter_counter}/* \"$out\""
         }
-        cp ${./dev.nix} "$out"/.idx/dev.nix
+        chmod -R u+w "$out"
         install --mode u+rw ${./dev.nix} "$out"/.idx/dev.nix
     '';
 }
