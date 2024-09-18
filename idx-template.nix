@@ -8,7 +8,6 @@
     ];
     bootstrap = ''
         mkdir "$out"/.idx
-        # cp -r ${./example}/* "$out"
         ${
             if example == "animations_example" then "cp -r ${./examples/animations_example}/* \"$out\""
             else if example == "auth_flow" then "cp -r ${./examples/auth_flow}/* \"$out\""
