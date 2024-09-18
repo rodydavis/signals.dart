@@ -1,0 +1,39 @@
+{
+  "name": "Signals",
+  "description": "Signals samples",
+  "categories": ["Mobile"],
+  "icon": "https://www.gstatic.com/images/branding/productlogos/flutter/v6/192px.svg",
+  "publisher": "Rody Davis",
+  "host": {
+    "virtualization": true
+  },
+  "params": [
+    {
+      "id": "example",
+      "name": "Example",
+      "type": "enum",
+      "default": "flutter_counter",
+      "options": {
+        "animations_example": "Animations",
+        "auth_flow": "Auth Flow",
+        "clean_architecture": "Clean Architecture",
+        "crud_dio": "Dio CRUD",
+        "dart_examples": "Dart Examples",
+        "dart_mappable_example": "Dart Mappable",
+        "drift_example": "Drift",
+        "eval_calculator": "Eval Calculator",
+        "flutter_async": "Async",
+        "flutter_colorband": "Color",
+        "flutter_counter": "Flutter Counter",
+        "get_it_signals": "get_it",
+        "html_canvas": "HTML Canvas",
+        "html_todo": "HTML TODO",
+        "infinite_scroll": "Infinite Scroll",
+        "node_based_editor": "Node Based Editor",
+        "persist_shared_preferences": "Shared Preferences",
+        "rxdart": "RXDart",
+        "shopping_cart": "Shopping Cart"
+      }
+    }
+  ]
+}
