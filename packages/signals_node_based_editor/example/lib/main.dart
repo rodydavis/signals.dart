@@ -9,14 +9,19 @@ void main() {
   runApp(const App());
 }
 
+final themeMode = signal(ThemeMode.system);
+
 class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Example(),
+      home: const Example(),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeMode.watch(context),
     );
   }
 }
@@ -36,6 +41,32 @@ class _ExampleState extends State<Example> {
     return Scaffold(
       key: graph.scaffoldKey,
       appBar: AppBar(
+        leading: PopupMenuButton(
+          icon: Watch((context) {
+            final mode = themeMode.value;
+            return Icon(
+              switch (mode) {
+                ThemeMode.light => Icons.light_mode,
+                ThemeMode.dark => Icons.dark_mode,
+                ThemeMode.system => Icons.auto_awesome,
+              },
+            );
+          }),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              child: const Text('Light'),
+              onTap: () => themeMode.value = ThemeMode.light,
+            ),
+            PopupMenuItem(
+              child: const Text('Dark'),
+              onTap: () => themeMode.value = ThemeMode.dark,
+            ),
+            PopupMenuItem(
+              child: const Text('System'),
+              onTap: () => themeMode.value = ThemeMode.system,
+            ),
+          ],
+        ),
         title: const Text('Node Based Editor'),
         actions: [
           Watch((context) {
