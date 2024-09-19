@@ -1,9 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:signals_node_based_editor/signals_node_based_editor.dart';
 import 'package:signals/signals_flutter.dart';
-
-import 'nodes/variables.dart';
-import 'nodes/widgets.dart';
 
 void main() {
   runApp(const App());
@@ -29,7 +29,7 @@ class Example extends StatefulWidget {
 }
 
 class _ExampleState extends State<Example> {
-  final graph = Graph();
+  final graph = GraphController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _ExampleState extends State<Example> {
               onPressed: selected == null
                   ? null
                   : () {
-                      if (selected is NodeSelection) {
+                      if (selected is NodeSelection<BaseKnob>) {
                         graph.removeNode(selected.node);
                       }
                       if (selected is ConnectorSelection) {
@@ -54,48 +54,32 @@ class _ExampleState extends State<Example> {
               icon: const Icon(Icons.delete),
             );
           }),
-          PopupMenuButton(
-            icon: const Icon(Icons.widgets),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: const Text('Text'),
-                onTap: () => graph.nodes.add(
-                  TextWidgetNode(data: 'Hello World!'),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('SizedBox'),
-                onTap: () => graph.nodes.add(
-                  SizedBoxNode(width: 100, height: 100),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('Button'),
-                onTap: () => graph.nodes.add(
-                  ButtonWidgetNode(
-                    child: const Text('BUTTON'),
-                  ),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('Increment'),
-                onTap: () => graph.nodes.add(
-                  IncrementNode(0),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('Set Int'),
-                onTap: () => graph.nodes.add(
-                  SetIntNode(0),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('Sum Int'),
-                onTap: () => graph.nodes.add(
-                  SumIntNode(1, 1),
-                ),
-              ),
-            ],
+          IconButton(
+            onPressed: () {
+              const encoder = JsonEncoder.withIndent('  ');
+              final str = encoder.convert(graph.toJson());
+              debugPrint(str);
+              // Copy to clipboard
+              Clipboard.setData(ClipboardData(text: str));
+            },
+            icon: const Icon(Icons.copy),
+          ),
+          IconButton(
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              final data = await Clipboard.getData('text/plain');
+              if (data != null) {
+                final json = jsonDecode(data.text!);
+                try {
+                  graph.fromJson(json);
+                } on JsonInteropParseError catch (e) {
+                  messenger.showSnackBar(
+                    SnackBar(content: Text(e.message)),
+                  );
+                }
+              }
+            },
+            icon: const Icon(Icons.paste),
           ),
           PopupMenuButton(
             icon: const Icon(Icons.add),
@@ -103,113 +87,37 @@ class _ExampleState extends State<Example> {
               PopupMenuItem(
                 child: const Text('String'),
                 onTap: () => graph.nodes.add(
-                  StringVariableNode('Hello World'),
+                  StringNode(data: 'Hello World'),
                 ),
               ),
               PopupMenuItem(
                 child: const Text('String?'),
                 onTap: () => graph.nodes.add(
-                  OptionalStringVariableNode('Hello World'),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('int'),
-                onTap: () => graph.nodes.add(
-                  IntVariableNode(0),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('int?'),
-                onTap: () => graph.nodes.add(
-                  OptionalIntVariableNode(0),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('double'),
-                onTap: () => graph.nodes.add(
-                  DoubleVariableNode(0),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('double?'),
-                onTap: () => graph.nodes.add(
-                  OptionalDoubleVariableNode(0),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('num'),
-                onTap: () => graph.nodes.add(
-                  NumVariableNode(0),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('num?'),
-                onTap: () => graph.nodes.add(
-                  OptionalNumVariableNode(0),
+                  StringNode(data: '', optional: true),
                 ),
               ),
               PopupMenuItem(
                 child: const Text('bool'),
                 onTap: () => graph.nodes.add(
-                  BoolVariableNode(false),
+                  BoolNode(data: false),
                 ),
               ),
               PopupMenuItem(
                 child: const Text('bool?'),
                 onTap: () => graph.nodes.add(
-                  OptionalBoolVariableNode(null),
+                  BoolNode(data: null, optional: true),
                 ),
               ),
               PopupMenuItem(
-                child: const Text('void Function()'),
+                child: const Text('num'),
                 onTap: () => graph.nodes.add(
-                  VoidFunctionVariableKnob(),
-                ),
-              ),
-              // PopupMenuItem(
-              //   child: const Text('void Function()?'),
-              //   onTap: () => graph.nodes.add(
-              //     OptionalVoidFunctionVariableKnob(),
-              //   ),
-              // ),
-              PopupMenuItem(
-                child: const Text('ThemeMode'),
-                onTap: () => graph.nodes.add(
-                  EnumVariableNode<ThemeMode>(
-                    ThemeMode.system,
-                    ThemeMode.values,
-                    'ThemeMode',
-                  ),
+                  NumNode(data: 0),
                 ),
               ),
               PopupMenuItem(
-                child: const Text('ThemeMode?'),
+                child: const Text('num?'),
                 onTap: () => graph.nodes.add(
-                  OptionalEnumVariableNode<ThemeMode>(
-                    null,
-                    ThemeMode.values,
-                    'ThemeMode',
-                  ),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('Brightness'),
-                onTap: () => graph.nodes.add(
-                  EnumVariableNode<Brightness>(
-                    Brightness.dark,
-                    Brightness.values,
-                    'Brightness',
-                  ),
-                ),
-              ),
-              PopupMenuItem(
-                child: const Text('Brightness?'),
-                onTap: () => graph.nodes.add(
-                  OptionalEnumVariableNode<Brightness>(
-                    null,
-                    Brightness.values,
-                    'Brightness',
-                  ),
+                  NumNode(data: null, optional: true),
                 ),
               ),
             ],
@@ -220,5 +128,165 @@ class _ExampleState extends State<Example> {
         graph: graph,
       ),
     );
+  }
+}
+
+abstract class BaseKnob extends GraphNode {
+  @override
+  final String type$;
+  BaseKnob(this.type$);
+
+  Map<String, dynamic> toJson();
+}
+
+class StringNode extends BaseKnob {
+  final Knob data;
+  final bool optional;
+
+  StringNode({
+    String? data,
+    this.optional = false,
+  })  : data = optional
+            ? OptionalStringKnob('data', data ?? '')
+            : StringKnob('data', data ?? ''),
+        super('String${optional ? '?' : ''}');
+
+  factory StringNode.fromJson(Map<String, dynamic> json, bool optional) {
+    return StringNode(
+      data: json['data'],
+      optional: optional,
+    );
+  }
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(data, 'String', optional),
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('value', data.source, 'String', false),
+    ];
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type$,
+      'data': data.value,
+    };
+  }
+}
+
+class BoolNode extends BaseKnob {
+  final Knob data;
+  final bool optional;
+
+  BoolNode({
+    bool? data,
+    this.optional = false,
+  })  : data = optional
+            ? OptionalBoolKnob('data', data ?? false)
+            : BoolKnob('data', data ?? false),
+        super('bool${optional ? '?' : ''}');
+
+  factory BoolNode.fromJson(Map<String, dynamic> json, bool optional) {
+    return BoolNode(
+      data: json['data'],
+      optional: optional,
+    );
+  }
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(data, 'bool', optional),
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('value', data.source, 'bool', false),
+    ];
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type$,
+      'data': data.value,
+    };
+  }
+}
+
+class NumNode extends BaseKnob {
+  final Knob data;
+  final bool optional;
+
+  NumNode({
+    num? data,
+    this.optional = false,
+  })  : data = optional
+            ? OptionalNumKnob('data', data ?? 0)
+            : NumKnob('data', data ?? 0),
+        super('num${optional ? '?' : ''}');
+
+  factory NumNode.fromJson(Map<String, dynamic> json, bool optional) {
+    return NumNode(
+      data: json['data'],
+      optional: optional,
+    );
+  }
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      NodeWidgetInput(data, 'num', optional),
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('value', data.source, 'num', false),
+    ];
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type$,
+      'data': data.value,
+    };
+  }
+}
+
+class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
+  @override
+  Map<String, BaseKnob Function(Map<String, dynamic> json)> nodesMapper = {
+    'String': (json) => StringNode.fromJson(json, false),
+    'String?': (json) => StringNode.fromJson(json, true),
+    'bool': (json) => BoolNode.fromJson(json, false),
+    'bool?': (json) => BoolNode.fromJson(json, true),
+    'num': (json) => NumNode.fromJson(json, false),
+    'num?': (json) => NumNode.fromJson(json, true),
+  };
+
+  @override
+  Map<String, dynamic> nodeToJson(BaseKnob node) {
+    return {
+      ...super.nodeToJson(node),
+      ...node.toJson(),
+    };
   }
 }

@@ -8,7 +8,6 @@ import 'knobs.dart';
 import 'node.dart';
 import 'utils/get_distance.dart';
 import 'widgets/background_painter.dart';
-import 'widgets/node_widget_render.dart';
 import 'package:graphs/graphs.dart' as graphs;
 
 typedef ConnectorInput<Node extends GraphNode> = ({
