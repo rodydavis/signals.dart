@@ -325,8 +325,8 @@ abstract class ListNode<T> extends BaseKnob {
 
   ListNode(
     this.listType,
-    this.items,
-    this.addKnob, {
+    this.items, {
+    this.addKnob,
     this.maxLength,
     this.minLength,
     this.canRemove = true,
@@ -361,7 +361,7 @@ class StringList extends ListNode<String> {
           listSignal([
             for (var i = 0; i < items.length; i++) StringKnob('$i', items[i])
           ]),
-          AddKnob(),
+          addKnob: AddKnob(),
           maxLength: null,
           minLength: null,
           canRemove: true,
