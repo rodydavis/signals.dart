@@ -47,18 +47,15 @@ class Graph<Node extends GraphNode> {
   final _scale = signal(0.0);
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void removeConnector(
-    ConnectorInput input,
-    ConnectorOutput output,
-  ) {
+  void removeConnector(ConnectorInput target) {
     selection.clear();
     batch(() {
       for (final node in nodes) {
         // Loop over inputs only to remove incoming sources
         for (final item in node.inputs.value) {
-          if (input.meta.port.knob == item.knob) {
+          if (target.meta.port.knob == item.knob) {
             // Reset source
-            disconnectKnobFromSource(node, item);
+            disconnectKnobFromSource(node, target.meta.port);
           }
         }
       }

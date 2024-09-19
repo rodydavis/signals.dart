@@ -79,7 +79,7 @@ class _ExampleState extends State<Example> {
                         graph.removeNode(selected.node);
                       }
                       if (selected is ConnectorSelection) {
-                        graph.removeConnector(selected.input, selected.output);
+                        graph.removeConnector(selected.input);
                       }
                     },
               icon: const Icon(Icons.delete),
@@ -311,11 +311,15 @@ class NumNode extends BaseKnob {
   }
 }
 
+class AddKnob extends Knob<Object> {
+  AddKnob() : super('+', Object());
+}
+
 abstract class ListNode<T> extends BaseKnob {
   final int? maxLength, minLength;
   final bool canRemove;
   final ListSignal<Knob<T>> items;
-  final Knob? addKnob;
+  final AddKnob? addKnob;
   final bool optional;
   final String listType;
 
@@ -357,7 +361,7 @@ class StringList extends ListNode<String> {
           listSignal([
             for (var i = 0; i < items.length; i++) StringKnob('$i', items[i])
           ]),
-          StringKnob('+', ''),
+          AddKnob(),
           maxLength: null,
           minLength: null,
           canRemove: true,
@@ -423,12 +427,9 @@ class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
 
   @override
   void disconnectKnobFromSource(BaseKnob node, NodeWidgetInput input) {
-    if (input.knob is ListNode) {
-      final list = input.knob as ListNode;
-      if (list.canRemove) {
-        list.items.remove(input.knob);
-      }
-      return;
+    if (node is ListNode) {
+      if (!node.canRemove) return;
+      node.items.remove(input.knob);
     }
     super.disconnectKnobFromSource(node, input);
   }
