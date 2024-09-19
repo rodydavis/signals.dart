@@ -58,7 +58,7 @@ class Graph<Node extends GraphNode> {
         for (final item in node.inputs.value) {
           if (input.meta.port.knob == item.knob) {
             // Reset source
-            item.knob.source = null;
+            disconnectKnobFromSource(node, item);
           }
         }
       }
@@ -74,7 +74,7 @@ class Graph<Node extends GraphNode> {
         for (final item in child.inputsMetadata.value) {
           for (final out in node.outputsMetadata.value) {
             if (item.port.knob.target.value == out.port.source) {
-              item.port.knob.source = null;
+              disconnectKnobFromSource(child, item.port);
             }
           }
         }
@@ -323,7 +323,7 @@ class Graph<Node extends GraphNode> {
               _toast('Cycle detected');
               return;
             }
-            input.$2.knob.source = output.$2.source;
+            connectKnobToSource(input, output);
             // input.$2.knob.source = prev;
           } catch (err) {
             if (err is StackOverflowError) {
@@ -336,6 +336,20 @@ class Graph<Node extends GraphNode> {
         }
       }
     }
+  }
+
+  void connectKnobToSource(
+    (Node, NodeWidgetInput) input,
+    (Node, NodeWidgetOutput) output,
+  ) {
+    input.$2.knob.source = output.$2.source;
+  }
+
+  void disconnectKnobFromSource(
+    Node node,
+    NodeWidgetInput input,
+  ) {
+    input.knob.source = null;
   }
 
   static var allowedConnections = <({String from, String to})>[

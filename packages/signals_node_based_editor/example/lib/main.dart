@@ -151,6 +151,18 @@ class _ExampleState extends State<Example> {
                   NumNode(data: null, optional: true),
                 ),
               ),
+              PopupMenuItem(
+                child: const Text('List<String>'),
+                onTap: () => graph.nodes.add(
+                  StringList(items: ['Hello', 'World']),
+                ),
+              ),
+              PopupMenuItem(
+                child: const Text('List<String>?'),
+                onTap: () => graph.nodes.add(
+                  StringList(items: [], optional: true),
+                ),
+              ),
             ],
           ),
         ],
@@ -208,7 +220,6 @@ class StringNode extends BaseKnob {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': type$,
       'data': data.value,
     };
   }
@@ -252,7 +263,6 @@ class BoolNode extends BaseKnob {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': type$,
       'data': data.value,
     };
   }
@@ -296,8 +306,74 @@ class NumNode extends BaseKnob {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': type$,
       'data': data.value,
+    };
+  }
+}
+
+abstract class ListNode<T> extends BaseKnob {
+  final int? maxLength, minLength;
+  final bool canRemove;
+  final ListSignal<Knob<T>> items;
+  final Knob? addKnob;
+  final bool optional;
+  final String listType;
+
+  ListNode(
+    this.listType,
+    this.items,
+    this.addKnob, {
+    this.maxLength,
+    this.minLength,
+    this.canRemove = true,
+    this.optional = false,
+  }) : super('List<$listType${optional ? '?' : ''}>');
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      for (var i = 0; i < items.length; i++)
+        NodeWidgetInput(items[i], listType, optional),
+      if (addKnob != null) NodeWidgetInput(addKnob!, listType, optional),
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      NodeWidgetOutput('List', items, type$, false),
+    ];
+  });
+}
+
+class StringList extends ListNode<String> {
+  StringList({
+    List<String> items = const [],
+    super.optional,
+  }) : super(
+          'String',
+          listSignal([
+            for (var i = 0; i < items.length; i++) StringKnob('$i', items[i])
+          ]),
+          StringKnob('+', ''),
+          maxLength: null,
+          minLength: null,
+          canRemove: true,
+        );
+
+  factory StringList.fromJson(Map<String, dynamic> json, bool optional) {
+    return StringList(
+      items: (json['items'] as List).cast<String>(),
+      optional: optional,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'items': items.map((e) => e.value).toList(),
     };
   }
 }
@@ -311,6 +387,8 @@ class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
     'bool?': (json) => BoolNode.fromJson(json, true),
     'num': (json) => NumNode.fromJson(json, false),
     'num?': (json) => NumNode.fromJson(json, true),
+    'List<String>': (json) => StringList.fromJson(json, false),
+    'List<String>?': (json) => StringList.fromJson(json, true),
   };
 
   @override
@@ -319,5 +397,39 @@ class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
       ...super.nodeToJson(node),
       ...node.toJson(),
     };
+  }
+
+  @override
+  void connectKnobToSource(
+    (BaseKnob, NodeWidgetInput) input,
+    (BaseKnob, NodeWidgetOutput) output,
+  ) {
+    if (input.$1 is ListNode) {
+      final list = input.$1 as ListNode;
+      // Add new item to list
+      if (list.addKnob != null && input.$2.knob == list.addKnob!) {
+        final index = list.items.length;
+        batch(() {
+          final Knob<dynamic> knob = StringKnob('$index', '');
+          list.items.add(knob);
+          knob.source = output.$2.source;
+        });
+        return;
+      }
+    }
+    // input.$2.knob.source = output.$2.source;
+    super.connectKnobToSource(input, output);
+  }
+
+  @override
+  void disconnectKnobFromSource(BaseKnob node, NodeWidgetInput input) {
+    if (input.knob is ListNode) {
+      final list = input.knob as ListNode;
+      if (list.canRemove) {
+        list.items.remove(input.knob);
+      }
+      return;
+    }
+    super.disconnectKnobFromSource(node, input);
   }
 }

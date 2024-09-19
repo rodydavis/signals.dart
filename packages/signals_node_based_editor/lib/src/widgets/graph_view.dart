@@ -53,6 +53,7 @@ class _GraphViewState extends State<GraphView> {
                 final colors = Theme.of(context).colorScheme;
                 final fonts = Theme.of(context).textTheme;
                 return SizedBox.fromSize(
+                  // TODO: Bug - Negative offset cannot work with text fields
                   size: widget.graph.maxSize.value.size,
                   child: Stack(
                     clipBehavior: Clip.none,
