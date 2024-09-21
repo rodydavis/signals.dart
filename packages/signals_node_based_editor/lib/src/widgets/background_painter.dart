@@ -11,6 +11,7 @@ class GraphBackgroundPainter extends CustomPainter {
   final Size cellSize;
   final Rect viewport;
   final double dotDimension;
+  final Graph graph;
 
   GraphBackgroundPainter({
     required this.selection,
@@ -21,6 +22,7 @@ class GraphBackgroundPainter extends CustomPainter {
     required this.viewport,
     required this.dotDimension,
     required this.transform,
+    required this.graph,
   });
 
   @override
@@ -51,12 +53,24 @@ class GraphBackgroundPainter extends CustomPainter {
       }
     }
 
+    // Draw viewport
+    // final viewPaint = Paint()
+    //   ..color = Colors.red
+    //   ..style = PaintingStyle.stroke;
+    // canvas.drawRect(graph.viewRect(), viewPaint);
+
     // Draw connectors
     for (final conn in connectors) {
-      final selected = selection.any((e) =>
-          e is ConnectorSelection &&
-          e.input == conn.input &&
-          e.output == conn.output);
+      final selected = selection.any((e) {
+        return e is ConnectorSelection &&
+            e.input == conn.input &&
+            e.output == conn.output;
+      });
+      if (graph.lazyRender &&
+          !graph.nodeVisible(conn.input.node) &&
+          !graph.nodeVisible(conn.output.node)) {
+        continue;
+      }
       final s = conn //
               .input
               .meta

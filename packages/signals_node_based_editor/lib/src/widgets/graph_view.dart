@@ -12,7 +12,7 @@ import 'interactive_viewer.dart';
 import 'foreground_painter.dart';
 import 'graph_delegate.dart';
 
-class GraphView extends StatefulWidget {
+class GraphView extends StatelessWidget {
   const GraphView({
     super.key,
     required this.graph,
@@ -25,61 +25,55 @@ class GraphView extends StatefulWidget {
   final Size gridSize;
 
   @override
-  State<GraphView> createState() => _GraphViewState();
-}
-
-class _GraphViewState extends State<GraphView> {
-  late final focusNode = widget.focusNode ?? FocusNode();
-
-  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      widget.graph.viewport.value = constraints.biggest;
+      graph.viewport.value = constraints.biggest;
       return KeyboardListener(
-        focusNode: focusNode,
-        onKeyEvent: widget.graph.onKeyEvent,
-        child: Watch((context) {
-          return InteractiveViewer.builder(
+        focusNode: graph.keyboardFocusNode,
+        onKeyEvent: graph.onKeyEvent,
+        autofocus: true,
+        child: Watch.builder(
+          builder: (context) => InteractiveViewer.builder(
             transformChild: false,
-            transformationController: widget.graph.controller,
-            minScale: widget.graph.minScale.value,
-            maxScale: widget.graph.maxScale.value,
+            transformationController: graph.controller,
+            minScale: graph.minScale.value,
+            maxScale: graph.maxScale.value,
             boundaryMargin: const EdgeInsets.all(double.infinity),
-            onInteractionStart: widget.graph.onInteractionStart,
-            onInteractionUpdate: widget.graph.onInteractionUpdate,
-            onInteractionEnd: widget.graph.onInteractionEnd,
-            panEnabled: widget.graph.panEnabled.value,
-            scaleEnabled: widget.graph.scaleEnabled.value,
+            onInteractionStart: graph.onInteractionStart,
+            onInteractionUpdate: graph.onInteractionUpdate,
+            onInteractionEnd: graph.onInteractionEnd,
+            panEnabled: graph.panEnabled.value,
+            scaleEnabled: graph.scaleEnabled.value,
             builder: renderView,
-          );
-        }),
+          ),
+        ),
       );
     });
   }
 
   Widget renderView(BuildContext context, Quad quad) {
     final viewport = axisAlignedBoundingBox(quad);
-    final gridSize = widget.gridSize;
     return Watch((context) {
       final colors = Theme.of(context).colorScheme;
       final fonts = Theme.of(context).textTheme;
-      final matrix = widget.graph.transform.value;
+      final matrix = graph.transform.value;
       return SizedBox.fromSize(
-        size: widget.graph.maxSize.value.size,
+        size: graph.maxSize.value.size,
         child: CustomPaint(
           painter: GraphBackgroundPainter(
-            selection: widget.graph.selection.value,
-            connectors: widget.graph.connectors.value,
+            selection: graph.selection.value,
+            connectors: graph.connectors.value,
             colors: colors,
             fonts: fonts,
             cellSize: gridSize,
             viewport: viewport,
             dotDimension: 3,
             transform: matrix,
+            graph: graph,
           ),
           foregroundPainter: GraphForegroundPainter(
             transform: matrix,
-            connection: widget.graph.connection.value,
+            connection: graph.connection.value,
             colors: colors,
             fonts: fonts,
             straightLines: true,
@@ -87,11 +81,11 @@ class _GraphViewState extends State<GraphView> {
           child: CustomMultiChildLayout(
             delegate: GraphDelegate(
               transform: matrix,
-              nodes: widget.graph.nodes,
+              nodes: graph.nodes,
               viewport: viewport,
             ),
             children: [
-              for (final node in widget.graph.nodes)
+              for (final node in graph.nodes)
                 LayoutId(
                   id: node.id,
                   child: () {
@@ -107,7 +101,7 @@ class _GraphViewState extends State<GraphView> {
                           child: renderNode(
                             context,
                             node,
-                            widget.graph,
+                            graph,
                           ),
                         ),
                       ),
@@ -123,8 +117,11 @@ class _GraphViewState extends State<GraphView> {
 
   Widget renderNode(BuildContext context, GraphNode node, Graph graph) {
     return Watch((context) {
+      final visible = graph.nodeVisible(node);
+      if (!visible && graph.lazyRender) return SizedBox.shrink();
       final selected = graph //
           .selection
+          .value
           .any((e) => e is NodeSelection && e.node == node);
       final colors = Theme.of(context).colorScheme;
       return SizedBox.fromSize(
@@ -373,7 +370,7 @@ class _OverlayWidget extends StatefulWidget {
     required this.verticalOffset,
     required this.mediaQuery,
   });
-  final _GraphViewState parentWidget;
+  final GraphView parentWidget;
   final double horizontalOffset;
   final double verticalOffset;
   final MediaQueryData mediaQuery;
@@ -415,7 +412,7 @@ class _OverlayWidgetState extends State<_OverlayWidget> {
   }
 
   OverlayEntry _overlayEntryBuilder(Offset parentPosition, Size parentSize) {
-    final graph = widget.parentWidget.widget.graph;
+    final graph = widget.parentWidget.graph;
     return OverlayEntry(
       maintainState: true,
       builder: (context) {

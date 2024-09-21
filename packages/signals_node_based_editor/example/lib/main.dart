@@ -35,11 +35,25 @@ class Example extends StatefulWidget {
 
 class _ExampleState extends State<Example> {
   final graph = GraphController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    effect(() {
+      final error = graph.errorMessage.value;
+      if (error.isEmpty) return;
+      final scaffold = scaffoldKey.currentState!;
+      final messenger = ScaffoldMessenger.of(scaffold.context);
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(SnackBar(content: Text(error)));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: graph.scaffoldKey,
+      key: scaffoldKey,
       appBar: AppBar(
         leading: PopupMenuButton(
           icon: Watch((context) {
@@ -75,7 +89,7 @@ class _ExampleState extends State<Example> {
               onPressed: selected == null
                   ? null
                   : () {
-                      if (selected is NodeSelection<BaseKnob>) {
+                      if (selected is NodeSelection<BaseNode>) {
                         graph.removeNode(selected.node);
                       }
                       if (selected is ConnectorSelection) {
@@ -174,15 +188,15 @@ class _ExampleState extends State<Example> {
   }
 }
 
-abstract class BaseKnob extends GraphNode {
+abstract class BaseNode extends GraphNode {
   @override
   final String type$;
-  BaseKnob(this.type$);
+  BaseNode(this.type$);
 
   Map<String, dynamic> toJson();
 }
 
-class StringNode extends BaseKnob {
+class StringNode extends BaseNode {
   final Knob data;
   final bool optional;
 
@@ -225,7 +239,7 @@ class StringNode extends BaseKnob {
   }
 }
 
-class BoolNode extends BaseKnob {
+class BoolNode extends BaseNode {
   final Knob data;
   final bool optional;
 
@@ -268,7 +282,7 @@ class BoolNode extends BaseKnob {
   }
 }
 
-class NumNode extends BaseKnob {
+class NumNode extends BaseNode {
   final Knob data;
   final bool optional;
 
@@ -315,7 +329,7 @@ class AddKnob extends Knob<Object> {
   AddKnob() : super('+', Object());
 }
 
-abstract class ListNode<T> extends BaseKnob {
+abstract class ListNode<T> extends BaseNode {
   final int? maxLength, minLength;
   final bool canRemove;
   final ListSignal<Knob<T>> items;
@@ -391,9 +405,27 @@ class StringList extends ListNode<String> {
   }
 }
 
-class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
+abstract class InputNode extends BaseNode {
+  InputNode(super.type$);
+}
+
+abstract class OutputNode extends BaseNode {
+  OutputNode(super.type$);
+}
+
+abstract class GroupNode extends BaseNode {
+  GroupNode(super.type$);
+
+  ReadonlySignal<List<InputNode>> get inputNodes$;
+
+  ReadonlySignal<List<OutputNode>> get outputNodes$;
+
+  ReadonlySignal<List<BaseNode>> get nodes$;
+}
+
+class GraphController extends Graph<BaseNode> with JsonInteropMixin {
   @override
-  Map<String, BaseKnob Function(Map<String, dynamic> json)> nodesMapper = {
+  Map<String, BaseNode Function(Map<String, dynamic> json)> nodesMapper = {
     'String': (json) => StringNode.fromJson(json, false),
     'String?': (json) => StringNode.fromJson(json, true),
     'bool': (json) => BoolNode.fromJson(json, false),
@@ -405,7 +437,7 @@ class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
   };
 
   @override
-  Map<String, dynamic> nodeToJson(BaseKnob node) {
+  Map<String, dynamic> nodeToJson(BaseNode node) {
     return {
       ...super.nodeToJson(node),
       ...node.toJson(),
@@ -414,8 +446,8 @@ class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
 
   @override
   void connectKnobToSource(
-    (BaseKnob, NodeWidgetInput) input,
-    (BaseKnob, NodeWidgetOutput) output,
+    (BaseNode, NodeWidgetInput) input,
+    (BaseNode, NodeWidgetOutput) output,
   ) {
     if (input.$1 is ListNode) {
       final list = input.$1 as ListNode;
@@ -435,7 +467,7 @@ class GraphController extends Graph<BaseKnob> with JsonInteropMixin {
   }
 
   @override
-  void disconnectKnobFromSource(BaseKnob node, NodeWidgetInput input) {
+  void disconnectKnobFromSource(BaseNode node, NodeWidgetInput input) {
     if (node is ListNode) {
       if (!node.canRemove) return;
       node.items.remove(input.knob);
