@@ -9,6 +9,8 @@ scripts:
     exec: dart scripts/examples.dart
   analyze:
     run: melos exec --no-private --ignore="signals_lint" -- dart analyze .
+  get:
+    run: melos exec --depends-on="signals" -- flutter pub get
   test:
     run: melos exec --dir-exists="test" --no-private --ignore="signals_lint" -- flutter test --coverage
   coverage:

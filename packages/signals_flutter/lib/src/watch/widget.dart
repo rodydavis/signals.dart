@@ -178,7 +178,7 @@ class Watch<T extends Widget> extends StatefulWidget {
 }
 
 class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
-  late final result = this.createComputed(() => widget.builder(context));
+  late final result = this.createComputed(() => widget.builder(context), debugLabel: widget.debugLabel);
   bool _init = true;
 
   @override
@@ -197,6 +197,11 @@ class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
     if (target is DevToolsSignalsObserver) {
       target.reassemble();
     }
+    print('hot reload! ${result.version}');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      result.recompute();
+      if (mounted) setState(() {});
+    });
   }
   // coverage:ignore-end
 
@@ -226,5 +231,7 @@ class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
   }
 
   @override
-  Widget build(BuildContext context) => result.value;
+  Widget build(BuildContext context) {
+    return result.value;
+  }
 }

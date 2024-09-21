@@ -8,6 +8,11 @@
 
 # Signals.dart
 
+<a href="https://idx.google.com/new?template=https://github.com/rodydavis/signals.dart">
+  <img height="32" alt="Try in IDX" src="https://cdn.idx.dev/btn/try_dark_32.svg">
+</a>
+
+
 ## Features
 
 - 🪡 **Fine grained reactivity**: Based on [Preact Signals](https://preactjs.com/blog/signal-boosting/) and provides a fine grained reactivity system that will automatically track dependencies and free them when no longer needed

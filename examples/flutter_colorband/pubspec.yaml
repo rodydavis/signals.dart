@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals: ^5.0.0
+  signals: ^5.5.0
   rxdart: ^0.27.7
   flutter_xlider: ^3.5.0
   layout: ^1.0.5

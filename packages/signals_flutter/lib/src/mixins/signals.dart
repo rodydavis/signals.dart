@@ -19,7 +19,7 @@ typedef _SignalMetadata = ({
 /// class MyWidget extends StatefulWidget {
 ///  ...
 /// }
-/// 
+///
 /// class _MyWidget extends State<MyWidget> with SignalsMixin {
 ///   late var _signal = this.createSignal(0);
 ///   late var _computed = this.createComputed(() => _signal() * 2);
@@ -39,6 +39,14 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   EffectCleanup? _cleanup;
   final _effects = <EffectCleanup>[];
 
+  /// Dispose and remove signal
+  void disposeSignal(int id) {
+    final s = _signals.remove(id);
+    if (s == null) return;
+    s.target.dispose();
+    s.listener?.cleanup();
+  }
+
   Future<void> _rebuild() async {
     if (!mounted) return;
 
@@ -52,14 +60,16 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   void _setup() {
-    final cb = effect(() {
-      for (final s in _signals.values.where((e) => e.local != null)) {
-        s.target.value;
-      }
-      _rebuild();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cb = effect(() {
+        for (final s in _signals.values.where((e) => e.local != null)) {
+          s.target.value;
+        }
+        _rebuild();
+      });
+      _cleanup?.call();
+      _cleanup = cb;
     });
-    _cleanup?.call();
-    _cleanup = cb;
   }
 
   void _watch(ReadonlySignal<dynamic> target, bool local) {
@@ -94,6 +104,66 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }) {
     final s = signal<V>(
       val,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
+  /// Create a [ListSignal]<T> and watch for changes
+  ListSignal<V> createListSignal<V>(
+    List<V> list, {
+    String? debugLabel,
+    bool autoDispose = true,
+  }) {
+    final s = ListSignal<V>(
+      list,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
+  /// Create a [SetSignal]<T> and watch for changes
+  SetSignal<V> createSetSignal<V>(
+    Set<V> set, {
+    String? debugLabel,
+    bool autoDispose = true,
+  }) {
+    final s = SetSignal<V>(
+      set,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
+  /// Create a [QueueSignal]<T> and watch for changes
+  QueueSignal<V> createQueueSignal<V>(
+    Queue<V> queue, {
+    String? debugLabel,
+    bool autoDispose = true,
+  }) {
+    final s = QueueSignal<V>(
+      queue,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    );
+    _watch(s, true);
+    return s;
+  }
+
+  /// Create a [MapSignal]<T> and watch for changes
+  MapSignal<K, V> createMapSignal<K, V>(
+    Map<K, V> value, {
+    String? debugLabel,
+    bool autoDispose = true,
+  }) {
+    final s = MapSignal<K, V>(
+      value,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
     );

@@ -155,6 +155,9 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
 
   @override
   Map<K, V> get previousValue => ValueSignalMixin.previousValueException();
+    
+  /// Snapshot of [MapEntries]
+  Map<K, V> toMap() => Map.fromIterables(keys, values);
 }
 
 /// Create an [MapSignal] from [Map]

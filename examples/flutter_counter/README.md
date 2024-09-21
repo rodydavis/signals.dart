@@ -1,4 +1,4 @@
-# example
+# Flutter Counter
 
 ```dart
 import 'package:flutter/material.dart';

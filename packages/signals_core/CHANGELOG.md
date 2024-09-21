@@ -1,3 +1,8 @@
+## 5.5.0
+
+- Fix for hot reload
+- Removing deprecation warning for watch/unwatch
+
 ## 5.4.0
 
 - Adding SignalsMixin to replace SignalsAutoDisposeMixin, bindSignal, bindComputed, etc.

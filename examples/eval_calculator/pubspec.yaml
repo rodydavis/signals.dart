@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals: ^5.0.0
+  signals: ^5.5.0
   analyzer: '>=6.4.1'
   cupertino_icons: ^1.0.8
   material_table_view: ^4.0.2
