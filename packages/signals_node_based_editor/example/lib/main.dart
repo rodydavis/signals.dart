@@ -78,7 +78,7 @@ class _ExampleState extends State<Example> {
                       if (selected is NodeSelection<BaseKnob>) {
                         graph.removeNode(selected.node);
                       }
-                      if (selected is ConnectorSelection) {
+                      if (selected is ConnectorSelection<BaseKnob>) {
                         graph.removeConnector(selected.input);
                       }
                     },

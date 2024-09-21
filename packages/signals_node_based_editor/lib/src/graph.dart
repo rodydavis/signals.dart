@@ -49,7 +49,7 @@ class Graph<Node extends GraphNode> {
   final _scale = signal(0.0);
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void removeConnector(ConnectorInput target) {
+  void removeConnector(ConnectorInput<Node> target) {
     selection.clear();
     batch(() {
       for (final node in nodes) {
@@ -558,9 +558,9 @@ enum NodeSelectionPart {
   connector,
 }
 
-class ConnectorSelection extends Selection {
-  final ConnectorInput input;
-  final ConnectorOutput output;
+class ConnectorSelection<Node extends GraphNode> extends Selection {
+  final ConnectorInput<Node> input;
+  final ConnectorOutput<Node> output;
   ConnectorSelection(this.input, this.output);
 
   @override
