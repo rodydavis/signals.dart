@@ -5,12 +5,14 @@ class GraphForegroundPainter extends CustomPainter {
   final ColorScheme colors;
   final TextTheme fonts;
   final (Offset, Offset)? connection;
+  final Matrix4 transform;
 
-  GraphForegroundPainter(
-    this.connection, {
+  GraphForegroundPainter({
     required this.colors,
     required this.fonts,
     this.straightLines = false,
+    required this.transform,
+    required this.connection,
   });
 
   @override
@@ -20,7 +22,9 @@ class GraphForegroundPainter extends CustomPainter {
         ..color = colors.primary
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
-      canvas.drawLine(connection!.$1, connection!.$2, paint);
+      final from = MatrixUtils.transformPoint(transform, connection!.$1);
+      final to = MatrixUtils.transformPoint(transform, connection!.$2);
+      canvas.drawLine(from, to, paint);
     }
   }
 

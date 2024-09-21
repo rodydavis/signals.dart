@@ -323,9 +323,17 @@ abstract class ListNode<T> extends BaseKnob {
   final bool optional;
   final String listType;
 
+  late Computed<String> listType$ = computed(() {
+    if (items.isNotEmpty) {
+      final types = items.map((e) => e.label).toSet();
+      if (types.length == 1) return types.first;
+    }
+    return listType;
+  });
+
   ListNode(
-    this.listType,
     this.items, {
+    this.listType = 'Object',
     this.addKnob,
     this.maxLength,
     this.minLength,
@@ -338,8 +346,8 @@ abstract class ListNode<T> extends BaseKnob {
     return [
       ...super.inputs.value,
       for (var i = 0; i < items.length; i++)
-        NodeWidgetInput(items[i], listType, optional),
-      if (addKnob != null) NodeWidgetInput(addKnob!, listType, optional),
+        NodeWidgetInput(items[i], listType$.value, optional),
+      if (addKnob != null) NodeWidgetInput(addKnob!, listType$.value, optional),
     ];
   });
 
@@ -347,7 +355,7 @@ abstract class ListNode<T> extends BaseKnob {
   late Computed<List<NodeWidgetOutput>> outputs = computed(() {
     return [
       ...super.outputs.value,
-      NodeWidgetOutput('List', items, type$, false),
+      NodeWidgetOutput('List', items, listType$.value, false),
     ];
   });
 }
@@ -357,10 +365,10 @@ class StringList extends ListNode<String> {
     List<String> items = const [],
     super.optional,
   }) : super(
-          'String',
           listSignal([
             for (var i = 0; i < items.length; i++) StringKnob('$i', items[i])
           ]),
+          listType: 'String',
           addKnob: AddKnob(),
           maxLength: null,
           minLength: null,
@@ -377,6 +385,7 @@ class StringList extends ListNode<String> {
   @override
   Map<String, dynamic> toJson() {
     return {
+      'listType': listType,
       'items': items.map((e) => e.value).toList(),
     };
   }

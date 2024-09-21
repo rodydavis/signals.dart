@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    hide InteractiveViewer, TransformationController;
 import 'package:signals/signals_flutter.dart';
+import 'package:vector_math/vector_math_64.dart' show Quad;
 
 import '../graph.dart';
 import '../node.dart';
 import '../utils/axis_aligned_bounding_box.dart';
 import 'actions.dart';
 import 'background_painter.dart';
+import 'interactive_viewer.dart';
 import 'foreground_painter.dart';
 import 'graph_delegate.dart';
-import 'grid_background.dart';
 
 class GraphView extends StatefulWidget {
   const GraphView({
@@ -37,8 +39,8 @@ class _GraphViewState extends State<GraphView> {
         focusNode: focusNode,
         onKeyEvent: widget.graph.onKeyEvent,
         child: Watch((context) {
-          final gridSize = widget.gridSize;
           return InteractiveViewer.builder(
+            transformChild: false,
             transformationController: widget.graph.controller,
             minScale: widget.graph.minScale.value,
             maxScale: widget.graph.maxScale.value,
@@ -48,70 +50,73 @@ class _GraphViewState extends State<GraphView> {
             onInteractionEnd: widget.graph.onInteractionEnd,
             panEnabled: widget.graph.panEnabled.value,
             scaleEnabled: widget.graph.scaleEnabled.value,
-            builder: (context, quad) {
-              return Watch((context) {
-                final colors = Theme.of(context).colorScheme;
-                final fonts = Theme.of(context).textTheme;
-                return SizedBox.fromSize(
-                  // TODO: Bug - Negative offset cannot work with text fields
-                  size: widget.graph.maxSize.value.size,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned.fill(
-                        child: GridBackgroundBuilder(
-                          cellWidth: gridSize.width,
-                          cellHeight: gridSize.height,
-                          viewport: axisAlignedBoundingBox(quad),
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: CustomPaint(
-                          painter: GraphBackgroundPainter(
-                            widget.graph.selection.value,
-                            widget.graph.connectors.value,
-                            () {
-                              final mouse = widget.graph.mouse.value;
-                              if (mouse == null) return null;
-                              return mouse;
-                            }(),
-                            colors: colors,
-                            fonts: fonts,
-                          ),
-                          foregroundPainter: GraphForegroundPainter(
-                            widget.graph.connection.value,
-                            colors: colors,
-                            fonts: fonts,
-                            straightLines: true,
-                          ),
-                          child: CustomMultiChildLayout(
-                            delegate: GraphDelegate(widget.graph.nodes),
-                            children: [
-                              for (final node in widget.graph.nodes)
-                                LayoutId(
-                                  id: node.id,
-                                  child: () {
-                                    node.rect$.value;
-                                    return Watch((context) {
-                                      return renderNode(
-                                        context,
-                                        node,
-                                        widget.graph,
-                                      );
-                                    });
-                                  }(),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              });
-            },
+            builder: renderView,
           );
         }),
+      );
+    });
+  }
+
+  Widget renderView(BuildContext context, Quad quad) {
+    final viewport = axisAlignedBoundingBox(quad);
+    final gridSize = widget.gridSize;
+    return Watch((context) {
+      final colors = Theme.of(context).colorScheme;
+      final fonts = Theme.of(context).textTheme;
+      final matrix = widget.graph.transform.value;
+      return SizedBox.fromSize(
+        size: widget.graph.maxSize.value.size,
+        child: CustomPaint(
+          painter: GraphBackgroundPainter(
+            selection: widget.graph.selection.value,
+            connectors: widget.graph.connectors.value,
+            colors: colors,
+            fonts: fonts,
+            cellSize: gridSize,
+            viewport: viewport,
+            dotDimension: 3,
+            transform: matrix,
+          ),
+          foregroundPainter: GraphForegroundPainter(
+            transform: matrix,
+            connection: widget.graph.connection.value,
+            colors: colors,
+            fonts: fonts,
+            straightLines: true,
+          ),
+          child: CustomMultiChildLayout(
+            delegate: GraphDelegate(
+              transform: matrix,
+              nodes: widget.graph.nodes,
+              viewport: viewport,
+            ),
+            children: [
+              for (final node in widget.graph.nodes)
+                LayoutId(
+                  id: node.id,
+                  child: () {
+                    node.rect$.value;
+                    var nodeRect =
+                        node.offset$.value & node.preferredSize$.value;
+                    nodeRect = MatrixUtils.transformRect(matrix, nodeRect);
+                    return Watch(
+                      (context) => SizedBox.fromSize(
+                        size: nodeRect.size,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: renderNode(
+                            context,
+                            node,
+                            widget.graph,
+                          ),
+                        ),
+                      ),
+                    );
+                  }(),
+                ),
+            ],
+          ),
+        ),
       );
     });
   }
@@ -127,6 +132,8 @@ class _GraphViewState extends State<GraphView> {
         child: Container(
           decoration: BoxDecoration(
             color: colors.surface,
+            borderRadius:
+                BorderRadius.all(const Radius.circular(GraphNode.borderRadius)),
           ),
           foregroundDecoration: BoxDecoration(
             border: Border.all(
@@ -355,6 +362,160 @@ class _GraphViewState extends State<GraphView> {
         width: double.infinity,
         height: double.infinity,
       ),
+    );
+  }
+}
+
+class _OverlayWidget extends StatefulWidget {
+  const _OverlayWidget({
+    required this.parentWidget,
+    required this.horizontalOffset,
+    required this.verticalOffset,
+    required this.mediaQuery,
+  });
+  final _GraphViewState parentWidget;
+  final double horizontalOffset;
+  final double verticalOffset;
+  final MediaQueryData mediaQuery;
+
+  @override
+  State<_OverlayWidget> createState() => _OverlayWidgetState();
+}
+
+class _OverlayWidgetState extends State<_OverlayWidget> {
+  OverlayEntry? overlay;
+  final offset = signal(Offset.zero);
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    removeOverlay();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Future(addOverlay);
+    return Container();
+  }
+
+  void addOverlay() {
+    removeOverlay();
+    RenderBox? renderBox = context.findAncestorRenderObjectOfType<RenderBox>();
+
+    var parentSize = renderBox!.size;
+    var parentPosition = renderBox.localToGlobal(Offset.zero);
+
+    overlay = _overlayEntryBuilder(parentPosition, parentSize);
+    Overlay.of(context).insert(overlay!);
+  }
+
+  void removeOverlay() {
+    overlay?.remove();
+  }
+
+  OverlayEntry _overlayEntryBuilder(Offset parentPosition, Size parentSize) {
+    final graph = widget.parentWidget.widget.graph;
+    return OverlayEntry(
+      maintainState: true,
+      builder: (context) {
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // Positioned(
+            //   left: parentPosition.dx +
+            //       parentSize.width -
+            //       clickableArea -
+            //       widget.horizontalOffset,
+            //   top: parentPosition.dy +
+            //       parentSize.height -
+            //       clickableArea -
+            //       widget.verticalOffset,
+            //   child: Material(
+            //     color: Colors.transparent,
+            //     child: InkWell(
+            //       onTap: () {
+            //         widget.parentWidget.incrementCounter();
+            //       },
+            //       child: Container(
+            //         color: Colors.blue.withAlpha(200),
+            //         width: clickableArea,
+            //         height: clickableArea,
+            //         child: Text(
+            //           'InkWell (Overlay)',
+            //           style: Theme.of(context).textTheme.bodyLarge,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Positioned(
+            //   left: offset.watch(context).dx +
+            //       parentPosition.dx +
+            //       parentSize.width -
+            //       clickableArea -
+            //       widget.horizontalOffset,
+            //   top: offset.watch(context).dy +
+            //       parentPosition.dy +
+            //       widget.verticalOffset,
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       widget.parentWidget.incrementCounter();
+            //     },
+            //     onPanUpdate: (details) {
+            //       offset.value += details.delta;
+            //     },
+            //     child: Container(
+            //       color: Colors.purple.withAlpha(200),
+            //       width: clickableArea,
+            //       height: clickableArea,
+            //       child: Text(
+            //         'Gesture (Overlay)',
+            //         style: Theme.of(context).textTheme.bodyLarge,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            for (final node in graph.nodes)
+              () {
+                return Watch((context) {
+                  node.rect$.value;
+                  var nodeRect = node.offset$.value & node.preferredSize$.value;
+                  return Positioned(
+                    left: nodeRect.topLeft.dx + parentPosition.dx,
+                    top: nodeRect.topLeft.dy + parentPosition.dy,
+                    width: nodeRect.width,
+                    height: nodeRect.height,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: widget.parentWidget.renderNode(
+                        context,
+                        node,
+                        graph,
+                      ),
+                    ),
+                  );
+                });
+                //  for (final node in widget.graph.nodes)
+                //     () {
+                //       node.rect$.value;
+                //       var nodeRect =
+                //           node.offset$.value & node.preferredSize$.value;
+                //       return Positioned.fromRect(
+                //         rect: nodeRect,
+                //         child: Watch((context) {
+                //           return renderNode(
+                //             context,
+                //             node,
+                //             widget.graph,
+                //           );
+                //         }),
+                //       );
+                //     }(),
+              }(),
+          ],
+        );
+      },
     );
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
 import 'node.dart';
-import 'widgets/number_field.dart';
-import 'widgets/string_field.dart';
+import 'widgets/fields/number_field.dart';
+import 'widgets/fields/string_field.dart';
 
 class Knob<T> {
   final String label;

@@ -1,30 +1,32 @@
-import 'dart:ui';
+import 'dart:ui' show Rect;
 
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' show Quad, Vector3;
 
+// Returns the axis aligned bounding box for the given Quad, which might not
+// be axis aligned.
 Rect axisAlignedBoundingBox(Quad quad) {
-  double xMin = quad.point0.x;
-  double xMax = quad.point0.x;
-  double yMin = quad.point0.y;
-  double yMax = quad.point0.y;
-
+  double? xMin;
+  double? xMax;
+  double? yMin;
+  double? yMax;
   for (final Vector3 point in <Vector3>[
+    quad.point0,
     quad.point1,
     quad.point2,
-    quad.point3,
+    quad.point3
   ]) {
-    if (point.x < xMin) {
+    if (xMin == null || point.x < xMin) {
       xMin = point.x;
-    } else if (point.x > xMax) {
+    }
+    if (xMax == null || point.x > xMax) {
       xMax = point.x;
     }
-
-    if (point.y < yMin) {
+    if (yMin == null || point.y < yMin) {
       yMin = point.y;
-    } else if (point.y > yMax) {
+    }
+    if (yMax == null || point.y > yMax) {
       yMax = point.y;
     }
   }
-
-  return Rect.fromLTRB(xMin, yMin, xMax, yMax);
+  return Rect.fromLTRB(xMin!, yMin!, xMax!, yMax!);
 }

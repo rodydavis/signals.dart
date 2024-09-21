@@ -5,21 +5,53 @@ import '../../src/graph.dart';
 class GraphBackgroundPainter extends CustomPainter {
   final Set<Selection> selection;
   final List<ConnectorPair> connectors;
-  final Offset? mouse;
-
+  final Matrix4 transform;
   final ColorScheme colors;
   final TextTheme fonts;
+  final Size cellSize;
+  final Rect viewport;
+  final double dotDimension;
 
-  GraphBackgroundPainter(
-    this.selection,
-    this.connectors,
-    this.mouse, {
+  GraphBackgroundPainter({
+    required this.selection,
+    required this.connectors,
     required this.colors,
     required this.fonts,
+    required this.cellSize,
+    required this.viewport,
+    required this.dotDimension,
+    required this.transform,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Draw grid background
+    final Size(width: cW, height: cH) = cellSize;
+    final int firstRow = (viewport.top / cH).floor();
+    final int lastRow = (viewport.bottom / cH).ceil();
+    final int firstCol = (viewport.left / cW).floor();
+    final int lastCol = (viewport.right / cW).ceil();
+    final bgPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = colors.surface;
+    final fgPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = colors.outlineVariant.withOpacity(0.6);
+    final cellRadius = Radius.circular(dotDimension);
+
+    canvas.drawRect(viewport, bgPaint);
+
+    for (int row = firstRow; row < lastRow; row++) {
+      for (int col = firstCol; col < lastCol; col++) {
+        final offset = Offset(col * cW, row * cH);
+        var rect = offset & Size.square(dotDimension);
+        rect = MatrixUtils.transformRect(transform, rect);
+        final rrect = RRect.fromRectAndRadius(rect, cellRadius);
+        canvas.drawRRect(rrect, fgPaint);
+      }
+    }
+
+    // Draw connectors
     for (final conn in connectors) {
       final selected = selection.any((e) =>
           e is ConnectorSelection &&
@@ -37,7 +69,10 @@ class GraphBackgroundPainter extends CustomPainter {
               .connector
               .center +
           conn.output.node.offset$.value;
-      final path = getPath(s, e);
+      final path = getPath(
+        MatrixUtils.transformPoint(transform, s),
+        MatrixUtils.transformPoint(transform, e),
+      );
       final paint = Paint()
         ..color = selected ? colors.primary : colors.outlineVariant
         ..style = PaintingStyle.stroke

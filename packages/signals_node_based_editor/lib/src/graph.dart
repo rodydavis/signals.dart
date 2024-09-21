@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TransformationController;
 import 'package:flutter/services.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -9,6 +9,8 @@ import 'node.dart';
 import 'utils/get_distance.dart';
 import 'widgets/background_painter.dart';
 import 'package:graphs/graphs.dart' as graphs;
+
+import 'widgets/interactive_viewer.dart';
 
 typedef ConnectorInput<Node extends GraphNode> = ({
   Node node,
