@@ -88,8 +88,7 @@ mixin MutableGraphMixin<Node extends GraphNode> on BaseGraph<Node> {
   void onInteractionStart(ScaleStartDetails event) {
     super.onInteractionStart(event);
     keyboardFocusNode.requestFocus();
-    // debugPrint(event.toString());
-    // mouse.value = event.focalPoint;
+    locked.value = true;
     final (local, list) = pointDetails(event.localFocalPoint);
     batch(() {
       if (list.isEmpty || event.pointerCount == 2) {
@@ -147,6 +146,7 @@ mixin MutableGraphMixin<Node extends GraphNode> on BaseGraph<Node> {
   void onInteractionEnd(ScaleEndDetails event) {
     super.onInteractionEnd(event);
     keyboardFocusNode.requestFocus();
+    locked.value = false;
     // debugPrint(event.toString());
     // mouse.value = null;
     if (fromPort.value != null) {

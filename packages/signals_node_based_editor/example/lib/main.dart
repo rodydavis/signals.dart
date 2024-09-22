@@ -5,6 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:signals_node_based_editor/signals_node_based_editor.dart';
 import 'package:signals/signals_flutter.dart';
 
+import 'controller.dart';
+import 'nodes/base.dart';
+import 'nodes/bool.dart';
+import 'nodes/group.dart';
+import 'nodes/list.dart';
+import 'nodes/num.dart';
+import 'nodes/string.dart';
+
 void main() {
   runApp(const App());
 }
@@ -40,6 +48,7 @@ class _ExampleState extends State<Example> {
   @override
   void initState() {
     super.initState();
+    graph.init();
     effect(() {
       final error = graph.errorMessage.value;
       if (error.isEmpty) return;
@@ -48,6 +57,12 @@ class _ExampleState extends State<Example> {
       messenger.hideCurrentSnackBar();
       messenger.showSnackBar(SnackBar(content: Text(error)));
     });
+  }
+
+  @override
+  void dispose() {
+    graph.dispose();
+    super.dispose();
   }
 
   @override
@@ -83,6 +98,18 @@ class _ExampleState extends State<Example> {
         ),
         title: const Text('Node Based Editor'),
         actions: [
+          Watch((context) {
+            return IconButton(
+              onPressed: !graph.canUndo() ? null : graph.undo,
+              icon: const Icon(Icons.undo),
+            );
+          }),
+          Watch((context) {
+            return IconButton(
+              onPressed: !graph.canRedo() ? null : graph.redo,
+              icon: const Icon(Icons.redo),
+            );
+          }),
           Watch((context) {
             final selected = graph.selection.value.firstOrNull;
             return IconButton(
@@ -205,413 +232,5 @@ class _ExampleState extends State<Example> {
         graph: graph,
       ),
     );
-  }
-}
-
-abstract class BaseNode extends GraphNode {
-  @override
-  final String type$;
-  BaseNode(this.type$);
-
-  Map<String, dynamic> toJson();
-}
-
-class StringNode extends BaseNode {
-  final Knob data;
-  final bool optional;
-
-  StringNode({
-    String? data,
-    this.optional = false,
-  })  : data = optional
-            ? OptionalStringKnob('data', data ?? '')
-            : StringKnob('data', data ?? ''),
-        super('String${optional ? '?' : ''}');
-
-  factory StringNode.fromJson(Map<String, dynamic> json, bool optional) {
-    return StringNode(
-      data: json['data'],
-      optional: optional,
-    );
-  }
-
-  @override
-  late Computed<List<NodeWidgetInput>> inputs = computed(() {
-    return [
-      ...super.inputs.value,
-      NodeWidgetInput(data, 'String', optional),
-    ];
-  });
-
-  @override
-  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
-    return [
-      ...super.outputs.value,
-      NodeWidgetOutput('value', data.source, 'String', false),
-    ];
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'data': data.value,
-    };
-  }
-}
-
-class BoolNode extends BaseNode {
-  final Knob data;
-  final bool optional;
-
-  BoolNode({
-    bool? data,
-    this.optional = false,
-  })  : data = optional
-            ? OptionalBoolKnob('data', data ?? false)
-            : BoolKnob('data', data ?? false),
-        super('bool${optional ? '?' : ''}');
-
-  factory BoolNode.fromJson(Map<String, dynamic> json, bool optional) {
-    return BoolNode(
-      data: json['data'],
-      optional: optional,
-    );
-  }
-
-  @override
-  late Computed<List<NodeWidgetInput>> inputs = computed(() {
-    return [
-      ...super.inputs.value,
-      NodeWidgetInput(data, 'bool', optional),
-    ];
-  });
-
-  @override
-  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
-    return [
-      ...super.outputs.value,
-      NodeWidgetOutput('value', data.source, 'bool', false),
-    ];
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'data': data.value,
-    };
-  }
-}
-
-class NumNode extends BaseNode {
-  final Knob data;
-  final bool optional;
-
-  NumNode({
-    num? data,
-    this.optional = false,
-  })  : data = optional
-            ? OptionalNumKnob('data', data ?? 0)
-            : NumKnob('data', data ?? 0),
-        super('num${optional ? '?' : ''}');
-
-  factory NumNode.fromJson(Map<String, dynamic> json, bool optional) {
-    return NumNode(
-      data: json['data'],
-      optional: optional,
-    );
-  }
-
-  @override
-  late Computed<List<NodeWidgetInput>> inputs = computed(() {
-    return [
-      ...super.inputs.value,
-      NodeWidgetInput(data, 'num', optional),
-    ];
-  });
-
-  @override
-  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
-    return [
-      ...super.outputs.value,
-      NodeWidgetOutput('value', data.source, 'num', false),
-    ];
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'data': data.value,
-    };
-  }
-}
-
-class AddKnob extends Knob<Object> {
-  AddKnob() : super('+', Object());
-}
-
-abstract class ListNode<T> extends BaseNode {
-  final int? maxLength, minLength;
-  final bool canRemove;
-  final ListSignal<Knob<T>> items;
-  final AddKnob? addKnob;
-  final bool optional;
-  final String listType;
-
-  late Computed<String> listType$ = computed(() {
-    if (items.isNotEmpty) {
-      final types = items.map((e) => e.label).toSet();
-      if (types.length == 1) return types.first;
-    }
-    return listType;
-  });
-
-  ListNode(
-    this.items, {
-    this.listType = 'Object',
-    this.addKnob,
-    this.maxLength,
-    this.minLength,
-    this.canRemove = true,
-    this.optional = false,
-  }) : super('List<$listType${optional ? '?' : ''}>');
-
-  @override
-  late Computed<List<NodeWidgetInput>> inputs = computed(() {
-    return [
-      ...super.inputs.value,
-      for (var i = 0; i < items.length; i++)
-        NodeWidgetInput(items[i], listType$.value, optional),
-      if (addKnob != null) NodeWidgetInput(addKnob!, listType$.value, optional),
-    ];
-  });
-
-  @override
-  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
-    return [
-      ...super.outputs.value,
-      NodeWidgetOutput('List', items, listType$.value, false),
-    ];
-  });
-}
-
-class StringList extends ListNode<String> {
-  StringList({
-    List<String> items = const [],
-    super.optional,
-  }) : super(
-          listSignal([
-            for (var i = 0; i < items.length; i++) StringKnob('$i', items[i])
-          ]),
-          listType: 'String',
-          addKnob: AddKnob(),
-          maxLength: null,
-          minLength: null,
-          canRemove: true,
-        );
-
-  factory StringList.fromJson(Map<String, dynamic> json, bool optional) {
-    return StringList(
-      items: (json['items'] as List).cast<String>(),
-      optional: optional,
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'listType': listType,
-      'items': items.map((e) => e.value).toList(),
-    };
-  }
-}
-
-class GroupNode extends BaseNode {
-  final ReadonlySignal<List<BaseNode>> nodes$;
-
-  GroupNode(List<BaseNode> list)
-      : nodes$ = listSignal<BaseNode>(list),
-        super('Group');
-
-  factory GroupNode.fromJson(
-    Map<String, dynamic> json,
-    BaseNode Function(Map<String, dynamic> data) parse,
-  ) {
-    final nodes = json['nodes'] as List;
-    return GroupNode(
-      nodes.map((e) => parse(e)).toList(),
-    );
-  }
-
-  Iterable<BaseNode> getNodesWithoutInputs() sync* {
-    for (final item in nodes$()) {
-      final valid = item.inputsMetadata.value
-          .every((input) => !input.port.knob.readonly.value);
-      if (valid) yield item;
-    }
-  }
-
-  Iterable<BaseNode> getNodesWithoutOutputs() sync* {
-    for (final item in nodes$()) {
-      for (final output in item.outputsMetadata.value) {
-        final inputs = getInputsForPort(item, output.port).toList();
-        if (inputs.isEmpty) {
-          final valid = item.inputsMetadata.value
-              .any((input) => input.port.knob.readonly.value);
-          if (valid) yield item;
-        }
-      }
-    }
-  }
-
-  Iterable<(BaseNode, NodeWidgetInput)> getInputsForPort(
-    BaseNode node,
-    NodeWidgetOutput output,
-  ) sync* {
-    for (final item in nodes$()) {
-      if (item == node) continue;
-      for (final input in item.inputsMetadata.value) {
-        if (input.port.knob.target.value == output.source) {
-          yield (item, input.port);
-        }
-      }
-    }
-  }
-
-  @override
-  late Computed<List<NodeWidgetInput>> inputs = computed(() {
-    return [
-      ...super.inputs.value,
-      for (final item in getNodesWithoutInputs()) ...item.inputs.value,
-    ];
-  });
-
-  @override
-  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
-    return [
-      ...super.outputs.value,
-      for (final item in getNodesWithoutOutputs()) ...item.outputs.value,
-    ];
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'nodes': nodes$.value.map((e) => e.toJson()).toList(),
-    };
-  }
-}
-
-class GraphController extends Graph<BaseNode> with JsonInteropMixin {
-  @override
-  late Map<String, BaseNode Function(Map<String, dynamic> json)> nodesMapper = {
-    'String': (json) => StringNode.fromJson(json, false),
-    'String?': (json) => StringNode.fromJson(json, true),
-    'bool': (json) => BoolNode.fromJson(json, false),
-    'bool?': (json) => BoolNode.fromJson(json, true),
-    'num': (json) => NumNode.fromJson(json, false),
-    'num?': (json) => NumNode.fromJson(json, true),
-    'List<String>': (json) => StringList.fromJson(json, false),
-    'List<String>?': (json) => StringList.fromJson(json, true),
-    'Group': (json) => GroupNode.fromJson(json, nodeFromJson),
-  };
-
-  @override
-  Map<String, dynamic> nodeToJson(BaseNode node) {
-    return {
-      ...super.nodeToJson(node),
-      ...node.toJson(),
-    };
-  }
-
-  @override
-  void connectKnobToSource(
-    (BaseNode, NodeWidgetInput) input,
-    (BaseNode, NodeWidgetOutput) output,
-  ) {
-    if (input.$1 is ListNode) {
-      final list = input.$1 as ListNode;
-      // Add new item to list
-      if (list.addKnob != null && input.$2.knob == list.addKnob!) {
-        final index = list.items.length;
-        batch(() {
-          final Knob<dynamic> knob = StringKnob('$index', '');
-          list.items.add(knob);
-          knob.source = output.$2.source;
-        });
-        return;
-      }
-    }
-    // input.$2.knob.source = output.$2.source;
-    super.connectKnobToSource(input, output);
-  }
-
-  @override
-  void disconnectKnobFromSource(BaseNode node, NodeWidgetInput input) {
-    if (node is ListNode) {
-      if (!node.canRemove) return;
-      node.items.remove(input.knob);
-    }
-    super.disconnectKnobFromSource(node, input);
-  }
-
-  late Computed<bool> canGroup = computed(() {
-    var selection = this
-        .selection
-        .value
-        .whereType<NodeSelection<BaseNode>>()
-        .map((e) => e.node)
-        .toList();
-    if (selection.length < 2) return false;
-    final inputs = getNodesWithoutInputs(selection);
-    if (inputs.isEmpty) return false;
-    final outputs = getNodesWithoutOutputs(selection);
-    if (outputs.isEmpty) return false;
-    // final difference = inputs.toSet().union(outputs.toSet());
-    // selection.removeWhere((e) => difference.contains(e));
-    // if (selection.isEmpty) return false;
-    return true;
-  });
-
-  void groupNodes() {
-    if (!canGroup()) return;
-    // Edges?
-    final selection = this
-        .selection
-        .value
-        .whereType<NodeSelection<BaseNode>>()
-        .map((e) => e.node)
-        .toList();
-
-    // Translate offsets to relative
-    batch(() {
-      final root = selection.first;
-      final offset = root.offset$.value;
-      for (final node in selection) {
-        node.offset$.value -= offset;
-      }
-      final group = GroupNode(selection);
-      group.offset$.value = offset;
-      final list = nodes.value.toList();
-      list.removeWhere((e) => selection.contains(e));
-      list.add(group);
-      nodes.value = list;
-      connectors.recompute();
-    });
-  }
-
-  void unGroup(GroupNode group) {
-    final selection = group.nodes$.value.toList();
-
-    batch(() {
-      final list = nodes.value.toList();
-      list.remove(group);
-      final offset = group.offset$.value;
-      for (final node in selection) {
-        node.offset$.value += offset;
-      }
-      list.addAll(selection);
-      nodes.value = list;
-      connectors.recompute();
-    });
   }
 }

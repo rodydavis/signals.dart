@@ -9,3 +9,4 @@ export 'src/widgets/graph_delegate.dart';
 export 'src/widgets/foreground_painter.dart';
 export 'src/widgets/grid_background.dart';
 export 'src/mixins/json_interop.dart';
+export 'src/mixins/undo_redo.dart';

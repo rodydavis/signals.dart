@@ -47,6 +47,10 @@ abstract class BaseGraph<Node extends GraphNode> {
         minScale = signal<double>(minScale),
         maxScale = signal<double>(maxScale);
 
+  void init() {}
+
+  void dispose() {}
+
   final FocusNode keyboardFocusNode;
   final ListSignal<Node> nodes;
   final TransformationController controller;
@@ -61,6 +65,7 @@ abstract class BaseGraph<Node extends GraphNode> {
   final metaPressed = signal(false);
   final spacePressed = signal(false);
   final shiftPressed = signal(false);
+  final locked = signal(false);
 
   void onKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent) {
