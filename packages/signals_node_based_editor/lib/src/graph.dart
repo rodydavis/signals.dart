@@ -406,9 +406,9 @@ enum NodeSelectionPart {
   connector,
 }
 
-class ConnectorSelection extends Selection {
-  final ConnectorInput input;
-  final ConnectorOutput output;
+class ConnectorSelection<Node extends GraphNode> extends Selection {
+  final ConnectorInput<Node> input;
+  final ConnectorOutput<Node> output;
   ConnectorSelection(this.input, this.output);
 
   @override
