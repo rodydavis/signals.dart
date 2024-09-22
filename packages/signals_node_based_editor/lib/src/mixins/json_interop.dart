@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +8,8 @@ import '../graph.dart';
 import '../node.dart';
 
 mixin JsonInteropMixin<Node extends GraphNode> on Graph<Node> {
+  JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+
   Map<String, dynamic> nodeToJson(Node node) {
     return {
       '@id': node.id,
