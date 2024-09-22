@@ -295,6 +295,7 @@ class EnumKnob<T extends Enum> extends Knob<T> {
               ),
           ],
           onChanged: (val) => value = val!,
+          isExpanded: true,
         ));
   }
 }
@@ -315,6 +316,7 @@ class OptionalEnumKnob<T extends Enum> extends OptionalKnob<T> {
               ),
           ],
           onChanged: (val) => value = val,
+          isExpanded: true,
         ));
   }
 }

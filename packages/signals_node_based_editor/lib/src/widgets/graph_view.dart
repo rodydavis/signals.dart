@@ -130,7 +130,7 @@ class GraphView extends StatelessWidget {
           decoration: BoxDecoration(
             color: colors.surface,
             borderRadius:
-                BorderRadius.all(const Radius.circular(GraphNode.borderRadius)),
+                BorderRadius.all(Radius.circular(GraphNode.borderRadius)),
           ),
           foregroundDecoration: BoxDecoration(
             border: Border.all(
@@ -146,13 +146,13 @@ class GraphView extends StatelessWidget {
                   rect: node.headerRect,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(GraphNode.borderRadius),
-                      topRight: const Radius.circular(GraphNode.borderRadius),
+                      topLeft: Radius.circular(GraphNode.borderRadius),
+                      topRight: Radius.circular(GraphNode.borderRadius),
                       bottomLeft: node.collapsed$.value
-                          ? const Radius.circular(GraphNode.borderRadius)
+                          ? Radius.circular(GraphNode.borderRadius)
                           : Radius.zero,
                       bottomRight: node.collapsed$.value
-                          ? const Radius.circular(GraphNode.borderRadius)
+                          ? Radius.circular(GraphNode.borderRadius)
                           : Radius.zero,
                     ),
                     child: Container(
@@ -233,7 +233,7 @@ class GraphView extends StatelessWidget {
                     Positioned.fromRect(
                       rect: item.control,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           vertical: GraphNode.portPadding,
                           horizontal: 10,
                         ),
@@ -265,7 +265,7 @@ class GraphView extends StatelessWidget {
                     Positioned.fromRect(
                       rect: item.control,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           vertical: GraphNode.portPadding,
                           horizontal: 10,
                         ),

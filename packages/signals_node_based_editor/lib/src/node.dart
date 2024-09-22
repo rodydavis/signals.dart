@@ -48,24 +48,24 @@ abstract class GraphNode {
     return const SizedBox.shrink();
   }
 
-  static const headerHeight = 30.0;
-  static const portHeight = 40.0;
-  static const portWidth = 8.0;
-  static const nodeWidth = 250.0;
-  static const portPadding = 4.0;
-  static const previewSizeFallback = Size(nodeWidth, 100);
-  static const borderRadius = 12.0;
+  static var headerHeight = 30.0;
+  static var portHeight = 40.0;
+  static var portWidth = 8.0;
+  static var nodeWidth = 250.0;
+  static var portPadding = 4.0;
+  static var previewSizeFallback = Size(nodeWidth, 100);
+  static var borderRadius = 12.0;
 
   final Computed<List<NodeWidgetInput>> inputs = computed(() => []);
 
   final Computed<List<NodeWidgetOutput>> outputs = computed(() => []);
 
   late Computed<Size> previewSize$ = computed(() {
-    return const Size(nodeWidth, 0);
+    return Size(nodeWidth, 0);
   });
 
   late Computed<Size> preferredSize$ = computed(() {
-    var size = const Size(nodeWidth, headerHeight);
+    var size = Size(nodeWidth, headerHeight);
     if (collapsed$.value) return size;
     if (hasPreview) {
       size = Size(
@@ -93,12 +93,12 @@ abstract class GraphNode {
             collapsed$.value ? nodeWidth + -portWidth : nodeWidth,
             collapsed$.value ? 0 : top + i * portHeight,
           ) &
-          const Size(portWidth, portHeight);
+          Size(portWidth, portHeight);
       final control = Offset(
             0,
             collapsed$.value ? 0 : top + i * portHeight,
           ) &
-          const Size(nodeWidth, portHeight);
+          Size(nodeWidth, portHeight);
       results.add((
         connector: connector,
         control: control,
@@ -120,12 +120,12 @@ abstract class GraphNode {
             collapsed$.value ? 0 : -portWidth,
             collapsed$.value ? 0 : top + i * portHeight,
           ) &
-          const Size(portWidth, portHeight);
+          Size(portWidth, portHeight);
       final control = Offset(
             0,
             collapsed$.value ? 0 : top + i * portHeight,
           ) &
-          const Size(nodeWidth, portHeight);
+          Size(nodeWidth, portHeight);
       results.add((
         connector: connector,
         control: control,
@@ -135,10 +135,10 @@ abstract class GraphNode {
     return results;
   });
 
-  Rect get headerRect => Offset.zero & const Size(nodeWidth, headerHeight);
+  Rect get headerRect => Offset.zero & Size(nodeWidth, headerHeight);
 
   late Computed<Rect> previewRect = computed(() {
-    return const Offset(0, headerHeight) &
+    return Offset(0, headerHeight) &
         Size(
           nodeWidth,
           previewSize$.value.height,
