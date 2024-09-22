@@ -12,6 +12,7 @@ dependencies:
   signals_node_based_editor:
     path: ..
   signals: ^5.3.0
+  recase: ^4.1.0
 
 dev_dependencies:
   flutter_test:

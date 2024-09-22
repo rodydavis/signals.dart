@@ -5,6 +5,7 @@ import 'base.dart';
 
 class GroupNode extends BaseNode {
   final ReadonlySignal<List<BaseNode>> nodes$;
+  // TODO: Hidden inputs/outputs labels
 
   GroupNode(List<BaseNode> list)
       : nodes$ = listSignal<BaseNode>(list),
@@ -15,14 +16,32 @@ class GroupNode extends BaseNode {
     BaseNode Function(Map<String, dynamic> data) parse,
   ) {
     return GroupNode(
-      (json['nodes'] as List).map((e) => parse(e)).toList(),
+      (json['nodes'] as List).cast<Map<String, dynamic>>().map(parse).toList(),
     );
   }
 
   Iterable<BaseNode> getNodesWithoutInputs() sync* {
     for (final item in nodes$()) {
-      final valid = item.inputsMetadata.value
-          .every((input) => !input.port.knob.readonly.value);
+      final valid = item.inputsMetadata.value.every(
+        (input) {
+          if (input.port.knob.readonly.value) {
+            // Check to see if the input is external only
+            final source = input.port.knob.target.value;
+            // Find output node
+            bool internal = false;
+            for (final item in nodes$()) {
+              for (final output in item.outputsMetadata.value) {
+                if (output.port.source == source) {
+                  internal = true;
+                  continue;
+                }
+              }
+            }
+            return !internal;
+          }
+          return true;
+        },
+      );
       if (valid) yield item;
     }
   }
@@ -32,8 +51,9 @@ class GroupNode extends BaseNode {
       for (final output in item.outputsMetadata.value) {
         final inputs = getInputsForPort(item, output.port).toList();
         if (inputs.isEmpty) {
-          final valid = item.inputsMetadata.value
-              .any((input) => input.port.knob.readonly.value);
+          final valid = item.inputsMetadata.value.any((input) {
+            return input.port.knob.readonly.value;
+          });
           if (valid) yield item;
         }
       }
