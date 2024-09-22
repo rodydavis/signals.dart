@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:signals/signals.dart';
-import 'package:graphs/graphs.dart' as graphs;
 
+import '../utils/graph.dart';
 import '../graph.dart';
 import '../node.dart';
 
@@ -181,7 +181,7 @@ mixin MutableGraphMixin<Node extends GraphNode> on BaseGraph<Node> {
 
       if (fromNode != null && toNode != null) {
         if (fromNode.$1 == toNode.$1) {
-          _error('Cannot connect node to itself');
+          setError('Cannot connect node to itself');
           return;
         }
         (Node, NodeWidgetInput)? input;
@@ -212,29 +212,31 @@ mixin MutableGraphMixin<Node extends GraphNode> on BaseGraph<Node> {
                 }
               }
               if (mismatch) {
-                _error('Type mismatch: ${output.$2.type} != ${input.$2.type}');
+                setError(
+                    'Type mismatch: ${output.$2.type} != ${input.$2.type}');
                 return;
               }
             }
             if (!mismatch && output.$2.optional && !input.$2.optional) {
-              _error('Cannot connect nullable type to non-nullable type');
+              setError('Cannot connect nullable type to non-nullable type');
               return;
             }
             if (prev == output.$2.source) {
               return;
             }
-            final cycle = _detectCycle(output, input);
+            final graph = toGraph();
+            final cycle = graph.connectionWillCauseCycle(output, input);
             if (cycle) {
-              _error('Cycle detected');
+              setError('Cycle detected');
               return;
             }
             connectKnobToSource(input, output);
             // input.$2.knob.source = prev;
           } catch (err) {
             if (err is StackOverflowError) {
-              _error('Cycle detected');
+              setError('Cycle detected');
             } else {
-              _error('Error connecting types: $err');
+              setError('Error connecting types: $err');
             }
             return;
           }
@@ -250,20 +252,7 @@ mixin MutableGraphMixin<Node extends GraphNode> on BaseGraph<Node> {
     (from: 'String', to: 'Pattern'),
   ];
 
-  bool _detectCycle(
-    (Node, NodeWidgetOutput) output,
-    (Node, NodeWidgetInput) input,
-  ) {
-    final graph = toGraph();
-    final path = graphs.shortestPath<Node>(
-      output.$1,
-      input.$1,
-      (node) => graph[node] ?? [],
-    );
-    return path != null;
-  }
-
-  void _error(String msg) {
+  void setError(String msg) {
     _errorMessage.value = msg;
   }
 }

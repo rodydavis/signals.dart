@@ -99,6 +99,26 @@ class _ExampleState extends State<Example> {
               icon: const Icon(Icons.delete),
             );
           }),
+          Watch((context) {
+            final canGroup = graph.canGroup();
+            final selection = graph.selection.value.firstOrNull;
+            if (canGroup) {
+              return IconButton(
+                onPressed: graph.groupNodes,
+                icon: const Icon(Icons.select_all),
+              );
+            }
+            if (selection is NodeSelection<BaseNode>) {
+              if (selection.node is GroupNode) {
+                final group = selection.node as GroupNode;
+                return IconButton(
+                  onPressed: () => graph.unGroup(group),
+                  icon: const Icon(Icons.clear),
+                );
+              }
+            }
+            return const SizedBox.shrink();
+          }),
           IconButton(
             onPressed: () {
               const encoder = JsonEncoder.withIndent('  ');
@@ -405,27 +425,85 @@ class StringList extends ListNode<String> {
   }
 }
 
-abstract class InputNode extends BaseNode {
-  InputNode(super.type$);
-}
+class GroupNode extends BaseNode {
+  final ReadonlySignal<List<BaseNode>> nodes$;
 
-abstract class OutputNode extends BaseNode {
-  OutputNode(super.type$);
-}
+  GroupNode(List<BaseNode> list)
+      : nodes$ = listSignal<BaseNode>(list),
+        super('Group');
 
-abstract class GroupNode extends BaseNode {
-  GroupNode(super.type$);
+  factory GroupNode.fromJson(
+    Map<String, dynamic> json,
+    BaseNode Function(Map<String, dynamic> data) parse,
+  ) {
+    final nodes = json['nodes'] as List;
+    return GroupNode(
+      nodes.map((e) => parse(e)).toList(),
+    );
+  }
 
-  ReadonlySignal<List<InputNode>> get inputNodes$;
+  Iterable<BaseNode> getNodesWithoutInputs() sync* {
+    for (final item in nodes$()) {
+      final valid = item.inputsMetadata.value
+          .every((input) => !input.port.knob.readonly.value);
+      if (valid) yield item;
+    }
+  }
 
-  ReadonlySignal<List<OutputNode>> get outputNodes$;
+  Iterable<BaseNode> getNodesWithoutOutputs() sync* {
+    for (final item in nodes$()) {
+      for (final output in item.outputsMetadata.value) {
+        final inputs = getInputsForPort(item, output.port).toList();
+        if (inputs.isEmpty) {
+          final valid = item.inputsMetadata.value
+              .any((input) => input.port.knob.readonly.value);
+          if (valid) yield item;
+        }
+      }
+    }
+  }
 
-  ReadonlySignal<List<BaseNode>> get nodes$;
+  Iterable<(BaseNode, NodeWidgetInput)> getInputsForPort(
+    BaseNode node,
+    NodeWidgetOutput output,
+  ) sync* {
+    for (final item in nodes$()) {
+      if (item == node) continue;
+      for (final input in item.inputsMetadata.value) {
+        if (input.port.knob.target.value == output.source) {
+          yield (item, input.port);
+        }
+      }
+    }
+  }
+
+  @override
+  late Computed<List<NodeWidgetInput>> inputs = computed(() {
+    return [
+      ...super.inputs.value,
+      for (final item in getNodesWithoutInputs()) ...item.inputs.value,
+    ];
+  });
+
+  @override
+  late Computed<List<NodeWidgetOutput>> outputs = computed(() {
+    return [
+      ...super.outputs.value,
+      for (final item in getNodesWithoutOutputs()) ...item.outputs.value,
+    ];
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'nodes': nodes$.value.map((e) => e.toJson()).toList(),
+    };
+  }
 }
 
 class GraphController extends Graph<BaseNode> with JsonInteropMixin {
   @override
-  Map<String, BaseNode Function(Map<String, dynamic> json)> nodesMapper = {
+  late Map<String, BaseNode Function(Map<String, dynamic> json)> nodesMapper = {
     'String': (json) => StringNode.fromJson(json, false),
     'String?': (json) => StringNode.fromJson(json, true),
     'bool': (json) => BoolNode.fromJson(json, false),
@@ -434,6 +512,7 @@ class GraphController extends Graph<BaseNode> with JsonInteropMixin {
     'num?': (json) => NumNode.fromJson(json, true),
     'List<String>': (json) => StringList.fromJson(json, false),
     'List<String>?': (json) => StringList.fromJson(json, true),
+    'Group': (json) => GroupNode.fromJson(json, nodeFromJson),
   };
 
   @override
@@ -473,5 +552,66 @@ class GraphController extends Graph<BaseNode> with JsonInteropMixin {
       node.items.remove(input.knob);
     }
     super.disconnectKnobFromSource(node, input);
+  }
+
+  late Computed<bool> canGroup = computed(() {
+    var selection = this
+        .selection
+        .value
+        .whereType<NodeSelection<BaseNode>>()
+        .map((e) => e.node)
+        .toList();
+    if (selection.length < 2) return false;
+    final inputs = getNodesWithoutInputs(selection);
+    if (inputs.isEmpty) return false;
+    final outputs = getNodesWithoutOutputs(selection);
+    if (outputs.isEmpty) return false;
+    // final difference = inputs.toSet().union(outputs.toSet());
+    // selection.removeWhere((e) => difference.contains(e));
+    // if (selection.isEmpty) return false;
+    return true;
+  });
+
+  void groupNodes() {
+    if (!canGroup()) return;
+    // Edges?
+    final selection = this
+        .selection
+        .value
+        .whereType<NodeSelection<BaseNode>>()
+        .map((e) => e.node)
+        .toList();
+
+    // Translate offsets to relative
+    batch(() {
+      final root = selection.first;
+      final offset = root.offset$.value;
+      for (final node in selection) {
+        node.offset$.value -= offset;
+      }
+      final group = GroupNode(selection);
+      group.offset$.value = offset;
+      final list = nodes.value.toList();
+      list.removeWhere((e) => selection.contains(e));
+      list.add(group);
+      nodes.value = list;
+      connectors.recompute();
+    });
+  }
+
+  void unGroup(GroupNode group) {
+    final selection = group.nodes$.value.toList();
+
+    batch(() {
+      final list = nodes.value.toList();
+      list.remove(group);
+      final offset = group.offset$.value;
+      for (final node in selection) {
+        node.offset$.value += offset;
+      }
+      list.addAll(selection);
+      nodes.value = list;
+      connectors.recompute();
+    });
   }
 }

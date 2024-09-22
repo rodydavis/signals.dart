@@ -32,6 +32,8 @@ typedef ConnectorPair<Node extends GraphNode> = ({
 // TODO: Marquee
 // TODO: Line connect
 
+typedef GraphData<Node extends GraphNode> = Map<Node, Iterable<Node>>;
+
 abstract class BaseGraph<Node extends GraphNode> {
   BaseGraph({
     List<Node>? nodes,
@@ -113,9 +115,10 @@ abstract class BaseGraph<Node extends GraphNode> {
 
   void onInteractionEnd(ScaleEndDetails event) {}
 
-  Map<Node, Iterable<Node>> toGraph() {
+  GraphData<Node> toGraph() {
     final graph = <Node, Iterable<Node>>{};
-    for (final node in nodes) {
+    final all = nodes();
+    for (final node in all) {
       graph.putIfAbsent(node, () {
         // Connected inputs
         final results = <Node>{};
@@ -214,8 +217,9 @@ abstract class BaseGraph<Node extends GraphNode> {
     for (final node in nodes) {
       for (final input in node.inputsMetadata.value) {
         if (!input.port.knob.readonly.value) continue;
-        final related =
-            from.where((e) => e.$2.port.source == input.port.knob.target.value);
+        final related = from.where(
+          (e) => e.$2.port.source == input.port.knob.target.value,
+        );
         for (final item in related) {
           results.add((
             input: (
@@ -250,6 +254,37 @@ abstract class BaseGraph<Node extends GraphNode> {
     matrix.invert();
     final result = matrix.getTranslation();
     return Offset(result.x, result.y);
+  }
+
+  Iterable<Node> getNodesWithoutInputs(Iterable<Node> nodes) sync* {
+    for (final item in nodes) {
+      final valid = item.inputsMetadata.value
+          .every((input) => !input.port.knob.readonly.value);
+      if (valid) yield item;
+    }
+  }
+
+  Iterable<Node> getNodesWithoutOutputs(Iterable<Node> nodes) sync* {
+    for (final item in nodes) {
+      for (final output in item.outputsMetadata.value) {
+        final inputs = getInputsForPort(item, output.port).toList();
+        if (inputs.isEmpty) yield item;
+      }
+    }
+  }
+
+  Iterable<(Node, NodeWidgetInput)> getInputsForPort(
+    Node node,
+    NodeWidgetOutput output,
+  ) sync* {
+    for (final item in nodes) {
+      if (item == node) continue;
+      for (final input in item.inputsMetadata.value) {
+        if (input.port.knob.target.value == output.source) {
+          yield (item, input.port);
+        }
+      }
+    }
   }
 
   (Node, PortMetadata)? getNodeByPort(PortMetadata port) {
