@@ -40,6 +40,8 @@ class Knob<T> {
 
   T get value => source.value;
 
+  T get fallbackValue => _fallback.value;
+
   set value(T val) {
     if (readonly.value) return;
     if (_fallback is Signal<T>) {
