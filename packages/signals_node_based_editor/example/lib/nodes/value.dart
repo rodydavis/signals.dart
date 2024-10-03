@@ -3,6 +3,7 @@ import 'package:signals_node_based_editor/signals_node_based_editor.dart';
 
 abstract class ValueNode<T, K extends Knob<T>> extends GraphNode {
   final K source;
+  @override
   final String type$;
   final bool optional;
 

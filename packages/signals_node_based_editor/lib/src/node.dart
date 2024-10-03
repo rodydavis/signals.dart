@@ -14,7 +14,7 @@ typedef NodePort<T> = ({
 abstract class GraphNode {
   final offset$ = signal<Offset>(Offset.zero);
 
-  late final String id = 'graph_node_${label$.globalId}';
+  late final String id$ = 'graph_node_${label$.globalId}';
 
   late final rect$ = computed(() {
     return offset$.value & preferredSize$.value;
@@ -27,10 +27,10 @@ abstract class GraphNode {
   late final nodeSize$ = computed(() => previewSize$);
 
   @override
-  bool operator ==(Object other) => other is GraphNode && other.id == id;
+  bool operator ==(Object other) => other is GraphNode && other.id$ == id$;
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => id$.hashCode;
 
   @override
   String toString() => label$();

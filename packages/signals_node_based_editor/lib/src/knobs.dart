@@ -271,11 +271,11 @@ class OptionalDoubleKnob extends OptionalNumKnob<double> {
   }
 }
 
-class ObjectKnob<T extends Object> extends Knob<T> {
+class ObjectKnob<T> extends Knob<T> {
   ObjectKnob(super.label, super.source);
 }
 
-class OptionalObjectKnob<T extends Object> extends Knob<T?> {
+class OptionalObjectKnob<T> extends Knob<T?> {
   OptionalObjectKnob(super.label, super.source);
 }
 

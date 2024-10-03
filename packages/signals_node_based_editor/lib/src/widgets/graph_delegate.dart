@@ -22,8 +22,8 @@ class GraphDelegate extends MultiChildLayoutDelegate {
     for (final node in nodes) {
       var nodeRect = node.offset$.value & node.preferredSize$.value;
       nodeRect = MatrixUtils.transformRect(transform, nodeRect);
-      layoutChild(node.id, BoxConstraints.tight(nodeRect.size));
-      positionChild(node.id, nodeRect.topLeft);
+      layoutChild(node.id$, BoxConstraints.tight(nodeRect.size));
+      positionChild(node.id$, nodeRect.topLeft);
     }
   }
 
