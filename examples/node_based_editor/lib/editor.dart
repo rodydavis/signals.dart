@@ -442,7 +442,7 @@ class _EditorState extends State<Editor> {
                         color: () {
                           final colors = Theme.of(context).colorScheme;
                           final color =
-                              dragAccept() ? colors.primary : colors.background;
+                              dragAccept() ? colors.primary : colors.surface;
                           return color.withOpacity(0.1);
                         }(),
                       ),
