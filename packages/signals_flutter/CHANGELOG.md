@@ -1,3 +1,7 @@
+## 5.5.1
+
+- Fix for Watch.builder not rebuilding with InheritedWidget
+
 ## 5.5.0
 
 - Fix for hot reload

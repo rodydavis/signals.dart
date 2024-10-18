@@ -178,7 +178,8 @@ class Watch<T extends Widget> extends StatefulWidget {
 }
 
 class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
-  late final result = this.createComputed(() => widget.builder(context), debugLabel: widget.debugLabel);
+  late final result = this.createComputed(() => widget.builder(context),
+      debugLabel: widget.debugLabel);
   bool _init = true;
 
   @override
@@ -226,6 +227,8 @@ class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
       for (final dep in widget.dependencies) {
         this.bindSignal(dep);
       }
+    } else if (oldWidget.builder != widget.builder) {
+      result.recompute();
     }
   }
 

@@ -50,13 +50,13 @@ void main() {
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      expect(calls, 2);
+      expect(calls, 3);
       expect(find.text('Count: 1'), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      expect(calls, 3);
+      expect(calls, 5);
       expect(find.text('Count: 2'), findsOneWidget);
     });
 
@@ -79,13 +79,13 @@ void main() {
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      expect(calls, 2);
+      expect(calls, 3);
       expect(find.text('Count: 1'), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      expect(calls, 3);
+      expect(calls, 5);
       expect(find.text('Count: 2'), findsOneWidget);
 
       allowSignalsCreatedInBuildContext = false;
