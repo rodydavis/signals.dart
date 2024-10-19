@@ -12,7 +12,6 @@
   <img height="32" alt="Try in IDX" src="https://cdn.idx.dev/btn/try_dark_32.svg">
 </a>
 
-
 ## Features
 
 - 🪡 **Fine grained reactivity**: Based on [Preact Signals](https://preactjs.com/blog/signal-boosting/) and provides a fine grained reactivity system that will automatically track dependencies and free them when no longer needed
@@ -34,3 +33,5 @@ VS Code Extension: https://marketplace.visualstudio.com/items?itemName=rodydavis
 | [`signals_flutter`](packages/signals_flutter)                       | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |
 | [`signals_lint`](packages/signals_lint)                             | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint)          |
 | [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                                                  |
+
+[![Star History Chart](https://api.star-history.com/svg?repos=rodydavis/signals.dart&type=Date)](https://star-history.com/#rodydavis/signals.dart&Date)
