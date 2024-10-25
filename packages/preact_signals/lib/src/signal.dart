@@ -1,17 +1,17 @@
 part of 'signals.dart';
 
+/// Instance of a new plain signal
 class Signal<T> extends ReadonlySignal<T> {
   @override
   final int globalId;
 
-  Signal(this._value)
+  @internal
+  late T internalValue;
+
+  Signal(this.internalValue)
       : version = 0,
-        globalId = ++_lastGlobalId;
+        globalId = ++lastGlobalId;
 
-  // @internal
-  T _value;
-
-  /// @internal
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
   @override
@@ -43,32 +43,37 @@ class Signal<T> extends ReadonlySignal<T> {
     if (node != null) {
       node.version = this.version;
     }
-    return this._value;
+    return this.internalValue;
   }
 
-  set value(T val) {
-    if (val != this._value) {
-      _updateValue(val);
+  /// Set the current value by a setter
+  set value(T val) => set(val);
+
+  /// Set the current value by a method
+  void set(
+    T val, {
+    /// Skip equality check and update the value
+    bool force = false,
+  }) {
+    if (force || val != this.internalValue) {
+      setValue(val);
     }
   }
 
-  void forceUpdate(T val) {
-    _updateValue(val);
-  }
-
-  void _updateValue(T val) {
+  @internal
+  void setValue(T val) {
     if (batchIteration > 100) {
       throw Exception('Cycle detected');
     }
 
-    this._value = val;
+    this.internalValue = val;
     this.version++;
     globalVersion++;
 
     startBatch();
     try {
       for (var node = targets; node != null; node = node.nextTarget) {
-        node.target._notify();
+        node.target.notify();
       }
     } finally {
       endBatch();
@@ -76,10 +81,10 @@ class Signal<T> extends ReadonlySignal<T> {
   }
 }
 
-/// Create a new plain signal.
-///
-/// @param value The initial value for the signal.
-/// @returns A new signal.
-Signal<T> signal<T>(T value) {
+/// Create a new plain signal
+Signal<T> signal<T>(
+  /// The initial value for the signal
+  T value,
+) {
   return Signal<T>(value);
 }

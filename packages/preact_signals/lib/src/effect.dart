@@ -1,8 +1,9 @@
 part of 'signals.dart';
 
+@internal
 void cleanupEffect(Effect effect) {
-  final cleanup = effect._cleanup;
-  effect._cleanup = null;
+  final cleanup = effect.cleanup;
+  effect.cleanup = null;
 
   if (cleanup != null) {
     startBatch();
@@ -13,8 +14,8 @@ void cleanupEffect(Effect effect) {
     try {
       cleanup();
     } catch (e) {
-      effect._flags &= ~RUNNING;
-      effect._flags |= DISPOSED;
+      effect.flags &= ~RUNNING;
+      effect.flags |= DISPOSED;
       disposeEffect(effect);
       rethrow;
     } finally {
@@ -24,16 +25,18 @@ void cleanupEffect(Effect effect) {
   }
 }
 
+@internal
 void disposeEffect(Effect effect) {
-  for (var node = effect._sources; node != null; node = node.nextSource) {
+  for (var node = effect.sources; node != null; node = node.nextSource) {
     node.source.unsubscribeFromNode(node);
   }
-  effect._fn = null;
-  effect._sources = null;
+  effect.fn = null;
+  effect.sources = null;
 
   cleanupEffect(effect);
 }
 
+@internal
 void endEffect(Effect effect, Listenable? prevContext) {
   if (evalContext != effect) {
     throw Exception('Out-of-order effect');
@@ -41,46 +44,56 @@ void endEffect(Effect effect, Listenable? prevContext) {
   cleanupSources(effect);
   evalContext = prevContext;
 
-  effect._flags &= ~RUNNING;
-  if ((effect._flags & DISPOSED) != 0) {
+  effect.flags &= ~RUNNING;
+  if ((effect.flags & DISPOSED) != 0) {
     disposeEffect(effect);
   }
   endBatch();
 }
 
+/// Create an effect to run arbitrary code in response to signal changes.
+///
+/// An effect tracks which signals are accessed within the given callback
+/// function `fn`, and re-runs the callback when those signals change.
+///
+/// The callback may return a cleanup function. The cleanup function gets
+/// run once, either when the callback is next called or when the effect
+/// gets disposed, whichever happens first.
 class Effect implements Listenable {
-  Function()? _fn;
+  @internal
+  Function()? fn;
 
   @override
   final int globalId;
 
-  Function? _cleanup;
+  @internal
+  Function? cleanup;
 
   @override
-  Node? _sources;
+  Node? sources;
 
-  Effect? _nextBatchedEffect;
+  @internal
+  Effect? nextBatchedEffect;
 
   @override
-  int _flags;
+  int flags;
 
-  Effect(Function() fn)
-      : _flags = TRACKING,
-        _fn = fn,
-        _cleanup = null,
-        globalId = ++_lastGlobalId;
+  Effect(this.fn)
+      : flags = TRACKING,
+        cleanup = null,
+        globalId = ++lastGlobalId;
 
   @internal
   void callback() {
     final finish = start();
     try {
-      if ((_flags & DISPOSED) != 0) return;
-      if (_fn == null) return;
+      if ((flags & DISPOSED) != 0) return;
+      if (fn == null) return;
       currentEffect = this;
-      final cleanup = _fn!();
+      final cleanup = fn!();
       currentEffect = null;
       if (cleanup is Function) {
-        _cleanup = cleanup;
+        this.cleanup = cleanup;
       }
     } finally {
       finish();
@@ -89,11 +102,11 @@ class Effect implements Listenable {
 
   @internal
   void Function() start() {
-    if ((_flags & RUNNING) != 0) {
+    if ((flags & RUNNING) != 0) {
       throw Exception('Cycle detected');
     }
-    _flags |= RUNNING;
-    _flags &= ~DISPOSED;
+    flags |= RUNNING;
+    flags &= ~DISPOSED;
     cleanupEffect(this);
     prepareSources(this);
 
@@ -104,19 +117,33 @@ class Effect implements Listenable {
   }
 
   @override
-  void _notify() {
-    if (!((_flags & NOTIFIED) != 0)) {
-      _flags |= NOTIFIED;
-      _nextBatchedEffect = batchedEffect;
+  void notify() {
+    if (!((flags & NOTIFIED) != 0)) {
+      flags |= NOTIFIED;
+      nextBatchedEffect = batchedEffect;
       batchedEffect = this;
     }
   }
 
+  /// Dispose of the effect and stop future callbacks
   void dispose() {
-    _flags |= DISPOSED;
-    if (!((_flags & RUNNING) != 0)) {
+    flags |= DISPOSED;
+    if (!((flags & RUNNING) != 0)) {
       disposeEffect(this);
     }
+  }
+
+  /// Activate the effect starting with the callback
+  void Function() call() {
+    try {
+      callback();
+    } catch (e) {
+      dispose();
+      rethrow;
+    }
+    // Return a bound function instead of a wrapper like `() => effect._dispose()`,
+    // because bound functions seem to be just as fast and take up a lot less memory.
+    return dispose;
   }
 }
 
@@ -128,18 +155,9 @@ class Effect implements Listenable {
 /// The callback may return a cleanup function. The cleanup function gets
 /// run once, either when the callback is next called or when the effect
 /// gets disposed, whichever happens first.
-///
-/// @param fn The effect callback.
-/// @returns A function for disposing the effect.
-void Function() effect(Function() fn) {
-  final effect = Effect(fn);
-  try {
-    effect.callback();
-  } catch (e) {
-    effect.dispose();
-    rethrow;
-  }
-  // Return a bound function instead of a wrapper like `() => effect._dispose()`,
-  // because bound functions seem to be just as fast and take up a lot less memory.
-  return effect.dispose;
+void Function() effect(
+  /// The effect callback
+  Function() fn,
+) {
+  return Effect(fn).call();
 }

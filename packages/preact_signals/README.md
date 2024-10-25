@@ -1,4 +1,3 @@
-
 # preact_signals
 
 Complete Dart port of [Preact.js Signals](https://github.com/preactjs/signals/blob/main/packages/core/src/index.ts).

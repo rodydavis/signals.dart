@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:preact_signals/preact_signals.dart';
 
 import 'utils/spy.dart';

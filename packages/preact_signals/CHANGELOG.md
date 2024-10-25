@@ -1,3 +1,8 @@
+## 1.8.1
+
+- Updating documentation comments and making private APIs public with internal annotation
+- Lower Dart version
+
 ## 1.8.0
 
 - Upstream changes with @preactjs/signals-core to 1.8.0

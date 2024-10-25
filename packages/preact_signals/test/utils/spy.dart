@@ -23,6 +23,6 @@ class SpyWithArgs<T, A> {
     return _spy(args);
   }
 
-  A? get lastCalledWith => calls.lastOrNull;
+  A? get lastCalledWith => calls.isEmpty ? null : calls.last;
   void resetHistory() => calls.clear();
 }

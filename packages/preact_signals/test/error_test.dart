@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_type_check, prefer_function_declarations_over_variables
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:preact_signals/preact_signals.dart';
 
 import 'utils/spy.dart';

@@ -23,11 +23,11 @@ void endBatch() {
     batchIteration++;
 
     while (effect != null) {
-      final Effect? next = effect._nextBatchedEffect;
-      effect._nextBatchedEffect = null;
-      effect._flags &= ~NOTIFIED;
+      final Effect? next = effect.nextBatchedEffect;
+      effect.nextBatchedEffect = null;
+      effect.flags &= ~NOTIFIED;
 
-      if (!((effect._flags & DISPOSED) != 0) && needsToRecompute(effect)) {
+      if (!((effect.flags & DISPOSED) != 0) && needsToRecompute(effect)) {
         try {
           effect.callback();
         } catch (err) {
@@ -55,10 +55,10 @@ void endBatch() {
 ///
 /// Accessing a signal that has been modified within a batch will reflect its updated
 /// value.
-///
-/// @param fn The callback function.
-/// @returns The value returned by the callback.
-T batch<T>(T Function() fn) {
+T batch<T>(
+  /// The callback function
+  T Function() fn,
+) {
   if (batchDepth > 0) {
     return fn();
   }

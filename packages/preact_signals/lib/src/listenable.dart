@@ -1,21 +1,26 @@
 part of 'signals.dart';
 
+@internal
 abstract class Listenable {
-  Node? _sources;
+  @internal
+  Node? sources;
 
-  int get _flags;
+  @internal
+  int get flags;
 
   /// Global ID of the signal
   int get globalId;
 
-  void _notify();
+  @internal
+  void notify();
 }
 
+@internal
 bool needsToRecompute(Listenable target) {
   // Check the dependencies for changed values. The dependency list is already
   // in order of use. Therefore if multiple dependencies have changed values, only
   // the first used dependency is re-evaluated at this point.
-  for (var node = target._sources; node != null; node = node.nextSource) {
+  for (var node = target.sources; node != null; node = node.nextSource) {
     // If there's a new version of the dependency before or after refreshing,
     // or the dependency has something blocking it from refreshing at all (e.g. a
     // dependency cycle), then we need to recompute.
@@ -30,6 +35,7 @@ bool needsToRecompute(Listenable target) {
   return false;
 }
 
+@internal
 void prepareSources(Listenable target) {
   /**
 	 * 1. Mark all current sources as re-usable nodes (version: -1)
@@ -43,7 +49,7 @@ void prepareSources(Listenable target) {
 	 *                   ↓                  │
 	 * target._sources = C; (node is tail) ─┘
 	 */
-  for (var node = target._sources; node != null; node = node.nextSource) {
+  for (var node = target.sources; node != null; node = node.nextSource) {
     final rollbackNode = node.source.node;
     if (rollbackNode != null) {
       node.rollbackNode = rollbackNode;
@@ -52,14 +58,15 @@ void prepareSources(Listenable target) {
     node.version = -1;
 
     if (node.nextSource == null) {
-      target._sources = node;
+      target.sources = node;
       break;
     }
   }
 }
 
+@internal
 void cleanupSources(Listenable target) {
-  var node = target._sources;
+  var node = target.sources;
   Node? head;
 
   /**
@@ -109,5 +116,5 @@ void cleanupSources(Listenable target) {
     node = prev;
   }
 
-  target._sources = head;
+  target.sources = head;
 }

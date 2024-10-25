@@ -15,7 +15,10 @@ abstract class ReadonlySignal<T> {
   dynamic toJson() => value;
 
   /// Return the value when invoked
-  T call() => this.value;
+  T call() => value;
+
+  /// Helper method to get the current value
+  T get() => value;
 
   /// In the rare instance that you have an effect that should write to another signal based on the previous value, but you _don't_ want the effect to be subscribed to that signal, you can read a signals's previous value via `signal.peek()`.
   ///
@@ -43,7 +46,7 @@ abstract class ReadonlySignal<T> {
     }
   }
 
-  /// Subscribe to value changes
+  /// Subscribe to value changes with a dispose function
   void Function() subscribe(void Function(T value) fn);
 
   @internal
@@ -76,9 +79,11 @@ abstract class ReadonlySignal<T> {
   @internal
   bool refresh();
 
+  @internal
   final Symbol brand = BRAND_SYMBOL;
 }
 
+@internal
 Node? addDependency(ReadonlySignal signal) {
   if (evalContext == null) {
     return null;
@@ -101,22 +106,22 @@ Node? addDependency(ReadonlySignal signal) {
     node = Node()
       ..version = 0
       ..source = signal
-      ..prevSource = evalContext!._sources
+      ..prevSource = evalContext!.sources
       ..nextSource = null
       ..target = evalContext!
       ..prevTarget = null
       ..nextTarget = null
       ..rollbackNode = node;
 
-    if (evalContext!._sources != null) {
-      evalContext!._sources!.nextSource = node;
+    if (evalContext!.sources != null) {
+      evalContext!.sources!.nextSource = node;
     }
-    evalContext!._sources = node;
+    evalContext!.sources = node;
     signal.node = node;
 
     // Subscribe to change notifications from this dependency if we're in an effect
     // OR evaluating a computed signal that in turn has subscribers.
-    if ((evalContext!._flags & TRACKING) != 0) {
+    if ((evalContext!.flags & TRACKING) != 0) {
       signal.subscribeToNode(node);
     }
     return node;
@@ -144,11 +149,11 @@ Node? addDependency(ReadonlySignal signal) {
         node.prevSource!.nextSource = node.nextSource;
       }
 
-      node.prevSource = evalContext!._sources;
+      node.prevSource = evalContext!.sources;
       node.nextSource = null;
 
-      evalContext!._sources!.nextSource = node;
-      evalContext!._sources = node;
+      evalContext!.sources!.nextSource = node;
+      evalContext!.sources = node;
     }
 
     // We can assume that the currently evaluated effect / computed signal is already
@@ -158,6 +163,7 @@ Node? addDependency(ReadonlySignal signal) {
   return null;
 }
 
+@internal
 void Function() signalSubscribe<T>(
   ReadonlySignal<T> signal,
   void Function(T value) fn,
@@ -174,6 +180,7 @@ void Function() signalSubscribe<T>(
   });
 }
 
+@internal
 void signalUnsubscribe(ReadonlySignal signal, Node node) {
   // Only run the unsubscribe step if the signal has any subscribers to begin with.
   if (signal.targets != null) {
