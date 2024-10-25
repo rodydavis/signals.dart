@@ -8,6 +8,9 @@ documentation: https://dartsignals.dev/
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
+dependencies:
+  preact_signals: ^1.8.1
+
 dev_dependencies:
   coverage: ^1.7.2
   lints: ^3.0.0
