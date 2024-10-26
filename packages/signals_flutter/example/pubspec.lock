@@ -137,7 +137,7 @@ packages:
       path: "../../preact_signals"
       relative: true
     source: path
-    version: "1.8.1"
+    version: "1.8.3"
   signals_core:
     dependency: "direct overridden"
     description:

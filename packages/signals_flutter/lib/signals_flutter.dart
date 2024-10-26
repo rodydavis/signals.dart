@@ -9,3 +9,6 @@ export 'src/core/signal.dart';
 export 'src/core/computed.dart';
 export 'src/ticker.dart';
 export 'src/mixins/signals.dart';
+export 'src/inherited_widget/signal.dart';
+export 'src/inherited_widget/computed.dart';
+export 'src/inherited_widget/readonly.dart';
