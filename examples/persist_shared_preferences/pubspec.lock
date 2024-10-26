@@ -206,7 +206,7 @@ packages:
       path: "../../packages/preact_signals"
       relative: true
     source: path
-    version: "1.8.1"
+    version: "1.8.3"
   shared_preferences:
     dependency: "direct main"
     description:
