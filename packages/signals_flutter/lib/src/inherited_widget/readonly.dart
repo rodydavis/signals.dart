@@ -1,35 +1,19 @@
 import 'package:flutter/widgets.dart';
 
-import '../../signals_core.dart';
 import '../core/readonly.dart';
 
-/// Signal notifier widget
-class ReadonlySignalProvider<T>
-    extends InheritedNotifier<FlutterReadonlySignal<T>> {
-  /// Signal notifier widget
-  const ReadonlySignalProvider({
+/// ReadonlySignal notifier widget
+class ReadonlySignalProvider<T extends FlutterReadonlySignal>
+    extends InheritedNotifier<T> {
+  /// ReadonlySignal notifier widget
+  ReadonlySignalProvider({
     super.key,
     required super.child,
-    required FlutterReadonlySignal<T> source,
-  }) : super(notifier: source);
-
-  /// Signal notifier with a set value
-  ReadonlySignalProvider.value({
-    super.key,
-    required super.child,
-    required T value,
-    String? debugLabel,
-    bool autoDispose = false,
-  }) : super(
-          notifier: signal<T>(
-            value,
-            debugLabel: debugLabel,
-            autoDispose: autoDispose,
-          ),
-        );
+    required T Function() create,
+  }) : super(notifier: create());
 
   /// Find widget in tree
-  static ReadonlySignalProvider<T>? providerOf<T>(
+  static ReadonlySignalProvider<T>? providerOf<T extends FlutterReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {
@@ -42,7 +26,7 @@ class ReadonlySignalProvider<T>
   }
 
   /// Find signal in widget tree
-  static ReadonlySignal<T>? of<T>(
+  static T? of<T extends FlutterReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {

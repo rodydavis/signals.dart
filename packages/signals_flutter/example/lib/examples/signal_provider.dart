@@ -20,6 +20,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Counter extends FlutterSignal<int> {
+  Counter([super.value = 0]);
+
+  void increment() => value++;
+}
+
 class SignalProviderExample extends StatelessWidget {
   const SignalProviderExample({
     super.key,
@@ -30,8 +36,8 @@ class SignalProviderExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SignalProvider<int>(
-      create: () => signal(0),
+    return SignalProvider<Counter>(
+      create: () => Counter(0),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -45,8 +51,9 @@ class SignalProviderExample extends StatelessWidget {
                 'You have pushed the button this many times:',
               ),
               Builder(builder: (context) {
+                final counter = SignalProvider.of<Counter>(context);
                 return Text(
-                  '${SignalProvider.of<int>(context)}',
+                  '$counter',
                   style: Theme.of(context).textTheme.headlineMedium,
                 );
               }),
@@ -54,9 +61,9 @@ class SignalProviderExample extends StatelessWidget {
           ),
         ),
         floatingActionButton: Builder(builder: (context) {
+          final counter = SignalProvider.of<Counter>(context, listen: false)!;
           return FloatingActionButton(
-            onPressed: () =>
-                SignalProvider.of<int>(context, listen: false)!.value++,
+            onPressed: counter.increment,
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           );

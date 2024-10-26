@@ -114,7 +114,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     Future<S> Function(List<A> args) fn, {
     S? initialValue,
     String? debugLabel,
-    bool autoDispose = false,
     bool lazy = true,
   }) {
     return _bindLocal(computedFrom<S, A>(
@@ -122,7 +121,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       fn,
       initialValue: initialValue,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
       lazy: lazy,
     ));
   }
@@ -146,7 +144,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     Future<S> Function() fn, {
     S? initialValue,
     String? debugLabel,
-    bool autoDispose = false,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     bool lazy = true,
   }) {
@@ -155,7 +152,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       dependencies: dependencies,
       initialValue: initialValue,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
       lazy: lazy,
     ));
   }
@@ -167,7 +163,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     String? debugLabel,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     bool lazy = true,
-    bool autoDispose = false,
   }) {
     return _bindLocal(futureSignal<S>(
       fn,
@@ -175,7 +170,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       debugLabel: debugLabel,
       dependencies: dependencies,
       lazy: lazy,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -188,7 +182,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     void Function()? onDone,
     bool? cancelOnError,
     bool lazy = true,
-    bool autoDispose = false,
   }) {
     return _bindLocal(streamSignal<S>(
       callback,
@@ -198,7 +191,6 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       onDone: onDone,
       cancelOnError: cancelOnError,
       lazy: lazy,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -206,12 +198,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   AsyncSignal<S> createAsyncSignal<S>(
     AsyncState<S> value, {
     String? debugLabel,
-    bool autoDispose = false,
   }) {
     return _bindLocal(asyncSignal<S>(
       value,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -219,12 +209,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   Signal<V> createSignal<V>(
     V val, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
     return _bindLocal(signal<V>(
       val,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -232,12 +220,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
     return _bindLocal(ListSignal<V>(
       list,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -245,12 +231,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   SetSignal<V> createSetSignal<V>(
     Set<V> set, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
     return _bindLocal(SetSignal<V>(
       set,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -258,12 +242,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   QueueSignal<V> createQueueSignal<V>(
     Queue<V> queue, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
     return _bindLocal(QueueSignal<V>(
       queue,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -271,12 +253,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   MapSignal<K, V> createMapSignal<K, V>(
     Map<K, V> value, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
     return _bindLocal(MapSignal<K, V>(
       value,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
     ));
   }
 
@@ -284,12 +264,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   Computed<V> createComputed<V>(
     V Function() cb, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
     return _bindLocal(computed<V>(
       cb,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
     ));
   }
 

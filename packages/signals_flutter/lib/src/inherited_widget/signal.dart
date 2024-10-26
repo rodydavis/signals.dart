@@ -1,34 +1,18 @@
 import 'package:flutter/widgets.dart';
 
-import '../../signals_core.dart';
 import '../core/signal.dart';
 
 /// Signal notifier widget
-class SignalProvider<T> extends InheritedNotifier<FlutterSignal<T>> {
+class SignalProvider<T extends FlutterSignal> extends InheritedNotifier<T> {
   /// Signal notifier widget
   SignalProvider({
     super.key,
     required super.child,
-    required FlutterSignal<T> Function() create,
+    required T Function() create,
   }) : super(notifier: create());
 
-  /// Signal notifier with a set value
-  SignalProvider.value({
-    super.key,
-    required super.child,
-    required T value,
-    String? debugLabel,
-    bool autoDispose = false,
-  }) : super(
-          notifier: signal<T>(
-            value,
-            debugLabel: debugLabel,
-            autoDispose: autoDispose,
-          ),
-        );
-
   /// Find widget in tree
-  static SignalProvider<T>? providerOf<T>(
+  static SignalProvider<T>? providerOf<T extends FlutterSignal>(
     BuildContext context, {
     bool listen = true,
   }) {
@@ -40,7 +24,7 @@ class SignalProvider<T> extends InheritedNotifier<FlutterSignal<T>> {
   }
 
   /// Find signal in widget tree
-  static Signal<T>? of<T>(
+  static T? of<T extends FlutterSignal>(
     BuildContext context, {
     bool listen = true,
   }) {
