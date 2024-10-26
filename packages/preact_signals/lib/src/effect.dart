@@ -5,6 +5,7 @@ import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
 
+@internal
 void cleanupEffect(Effect effect) {
   final cleanup = effect.cleanup;
   effect.cleanup = null;
