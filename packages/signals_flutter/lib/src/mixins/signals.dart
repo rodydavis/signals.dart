@@ -97,6 +97,125 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     _setup();
   }
 
+  /// Async Computed is syntax sugar around [FutureSignal].
+  ///
+  /// _Inspired by [computedFrom](https://ngxtension.netlify.app/utilities/signals/computed-from/) from Angular NgExtension._
+  ///
+  /// computedFrom takes a list of [signals] and a [callback] function to
+  /// compute the value of the signal every time one of the [signals] changes.
+  ///
+  /// ```dart
+  /// final movieId = signal('id');
+  /// late final movie = computedFrom(args, ([movieId]) => fetchMovie(args.first));
+  /// ```
+  ///
+  /// Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
+  FutureSignal<S> createComputedFrom<S, A>(
+    List<ReadonlySignal<A>> signals,
+    Future<S> Function(List<A> args) fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool autoDispose = false,
+    bool lazy = true,
+  }) {
+    return bindSignal(core.computedFrom<S, A>(
+      signals,
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+      lazy: lazy,
+    ));
+  }
+
+  /// Async Computed is syntax sugar around [FutureSignal].
+  ///
+  /// _Inspired by [computedAsync](https://ngxtension.netlify.app/utilities/signals/computed-async/) from Angular NgExtension._
+  ///
+  /// computedAsync takes a [callback] function to compute the value
+  /// of the signal. This callback is converted into a [Computed] signal.
+  ///
+  /// ```dart
+  /// final movieId = signal('id');
+  /// late final movie = computedAsync(() => fetchMovie(movieId()));
+  /// ```
+  ///
+  /// **It is important that signals are called before any async gaps with await.**
+  ///
+  /// Any signal that is read inside the callback will be tracked as a dependency and the computed signal will be re-evaluated when any of the dependencies change.
+  FutureSignal<S> createComputedAsync<S>(
+    Future<S> Function() fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool autoDispose = false,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    bool lazy = true,
+  }) {
+    return bindSignal(core.computedAsync<S>(
+      fn,
+      dependencies: dependencies,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+      lazy: lazy,
+    ));
+  }
+
+  /// Create a signal from a future
+  FutureSignal<S> createFutureSignal<S>(
+    Future<S> Function() fn, {
+    S? initialValue,
+    String? debugLabel,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    bool lazy = true,
+    bool autoDispose = false,
+  }) {
+    return bindSignal(core.futureSignal<S>(
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      dependencies: dependencies,
+      lazy: lazy,
+      autoDispose: autoDispose,
+    ));
+  }
+
+  /// Create a signals from a stream
+  StreamSignal<S> createStreamSignal<S>(
+    Stream<S> Function() callback, {
+    S? initialValue,
+    String? debugLabel,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    void Function()? onDone,
+    bool? cancelOnError,
+    bool lazy = true,
+    bool autoDispose = false,
+  }) {
+    return bindSignal(core.streamSignal<S>(
+      callback,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      dependencies: dependencies,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+      lazy: lazy,
+      autoDispose: autoDispose,
+    ));
+  }
+
+  /// Create a signal holding an async value
+  AsyncSignal<S> createAsyncSignal<S>(
+    AsyncState<S> value, {
+    String? debugLabel,
+    bool autoDispose = false,
+  }) {
+    return bindSignal(core.asyncSignal<S>(
+      value,
+      debugLabel: debugLabel,
+      autoDispose: autoDispose,
+    ));
+  }
+
   /// Create a signal<T> and watch for changes
   Signal<V> createSignal<V>(
     V val, {
