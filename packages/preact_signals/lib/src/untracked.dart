@@ -1,4 +1,4 @@
-part of 'signals.dart';
+import 'globals.dart';
 
 /// Run a callback function that can access signal values without
 /// subscribing to the signal updates.

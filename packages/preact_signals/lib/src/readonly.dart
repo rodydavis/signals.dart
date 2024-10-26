@@ -1,4 +1,10 @@
-part of 'signals.dart';
+import 'package:meta/meta.dart';
+
+import 'effect.dart';
+import 'globals.dart';
+import 'listenable.dart';
+import 'node.dart';
+import 'signal.dart';
 
 /// An interface for read-only signals.
 abstract class ReadonlySignal<T> {
@@ -7,6 +13,9 @@ abstract class ReadonlySignal<T> {
 
   /// Compute the current value
   T get value;
+
+  @internal
+  T get internalValue;
 
   @override
   String toString() => value.toString();
@@ -40,7 +49,7 @@ abstract class ReadonlySignal<T> {
     final prevContext = evalContext;
     evalContext = null;
     try {
-      return this.value;
+      return value;
     } finally {
       evalContext = prevContext;
     }
@@ -55,7 +64,8 @@ abstract class ReadonlySignal<T> {
   @internal
   void unsubscribeFromNode(Node node);
 
-  static void __subscribe(ReadonlySignal signal, Node node) {
+  @internal
+  static void internalSubscribe(ReadonlySignal signal, Node node) {
     if (signal.targets != node && node.prevTarget == null) {
       node.nextTarget = signal.targets;
       if (signal.targets != null) {
@@ -77,10 +87,17 @@ abstract class ReadonlySignal<T> {
   Node? targets;
 
   @internal
-  bool refresh();
+  bool internalRefresh();
 
   @internal
   final Symbol brand = BRAND_SYMBOL;
+}
+
+@internal
+Iterable<Listenable> readonlySignalTargets(ReadonlySignal instance) sync* {
+  for (Node? node = instance.targets; node != null; node = node.nextTarget) {
+    yield node.target;
+  }
 }
 
 @internal
@@ -198,4 +215,12 @@ void signalUnsubscribe(ReadonlySignal signal, Node node) {
       signal.targets = next;
     }
   }
+}
+
+/// Create a new plain readonly signal
+ReadonlySignal<T> readonly<T>(
+  /// The initial value for the signal
+  T value,
+) {
+  return signal<T>(value);
 }

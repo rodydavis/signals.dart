@@ -1,4 +1,8 @@
-part of 'signals.dart';
+import 'package:meta/meta.dart';
+
+import 'effect.dart';
+import 'globals.dart';
+import 'listenable.dart';
 
 @internal
 @pragma("vm:prefer-inline")

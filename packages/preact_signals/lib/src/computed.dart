@@ -1,4 +1,9 @@
-part of 'signals.dart';
+import 'package:meta/meta.dart';
+
+import 'globals.dart';
+import 'listenable.dart';
+import 'node.dart';
+import 'readonly.dart';
 
 /// Create a new signal that is computed based on the values of other signals.
 ///
@@ -23,11 +28,21 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
   @internal
   Object? error;
 
-  @internal
-  bool initialized = false;
+  bool _isInitialized = false;
+
+  /// Check if the value has been computed
+  bool get isInitialized => _isInitialized;
+
+  late T _internalValue;
+
+  @override
+  T get internalValue => _internalValue;
 
   @internal
-  late T internalValue;
+  set internalValue(T value) {
+    _internalValue = value;
+    _isInitialized = true;
+  }
 
   Computed(this.fn)
       : internalGlobalVersion = globalVersion - 1,
@@ -36,7 +51,7 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
         globalId = ++lastGlobalId;
 
   @override
-  bool refresh() {
+  bool internalRefresh() {
     this.flags &= ~NOTIFIED;
 
     if ((this.flags & RUNNING) != 0) {
@@ -68,13 +83,12 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
     try {
       prepareSources(this);
       evalContext = this;
-      final value = this.fn();
-      if ((this.flags & HAS_ERROR) != 0 ||
-          !initialized ||
-          internalValue != value ||
+      final val = this.fn();
+      if (!_isInitialized ||
+          (flags & HAS_ERROR) != 0 ||
+          _internalValue != val ||
           version == 0) {
-        internalValue = value;
-        if (!initialized) initialized = true;
+        internalValue = val;
         flags &= ~HAS_ERROR;
         version++;
       }
@@ -100,7 +114,7 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
         node.source.subscribeToNode(node);
       }
     }
-    ReadonlySignal.__subscribe(this, node);
+    ReadonlySignal.internalSubscribe(this, node);
   }
 
   @override
@@ -139,14 +153,14 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
     }
 
     final node = addDependency(this);
-    refresh();
+    internalRefresh();
     if (node != null) {
       node.version = version;
     }
     if ((flags & HAS_ERROR) != 0) {
       throw error!;
     }
-    return internalValue;
+    return _internalValue;
   }
 
   @override

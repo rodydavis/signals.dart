@@ -1,9 +1,12 @@
 // ignore_for_file: constant_identifier_names
 
-part of 'signals.dart';
-
 // An named symbol/brand for detecting Signal instances even when they weren't
 // created using the same signals library version.
+import 'package:meta/meta.dart';
+
+import 'effect.dart';
+import 'listenable.dart';
+
 @internal
 const BRAND_SYMBOL = Symbol('preact-signals');
 

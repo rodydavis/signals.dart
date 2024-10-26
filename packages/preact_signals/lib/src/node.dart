@@ -1,7 +1,10 @@
-part of 'signals.dart';
-
 // A linked list node used to track dependencies (sources) and dependents (targets).
 // Also used to remember the source's last version number that the target saw.
+import 'package:meta/meta.dart';
+
+import 'listenable.dart';
+import 'readonly.dart';
+
 @internal
 class Node {
   // A source whose value the target depends on.

@@ -1,6 +1,10 @@
-part of 'signals.dart';
+import 'package:meta/meta.dart';
 
-@internal
+import 'batch.dart';
+import 'globals.dart';
+import 'listenable.dart';
+import 'node.dart';
+
 void cleanupEffect(Effect effect) {
   final cleanup = effect.cleanup;
   effect.cleanup = null;
@@ -159,5 +163,5 @@ void Function() effect(
   /// The effect callback
   Function() fn,
 ) {
-  return Effect(fn).call();
+  return Effect(fn)();
 }

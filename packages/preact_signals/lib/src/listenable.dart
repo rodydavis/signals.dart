@@ -1,4 +1,7 @@
-part of 'signals.dart';
+import 'package:meta/meta.dart';
+
+import 'node.dart';
+import 'readonly.dart';
 
 @internal
 abstract class Listenable {
@@ -16,6 +19,13 @@ abstract class Listenable {
 }
 
 @internal
+Iterable<ReadonlySignal> listenableSources(Listenable instance) sync* {
+  for (var node = instance.sources; node != null; node = node.nextSource) {
+    yield node.source;
+  }
+}
+
+@internal
 bool needsToRecompute(Listenable target) {
   // Check the dependencies for changed values. The dependency list is already
   // in order of use. Therefore if multiple dependencies have changed values, only
@@ -25,7 +35,7 @@ bool needsToRecompute(Listenable target) {
     // or the dependency has something blocking it from refreshing at all (e.g. a
     // dependency cycle), then we need to recompute.
     if (node.source.version != node.version ||
-        !node.source.refresh() ||
+        !node.source.internalRefresh() ||
         node.source.version != node.version) {
       return true;
     }

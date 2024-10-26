@@ -1,6 +1,16 @@
+## 1.8.3
+
+- Add Computed.isInitialized
+
+## 1.8.2
+
+- Adding lazy signal
+- Rename some internal methods
+
 ## 1.8.1
 
-- Updating documentation comments and making private APIs public with internal annotation
+- Updating documentation comments
+- Making private APIs public with internal annotation
 - Lower Dart version
 
 ## 1.8.0
