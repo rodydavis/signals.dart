@@ -70,7 +70,7 @@ void main() {
 }
 
 final router = GoRouter(
-  refreshListenable: getIt.get<Auth>().isLoggedIn.toValueListenable(),
+  refreshListenable: getIt.get<Auth>().isLoggedIn,
   routes: [
     GoRoute(
       path: '/',

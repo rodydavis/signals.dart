@@ -40,8 +40,8 @@ class CounterExample extends StatefulWidget {
   State<CounterExample> createState() => _CounterExampleState();
 }
 
-class _CounterExampleState extends State<CounterExample> {
-  late final Signal<int> counter = createSignal(context, 0);
+class _CounterExampleState extends State<CounterExample> with SignalsMixin {
+  late final Signal<int> counter = createSignal(0);
 
   void _incrementCounter() {
     counter.value++;

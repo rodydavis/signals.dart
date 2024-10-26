@@ -71,7 +71,7 @@ class Auth {
 final auth = Auth();
 
 final router = GoRouter(
-  refreshListenable: auth.isLoggedIn.toValueListenable(),
+  refreshListenable: auth.isLoggedIn,
   routes: [
     GoRoute(
       path: '/',
