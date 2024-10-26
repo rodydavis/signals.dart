@@ -1,3 +1,11 @@
+## 6.0.0
+
+- Upgrade SignalsProvider/ComputedProvider/ReadonlySignalProvider to default imports
+- Add FlutterSignal to extends ValueNotifier
+- Add FlutterComputed/FlutterReadonlySignal to extends ValueListenable
+- Removing deprecated methods
+- Add more methods to SignalsMixin
+
 ## 5.5.1
 
 - Fix for Watch.builder not rebuilding with InheritedWidget

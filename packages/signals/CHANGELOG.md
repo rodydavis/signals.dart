@@ -1,3 +1,12 @@
+## 6.0.0
+
+- Switching to **preact_signals** package for core implementation
+- Removing old deprecated methods
+- Upgrade SignalsProvider/ComputedProvider/ReadonlySignalProvider to default imports
+- Add FlutterSignal to extends ValueNotifier
+- Add FlutterComputed/FlutterReadonlySignal to extends ValueListenable
+- Add more methods to SignalsMixin
+
 ## 5.5.0
 
 - Fix for hot reload

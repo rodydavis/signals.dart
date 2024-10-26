@@ -1,3 +1,8 @@
+## 6.0.0
+
+- Switching to **preact_signals** package for core implementation
+- Removing old deprecated methods
+
 ## 5.5.0
 
 - Fix for hot reload
