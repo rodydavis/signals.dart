@@ -2,6 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:signals_flutter/extended.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home: const SignalProviderExample(),
+    );
+  }
+}
+
 class SignalProviderExample extends StatelessWidget {
   const SignalProviderExample({
     super.key,
@@ -35,12 +54,14 @@ class SignalProviderExample extends StatelessWidget {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () =>
-              SignalProvider.of<int>(context, listen: false).value++,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-        ),
+        floatingActionButton: Builder(builder: (context) {
+          return FloatingActionButton(
+            onPressed: () =>
+                SignalProvider.of<int>(context, listen: false)!.value++,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          );
+        }),
       ),
     );
   }

@@ -5,25 +5,20 @@ import 'package:flutter/widgets.dart';
 import '../../signals_flutter.dart';
 
 /// [Signal] + [Stream]
-class SignalStream<T> extends WrappedSignal<T>
-    implements StreamSink<T>, Stream<T> {
+class SignalStream<T> extends Signal<T> implements StreamSink<T>, Stream<T> {
   /// [Signal] + [Stream]
   SignalStream(
-    T val, {
-    String? debugLabel,
-    bool autoDispose = false,
-  }) : super(signal<T>(
-          val,
-          debugLabel: debugLabel,
-          autoDispose: autoDispose,
-        )) {
-    stream = source.toStream();
+    super.internalValue, {
+    super.debugLabel,
+    super.autoDispose,
+  }) {
+    stream = toStream();
     addStream(stream);
   }
 
   /// [Signal] + [ValueNotifier]
   SignalStream.fromSignal(super.source) {
-    stream = source.toStream();
+    stream = toStream();
     addStream(stream);
   }
 
@@ -36,9 +31,7 @@ class SignalStream<T> extends WrappedSignal<T>
   late final Stream<T> stream;
 
   @override
-  void add(T event) {
-    source.value = event;
-  }
+  void add(T event) => value = event;
 
   @override
   void dispose() {

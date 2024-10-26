@@ -1,3 +1,6 @@
+analyzer:
+  errors:
+    invalid_use_of_internal_member: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:

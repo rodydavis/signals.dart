@@ -132,12 +132,11 @@ packages:
     source: hosted
     version: "1.9.0"
   preact_signals:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: preact_signals
-      sha256: "04e152edefaecd8a5ba96393644cc96f61cddd3b261877aba79f96410c35622f"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../preact_signals"
+      relative: true
+    source: path
     version: "1.8.1"
   signals_core:
     dependency: "direct overridden"

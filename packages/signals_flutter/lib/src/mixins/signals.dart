@@ -3,13 +3,14 @@ import 'dart:collection';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:signals_core/signals_core.dart' as core;
 
 import '../../signals_core.dart';
 
 typedef _SignalMetadata = ({
   bool? local,
-  ReadonlySignal<dynamic> target,
-  ({Function cb, EffectCleanup cleanup})? listener,
+  core.ReadonlySignal<dynamic> target,
+  ({Function cb, core.EffectCleanup cleanup})? listener,
 });
 
 /// Signals mixin that will automatically rebuild the widget tree when any of
@@ -36,8 +37,8 @@ typedef _SignalMetadata = ({
 /// ```
 mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   final _signals = HashMap.of(<int, _SignalMetadata>{});
-  EffectCleanup? _cleanup;
-  final _effects = <EffectCleanup>[];
+  core.EffectCleanup? _cleanup;
+  final _effects = <core.EffectCleanup>[];
 
   /// Dispose and remove signal
   void disposeSignal(int id) {
@@ -61,7 +62,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
 
   void _setup() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final cb = effect(() {
+      final cb = core.effect(() {
         for (final s in _signals.values.where((e) => e.local != null)) {
           s.target.value;
         }
@@ -72,7 +73,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     });
   }
 
-  void _watch(ReadonlySignal<dynamic> target, bool local) {
+  void _watch(core.ReadonlySignal<dynamic> target, bool local) {
     if (_signals[target.globalId]?.local != null) {
       return;
     }
@@ -85,7 +86,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     _setup();
   }
 
-  void _unwatch(ReadonlySignal<dynamic> target) {
+  void _unwatch(core.ReadonlySignal<dynamic> target) {
     if (!_signals.containsKey(target.globalId)) return;
     final listener = _signals[target.globalId]?.listener;
     _signals[target.globalId] = (
@@ -112,12 +113,12 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a [ListSignal]<T> and watch for changes
-  ListSignal<V> createListSignal<V>(
+  core.ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
     bool autoDispose = true,
   }) {
-    final s = ListSignal<V>(
+    final s = core.ListSignal<V>(
       list,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
@@ -127,12 +128,12 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a [SetSignal]<T> and watch for changes
-  SetSignal<V> createSetSignal<V>(
+  core.SetSignal<V> createSetSignal<V>(
     Set<V> set, {
     String? debugLabel,
     bool autoDispose = true,
   }) {
-    final s = SetSignal<V>(
+    final s = core.SetSignal<V>(
       set,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
@@ -142,12 +143,12 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a [QueueSignal]<T> and watch for changes
-  QueueSignal<V> createQueueSignal<V>(
+  core.QueueSignal<V> createQueueSignal<V>(
     Queue<V> queue, {
     String? debugLabel,
     bool autoDispose = true,
   }) {
-    final s = QueueSignal<V>(
+    final s = core.QueueSignal<V>(
       queue,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
@@ -157,12 +158,12 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a [MapSignal]<T> and watch for changes
-  MapSignal<K, V> createMapSignal<K, V>(
+  core.MapSignal<K, V> createMapSignal<K, V>(
     Map<K, V> value, {
     String? debugLabel,
     bool autoDispose = true,
   }) {
-    final s = MapSignal<K, V>(
+    final s = core.MapSignal<K, V>(
       value,
       debugLabel: debugLabel,
       autoDispose: autoDispose,
@@ -187,30 +188,30 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Bind an existing signal<T> and watch for changes
-  S bindSignal<V, S extends ReadonlySignal<V>>(S val) {
+  S bindSignal<V, S extends core.ReadonlySignal<V>>(S val) {
     _watch(val, false);
     return val;
   }
 
   /// Unbind an existing signal<T> changes
-  S unbindSignal<V, S extends ReadonlySignal<V>>(S val) {
+  S unbindSignal<V, S extends core.ReadonlySignal<V>>(S val) {
     _unwatch(val);
     return val;
   }
 
   /// Watch signal value
-  V watchSignal<V, S extends ReadonlySignal<V>>(S val) {
+  V watchSignal<V, S extends core.ReadonlySignal<V>>(S val) {
     return bindSignal(val).value;
   }
 
   /// Unwatch an existing signal<T> value changes
-  V unwatchSignal<V, S extends ReadonlySignal<V>>(S val) {
+  V unwatchSignal<V, S extends core.ReadonlySignal<V>>(S val) {
     return unbindSignal(val).value;
   }
 
   /// Watch signal value
   void listenSignal(
-    ReadonlySignal<dynamic> target,
+    core.ReadonlySignal<dynamic> target,
     void Function() callback, {
     String? debugLabel,
   }) {
@@ -230,7 +231,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
 
   /// Stop listening to a signal value
   void unlistenSignal(
-    ReadonlySignal<dynamic> target,
+    core.ReadonlySignal<dynamic> target,
     void Function() callback,
   ) {
     final current = _signals[target.globalId];
@@ -250,12 +251,12 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   ///
   /// Calling this method in build() will create a new
   /// effect every render.
-  EffectCleanup createEffect(
+  core.EffectCleanup createEffect(
     dynamic Function() cb, {
     String? debugLabel,
     dynamic Function()? onDispose,
   }) {
-    final s = effect(
+    final s = core.effect(
       cb,
       debugLabel: debugLabel,
       onDispose: onDispose,

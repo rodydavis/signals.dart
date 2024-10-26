@@ -171,7 +171,7 @@ class Watch<T extends Widget> extends StatefulWidget {
   final String? debugLabel;
 
   /// List of optional dependencies to watch
-  final List<ReadonlySignal<dynamic>> dependencies;
+  final List<core.ReadonlySignal<dynamic>> dependencies;
 
   @override
   State<Watch<T>> createState() => _WatchState<T>();
@@ -194,8 +194,8 @@ class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
   @override
   void reassemble() {
     super.reassemble();
-    final target = SignalsObserver.instance;
-    if (target is DevToolsSignalsObserver) {
+    final target = core.SignalsObserver.instance;
+    if (target is core.DevToolsSignalsObserver) {
       target.reassemble();
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
