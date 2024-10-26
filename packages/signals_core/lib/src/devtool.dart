@@ -2,6 +2,11 @@
 import 'dart:convert';
 
 import 'dart:developer' as developer;
+// ignore: implementation_imports
+import 'package:preact_signals/src/listenable.dart' show listenableSources;
+
+// ignore: implementation_imports
+import 'package:preact_signals/src/readonly.dart' show readonlySignalTargets;
 
 import 'core/signals.dart';
 import 'utils/constants.dart';
@@ -100,8 +105,9 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': instance.sources.map((e) => e.globalId).join(','),
-        'targets': instance.targets.map((e) => e.globalId).join(','),
+        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
+        'targets':
+            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
         'value': '',
         'type': 'computed',
       };
@@ -118,8 +124,9 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'sources': instance.sources.map((e) => e.globalId).join(','),
-        'targets': instance.targets.map((e) => e.globalId).join(','),
+        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
+        'targets':
+            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
         'type': 'computed',
       };
     });
@@ -134,7 +141,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': instance.peek()?.toString(),
-        'targets': instance.targets.map((e) => e.globalId).join(','),
+        'targets':
+            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
         'type': 'signal',
       };
     });
@@ -150,7 +158,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'targets': instance.targets.map((e) => e.globalId).join(','),
+        'targets':
+            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
         'type': 'signal',
       };
     });
@@ -168,7 +177,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': instance.sources.map((e) => e.globalId).join(','),
+        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
         'value': '0',
         'type': 'effect',
       };
@@ -184,7 +193,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': instance.sources.map((e) => e.globalId).join(','),
+        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
         'value': '$count',
         'type': 'effect',
       };
@@ -215,7 +224,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'id': e.globalId,
               'label': e.debugLabel,
               'value': e.toString(),
-              'targets': e.targets.map((e) => e.globalId).join(','),
+              'targets':
+                  readonlySignalTargets(e).map((e) => e.globalId).join(','),
               'type': 'signal',
             })
         .toList();
@@ -226,8 +236,9 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'id': e.globalId,
               'label': e.debugLabel,
               'value': e.toString(),
-              'targets': e.targets.map((e) => e.globalId).join(','),
-              'sources': e.sources.map((e) => e.globalId).join(','),
+              'sources': listenableSources(e).map((e) => e.globalId).join(','),
+              'targets':
+                  readonlySignalTargets(e).map((e) => e.globalId).join(','),
               'type': 'computed',
             })
         .toList();
@@ -238,7 +249,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'id': e.globalId,
               'label': e.debugLabel,
               'value': '${_effectCount[e.globalId] ?? 0}',
-              'sources': e.sources.map((e) => e.globalId).join(','),
+              'sources': listenableSources(e).map((e) => e.globalId).join(','),
               'type': 'effect',
             })
         .toList();

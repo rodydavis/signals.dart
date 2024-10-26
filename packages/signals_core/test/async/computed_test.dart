@@ -60,7 +60,7 @@ void main() {
 
       final signal = computedAsync(() => future());
       expect(signal.peek().isLoading, true);
-      expect(calls, 0);
+      expect(calls, 1);
 
       await signal.future;
 
@@ -86,7 +86,7 @@ void main() {
 
       final signal = computedAsync(() => future());
       expect(signal.peek().isLoading, true);
-      expect(calls, 0);
+      expect(calls, 1);
 
       await signal.future;
 
@@ -118,7 +118,7 @@ void main() {
 
       final signal = computedAsync(() => future());
       expect(signal.peek().isLoading, true);
-      expect(calls, 0);
+      expect(calls, 1);
 
       await signal.future;
 

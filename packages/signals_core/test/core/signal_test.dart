@@ -4,6 +4,8 @@ import 'dart:core';
 
 import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
+import 'package:preact_signals/src/listenable.dart';
+import 'package:preact_signals/src/readonly.dart' hide ReadonlySignal;
 
 void main() {
   SignalsObserver.instance = null;
@@ -64,20 +66,21 @@ void main() {
       final instance = Effect(() {
         a.value;
       });
+      instance();
 
-      expect(instance.sources.contains(a), true);
-      expect(instance.sources.contains(b), false);
-      expect(a.targets.contains(instance), true);
-      expect(b.targets.contains(instance), false);
+      expect(listenableSources(instance).contains(a), true);
+      expect(listenableSources(instance).contains(b), false);
+      expect(readonlySignalTargets(a).contains(instance), true);
+      expect(readonlySignalTargets(b).contains(instance), false);
       expect(a.version, 0);
 
       a.value++;
       instance.dispose();
 
-      expect(instance.sources.contains(a), false);
-      expect(instance.sources.contains(b), false);
-      expect(a.targets.contains(instance), false);
-      expect(b.targets.contains(instance), false);
+      expect(listenableSources(instance).contains(a), false);
+      expect(listenableSources(instance).contains(b), false);
+      expect(readonlySignalTargets(a).contains(instance), false);
+      expect(readonlySignalTargets(b).contains(instance), false);
       expect(a.version, 1);
     });
 
@@ -258,22 +261,6 @@ void main() {
 
       // ignore: unnecessary_type_check
       expect(b is ReadonlySignal, true);
-    });
-
-    test('valueSignal', () {
-      // ignore: deprecated_member_use_from_same_package
-      final a = valueSignal(1);
-
-      expect(a.value, 1);
-    });
-
-    test('forceUpdate', () {
-      final a = signal(0);
-
-      // ignore: deprecated_member_use_from_same_package
-      a.forceUpdate(1);
-
-      expect(a.value, 1);
     });
 
     test('should run the callback when the signal value changes', () {

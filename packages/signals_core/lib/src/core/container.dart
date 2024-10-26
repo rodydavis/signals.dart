@@ -58,7 +58,7 @@ import 'signals.dart';
 ///  settings.darkMode.value = 'true';
 ///}
 /// ```
-class SignalContainer<T, Arg, S extends ReadonlySignal<T>> {
+class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
   /// If true then signals will be cached when created
   final bool cache;
 

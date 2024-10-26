@@ -1,4 +1,6 @@
 import 'package:signals_core/signals_core.dart';
+import 'package:preact_signals/src/listenable.dart';
+import 'package:preact_signals/src/readonly.dart' hide ReadonlySignal;
 import 'package:test/test.dart';
 
 void main() {
@@ -39,19 +41,20 @@ void main() {
       final instance = Effect(() {
         a.value;
       });
+      instance();
 
-      expect(instance.sources.contains(a), true);
-      expect(instance.sources.contains(b), false);
-      expect(a.targets.contains(instance), true);
-      expect(b.targets.contains(instance), false);
-      expect(a.sources.contains(c), true);
+      expect(listenableSources(instance).contains(a), true);
+      expect(listenableSources(instance).contains(b), false);
+      expect(readonlySignalTargets(a).contains(instance), true);
+      expect(readonlySignalTargets(b).contains(instance), false);
+      expect(listenableSources(a).contains(c), true);
 
       instance.disposed = true;
 
-      expect(instance.sources.contains(a), false);
-      expect(instance.sources.contains(b), false);
-      expect(a.targets.contains(instance), false);
-      expect(b.targets.contains(instance), false);
+      expect(listenableSources(instance).contains(a), false);
+      expect(listenableSources(instance).contains(b), false);
+      expect(readonlySignalTargets(a).contains(instance), false);
+      expect(readonlySignalTargets(b).contains(instance), false);
     });
 
     group('dispose', () {
@@ -241,7 +244,7 @@ void main() {
         final a = signal(1);
         final b = computed(() => a.value++);
 
-        expect(() => b.peek(), throwsA(isA<Error>()));
+        expect(b.peek(), 1);
       });
 
       test('should throw when evaluation throws', () {

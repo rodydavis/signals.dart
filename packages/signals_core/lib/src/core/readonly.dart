@@ -1,125 +1,11 @@
 part of 'signals.dart';
 
 /// Read only signals can just retrieve a value but not update or cause mutations
-abstract class ReadonlySignal<T> {
-  ReadonlySignal._({
-    required this.globalId,
-    this.debugLabel,
-    this.autoDispose = false,
-  });
+abstract class ReadonlySignal<T> = signals.ReadonlySignal<T>
+    with ReadonlySignalMixin<T>;
 
-  /// Throws and error if read after dispose and can be
-  /// disposed on last unsubscribe.
-  final bool autoDispose;
-
-  /// Returns true if dispose has been called and will throw and
-  /// error on value read
-  bool disposed = false;
-
-  /// @internal for testing getter to track all the effects currently
-  /// effected in the signal
-  Iterable<SignalListenable> get targets sync* {
-    for (var node = _targets; node != null; node = node._nextTarget) {
-      yield node._target;
-    }
-  }
-
-  /// Check if the signal is lazy and has not had a value set
-  bool get isInitialized;
-
-  /// Check if there are any targets attached
-  bool get hasTargets => _targets != null;
-
-  void _notifyAllTargets() {
-    for (var node = _targets; node != null; node = node._nextTarget) {
-      node._target._notify();
-    }
-  }
-
-  /// Debug label for Debug Mode
-  final String? debugLabel;
-
-  /// Global ID of the signal
-  final int globalId;
-
-  /// Compute the current value
-  T get value;
-
-  T get _value;
-
-  @override
-  String toString() => '$value';
-
-  /// Convert value to JSON
-  dynamic toJson() => value;
-
-  /// Return the value when invoked
-  T call() => value;
-
-  /// Get the current value
-  T get() => value;
-
-  /// In the rare instance that you have an effect that should write to
-  /// another signal based on the previous value, but you _don't_ want the
-  /// effect to be subscribed to that signal, you can read a signals's
-  /// previous value via `signal.peek()`.
-  ///
-  /// ```dart
-  /// final counter = signal(0);
-  /// final effectCount = signal(0);
-  ///
-  /// effect(() {
-  /// 	print(counter.value);
-  ///
-  /// 	// Whenever this effect is triggered, increase `effectCount`.
-  /// 	// But we don't want this signal to react to `effectCount`
-  /// 	effectCount.value = effectCount.peek() + 1;
-  /// });
-  /// ```
-  ///
-  /// Note that you should only use `signal.peek()` if you really need it.
-  /// Reading a signal's value via `signal.value` is the preferred way in most scenarios.
-  T peek() {
-    final prevContext = _evalContext;
-    _evalContext = null;
-    try {
-      return _value;
-    } finally {
-      _evalContext = prevContext;
-    }
-  }
-
-  /// Subscribe to value changes
-  EffectCleanup subscribe(void Function(T value) fn) {
-    return effect(() {
-      final value = this.value;
-
-      final prevContext = _evalContext;
-      _evalContext = null;
-      try {
-        fn(value);
-      } finally {
-        _evalContext = prevContext;
-      }
-    });
-  }
-
-  /// @internal
-  /// Version numbers should always be >= 0, because the special value -1 is used
-  /// by Nodes to signify potentially unused but recyclable nodes.
-  int _version = 0;
-
-  /// Version number is used to track changes and will increment for every set
-  int get version => _version;
-
-  // @internal
-  _Node? _node;
-
-  // @internal
-  _Node? _targets;
-
-  bool _refresh();
-
+/// Readonly signal mixin for adding addition helper methods
+mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
   final _disposeCallbacks = <void Function()>{};
 
   /// Add a cleanup function to be called when the signal is disposed
@@ -142,15 +28,6 @@ abstract class ReadonlySignal<T> {
     };
   }
 
-  /// Dispose the signal
-  void dispose() {
-    if (disposed) return;
-    for (final cleanup in _disposeCallbacks) {
-      cleanup();
-    }
-    disposed = true;
-  }
-
   /// Value that the signal was created with
   T get initialValue;
 
@@ -171,32 +48,41 @@ abstract class ReadonlySignal<T> {
   //   ]);
   // }
 
-  void _subscribe(_Node node) {
-    if (_targets != node && node._prevTarget == null) {
-      node._nextTarget = _targets;
-      if (_targets != null) {
-        _targets!._prevTarget = node;
-      }
-      _targets = node;
-    }
+  /// Throws and error if read after dispose and can be
+  /// disposed on last unsubscribe.
+  bool autoDispose = false;
+
+  /// Returns true if dispose has been called and will throw and
+  /// error on value read
+  bool _disposed = false;
+
+  /// Check if the effect is disposed
+  bool get disposed => _disposed;
+
+  /// Force a signal to be disposed
+  set disposed(bool value) {
+    if (_disposed == value) return;
+    if (!_disposed & value) dispose();
+    _disposed = value;
   }
 
-  void _unsubscribe(_Node node) {
-    // Only run the unsubscribe step if the signal has any subscribers to begin with.
-    if (_targets != null) {
-      final prev = node._prevTarget;
-      final next = node._nextTarget;
-      if (prev != null) {
-        prev._nextTarget = next;
-        node._prevTarget = null;
-      }
-      if (next != null) {
-        next._prevTarget = prev;
-        node._nextTarget = null;
-      }
-      if (node == _targets) {
-        _targets = next;
-      }
+  /// Dispose the signal
+  void dispose() {
+    if (_disposed) return;
+    for (final cleanup in _disposeCallbacks) {
+      cleanup();
     }
+    _disposed = true;
   }
+
+  /// Debug label for Debug Mode
+  String? get debugLabel;
+}
+
+/// Create a new plain readonly signal
+ReadonlySignal<T> readonly<T>(
+  /// The initial value for the signal
+  T value,
+) {
+  return signal<T>(value);
 }

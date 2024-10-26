@@ -1,3 +1,6 @@
+// ignore: implementation_imports
+import 'package:preact_signals/src/node.dart';
+
 import 'signals.dart';
 
 /// Wrap a [ReadonlySignal] and implement the same API
@@ -61,13 +64,34 @@ class WrappedReadonlySignal<T, S extends ReadonlySignal<T>>
   void dispose() => source.dispose();
 
   @override
-  Iterable<SignalListenable> get targets => source.targets;
+  late Symbol brand = source.brand;
 
   @override
-  bool get hasTargets => source.hasTargets;
+  late Node? node = source.node;
 
   @override
-  bool get isInitialized => source.isInitialized;
+  late Node? targets = source.targets;
+
+  @override
+  set autoDispose(bool val) {
+    source.autoDispose = val;
+  }
+
+  @override
+  bool internalRefresh() => source.internalRefresh();
+
+  @override
+  void subscribeToNode(Node node) {
+    source.subscribeToNode(node);
+  }
+
+  @override
+  void unsubscribeFromNode(Node node) {
+    source.unsubscribeFromNode(node);
+  }
+
+  @override
+  T get internalValue => source.initialValue;
 }
 
 /// Wrap a [Signal] and implement the same API
@@ -75,10 +99,6 @@ class WrappedSignal<T> extends WrappedReadonlySignal<T, Signal<T>>
     implements Signal<T> {
   /// Wrap a [Signal] and implement the same API
   WrappedSignal(super.source);
-
-  @override
-  @Deprecated('use .set(..., force: true) instead')
-  void forceUpdate([T? val]) => source.forceUpdate(val);
 
   @override
   Signal<T> overrideWith(T value) => source.overrideWith(value);
@@ -100,4 +120,25 @@ class WrappedSignal<T> extends WrappedReadonlySignal<T, Signal<T>>
 
   @override
   set value(T val) => source.value = val;
+
+  @override
+  late T internalValue = source.internalValue;
+
+  @override
+  late bool isInitialized = source.isInitialized;
+
+  @override
+  set initialValue(T val) {
+    source.initialValue = val;
+  }
+
+  @override
+  void internalSetValue(T val) {
+    source.internalSetValue(val);
+  }
+
+  @override
+  set version(int val) {
+    source.version = val;
+  }
 }
