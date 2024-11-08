@@ -8,7 +8,7 @@
     ];
     bootstrap = ''
         mkdir "$out"
-        cp -rf ${./.}/examples/${example}/ "$out"
+        cp -rf ${./.}/examples/${example}/ "$out/"
         mkdir "$out"/.idx
         cp ${./dev.nix} "$out"/.idx/dev.nix
         chmod -R u+w "$out"
