@@ -140,7 +140,7 @@ class CounterWidget extends StatefulWidget {
   _CounterWidgetState createState() => _CounterWidgetState();
 }
 
-class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
   late final counter = createSignal(context, 0);
 
   @override
@@ -165,7 +165,7 @@ class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMi
 
 No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
 
-The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+The `SignalsMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
 
 ## Testing
 
