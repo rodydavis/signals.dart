@@ -99,7 +99,7 @@ part of 'signals.dart';
 ///   _CounterWidgetState createState() => _CounterWidgetState();
 /// }
 ///
-/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
 ///   late final counter = createSignal(context, 0);
 ///   late final isEven = createComputed(context, () => counter.value.isEven);
 ///   late final isOdd = createComputed(context, () => counter.value.isOdd);
@@ -126,7 +126,7 @@ part of 'signals.dart';
 ///
 /// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
 ///
-/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+/// The `SignalsMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
 ///
 /// ## Testing
 ///
@@ -269,7 +269,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   ///   _CounterWidgetState createState() => _CounterWidgetState();
   /// }
   ///
-  /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+  /// class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
   ///   late final counter = createSignal(context, 0);
   ///   late final isEven = createComputed(context, () => counter.value.isEven);
   ///   late final isOdd = createComputed(context, () => counter.value.isOdd);
@@ -296,7 +296,7 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   ///
   /// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
   ///
-  /// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+  /// The `SignalsMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
   ///
   /// ## Testing
   ///
@@ -655,7 +655,7 @@ typedef ComputedCallback<T> = T Function();
 ///   _CounterWidgetState createState() => _CounterWidgetState();
 /// }
 ///
-/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
 ///   late final counter = createSignal(context, 0);
 ///   late final isEven = createComputed(context, () => counter.value.isEven);
 ///   late final isOdd = createComputed(context, () => counter.value.isOdd);
@@ -682,7 +682,7 @@ typedef ComputedCallback<T> = T Function();
 ///
 /// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
 ///
-/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+/// The `SignalsMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
 ///
 /// ## Testing
 ///

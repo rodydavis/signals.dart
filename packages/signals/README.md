@@ -237,7 +237,7 @@ class Counter extends StatefulWidget {
   _CounterState createState() => _CounterState();
 }
 
-class _CounterState extends State<Counter> with SignalsAutoDisposeMixin {
+class _CounterState extends State<Counter> with SignalsMixin {
   late final counter = createSignal(context, 0);
   late final isEven = createComputed(context, () => counter.value.isEven);
   late final isOdd = createComputed(context, () => counter.value.isOdd);
@@ -259,7 +259,7 @@ class _CounterState extends State<Counter> with SignalsAutoDisposeMixin {
 }
 ```
 
-The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+The `SignalsMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
 
 #### Fine Grained Rebuilding
 
