@@ -246,11 +246,11 @@ final counterRef = Ref.scoped((_) => Counter());
 
 Zones are another built in way to provide objects to your application via Dart [Zones](https://dart.dev/articles/archive/zones).
 
-[Scoped](https://github.com/shorebirdtech/shorebird/tree/main/packages/scoped) is a package that easily integrates Zones with Dart.
+[Scoped Deps](https://pub.dev/packages/scoped_deps) is a package that easily integrates Zones with Dart.
 
 ```dart
 import 'package:signals/signals_flutter.dart';
-import 'package:scoped/scoped.dart';
+import 'package:scoped_deps/scoped_deps.dart';
 import 'package:flutter/material.dart';
 
 final counter = create(() => signal(0));
