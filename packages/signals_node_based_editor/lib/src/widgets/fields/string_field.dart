@@ -93,6 +93,10 @@ class _OptionalStringFieldState extends State<OptionalStringField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.zero,
+      ),
     );
   }
 }

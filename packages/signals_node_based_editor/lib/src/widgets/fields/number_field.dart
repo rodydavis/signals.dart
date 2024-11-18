@@ -50,6 +50,10 @@ class _NumberFieldState<T extends num> extends State<NumberField<T>> {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.zero,
+      ),
     );
   }
 }
@@ -108,6 +112,10 @@ class _OptionalNumberFieldState<T extends num>
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.zero,
+      ),
     );
   }
 }

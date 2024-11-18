@@ -118,7 +118,7 @@ class GraphView extends StatelessWidget {
   Widget renderNode(BuildContext context, GraphNode node, Graph graph) {
     return Watch((context) {
       final visible = graph.nodeVisible(node);
-      if (!visible && graph.lazyRender) return SizedBox.shrink();
+      if (!visible && graph.lazyRender) return const SizedBox.shrink();
       final selected = graph //
           .selection
           .value
@@ -129,8 +129,9 @@ class GraphView extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: colors.surface,
-            borderRadius:
-                BorderRadius.all(const Radius.circular(GraphNode.borderRadius)),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(GraphNode.borderRadius),
+            ),
           ),
           foregroundDecoration: BoxDecoration(
             border: Border.all(

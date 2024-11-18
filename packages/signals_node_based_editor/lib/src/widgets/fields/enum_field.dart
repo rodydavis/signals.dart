@@ -60,6 +60,10 @@ class _EnumFieldState<T extends Enum> extends State<EnumField<T>> {
           ),
       ],
       onChanged: (val) {},
+      decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.zero,
+      ),
     );
   }
 }
