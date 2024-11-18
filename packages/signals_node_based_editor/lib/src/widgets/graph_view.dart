@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart'
     hide InteractiveViewer, TransformationController;
 import 'package:signals/signals_flutter.dart';
+import 'package:signals_node_based_editor/signals_node_based_editor.dart';
 import 'package:vector_math/vector_math_64.dart' show Quad;
 
 import '../graph.dart';
@@ -18,11 +19,14 @@ class GraphView extends StatelessWidget {
     required this.graph,
     this.focusNode,
     this.gridSize = const Size.square(50),
+    this.portColorBuilder,
   });
 
   final Graph graph;
   final FocusNode? focusNode;
   final Size gridSize;
+
+  final Color? Function(NodeWidgetPort)? portColorBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +91,7 @@ class GraphView extends StatelessWidget {
             children: [
               for (final node in graph.nodes)
                 LayoutId(
-                  id: node.id,
+                  id: node.id$,
                   child: () {
                     node.rect$.value;
                     var nodeRect =
@@ -129,7 +133,7 @@ class GraphView extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: colors.surface,
-            borderRadius: const BorderRadius.all(
+            borderRadius: BorderRadius.all(
               Radius.circular(GraphNode.borderRadius),
             ),
           ),
@@ -147,13 +151,13 @@ class GraphView extends StatelessWidget {
                   rect: node.headerRect,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(GraphNode.borderRadius),
-                      topRight: const Radius.circular(GraphNode.borderRadius),
+                      topLeft: Radius.circular(GraphNode.borderRadius),
+                      topRight: Radius.circular(GraphNode.borderRadius),
                       bottomLeft: node.collapsed$.value
-                          ? const Radius.circular(GraphNode.borderRadius)
+                          ? Radius.circular(GraphNode.borderRadius)
                           : Radius.zero,
                       bottomRight: node.collapsed$.value
-                          ? const Radius.circular(GraphNode.borderRadius)
+                          ? Radius.circular(GraphNode.borderRadius)
                           : Radius.zero,
                     ),
                     child: Container(
@@ -234,7 +238,7 @@ class GraphView extends StatelessWidget {
                     Positioned.fromRect(
                       rect: item.control,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           vertical: GraphNode.portPadding,
                           horizontal: 10,
                         ),
@@ -266,7 +270,7 @@ class GraphView extends StatelessWidget {
                     Positioned.fromRect(
                       rect: item.control,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           vertical: GraphNode.portPadding,
                           horizontal: 10,
                         ),
@@ -287,6 +291,8 @@ class GraphView extends StatelessWidget {
                                 textAlign: TextAlign.left,
                                 type: item.port.type,
                                 optional: item.port.optional,
+                                clip: !(item.port.knob is ObjectKnob ||
+                                    item.port.knob is OptionalObjectKnob),
                               ),
                               const SizedBox(width: 8),
                               Expanded(
@@ -327,10 +333,11 @@ class GraphView extends StatelessWidget {
     required String type,
     required bool optional,
     TextAlign textAlign = TextAlign.left,
+    bool clip = true,
   }) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 100,
+      constraints: BoxConstraints(
+        // maxWidth: clip ? 100 : double.infinity,
         minWidth: 50,
       ),
       child: Tooltip(
@@ -353,10 +360,11 @@ class GraphView extends StatelessWidget {
 
   Widget buildNodePort(BuildContext context, NodeWidgetPort port) {
     final colors = Theme.of(context).colorScheme;
+    final color = portColorBuilder?.call(port) ?? colors.secondary;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
-        color: colors.secondary,
+        color: color,
         width: double.infinity,
         height: double.infinity,
       ),

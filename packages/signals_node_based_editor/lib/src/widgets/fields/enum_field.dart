@@ -52,6 +52,7 @@ class _EnumFieldState<T extends Enum> extends State<EnumField<T>> {
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
       value: widget.value,
+      isExpanded: true,
       items: [
         for (final item in widget.values)
           DropdownMenuItem(
@@ -64,6 +65,11 @@ class _EnumFieldState<T extends Enum> extends State<EnumField<T>> {
         isDense: true,
         contentPadding: EdgeInsets.zero,
       ),
+      onChanged: (val) {
+        if (val is T) {
+          widget.onChanged(val);
+        }
+      },
     );
   }
 }

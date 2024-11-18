@@ -12,7 +12,7 @@ mixin JsonInteropMixin<Node extends GraphNode> on Graph<Node> {
 
   Map<String, dynamic> nodeToJson(Node node) {
     return {
-      '@id': node.id,
+      '@id': node.id$,
       '@type': node.type$,
       '@label': node.label$.value,
       '@collapsed': node.collapsed$.value,
@@ -60,11 +60,11 @@ mixin JsonInteropMixin<Node extends GraphNode> on Graph<Node> {
         for (final connector in connectors.value)
           {
             'source': {
-              'id': connector.output.node.id,
+              'id': connector.output.node.id$,
               'label': connector.output.meta.port.label,
             },
             'target': {
-              'id': connector.input.node.id,
+              'id': connector.input.node.id$,
               'label': connector.input.meta.port.label,
             },
           }
