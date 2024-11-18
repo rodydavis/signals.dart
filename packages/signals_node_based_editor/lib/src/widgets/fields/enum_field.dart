@@ -60,7 +60,6 @@ class _EnumFieldState<T extends Enum> extends State<EnumField<T>> {
             child: Text(item.name),
           ),
       ],
-      onChanged: (val) {},
       decoration: const InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.zero,
