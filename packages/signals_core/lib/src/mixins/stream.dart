@@ -5,17 +5,15 @@ import '../../signals_core.dart';
 /// [Stream] implementation for [AsyncState]
 mixin StreamSignalMixin<T> on ReadonlySignal<T> implements Stream<T> {
   final _controller = StreamController<T>.broadcast(sync: true);
-  void Function()? _cleanup;
 
   late final Stream<T> _stream = () {
     final s = toStream();
-    _cleanup = subscribe(_controller.add);
+    onDispose(subscribe(_controller.add));
     return s;
   }();
 
   @override
   void dispose() {
-    _cleanup?.call();
     _controller.close();
     super.dispose();
   }
