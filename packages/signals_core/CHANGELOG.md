@@ -2,6 +2,8 @@
 
 - Switching to **preact_signals** package for core implementation
 - Removing old deprecated methods
+- Add new mixins: EventSinkSignalMixin, SinkSignalMixin, StreamSignalMixin
+- Update AsyncSignal to implement EventSink
 
 ## 5.5.0
 

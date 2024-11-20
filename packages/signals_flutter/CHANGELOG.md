@@ -5,6 +5,8 @@
 - Add FlutterComputed/FlutterReadonlySignal to extends ValueListenable
 - Removing deprecated methods
 - Add more methods to SignalsMixin
+- Add new mixins: EventSinkSignalMixin, SinkSignalMixin, StreamSignalMixin, ValueListenableSignalMixin, ValueNotifierSignalMixin
+- Update AsyncSignal to implement EventSink
 
 ## 5.5.1
 

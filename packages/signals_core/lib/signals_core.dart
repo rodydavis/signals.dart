@@ -16,5 +16,7 @@ export 'src/async/computed.dart';
 export 'src/value/value.dart';
 export 'src/core/container.dart';
 export 'src/core/signals.dart';
-export 'src/core/wrappers.dart';
+export 'src/mixins/event_sink.dart';
+export 'src/mixins/sink.dart';
+export 'src/mixins/stream.dart';
 export 'src/devtool.dart';

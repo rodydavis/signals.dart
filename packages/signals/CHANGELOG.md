@@ -6,6 +6,8 @@
 - Add FlutterSignal to extends ValueNotifier
 - Add FlutterComputed/FlutterReadonlySignal to extends ValueListenable
 - Add more methods to SignalsMixin
+- Add new mixins: EventSinkSignalMixin, SinkSignalMixin, StreamSignalMixin, ValueListenableSignalMixin, ValueNotifierSignalMixin
+- Update AsyncSignal to implement EventSink
 
 ## 5.5.0
 

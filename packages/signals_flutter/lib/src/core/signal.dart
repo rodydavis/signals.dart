@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:signals_core/signals_core.dart' as core;
 
+import '../mixins/value_notifier.dart';
 import 'readonly.dart';
 
 /// Simple writeable single
 class FlutterSignal<T> extends core.Signal<T>
+    with ValueNotifierSignalMixin<T>
     implements ValueNotifier<T>, FlutterReadonlySignal<T> {
-  final _listeners = <VoidCallback, void Function()>{};
-
   /// Simple writeable signal.
   ///
   /// ```dart
@@ -34,33 +34,6 @@ class FlutterSignal<T> extends core.Signal<T>
     super.autoDispose,
     super.debugLabel,
   }) : super.lazy();
-
-  @override
-  void addListener(VoidCallback listener) {
-    _listeners.putIfAbsent(listener, () {
-      return subscribe((_) => listener());
-    });
-  }
-
-  @override
-  void removeListener(VoidCallback listener) {
-    final cleanup = _listeners.remove(listener);
-    cleanup?.call();
-  }
-
-  @override
-  bool get hasListeners => _listeners.isNotEmpty;
-
-  @override
-  void notifyListeners() {
-    set(value, force: true);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _listeners.clear();
-  }
 }
 
 /// Simple signal that can be created with type T that
