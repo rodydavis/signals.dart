@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:signals_flutter/extended.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
