@@ -100,4 +100,7 @@ class WrappedSignal<T> extends WrappedReadonlySignal<T, Signal<T>>
 
   @override
   set value(T val) => source.value = val;
+
+  @override
+  get untrackedValue => untracked(() => source.value);
 }

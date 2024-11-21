@@ -548,6 +548,21 @@ class Signal<T> extends ReadonlySignal<T> {
     return _value;
   }
 
+  /// Run a callback function that returns the signal value without
+  /// subscribing to the signal updates.
+  T get untrackedValue {
+    if (_lazy) {
+      throw LazySignalInitializationError(this);
+    }
+    if (disposed) {
+      if (kDebugMode) {
+        print(
+            'signal warning: [$globalId|$debugLabel] has been read after disposed: ${StackTrace.current}');
+      }
+    }
+    return untracked(() => _value);
+  }
+
   /// Returns a readonly signal
   ReadonlySignal<T> readonly() => this;
 
