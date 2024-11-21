@@ -98,7 +98,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void onComputedCreated(Computed instance) {
+  void onComputedCreated<T>(Computed<T> instance) {
     if (!enabled) return;
     log('computed created: [${instance.globalId}|${instance.debugLabel}]');
     _debugPostEvent('ext.signals.computedCreate', () {
@@ -116,7 +116,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void onComputedUpdated(Computed instance, value) {
+  void onComputedUpdated<T>(Computed<T> instance, T value) {
     if (!enabled) return;
     log('computed updated: [${instance.globalId}|${instance.debugLabel}] => $value');
     _debugPostEvent('ext.signals.computedUpdate', () {
@@ -133,9 +133,9 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void onSignalCreated(Signal instance) {
+  void onSignalCreated<T>(Signal<T> instance, T value) {
     if (!enabled) return;
-    log('signal created: [${instance.globalId}|${instance.debugLabel}] => ${instance.peek()}');
+    log('signal created: [${instance.globalId}|${instance.debugLabel}] => $value');
     _debugPostEvent('ext.signals.signalCreate', () {
       return {
         'id': instance.globalId,
@@ -150,7 +150,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   }
 
   @override
-  void onSignalUpdated(Signal instance, dynamic value) {
+  void onSignalUpdated<T>(Signal<T> instance, T value) {
     if (!enabled) return;
     log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
     _debugPostEvent('ext.signals.signalUpdate', () {

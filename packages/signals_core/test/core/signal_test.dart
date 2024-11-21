@@ -23,8 +23,6 @@ void main() {
 
       expect(c.value, 1);
       expect(b.value, 1);
-      expect(b.initialValue, 0);
-      expect(b.previousValue, 0);
     });
 
     test('lazy init', () {

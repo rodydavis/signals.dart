@@ -6,6 +6,17 @@ abstract class ReadonlySignal<T> = signals.ReadonlySignal<T>
 
 /// Readonly signal mixin for adding addition helper methods
 mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
+  /// Check if a signal value is set (does not subscribe)
+  bool get isInitialized;
+
+  /// Internal hook for after a signal is created
+  @internal
+  void afterCreate(T val);
+
+  /// Internal hook for after a signal is updated
+  @internal
+  void beforeUpdate(T val);
+
   final _disposeCallbacks = <void Function()>{};
 
   /// Add a cleanup function to be called when the signal is disposed
@@ -27,13 +38,6 @@ mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
       _disposeCallbacks.remove(cleanup);
     };
   }
-
-  /// Value that the signal was created with
-  T get initialValue;
-
-  /// Previous value that was set before the current
-  T? get previousValue => _previousValue;
-  T? _previousValue;
 
   // @override
   // bool operator ==(Object other) {

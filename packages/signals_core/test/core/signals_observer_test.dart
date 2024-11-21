@@ -8,22 +8,22 @@ class TestSignalsObserver extends SignalsObserver {
   double _computedUpdatedCount = 0;
 
   @override
-  void onSignalCreated(Signal instance) {
+  void onSignalCreated<T>(Signal<T> instance, T value) {
     _signalCreatedCount++;
   }
 
   @override
-  void onSignalUpdated(Signal instance, value) {
+  void onSignalUpdated<T>(Signal<T> instance, T value) {
     _signalUpdatedCount++;
   }
 
   @override
-  void onComputedCreated(Computed instance) {
+  void onComputedCreated<T>(Computed<T> instance) {
     _computedCreatedCount++;
   }
 
   @override
-  void onComputedUpdated(Computed instance, value) {
+  void onComputedUpdated<T>(Computed<T> instance, T value) {
     _computedUpdatedCount++;
   }
 

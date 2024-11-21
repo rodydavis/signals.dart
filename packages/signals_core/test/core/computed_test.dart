@@ -198,21 +198,6 @@ void main() {
       expect(() => s.recompute(), throwsException);
     });
 
-    test('previousValue', () {
-      int i = 0;
-      final s = computed(() => i++);
-      s.recompute();
-      s.recompute();
-      expect(s.previousValue, 1);
-      expect(s.value, 2);
-    });
-
-    test('initialValue', () {
-      final s = computed(() => 1);
-      expect(s.value, 1);
-      expect(s.initialValue, 1);
-    });
-
     test('toString()', () {
       final s = computed(() => 1);
       expect(s.toString(), '1');

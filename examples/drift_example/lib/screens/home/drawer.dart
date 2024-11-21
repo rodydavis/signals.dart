@@ -14,7 +14,7 @@ class CategoriesDrawer extends StatefulWidget {
 }
 
 class _CategoriesDrawerState extends State<CategoriesDrawer> {
-  final stream = AppDatabase.instance().categoriesWithCount().toSignal();
+  final stream = AppDatabase.instance().categoriesWithCount().toStreamSignal();
 
   @override
   Widget build(BuildContext context) {

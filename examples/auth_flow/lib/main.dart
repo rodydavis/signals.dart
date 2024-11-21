@@ -38,7 +38,7 @@ class Auth {
   final api = ServerApi();
 
   /// Current user signal
-  late final currentUser = api.userStream().toSignal();
+  late final currentUser = api.userStream().toStreamSignal();
 
   late final settings = streamSignal(
     () => api.todosStream(currentUser().value?.id ?? 0),

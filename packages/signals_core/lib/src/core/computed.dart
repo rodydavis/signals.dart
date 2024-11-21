@@ -364,9 +364,18 @@ class Computed<T> extends signals.Computed<T>
     fn = () => val;
     flags = OUTDATED;
     // _version = 0;
-    _initialValue = val;
-    _previousValue = null;
+    afterCreate(val);
     return this;
+  }
+
+  @override
+  void afterCreate(T val) {
+    SignalsObserver.instance?.onComputedCreated(this);
+  }
+
+  @override
+  void beforeUpdate(T val) {
+    SignalsObserver.instance?.onComputedUpdated(this, val);
   }
 
   @override
@@ -375,7 +384,6 @@ class Computed<T> extends signals.Computed<T>
   /// Call the computed function and update the value
   void recompute() {
     value;
-    _previousValue = internalValue;
     internalValue = fn();
     flags |= OUTDATED | NOTIFIED;
 
@@ -389,10 +397,6 @@ class Computed<T> extends signals.Computed<T>
     super.dispose();
     flags |= DISPOSED;
   }
-
-  @override
-  T get initialValue => _initialValue;
-  late T _initialValue;
 
   /// Returns a readonly signal
   ReadonlySignal<T> readonly() => this;
@@ -418,9 +422,8 @@ class Computed<T> extends signals.Computed<T>
 
   @override
   set internalValue(T value) {
-    if (!isInitialized) _initialValue = value;
+    beforeUpdate(value);
     super.internalValue = value;
-    SignalsObserver.instance?.onComputedUpdated(this, value);
   }
 }
 

@@ -1,4 +1,6 @@
 // ignore_for_file: constant_identifier_names
+import 'package:meta/meta.dart';
+
 import '../devtool.dart';
 import '../utils/constants.dart';
 import 'dart:developer' as developer;

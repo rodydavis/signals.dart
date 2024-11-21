@@ -16,9 +16,9 @@ class Signal<T> extends signals.Signal<T>
     super.internalValue, {
     this.debugLabel,
     bool autoDispose = false,
-  }) : initialValue = internalValue {
+  }) {
     this.autoDispose = autoDispose;
-    SignalsObserver.instance?.onSignalCreated(this);
+    afterCreate(super.internalValue);
   }
 
   /// Lazy signal that can be created with type T that
@@ -37,7 +37,15 @@ class Signal<T> extends signals.Signal<T>
   }
 
   @override
-  late T initialValue;
+  void afterCreate(T val) {
+    SignalsObserver.instance?.onSignalCreated(this, val);
+    isInitialized = true;
+  }
+
+  @override
+  void beforeUpdate(T val) {
+    SignalsObserver.instance?.onSignalUpdated(this, val);
+  }
 
   @override
   final String? debugLabel;
@@ -55,15 +63,8 @@ class Signal<T> extends signals.Signal<T>
       throw SignalsWriteAfterDisposeError(this);
     }
     if (force || !isInitialized || !equalityCheck(val, internalValue)) {
-      final ready = isInitialized;
-      if (ready) _previousValue = internalValue;
+      beforeUpdate(val);
       internalSetValue(val);
-      if (!ready) initialValue = val;
-      if (ready) {
-        SignalsObserver.instance?.onSignalUpdated(this, val);
-      } else {
-        SignalsObserver.instance?.onSignalCreated(this);
-      }
       return true;
     }
     return false;
@@ -108,9 +109,8 @@ class Signal<T> extends signals.Signal<T>
   /// ```
   Signal<T> overrideWith(T val) {
     version = 0;
+    afterCreate(val);
     internalValue = val;
-    _previousValue = null;
-    isInitialized = true;
     return this;
   }
 }

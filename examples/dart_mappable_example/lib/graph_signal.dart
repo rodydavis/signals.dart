@@ -2,7 +2,7 @@ import 'package:signals/signals.dart';
 
 import 'graph.dart';
 
-class GraphSignal extends Signal<Graph> with ValueSignalMixin implements Graph {
+class GraphSignal extends Signal<Graph> implements Graph {
   GraphSignal(
     super.value, {
     super.debugLabel,
