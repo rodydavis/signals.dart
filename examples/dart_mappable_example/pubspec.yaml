@@ -11,7 +11,6 @@ dependencies:
   dart_mappable: ^4.2.2
   flutter:
     sdk: flutter
-  signals: ^5.5.0
 
 dev_dependencies:
   flutter_test:
@@ -19,5 +18,17 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   build_runner: ^2.4.11
   dart_mappable_builder: ^4.2.3
+
+dependency_overrides:
+  preact_signals:
+    path: ../../packages/preact_signals
+  signals: 
+    path: ../../packages/signals
+  signals_core:
+    path: ../../packages/signals_core
+  signals_flutter:
+    path: ../../packages/signals_flutter
+  signals_lint:
+    path: ../../packages/signals_lint
 
 flutter:
