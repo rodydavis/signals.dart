@@ -1,7 +1,8 @@
 import '../core/signals.dart';
 
 /// Mixin to upgrade an iterable signal with reactive properties
-mixin IterableSignalMixin<E, T extends Iterable<E>> on Signal<T> implements Iterable<E> {
+mixin IterableSignalMixin<E, T extends Iterable<E>> on Signal<T>
+    implements Iterable<E> {
   @override
   bool any(bool Function(E element) test) {
     return value.any(test);

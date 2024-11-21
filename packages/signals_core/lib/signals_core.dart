@@ -1,6 +1,3 @@
-/// Core signals library
-library signals_core;
-
 export 'src/devtool.dart';
 export 'src/async/connect.dart';
 export 'src/extensions/future.dart';
@@ -26,4 +23,3 @@ export 'src/mixins/set.dart';
 export 'src/mixins/map.dart';
 export 'src/mixins/queue.dart';
 export 'src/mixins/tracked.dart';
-
