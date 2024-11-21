@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+  signals: ^5.5.0
   dio: ^5.4.3+1
   retrofit: ^4.1.0
   json_annotation: ^4.8.1
@@ -24,18 +25,6 @@ dev_dependencies:
   json_serializable: ^6.7.1
   copy_with_extension_gen: ^5.0.4
   retrofit_generator: '>=8.1.0'
-
-dependency_overrides:
-  preact_signals:
-    path: ../../packages/preact_signals
-  signals: 
-    path: ../../packages/signals
-  signals_core:
-    path: ../../packages/signals_core
-  signals_flutter:
-    path: ../../packages/signals_flutter
-  signals_lint:
-    path: ../../packages/signals_lint
 
 flutter:
   uses-material-design: true
