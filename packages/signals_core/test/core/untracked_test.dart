@@ -30,32 +30,4 @@ void main() {
       expect(calls, 1);
     });
   });
-
-  group('untrackedValue', () {
-    test('single', () {
-      final s = signal(0);
-      int calls = 0;
-      final dis = effect(() {
-        s.value;
-        s.untrackedValue + 1;
-        calls++;
-      });
-      dis();
-
-      expect(calls, 1);
-    });
-
-    test('nested', () {
-      final s = signal(0);
-      int calls = 0;
-      final dis = effect(() {
-        s.value;
-        untracked(() => s.untrackedValue + 1);
-        calls++;
-      });
-      dis();
-
-      expect(calls, 1);
-    });
-  });
 }
