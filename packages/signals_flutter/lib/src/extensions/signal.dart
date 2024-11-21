@@ -70,6 +70,15 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
     return SignalValueListenable<T, ValueListenable<T>,
         ReadonlySignal<T>>.fromSignal(this);
   }
+
+  /// Runs a callback function that returns the signal value without
+  /// subscribing to the signal updates.
+  ///
+  /// ```dart
+  /// final counter = signal(0);
+  /// final untrackedValue = counter.untrackedValue;
+  /// ```
+  T get untrackedValue => untracked(() => value);
 }
 
 /// Mutable signal utils
