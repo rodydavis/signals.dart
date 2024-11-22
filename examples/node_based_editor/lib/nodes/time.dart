@@ -20,7 +20,7 @@ class TimeOfDayNode extends ValueNode<TimeOfDay> {
   }) : super.computed();
 
   @override
-  Widget build() => Watch.builder(builder: (context) {
+  Widget build() => Watch.builder(builder: (context, _) {
         if (output is Signal<TimeOfDay>) {
           return InkWell(
             onTap: () {

@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Watch((context) {
+      body: Watch((context, _) {
         final posts = postsService.posts;
         if (posts.value.isLoading) {
           return const Center(

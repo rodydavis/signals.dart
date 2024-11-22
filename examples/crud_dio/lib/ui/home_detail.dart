@@ -45,7 +45,7 @@ class _DetailPostState extends State<HomeDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Watch((context) {
+    return Watch((context, _) {
       final post = postsService.post.value;
       return Scaffold(
         appBar: AppBar(

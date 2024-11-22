@@ -40,7 +40,7 @@ class _TodoListViewState extends State<TodoListView> {
           ),
         ],
       ),
-      body: Watch((context) {
+      body: Watch((context, _) {
         if (widget.viewModel.todos.isEmpty) {
           return const Center(
             child: Text('No todos'),

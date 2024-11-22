@@ -9,7 +9,7 @@ class ColorBandDisplay extends StatelessWidget {
 
   @override
   build(context) {
-    return Watch((builder) {
+    return Watch((builder, _) {
       final conf = signals.confSignal.value;
       final band = signals.bandSignal.value;
 

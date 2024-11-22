@@ -66,14 +66,14 @@ class _EditorState extends State<Editor> {
                     ..scale(0.9, 0.9)
                     ..translate(-(size.width / 2), -(size.height / 2))),
             ),
-            Watch((context) {
+            Watch((context, _) {
               return IconButton(
                 onPressed: () => toolbox.set(!toolbox()),
                 icon: Icon(toolbox() ? Icons.visibility_off : Icons.visibility),
                 tooltip: toolbox() ? 'Hide Toolbox' : 'Show Toolbox',
               );
             }),
-            Watch((context) {
+            Watch((context, _) {
               if (selection.isEmpty) return const SizedBox.shrink();
               return IconButton(
                 onPressed: () => selection.clear(),
@@ -81,7 +81,7 @@ class _EditorState extends State<Editor> {
                 tooltip: 'Clear selection',
               );
             }),
-            Watch((context) {
+            Watch((context, _) {
               if (nodes.isEmpty) return const SizedBox.shrink();
               return IconButton(
                 onPressed: () {
@@ -95,7 +95,7 @@ class _EditorState extends State<Editor> {
           ],
         ),
         body: Watch.builder(
-          builder: (context) => Stack(
+          builder: (context, _) => Stack(
             children: [
               Positioned.fill(
                 child: CodeView(

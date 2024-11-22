@@ -15,6 +15,16 @@
 - Updated examples
 - Remove callback to signal
 - Remove toSignal extension method (causing unintended casts) in favor of .$ for Object/Object?
+- [BREAKING] Watch widget callback now includes an optional child
+
+```diff
+Watch.builder(
+-   builder: (context) {
++   builder: (context, child) {
+  }
++ child: null, // optional child to pass in
+)
+```
 
 ## 5.5.0
 
