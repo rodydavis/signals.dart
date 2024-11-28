@@ -1,6 +1,6 @@
 name: signals_lint
 description: linter and developer tool for signals
-version: 5.0.0
+version: 6.0.0
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://dartsignals.dev/
 documentation: https://dartsignals.dev/
