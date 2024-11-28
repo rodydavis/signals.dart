@@ -38,7 +38,7 @@ jobs:
         run: melos run test
 
       - name: Combine coverage
-        run: melos run combine_coverage
+        run: melos run coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
