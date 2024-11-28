@@ -145,14 +145,14 @@ packages:
       path: "../../signals_core"
       relative: true
     source: path
-    version: "6.0.0-rc.4"
+    version: "6.0.0-rc.5"
   signals_flutter:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "6.0.0-rc.4"
+    version: "6.0.0-rc.5"
   sky_engine:
     dependency: transitive
     description: flutter

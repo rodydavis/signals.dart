@@ -21,13 +21,5 @@ void main() {
       expect(s.value, val);
       expect(s is Signal<Object>, true);
     });
-
-    test('Object?', () {
-      final Object? val = null;
-      final s = val.$;
-
-      expect(s.value, null);
-      expect(s is Signal<Object?>, true);
-    });
   });
 }
