@@ -19,7 +19,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Watch(
-        (_, __) {
+        (_) {
           final backgroundColor = backgroundColorSignal.value;
 
           return Scaffold(

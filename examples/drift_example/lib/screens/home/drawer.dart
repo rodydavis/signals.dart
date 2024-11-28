@@ -33,7 +33,7 @@ class _CategoriesDrawerState extends State<CategoriesDrawer> {
             ),
           ),
           Flexible(
-            child: Watch((context, _) {
+            child: Watch((context) {
               final value = stream.value.value;
               final categories = value ?? <CategoryWithCount>[];
               return ListView.builder(

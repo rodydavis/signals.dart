@@ -111,7 +111,7 @@ class InfiniteScroll extends StatelessWidget {
         title: const Text('Infinite Scroll'),
       ),
       body: Watch.builder(
-        builder: (context, _) {
+        builder: (context) {
           final items = source.value.value ?? [];
           final more = source.hasMore();
           if (items.isEmpty) {

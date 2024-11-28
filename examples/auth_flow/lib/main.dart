@@ -148,7 +148,7 @@ class DarkModeToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Watch((_, __) {
+    return Watch((_) {
       final isDark = brightness() == Brightness.dark;
       return IconButton(
         onPressed: () {
@@ -195,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Count value:'),
-            Watch((context, _) {
+            Watch((context) {
               return Text(
                 '$counter',
                 style: Theme.of(context).textTheme.headlineMedium,
@@ -288,7 +288,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Watch((context, _) {
+    return Watch((context) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Profile: ${auth.currentUserName()}'),

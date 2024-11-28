@@ -59,14 +59,14 @@ class _ExampleState extends State<Example> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Watch((_, __) {
+              Watch((_) {
                 return SwitchListTile(
                   title: const Text('Throw Error'),
                   value: throwError.value,
                   onChanged: (value) => throwError.value = value,
                 );
               }),
-              Watch((context, _) {
+              Watch((context) {
                 return ListTile(
                   title: const Text('Result (map)'),
                   subtitle: _futureSignal.value.map(
@@ -103,7 +103,7 @@ class _ExampleState extends State<Example> {
                   ),
                 );
               }),
-              Watch((context, _) {
+              Watch((context) {
                 return ListTile(
                     title: const Text('Result (switch)'),
                     subtitle: switch (_futureSignal.value) {

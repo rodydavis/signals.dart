@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           for (final rect in circles)
-            Watch((context, _) {
+            Watch((context) {
               return AnimatedPositioned.fromRect(
                 rect: rect.value!,
                 duration: kThemeAnimationDuration,

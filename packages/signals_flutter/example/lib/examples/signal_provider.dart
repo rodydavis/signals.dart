@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: const SignalProviderExample(),
+      home: const Example(),
     );
   }
 }
@@ -26,10 +26,10 @@ class Counter extends FlutterSignal<int> {
   void increment() => value++;
 }
 
-class SignalProviderExample extends StatelessWidget {
-  const SignalProviderExample({
+class Example extends StatelessWidget {
+  const Example({
     super.key,
-    this.title = 'SignalProvider Example',
+    this.title = 'Example',
   });
 
   final String title;

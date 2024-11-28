@@ -30,7 +30,7 @@ part of 'watch.dart';
 ///   );
 /// }
 /// ```
-class Watch<T extends Widget> extends StatefulWidget {
+class Watch<T extends Widget> extends StatelessWidget {
   /// Minimal builder for signal changes that rerender a widget tree.
   ///
   /// ```dart
@@ -43,7 +43,6 @@ class Watch<T extends Widget> extends StatefulWidget {
     super.key,
     this.debugLabel,
     this.dependencies = const [],
-    this.child,
   });
 
   /// Drop in replacement for the Flutter builder widget.
@@ -63,83 +62,24 @@ class Watch<T extends Widget> extends StatefulWidget {
     required this.builder,
     this.debugLabel,
     this.dependencies = const [],
-    this.child,
   });
 
   /// The widget to rebuild when any signals change
-  final T Function(BuildContext context, Widget? child) builder;
+  final T Function(BuildContext context) builder;
 
   /// Optional debug label to use for devtools
   final String? debugLabel;
-
-  /// Cached widget to pass in
-  final Widget? child;
 
   /// List of optional dependencies to watch
   final List<core.ReadonlySignal<dynamic>> dependencies;
 
   @override
-  State<Watch<T>> createState() => _WatchState<T>();
-}
-
-class _WatchState<T extends Widget> extends State<Watch<T>> with SignalsMixin {
-  late final result = createComputed(() {
-    return widget.builder(context, widget.child);
-  }, debugLabel: widget.debugLabel);
-  bool _init = true;
-
-  @override
-  void initState() {
-    super.initState();
-    for (final dep in widget.dependencies) {
-      bindSignal(dep);
-    }
-  }
-
-  // coverage:ignore-start
-  @override
-  void reassemble() {
-    super.reassemble();
-    final target = core.SignalsObserver.instance;
-    if (target is core.DevToolsSignalsObserver) {
-      target.reassemble();
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      result.recompute();
-      if (mounted) setState(() {});
-    });
-  }
-  // coverage:ignore-end
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_init) {
-      // Called on first build (we do not need to rebuild yet)
-      _init = false;
-      return;
-    }
-    result.recompute();
-  }
-
-  @override
-  void didUpdateWidget(covariant Watch<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.dependencies != widget.dependencies) {
-      for (final dep in oldWidget.dependencies) {
-        final idx = widget.dependencies.indexOf(dep);
-        if (idx == -1) unbindSignal(dep);
-      }
-      for (final dep in widget.dependencies) {
-        bindSignal(dep);
-      }
-    } else if (oldWidget.builder != widget.builder) {
-      result.recompute();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return result.value;
+    return WatchBuilder(
+      // key: key,
+      builder: (context, _) => builder(context),
+      debugLabel: debugLabel,
+      dependencies: dependencies,
+    );
   }
 }

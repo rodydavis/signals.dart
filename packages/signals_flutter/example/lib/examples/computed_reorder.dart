@@ -107,7 +107,7 @@ class _ReorderableItemListState extends State<ReorderableItemList> {
           child: const Text('Switch Category'),
         ),
         Expanded(
-          child: Watch((context, _) {
+          child: Watch((context) {
             final items = filteredAndSortedItems.value;
             return ReorderableListView.builder(
               itemCount: items.length,

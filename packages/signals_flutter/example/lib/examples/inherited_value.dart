@@ -65,7 +65,7 @@ class Example extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final value = InheritedValue.of(context);
-    return Watch((context, _) {
+    return Watch((context) {
       final other = signal$.value;
       return Text('value: $value, other: $other');
     });

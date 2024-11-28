@@ -28,7 +28,7 @@ class _SpreadsheetCalculatorState extends State<SpreadsheetCalculator> {
 
   Widget valueToWidget(ValueRow valueRow, BuildContext context) {
     final valueDisplay = Watch(
-      (context, _) => Text(valueRow.signalObject.value.toString(), style: _style),
+      (context) => Text(valueRow.signalObject.value.toString(), style: _style),
     );
 
     if (valueRow.type == ValueType.number) {
@@ -59,7 +59,7 @@ class _SpreadsheetCalculatorState extends State<SpreadsheetCalculator> {
   @override
   Widget build(BuildContext context) {
     const cellSize = 30.0;
-    return Watch((context, _) {
+    return Watch((context) {
       final selected = selectedCells();
       return Scaffold(
         appBar: AppBar(

@@ -51,7 +51,7 @@ class _TextTableState extends State<TextTable> {
 
   Widget valueToWidget(ValueRow valueRow, BuildContext context) {
     final valueDisplay = Watch(
-      (context, _) => Text(valueRow.signalObject.value.toString(), style: _style),
+      (context) => Text(valueRow.signalObject.value.toString(), style: _style),
     );
 
     if (valueRow.type == ValueType.number) {
@@ -89,7 +89,7 @@ class _TextTableState extends State<TextTable> {
 
   @override
   Widget build(BuildContext context) {
-    return Watch((context, _) {
+    return Watch((context) {
       return Padding(
         padding: const EdgeInsets.all(20),
         child: ListView(

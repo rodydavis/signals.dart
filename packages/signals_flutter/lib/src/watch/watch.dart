@@ -7,3 +7,4 @@ import '../mixins/signals.dart';
 part 'widget.dart';
 part 'element_watcher.dart';
 part 'extension.dart';
+part 'builder.dart';

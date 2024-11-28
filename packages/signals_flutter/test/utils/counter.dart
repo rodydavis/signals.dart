@@ -45,12 +45,12 @@ class CounterState extends State<Counter> {
         body: () {
           if (widget.watch) {
             if (widget.builder) {
-              return Watch.builder(builder: (context, _) {
+              return Watch.builder(builder: (context) {
                 widget.callback();
                 return Text('Count: $display');
               });
             } else {
-              return Watch((context, _) {
+              return Watch((context) {
                 widget.callback();
                 return Text('Count: $display');
               });

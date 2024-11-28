@@ -22,7 +22,7 @@ class ColorScale extends StatelessWidget {
 
   @override
   build(context) {
-    return Watch((context, _) {
+    return Watch((context) {
       final conf = signals.confSignal.value;
 
       final configValueStyle = TextStyle(

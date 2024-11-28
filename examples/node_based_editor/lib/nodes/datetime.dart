@@ -24,7 +24,7 @@ class DateTimeNode extends ValueNode<DateTime> {
   @override
   Widget build() {
     if (output is Signal<DateTime>) {
-      return Watch.builder(builder: (context, _) {
+      return Watch.builder(builder: (context) {
         return InkWell(
           onTap: () {
             final now = DateTime.now();

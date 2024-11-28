@@ -7,7 +7,7 @@ class NodesTable extends StatelessWidget {
   const NodesTable({super.key});
   @override
   Widget build(BuildContext context) {
-    return Watch((context, _) {
+    return Watch((context) {
       if (nodes.isEmpty) {
         return const Center(child: Text('No nodes created'));
       }
