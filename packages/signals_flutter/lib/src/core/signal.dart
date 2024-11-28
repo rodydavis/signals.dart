@@ -1,110 +1,76 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:signals_core/signals_core.dart' as core;
 
-import '../../signals_flutter.dart';
+import '../mixins/value_notifier.dart';
+import 'readonly.dart';
 
-/// Bind an existing signal to a widget.
-///
-/// ```dart
-/// class State extends ... {
-///  final source = signal(0);
-///  late final count = bindSignal(context, source);
-///
-///  @override
-///  Widget build(BuildContext context) {
-///    return Row(
-///     children: [
-///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
-///       Text(count.value.toString()),
-///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
-///    ],
-///   );
-///  }
-/// }
-/// ```
-@Deprecated('use SignalsMixin > bindSignal instead')
-S bindSignal<T, S extends ReadonlySignal<T>>(
-  BuildContext context,
-  S target, {
-  String? debugLabel,
-}) {
-  final ctx = context;
-  if (ctx is StatefulElement) {
-    final state = ctx.state;
-    if (state is SignalsMixin) {
-      return state.bindSignal<T, S>(target);
-    } else if (target.autoDispose == true && state is SignalsAutoDisposeMixin) {
-      state.cleanupCallbacks.add(target.dispose);
-    }
-  }
-  watchSignal<T>(
-    context,
-    target,
-    debugLabel: debugLabel,
-  );
-  return target;
+/// Simple writeable single
+class FlutterSignal<T> extends core.Signal<T>
+    with ValueNotifierSignalMixin<T>
+    implements ValueNotifier<T>, FlutterReadonlySignal<T> {
+  /// Simple writeable signal.
+  ///
+  /// ```dart
+  /// final count = signal(0);
+  /// print(count.value); // 0
+  /// count.value++;
+  /// print(count.value); // 1
+  /// ```
+  FlutterSignal(
+    super.internalValue, {
+    super.autoDispose,
+    super.debugLabel,
+  });
+
+  /// Lazy signal that can be created with type T that
+  /// the value will be assigned later.
+  ///
+  /// ```dart
+  /// final db = FlutterSignal.lazy<DatabaseConnection>();
+  /// ...
+  /// db.value = DatabaseConnect(...);
+  /// ```
+  FlutterSignal.lazy({
+    super.autoDispose,
+    super.debugLabel,
+  }) : super.lazy();
 }
 
-/// Create and watch a signal and rebuild on changes.
+/// Simple signal that can be created with type T that
+/// can read and write a value.
 ///
 /// ```dart
-/// class State extends ... {
-///  late final count = createSignal(context, 0);
-///
-///  @override
-///  Widget build(BuildContext context) {
-///    return Row(
-///     children: [
-///       IconButton(icon: Icon(Icons.remove), onPressed: () => count.value--),
-///       Text(count.value.toString()),
-///       IconButton(icon: Icon(Icons.add), onPressed: () => count.value++),
-///    ],
-///   );
-///  }
-/// }
+/// final count = signal(0);
+/// print(count.value); // 0
+/// count.value++;
+/// print(count.value); // 1
 /// ```
-@Deprecated('use SignalsMixin > createSignal instead')
-Signal<T> createSignal<T>(
-  BuildContext context,
+FlutterSignal<T> signal<T>(
   T value, {
   String? debugLabel,
-  bool autoDispose = true,
+  bool autoDispose = false,
 }) {
-  assert(
-    allowSignalsCreatedInBuildContext ? true : context is StatefulElement,
-    'createSignal must be called in a StatefulElement like State<T>',
+  return FlutterSignal<T>(
+    value,
+    debugLabel: debugLabel,
+    autoDispose: autoDispose,
   );
-  Signal<T> result;
-  if (allowSignalsCreatedInBuildContext) {
-    final key = (value, debugLabel, autoDispose).hashCode;
-    if (_signals[key]?.target == null || _signals[key]?.target is! Signal<T>) {
-      _signals.remove(key);
-    }
-    final target = _signals[key] ??= () {
-      final source = signal<T>(
-        value,
-        debugLabel: debugLabel,
-        autoDispose: autoDispose,
-      );
-      final ref = WeakReference(source);
-      source.onDispose(() => _signals.remove(key));
-      return ref;
-    }();
-    result = target.target as Signal<T>;
-  } else {
-    result = signal<T>(
-      value,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
-  }
-  return bindSignal<T, Signal<T>>(context, result);
 }
 
-final _signals = <int, WeakReference<Signal>>{};
-
-/// If true it would allow creating signals inside the build method.
+/// Lazy signal that can be created with type T that
+/// the value will be assigned later.
 ///
-/// This comes at the cost of needing to be unique with the starting value,
-/// debug label and auto dispose flag
-@Deprecated('use SignalsMixin instead')
-bool allowSignalsCreatedInBuildContext = false;
+/// ```dart
+/// final db = lazySignal<DatabaseConnection>();
+/// ...
+/// db.value = DatabaseConnect(...);
+/// ```
+FlutterSignal<T> lazySignal<T>({
+  String? debugLabel,
+  bool autoDispose = false,
+}) {
+  return FlutterSignal<T>.lazy(
+    debugLabel: debugLabel,
+    autoDispose: autoDispose,
+  );
+}

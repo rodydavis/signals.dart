@@ -1,6 +1,8 @@
 ---
 title: Computed
 description: Create a signal that derives its value from other signals
+sidebar:
+  order: 1
 ---
 
 Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
@@ -87,6 +89,15 @@ s.onDispose(() => print('Signal destroyed'));
 s.dispose();
 ```
 
+## Custom Computed
+
+You can create a custom computed signal by extending the `Computed` class.
+
+```dart
+class MyComputed extends Computed<int> {
+  MyComputed() : super(() => 0);
+}
+```
 
 ## Flutter
 
@@ -102,9 +113,9 @@ class CounterWidget extends StatefulWidget {
 }
 
 class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
-  late final counter = createSignal(context, 0);
-  late final isEven = createComputed(context, () => counter.value.isEven);
-  late final isOdd = createComputed(context, () => counter.value.isOdd);
+  late final counter = createSignal(0);
+  late final isEven = createComputed(() => counter.value.isEven);
+  late final isOdd = createComputed(() => counter.value.isOdd);
 
   @override
   Widget build(BuildContext context) {

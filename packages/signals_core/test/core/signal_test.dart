@@ -4,6 +4,8 @@ import 'dart:core';
 
 import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
+import 'package:preact_signals/src/listenable.dart';
+import 'package:preact_signals/src/readonly.dart' hide ReadonlySignal;
 
 void main() {
   SignalsObserver.instance = null;
@@ -21,8 +23,6 @@ void main() {
 
       expect(c.value, 1);
       expect(b.value, 1);
-      expect(b.initialValue, 0);
-      expect(b.previousValue, 0);
     });
 
     test('lazy init', () {
@@ -64,20 +64,21 @@ void main() {
       final instance = Effect(() {
         a.value;
       });
+      instance();
 
-      expect(instance.sources.contains(a), true);
-      expect(instance.sources.contains(b), false);
-      expect(a.targets.contains(instance), true);
-      expect(b.targets.contains(instance), false);
+      expect(listenableSources(instance).contains(a), true);
+      expect(listenableSources(instance).contains(b), false);
+      expect(readonlySignalTargets(a).contains(instance), true);
+      expect(readonlySignalTargets(b).contains(instance), false);
       expect(a.version, 0);
 
       a.value++;
       instance.dispose();
 
-      expect(instance.sources.contains(a), false);
-      expect(instance.sources.contains(b), false);
-      expect(a.targets.contains(instance), false);
-      expect(b.targets.contains(instance), false);
+      expect(listenableSources(instance).contains(a), false);
+      expect(listenableSources(instance).contains(b), false);
+      expect(readonlySignalTargets(a).contains(instance), false);
+      expect(readonlySignalTargets(b).contains(instance), false);
       expect(a.version, 1);
     });
 
@@ -90,159 +91,6 @@ void main() {
       expect(s(), v);
       expect(s.toJson(), v);
       expect(s.peek(), v);
-    });
-
-    group('wrap', () {
-      test('should match', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-
-        expect(a.value, v);
-        expect(a.get(), v);
-        expect(a.toString(), v.toString());
-        expect(a(), v);
-        expect(a.toJson(), v);
-        expect(a.peek(), v);
-
-        expect(b.value, v);
-        expect(b.get(), v);
-        expect(b.toString(), v.toString());
-        expect(b(), v);
-        expect(b.toJson(), v);
-        expect(b.peek(), v);
-
-        expect(a.globalId, b.globalId);
-        expect(a.version, b.version);
-        expect(a.initialValue, b.initialValue);
-        expect(a.previousValue, b.previousValue);
-        expect(a.targets, b.targets);
-        expect(a.disposed, b.disposed);
-        expect(a.autoDispose, b.autoDispose);
-        expect(a.debugLabel, b.debugLabel);
-        expect(a.readonly()(), b.readonly()());
-        expect(a.overrideWith(1)(), b.overrideWith(1)());
-      });
-
-      test('disposed set', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-
-        b.disposed = true;
-
-        expect(a.disposed, b.disposed);
-      });
-
-      test('dispose()', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-
-        b.dispose();
-
-        expect(a.disposed, b.disposed);
-      });
-
-      test('onDispose()', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-        var called = false;
-
-        b.onDispose(() => called = true);
-
-        expect(called, false);
-
-        b.dispose();
-
-        expect(called, true);
-        expect(a.disposed, b.disposed);
-      });
-
-      test('subscribe()', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-        bool called = false;
-
-        expect(called, false);
-
-        b.subscribe((val) => called = true);
-
-        expect(called, true);
-        expect(a.targets, b.targets);
-      });
-
-      test('forceUpdate()', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-        bool called = false;
-
-        expect(called, false);
-        expect(b.value, 0);
-
-        b.subscribe((val) => called = true);
-        b.set(force: true, 1);
-
-        expect(called, true);
-        expect(a.targets, b.targets);
-        expect(b.value, 1);
-      });
-
-      test('set()', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-        bool called = false;
-
-        expect(called, false);
-        expect(b.value, 0);
-
-        b.subscribe((val) => called = true);
-        b.set(1);
-
-        expect(called, true);
-        expect(a.targets, b.targets);
-        expect(b.value, 1);
-      });
-
-      test('set value', () {
-        final v = 0;
-        final a = signal(v);
-        final b = WrappedSignal(a);
-        bool called = false;
-
-        expect(called, false);
-        expect(b.value, 0);
-
-        b.subscribe((val) => called = true);
-        b.value = 1;
-
-        expect(called, true);
-        expect(a.targets, b.targets);
-        expect(b.value, 1);
-      });
-
-      test('custom equality', () {
-        final a = signal('s_2');
-        final b = signal('s_1');
-
-        expect(a.equalityCheck(a.value, b.value), false);
-
-        a.equalityCheck = (a, b) {
-          final aP = a.split('_').first;
-          final bP = b.split('_').first;
-          return aP == bP;
-        };
-
-        expect(a.equalityCheck(a.value, b.value), true);
-
-        a.value = 's_3';
-
-        expect(a.value, 's_2');
-      });
     });
 
     test('overrideWith', () {
@@ -258,22 +106,6 @@ void main() {
 
       // ignore: unnecessary_type_check
       expect(b is ReadonlySignal, true);
-    });
-
-    test('valueSignal', () {
-      // ignore: deprecated_member_use_from_same_package
-      final a = valueSignal(1);
-
-      expect(a.value, 1);
-    });
-
-    test('forceUpdate', () {
-      final a = signal(0);
-
-      // ignore: deprecated_member_use_from_same_package
-      a.forceUpdate(1);
-
-      expect(a.value, 1);
     });
 
     test('should run the callback when the signal value changes', () {

@@ -1,6 +1,8 @@
 ---
 title: StreamSignal
 description: Creates a signal that contains a stream
+sidebar:
+  order: 1
 ---
 
 Stream signals can be created by extension or method.

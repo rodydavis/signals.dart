@@ -29,43 +29,47 @@ class _HomeAddEditState extends State<HomeAddOrEdit> {
       );
     }
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      postsService.postAddOrEdit.subscribe((_) {
+        final messenger = ScaffoldMessenger.of(context);
+        messenger.hideCurrentSnackBar();
+        if (postsService.postAddOrEdit.value.hasError) {
+          messenger.showSnackBar(
+            SnackBar(
+                backgroundColor: Colors.red,
+                content:
+                    Text(postsService.postAddOrEdit.value.error.toString())),
+          );
+        } else if (postsService.postAddOrEdit.value.isLoading) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return Container(
+                color: Colors.grey.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+              );
+            },
+          );
+        } else if (postsService.postAddOrEdit.value.hasValue) {
+          messenger.showSnackBar(
+            const SnackBar(
+                backgroundColor: Colors.green, content: Text('Saved')),
+          );
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pop();
+          });
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    postsService.postAddOrEdit.listen(context, () {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.hideCurrentSnackBar();
-      if (postsService.postAddOrEdit.value.hasError) {
-        messenger.showSnackBar(
-          SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(postsService.postAddOrEdit.value.error.toString())),
-        );
-      } else if (postsService.postAddOrEdit.value.isLoading) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return Container(
-              color: Colors.grey.withOpacity(0.5),
-              child: const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              ),
-            );
-          },
-        );
-      } else if (postsService.postAddOrEdit.value.hasValue) {
-        messenger.showSnackBar(
-          const SnackBar(backgroundColor: Colors.green, content: Text('Saved')),
-        );
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.of(context).pop();
-        });
-      }
-    });
     return Scaffold(
       appBar: AppBar(),
       body: Form(

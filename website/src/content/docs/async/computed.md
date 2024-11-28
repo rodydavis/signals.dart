@@ -1,6 +1,8 @@
 ---
 title: Computed
 description: Creates a async computed signal
+sidebar:
+  order: 2
 ---
 
 All signals are synchronous but data can be computed asynchronously.

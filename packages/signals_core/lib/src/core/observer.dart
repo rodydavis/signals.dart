@@ -2,7 +2,7 @@ part of 'signals.dart';
 
 /// {@template observer}
 /// You can observe all signal values in the dart application by providing an implementation of `SignalsObserver`:
-/// 
+///
 /// ```dart
 /// abstract class SignalsObserver {
 ///   void onSignalCreated(Signal instance);
@@ -12,33 +12,33 @@ part of 'signals.dart';
 ///   static SignalsObserver? instance;
 /// }
 /// ```
-/// 
+///
 /// > There is a prebuilt `LoggingSignalsObserver` for printing updates to the console.
-/// 
+///
 /// To add the observer override the instance at the start of the application:
-/// 
+///
 /// ```dart
 /// void main() {
 ///     SignalsObserver.instance = LoggingSignalsObserver(); // or custom observer
 ///     ...
 /// }
 /// ```
-/// 
+///
 /// This will have a slight performance hit since every update will be tracked via the observer. It is recommended to only set the `SignalsObserver.instance` in debug or profile mode.
 /// @link https://dartsignals.dev/utilities/observer
 /// {@endtemplate}
 abstract class SignalsObserver {
   /// Called when a signal is created.
-  void onSignalCreated(Signal instance);
+  void onSignalCreated<T>(Signal<T> instance, T value);
 
   /// Called when a signal is updated.
-  void onSignalUpdated(Signal instance, dynamic value);
+  void onSignalUpdated<T>(Signal<T> instance, T value);
 
   /// Called when a computed is created.
-  void onComputedCreated(Computed instance);
+  void onComputedCreated<T>(Computed<T> instance);
 
   /// Called when a computed is updated.
-  void onComputedUpdated(Computed instance, dynamic value);
+  void onComputedUpdated<T>(Computed<T> instance, T value);
 
   /// Called when a effect is created.
   void onEffectCreated(Effect instance) {}
@@ -58,22 +58,22 @@ abstract class SignalsObserver {
 /// Logs all signals and computed changes to the console.
 class LoggingSignalsObserver extends SignalsObserver {
   @override
-  void onComputedCreated(Computed instance) {
+  void onComputedCreated<T>(Computed<T> instance) {
     log('computed created: [${instance.globalId}|${instance.debugLabel}]');
   }
 
   @override
-  void onComputedUpdated(Computed instance, value) {
+  void onComputedUpdated<T>(Computed<T> instance, T value) {
     log('computed updated: [${instance.globalId}|${instance.debugLabel}] => $value');
   }
 
   @override
-  void onSignalCreated(Signal instance) {
-    log('signal created: [${instance.globalId}|${instance.debugLabel}] => ${instance.peek()}');
+  void onSignalCreated<T>(Signal<T> instance, T value) {
+    log('signal created: [${instance.globalId}|${instance.debugLabel}] => $value');
   }
 
   @override
-  void onSignalUpdated(Signal instance, value) {
+  void onSignalUpdated<T>(Signal<T> instance, T value) {
     log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
   }
 

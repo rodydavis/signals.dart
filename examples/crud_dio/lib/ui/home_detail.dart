@@ -13,31 +13,38 @@ class HomeDetail extends StatefulWidget {
 
 class _DetailPostState extends State<HomeDetail> {
   @override
-  Widget build(BuildContext context) {
-    postsService.delete.listen(context, () {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.hideCurrentSnackBar();
-      if (postsService.delete.value.hasError) {
-        messenger.showSnackBar(
-          SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(postsService.delete.value.error.toString())),
-        );
-      } else if (postsService.delete.value.isLoading) {
-        messenger.showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.blue,
-            content: Text('Loading...'),
-          ),
-        );
-      } else if (postsService.delete.value.hasValue) {
-        messenger.showSnackBar(
-          const SnackBar(
-              backgroundColor: Colors.green, content: Text('Deleted')),
-        );
-        Navigator.of(context).pop();
-      }
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      postsService.delete.subscribe((_) {
+        final messenger = ScaffoldMessenger.of(context);
+        messenger.hideCurrentSnackBar();
+        if (postsService.delete.value.hasError) {
+          messenger.showSnackBar(
+            SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(postsService.delete.value.error.toString())),
+          );
+        } else if (postsService.delete.value.isLoading) {
+          messenger.showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.blue,
+              content: Text('Loading...'),
+            ),
+          );
+        } else if (postsService.delete.value.hasValue) {
+          messenger.showSnackBar(
+            const SnackBar(
+                backgroundColor: Colors.green, content: Text('Deleted')),
+          );
+          Navigator.of(context).pop();
+        }
+      });
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Watch((context) {
       final post = postsService.post.value;
       return Scaffold(

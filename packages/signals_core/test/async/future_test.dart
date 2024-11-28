@@ -59,7 +59,7 @@ void main() {
 
       final signal = futureSignal(() => future());
       expect(signal.peek().isLoading, true);
-      expect(calls, 0);
+      expect(calls, 1);
 
       await signal.future;
 
@@ -85,7 +85,7 @@ void main() {
 
       final signal = futureSignal(() => future());
       expect(signal.peek().isLoading, true);
-      expect(calls, 0);
+      expect(calls, 1);
 
       await signal.future;
 
@@ -117,7 +117,7 @@ void main() {
 
       final signal = futureSignal(() => future());
       expect(signal.peek().isLoading, true);
-      expect(calls, 0);
+      expect(calls, 1);
 
       await signal.future;
 

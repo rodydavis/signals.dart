@@ -3,6 +3,24 @@ title: ValueNotifier
 description: How is Signals different than using ValueNotifier?
 ---
 
+:::tip
+As of Signals 0.6.0 Signal and Computed created with the flutter import implement ValueListenable and ValueNotifier by default.
+
+```dart
+import 'package:signals/signals_flutter.dart';
+
+final count = signal(0);
+assert(count is ValueListenable<int>);
+assert(count is Signal<int>);
+
+final isEven = computed(() => count.value.isEven);
+assert(isEven is ValueListenable<bool>);
+assert(isEven is Computed<bool>);
+```
+
+You can also use the [ValueListenableSignalMixin](/mixins/value-listenable) and [ValueNotifierSignalMixin](/mixins/value-notifier) to add the methods to custom signals.
+:::
+
 ## Signal
 
 You may be thinking **"How is Signals different than using ValueNotifier?"** and that is a valid question when first coming to signals because at a glance they look very familiar.
@@ -232,33 +250,15 @@ import 'package:signals/signals_flutter.dart';
 final count = signal(0);
 final isEven = computed(() => count.value.isEven);
 
-final countNotifier = count.toValueNotifier();
+final ValueNotifier<int> countNotifier = count;
 // Will call count.value when countNotifier is set
 countNotifier.value = 1; // calls count.value = 1;
 
 // React to changes from the host signal
-final countListenable = isEven.toValueListenable();
+final ValueListenable<bool> countListenable = isEven;
 ```
 
 These extensions will also dispose the ValueNotifier and ValueListenable when the signal is disposed.
-
-### SignalValueNotifier
-
-If you need to use both ValueNotifier and Signal you can use `SignalValueNotifier` which is a ValueNotifier that will update the signal when the value is set.
-
-```dart
-import 'package:signals/signals_flutter.dart';
-
-final count = signalValueNotifier<int>(0); // or SignalValueNotifier<int>(0);
-
-expect(count.value, 0);
-expect(count is Signal<int>, true);
-expect(count is ValueNotifier<int>, true);
-
-count.value = 1; // 1
-
-expect(count.value, 1);
-```
 
 ## Outside of Flutter
 
@@ -280,6 +280,52 @@ void main() {
 }
 ```
 
-_It really is that simple._
+:::note
+It really is that simple.
+:::
 
 All the other signals in the package are syntax sugar for core types or helper methods to connect to Flutter specifics.
+
+With Signals 0.6.0 you can also create a signal that extends both Signal, ValueNotifier and Stream.
+
+```dart
+import 'package:signals/signals_flutter.dart';
+
+class CustomSignal<T> extends Signal<T> with
+  ValueNotifierSignalMixin<T>,
+  SinkSignalMixin<T>,
+  StreamSignalMixin<T> {
+    CustomSignal(T value) : super(value);
+}
+
+class Counter extends CustomSignal<int> {
+    Counter(int value) : super(value);
+}
+
+void main() {
+    final counter = Counter(0);
+
+    assert(counter is Signal<int>);
+    assert(counter is ValueNotifier<int>);
+    assert(counter is Stream<int>);
+
+    // Listen to the stream
+    counter.listen((value) {
+         print('stream: $value');
+    });
+
+    // Subscribe in an effect
+    effect(() {
+        print('effect: $counter');
+    });
+
+    counter.add(1);
+    print(counter.value); // 1
+
+    counter.value = 2;
+    print(counter.value); // 2
+    
+    counter.close();
+    print(counter.disposed); // true
+}
+```

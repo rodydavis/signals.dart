@@ -30,7 +30,7 @@ class Example extends StatefulWidget {
 }
 
 class _ExampleState extends State<Example> with SignalsMixin {
-  late final _counter = this.createSignal(0);
+  late final _counter = createSignal(0);
   void _incrementCounter() => _counter.value++;
 
   @override

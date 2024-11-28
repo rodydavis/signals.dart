@@ -1,0 +1,29 @@
+---
+title: IterableSignalMixin
+description: Mixin for a Signal that adds reactive methods for Iterable
+sidebar:
+  order: 4
+  badge:
+    text: New
+    variant: tip
+---
+
+IterableSignalMixin is a mixin for a Signal that adds reactive methods for [Iterable](https://api.flutter.dev/flutter/dart-core/Iterable-class.html).
+
+:::note
+This mixin only works with signals that have a value type of `Iterable<T>`.
+:::
+
+```dart
+class MySignal extends Signal<Iterable<int>> with IterableSignalMixin<int> {
+  MySignal(Iterable<int> value) : super(value);
+}
+
+void main() {
+  final signal = MySignal([1, 2, 3]);
+  
+  effect(() {
+    print(signal.length);
+  });
+}
+```

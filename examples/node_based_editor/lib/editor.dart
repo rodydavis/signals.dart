@@ -49,18 +49,22 @@ class _EditorState extends State<Editor> {
             IconButton(
               icon: const Icon(Icons.zoom_in),
               tooltip: 'Zoom In',
-              onPressed: () => matrix.set(force: true, matrix.value
-                ..translate(size.width / 2, size.height / 2)
-                ..scale(1.1, 1.1)
-                ..translate(-(size.width / 2), -(size.height / 2))),
+              onPressed: () => matrix.set(
+                  force: true,
+                  matrix.value
+                    ..translate(size.width / 2, size.height / 2)
+                    ..scale(1.1, 1.1)
+                    ..translate(-(size.width / 2), -(size.height / 2))),
             ),
             IconButton(
               icon: const Icon(Icons.zoom_out),
               tooltip: 'Zoom Out',
-              onPressed: () => matrix.set(force: true, matrix.value
-                ..translate(size.width / 2, size.height / 2)
-                ..scale(0.9, 0.9)
-                ..translate(-(size.width / 2), -(size.height / 2))),
+              onPressed: () => matrix.set(
+                  force: true,
+                  matrix.value
+                    ..translate(size.width / 2, size.height / 2)
+                    ..scale(0.9, 0.9)
+                    ..translate(-(size.width / 2), -(size.height / 2))),
             ),
             Watch((context) {
               return IconButton(
@@ -103,8 +107,10 @@ class _EditorState extends State<Editor> {
                 child: SizedBox.expand(
                   child: GestureDetector(
                     onPanUpdate: (details) {
-                      matrix.set(force: true, matrix.value
-                        ..translate(details.delta.dx, details.delta.dy));
+                      matrix.set(
+                          force: true,
+                          matrix.value
+                            ..translate(details.delta.dx, details.delta.dy));
                     },
                     child: CustomPaint(
                       painter: NodeEdges(matrix(), nodes, selection),

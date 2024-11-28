@@ -169,7 +169,9 @@ part of 'signals.dart';
 /// `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
 /// @link https://dartsignals.dev/core/computed
 /// {@endtemplate}
-class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
+class Computed<T> extends signals.Computed<T>
+    with ReadonlySignalMixin<T>
+    implements ReadonlySignal<T> {
   /// {@template computed}
   /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
   ///
@@ -340,47 +342,13 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   /// @link https://dartsignals.dev/core/computed
   /// {@endtemplate}
   Computed(
-    ComputedCallback<T> fn, {
-    super.debugLabel,
-    super.autoDispose,
-  })  : _fn = fn,
-        __globalVersion = _globalVersion - 1,
-        _flags = _OUTDATED,
-        super._(globalId: ++_lastGlobalId) {
-    assert(() {
-      SignalsObserver.instance?.onComputedCreated(this);
-      return true;
-    }());
+    super.fn, {
+    this.debugLabel,
+    bool autoDispose = false,
+  }) {
+    this.autoDispose = autoDispose;
+    SignalsObserver.instance?.onComputedCreated(this);
   }
-
-  @override
-  late T _value;
-
-  @override
-  bool get isInitialized => _version > 0;
-
-  ComputedCallback<T> _fn;
-
-  @override
-  _Node? _sources;
-
-  int __globalVersion;
-
-  @override
-  int _flags;
-
-  Object? _error;
-
-  /// @internal for testing getter to track all the signals currently
-  /// subscribed in the signal
-  Iterable<ReadonlySignal> get sources sync* {
-    for (var node = _sources; node != null; node = node._nextSource) {
-      yield node._source;
-    }
-  }
-
-  /// Check if there are any targets attached
-  bool get hasSources => _sources != null;
 
   /// Override the current signal with a new value as if it was created with it
   ///
@@ -393,125 +361,51 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   /// counter = counter.overrideWith(1);
   /// ```
   Computed<T> overrideWith(T val) {
-    _fn = () => val;
-    _flags = _OUTDATED;
+    fn = () => val;
+    flags = OUTDATED;
     // _version = 0;
-    _initialValue = val;
-    _previousValue = null;
+    afterCreate(val);
     return this;
   }
 
   @override
-  bool _refresh() {
-    this._flags &= ~_NOTIFIED;
-
-    if ((this._flags & _RUNNING) != 0) {
-      return false;
-    }
-
-    // If this computed signal has subscribed to updates from its dependencies
-    // (TRACKING flag set) and none of them have notified about changes (OUTDATED
-    // flag not set), then the computed value can't have changed.
-    if ((this._flags & (_OUTDATED | _TRACKING)) == _TRACKING) {
-      return true;
-    }
-    this._flags &= ~_OUTDATED;
-
-    if (this.__globalVersion == _globalVersion) {
-      return true;
-    }
-    this.__globalVersion = _globalVersion;
-
-    // Mark this computed signal running before checking the dependencies for value
-    // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
-    this._flags |= _RUNNING;
-    final needsUpdate = _needsToRecompute(this);
-    if (_version > 0 && !needsUpdate) {
-      this._flags &= ~_RUNNING;
-      return true;
-    }
-
-    final prevContext = _evalContext;
-    try {
-      _prepareSources(this);
-      _evalContext = this;
-      final val = _fn();
-      if ((this._flags & _HAS_ERROR) != 0 || needsUpdate || _version == 0) {
-        if (_version == 0 || val != _value) {
-          if (_version == 0) {
-            _initialValue = val;
-          } else {
-            _previousValue = _value;
-          }
-          _value = val;
-          _flags &= ~_HAS_ERROR;
-          _version++;
-          assert(() {
-            SignalsObserver.instance?.onComputedUpdated(this, val);
-            return true;
-          }());
-        }
-      }
-    } catch (err) {
-      _error = err;
-      _flags |= _HAS_ERROR;
-      _version++;
-    }
-    _evalContext = prevContext;
-    _cleanupSources(this);
-    _flags &= ~_RUNNING;
-    return true;
+  void afterCreate(T val) {
+    SignalsObserver.instance?.onComputedCreated(this);
   }
 
   @override
-  void _subscribe(_Node node) {
-    if (_targets == null) {
-      _flags |= _OUTDATED | _TRACKING;
-
-      // A computed signal subscribes lazily to its dependencies when it
-      // gets its first subscriber.
-      for (var node = _sources; node != null; node = node._nextSource) {
-        node._source._subscribe(node);
-      }
-    }
-    super._subscribe(node);
+  void beforeUpdate(T val) {
+    SignalsObserver.instance?.onComputedUpdated(this, val);
   }
 
   @override
-  void _unsubscribe(_Node node) {
-    // Only run the unsubscribe step if the computed signal has any subscribers.
-    if (_targets != null) {
-      super._unsubscribe(node);
-
-      // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
-      // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
-      if (_targets == null) {
-        _flags &= ~_TRACKING;
-
-        for (var node = _sources; node != null; node = node._nextSource) {
-          node._source._unsubscribe(node);
-        }
-      }
-    }
-    if (autoDispose && targets.isEmpty) {
-      dispose();
-    }
-  }
+  final String? debugLabel;
 
   /// Call the computed function and update the value
   void recompute() {
     value;
-    _previousValue = _value;
-    _value = _fn();
-    _flags |= _OUTDATED | _NOTIFIED;
-    _notifyAllTargets();
+    internalValue = fn();
+    flags |= OUTDATED | NOTIFIED;
+
+    for (var node = targets; node != null; node = node.nextTarget) {
+      node.target.notify();
+    }
   }
 
   @override
-  void _notify() {
-    if (!((_flags & _NOTIFIED) != 0)) {
-      _flags |= _OUTDATED | _NOTIFIED;
-      _notifyAllTargets();
+  void dispose() {
+    super.dispose();
+    flags |= DISPOSED;
+  }
+
+  /// Returns a readonly signal
+  ReadonlySignal<T> readonly() => this;
+
+  @override
+  void unsubscribeFromNode(Node node) {
+    super.unsubscribeFromNode(node);
+    if (autoDispose && targets == null) {
+      dispose();
     }
   }
 
@@ -519,38 +413,18 @@ class Computed<T> extends ReadonlySignal<T> implements SignalListenable {
   T get value {
     if (disposed) {
       print(
-          'computed warning: [$globalId|$debugLabel] has been read after disposed: ${StackTrace.current}');
-      return _value;
+        'computed warning: [$globalId|$debugLabel] has been '
+        'read after disposed: ${StackTrace.current}',
+      );
     }
-
-    if ((_flags & _RUNNING) != 0) {
-      // coverage:ignore-start
-      throw EffectCycleDetectionError();
-      // coverage:ignore-end
-    }
-    final node = _addDependency(this);
-    _refresh();
-    if (node != null) {
-      node._version = _version;
-    }
-    if ((_flags & _HAS_ERROR) != 0) {
-      throw _error!;
-    }
-    return _value;
+    return super.value;
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _flags |= _DISPOSED;
+  set internalValue(T value) {
+    beforeUpdate(value);
+    super.internalValue = value;
   }
-
-  @override
-  T get initialValue => _initialValue;
-  late T _initialValue;
-
-  /// Returns a readonly signal
-  ReadonlySignal<T> readonly() => this;
 }
 
 /// A callback that is executed inside a computed.

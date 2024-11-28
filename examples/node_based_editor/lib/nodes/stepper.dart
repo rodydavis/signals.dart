@@ -18,7 +18,7 @@ class StepperNode extends NumberNode {
     required Node<dynamic, Object> increment,
     required Node<dynamic, Object> decrement,
   }) : super.computed(inputs: [increment, decrement]) {
-    output = signal(initial);
+    output = trackedSignal(initial);
     _cleanup.add(effect(() {
       increment.output.value;
       final out = output as Signal<num>;
@@ -66,14 +66,15 @@ class StepperNode extends NumberNode {
               children: [
                 IconButton(
                   tooltip: 'Reset',
-                  onPressed: () =>
-                      (output as Signal<num>).value = output.initialValue,
+                  onPressed: () => (output as Signal<num>).value =
+                      (output as TrackedSignal<num>).initialValue,
                   icon: const Icon(Icons.restore),
                 ),
                 IconButton(
                   tooltip: 'Undo',
                   onPressed: () => (output as Signal<num>).value =
-                      output.previousValue ?? output.initialValue,
+                      (output as TrackedSignal<num>).previousValue ??
+                          (output as TrackedSignal<num>).initialValue,
                   icon: const Icon(Icons.refresh),
                 ),
               ],

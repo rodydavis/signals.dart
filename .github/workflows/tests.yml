@@ -18,6 +18,8 @@ jobs:
 
       - name: Install melos
         run: dart pub global activate melos
+      - name: Bootstrap
+        run: melos bootstrap
 
       - name: Install dependencies
         run: melos exec --no-private flutter pub get

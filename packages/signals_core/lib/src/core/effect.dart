@@ -103,26 +103,11 @@ typedef EffectCallback = Function();
 /// ```
 /// @link https://dartsignals.dev/core/effect
 /// {@endtemplate}
-class Effect implements SignalListenable {
-  EffectCallback? _compute;
-
-  @override
-  final String? debugLabel;
-
-  @override
-  final int globalId;
-
-  Function? _cleanup;
-
-  @override
-  _Node? _sources;
-
-  Effect? _nextBatchedEffect;
-
-  @override
-  int _flags;
-
+class Effect extends signals.Effect {
   final _disposeCallbacks = <void Function()>{};
+
+  /// Label used for debugging
+  final String? debugLabel;
 
   /// {@template effect}
   /// The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](/core/computed). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
@@ -222,97 +207,25 @@ class Effect implements SignalListenable {
   /// @link https://dartsignals.dev/core/effect
   /// {@endtemplate}
   Effect(
-    EffectCallback compute, {
+    super.fn, {
     this.debugLabel,
-  })  : _flags = _TRACKING,
-        _compute = compute,
-        _cleanup = null,
-        globalId = ++_lastGlobalId {
-    assert(() {
-      SignalsObserver.instance?.onEffectCreated(this);
-      return true;
-    }());
-    try {
-      _callback();
-    } catch (e) {
-      dispose();
-      rethrow;
-    }
-  }
-
-  /// @internal for testing getter to track all the signals currently
-  /// subscribed in the effect
-  Iterable<ReadonlySignal> get sources sync* {
-    _Node? root = _sources;
-    for (var node = root; node != null; node = node._nextSource) {
-      yield node._source;
-    }
-  }
-
-  void _callback() {
-    final finish = _start();
-    try {
-      if ((_flags & _DISPOSED) != 0) return;
-      if (_compute == null) return;
-      _currentEffect = this;
-      final cleanup = _compute!();
-      _currentEffect = null;
-      if (cleanup is Function) {
-        _cleanup = cleanup;
-      }
-    } finally {
-      finish();
-    }
-    assert(() {
-      SignalsObserver.instance?.onEffectCalled(this);
-      return true;
-    }());
-  }
-
-  EffectCleanup _start() {
-    if ((_flags & _RUNNING) != 0) {
-      // coverage:ignore-start
-      throw EffectCycleDetectionError();
-      // coverage:ignore-end
-    }
-    _flags |= _RUNNING;
-    _flags &= ~_DISPOSED;
-    _cleanupEffect(this);
-    _prepareSources(this);
-    _startBatch();
-    final prevContext = _evalContext;
-    _evalContext = this;
-    return () => _endEffect(this, prevContext);
-  }
+  });
 
   @override
-  void _notify() {
-    if (!((_flags & _NOTIFIED) != 0)) {
-      _flags |= _NOTIFIED;
-      _nextBatchedEffect = _batchedEffect;
-      _batchedEffect = this;
-    }
-  }
-
-  void _dispose() {
-    _flags |= _DISPOSED;
-    if (!((_flags & _RUNNING) != 0)) {
-      _disposeEffect(this);
-    }
-    assert(() {
-      SignalsObserver.instance?.onEffectRemoved(this);
-      return true;
-    }());
+  void Function() call() {
+    SignalsObserver.instance?.onEffectCreated(this);
+    return super.call();
   }
 
   @override
   void dispose() {
     if (_disposed) return;
-    _dispose();
+    super.dispose();
     for (final cleanup in _disposeCallbacks) {
       cleanup();
     }
     _disposed = true;
+    SignalsObserver.instance?.onEffectRemoved(this);
   }
 
   bool _disposed = false;
@@ -446,18 +359,16 @@ class Effect implements SignalListenable {
 /// @link https://dartsignals.dev/core/effect
 /// {@endtemplate}
 EffectCleanup effect(
-  EffectCallback compute, {
+  EffectCallback fn, {
   String? debugLabel,
   EffectCallback? onDispose,
 }) {
   final instance = Effect(
-    compute,
+    fn,
     debugLabel: debugLabel,
   );
   if (onDispose != null) {
     instance._disposeCallbacks.add(onDispose);
   }
-  // Return a bound function instead of a wrapper like `() => effect._dispose()`,
-  // because bound functions seem to be just as fast and take up a lot less memory.
-  return instance.dispose;
+  return instance.call();
 }

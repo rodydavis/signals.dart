@@ -1,6 +1,8 @@
 ---
 title: Overview
 description: An overview of the signals library
+sidebar:
+  order: 1
 ---
 
 Signals are not new and have been around for a long time. They are also known as [signals](https://en.wikipedia.org/wiki/Signals_and_slots) or [observables](https://en.wikipedia.org/wiki/Observable_pattern).
@@ -13,7 +15,9 @@ Signals in preact started off by being implemented with dependencies tracked usi
 
 There is also a [DartPad](https://dartpad.dev/?id=d5f16f6be22e716d90419e41d10f281a) playground with some of the core methods that you can use to experiment!
 
-> If you are coming from the JS world and are comfortable with signals this should feel very familiar. If you are looking for a state management library in Flutter that can be used in the JS world and outside of Dart then look no further!
+:::note
+If you are coming from the JS world and are comfortable with signals this should feel very familiar. If you are looking for a state management library in Flutter that can be used in the JS world and outside of Dart then look no further!
+:::
 
 ## Minimal Updates
 

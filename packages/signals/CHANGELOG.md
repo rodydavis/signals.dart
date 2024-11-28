@@ -1,3 +1,23 @@
+## 6.0.0
+
+- Remove SignalStream controller
+- Upgrade SignalsProvider/ComputedProvider/ReadonlySignalProvider to default imports
+- Add FlutterSignal to extends ValueNotifier
+- Add FlutterComputed/FlutterReadonlySignal to extends ValueListenable
+- Removing deprecated methods
+- Add more methods to SignalsMixin
+- Switching to **preact_signals** package for core implementation
+- Removing old deprecated methods
+- Add new mixins: EventSinkSignalMixin, SinkSignalMixin, StreamSignalMixin, SetSignalMixin, ListSignalMixin, MapSignalMixin, QueueSignalMixin, ChangeStackSignalMixin, IterableSignalMixin
+- Update AsyncSignal to implement EventSink
+- Removing previous/initial value from Signal and Computed in favor of TrackedSignal, TrackedSignalMixin and trackedSignal()
+- Update SignalsObserver to include value for signal created (instead of peek())
+- Updated examples
+- Remove callback to signal
+- Remove toSignal extension method (causing unintended casts) in favor of .$ for Object/Object?
+- Add WatchBuilder to include a child callback for caching a widget between rebuilds
+- Removing ComputedProvider/ReadonlySignalProvider
+
 ## 5.5.0
 
 - Fix for hot reload

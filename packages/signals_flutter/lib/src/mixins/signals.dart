@@ -96,94 +96,184 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     _setup();
   }
 
+  /// Async Computed is syntax sugar around [FutureSignal].
+  ///
+  /// _Inspired by [computedFrom](https://ngxtension.netlify.app/utilities/signals/computed-from/) from Angular NgExtension._
+  ///
+  /// computedFrom takes a list of [signals] and a [callback] function to
+  /// compute the value of the signal every time one of the [signals] changes.
+  ///
+  /// ```dart
+  /// final movieId = signal('id');
+  /// late final movie = computedFrom(args, ([movieId]) => fetchMovie(args.first));
+  /// ```
+  ///
+  /// Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
+  FutureSignal<S> createComputedFrom<S, A>(
+    List<ReadonlySignal<A>> signals,
+    Future<S> Function(List<A> args) fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool lazy = true,
+  }) {
+    return _bindLocal(computedFrom<S, A>(
+      signals,
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      lazy: lazy,
+    ));
+  }
+
+  /// Async Computed is syntax sugar around [FutureSignal].
+  ///
+  /// _Inspired by [computedAsync](https://ngxtension.netlify.app/utilities/signals/computed-async/) from Angular NgExtension._
+  ///
+  /// computedAsync takes a [callback] function to compute the value
+  /// of the signal. This callback is converted into a [Computed] signal.
+  ///
+  /// ```dart
+  /// final movieId = signal('id');
+  /// late final movie = computedAsync(() => fetchMovie(movieId()));
+  /// ```
+  ///
+  /// **It is important that signals are called before any async gaps with await.**
+  ///
+  /// Any signal that is read inside the callback will be tracked as a dependency and the computed signal will be re-evaluated when any of the dependencies change.
+  FutureSignal<S> createComputedAsync<S>(
+    Future<S> Function() fn, {
+    S? initialValue,
+    String? debugLabel,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    bool lazy = true,
+  }) {
+    return _bindLocal(computedAsync<S>(
+      fn,
+      dependencies: dependencies,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      lazy: lazy,
+    ));
+  }
+
+  /// Create a signal from a future
+  FutureSignal<S> createFutureSignal<S>(
+    Future<S> Function() fn, {
+    S? initialValue,
+    String? debugLabel,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    bool lazy = true,
+  }) {
+    return _bindLocal(futureSignal<S>(
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      dependencies: dependencies,
+      lazy: lazy,
+    ));
+  }
+
+  /// Create a signals from a stream
+  StreamSignal<S> createStreamSignal<S>(
+    Stream<S> Function() callback, {
+    S? initialValue,
+    String? debugLabel,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    void Function()? onDone,
+    bool? cancelOnError,
+    bool lazy = true,
+  }) {
+    return _bindLocal(streamSignal<S>(
+      callback,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      dependencies: dependencies,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+      lazy: lazy,
+    ));
+  }
+
+  /// Create a signal holding an async value
+  AsyncSignal<S> createAsyncSignal<S>(
+    AsyncState<S> value, {
+    String? debugLabel,
+  }) {
+    return _bindLocal(asyncSignal<S>(
+      value,
+      debugLabel: debugLabel,
+    ));
+  }
+
   /// Create a signal<T> and watch for changes
   Signal<V> createSignal<V>(
     V val, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
-    final s = signal<V>(
+    return _bindLocal(signal<V>(
       val,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
-    _watch(s, true);
-    return s;
+    ));
   }
 
   /// Create a [ListSignal]<T> and watch for changes
   ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
-    final s = ListSignal<V>(
+    return _bindLocal(ListSignal<V>(
       list,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
-    _watch(s, true);
-    return s;
+    ));
   }
 
   /// Create a [SetSignal]<T> and watch for changes
   SetSignal<V> createSetSignal<V>(
     Set<V> set, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
-    final s = SetSignal<V>(
+    return _bindLocal(SetSignal<V>(
       set,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
-    _watch(s, true);
-    return s;
+    ));
   }
 
   /// Create a [QueueSignal]<T> and watch for changes
   QueueSignal<V> createQueueSignal<V>(
     Queue<V> queue, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
-    final s = QueueSignal<V>(
+    return _bindLocal(QueueSignal<V>(
       queue,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
-    _watch(s, true);
-    return s;
+    ));
   }
 
   /// Create a [MapSignal]<T> and watch for changes
   MapSignal<K, V> createMapSignal<K, V>(
     Map<K, V> value, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
-    final s = MapSignal<K, V>(
+    return _bindLocal(MapSignal<K, V>(
       value,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
-    _watch(s, true);
-    return s;
+    ));
   }
 
   /// Create a computed<T> and watch for changes
   Computed<V> createComputed<V>(
     V Function() cb, {
     String? debugLabel,
-    bool autoDispose = true,
   }) {
-    final s = computed<V>(
+    return _bindLocal(computed<V>(
       cb,
       debugLabel: debugLabel,
-      autoDispose: autoDispose,
-    );
-    _watch(s, true);
-    return s;
+    ));
+  }
+
+  S _bindLocal<V, S extends ReadonlySignal<V>>(S val) {
+    _watch(val, true);
+    return val;
   }
 
   /// Bind an existing signal<T> and watch for changes

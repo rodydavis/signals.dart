@@ -33,6 +33,7 @@ void main() {
 
           final instance = Effect(() => calls++);
           instance.onDispose(() => called = true);
+          instance();
 
           expect(calls, 1);
           expect(called, false);
@@ -48,6 +49,7 @@ void main() {
           var called = false;
           final instance = Effect(() => calls++);
           final cancel = instance.onDispose(() => called = true);
+          instance();
 
           expect(calls, 1);
           expect(called, false);
@@ -69,6 +71,7 @@ void main() {
             return () => called = true;
           },
         );
+        instance();
         expect(instance.disposed, false);
         instance.dispose();
         expect(calls, 1);

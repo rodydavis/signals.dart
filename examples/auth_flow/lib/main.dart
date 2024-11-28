@@ -38,7 +38,7 @@ class Auth {
   final api = ServerApi();
 
   /// Current user signal
-  late final currentUser = api.userStream().toSignal();
+  late final currentUser = api.userStream().toStreamSignal();
 
   late final settings = streamSignal(
     () => api.todosStream(currentUser().value?.id ?? 0),
@@ -71,7 +71,7 @@ class Auth {
 final auth = Auth();
 
 final router = GoRouter(
-  refreshListenable: auth.isLoggedIn.toValueListenable(),
+  refreshListenable: auth.isLoggedIn,
   routes: [
     GoRoute(
       path: '/',

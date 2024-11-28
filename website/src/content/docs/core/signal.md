@@ -1,6 +1,8 @@
 ---
 title: Signal
 description: How to create and use a signal
+sidebar:
+  order: 0
 ---
 
 The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
@@ -60,21 +62,6 @@ effect(() {
 counter.value = 1;
 ```
 
-## .previousValue
-
-The `.previousValue` property of a signal is used to read the previous value of the signal. If used inside an effect or computed, it will not subscribe to the signal and not trigger the effect or computed whenever the signal's value changes.
-
-```dart
-final counter = signal(0);
-
-effect(() {
-	print('Current value: ${counter.value}');
-	print('Previous value: ${counter.previousValue}');
-});
-
-counter.value = 1;
-```
-
 ## Force Update
 
 If you want to force an update for a signal, you can call the `.set(..., force: true)` method. This will trigger all effects and mark all computed as dirty.
@@ -127,6 +114,34 @@ s.onDispose(() => print('Signal destroyed'));
 s.dispose();
 ```
 
+## Custom Signal
+
+You can create a custom signal by extending the `Signal` class.
+
+```dart
+class MySignal extends Signal<int> {
+  MySignal(int value) : super(value);
+}
+```
+
+:::tip
+You can apply any number of mixins to a custom signal to add additional functionality.
+
+Mixins:
+- [ValueListenableSignalMixin](/mixins/value-listenable) to implement ValueListenable<T>
+- [ValueNotifierSignalMixin](/mixins/value-notifier) to implement ValueNotifier<T>
+- [ChangeStackSignalMixin](/mixins/change-stack) to add undo and redo functionality
+- [TrackedSignalMixin](/mixins/tracked) to add initial and previous value tracking
+- [StreamSignalMixin](/mixins/stream) to implement Stream
+- [SinkSignalMixin](/mixins/sink) to implement Sink
+- [EventSinkSignalMixin](/mixins/event-sink) to implement EventSink
+- [ListSignalMixin](/mixins/list) for List value types
+- [MapSignalMixin](/mixins/map) for Map value types
+- [SetSignalMixin](/mixins/set) for Set value types
+- [IterableSignalMixin](/mixins/iterable) for Iterable<T> value types
+- [QueueSignalMixin](/mixins/queue) for Queue value types
+:::
+
 ## Flutter
 
 In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createSignal` inside a stateful widget.
@@ -141,7 +156,7 @@ class CounterWidget extends StatefulWidget {
 }
 
 class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
-  late final counter = createSignal(context, 0);
+  late final counter = createSignal(0);
 
   @override
   Widget build(BuildContext context) {

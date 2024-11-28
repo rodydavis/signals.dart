@@ -44,7 +44,7 @@ class ElementWatcher {
   }
 
   /// Watch a signal on am element
-  void watch(ReadonlySignal value) {
+  void watch(core.ReadonlySignal value) {
     _watch.putIfAbsent(
       value.globalId,
       () => value.subscribe((val) => rebuild()),
@@ -52,13 +52,13 @@ class ElementWatcher {
   }
 
   /// Remove the listener of an element for a given signal
-  void unwatch(ReadonlySignal value) {
+  void unwatch(core.ReadonlySignal value) {
     final dispose = _watch.remove(value.globalId);
     dispose?.call();
   }
 
   /// Attach a callback to the widget
-  void listen(ReadonlySignal value, VoidCallback cb) {
+  void listen(core.ReadonlySignal value, VoidCallback cb) {
     _listen.putIfAbsent(
       value.globalId,
       () => value.subscribe((val) => _callback(cb, listener: true)),
@@ -66,7 +66,7 @@ class ElementWatcher {
   }
 
   /// Stop calling the callback for a signal
-  void unlisten(ReadonlySignal value, VoidCallback cb) {
+  void unlisten(core.ReadonlySignal value, VoidCallback cb) {
     final dispose = _listen.remove(value.globalId);
     dispose?.call();
   }

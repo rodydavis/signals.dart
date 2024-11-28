@@ -11,6 +11,9 @@
 # (the recommended set includes the core lints).
 # The core lints are also what is used by pub.dev for scoring packages.
 
+analyzer:
+  errors:
+    invalid_use_of_internal_member: ignore
 include: package:lints/recommended.yaml
 
 linter:
