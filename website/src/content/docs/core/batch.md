@@ -1,6 +1,8 @@
 ---
 title: Batch
 description: Batch multiple signal writes into one update
+sidebar:
+  order: 4
 ---
 
 The `batch` function allows you to combine multiple signal writes into one single update that is triggered at the end when the callback completes.

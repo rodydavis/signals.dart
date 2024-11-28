@@ -1,1 +1,1 @@
-export 'src/extensions/object.dart' show OptionalSignalObjectUtils;
+export 'src/extensions/object.dart' show SignalObjectUtils;

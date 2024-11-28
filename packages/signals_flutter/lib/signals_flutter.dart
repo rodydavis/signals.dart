@@ -12,5 +12,3 @@ export 'src/mixins/signals.dart';
 export 'src/mixins/value_listenable.dart';
 export 'src/mixins/value_notifier.dart';
 export 'src/inherited_widget/signal.dart';
-export 'src/inherited_widget/computed.dart';
-export 'src/inherited_widget/readonly.dart';

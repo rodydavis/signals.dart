@@ -5,7 +5,9 @@ description: By default, Signals are uni-directional but can be used in a bi-dir
 
 By default, Signals are uni-directional but can be used in a bi-directional way if needed.
 
-> Warning: Bi-directional data flow should only be used when necessary as it can lead to infinite loops if not used correctly.
+:::caution
+Bi-directional data flow should only be used when necessary as it can lead to infinite loops if not used correctly.
+:::
 
 Consider the following example:
 

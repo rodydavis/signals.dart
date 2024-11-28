@@ -1,6 +1,8 @@
 ---
 title: FutureSignal
 description: Creates a signal that contains a future
+sidebar:
+  order: 1
 ---
 
 Future signals can be created by extension or method.

@@ -1,15 +1,23 @@
 import 'package:flutter/widgets.dart';
 
+import '../core/readonly.dart';
 import '../core/signal.dart';
 
 /// Signal notifier widget
-class SignalProvider<T extends FlutterSignal> extends InheritedNotifier<T> {
+class SignalProvider<T extends FlutterReadonlySignal>
+    extends InheritedNotifier<T> {
   /// Signal notifier widget
   SignalProvider({
     super.key,
-    required super.child,
     required T Function() create,
-  }) : super(notifier: create());
+    required super.child,
+  }) : _setup = create;
+
+  final T Function() _setup;
+
+  @override
+  // ignore: overridden_fields
+  late final T notifier = _setup();
 
   /// Find widget in tree
   static SignalProvider<T>? providerOf<T extends FlutterSignal>(

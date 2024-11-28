@@ -1,6 +1,8 @@
 ---
 title: Connect
 description: Connect a signal to a set of streams
+sidebar:
+  order: 3
 ---
 
 The idea for `connect` comes from Anguar Signals with RxJS:

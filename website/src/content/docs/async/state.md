@@ -1,6 +1,8 @@
 ---
 title: AsyncState
 description: Async states for a signal value
+sidebar:
+  order: 0
 ---
 
 `AsyncState` is class commonly used with Future/Stream signals to represent the states the signal can be in.

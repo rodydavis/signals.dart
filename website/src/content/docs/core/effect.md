@@ -1,6 +1,8 @@
 ---
 title: Effect
 description: Effects are used to perform side effects from signals
+sidebar:
+  order: 2
 ---
 
 The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](/core/computed). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
@@ -76,8 +78,9 @@ final dispose = effect(() {
 dispose();
 ```
 
-## Warning About Cycles
+## Preventing Cycles
 
+:::danger
 Mutating a signal inside an effect will cause an infinite loop, because the effect will be triggered again. To prevent this, you can use [`untracked(fn)`](/core/untracked) to read a signal without subscribing to it.
 
 ```dart
@@ -97,3 +100,5 @@ Future<void> main() async {
   await completer.future;
 }
 ```
+
+:::

@@ -16,6 +16,7 @@
 - Remove callback to signal
 - Remove toSignal extension method (causing unintended casts) in favor of .$ for Object/Object?
 - Add WatchBuilder to include a child callback for caching a widget between rebuilds
+- Removing ComputedProvider/ReadonlySignalProvider
 
 ## 5.5.0
 
