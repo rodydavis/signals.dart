@@ -199,7 +199,8 @@ class AppTheme {
     'sourceColor',
  );
   final themeMode = EnumSignal(
-    ThemeMode.system, 'themeMode',
+    ThemeMode.system,
+    'themeMode',
     ThemeMode.values,
  );
 
