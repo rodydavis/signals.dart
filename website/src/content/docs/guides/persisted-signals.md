@@ -133,7 +133,7 @@ mixin PersistedSignalMixin<T> on Signal<T> {
 
   Future<T> load() async {
     final val = await store.getItem(key);
-    if (val == null) return internalValue;
+    if (val == null) return value;
     return decode(val);
   }
 
