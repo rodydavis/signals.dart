@@ -267,4 +267,4 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-Now when we run the app and make changes, if we close the app and reopen it, the changes will persist.
+Now when we run the app and make changes, if we close the app and reopen it, the changes will persist offline.
