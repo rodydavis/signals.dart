@@ -1,6 +1,8 @@
 ---
 title: ValueNotifier
 description: How is Signals different than using ValueNotifier?
+sidebar:
+  order: 1
 ---
 
 :::tip

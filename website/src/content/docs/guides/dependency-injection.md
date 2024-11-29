@@ -1,6 +1,8 @@
 ---
 title: Dependency Injection
 description: How is Signals can be used with any DI solution or none at all
+sidebar:
+  order: 3
 ---
 
 Signals is a new **core primitive reactivity library** and not a framework which means it can be used with any dependency injection solution or none at all.

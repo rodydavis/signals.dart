@@ -1,6 +1,8 @@
 ---
 title: Bi-directional Data Flow
 description: By default, Signals are uni-directional but can be used in a bi-directional way if needed.
+sidebar:
+  order: 4
 ---
 
 By default, Signals are uni-directional but can be used in a bi-directional way if needed.
