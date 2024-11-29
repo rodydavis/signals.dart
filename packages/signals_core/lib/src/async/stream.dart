@@ -253,17 +253,17 @@ class StreamSignal<T> extends AsyncSignal<T> {
     bool lazy = true,
     super.autoDispose,
   })  : _onDone = onDone,
+        _stream = computed(
+          () {
+            for (final dep in dependencies) {
+              dep.value;
+            }
+            return fn();
+          },
+        ),
         super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
-    _stream = computed(
-      () {
-        for (final dep in dependencies) {
-          dep.value;
-        }
-        return fn();
-      },
-    );
     if (!lazy) value;
   }
 

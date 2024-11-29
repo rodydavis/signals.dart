@@ -1,3 +1,7 @@
+## 6.0.1
+
+- Fix issue with StreamSignal `_stream not initialized`
+
 ## 6.0.0
 
 - Remove SignalStream controller

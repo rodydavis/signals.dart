@@ -1,7 +1,11 @@
+## 6.0.1
+
+- Fix issue with StreamSignal `_stream not initialized`
+
 ## 6.0.0
 
 - Remove SignalStream controller
-- Upgrade SignalsProvider/ComputedProvider/ReadonlySignalProvider to default imports
+- Upgrade SignalsProvider to default import
 - Add FlutterSignal to extends ValueNotifier
 - Add FlutterComputed/FlutterReadonlySignal to extends ValueListenable
 - Removing deprecated methods
