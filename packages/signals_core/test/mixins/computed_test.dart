@@ -21,5 +21,14 @@ void main() {
       expect(s.value, 1);
       expect(s.initialValue, 1);
     });
+    test('new computed value from signal', () {
+      final i = signal(0);
+      final s = TrackedComputed(() => i.value);
+      i.value = 1;
+      expect(s.value, 1);
+      i.value = 2;
+      expect(s.value, 2);
+      expect(s.previousValue, 1);
+    });
   });
 }
