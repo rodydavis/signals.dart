@@ -59,13 +59,13 @@ void main() {
       test('data', () async {
         final s = asyncSignal(AsyncState<int>.data(0));
         s.reload();
-        expect(s.value is AsyncLoading, true);
+        expect(s.value is AsyncDataReloading, true);
       });
 
       test('error', () async {
         final s = asyncSignal(AsyncState<int>.error('error'));
         s.reload();
-        expect(s.value is AsyncLoading, true);
+        expect(s.value is AsyncErrorReloading, true);
       });
 
       test('loading', () async {
@@ -79,14 +79,14 @@ void main() {
       test('data', () async {
         final s = asyncSignal(AsyncState<int>.data(0));
         s.refresh();
-        expect(s.value is AsyncData, true);
+        expect(s.value is AsyncDataRefreshing, true);
         expect(s.value.isLoading, true);
       });
 
       test('error', () async {
         final s = asyncSignal(AsyncState<int>.error('error'));
         s.refresh();
-        expect(s.value is AsyncError, true);
+        expect(s.value is AsyncErrorRefreshing, true);
         expect(s.value.isLoading, true);
       });
 
