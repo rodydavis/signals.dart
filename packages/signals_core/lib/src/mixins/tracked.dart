@@ -22,7 +22,7 @@ mixin TrackedSignalMixin<T> on ReadonlySignal<T> {
     final ready = isInitialized;
     super.beforeUpdate(val);
     if (ready) {
-      _previousValue = value;
+      _previousValue = internalValue;
     } else {
       afterCreate(val);
     }
