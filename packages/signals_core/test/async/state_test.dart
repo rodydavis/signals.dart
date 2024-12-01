@@ -152,5 +152,134 @@ void main() {
         expect(value, true);
       });
     });
+    
+    group('pattern matching', () {
+      test('loading', () {
+        final s = AsyncState<int>.loading();
+        int value = switch (s) {
+          AsyncData<int>() => 1,
+          AsyncError<int>() => 2,
+          AsyncLoading<int>() => 3,
+        };
+        expect(value, 3);
+        value = switch (s) {
+          AsyncDataRefreshing<int>() => 1,
+          AsyncDataReloading<int>() => 2,
+          AsyncData<int>() => 3,
+          AsyncErrorRefreshing() => 4,
+          AsyncErrorReloading() => 5,
+          AsyncError<int>() => 6,
+          AsyncLoading<int>() => 7,
+        };
+        expect(value, 7);
+      });
+
+      test('data', () {
+        var s = AsyncState<int>.data(0);
+        int value = switch (s) {
+          AsyncData<int>() => 1,
+          AsyncError<int>() => 2,
+          AsyncLoading<int>() => 3,
+        };
+        expect(value, 1);
+        value = switch (s) {
+          AsyncDataRefreshing<int>() => 1,
+          AsyncDataReloading<int>() => 2,
+          AsyncData<int>() => 3,
+          AsyncErrorRefreshing() => 4,
+          AsyncErrorReloading() => 5,
+          AsyncError<int>() => 6,
+          AsyncLoading<int>() => 7,
+        };
+        expect(value, 3);
+        s = AsyncState<int>.dataRefreshing(0);
+        value = switch (s) {
+          AsyncData<int>() => 1,
+          AsyncError<int>() => 2,
+          AsyncLoading<int>() => 3,
+        };
+        expect(value, 1);
+        value = switch (s) {
+          AsyncDataRefreshing<int>() => 1,
+          AsyncDataReloading<int>() => 2,
+          AsyncData<int>() => 3,
+          AsyncErrorRefreshing() => 4,
+          AsyncErrorReloading() => 5,
+          AsyncError<int>() => 6,
+          AsyncLoading<int>() => 7,
+        };
+        expect(value, 1);
+        s = AsyncState<int>.dataReloading(0);
+        value = switch (s) {
+          AsyncData<int>() => 1,
+          AsyncError<int>() => 2,
+          AsyncLoading<int>() => 3,
+        };
+        expect(value, 1);
+        value = switch (s) {
+          AsyncDataRefreshing<int>() => 1,
+          AsyncDataReloading<int>() => 2,
+          AsyncData<int>() => 3,
+          AsyncErrorRefreshing() => 4,
+          AsyncErrorReloading() => 5,
+          AsyncError<int>() => 6,
+          AsyncLoading<int>() => 7,
+        };
+      });
+
+      test('error', () {
+        var s = AsyncState<int>.error('error');
+        int value = switch (s) {
+          AsyncData<int>() => 1,
+          AsyncError<int>() => 2,
+          AsyncLoading<int>() => 3,
+        };
+        expect(value, 2);
+        value = switch (s) {
+          AsyncDataRefreshing<int>() => 1,
+          AsyncDataReloading<int>() => 2,
+          AsyncData<int>() => 3,
+          AsyncErrorRefreshing() => 4,
+          AsyncErrorReloading() => 5,
+          AsyncError<int>() => 6,
+          AsyncLoading<int>() => 7,
+        };
+        expect(value, 6);
+        s = AsyncState<int>.errorRefreshing('error');
+        value = switch (s) {
+          AsyncData<int>() => 1,
+          AsyncError<int>() => 2,
+          AsyncLoading<int>() => 3,
+        };
+        expect(value, 2);
+        value = switch (s) {
+          AsyncDataRefreshing<int>() => 1,
+          AsyncDataReloading<int>() => 2,
+          AsyncData<int>() => 3,
+          AsyncErrorRefreshing() => 4,
+          AsyncErrorReloading() => 5,
+          AsyncError<int>() => 6,
+          AsyncLoading<int>() => 7,
+        };
+        expect(value, 4);
+        s = AsyncState<int>.errorReloading('error');
+        value = switch (s) {
+          AsyncData<int>() => 1,
+          AsyncError<int>() => 2,
+          AsyncLoading<int>() => 3,
+        };
+        expect(value, 2);
+        value = switch (s) {
+          AsyncDataRefreshing<int>() => 1,
+          AsyncDataReloading<int>() => 2,
+          AsyncData<int>() => 3,
+          AsyncErrorRefreshing() => 4,
+          AsyncErrorReloading() => 5,
+          AsyncError<int>() => 6,
+          AsyncLoading<int>() => 7,
+        };
+        expect(value, 5);
+      });
+    });
   });
 }
