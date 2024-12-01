@@ -327,7 +327,7 @@ sealed class AsyncState<T> {
 
 /// A loading state with a value. Signals the query conditions that led to the data
 /// has changed and is being reloaded.
-class AsyncDataReloading<T> extends AsyncData<T> {
+class AsyncDataReloading<T> extends AsyncData<T> implements AsyncLoading<T> {
   /// Create a state with a value that is reloading
   const AsyncDataReloading(super.data);
 
@@ -346,7 +346,7 @@ class AsyncDataReloading<T> extends AsyncData<T> {
 
 /// A loading state with a value. Signals the query conditions that led to the data
 /// has remained the same and is being refreshed
-class AsyncDataRefreshing<T> extends AsyncData<T> {
+class AsyncDataRefreshing<T> extends AsyncData<T> implements AsyncLoading<T> {
   /// Create a state with a value that is refreshing
   const AsyncDataRefreshing(super.data);
 
@@ -410,7 +410,7 @@ class AsyncData<T> extends AsyncState<T> {
 
 /// A loading state with an error. Signal the query conditions that led to the error
 /// has changed and is being reloaded.
-class AsyncErrorReloading<T> extends AsyncError<T> {
+class AsyncErrorReloading<T> extends AsyncError<T> implements AsyncLoading<T> {
   /// Create a state with an error that is reloading
   const AsyncErrorReloading(super.error, super.stackTrace);
 
@@ -431,7 +431,7 @@ class AsyncErrorReloading<T> extends AsyncError<T> {
 
 /// A loading state with an error. Signal the query conditions that led to the error
 /// has remained the same and is being refreshed.
-class AsyncErrorRefreshing<T> extends AsyncError<T> {
+class AsyncErrorRefreshing<T> extends AsyncError<T> implements AsyncLoading<T> {
   /// Create a state with an error that is refreshing
   const AsyncErrorRefreshing(super.error, super.stackTrace);
 
