@@ -405,7 +405,10 @@ class AsyncData<T> extends AsyncState<T> {
 
   @override
   int get hashCode =>
-      value.hashCode ^ isLoading.hashCode ^ isRefreshing.hashCode ^ isReloading.hashCode;
+      value.hashCode ^
+      isLoading.hashCode ^
+      isRefreshing.hashCode ^
+      isReloading.hashCode;
 }
 
 /// A loading state with an error. Signal the query conditions that led to the error
@@ -474,7 +477,8 @@ class AsyncError<T> extends AsyncState<T> {
   bool get isReloading => false;
 
   @override
-  T get requireValue => throw UnsupportedError('Error state does not have a value');
+  T get requireValue =>
+      throw UnsupportedError('Error state does not have a value');
 
   @override
   final Object error;
@@ -484,7 +488,9 @@ class AsyncError<T> extends AsyncState<T> {
 
   @override
   bool operator ==(covariant AsyncState other) {
-    return other is AsyncError<T> && other.error == error && other.stackTrace == stackTrace;
+    return other is AsyncError<T> &&
+        other.error == error &&
+        other.stackTrace == stackTrace;
   }
 
   @override
@@ -520,7 +526,8 @@ class AsyncLoading<T> extends AsyncState<T> {
   bool get isReloading => false;
 
   @override
-  T get requireValue => throw UnsupportedError('Loading state does not have a value');
+  T get requireValue =>
+      throw UnsupportedError('Loading state does not have a value');
 
   @override
   Object? get error => null;
