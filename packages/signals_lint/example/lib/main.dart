@@ -22,8 +22,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  late final counter = createSignal(context, 1);
+class _MyHomePageState extends State<MyHomePage> with SignalsMixin {
+  late final counter = createSignal(1);
 
   @override
   Widget build(BuildContext context) {

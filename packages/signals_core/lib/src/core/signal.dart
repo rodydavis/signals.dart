@@ -289,7 +289,7 @@ class Signal<T> extends signals.Signal<T>
 /// }
 ///
 /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
-///   late final counter = createSignal(context, 0);
+///   late final counter = createSignal(0);
 ///
 ///   @override
 ///   Widget build(BuildContext context) {

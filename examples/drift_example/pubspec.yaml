@@ -14,7 +14,7 @@ dependencies:
   path_provider: ^2.1.3
   path: ^1.9.0
   go_router: ^13.2.4
-  signals: ^5.5.0
+  signals: ^6.0.0
   flutter_colorpicker: ^1.0.3
   file_picker: ^8.0.0+1
   sqlite3: ^2.4.2
