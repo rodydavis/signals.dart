@@ -1,3 +1,8 @@
+## 6.0.2
+
+- Fix cycle error with TrackedSignalMixin and Computed
+- Add `AsyncErrorReloading`, `AsyncErrorRefreshing`, `AsyncDataReloading`, `AsyncDataRefreshing`
+
 ## 6.0.1
 
 - Fix issue with StreamSignal `_stream not initialized`
