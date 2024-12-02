@@ -5,6 +5,10 @@ class TrackedComputed<T> extends Computed<T> with TrackedSignalMixin<T> {
   TrackedComputed(super.fn);
 }
 
+class TrackedSignal<T> extends Signal<T> with TrackedSignalMixin<T> {
+  TrackedSignal(super.internalValue);
+}
+
 void main() {
   group('TrackedComputed', () {
     test('previousValue', () {
@@ -27,6 +31,38 @@ void main() {
       i.value = 1;
       expect(s.value, 1);
       i.value = 2;
+      expect(s.value, 2);
+      expect(s.previousValue, 1);
+    });
+  });
+
+  group('TrackedSignal', () {
+    test('previousValue', () {
+      final s = TrackedSignal(0);
+
+      expect(s.previousValue, null);
+      expect(s.value, 0);
+
+      s.value += 1;
+
+      expect(s.previousValue, 0);
+      expect(s.value, 1);
+    });
+
+    test('initialValue', () {
+      final s = TrackedSignal(1);
+      expect(s.value, 1);
+      expect(s.initialValue, 1);
+    });
+    test('new computed value from signal', () {
+      final s = TrackedSignal(0);
+
+      s.value = 1;
+
+      expect(s.value, 1);
+
+      s.value = 2;
+
       expect(s.value, 2);
       expect(s.previousValue, 1);
     });
