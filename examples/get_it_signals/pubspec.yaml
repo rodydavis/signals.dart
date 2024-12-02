@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   get_it: ^7.7.0
   go_router: ^13.2.4
-  signals: ^5.5.0
+  signals: ^6.0.0
 
 dev_dependencies:
   flutter_test:
