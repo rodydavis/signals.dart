@@ -125,7 +125,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for one element.
+  /// [createComputedFrom] for one signal.
   FutureSignal<S> createComputedFrom1<S, A>(
     ReadonlySignal<A> signal1,
     Future<S> Function(A value1) fn, {
@@ -142,7 +142,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for two elements.
+  /// [createComputedFrom] for two signals.
   FutureSignal<S> createComputedFrom2<S, A, B>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
@@ -161,7 +161,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for three elements.
+  /// [createComputedFrom] for three signals.
   FutureSignal<S> createComputedFrom3<S, A, B, C>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
@@ -182,7 +182,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for four elements.
+  /// [createComputedFrom] for four signals.
   FutureSignal<S> createComputedFrom4<S, A, B, C, D>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
@@ -205,7 +205,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for five elements.
+  /// [createComputedFrom] for five signals.
   FutureSignal<S> createComputedFrom5<S, A, B, C, D, E>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
