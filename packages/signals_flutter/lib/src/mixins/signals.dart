@@ -125,10 +125,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a one element.
+  /// [createComputedFrom] for one element.
   FutureSignal<S> createComputedFrom1<S, A>(
     ReadonlySignal<A> signal1,
-    Future<S> Function(A signal1) fn, {
+    Future<S> Function(A value1) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
@@ -142,11 +142,11 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a two elements.
+  /// [createComputedFrom] for two elements.
   FutureSignal<S> createComputedFrom2<S, A, B>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
-    Future<S> Function(A signal1, B signal2) fn, {
+    Future<S> Function(A value1, B value2) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
@@ -161,12 +161,12 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a three elements.
+  /// [createComputedFrom] for three elements.
   FutureSignal<S> createComputedFrom3<S, A, B, C>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
     ReadonlySignal<C> signal3,
-    Future<S> Function(A signal1, B signal2, C signal3) fn, {
+    Future<S> Function(A value1, B value2, C value3) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
@@ -182,13 +182,13 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a four elements.
+  /// [createComputedFrom] for four elements.
   FutureSignal<S> createComputedFrom4<S, A, B, C, D>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
     ReadonlySignal<C> signal3,
     ReadonlySignal<D> signal4,
-    Future<S> Function(A signal1, B signal2, C signal3, D signal4) fn, {
+    Future<S> Function(A value1, B value2, C value3, D value4) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
@@ -205,15 +205,14 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a five elements.
+  /// [createComputedFrom] for five elements.
   FutureSignal<S> createComputedFrom5<S, A, B, C, D, E>(
     ReadonlySignal<A> signal1,
     ReadonlySignal<B> signal2,
     ReadonlySignal<C> signal3,
     ReadonlySignal<D> signal4,
     ReadonlySignal<E> signal5,
-    Future<S> Function(A signal1, B signal2, C signal3, D signal4, E signal5)
-        fn, {
+    Future<S> Function(A value1, B value2, C value3, D value, E value5) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
