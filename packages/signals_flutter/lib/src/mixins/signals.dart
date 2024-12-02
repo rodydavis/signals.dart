@@ -125,16 +125,16 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a one element record.
+  /// [createComputedFrom] for a one element.
   FutureSignal<S> createComputedFrom1<S, A>(
-    (ReadonlySignal<A>,) signals,
-    Future<S> Function((A,) args) fn, {
+    ReadonlySignal<A> signal1,
+    Future<S> Function(A signal1) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
   }) {
     return _bindLocal(computedFrom1<S, A>(
-      signals,
+      signal1,
       fn,
       initialValue: initialValue,
       debugLabel: debugLabel,
@@ -142,21 +142,18 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a two element record.
+  /// [createComputedFrom] for a two elements.
   FutureSignal<S> createComputedFrom2<S, A, B>(
-    (ReadonlySignal<A>, ReadonlySignal<B>) signals,
-    Future<S> Function(
-            (
-              A,
-              B,
-            ) args)
-        fn, {
+    ReadonlySignal<A> signal1,
+    ReadonlySignal<B> signal2,
+    Future<S> Function(A signal1, B signal2) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
   }) {
     return _bindLocal(computedFrom2<S, A, B>(
-      signals,
+      signal1,
+      signal2,
       fn,
       initialValue: initialValue,
       debugLabel: debugLabel,
@@ -164,22 +161,20 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a three element record.
+  /// [createComputedFrom] for a three elements.
   FutureSignal<S> createComputedFrom3<S, A, B, C>(
-    (ReadonlySignal<A>, ReadonlySignal<B>, ReadonlySignal<C>) signals,
-    Future<S> Function(
-            (
-              A,
-              B,
-              C,
-            ) args)
-        fn, {
+    ReadonlySignal<A> signal1,
+    ReadonlySignal<B> signal2,
+    ReadonlySignal<C> signal3,
+    Future<S> Function(A signal1, B signal2, C signal3) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
   }) {
     return _bindLocal(computedFrom3<S, A, B, C>(
-      signals,
+      signal1,
+      signal2,
+      signal3,
       fn,
       initialValue: initialValue,
       debugLabel: debugLabel,
@@ -187,28 +182,22 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a four element record.
+  /// [createComputedFrom] for a four elements.
   FutureSignal<S> createComputedFrom4<S, A, B, C, D>(
-    (
-      ReadonlySignal<A>,
-      ReadonlySignal<B>,
-      ReadonlySignal<C>,
-      ReadonlySignal<D>
-    ) signals,
-    Future<S> Function(
-            (
-              A,
-              B,
-              C,
-              D,
-            ) args)
-        fn, {
+    ReadonlySignal<A> signal1,
+    ReadonlySignal<B> signal2,
+    ReadonlySignal<C> signal3,
+    ReadonlySignal<D> signal4,
+    Future<S> Function(A signal1, B signal2, C signal3, D signal4) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
   }) {
     return _bindLocal(computedFrom4<S, A, B, C, D>(
-      signals,
+      signal1,
+      signal2,
+      signal3,
+      signal4,
       fn,
       initialValue: initialValue,
       debugLabel: debugLabel,
@@ -216,30 +205,25 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     ));
   }
 
-  /// [createComputedFrom] for a five element record.
+  /// [createComputedFrom] for a five elements.
   FutureSignal<S> createComputedFrom5<S, A, B, C, D, E>(
-    (
-      ReadonlySignal<A>,
-      ReadonlySignal<B>,
-      ReadonlySignal<C>,
-      ReadonlySignal<D>,
-      ReadonlySignal<E>
-    ) signals,
-    Future<S> Function(
-            (
-              A,
-              B,
-              C,
-              D,
-              E,
-            ) args)
+    ReadonlySignal<A> signal1,
+    ReadonlySignal<B> signal2,
+    ReadonlySignal<C> signal3,
+    ReadonlySignal<D> signal4,
+    ReadonlySignal<E> signal5,
+    Future<S> Function(A signal1, B signal2, C signal3, D signal4, E signal5)
         fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
   }) {
     return _bindLocal(computedFrom5<S, A, B, C, D, E>(
-      signals,
+      signal1,
+      signal2,
+      signal3,
+      signal4,
+      signal5,
       fn,
       initialValue: initialValue,
       debugLabel: debugLabel,

@@ -32,18 +32,18 @@ FutureSignal<T> computedFrom<T, A>(
   );
 }
 
-/// [computedFrom] for a one element record.
+/// [computedFrom] for a one element.
 FutureSignal<T> computedFrom1<T, A>(
-  (ReadonlySignal<A>,) signals,
-  Future<T> Function((A,) args) fn, {
+  ReadonlySignal<A> signal1,
+  Future<T> Function(A signal1) fn, {
   T? initialValue,
   String? debugLabel,
   bool autoDispose = false,
   bool lazy = true,
 }) {
   return FutureSignal<T>(
-    () => fn((signals.$1(),)),
-    dependencies: [signals.$1],
+    () => fn(signal1.value),
+    dependencies: [signal1],
     initialValue: initialValue,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
@@ -51,23 +51,22 @@ FutureSignal<T> computedFrom1<T, A>(
   );
 }
 
-/// [computedFrom] for a two element record.
+/// [computedFrom] for a two elements.
 FutureSignal<T> computedFrom2<T, A, B>(
-  (ReadonlySignal<A>, ReadonlySignal<B>) signals,
+  ReadonlySignal<A> signal1,
+  ReadonlySignal<B> signal2,
   Future<T> Function(
-          (
-            A,
-            B,
-          ) args)
-      fn, {
+    A signal1,
+    B signal2,
+  ) fn, {
   T? initialValue,
   String? debugLabel,
   bool autoDispose = false,
   bool lazy = true,
 }) {
   return FutureSignal<T>(
-    () => fn((signals.$1(), signals.$2())),
-    dependencies: [signals.$1, signals.$2],
+    () => fn(signal1.value, signal2.value),
+    dependencies: [signal1, signal2],
     initialValue: initialValue,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
@@ -75,24 +74,24 @@ FutureSignal<T> computedFrom2<T, A, B>(
   );
 }
 
-/// [computedFrom] for a three element record.
+/// [computedFrom] for a three elements.
 FutureSignal<T> computedFrom3<T, A, B, C>(
-  (ReadonlySignal<A>, ReadonlySignal<B>, ReadonlySignal<C>) signals,
+  ReadonlySignal<A> signal1,
+  ReadonlySignal<B> signal2,
+  ReadonlySignal<C> signal3,
   Future<T> Function(
-          (
-            A,
-            B,
-            C,
-          ) args)
-      fn, {
+    A signal1,
+    B signal2,
+    C signal3,
+  ) fn, {
   T? initialValue,
   String? debugLabel,
   bool autoDispose = false,
   bool lazy = true,
 }) {
   return FutureSignal<T>(
-    () => fn((signals.$1(), signals.$2(), signals.$3())),
-    dependencies: [signals.$1, signals.$2, signals.$3],
+    () => fn(signal1.value, signal2.value, signal3.value),
+    dependencies: [signal1, signal2, signal3],
     initialValue: initialValue,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
@@ -100,30 +99,26 @@ FutureSignal<T> computedFrom3<T, A, B, C>(
   );
 }
 
-/// [computedFrom] for a four element record.
+/// [computedFrom] for a four elements.
 FutureSignal<T> computedFrom4<T, A, B, C, D>(
-  (
-    ReadonlySignal<A>,
-    ReadonlySignal<B>,
-    ReadonlySignal<C>,
-    ReadonlySignal<D>
-  ) signals,
+  ReadonlySignal<A> signal1,
+  ReadonlySignal<B> signal2,
+  ReadonlySignal<C> signal3,
+  ReadonlySignal<D> signal4,
   Future<T> Function(
-          (
-            A,
-            B,
-            C,
-            D,
-          ) args)
-      fn, {
+    A signal1,
+    B signal2,
+    C signal3,
+    D signal4,
+  ) fn, {
   T? initialValue,
   String? debugLabel,
   bool autoDispose = false,
   bool lazy = true,
 }) {
   return FutureSignal<T>(
-    () => fn((signals.$1(), signals.$2(), signals.$3(), signals.$4())),
-    dependencies: [signals.$1, signals.$2, signals.$3, signals.$4],
+    () => fn(signal1.value, signal2.value, signal3.value, signal4.value),
+    dependencies: [signal1, signal2, signal3, signal4],
     initialValue: initialValue,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
@@ -131,33 +126,29 @@ FutureSignal<T> computedFrom4<T, A, B, C, D>(
   );
 }
 
-/// [computedFrom] for a five element record.
+/// [computedFrom] for a five elements.
 FutureSignal<T> computedFrom5<T, A, B, C, D, E>(
-  (
-    ReadonlySignal<A>,
-    ReadonlySignal<B>,
-    ReadonlySignal<C>,
-    ReadonlySignal<D>,
-    ReadonlySignal<E>
-  ) signals,
+  ReadonlySignal<A> signal1,
+  ReadonlySignal<B> signal2,
+  ReadonlySignal<C> signal3,
+  ReadonlySignal<D> signal4,
+  ReadonlySignal<E> signal5,
   Future<T> Function(
-          (
-            A,
-            B,
-            C,
-            D,
-            E,
-          ) args)
-      fn, {
+    A signal1,
+    B signal2,
+    C signal3,
+    D signal4,
+    E signal5,
+  ) fn, {
   T? initialValue,
   String? debugLabel,
   bool autoDispose = false,
   bool lazy = true,
 }) {
   return FutureSignal<T>(
-    () => fn(
-        (signals.$1(), signals.$2(), signals.$3(), signals.$4(), signals.$5())),
-    dependencies: [signals.$1, signals.$2, signals.$3, signals.$4, signals.$5],
+    () => fn(signal1.value, signal2.value, signal3.value, signal4.value,
+        signal5.value),
+    dependencies: [signal1, signal2, signal3, signal4, signal5],
     initialValue: initialValue,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
