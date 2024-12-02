@@ -32,7 +32,7 @@ FutureSignal<T> computedFrom<T, A>(
   );
 }
 
-/// [computedFrom] for a one element.
+/// [computedFrom] for one element.
 FutureSignal<T> computedFrom1<T, A>(
   ReadonlySignal<A> signal1,
   Future<T> Function(A signal1) fn, {
@@ -51,7 +51,7 @@ FutureSignal<T> computedFrom1<T, A>(
   );
 }
 
-/// [computedFrom] for a two elements.
+/// [computedFrom] for two elements.
 FutureSignal<T> computedFrom2<T, A, B>(
   ReadonlySignal<A> signal1,
   ReadonlySignal<B> signal2,
@@ -74,7 +74,7 @@ FutureSignal<T> computedFrom2<T, A, B>(
   );
 }
 
-/// [computedFrom] for a three elements.
+/// [computedFrom] for three elements.
 FutureSignal<T> computedFrom3<T, A, B, C>(
   ReadonlySignal<A> signal1,
   ReadonlySignal<B> signal2,
@@ -99,7 +99,7 @@ FutureSignal<T> computedFrom3<T, A, B, C>(
   );
 }
 
-/// [computedFrom] for a four elements.
+/// [computedFrom] for four elements.
 FutureSignal<T> computedFrom4<T, A, B, C, D>(
   ReadonlySignal<A> signal1,
   ReadonlySignal<B> signal2,
@@ -126,7 +126,7 @@ FutureSignal<T> computedFrom4<T, A, B, C, D>(
   );
 }
 
-/// [computedFrom] for a five elements.
+/// [computedFrom] for five elements.
 FutureSignal<T> computedFrom5<T, A, B, C, D, E>(
   ReadonlySignal<A> signal1,
   ReadonlySignal<B> signal2,
