@@ -105,7 +105,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   ///
   /// ```dart
   /// final movieId = signal('id');
-  /// late final movie = computedFrom(args, ([movieId]) => fetchMovie(args.first));
+  /// late final movie = computedFrom([movieId], (args) => fetchMovie(args.first));
   /// ```
   ///
   /// Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
@@ -117,6 +117,128 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     bool lazy = true,
   }) {
     return _bindLocal(computedFrom<S, A>(
+      signals,
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      lazy: lazy,
+    ));
+  }
+
+  /// [createComputedFrom] for a one element record.
+  FutureSignal<S> createComputedFrom1<S, A>(
+    (ReadonlySignal<A>,) signals,
+    Future<S> Function((A,) args) fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool lazy = true,
+  }) {
+    return _bindLocal(computedFrom1<S, A>(
+      signals,
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      lazy: lazy,
+    ));
+  }
+
+  /// [createComputedFrom] for a two element record.
+  FutureSignal<S> createComputedFrom2<S, A, B>(
+    (ReadonlySignal<A>, ReadonlySignal<B>) signals,
+    Future<S> Function(
+            (
+              A,
+              B,
+            ) args)
+        fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool lazy = true,
+  }) {
+    return _bindLocal(computedFrom2<S, A, B>(
+      signals,
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      lazy: lazy,
+    ));
+  }
+
+  /// [createComputedFrom] for a three element record.
+  FutureSignal<S> createComputedFrom3<S, A, B, C>(
+    (ReadonlySignal<A>, ReadonlySignal<B>, ReadonlySignal<C>) signals,
+    Future<S> Function(
+            (
+              A,
+              B,
+              C,
+            ) args)
+        fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool lazy = true,
+  }) {
+    return _bindLocal(computedFrom3<S, A, B, C>(
+      signals,
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      lazy: lazy,
+    ));
+  }
+
+  /// [createComputedFrom] for a four element record.
+  FutureSignal<S> createComputedFrom4<S, A, B, C, D>(
+    (
+      ReadonlySignal<A>,
+      ReadonlySignal<B>,
+      ReadonlySignal<C>,
+      ReadonlySignal<D>
+    ) signals,
+    Future<S> Function(
+            (
+              A,
+              B,
+              C,
+              D,
+            ) args)
+        fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool lazy = true,
+  }) {
+    return _bindLocal(computedFrom4<S, A, B, C, D>(
+      signals,
+      fn,
+      initialValue: initialValue,
+      debugLabel: debugLabel,
+      lazy: lazy,
+    ));
+  }
+
+  /// [createComputedFrom] for a five element record.
+  FutureSignal<S> createComputedFrom5<S, A, B, C, D, E>(
+    (
+      ReadonlySignal<A>,
+      ReadonlySignal<B>,
+      ReadonlySignal<C>,
+      ReadonlySignal<D>,
+      ReadonlySignal<E>
+    ) signals,
+    Future<S> Function(
+            (
+              A,
+              B,
+              C,
+              D,
+              E,
+            ) args)
+        fn, {
+    S? initialValue,
+    String? debugLabel,
+    bool lazy = true,
+  }) {
+    return _bindLocal(computedFrom5<S, A, B, C, D, E>(
       signals,
       fn,
       initialValue: initialValue,
