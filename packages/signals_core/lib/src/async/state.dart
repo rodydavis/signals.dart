@@ -52,7 +52,7 @@ typedef AsyncStateBuilder<E> = E Function();
 ///
 /// ### .hasValue
 ///
-/// Returns true if a value has been set regardless of the state.
+/// Returns true if the state has a value - `AsyncData`.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.loading());
@@ -63,44 +63,45 @@ typedef AsyncStateBuilder<E> = E Function();
 ///
 /// ### .hasError
 ///
-/// Returns true if a error has been set regardless of the state.
+/// Returns true if the state has a error - `AsyncError`.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.loading());
 /// print(s.hasError); // false
-/// s.value = AsyncState.error('error', null);
+/// s.value = AsyncState.error('error');
 /// print(s.hasError); // true
 /// ```
 ///
 /// ### .isRefreshing
 ///
-/// Returns true if the state is refreshing with a loading flag, has a value or error and is not the loading state.
+/// Returns true if the state is refreshing - `AsyncDataRefreshing` or `AsyncErrorRefreshing`.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.loading());
 /// print(s.isRefreshing); // false
-/// s.value = AsyncState.error('error', null, isLoading: true);
+/// s.value = AsyncState.errorRefreshing('error');
 /// print(s.isRefreshing); // true
-/// s.value = AsyncData(1, isLoading: true);
+/// s.value = AsyncState.dataRefreshing(1);
 /// print(s.isRefreshing); // true
 /// ```
 ///
 /// ### .isReloading
 ///
-/// Returns true if the state is reloading with having a value or error, and is the loading state.
+/// Returns true if the state is refreshing - `AsyncDataReloading` or `AsyncErrorReloading`.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.loading());
 /// print(s.isReloading); // false
-/// s.value = AsyncState.loading(data: 1);
+/// s.value = AsyncState.dataReloading(1);
 /// print(s.isReloading); // true
-/// s.value = AsyncState.loading(error: ('error', null));
+/// s.value = AsyncState.errorReloading('error');
 /// print(s.isReloading); // true
 /// ```
 ///
 /// ### .requireValue
 ///
-/// Force unwrap the value of the state and throw an error if it has an error or is null.
+/// Force unwrap the value of the state
+/// and throw an error if it has an error or is null - `AsyncData`.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.data(1));
@@ -109,7 +110,7 @@ typedef AsyncStateBuilder<E> = E Function();
 ///
 /// ### .value
 ///
-/// Return the current value if exists.
+/// Return the current value if exists - `AsyncData`.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.data(1));
@@ -118,16 +119,16 @@ typedef AsyncStateBuilder<E> = E Function();
 ///
 /// ### .error
 ///
-/// Return the current error if exists.
+/// Return the current error if exists - `AsyncError`.
 ///
 /// ```dart
-/// final s = asyncSignal<int>(AsyncState.error('error', null));
+/// final s = asyncSignal<int>(AsyncState.error('error'));
 /// print(s.error); // 'error' or null
 /// ```
 ///
 /// ### .stackTrace
 ///
-/// Return the current stack trace if exists.
+/// Return the current stack trace if exists - `AsyncError`.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.error('error', StackTrace(...)));
@@ -174,21 +175,31 @@ typedef AsyncStateBuilder<E> = E Function();
 /// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
 sealed class AsyncState<T> {
-  /// Check if the state is a loading state
-  final bool isLoading;
-  final T? _value;
-  final (Object, StackTrace?)? _error;
+  const AsyncState();
 
-  const AsyncState({
-    required this.isLoading,
-    required T? value,
-    required (Object, StackTrace?)? error,
-  })  : _value = value,
-        _error = error;
+  /// Create a state with a value that is reloading
+  factory AsyncState.dataReloading(T data) {
+    return AsyncDataReloading<T>(data);
+  }
+
+  /// Create a state with a value that is refreshing
+  factory AsyncState.dataRefreshing(T data) {
+    return AsyncDataRefreshing<T>(data);
+  }
 
   /// Create a state with a value
   factory AsyncState.data(T data) {
     return AsyncData<T>(data);
+  }
+
+  /// Create a state with an error that is reloading
+  factory AsyncState.errorReloading(Object error, [StackTrace? stackTrace]) {
+    return AsyncErrorReloading<T>(error, stackTrace ?? StackTrace.current);
+  }
+
+  /// Create a state with an error that is refreshing
+  factory AsyncState.errorRefreshing(Object error, [StackTrace? stackTrace]) {
+    return AsyncErrorRefreshing<T>(error, stackTrace ?? StackTrace.current);
   }
 
   /// Create a state with an error
@@ -196,7 +207,7 @@ sealed class AsyncState<T> {
     return AsyncError<T>(error, stackTrace ?? StackTrace.current);
   }
 
-  /// Create a state with a loading state
+  /// Create a loading state
   factory AsyncState.loading() {
     return AsyncLoading<T>();
   }
@@ -207,28 +218,30 @@ sealed class AsyncState<T> {
   /// Returns true if the state has an error
   bool get hasError;
 
+  /// Check if the state is a loading state
+  bool get isLoading;
+
   /// Returns true if the state is refreshing with a loading flag,
   ///  has a value or error and is not the loading state
-  bool get isRefreshing =>
-      isLoading && (hasValue || hasError) && this is! AsyncLoading<T>;
+  bool get isRefreshing;
 
   /// Returns true if the state is reloading with having a value or error,
   /// and is the loading state
-  bool get isReloading => (hasValue || hasError) && this is AsyncLoading<T>;
+  bool get isReloading;
 
   /// Force unwrap the value of the state.
   ///
   /// This will throw an error if the state does not have a value.
-  T get requireValue => _value as T;
+  T get requireValue;
 
   /// Returns the value of the state.
-  T? get value => _value;
+  T? get value;
 
   /// Returns the error of the state.
-  Object? get error => _error?.$1;
+  Object? get error;
 
   /// Returns the stack trace of the state.
-  StackTrace? get stackTrace => _error?.$2;
+  StackTrace? get stackTrace;
 
   /// Map the state to a value.
   ///
@@ -306,37 +319,54 @@ sealed class AsyncState<T> {
   }
 
   @override
-  bool operator ==(covariant AsyncState<T> other) {
-    if (identical(this, other)) return true;
-    return other.hasError == hasError &&
-        other.hasValue == hasValue &&
-        other.isLoading == isLoading &&
-        other.isRefreshing == isRefreshing &&
-        other.isReloading == isReloading &&
-        other._value == _value &&
-        other._error == _error;
-  }
+  bool operator ==(covariant AsyncState<T> other);
 
   @override
-  int get hashCode {
-    return hasError.hashCode ^
-        hasValue.hashCode ^
-        isLoading.hashCode ^
-        isRefreshing.hashCode ^
-        isReloading.hashCode ^
-        _value.hashCode ^
-        _error.hashCode;
+  int get hashCode;
+}
+
+/// A loading state with a value. Signals the query conditions that led to the data
+/// has changed and is being reloaded.
+class AsyncDataReloading<T> extends AsyncData<T> implements AsyncLoading<T> {
+  /// Create a state with a value that is reloading
+  const AsyncDataReloading(super.data);
+
+  @override
+  bool get isLoading => true;
+
+  @override
+  bool get isReloading => true;
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(covariant AsyncState other) {
+    return other is AsyncDataReloading<T> && other.value == value;
+  }
+}
+
+/// A loading state with a value. Signals the query conditions that led to the data
+/// has remained the same and is being refreshed
+class AsyncDataRefreshing<T> extends AsyncData<T> implements AsyncLoading<T> {
+  /// Create a state with a value that is refreshing
+  const AsyncDataRefreshing(super.data);
+
+  @override
+  bool get isLoading => true;
+
+  @override
+  bool get isRefreshing => true;
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(covariant AsyncState other) {
+    return other is AsyncDataRefreshing<T> && other.value == value;
   }
 }
 
 /// State for an [AsyncState] with a value
 class AsyncData<T> extends AsyncState<T> {
   /// State for an [AsyncState] with a value
-  const AsyncData(
-    T data, {
-    super.isLoading = false,
-    super.error,
-  }) : super(value: data);
+  const AsyncData(T data) : value = data;
 
   @override
   bool get hasValue => true;
@@ -345,18 +375,88 @@ class AsyncData<T> extends AsyncState<T> {
   bool get hasError => false;
 
   @override
-  T get value => super.value as T;
+  final T value;
+
+  @override
+  bool get isLoading => false;
+
+  @override
+  bool get isRefreshing => false;
+
+  @override
+  bool get isReloading => false;
+
+  @override
+  T get requireValue => value;
+
+  @override
+  Object? get error => null;
+
+  @override
+  StackTrace? get stackTrace => null;
+
+  @override
+  bool operator ==(covariant AsyncState other) {
+    if (other is AsyncData<T>) {
+      return other.value == value;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode =>
+      value.hashCode ^
+      isLoading.hashCode ^
+      isRefreshing.hashCode ^
+      isReloading.hashCode;
+}
+
+/// A loading state with an error. Signal the query conditions that led to the error
+/// has changed and is being reloaded.
+class AsyncErrorReloading<T> extends AsyncError<T> implements AsyncLoading<T> {
+  /// Create a state with an error that is reloading
+  const AsyncErrorReloading(super.error, super.stackTrace);
+
+  @override
+  bool get isLoading => true;
+
+  @override
+  bool get isReloading => true;
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(covariant AsyncState other) {
+    return other is AsyncErrorReloading<T> &&
+        other.error == error &&
+        other.stackTrace == stackTrace;
+  }
+}
+
+/// A loading state with an error. Signal the query conditions that led to the error
+/// has remained the same and is being refreshed.
+class AsyncErrorRefreshing<T> extends AsyncError<T> implements AsyncLoading<T> {
+  /// Create a state with an error that is refreshing
+  const AsyncErrorRefreshing(super.error, super.stackTrace);
+
+  @override
+  bool get isLoading => true;
+
+  @override
+  bool get isRefreshing => true;
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(covariant AsyncState other) {
+    return other is AsyncErrorRefreshing<T> &&
+        other.error == error &&
+        other.stackTrace == stackTrace;
+  }
 }
 
 /// State for an [AsyncState] with an error
 class AsyncError<T> extends AsyncState<T> {
   /// State for an [AsyncState] with an error
-  const AsyncError(
-    Object error,
-    StackTrace? stackTrace, {
-    super.isLoading = false,
-    super.value,
-  }) : super(error: (error, stackTrace));
+  const AsyncError(this.error, this.stackTrace);
 
   @override
   bool get hasValue => false;
@@ -365,23 +465,81 @@ class AsyncError<T> extends AsyncState<T> {
   bool get hasError => true;
 
   @override
-  Object get error => super.error as Object;
+  T? get value => null;
+
+  @override
+  bool get isLoading => false;
+
+  @override
+  bool get isRefreshing => false;
+
+  @override
+  bool get isReloading => false;
+
+  @override
+  T get requireValue =>
+      throw UnsupportedError('Error state does not have a value');
+
+  @override
+  final Object error;
+
+  @override
+  final StackTrace stackTrace;
+
+  @override
+  bool operator ==(covariant AsyncState other) {
+    return other is AsyncError<T> &&
+        other.error == error &&
+        other.stackTrace == stackTrace;
+  }
+
+  @override
+  int get hashCode =>
+      error.hashCode ^
+      stackTrace.hashCode ^
+      isLoading.hashCode ^
+      isRefreshing.hashCode ^
+      isReloading.hashCode;
 }
 
 /// State for an [AsyncState] with a loading state
 class AsyncLoading<T> extends AsyncState<T> {
   /// State for an [AsyncState] with a loading state
-  const AsyncLoading({
-    super.value,
-    super.error,
-    super.isLoading = true,
-    this.hasValue = false,
-    this.hasError = false,
-  });
+  const AsyncLoading();
 
   @override
-  final bool hasValue;
+  bool get hasValue => false;
 
   @override
-  final bool hasError;
+  bool get hasError => false;
+
+  @override
+  T? get value => null;
+
+  @override
+  bool get isLoading => true;
+
+  @override
+  bool get isRefreshing => false;
+
+  @override
+  bool get isReloading => false;
+
+  @override
+  T get requireValue =>
+      throw UnsupportedError('Loading state does not have a value');
+
+  @override
+  Object? get error => null;
+
+  @override
+  StackTrace? get stackTrace => null;
+
+  @override
+  bool operator ==(covariant AsyncState other) {
+    return other is AsyncLoading;
+  }
+
+  @override
+  int get hashCode => 0;
 }

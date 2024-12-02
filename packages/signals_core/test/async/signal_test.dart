@@ -60,18 +60,35 @@ void main() {
         final s = asyncSignal(AsyncState<int>.data(0));
         s.reload();
         expect(s.value is AsyncLoading, true);
+        expect(s.value is AsyncData, true);
+        expect(s.value is AsyncDataReloading, true);
+        expect(s.value.isLoading, true);
+        expect(s.value.isReloading, true);
+        expect(s.value.isRefreshing, false);
       });
 
       test('error', () async {
         final s = asyncSignal(AsyncState<int>.error('error'));
         s.reload();
         expect(s.value is AsyncLoading, true);
+        expect(s.value is AsyncError, true);
+        expect(s.value is AsyncErrorReloading, true);
+        expect(s.value.isLoading, true);
+        expect(s.value.isReloading, true);
+        expect(s.value.isRefreshing, false);
       });
 
       test('loading', () async {
         final s = asyncSignal(AsyncState<int>.loading());
         s.reload();
         expect(s.value is AsyncLoading, true);
+        expect(s.value is! AsyncDataReloading, true);
+        expect(s.value is! AsyncDataRefreshing, true);
+        expect(s.value is! AsyncErrorReloading, true);
+        expect(s.value is! AsyncErrorRefreshing, true);
+        expect(s.value.isLoading, true);
+        expect(s.value.isReloading, false);
+        expect(s.value.isRefreshing, false);
       });
     });
 
@@ -79,21 +96,36 @@ void main() {
       test('data', () async {
         final s = asyncSignal(AsyncState<int>.data(0));
         s.refresh();
+        expect(s.value is AsyncLoading, true);
         expect(s.value is AsyncData, true);
+        expect(s.value is AsyncDataRefreshing, true);
         expect(s.value.isLoading, true);
+        expect(s.value.isRefreshing, true);
+        expect(s.value.isReloading, false);
       });
 
       test('error', () async {
         final s = asyncSignal(AsyncState<int>.error('error'));
         s.refresh();
+        expect(s.value is AsyncLoading, true);
         expect(s.value is AsyncError, true);
+        expect(s.value is AsyncErrorRefreshing, true);
         expect(s.value.isLoading, true);
+        expect(s.value.isRefreshing, true);
+        expect(s.value.isReloading, false);
       });
 
       test('loading', () async {
         final s = asyncSignal(AsyncState<int>.loading());
         s.refresh();
         expect(s.value is AsyncLoading, true);
+        expect(s.value is! AsyncDataReloading, true);
+        expect(s.value is! AsyncDataRefreshing, true);
+        expect(s.value is! AsyncErrorReloading, true);
+        expect(s.value is! AsyncErrorRefreshing, true);
+        expect(s.value.isLoading, true);
+        expect(s.value.isReloading, false);
+        expect(s.value.isRefreshing, false);
       });
     });
   });
