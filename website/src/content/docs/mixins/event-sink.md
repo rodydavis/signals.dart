@@ -15,7 +15,7 @@ This mixin only works with signals that have a value type of `AsyncState<T>`.
 :::
 
 ```dart
-class MySignal extends Signal<AsyncState<int>> with EventSinkSignalMixin<AsyncState<int>> {
+class MySignal extends Signal<AsyncState<int>> with EventSinkSignalMixin<int> {
   MySignal(int value) : super(AsyncState.data(value));
 }
 
