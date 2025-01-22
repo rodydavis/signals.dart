@@ -36,3 +36,9 @@ VS Code Extension: https://marketplace.visualstudio.com/items?itemName=rodydavis
 | [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                                                  |
 
 [![Star History Chart](https://api.star-history.com/svg?repos=rodydavis/signals.dart&type=Date)](https://star-history.com/#rodydavis/signals.dart&Date)
+
+## Contributors
+
+<a href="https://github.com/rodydavis/signals.dart/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rodydavis/signals.dart" />
+</a>
