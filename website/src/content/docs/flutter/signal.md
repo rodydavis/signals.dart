@@ -8,7 +8,7 @@ sidebar:
     variant: tip
 ---
 
-Since Signals 0.6.0, you can use the `signals_flutter` import to create signals that extend [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html).
+Since Signals 6.0.0, you can use the `signals_flutter` import to create signals that extend [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html).
 
 ```dart
 import 'package:signals/signals_flutter.dart';

@@ -15,8 +15,9 @@ This mixin only works with signals that have a value type of `Set<T>`.
 :::
 
 ```dart
-class MySignal extends Signal<Set<int>> with SetSignalMixin<int> {
-  MySignal(Set<int> value) : super(value);
+class MySignal extends Signal<Set<int>>
+    with IterableSignalMixin<int, Set<int>>, SetSignalMixin<int, Set<int>> {
+  MySignal(super.internalValue);
 }
 
 void main() {

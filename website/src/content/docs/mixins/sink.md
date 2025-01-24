@@ -12,7 +12,7 @@ SinkSignalMixin is a mixin for a Signal that implements [Sink](https://api.flutt
 
 ```dart
 class MySignal extends Signal<int> with SinkSignalMixin<int> {
-  MySignal(int value) : super(value);
+  MySignal(super.internalValue);
 }
 
 void main() {

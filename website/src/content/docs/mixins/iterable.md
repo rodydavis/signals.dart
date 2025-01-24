@@ -15,8 +15,9 @@ This mixin only works with signals that have a value type of `Iterable<T>`.
 :::
 
 ```dart
-class MySignal extends Signal<Iterable<int>> with IterableSignalMixin<int> {
-  MySignal(Iterable<int> value) : super(value);
+class MySignal extends Signal<Iterable<int>>
+    with IterableSignalMixin<int, Iterable<int>> {
+  MySignal(super.internalValue);
 }
 
 void main() {

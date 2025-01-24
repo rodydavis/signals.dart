@@ -6,7 +6,7 @@ sidebar:
 ---
 
 :::tip
-As of Signals 0.6.0 Signal and Computed created with the flutter import implement ValueListenable and ValueNotifier by default.
+As of Signals 6.0.0 Signal and Computed created with the flutter import implement ValueListenable and ValueNotifier by default.
 
 ```dart
 import 'package:signals/signals_flutter.dart';

@@ -14,7 +14,7 @@ This allows you to use the signal as a ValueNotifier in Flutter widgets.
 
 ```dart
 class MySignal extends Signal<int> with ValueNotifierSignalMixin<int> {
-  MySignal(int value) : super(value);
+  MySignal(super.internalValue);
 }
 
 void main() {

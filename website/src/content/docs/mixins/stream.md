@@ -12,7 +12,7 @@ StreamSignalMixin is a mixin for a Signal that adds reactive methods for [Stream
 
 ```dart
 class MySignal extends Signal<int> with StreamSignalMixin<int> {
-  MySignal(int value) : super(value);
+  MySignal(super.internalValue);
 }
 
 void main() {

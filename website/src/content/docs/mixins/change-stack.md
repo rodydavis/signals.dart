@@ -16,7 +16,7 @@ If you are just looking for initial and previous values, use the [TrackedSignalM
 
 ```dart
 class MySignal extends Signal<int> with ChangeStackSignalMixin<int> {
-  MySignal(int value) : super(value);
+  MySignal(super.internalValue);
 }
 
 void main() {

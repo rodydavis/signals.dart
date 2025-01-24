@@ -15,8 +15,9 @@ This mixin only works with signals that have a value type of `Queue<T>`.
 :::
 
 ```dart
-class MySignal extends Signal<Queue<int>> with QueueSignalMixin<int> {
-  MySignal(Queue<int> value) : super(value);
+class MySignal extends Signal<Queue<int>>
+    with QueueSignalMixin<int, Queue<int>> {
+  MySignal(super.internalValue);
 }
 
 void main() {
