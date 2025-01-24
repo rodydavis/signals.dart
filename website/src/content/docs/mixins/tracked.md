@@ -16,7 +16,7 @@ If you are looking for undo/redo functionality, use the [ChangeStackSignalMixin]
 
 ```dart
 class MySignal extends Signal<int> with TrackedSignalMixin<int> {
-  MySignal(int value) : super(value);
+  MySignal(super.internalValue);
 }
 
 void main() {
