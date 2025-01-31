@@ -42,7 +42,8 @@ class _SignalHook<T, S extends ReadonlySignal<T>> extends Hook<S> {
   _SignalHookState<T, S> createState() => _SignalHookState();
 }
 
-class _SignalHookState<T, S extends ReadonlySignal<T>> extends HookState<S, _SignalHook<T, S>> {
+class _SignalHookState<T, S extends ReadonlySignal<T>>
+    extends HookState<S, _SignalHook<T, S>> {
   late final _instance = hook.initialData;
   void Function()? _cleanup;
 
