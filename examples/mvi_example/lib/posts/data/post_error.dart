@@ -1,0 +1,4 @@
+enum PostError {
+  unknown,
+  parse,
+}
