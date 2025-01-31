@@ -14,7 +14,7 @@ This allows you to use the signal as a ValueListenable in Flutter widgets.
 
 ```dart
 class MySignal extends Signal<int> with ValueListenableSignalMixin<int> {
-  MySignal(int value) : super(value);
+  MySignal(super.internalValue);
 }
 
 void main() {
