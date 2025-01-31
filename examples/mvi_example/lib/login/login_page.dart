@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage>
       };
 
   void _onLoginSuccess() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
         builder: (context) => PostsScreen(
           viewModel: PostsViewModel(
