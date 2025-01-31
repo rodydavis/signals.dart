@@ -81,3 +81,23 @@ class Example extends HookWidget {
   }
 }
 ```
+
+## useExistingSignal
+
+How to bind an existing signal inside of a hook widget:
+
+```dart
+class Example extends HookWidget {
+  final Signal<int> count;
+
+  Example(this.count);
+
+  @override
+  Widget build(BuildContext context) {
+    final counter = useExistingSignal(count);
+    return Text('Count: $counter');
+  }
+}
+```
+
+The value will auto rebuild the widget when it changes.
