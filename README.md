@@ -32,6 +32,7 @@ VS Code Extension: https://marketplace.visualstudio.com/items?itemName=rodydavis
 | [`signals_core`](packages/signals_core)                             | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
 | [`signals_flutter`](packages/signals_flutter)                       | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |
 | [`signals_lint`](packages/signals_lint)                             | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint)          |
+| [`signals_hooks`](packages/signals_hooks)                             | [![signals_hooks](https://img.shields.io/pub/v/signals_hooks.svg)](https://pub.dev/packages/signals_hooks)          |
 | [`preact_signals`](packages/preact_signals)                             | [![signals_lint](https://img.shields.io/pub/v/preact_signals.svg)](https://pub.dev/packages/preact_signals)          |
 | [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                                                  |
 

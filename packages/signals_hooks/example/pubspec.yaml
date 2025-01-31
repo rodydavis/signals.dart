@@ -1,0 +1,22 @@
+name: example
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.0-216.1.beta
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_hooks: any
+  signals_hooks:
+    path: ..
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
