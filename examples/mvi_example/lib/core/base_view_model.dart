@@ -27,7 +27,7 @@ abstract class BaseViewModel<BaseState, BaseEvent, BaseEffect> {
   late final StreamSubscription<BaseEvent> _eventsSubscription;
 
   final _effects = StreamController<BaseEffect>();
-  Stream<BaseEffect> get effects => _effects.stream;
+  late final Stream<BaseEffect> effects = _effects.stream;
 
   @protected
   void onEvent(BaseEvent event);
