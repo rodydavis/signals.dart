@@ -5,7 +5,7 @@ import 'package:multiple_result/multiple_result.dart';
 import 'package:signals_mvi_example/posts/data/post_error.dart';
 import 'package:signals_mvi_example/posts/data/post_model.dart';
 
-final class PostsRepository {
+class PostsRepository {
   Future<Result<List<Post>, PostError>> fetchPosts() async {
     // Simulate a delay to show the loading state, sometimes the API is too fast
     await Future<void>.delayed(const Duration(seconds: 1));

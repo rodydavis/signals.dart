@@ -44,5 +44,7 @@ abstract class BaseViewModel<BaseState, BaseEvent, BaseEffect> {
   void dispose() {
     _state.dispose();
     _eventsSubscription.cancel();
+    _events.close();
+    _effects.close();
   }
 }
