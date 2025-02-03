@@ -22,6 +22,12 @@ class _LoginPageState extends State<LoginPage>
   @override
   LoginViewModel provideViewModel() => widget.viewModel;
 
+  // select only the isAuthenticating property from the state
+  late final isAuthenticating = computed(
+    () => viewModel.state.value.isAuthenticating,
+    debugLabel: 'isAuthenticating',
+  );
+
   @override
   void onEffect(LoginEffect effect) => switch (effect) {
         LoginSuccess() => _onLoginSuccess(),
@@ -61,12 +67,6 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    // select only the isAuthenticating property from the state
-    final isAuthenticating = computed(
-      () => viewModel.state.value.isAuthenticating,
-      debugLabel: 'isAuthenticating',
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('MVI Example'),
