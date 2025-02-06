@@ -70,6 +70,11 @@
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/infinite_scroll"
   },
   {
+    "title": "signals_mvi_example",
+    "description": "A new Flutter project.",
+    "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/mvi_example"
+  },
+  {
     "title": "get_it_signals_example",
     "description": "get_it + signals",
     "link": "https://github.com/rodydavis/signals.dart/tree/main/examples/get_it_signals"
