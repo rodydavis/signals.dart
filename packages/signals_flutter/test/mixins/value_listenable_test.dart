@@ -8,6 +8,9 @@ import '../utils/spy.dart';
 
 class _Signal<T> extends Signal<T> with ValueListenableSignalMixin<T> {
   _Signal(super.internalValue);
+
+  @override
+  bool runCallbackOnListen = true;
 }
 
 void main() {
@@ -22,6 +25,7 @@ void main() {
 
     test('addListener', () {
       final s = _Signal(0);
+      s.runCallbackOnListen = true;
 
       expect(s.value, 0);
 
