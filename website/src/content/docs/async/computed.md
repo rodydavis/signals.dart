@@ -22,6 +22,7 @@ of the signal. This callback is converted into a Computed signal.
 final movieId = signal('id');
 late final movie = computedAsync(() => fetchMovie(movieId()));
 ```
+
 :::caution
 It is important that signals are called before any async gaps with await.
 :::
@@ -39,7 +40,7 @@ compute the value of the signal every time one of the signals changes.
 
 ```dart
 final movieId = signal('id');
-late final movie = computedFrom(args, ([movieId]) => fetchMovie(args.first));
+late final movie = computedFrom([movieId], (args) => fetchMovie(args.first));
 ```
 
 Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
