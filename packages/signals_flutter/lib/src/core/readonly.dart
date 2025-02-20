@@ -12,7 +12,15 @@ abstract class FlutterReadonlySignal<T> extends core.ReadonlySignal<T>
 /// Create a new plain readonly signal
 FlutterReadonlySignal<T> readonly<T>(
   /// The initial value for the signal
-  T value,
-) {
-  return signal<T>(value);
+  T value, {
+  String? debugLabel,
+  bool autoDispose = false,
+  bool runCallbackOnListen = false,
+}) {
+  return signal<T>(
+    value,
+    debugLabel: debugLabel,
+    autoDispose: autoDispose,
+    runCallbackOnListen: runCallbackOnListen,
+  );
 }

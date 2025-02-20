@@ -8,6 +8,9 @@ import '../utils/spy.dart';
 
 class _Signal<T> extends Signal<T> with ValueNotifierSignalMixin<T> {
   _Signal(super.internalValue);
+
+  @override
+  bool runCallbackOnListen = true;
 }
 
 void main() {

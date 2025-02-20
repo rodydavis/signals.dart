@@ -10,5 +10,16 @@ void main() {
 
       expect(a.value.keys, b.value);
     });
+
+    test('hooks', () {
+      final counter = signal(0);
+      final (getCount, setCount) = counter.hooks;
+
+      expect(getCount(), 0);
+
+      setCount(1);
+
+      expect(getCount(), 1);
+    });
   });
 }

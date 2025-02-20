@@ -16,7 +16,11 @@ class FlutterComputed<T> extends core.Computed<T>
     super.internalValue, {
     super.autoDispose,
     super.debugLabel,
+    this.runCallbackOnListen = false,
   });
+
+  @override
+  bool runCallbackOnListen;
 }
 
 /// Create a new signal that is computed based on the values of other signals.
@@ -27,10 +31,12 @@ FlutterComputed<T> computed<T>(
   T Function() compute, {
   String? debugLabel,
   bool autoDispose = false,
+  bool runCallbackOnListen = false,
 }) {
   return FlutterComputed<T>(
     compute,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
+    runCallbackOnListen: runCallbackOnListen,
   );
 }

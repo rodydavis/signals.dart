@@ -20,6 +20,7 @@ class FlutterSignal<T> extends core.Signal<T>
     super.internalValue, {
     super.autoDispose,
     super.debugLabel,
+    this.runCallbackOnListen = false,
   });
 
   /// Lazy signal that can be created with type T that
@@ -33,7 +34,11 @@ class FlutterSignal<T> extends core.Signal<T>
   FlutterSignal.lazy({
     super.autoDispose,
     super.debugLabel,
+    this.runCallbackOnListen = false,
   }) : super.lazy();
+
+  @override
+  bool runCallbackOnListen;
 }
 
 /// Simple signal that can be created with type T that
@@ -49,11 +54,13 @@ FlutterSignal<T> signal<T>(
   T value, {
   String? debugLabel,
   bool autoDispose = false,
+  bool runCallbackOnListen = false,
 }) {
   return FlutterSignal<T>(
     value,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
+    runCallbackOnListen: runCallbackOnListen,
   );
 }
 
@@ -68,9 +75,11 @@ FlutterSignal<T> signal<T>(
 FlutterSignal<T> lazySignal<T>({
   String? debugLabel,
   bool autoDispose = false,
+  bool runCallbackOnListen = false,
 }) {
   return FlutterSignal<T>.lazy(
     debugLabel: debugLabel,
     autoDispose: autoDispose,
+    runCallbackOnListen: runCallbackOnListen,
   );
 }
