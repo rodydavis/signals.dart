@@ -4,7 +4,7 @@ import '../core/signals.dart';
 
 final Map<int, Stream<dynamic>> _streamCache = {};
 
-/// Signal extensions
+/// Readonly signal extensions
 extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Convert a signal to a [Stream] to be consumed as
   /// a read only stream.
@@ -48,4 +48,16 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
       debugLabel: debugLabel,
     );
   }
+}
+
+/// Writeable signal extensions
+extension WriteableSignalUtils<T> on Signal<T> {
+  /// Easy destructure to get and set the value
+  ///
+  /// ```dart
+  /// final counter = signal(0);
+  /// ...
+  /// final (getCount, setCount) = counter.hooks;
+  /// ```
+  (T Function(), void Function(T)) get hooks => (get, set);
 }
