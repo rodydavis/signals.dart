@@ -60,30 +60,45 @@ void main() {
       Stream<int> stream() async* {
         calls++;
         await Future.delayed(const Duration(milliseconds: 5));
-        yield* _stream();
+        // After the first call, return another value
+        yield* _stream(value: calls == 1 ? 10 : 20);
       }
 
       final signal = streamSignal(() => stream());
       expect(signal.peek().isLoading, true);
       expect(calls, 0);
 
-      await signal.future;
-
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
+      final List<AsyncState<int>> states = [];
+      addTearDown(signal.subscribe((v) => states.add(v)));
+      expect(states.length, 1);
 
       await signal.future;
 
       expect(calls, 1);
       expect(signal.value.value, 10);
       expect(signal.value.error, null);
+      expect(states.length, 2);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+      expect(states.length, 2);
 
       await signal.reload();
+      await signal.future;
 
       expect(calls, 2);
-      expect(signal.value.value, 10);
+      expect(signal.value.value, 20);
       expect(signal.value.error, null);
+
+      expect(states, <AsyncState<int>>[
+        AsyncState.loading(),
+        AsyncState.data(10),
+        AsyncState.dataReloading(10),
+        AsyncState.data(20),
+      ]);
     });
 
     test('check refresh calls', () async {
@@ -92,12 +107,17 @@ void main() {
       Stream<int> stream() async* {
         calls++;
         await Future.delayed(const Duration(milliseconds: 5));
-        yield* _stream();
+        // After the first call, return another value
+        yield* _stream(value: calls == 1 ? 10 : 20);
       }
 
       final signal = streamSignal(() => stream());
       expect(signal.peek().isLoading, true);
       expect(calls, 0);
+
+      final List<AsyncState<int>> states = [];
+      addTearDown(signal.subscribe((v) => states.add(v)));
+      expect(states.length, 1);
 
       await signal.future;
 
@@ -112,10 +132,18 @@ void main() {
       expect(signal.value.error, null);
 
       await signal.refresh();
+      await signal.future;
 
       expect(calls, 2);
-      expect(signal.value.value, 10);
+      expect(signal.value.value, 20);
       expect(signal.value.error, null);
+
+      expect(states, <AsyncState<int>>[
+        AsyncState.loading(),
+        AsyncState.data(10),
+        AsyncState.dataRefreshing(10),
+        AsyncState.data(20),
+      ]);
     });
 
     test('onDone', () async {
@@ -212,7 +240,7 @@ void main() {
 
     test('cancelOnError', () async {
       final signal = streamSignal(
-        () => _stream(true),
+        () => _stream(error: true),
         cancelOnError: true,
       );
 
@@ -226,10 +254,10 @@ void main() {
   });
 }
 
-Stream<int> _stream([bool error = false]) async* {
+Stream<int> _stream({bool error = false, int value = 10}) async* {
   await Future.delayed(const Duration(milliseconds: 5));
   if (!error) {
-    yield 10;
+    yield value;
   } else {
     throw Exception();
   }
