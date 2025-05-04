@@ -232,20 +232,26 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
 
   /// Reload the future
   Future<void> reload() async {
-    value = switch (value) {
-      AsyncData<T> data => AsyncDataReloading<T>(data.value),
-      AsyncError<T> err => AsyncErrorReloading<T>(err.error, err.stackTrace),
-      AsyncLoading<T>() => AsyncLoading<T>(),
-    };
+    batch(() {
+      if (_completer.isCompleted) _completer = Completer<bool>();
+      value = switch (value) {
+        AsyncData<T> data => AsyncDataReloading<T>(data.value),
+        AsyncError<T> err => AsyncErrorReloading<T>(err.error, err.stackTrace),
+        AsyncLoading<T>() => AsyncLoading<T>(),
+      };
+    });
   }
 
   /// Refresh the future
   Future<void> refresh() async {
-    value = switch (value) {
-      AsyncData<T> data => AsyncDataRefreshing<T>(data.value),
-      AsyncError<T> err => AsyncErrorRefreshing<T>(err.error, err.stackTrace),
-      AsyncLoading<T>() => AsyncLoading<T>(),
-    };
+    batch(() {
+      if (_completer.isCompleted) _completer = Completer<bool>();
+      value = switch (value) {
+        AsyncData<T> data => AsyncDataRefreshing<T>(data.value),
+        AsyncError<T> err => AsyncErrorRefreshing<T>(err.error, err.stackTrace),
+        AsyncLoading<T>() => AsyncLoading<T>(),
+      };
+    });
   }
 
   @override

@@ -323,6 +323,13 @@ sealed class AsyncState<T> {
 
   @override
   int get hashCode;
+
+  bool _loadingValuesAreEquals(Object other) {
+    return other is AsyncState<T> &&
+        other.isLoading == isLoading &&
+        other.isReloading == isReloading &&
+        other.isRefreshing == isRefreshing;
+  }
 }
 
 /// A loading state with a value. Signals the query conditions that led to the data
@@ -340,7 +347,9 @@ class AsyncDataReloading<T> extends AsyncData<T> implements AsyncLoading<T> {
   @override
   // ignore: hash_and_equals
   bool operator ==(covariant AsyncState other) {
-    return other is AsyncDataReloading<T> && other.value == value;
+    return other is AsyncDataReloading<T> &&
+        other.value == value &&
+        _loadingValuesAreEquals(other);
   }
 }
 
@@ -359,7 +368,9 @@ class AsyncDataRefreshing<T> extends AsyncData<T> implements AsyncLoading<T> {
   @override
   // ignore: hash_and_equals
   bool operator ==(covariant AsyncState other) {
-    return other is AsyncDataRefreshing<T> && other.value == value;
+    return other is AsyncDataRefreshing<T> &&
+        other.value == value &&
+        _loadingValuesAreEquals(other);
   }
 }
 
@@ -397,10 +408,9 @@ class AsyncData<T> extends AsyncState<T> {
 
   @override
   bool operator ==(covariant AsyncState other) {
-    if (other is AsyncData<T>) {
-      return other.value == value;
-    }
-    return false;
+    return other is AsyncData<T> &&
+        other.value == value &&
+        _loadingValuesAreEquals(other);
   }
 
   @override
@@ -428,7 +438,8 @@ class AsyncErrorReloading<T> extends AsyncError<T> implements AsyncLoading<T> {
   bool operator ==(covariant AsyncState other) {
     return other is AsyncErrorReloading<T> &&
         other.error == error &&
-        other.stackTrace == stackTrace;
+        other.stackTrace == stackTrace &&
+        _loadingValuesAreEquals(other);
   }
 }
 
@@ -449,7 +460,8 @@ class AsyncErrorRefreshing<T> extends AsyncError<T> implements AsyncLoading<T> {
   bool operator ==(covariant AsyncState other) {
     return other is AsyncErrorRefreshing<T> &&
         other.error == error &&
-        other.stackTrace == stackTrace;
+        other.stackTrace == stackTrace &&
+        _loadingValuesAreEquals(other);
   }
 }
 
@@ -490,7 +502,8 @@ class AsyncError<T> extends AsyncState<T> {
   bool operator ==(covariant AsyncState other) {
     return other is AsyncError<T> &&
         other.error == error &&
-        other.stackTrace == stackTrace;
+        other.stackTrace == stackTrace &&
+        _loadingValuesAreEquals(other);
   }
 
   @override
@@ -537,7 +550,7 @@ class AsyncLoading<T> extends AsyncState<T> {
 
   @override
   bool operator ==(covariant AsyncState other) {
-    return other is AsyncLoading;
+    return other is AsyncLoading && _loadingValuesAreEquals(other);
   }
 
   @override
