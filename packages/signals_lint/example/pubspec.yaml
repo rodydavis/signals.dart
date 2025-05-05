@@ -13,7 +13,7 @@ dependencies:
     path: ../../signals
 
 dev_dependencies:
-  custom_lint: ^0.5.5
+  custom_lint: ^0.7.5
   signals_lint:
     path: ../
   flutter_test:

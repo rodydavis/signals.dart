@@ -5,23 +5,23 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: f256b0c0ba6c7577c15e2e4e114755640a875e885099367bf6e012b19314c834
+      sha256: "16e298750b6d0af7ce8a3ba7c18c69c3785d11b15ec83f6dcd0ad2a0009b3cab"
       url: "https://pub.dev"
     source: hosted
-    version: "72.0.0"
+    version: "76.0.0"
   _macros:
     dependency: transitive
     description: dart
     source: sdk
-    version: "0.3.2"
+    version: "0.3.3"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: b652861553cd3990d8ed361f7979dc6d7053a9ac8843fa73820ab68ce5410139
+      sha256: "1f14db053a8c23e260789e9b0980fa27f2680dd640932cae5e1137cce0e46e1e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.7.0"
+    version: "6.11.0"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -98,10 +98,10 @@ packages:
     dependency: transitive
     description:
       name: build_modules
-      sha256: "403ba034d94f1a0f26362fe14fd83e9ff33644f5cbe879982920e3d209650b43"
+      sha256: b1fc29a603669b25a5d95cc9610ed649e9f00e6075e5b6b721aa1a095cff13de
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.9"
+    version: "5.0.13"
   build_resolvers:
     dependency: transitive
     description:
@@ -130,10 +130,10 @@ packages:
     dependency: "direct dev"
     description:
       name: build_web_compilers
-      sha256: e8d818410cc8b4dc96c4960ce0ab84fe3f2b0ca6576cc130fd7277b56eba9d68
+      sha256: "0713ad9045ae0ee7f97187ae7bd2f42bdec929c22f32caa78e031338d4894bd7"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.11"
+    version: "4.1.4"
   built_collection:
     dependency: transitive
     description:
@@ -154,10 +154,10 @@ packages:
     dependency: transitive
     description:
       name: characters
-      sha256: "04a925763edad70e8443c99234dc3328f442e811f1d8fd1a72f1c8ad0f69a605"
+      sha256: f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.0"
   charcode:
     dependency: transitive
     description:
@@ -202,10 +202,10 @@ packages:
     dependency: transitive
     description:
       name: collection
-      sha256: a1ace0a119f20aabc852d165077c036cd864315bd99b7eaa10a60100341941bf
+      sha256: "2f5709ae4d3d59dd8f7cd309b4e023046b57d8a6c82130785d2b0e5868084e76"
       url: "https://pub.dev"
     source: hosted
-    version: "1.19.0"
+    version: "1.19.1"
   convert:
     dependency: transitive
     description:
@@ -420,10 +420,10 @@ packages:
     dependency: transitive
     description:
       name: macros
-      sha256: "0acaed5d6b7eab89f63350bccd82119e6c602df0f391260d0e32b5e23db79536"
+      sha256: "1d9e801cd66f7ea3663c45fc708450db1fa57f988142c64289142c9b7ee80656"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.2-main.4"
+    version: "0.1.3-main.0"
   matcher:
     dependency: transitive
     description:
@@ -444,10 +444,10 @@ packages:
     dependency: transitive
     description:
       name: meta
-      sha256: bdb68674043280c3428e9ec998512fb681678676b3c54e773629ffe74419f8c7
+      sha256: e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c
       url: "https://pub.dev"
     source: hosted
-    version: "1.15.0"
+    version: "1.16.0"
   mime:
     dependency: transitive
     description:
@@ -545,11 +545,12 @@ packages:
     source: hosted
     version: "1.5.1"
   preact_signals:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../packages/preact_signals"
-      relative: true
-    source: path
+      name: preact_signals
+      sha256: a5b445796a02244b85fa43d79a7030fbfbbb08f7c48277ee93c636140a8fb2e0
+      url: "https://pub.dev"
+    source: hosted
     version: "1.8.3"
   protobuf:
     dependency: transitive
@@ -610,23 +611,26 @@ packages:
   signals:
     dependency: "direct main"
     description:
-      path: "../../packages/signals"
-      relative: true
-    source: path
+      name: signals
+      sha256: "85225d03e71720b6fff62a8296ba7328a3e363d1ffbb9f3a85efaa05d9e85e67"
+      url: "https://pub.dev"
+    source: hosted
     version: "6.0.2"
   signals_core:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../packages/signals_core"
-      relative: true
-    source: path
+      name: signals_core
+      sha256: "5668ff1fb953fe48c88b03d50d43c5fe128cd7c831b932a4157f5f6be868b80f"
+      url: "https://pub.dev"
+    source: hosted
     version: "6.0.2"
   signals_flutter:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../packages/signals_flutter"
-      relative: true
-    source: path
+      name: signals_flutter
+      sha256: "66b36ed0b5961cc7d8d0606813bc3fd66758dc1728cbfcffef0d2a97c7a706a2"
+      url: "https://pub.dev"
+    source: hosted
     version: "6.0.2"
   sky_engine:
     dependency: transitive
@@ -810,5 +814,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.5.0 <3.7.0"
+  dart: ">=3.7.0 <3.9.0-z"
   flutter: ">=3.24.0"
