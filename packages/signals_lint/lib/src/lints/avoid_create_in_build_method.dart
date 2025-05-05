@@ -1,5 +1,5 @@
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/error/error.dart';
+import 'package:analyzer/error/error.dart' hide LintCode;
 import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
@@ -72,8 +72,7 @@ class SignalsAvoidCreateInBuildMethod extends DartLintRule {
       if (element == null) return;
 
       final ancestor = node.thisOrAncestorMatching((method) {
-        final isMethod =
-            method is MethodDeclaration && method.name.lexeme == buildMethod;
+        final isMethod = method is MethodDeclaration && method.name.lexeme == buildMethod;
         if (!isMethod) return false;
 
         if (_findStateClass(node) != null) {
@@ -84,7 +83,7 @@ class SignalsAvoidCreateInBuildMethod extends DartLintRule {
       });
 
       if (ancestor != null) {
-        reporter.reportErrorForElement(code, element);
+        reporter.atElement(element, code);
       }
     });
   }
@@ -110,7 +109,6 @@ AstNode? _findStateClass(AstNode node) {
     final extendsType = extendsClause.superclass.type;
     if (extendsType == null) return false;
 
-    return stateClass.isExactlyType(extendsType) ||
-        statelessClass.isExactlyType(extendsType);
+    return stateClass.isExactlyType(extendsType) || statelessClass.isExactlyType(extendsType);
   });
 }

@@ -15,12 +15,12 @@ environment:
   sdk: ^3.0.0
 
 dependencies:
-  analyzer: ^6.2.0
-  analyzer_plugin: ^0.11.3
-  collection: ^1.17.2
-  custom_lint_builder: ^0.5.5
+  analyzer: ^7.3.0
+  analyzer_plugin: ^0.13.0
+  collection: ^1.19.1
+  custom_lint_builder: ^0.7.5
 
 dev_dependencies:
-  lints: ^3.0.0
-  test: ^1.24.9
-  signals: ^4.2.0
+  lints: 
+  test: ^1.25.15
+  signals: ^6.0.2
