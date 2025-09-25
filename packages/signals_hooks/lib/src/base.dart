@@ -28,7 +28,7 @@ class SignalHookState<T, S extends ReadonlySignal<T>>
 
   void _listener() {
     _cleanup = hook.target.subscribe((_) {
-      setState(() {});
+      if (context.mounted) setState(() {});
     });
   }
 
