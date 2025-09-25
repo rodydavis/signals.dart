@@ -112,29 +112,7 @@ import 'state.dart';
 /// ```
 /// @link https://dartsignals.dev/async/stream
 /// {@endtemplate}
-class StreamSignal<T> extends AsyncSignal<T> {
-  late final Computed<Stream<T>> _stream;
-  bool _fetching = false;
-  StreamSubscription<T>? _subscription;
-  final void Function()? _onDone;
-  bool _done = false;
-  EffectCleanup? _cleanup;
-
-  /// Check if the signal is done
-  bool get isDone => _done;
-
-  /// Cancel the subscription on error
-  final bool? cancelOnError;
-
-  /// List of dependencies to recompute the stream
-  final List<ReadonlySignal<dynamic>> dependencies;
-
-  /// First value of the stream
-  Future<T> get last => _stream.value.last;
-
-  /// Last value of the stream
-  Future<T> get first => _stream.value.first;
-
+class StreamSignal<T> extends AsyncSignal<T> with _StreamSignalMixin<T> {
   /// {@template stream}
   /// Stream signals can be created by extension or method.
   ///
@@ -245,27 +223,54 @@ class StreamSignal<T> extends AsyncSignal<T> {
   /// {@endtemplate}
   StreamSignal(
     Stream<T> Function() fn, {
-    this.cancelOnError,
+    bool? cancelOnError,
     super.debugLabel,
     T? initialValue,
-    this.dependencies = const [],
+    List<ReadonlySignal<dynamic>> dependencies = const [],
     void Function()? onDone,
     bool lazy = true,
     super.autoDispose,
-  })  : _onDone = onDone,
-        _stream = computed(
-          () {
-            for (final dep in dependencies) {
-              dep.value;
-            }
-            return fn();
-          },
-        ),
-        super(initialValue != null
+  }) : super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
+    this.dependencies = dependencies;
+    _onDone = onDone;
+    _stream = computed(
+      () {
+        for (final dep in dependencies) {
+          dep.value;
+        }
+        return fn();
+      },
+    );
+    this.cancelOnError = cancelOnError;
     if (!lazy) value;
   }
+}
+
+/// Mixin for StreamSignal
+mixin _StreamSignalMixin<T> on AsyncSignal<T> {
+  late final Computed<Stream<T>> _stream;
+  bool _fetching = false;
+  StreamSubscription<T>? _subscription;
+  late final void Function()? _onDone;
+  bool _done = false;
+  EffectCleanup? _cleanup;
+
+  /// Check if the signal is done
+  bool get isDone => _done;
+
+  /// Cancel the subscription on error
+  late final bool? cancelOnError;
+
+  /// List of dependencies to recompute the stream
+  late final List<ReadonlySignal<dynamic>> dependencies;
+
+  /// First value of the stream
+  Future<T> get last => _stream.value.last;
+
+  /// Last value of the stream
+  Future<T> get first => _stream.value.first;
 
   /// Execute the stream
   Future<void> execute(Stream<T> src) async {

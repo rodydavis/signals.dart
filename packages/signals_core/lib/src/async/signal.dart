@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 import '../core/signals.dart';
 import '../mixins/event_sink.dart';
 import 'state.dart';
@@ -165,36 +167,45 @@ import 'state.dart';
 /// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
 class AsyncSignal<T> extends Signal<AsyncState<T>>
-    with EventSinkSignalMixin<T> {
+    with EventSinkSignalMixin<T>, _AsyncSignalMixin<T> {
   /// A [Signal] that stores value in [AsyncState]
   AsyncSignal(
     super.value, {
     super.debugLabel,
     super.autoDispose,
-  }) : _initialValue = value;
-  final AsyncState<T> _initialValue;
+  }) {
+    _initialValue = value;
+  }
+}
+
+/// AsyncSignal mixin
+mixin _AsyncSignalMixin<T> on Signal<AsyncState<T>> {
+  late AsyncState<T> _initialValue;
   bool _initialized = false;
-  Completer<bool> _completer = Completer<bool>();
+
+  /// Internal Completer for values
+  @internal
+  Completer<bool> completer = Completer<bool>();
 
   /// The future of the signal completer
   Future<T> get future async {
     value;
-    await _completer.future;
+    await completer.future;
     return value.requireValue;
   }
 
   /// Returns true if the signal is completed an error or data
   bool get isCompleted {
     value;
-    return _completer.isCompleted;
+    return completer.isCompleted;
   }
 
   /// Set the error with optional stackTrace to [AsyncError]
   void setError(Object error, [StackTrace? stackTrace]) {
     batch(() {
       value = AsyncState.error(error, stackTrace);
-      if (_completer.isCompleted) _completer = Completer<bool>();
-      _completer.complete(true);
+      if (completer.isCompleted) completer = Completer<bool>();
+      completer.complete(true);
     });
   }
 
@@ -202,8 +213,8 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   void setValue(T value) {
     batch(() {
       this.value = AsyncState.data(value);
-      if (_completer.isCompleted) _completer = Completer<bool>();
-      _completer.complete(true);
+      if (completer.isCompleted) completer = Completer<bool>();
+      completer.complete(true);
     });
   }
 
@@ -211,7 +222,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   void setLoading([AsyncState<T>? state]) {
     batch(() {
       value = state ?? AsyncState.loading();
-      _completer = Completer<bool>();
+      completer = Completer<bool>();
     });
   }
 
@@ -220,7 +231,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
     batch(() {
       this.value = value ?? _initialValue;
       _initialized = false;
-      if (_completer.isCompleted) _completer = Completer<bool>();
+      if (completer.isCompleted) completer = Completer<bool>();
     });
   }
 

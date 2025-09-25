@@ -3,6 +3,7 @@ export 'src/async/connect.dart';
 export 'src/extensions/future.dart';
 export 'src/extensions/stream.dart';
 export 'src/extensions/signal.dart';
+export 'src/extensions/async.dart';
 export 'src/extensions/object.dart' hide SignalObjectUtils;
 export 'src/utils/timer.dart';
 export 'src/async/state.dart';
