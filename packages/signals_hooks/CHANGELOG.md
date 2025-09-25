@@ -1,3 +1,7 @@
+## 0.2.1
+
+- fix: Check if widget is mounted before rebuilding
+
 ## 0.2.0
 
 - feat: Add `useSignalValue` to get the value of a signal directly
