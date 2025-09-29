@@ -25,8 +25,11 @@ ListSignal<T> useListSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => listSignal(value), keys);
+  final s = useMemoized(() => listSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -50,8 +53,11 @@ SetSignal<T> useSetSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => setSignal(value), keys);
+  final s = useMemoized(() => setSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -75,8 +81,12 @@ IterableSignal<T> useIterableSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => iterableSignal(value), keys);
+  final s =
+      useMemoized(() => iterableSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -100,8 +110,11 @@ MapSignal<K, V> useMapSignal<K, V>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => mapSignal(value), keys);
+  final s = useMemoized(() => mapSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -125,8 +138,12 @@ TrackedSignal<T> useTrackedSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => trackedSignal(value), keys);
+  final s =
+      useMemoized(() => trackedSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -150,8 +167,11 @@ QueueSignal<T> useQueueSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => queueSignal(value), keys);
+  final s = useMemoized(() => queueSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -178,7 +198,11 @@ ChangeStackSignal<T> useChangeStackSignal<T>(
 
   /// The maximum number of changes to store in the history.
   int? limit,
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => changeStack(value, limit: limit), keys);
+  final s = useMemoized(
+      () => changeStack(value, limit: limit, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }

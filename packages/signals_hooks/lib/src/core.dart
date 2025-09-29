@@ -74,8 +74,11 @@ Signal<T> useSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => signal(value), keys);
+  final s = useMemoized(() => signal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -100,8 +103,11 @@ Computed<T> useComputed<T>(
   ///
   /// If any of the keys change, the computed signal will be re-created.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the computed signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => computed(value), keys);
+  final s = useMemoized(() => computed(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -134,7 +140,11 @@ void useSignalEffect(
 
   /// A callback that is executed when the effect is disposed.
   dynamic Function()? onDispose,
+
+  /// The debug label for the effect.
+  String? debugLabel,
 }) {
-  useEffect(() => effect(cb, onDispose: onDispose), keys);
+  useEffect(
+      () => effect(cb, onDispose: onDispose, debugLabel: debugLabel), keys);
   return;
 }
