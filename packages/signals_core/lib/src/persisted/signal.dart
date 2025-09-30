@@ -63,18 +63,18 @@ mixin PersistedSignalMixin<T> on Signal<T> {
   Future<T> load() async {
     final val = await store.getItem(key);
     if (val == null) return value;
-    return await decode(val);
+    return decode(val);
   }
 
   /// Saves the value to the store.
   Future<void> save(T value) async {
-    final str = await encode(value);
+    final str = encode(value);
     await store.setItem(key, str);
   }
 
   /// Decodes the value from a string.
-  FutureOr<T> decode(String value) async => jsonDecode(value);
+  T decode(String value) => jsonDecode(value);
 
   /// Encodes the value to a string.
-  FutureOr<String> encode(T value) async => jsonEncode(value);
+  String encode(T value) => jsonEncode(value);
 }
