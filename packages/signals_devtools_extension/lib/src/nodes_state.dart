@@ -8,8 +8,11 @@ final nodeUpdate = signal<$Node?>(null);
 final nodeRemove = signal<$Node?>(null);
 final reassembleCount = signal<int>(0);
 
-Function? initNodes() {
-  final subscription = serviceManager.service?.onExtensionEvent
+Future<Function?> initNodes() async {
+  // We need to wait for the service to be available before we can subscribe
+  final service = await serviceManager.onServiceAvailable;
+
+  final subscription = service.onExtensionEvent
       .where((e) => e.extensionKind?.startsWith('ext.signals') ?? false)
       .listen((event) {
     final kind = event.extensionKind;
@@ -110,13 +113,16 @@ class $Node {
   String toString() => '$type|$id|$label';
 
   factory $Node.fromJson(Map<String, dynamic> item) {
+    final sources = item['sources'] as String?;
+    final targets = item['targets'] as String?;
+
     return $Node(
       id: item['id'] as int,
       type: item['type'] as String,
       label: item['label'] as String?,
       value: item['value'] as String?,
-      sources: item['sources'] as String?,
-      targets: item['targets'] as String?,
+      sources: sources == null || sources.isEmpty ? null : sources,
+      targets: targets == null || targets.isEmpty ? null : targets,
     );
   }
 }
