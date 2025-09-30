@@ -227,7 +227,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'targets':
                   readonlySignalTargets(e).map((e) => e.globalId).join(','),
               'type': 'signal',
-            })
+            },)
         .toList();
     final computed = _computed
         .where((e) => e.target != null)
@@ -240,7 +240,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'targets':
                   readonlySignalTargets(e).map((e) => e.globalId).join(','),
               'type': 'computed',
-            })
+            },)
         .toList();
     final effects = _effects
         .where((e) => e.target != null)
@@ -251,10 +251,10 @@ class DevToolsSignalsObserver implements SignalsObserver {
               'value': '${_effectCount[e.globalId] ?? 0}',
               'sources': listenableSources(e).map((e) => e.globalId).join(','),
               'type': 'effect',
-            })
+            },)
         .toList();
     return {
-      'nodes': [...signals, ...computed, ...effects]
+      'nodes': [...signals, ...computed, ...effects],
     };
   }
 }

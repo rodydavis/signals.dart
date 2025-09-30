@@ -1,4 +1,4 @@
-import 'package:signals_core/signals_core.dart';
+import '../../signals_core.dart';
 
 /// Time event to react to
 typedef TimerSignalEvent = ({int iteration, int millis});
