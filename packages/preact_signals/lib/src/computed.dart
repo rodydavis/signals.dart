@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
@@ -26,7 +27,7 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   int flags;
 
   @internal
-  Object? error;
+  SignalEffectException? error;
 
   bool _isInitialized = false;
 
@@ -92,8 +93,8 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
         flags &= ~HAS_ERROR;
         version++;
       }
-    } catch (err) {
-      error = err;
+    } catch (err, stack) {
+      error = SignalEffectException(err, stack);
       flags |= HAS_ERROR;
       version++;
     }

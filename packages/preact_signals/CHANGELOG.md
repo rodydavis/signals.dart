@@ -1,3 +1,7 @@
+## 1.9.2
+
+- Computed not also can throw SignalEffectException instead of generic error
+
 ## 1.9.1
 
 - Refactor internal methods
