@@ -1,3 +1,7 @@
+## 1.9.0
+
+- Add SignalEffectException for getting the error and StackTrace for a failed effect callback
+
 ## 1.8.3
 
 - Add Computed.isInitialized
