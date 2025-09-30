@@ -17,7 +17,7 @@ void endBatch() {
     return;
   }
 
-  SignalEffectError? error;
+  SignalEffectException? error;
   bool hasError = false;
 
   while (batchedEffect != null) {
@@ -36,7 +36,7 @@ void endBatch() {
           effect.callback();
         } catch (err, stack) {
           if (!hasError) {
-            error = SignalEffectError(err, stack);
+            error = SignalEffectException(err, stack);
             hasError = true;
           }
         }
@@ -53,15 +53,15 @@ void endBatch() {
 }
 
 /// Error for when a effect fails to run the callback
-class SignalEffectError implements Error {
+class SignalEffectException implements Exception {
   /// Error during callback
   Object? error;
 
-  @override
+  /// StackTrace for where the error started
   StackTrace? stackTrace;
 
   /// Error for when a effect fails to run the callback
-  SignalEffectError(this.error, [this.stackTrace]);
+  SignalEffectException(this.error, [this.stackTrace]);
 }
 
 /// Combine multiple value updates into one "commit" at the end of the provided callback.
