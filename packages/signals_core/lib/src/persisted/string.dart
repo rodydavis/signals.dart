@@ -21,6 +21,8 @@ class PersistedStringSignal extends PersistedSignal<String> {
 }
 
 /// A `PersistedSignal` that stores a nullable string value.
+///
+/// > [!warning] An empty value is considered null
 class PersistedNullableStringSignal extends PersistedSignal<String?> {
   /// Creates a new `NullableStringSignal`.
   PersistedNullableStringSignal(

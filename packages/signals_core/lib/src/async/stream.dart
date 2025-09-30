@@ -112,7 +112,7 @@ import 'state.dart';
 /// ```
 /// @link https://dartsignals.dev/async/stream
 /// {@endtemplate}
-class StreamSignal<T> extends AsyncSignal<T> with _StreamSignalMixin<T> {
+class StreamSignal<T> extends AsyncSignal<T> {
   /// {@template stream}
   /// Stream signals can be created by extension or method.
   ///
@@ -223,37 +223,32 @@ class StreamSignal<T> extends AsyncSignal<T> with _StreamSignalMixin<T> {
   /// {@endtemplate}
   StreamSignal(
     Stream<T> Function() fn, {
-    bool? cancelOnError,
+    this.cancelOnError,
     super.debugLabel,
     T? initialValue,
-    List<ReadonlySignal<dynamic>> dependencies = const [],
+    this.dependencies = const [],
     void Function()? onDone,
     bool lazy = true,
     super.autoDispose,
-  }) : super(initialValue != null
+  })  : _onDone = onDone,
+        _stream = computed(
+          () {
+            for (final dep in dependencies) {
+              dep.value;
+            }
+            return fn();
+          },
+        ),
+        super(initialValue != null
             ? AsyncState.data(initialValue)
             : AsyncState.loading()) {
-    this.dependencies = dependencies;
-    _onDone = onDone;
-    _stream = computed(
-      () {
-        for (final dep in dependencies) {
-          dep.value;
-        }
-        return fn();
-      },
-    );
-    this.cancelOnError = cancelOnError;
     if (!lazy) value;
   }
-}
 
-/// Mixin for StreamSignal
-mixin _StreamSignalMixin<T> on AsyncSignal<T> {
-  late final Computed<Stream<T>> _stream;
+  final Computed<Stream<T>> _stream;
   bool _fetching = false;
   StreamSubscription<T>? _subscription;
-  late final void Function()? _onDone;
+  final void Function()? _onDone;
   bool _done = false;
   EffectCleanup? _cleanup;
 

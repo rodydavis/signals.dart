@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import '../../signals_core.dart';
+import '../core/signals.dart';
 import 'store.dart';
 
 /// A signal that persists its value in a key-value store.
@@ -13,8 +13,9 @@ class PersistedSignal<T> extends Signal<T> with PersistedSignalMixin<T> {
     super.debugLabel,
     required this.key,
     required this.store,
+    bool autoInit = true,
   }) {
-    init().ignore();
+    if (autoInit) init().ignore();
   }
 
   @override

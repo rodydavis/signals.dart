@@ -167,20 +167,15 @@ import 'state.dart';
 /// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
 class AsyncSignal<T> extends Signal<AsyncState<T>>
-    with EventSinkSignalMixin<T>, _AsyncSignalMixin<T> {
+    with EventSinkSignalMixin<T> {
   /// A [Signal] that stores value in [AsyncState]
   AsyncSignal(
     super.value, {
     super.debugLabel,
     super.autoDispose,
-  }) {
-    _initialValue = value;
-  }
-}
+  }) : _initialValue = value;
 
-/// AsyncSignal mixin
-mixin _AsyncSignalMixin<T> on Signal<AsyncState<T>> {
-  late AsyncState<T> _initialValue;
+  final AsyncState<T> _initialValue;
   bool _initialized = false;
 
   /// Internal Completer for values

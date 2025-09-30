@@ -87,7 +87,7 @@ import 'stream.dart';
 /// ```
 /// @link https://dartsignals.dev/async/future
 /// {@endtemplate}
-class FutureSignal<T> extends StreamSignal<T> with _FutureSignalMixin<T> {
+class FutureSignal<T> extends StreamSignal<T> {
   /// {@template future}
   /// Future signals can be created by extension or method.
   ///
@@ -180,9 +180,7 @@ class FutureSignal<T> extends StreamSignal<T> with _FutureSignalMixin<T> {
     super.lazy,
     super.autoDispose,
   }) : super(() => fn().asStream(), cancelOnError: true);
-}
 
-mixin _FutureSignalMixin<T> on StreamSignal<T> {
   @override
   Future<void> refresh() async {
     await super.refresh();
