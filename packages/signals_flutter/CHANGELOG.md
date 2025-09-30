@@ -1,3 +1,13 @@
+## 6.2.0
+
+- Adding SignalsAutoDisposeMixin
+- Computed/Signal now use SignalsAutoDisposeMixin but ReadonlySignalMixin no longer has dispose methods
+- Tests now check for SignalEffectException and not error
+- Exposing SignalEffectException from preact_signals
+- Bump preact_signals to 1.9.3
+- Computed not also can throw SignalEffectException instead of generic error
+- Bump signals_core to 6.2.0
+
 ## 6.1.0
 
 - Bump signals_core to 6.1.0

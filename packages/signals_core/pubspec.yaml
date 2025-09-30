@@ -1,6 +1,6 @@
 name: signals_core
 description: The signals library exposes four core functions which are the building blocks to model any business logic you can think of.
-version: 6.1.0
+version: 6.2.0
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://dartsignals.dev/
 documentation: https://dartsignals.dev/
@@ -9,7 +9,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  preact_signals: ^1.9.0
+  preact_signals: ^1.9.3
   meta: ^1.3.0
 
 dev_dependencies:

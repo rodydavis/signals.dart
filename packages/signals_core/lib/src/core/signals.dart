@@ -17,6 +17,7 @@ part 'signal.dart';
 part 'batch.dart';
 part 'untracked.dart';
 part 'readonly.dart';
+part 'auto_dispose.dart';
 
 /// Signal usage error
 class SignalsError extends Error {

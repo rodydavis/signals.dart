@@ -2,7 +2,7 @@ part of 'signals.dart';
 
 /// Simple writeable signal
 class Signal<T> extends signals.Signal<T>
-    with ReadonlySignalMixin<T>
+    with ReadonlySignalMixin<T>, SignalsAutoDisposeMixin<T>
     implements ReadonlySignal<T> {
   /// Simple writeable signal.
   ///
@@ -51,7 +51,7 @@ class Signal<T> extends signals.Signal<T>
   final String? debugLabel;
 
   /// Optional method to check if to values are the same
-  bool Function(T a, T b) equalityCheck = (T a, T b) => a == b;
+  bool Function(T a, T b) equalityCheck = identical;
 
   @override
   bool set(

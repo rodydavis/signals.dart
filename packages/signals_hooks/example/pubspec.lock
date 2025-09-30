@@ -143,33 +143,33 @@ packages:
     dependency: transitive
     description:
       name: preact_signals
-      sha256: a6d703963ec5c0bc8d88f6f02879a6c273c6a7cb1e0fd94e9d585b811ca9b1b4
+      sha256: "8bf3cec7fe784d224f1a1132ae7b2f9f3852609046ccb71c4f450a13dd811abf"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.9.3"
   signals_core:
     dependency: transitive
     description:
       name: signals_core
-      sha256: "57906842fdbb56a20da5aa5802d42ae31b392692f97e12cfdf0b14d590aad3a2"
+      sha256: "10e527cda3c400703e4156da16aeaea274644ecb7db11abeec7dc7cc9bec9abd"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.0"
   signals_flutter:
     dependency: transitive
     description:
       name: signals_flutter
-      sha256: "73423f9426ea2cf67ce8982a54a079258fa95f2f9547ee09da50795eef3469dd"
+      sha256: d04c973e3feeaddd7d8428f3a8af911297febb3c083091217e1a1fc0c4d6504f
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.0"
   signals_hooks:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.3.1"
   sky_engine:
     dependency: transitive
     description: flutter

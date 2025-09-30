@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Bump signals_flutter to 6.2.0
+
 ## 0.3.0
 
 - feat: add debugLabel to signals in hooks @dickermoshe
