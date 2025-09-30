@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 
 import 'effect.dart';
 import 'globals.dart';
-import 'listenable.dart';
 
 @internal
 @pragma("vm:prefer-inline")
@@ -31,7 +30,7 @@ void endBatch() {
       effect.nextBatchedEffect = null;
       effect.flags &= ~NOTIFIED;
 
-      if (!((effect.flags & DISPOSED) != 0) && needsToRecompute(effect)) {
+      if (!((effect.flags & DISPOSED) != 0) && effect.needsToRecompute()) {
         try {
           effect.callback();
         } catch (err, stack) {

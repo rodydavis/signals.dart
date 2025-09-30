@@ -1,3 +1,9 @@
+## 1.9.1
+
+- Refactor internal methods
+- Switch to mixin class on Listenable and ReadonlySignal
+- Update min sdk to 3.0.0
+
 ## 1.9.0
 
 - Add SignalEffectException for getting the error and StackTrace for a failed effect callback
