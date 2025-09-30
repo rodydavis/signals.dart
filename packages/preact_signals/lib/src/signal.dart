@@ -69,9 +69,9 @@ class Signal<T> extends ReadonlySignal<T> {
   T get value {
     final node = addDependency(this);
     if (node != null) {
-      node.version = this.version;
+      node.version = version;
     }
-    return this.internalValue;
+    return internalValue;
   }
 
   /// Set the current value by a setter
@@ -83,7 +83,7 @@ class Signal<T> extends ReadonlySignal<T> {
     /// Skip equality check and update the value
     bool force = false,
   }) {
-    if (force || !isInitialized || val != this.internalValue) {
+    if (force || !isInitialized || val != internalValue) {
       internalSetValue(val);
       return true;
     }
@@ -96,8 +96,8 @@ class Signal<T> extends ReadonlySignal<T> {
       throw Exception('Cycle detected');
     }
 
-    this.internalValue = val;
-    this.version++;
+    internalValue = val;
+    version++;
     globalVersion++;
 
     startBatch();

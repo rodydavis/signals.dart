@@ -15,6 +15,8 @@ Signal<Brightness> brightness = Brightness.light.$;
 Signal<double> progress = 0.5.$;
 ````
 
+- Add SignalEffectException for getting the error and StackTrace for a failed effect callback
+
 ## 6.0.2
 
 - Fix cycle error with TrackedSignalMixin and Computed

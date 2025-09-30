@@ -52,30 +52,30 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
 
   @override
   bool internalRefresh() {
-    this.flags &= ~NOTIFIED;
+    flags &= ~NOTIFIED;
 
-    if ((this.flags & RUNNING) != 0) {
+    if ((flags & RUNNING) != 0) {
       return false;
     }
 
     // If this computed signal has subscribed to updates from its dependencies
     // (TRACKING flag set) and none of them have notified about changes (OUTDATED
     // flag not set), then the computed value can't have changed.
-    if ((this.flags & (OUTDATED | TRACKING)) == TRACKING) {
+    if ((flags & (OUTDATED | TRACKING)) == TRACKING) {
       return true;
     }
-    this.flags &= ~OUTDATED;
+    flags &= ~OUTDATED;
 
-    if (this.internalGlobalVersion == globalVersion) {
+    if (internalGlobalVersion == globalVersion) {
       return true;
     }
-    this.internalGlobalVersion = globalVersion;
+    internalGlobalVersion = globalVersion;
 
     // Mark this computed signal running before checking the dependencies for value
     // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
-    this.flags |= RUNNING;
+    flags |= RUNNING;
     if (version > 0 && !needsToRecompute(this)) {
-      this.flags &= ~RUNNING;
+      flags &= ~RUNNING;
       return true;
     }
 
@@ -83,7 +83,7 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
     try {
       prepareSources(this);
       evalContext = this;
-      final val = this.fn();
+      final val = fn();
       if (!_isInitialized ||
           (flags & HAS_ERROR) != 0 ||
           _internalValue != val ||
