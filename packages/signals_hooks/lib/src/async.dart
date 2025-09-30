@@ -48,7 +48,7 @@ FutureSignal<T> useFutureSignal<T>(
       lazy: lazy,
       debugLabel: debugLabel,
     );
-  }, keys);
+  }, keys,);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -105,7 +105,7 @@ StreamSignal<T> useStreamSignal<T>(
       dependencies: dependencies,
       debugLabel: debugLabel,
     );
-  }, keys);
+  }, keys,);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -190,6 +190,6 @@ FutureSignal<T> useAsyncComputed<T>(
       initialValue: initialValue,
       debugLabel: debugLabel,
     );
-  }, keys);
+  }, keys,);
   return useExistingSignal(s, keys: keys);
 }

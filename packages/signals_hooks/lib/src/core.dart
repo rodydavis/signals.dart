@@ -145,6 +145,6 @@ void useSignalEffect(
   String? debugLabel,
 }) {
   useEffect(
-      () => effect(cb, onDispose: onDispose, debugLabel: debugLabel), keys);
+      () => effect(cb, onDispose: onDispose, debugLabel: debugLabel), keys,);
   return;
 }

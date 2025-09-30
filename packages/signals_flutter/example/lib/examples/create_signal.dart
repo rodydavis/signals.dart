@@ -16,7 +16,7 @@ class CreateSignalExample extends StatefulWidget {
 
 class _CreateSignalExampleState extends State<CreateSignalExample>
     with SignalsMixin {
-  late final counter = this.createSignal(0, debugLabel: 'Counter');
+  late final counter = createSignal(0, debugLabel: 'Counter');
 
   void _incrementCounter() => counter.value++;
 

@@ -11,7 +11,7 @@ void main() {
           HookBuilder(builder: (context) {
             final state = useSignal(42);
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -25,7 +25,7 @@ void main() {
               onTap: () => state.value++,
               child: Text('$state', textDirection: TextDirection.ltr),
             );
-          }),
+          },),
         );
 
         // Click text and wait
@@ -43,7 +43,7 @@ void main() {
             final state = useSignal(42);
             final computedState = useComputed(() => state.value * 2);
             return Text('$computedState', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(find.text('84'), findsOneWidget);
@@ -58,7 +58,7 @@ void main() {
               onTap: () => state.value++,
               child: Text('$computedState', textDirection: TextDirection.ltr),
             );
-          }),
+          },),
         );
 
         // Click text and wait
@@ -76,7 +76,7 @@ void main() {
           HookBuilder(builder: (context) {
             useSignalEffect(() => count++);
             return Container();
-          }),
+          },),
         );
 
         expect(count, 1);
@@ -89,7 +89,7 @@ void main() {
           HookBuilder(builder: (context) {
             useSignalEffect(() => count = state.value);
             return Container();
-          }),
+          },),
         );
 
         expect(count, 42);
@@ -109,7 +109,7 @@ void main() {
               onDispose: () => count = -1,
             );
             return Container();
-          }),
+          },),
         );
 
         expect(count, 1);
@@ -127,7 +127,7 @@ void main() {
           HookBuilder(builder: (context) {
             final signal = useExistingSignal(state);
             return Text('$signal', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -142,7 +142,7 @@ void main() {
               onTap: () => signal.value++,
               child: Text('$signal', textDirection: TextDirection.ltr),
             );
-          }),
+          },),
         );
 
         // Click text and wait
@@ -160,7 +160,7 @@ void main() {
           HookBuilder(builder: (context) {
             final value = useSignalValue(state);
             return Text('$value', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -175,7 +175,7 @@ void main() {
               onTap: () => state.value++,
               child: Text('$value', textDirection: TextDirection.ltr),
             );
-          }),
+          },),
         );
 
         // Click text and wait

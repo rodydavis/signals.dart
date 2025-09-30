@@ -1,3 +1,8 @@
+## 0.3.0
+
+- feat: add debugLabel to signals in hooks @dickermoshe
+- Bump signals_flutter to 6.1.0
+
 ## 0.2.1
 
 - fix: Check if widget is mounted before rebuilding

@@ -30,7 +30,7 @@ Signal<T> useValueNotifierToSignal<T>(
   String? debugLabel,
 }) {
   final s = useMemoized(
-      () => valueNotifierToSignal(value, debugLabel: debugLabel), keys);
+      () => valueNotifierToSignal(value, debugLabel: debugLabel), keys,);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -60,6 +60,6 @@ ReadonlySignal<T> useValueListenableToSignal<T>(
   String? debugLabel,
 }) {
   final s = useMemoized(
-      () => valueListenableToSignal(value, debugLabel: debugLabel), keys);
+      () => valueListenableToSignal(value, debugLabel: debugLabel), keys,);
   return useExistingSignal(s, keys: keys);
 }

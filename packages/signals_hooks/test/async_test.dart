@@ -15,7 +15,7 @@ void main() {
               lazy: false,
             );
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(state!.value.isLoading, true);
@@ -36,7 +36,7 @@ void main() {
               lazy: false,
             );
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(state!.value.isLoading, true);
@@ -53,7 +53,7 @@ void main() {
           HookBuilder(builder: (context) {
             state ??= useAsyncSignal<int>(const AsyncLoading());
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(state!.value.isLoading, true);
@@ -65,7 +65,7 @@ void main() {
           HookBuilder(builder: (context) {
             state ??= useAsyncSignal<int>(const AsyncLoading());
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         state!.value = const AsyncData(1);
@@ -91,7 +91,7 @@ void main() {
               lazy: false,
             );
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(state!.value.isLoading, true);

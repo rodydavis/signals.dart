@@ -12,7 +12,7 @@ void main() {
           HookBuilder(builder: (context) {
             final state = useValueNotifierToSignal(notifier);
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -24,7 +24,7 @@ void main() {
           HookBuilder(builder: (context) {
             final state = useValueNotifierToSignal(notifier);
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         notifier.value++;
@@ -40,7 +40,7 @@ void main() {
           HookBuilder(builder: (context) {
             state ??= useValueNotifierToSignal(notifier);
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         state!.value++;
@@ -58,7 +58,7 @@ void main() {
           HookBuilder(builder: (context) {
             final state = useValueListenableToSignal(notifier);
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -70,7 +70,7 @@ void main() {
           HookBuilder(builder: (context) {
             final state = useValueListenableToSignal(notifier);
             return Text('$state', textDirection: TextDirection.ltr);
-          }),
+          },),
         );
 
         notifier.value++;

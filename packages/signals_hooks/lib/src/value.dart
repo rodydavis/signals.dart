@@ -203,6 +203,6 @@ ChangeStackSignal<T> useChangeStackSignal<T>(
   String? debugLabel,
 }) {
   final s = useMemoized(
-      () => changeStack(value, limit: limit, debugLabel: debugLabel), keys);
+      () => changeStack(value, limit: limit, debugLabel: debugLabel), keys,);
   return useExistingSignal(s, keys: keys);
 }

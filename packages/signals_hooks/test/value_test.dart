@@ -14,8 +14,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useListSignal([1, 2, 3]);
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         expect(find.text('[1, 2, 3]'), findsOneWidget);
@@ -27,8 +27,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useListSignal([1, 2, 3]);
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         state.add(4);
@@ -45,8 +45,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useSetSignal({1, 2, 3});
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         expect(find.text('{1, 2, 3}'), findsOneWidget);
@@ -58,8 +58,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useSetSignal({1, 2, 3});
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         state.add(4);
@@ -76,8 +76,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useIterableSignal([1, 2, 3]);
             return Text(state.join(',').toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         expect(find.text('1,2,3'), findsOneWidget);
@@ -91,8 +91,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useMapSignal({'a': 1, 'b': 2});
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         expect(find.text('{a: 1, b: 2}'), findsOneWidget);
@@ -104,8 +104,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useMapSignal({'a': 1, 'b': 2});
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         state['c'] = 3;
@@ -122,8 +122,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useTrackedSignal(42);
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -135,8 +135,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useTrackedSignal(42);
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         state.value = 43;
@@ -153,8 +153,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useQueueSignal(Queue.from([1, 2, 3]));
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         expect(find.text('{1, 2, 3}'), findsOneWidget);
@@ -166,8 +166,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useQueueSignal(Queue.from([1, 2, 3]));
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         state.add(4);
@@ -184,8 +184,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useChangeStackSignal(42);
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -197,8 +197,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useChangeStackSignal(42);
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         state.value = 43;
@@ -213,8 +213,8 @@ void main() {
           HookBuilder(builder: (context) {
             state = useChangeStackSignal(42);
             return Text(state.value.toString(),
-                textDirection: TextDirection.ltr);
-          }),
+                textDirection: TextDirection.ltr,);
+          },),
         );
 
         state.value = 43;
