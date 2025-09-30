@@ -1,3 +1,20 @@
+## 6.1.0
+
+- Fix error in effect not showing StackTrace
+- Add extensions for List, Map, Set, Iterable, bool, String, int, double, num, Comparable, Pattern, Enum
+- Add persisted signals for bool, double, Enum, int, num, String and Json (including nullable for each)
+- Add SignalsKeyValueStore and SignalsInMemoryKeyValueStore for storage
+- Add $ extension method for common types to create signal and function for computed
+
+```dart
+Signal<int> count = 0.$;
+Computed<double> doubleValue => (() => count() * 2).$;
+Signal<String> name = 'Flutter'.$;
+Signal<bool> isTrue = true.$;
+Signal<Brightness> brightness = Brightness.light.$;
+Signal<double> progress = 0.5.$;
+````
+
 ## 6.0.2
 
 - Fix cycle error with TrackedSignalMixin and Computed
