@@ -1,0 +1,8 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - require_trailing_commas
+    - prefer_relative_imports
+formatter:
+  trailing_commas: preserve
