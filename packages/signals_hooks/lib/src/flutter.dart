@@ -25,8 +25,12 @@ Signal<T> useValueNotifierToSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => valueNotifierToSignal(value), keys);
+  final s = useMemoized(
+      () => valueNotifierToSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -51,7 +55,11 @@ ReadonlySignal<T> useValueListenableToSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
+
+  /// The debug label for the signal.
+  String? debugLabel,
 }) {
-  final s = useMemoized(() => valueListenableToSignal(value), keys);
+  final s = useMemoized(
+      () => valueListenableToSignal(value, debugLabel: debugLabel), keys);
   return useExistingSignal(s, keys: keys);
 }
