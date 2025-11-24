@@ -5,6 +5,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../signals_core.dart';
+import '../core/signal.dart' show FlutterSignal;
+import '../core/computed.dart' show FlutterComputed;
 
 typedef _SignalMetadata = ({
   bool? local,
@@ -206,7 +208,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a signal<T> and watch for changes
-  Signal<V> createSignal<V>(
+  FlutterSignal<V> createSignal<V>(
     V val, {
     String? debugLabel,
   }) {
@@ -261,7 +263,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a computed<T> and watch for changes
-  Computed<V> createComputed<V>(
+  FlutterComputed<V> createComputed<V>(
     V Function() cb, {
     String? debugLabel,
   }) {
