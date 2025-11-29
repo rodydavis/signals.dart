@@ -1,10 +1,40 @@
 name: signals_workspace
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.5.0
 
 dev_dependencies:
   combine_coverage: ^1.0.1
-  lints: ^3.0.0
-  melos: ^3.4.0
+  lints: ^5.0.0
+  melos: ^6.0.0
   yaml: ^3.1.2
+
+workspace:
+  - packages/preact_signals
+  - packages/signals
+  - packages/signals_core
+  - packages/signals_devtools_extension
+  - packages/signals_flutter
+  - packages/signals_hooks
+  - packages/signals_lint
+  - benchmark
+  - examples/html_todo_app
+  - examples/clean_architecture
+  - examples/eval_calculator
+  - examples/flutter_counter
+  - examples/node_based_editor
+  - examples/dart_mappable_example
+  - examples/animations_example
+  - examples/flutter_colorband
+  - examples/rxdart
+  - examples/crud_dio
+  - examples/persist_shared_preferences
+  - examples/drift_example
+  - examples/dart_examples
+  - examples/infinite_scroll
+  - examples/mvi_example
+  - examples/get_it_signals
+  - examples/auth_flow
+  - examples/flutter_async
+  - examples/shopping_cart
+  - examples/html_canvas
