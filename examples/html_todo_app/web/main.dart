@@ -28,7 +28,7 @@ void main() {
   }.toJS;
 
   effect(() {
-    todoList.innerHTML = '';
+    todoList.innerHTML = ''.toJS;
     final tasks = app.filteredTasks.value;
     for (var i = 0; i < tasks.length; i++) {
       final task = tasks[i];
@@ -38,17 +38,17 @@ void main() {
 
   effect(() {
     final el = document.getElementById("tasks-total")!;
-    el.innerHTML = app.taskCount.value.toString();
+    el.innerHTML = app.taskCount.value.toString().toJS;
   });
 
   effect(() {
     final el = document.getElementById("tasks-active")!;
-    el.innerHTML = app.activeTaskCount.value.toString();
+    el.innerHTML = app.activeTaskCount.value.toString().toJS;
   });
 
   effect(() {
     final el = document.getElementById("tasks-completed")!;
-    el.innerHTML = app.completedTaskCount.value.toString();
+    el.innerHTML = app.completedTaskCount.value.toString().toJS;
   });
 
   app.load();
@@ -177,7 +177,7 @@ class TaskElement {
     base.appendChild(() {
       final el = document.createElement("td");
       final btn = document.createElement("button") as HTMLButtonElement;
-      btn.innerHTML = 'delete';
+      btn.innerHTML = 'delete'.toJS;
       btn.onclick = (Event e) {
         instance.delete();
       }.toJS;

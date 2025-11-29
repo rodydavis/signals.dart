@@ -7,9 +7,13 @@ export default defineConfig({
     starlight({
       // site: "https://rodydavis.github.io/signals.dart",
       title: "Signals.dart",
-      social: {
-        github: "https://github.com/rodydavis/signals.dart",
-      },
+      social: [
+        {
+          label: "GitHub",
+          icon: "github",
+          href: "https://github.com/rodydavis/signals.dart",
+        },
+      ],
       customCss: ["/src/styles/custom.css", "/src/fonts/font-face.css"],
       sidebar: [
         { label: "Reference", autogenerate: { directory: "reference" } },

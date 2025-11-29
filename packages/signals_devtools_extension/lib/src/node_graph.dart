@@ -138,7 +138,9 @@ class _NodeGraphState extends State<NodeGraph> {
           maxScale: 5.6,
           child: GraphView(
             graph: graph,
-            algorithm: FruchtermanReingoldAlgorithm(),
+            algorithm: FruchtermanReingoldAlgorithm(
+              FruchtermanReingoldConfiguration(),
+            ),
             paint: Paint()
               ..color = Theme.of(context).colorScheme.outline
               ..strokeWidth = 1
