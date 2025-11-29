@@ -3,9 +3,6 @@ title: Persisted Signals
 description: How to save and restore signals.
 sidebar:
   order: 2
-  badge:
-    text: New
-    variant: tip
 ---
 
 When you need to store the state of your signals between app launches you can create a `PersistedSignal` from this example code.

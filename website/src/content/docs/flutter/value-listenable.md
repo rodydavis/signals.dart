@@ -3,9 +3,6 @@ title: ValueListenable
 description: Easy conversion between ValueListenable and Signal
 sidebar:
   order: 2
-  badge:
-    text: Updated
-    variant: note
 ---
 
 :::tip
