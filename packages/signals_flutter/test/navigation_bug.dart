@@ -52,7 +52,7 @@ void main() {
       expect(
         find.text('Count: 2'),
         findsOneWidget,
-        reason: 'Widget should rebuild when beacon changes after re-navigation',
+        reason: 'Widget should rebuild when signal changes after re-navigation',
       );
     },
   );
