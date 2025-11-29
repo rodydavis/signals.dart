@@ -1,3 +1,5 @@
+// ignore_for_file: hash_and_equals
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -85,22 +87,6 @@ class _CollisionWidgetStateWithHash extends State<_CollisionWidget> {
   @override
   Widget build(BuildContext context) {
     final count = widget.counter.watch(context);
-    return Scaffold(
-      body: Center(
-        child: Text('Count: $count'),
-      ),
-    );
-  }
-}
-
-class _TestPage extends StatelessWidget {
-  const _TestPage({required this.counter, super.key});
-
-  final Signal<int> counter;
-
-  @override
-  Widget build(BuildContext context) {
-    final count = counter.watch(context);
     return Scaffold(
       body: Center(
         child: Text('Count: $count'),
