@@ -4,6 +4,10 @@ packages:
   - examples/*
   - packages/*
 
+command:
+  bootstrap:
+    usePubspecOverrides: false
+
 scripts:
   examples:
     exec: dart scripts/examples.dart
