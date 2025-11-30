@@ -7,8 +7,7 @@ class IterableSignal<E> extends Signal<Iterable<E>>
   /// Creates a [IterableSignal] with the given [value].
   IterableSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   @override
@@ -31,11 +30,15 @@ IterableSignal<T> iterableSignal<T>(
   Iterable<T> iterable, {
   String? debugLabel,
   bool autoDispose = false,
+  SignalOptions<Iterable<T>>? options,
 }) {
   return IterableSignal<T>(
     iterable,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        SignalOptions<Iterable<T>>(
+          name: debugLabel,
+          autoDispose: autoDispose,
+        ),
   );
 }
 
@@ -45,11 +48,15 @@ extension SignalIterableUtils<T> on Iterable<T> {
   IterableSignal<T> toSignal({
     String? debugLabel,
     bool autoDispose = false,
+    SignalOptions<Iterable<T>>? options,
   }) {
-    return IterableSignal<T>(
+    return IterableSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options ??
+          SignalOptions<Iterable<T>>(
+            name: debugLabel,
+            autoDispose: autoDispose,
+          ),
     );
   }
 }

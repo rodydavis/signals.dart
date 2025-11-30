@@ -5,6 +5,7 @@ import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
 import 'signal.dart';
+import 'untracked.dart';
 
 /// An interface for read-only signals.
 mixin class ReadonlySignal<T> {
@@ -14,7 +15,12 @@ mixin class ReadonlySignal<T> {
   /// Compute the current value
   T get value => throw UnimplementedError();
 
+  /// Check if the value is set
+  bool get isInitialized => throw UnimplementedError();
+
   @internal
+
+  /// Internal value of the signal
   T get internalValue => throw UnimplementedError();
 
   @override
@@ -60,18 +66,36 @@ mixin class ReadonlySignal<T> {
       throw UnimplementedError();
 
   @internal
+
+  /// Subscribe to a node
   void subscribeToNode(Node node) => throw UnimplementedError();
 
   @internal
+
+  /// Unsubscribe from a node
   void unsubscribeFromNode(Node node) => throw UnimplementedError();
 
   @internal
+
+  /// Callback when the signal is watched
+  void Function()? get watched => null;
+
+  @internal
+
+  /// Callback when the signal is unwatched
+  void Function()? get unwatched => null;
+
+  @internal
+
+  /// Internal subscribe method
   void internalSubscribe(Node node) {
     final signal = this;
     if (signal.targets != node && node.prevTarget == null) {
       node.nextTarget = signal.targets;
       if (signal.targets != null) {
         signal.targets!.prevTarget = node;
+      } else {
+        untracked(() => watched?.call());
       }
       signal.targets = node;
     }
@@ -83,18 +107,34 @@ mixin class ReadonlySignal<T> {
   int get version => throw UnimplementedError();
 
   @internal
+
+  /// Node for the signal
   Node? node;
 
   @internal
+
+  /// Targets for the signal
   Node? targets;
 
   @internal
+  void afterCreate(T value) {}
+
+  @internal
+  void beforeUpdate(T value) {}
+
+  @internal
+
+  /// Refresh the signal
   bool internalRefresh() => throw UnimplementedError();
 
   @internal
+
+  /// Brand symbol
   final Symbol brand = BRAND_SYMBOL;
 
   @internal
+
+  /// Get the targets for the signal
   Iterable<Listenable> readonlySignalTargets() sync* {
     final instance = this;
     for (Node? node = instance.targets; node != null; node = node.nextTarget) {
@@ -103,6 +143,8 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+
+  /// Add a dependency to the signal
   Node? addDependency() {
     final signal = this;
     if (evalContext == null) {
@@ -184,6 +226,8 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+
+  /// Subscribe to the signal
   void Function() signalSubscribe(
     void Function(T value) fn,
   ) {
@@ -201,6 +245,8 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+
+  /// Unsubscribe from the signal
   void signalUnsubscribe(Node node) {
     final signal = this;
     // Only run the unsubscribe step if the signal has any subscribers to begin with.
@@ -217,6 +263,9 @@ mixin class ReadonlySignal<T> {
       }
       if (node == signal.targets) {
         signal.targets = next;
+        if (next == null) {
+          untracked(() => unwatched?.call());
+        }
       }
     }
   }

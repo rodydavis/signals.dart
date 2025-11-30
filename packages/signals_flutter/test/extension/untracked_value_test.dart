@@ -3,7 +3,7 @@ import 'package:signals_flutter/extended.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
-  SignalsObserver.instance = null;
+  
   group('untrackedValue', () {
     test('single', () {
       final s = signal(0);

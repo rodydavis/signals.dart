@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import '../core/signals.dart';
 
 /// Helper extensions for [ReadonlySignal<double>]

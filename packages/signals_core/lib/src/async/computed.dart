@@ -1,5 +1,6 @@
 import '../core/signals.dart';
 import 'future.dart';
+import 'state.dart';
 
 /// Async Computed is syntax sugar around [FutureSignal].
 ///
@@ -18,17 +19,14 @@ FutureSignal<T> computedFrom<T, A>(
   List<ReadonlySignal<A>> signals,
   Future<T> Function(List<A> args) fn, {
   T? initialValue,
-  String? debugLabel,
-  bool autoDispose = false,
   bool lazy = true,
+  SignalOptions<AsyncState<T>>? options,
 }) {
   return FutureSignal<T>(
     () => fn(signals.map((e) => e()).toList()),
-    dependencies: signals,
     initialValue: initialValue,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
     lazy: lazy,
+    options: options,
   );
 }
 
@@ -50,17 +48,15 @@ FutureSignal<T> computedFrom<T, A>(
 FutureSignal<T> computedAsync<T>(
   Future<T> Function() fn, {
   T? initialValue,
-  String? debugLabel,
-  bool autoDispose = false,
   List<ReadonlySignal<dynamic>> dependencies = const [],
   bool lazy = true,
+  SignalOptions<AsyncState<T>>? options,
 }) {
   return FutureSignal<T>(
     fn,
-    dependencies: dependencies,
     initialValue: initialValue,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    dependencies: dependencies,
     lazy: lazy,
+    options: options,
   );
 }

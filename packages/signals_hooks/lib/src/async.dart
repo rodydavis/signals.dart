@@ -40,15 +40,18 @@ FutureSignal<T> useFutureSignal<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return futureSignal(
-      value,
-      initialValue: initialValue,
-      dependencies: dependencies,
-      lazy: lazy,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized<FutureSignal<T>>(
+    () {
+      return futureSignal<T>(
+        value,
+        initialValue: initialValue,
+        dependencies: dependencies,
+        lazy: lazy,
+        options: SignalOptions<AsyncState<T>>(name: debugLabel),
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -94,18 +97,24 @@ StreamSignal<T> useStreamSignal<T>(
 
   /// The debug label for the signal.
   String? debugLabel,
+
+  /// Options for the signal.
+  SignalOptions<T>? options,
 }) {
-  final s = useMemoized(() {
-    return streamSignal(
-      value,
-      onDone: onDone,
-      initialValue: initialValue,
-      cancelOnError: cancelOnError,
-      lazy: lazy,
-      dependencies: dependencies,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized<StreamSignal<T>>(
+    () {
+      return streamSignal<T>(
+        value,
+        onDone: onDone,
+        initialValue: initialValue,
+        cancelOnError: cancelOnError,
+        lazy: lazy,
+        dependencies: dependencies,
+        options: options ?? SignalOptions<AsyncState<T>>(name: debugLabel),
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -137,7 +146,13 @@ AsyncSignal<T> useAsyncSignal<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() => asyncSignal(value, debugLabel: debugLabel), keys);
+  final s = useMemoized<AsyncSignal<T>>(
+    () => asyncSignal<T>(
+      value,
+      options: SignalOptions<AsyncState<T>>(name: debugLabel),
+    ),
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -182,14 +197,17 @@ FutureSignal<T> useAsyncComputed<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return computedAsync(
-      value,
-      dependencies: dependencies,
-      lazy: lazy,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized<FutureSignal<T>>(
+    () {
+      return computedAsync<T>(
+        value,
+        dependencies: dependencies,
+        lazy: lazy,
+        initialValue: initialValue,
+        options: SignalOptions<AsyncState<T>>(name: debugLabel),
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }

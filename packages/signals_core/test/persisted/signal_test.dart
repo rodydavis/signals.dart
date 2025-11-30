@@ -4,9 +4,6 @@ import 'package:test/test.dart';
 // A mock store for testing
 class MockStore extends SignalsInMemoryKeyValueStore {
   @override
-  final Map<String, String?> store = {};
-
-  @override
   Future<String?> getItem(String key) async {
     return store[key];
   }
@@ -125,7 +122,10 @@ void main() {
     group('PersistedPersistedEnumSignal', () {
       test('it should persist a nullable enum value', () async {
         final signal = PersistedPersistedEnumSignal(
-            TestEnum.a, 'nullable_enum_key', TestEnum.values,);
+          TestEnum.a,
+          'nullable_enum_key',
+          TestEnum.values,
+        );
         await signal.init();
         expect(signal.value, TestEnum.a);
 
@@ -135,7 +135,10 @@ void main() {
         expect(item, '');
 
         final signal2 = PersistedPersistedEnumSignal(
-            TestEnum.a, 'nullable_enum_key', TestEnum.values,);
+          TestEnum.a,
+          'nullable_enum_key',
+          TestEnum.values,
+        );
         await signal2.init();
         expect(signal2.value, null);
       });

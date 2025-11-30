@@ -6,8 +6,6 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  SignalsObserver.instance = null;
-
   group('signal', () {
     test('should work', () {
       final a = signal(0);
@@ -122,7 +120,7 @@ void main() {
     group('dispose', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {
-          final s = signal(1, autoDispose: true);
+          final s = signal(1, options: SignalOptions(autoDispose: true));
           final dispose = s.subscribe((_) => {});
           expect(s.disposed, false);
           dispose();

@@ -2,6 +2,7 @@ export 'src/devtool.dart';
 export 'src/utils/timer.dart';
 export 'src/value/value.dart';
 export 'src/core/container.dart';
+export 'src/core/options.dart';
 export 'src/core/signals.dart';
 export 'package:preact_signals/preact_signals.dart' show SignalEffectException;
 

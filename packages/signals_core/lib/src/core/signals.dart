@@ -1,16 +1,17 @@
 // ignore_for_file: constant_identifier_names
+library;
+
 import 'package:meta/meta.dart';
 
-import '../devtool.dart';
 import '../utils/constants.dart';
-import 'dart:developer' as developer;
 import 'package:preact_signals/preact_signals.dart' as signals;
+import 'options.dart' as custom_options;
+export 'options.dart';
 // ignore: implementation_imports
 import 'package:preact_signals/src/globals.dart';
 // ignore: implementation_imports
 import 'package:preact_signals/src/node.dart';
 
-part 'observer.dart';
 part 'effect.dart';
 part 'computed.dart';
 part 'signal.dart';

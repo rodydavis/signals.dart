@@ -2,7 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  SignalsObserver.instance = null;
+  
   void testSignal(
     String message,
     ListSignal<T> Function<T>(
@@ -546,8 +546,10 @@ void main() {
     'ListSignal',
     <T>(val, {autoDispose = false, debugLabel}) => ListSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: SignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(

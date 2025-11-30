@@ -7,8 +7,7 @@ class ListSignal<E> extends Signal<List<E>>
   /// Creates a [ListSignal] with the given [value].
   ListSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   /// Inject: Update current signal value with iterable
@@ -53,8 +52,10 @@ ListSignal<T> listSignal<T>(
 }) {
   return ListSignal<T>(
     list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: SignalOptions<List<T>>(
+      name: debugLabel,
+      autoDispose: autoDispose,
+    ),
   );
 }
 
@@ -65,10 +66,12 @@ extension SignalListUtils<T> on List<T> {
     String? debugLabel,
     bool autoDispose = false,
   }) {
-    return ListSignal<T>(
+    return ListSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: SignalOptions<List<T>>(
+        name: debugLabel,
+        autoDispose: autoDispose,
+      ),
     );
   }
 }

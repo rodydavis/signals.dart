@@ -16,9 +16,12 @@ class CreateSignalExample extends StatefulWidget {
 
 class _CreateSignalExampleState extends State<CreateSignalExample>
     with SignalsMixin {
-  final counter = signal(0, debugLabel: 'Counter');
+  late final signal = createSignal(
+    0,
+    options: SignalOptions(name: 'Watch Example'),
+  );
 
-  void _incrementCounter() => counter.value++;
+  void _incrementCounter() => signal.value++;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class _CreateSignalExampleState extends State<CreateSignalExample>
             ),
             Builder(builder: (context) {
               return Text(
-                '${this.watchSignal(counter)}',
+                '${this.watchSignal(signal)}',
                 style: Theme.of(context).textTheme.headlineMedium,
               );
             }),

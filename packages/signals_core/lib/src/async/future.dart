@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../core/signals.dart';
 import 'stream.dart';
+import 'state.dart';
 
 /// {@template future}
 /// Future signals can be created by extension or method.
@@ -174,12 +175,18 @@ class FutureSignal<T> extends StreamSignal<T> {
   /// {@endtemplate}
   FutureSignal(
     Future<T> Function() fn, {
-    super.initialValue,
-    super.debugLabel,
-    super.dependencies,
-    super.lazy,
-    super.autoDispose,
-  }) : super(() => fn().asStream(), cancelOnError: true);
+    T? initialValue,
+    List<ReadonlySignal<dynamic>> dependencies = const [],
+    bool lazy = true,
+    SignalOptions<AsyncState<T>>? options,
+  }) : super(
+          () => fn().asStream(),
+          initialValue: initialValue,
+          dependencies: dependencies,
+          lazy: lazy,
+          options: options,
+          cancelOnError: true,
+        );
 
   @override
   Future<void> refresh() async {
@@ -281,17 +288,15 @@ class FutureSignal<T> extends StreamSignal<T> {
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() fn, {
   T? initialValue,
-  String? debugLabel,
   List<ReadonlySignal<dynamic>> dependencies = const [],
   bool lazy = true,
-  bool autoDispose = false,
+  SignalOptions<AsyncState<T>>? options,
 }) {
   return FutureSignal(
     fn,
     initialValue: initialValue,
-    debugLabel: debugLabel,
     dependencies: dependencies,
     lazy: lazy,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

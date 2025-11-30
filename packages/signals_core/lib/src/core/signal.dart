@@ -14,11 +14,11 @@ class Signal<T> extends signals.Signal<T>
   /// ```
   Signal(
     super.internalValue, {
-    this.debugLabel,
-    bool autoDispose = false,
-  }) {
-    this.autoDispose = autoDispose;
-    afterCreate(super.internalValue);
+    custom_options.SignalOptions<T>? options,
+  }) : super(
+          options: options,
+        ) {
+    autoDispose = options?.autoDispose ?? false;
   }
 
   /// Lazy signal that can be created with type T that
@@ -30,25 +30,23 @@ class Signal<T> extends signals.Signal<T>
   /// db.value = DatabaseConnect(...);
   /// ```
   Signal.lazy({
-    this.debugLabel,
-    bool autoDispose = false,
-  }) : super.lazy() {
-    this.autoDispose = autoDispose;
+    custom_options.SignalOptions<T>? options,
+  }) : super.lazy(
+          options: options,
+        ) {
+    autoDispose = options?.autoDispose ?? false;
   }
 
   @override
-  void afterCreate(T val) {
-    SignalsObserver.instance?.onSignalCreated(this, val);
+  void afterCreate(T value) {
     isInitialized = true;
   }
 
   @override
-  void beforeUpdate(T val) {
-    SignalsObserver.instance?.onSignalUpdated(this, val);
-  }
+  void beforeUpdate(T value) {}
 
   @override
-  final String? debugLabel;
+  String? get debugLabel => name;
 
   /// Optional method to check if to values are the same
   bool Function(T a, T b) equalityCheck = identical;
@@ -287,8 +285,7 @@ class Signal<T> extends signals.Signal<T>
 ///   @override
 ///   _CounterWidgetState createState() => _CounterWidgetState();
 /// }
-///
-/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
+/// /// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
 ///   late final counter = createSignal(0);
 ///
 ///   @override
@@ -355,13 +352,11 @@ class Signal<T> extends signals.Signal<T>
 /// {@endtemplate}
 Signal<T> signal<T>(
   T value, {
-  String? debugLabel,
-  bool autoDispose = false,
+  custom_options.SignalOptions<T>? options,
 }) {
   return Signal<T>(
     value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }
 
@@ -374,11 +369,9 @@ Signal<T> signal<T>(
 /// db.value = DatabaseConnect(...);
 /// ```
 Signal<T> lazySignal<T>({
-  String? debugLabel,
-  bool autoDispose = false,
+  custom_options.SignalOptions<T>? options,
 }) {
   return Signal<T>.lazy(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

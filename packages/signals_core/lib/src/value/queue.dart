@@ -7,21 +7,24 @@ class QueueSignal<T> extends Signal<Queue<T>>
   /// Creates a [QueueSignal] with the given [value].
   QueueSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 }
 
 /// Create an [QueueSignal] from [Queue]
 QueueSignal<T> queueSignal<T>(
-  Queue<T> list, {
+  Queue<T> queue, {
   String? debugLabel,
   bool autoDispose = false,
+  SignalOptions<Queue<T>>? options,
 }) {
   return QueueSignal<T>(
-    list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    queue,
+    options: options ??
+        SignalOptions<Queue<T>>(
+          name: debugLabel,
+          autoDispose: autoDispose,
+        ),
   );
 }
 
@@ -34,8 +37,10 @@ extension SignalQueueUtils<T> on Queue<T> {
   }) {
     return QueueSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: SignalOptions<Queue<T>>(
+        name: debugLabel,
+        autoDispose: autoDispose,
+      ),
     );
   }
 }

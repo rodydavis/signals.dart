@@ -224,12 +224,11 @@ class StreamSignal<T> extends AsyncSignal<T> {
   StreamSignal(
     Stream<T> Function() fn, {
     this.cancelOnError,
-    super.debugLabel,
     T? initialValue,
     this.dependencies = const [],
     void Function()? onDone,
     bool lazy = true,
-    super.autoDispose,
+    super.options,
   })  : _onDone = onDone,
         _stream = computed(
           () {
@@ -239,9 +238,11 @@ class StreamSignal<T> extends AsyncSignal<T> {
             return fn();
           },
         ),
-        super(initialValue != null
-            ? AsyncState.data(initialValue)
-            : AsyncState.loading(),) {
+        super(
+          initialValue != null
+              ? AsyncState.data(initialValue)
+              : AsyncState.loading(),
+        ) {
     if (!lazy) value;
   }
 
@@ -474,21 +475,19 @@ class StreamSignal<T> extends AsyncSignal<T> {
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() callback, {
   T? initialValue,
-  String? debugLabel,
   List<ReadonlySignal<dynamic>> dependencies = const [],
   void Function()? onDone,
   bool? cancelOnError,
   bool lazy = true,
-  bool autoDispose = false,
+  SignalOptions<AsyncState<T>>? options,
 }) {
-  return StreamSignal(
+  return StreamSignal<T>(
     callback,
     initialValue: initialValue,
-    debugLabel: debugLabel,
     dependencies: dependencies,
     onDone: onDone,
     cancelOnError: cancelOnError,
     lazy: lazy,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

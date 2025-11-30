@@ -1,4 +1,5 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter/widgets.dart';
 import 'package:signals_flutter/signals_core.dart';
 
 import 'base.dart';
@@ -69,17 +70,18 @@ T useSignalValue<T, S extends ReadonlySignal<T>>(
 /// ```
 Signal<T> useSignal<T>(
   T value, {
-  /// A list of objects to watch for changes.
-  ///
-  /// If any of the keys change, the signal will be re-created with the
-  /// new initial value.
-  List<Object?> keys = const <Object>[],
-
-  /// The debug label for the signal.
   String? debugLabel,
+  bool autoDispose = false,
 }) {
-  final s = useMemoized(() => signal(value, debugLabel: debugLabel), keys);
-  return useExistingSignal(s, keys: keys);
+  return use(
+    _SignalHook(
+      value,
+      options: SignalOptions<T>(
+        name: debugLabel,
+        autoDispose: autoDispose,
+      ),
+    ),
+  );
 }
 
 /// Creates a new computed signal and subscribes to it.
@@ -145,6 +147,39 @@ void useSignalEffect(
   String? debugLabel,
 }) {
   useEffect(
-      () => effect(cb, onDispose: onDispose, debugLabel: debugLabel), keys,);
+    () => effect(cb, onDispose: onDispose, debugLabel: debugLabel),
+    keys,
+  );
   return;
+}
+
+class _SignalHook<T> extends Hook<Signal<T>> {
+  const _SignalHook(this.value, {this.options});
+
+  final T value;
+  final SignalOptions<T>? options;
+
+  @override
+  _SignalHookState<T> createState() => _SignalHookState<T>();
+}
+
+class _SignalHookState<T> extends HookState<Signal<T>, _SignalHook<T>> {
+  late final Signal<T> _signal;
+
+  @override
+  void initHook() {
+    super.initHook();
+    _signal = signal<T>(hook.value, options: hook.options);
+  }
+
+  @override
+  void dispose() {
+    if (hook.options?.autoDispose == true) {
+      _signal.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Signal<T> build(BuildContext context) => _signal;
 }

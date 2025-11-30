@@ -3,7 +3,10 @@ import 'package:crud_dio/service/api_service.dart';
 import 'package:signals/signals.dart';
 
 class PostService {
-  late final posts = futureSignal(() => getPosts(), autoDispose: false);
+  late final FutureSignal<List<Post>?> posts = futureSignal(
+    getPosts,
+    options: SignalOptions(autoDispose: true),
+  );
   final post = asyncSignal<Post?>(AsyncState.data(null));
   final postAddOrEdit = asyncSignal<Post?>(AsyncState.data(null));
   final delete = asyncSignal<void>(AsyncState.data(null));

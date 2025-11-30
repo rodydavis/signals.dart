@@ -11,15 +11,20 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
   /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
   TimerSignal({
     required this.every,
-    String super.debugLabel = 'Timer',
-    super.cancelOnError,
-    super.autoDispose,
+    String debugLabel = 'Timer',
+    bool? cancelOnError,
+    bool autoDispose = false,
   }) : super(
           () => Stream<TimerSignalEvent>.periodic(
             every,
             (c) => _emit(c + 1),
           ),
           initialValue: _emit(0),
+          cancelOnError: cancelOnError,
+          options: SignalOptions<AsyncState<TimerSignalEvent>>(
+            name: debugLabel,
+            autoDispose: autoDispose,
+          ),
         );
 
   static TimerSignalEvent _emit(int count) => (

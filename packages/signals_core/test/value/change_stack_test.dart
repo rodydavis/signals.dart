@@ -2,7 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  SignalsObserver.instance = null;
+  
 
   group('ChangeStack signal tests', () {
     test(
@@ -124,8 +124,10 @@ void main() {
     'ChangeStackSignal',
     <T>(val, {autoDispose = false, debugLabel, limit}) => ChangeStackSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: SignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
       limit: limit,
     ),
   );
@@ -133,8 +135,10 @@ void main() {
     'changeStack',
     <T>(val, {autoDispose = false, debugLabel, limit}) => changeStack(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: SignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
       limit: limit,
     ),
   );

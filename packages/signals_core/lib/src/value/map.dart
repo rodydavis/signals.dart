@@ -7,8 +7,7 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
   /// Creates a [MapSignal] with the given [value].
   MapSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   /// Inject: Update current signal value with iterable
@@ -50,11 +49,15 @@ MapSignal<K, V> mapSignal<K, V>(
   Map<K, V> map, {
   String? debugLabel,
   bool autoDispose = false,
+  SignalOptions<Map<K, V>>? options,
 }) {
   return MapSignal<K, V>(
     map,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        SignalOptions<Map<K, V>>(
+          name: debugLabel,
+          autoDispose: autoDispose,
+        ),
   );
 }
 
@@ -64,11 +67,15 @@ extension SignalMapUtils<K, V> on Map<K, V> {
   MapSignal<K, V> toSignal({
     String? debugLabel,
     bool autoDispose = false,
+    SignalOptions<Map<K, V>>? options,
   }) {
-    return MapSignal<K, V>(
+    return MapSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options ??
+          SignalOptions<Map<K, V>>(
+            name: debugLabel,
+            autoDispose: autoDispose,
+          ),
     );
   }
 }

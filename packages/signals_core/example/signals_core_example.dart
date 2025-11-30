@@ -1,3 +1,4 @@
+// ignore: deprecated_member_use
 import 'dart:html';
 import 'package:signals_core/signals_core.dart';
 

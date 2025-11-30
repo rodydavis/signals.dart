@@ -4,6 +4,7 @@ import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
+import 'options.dart';
 import 'readonly.dart';
 
 /// Create a new signal that is computed based on the values of other signals.
@@ -12,21 +13,24 @@ import 'readonly.dart';
 /// updated when any signals accessed from within the callback function change.
 class Computed<T> with Listenable, ReadonlySignal<T> {
   @internal
+
+  /// The function to compute the value
   T Function() fn;
 
   @override
   final int globalId;
 
-  @override
-  Node? sources;
-
   @internal
+
+  /// Global version when the value was last computed
   int internalGlobalVersion;
 
   @override
   int flags;
 
   @internal
+
+  /// Error if the computation failed
   SignalEffectException? error;
 
   bool _isInitialized = false;
@@ -45,11 +49,32 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
     _isInitialized = true;
   }
 
-  Computed(this.fn)
-      : internalGlobalVersion = globalVersion - 1,
+  /// Computed signal name
+  final String? name;
+  final void Function()? _watched;
+  final void Function()? _unwatched;
+
+  @override
+
+  /// Callback when the signal is watched
+  void Function()? get watched => _watched;
+
+  @override
+
+  /// Callback when the signal is unwatched
+  void Function()? get unwatched => _unwatched;
+
+  /// Create a new computed signal
+  Computed(
+    this.fn, {
+    SignalOptions<T>? options,
+  })  : internalGlobalVersion = globalVersion - 1,
         flags = OUTDATED,
         version = 0,
-        globalId = ++lastGlobalId;
+        globalId = ++lastGlobalId,
+        _watched = options?.watched,
+        _unwatched = options?.unwatched,
+        name = options?.name;
 
   @override
   bool internalRefresh() {
@@ -89,9 +114,11 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
           (flags & HAS_ERROR) != 0 ||
           _internalValue != val ||
           version == 0) {
+        beforeUpdate(val);
         internalValue = val;
         flags &= ~HAS_ERROR;
         version++;
+        update();
       }
     } catch (err, stack) {
       error = SignalEffectException(err, stack);
@@ -171,6 +198,9 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   void Function() subscribe(void Function(T value) fn) {
     return signalSubscribe(fn);
   }
+
+  @internal
+  void update() {}
 }
 
 /// Create a new signal that is computed based on the values of other signals.
@@ -179,7 +209,11 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
 /// updated when any signals accessed from within the callback function change.
 ReadonlySignal<T> computed<T>(
   /// The effect callback.
-  T Function() fn,
-) {
-  return Computed<T>(fn);
+  T Function() fn, {
+  SignalOptions<T>? options,
+}) {
+  return Computed<T>(
+    fn,
+    options: options,
+  );
 }

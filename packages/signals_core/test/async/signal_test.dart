@@ -2,7 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  SignalsObserver.instance = null;
+  
   group('AsyncSignal', () {
     test('data', () async {
       final s = asyncSignal(AsyncState<int>.data(0));

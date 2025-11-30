@@ -3,7 +3,8 @@ import 'package:meta/meta.dart';
 import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
-import 'node.dart';
+
+import 'options.dart';
 
 /// Create an effect to run arbitrary code in response to signal changes.
 ///
@@ -15,29 +16,41 @@ import 'node.dart';
 /// gets disposed, whichever happens first.
 class Effect with Listenable {
   @internal
+
+  /// The effect callback
   Function()? fn;
 
   @override
   final int globalId;
 
   @internal
+
+  /// Cleanup function
   Function? cleanup;
 
-  @override
-  Node? sources;
-
   @internal
+
+  /// Next batched effect
   Effect? nextBatchedEffect;
 
   @override
   int flags;
 
-  Effect(this.fn)
-      : flags = TRACKING,
+  /// Effect name
+  final String? name;
+
+  /// Create a new effect
+  Effect(
+    this.fn, {
+    EffectOptions? options,
+  })  : flags = TRACKING,
         cleanup = null,
+        name = options?.name,
         globalId = ++lastGlobalId;
 
   @internal
+
+  /// Run the effect callback
   void callback() {
     final finish = start();
     try {
@@ -55,6 +68,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// Start the effect
   void Function() start() {
     if ((flags & RUNNING) != 0) {
       throw Exception('Cycle detected');
@@ -101,10 +116,11 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// Cleanup the effect
   void cleanupEffect() {
-    final effect = this;
-    final cleanup = effect.cleanup;
-    effect.cleanup = null;
+    final cleanup = this.cleanup;
+    this.cleanup = null;
 
     if (cleanup != null) {
       startBatch();
@@ -115,9 +131,9 @@ class Effect with Listenable {
       try {
         cleanup();
       } catch (e) {
-        effect.flags &= ~RUNNING;
-        effect.flags |= DISPOSED;
-        effect.disposeEffect();
+        flags &= ~RUNNING;
+        flags |= DISPOSED;
+        disposeEffect();
         rethrow;
       } finally {
         evalContext = prevContext;
@@ -127,29 +143,31 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// Dispose the effect
   void disposeEffect() {
-    final effect = this;
-    for (var node = effect.sources; node != null; node = node.nextSource) {
+    for (var node = sources; node != null; node = node.nextSource) {
       node.source.unsubscribeFromNode(node);
     }
-    effect.fn = null;
-    effect.sources = null;
+    fn = null;
+    sources = null;
 
-    effect.cleanupEffect();
+    cleanupEffect();
   }
 
   @internal
+
+  /// End the effect
   void endEffect(Listenable? prevContext) {
-    final effect = this;
-    if (evalContext != effect) {
+    if (evalContext != this) {
       throw Exception('Out-of-order effect');
     }
-    effect.cleanupSources();
+    cleanupSources();
     evalContext = prevContext;
 
-    effect.flags &= ~RUNNING;
-    if ((effect.flags & DISPOSED) != 0) {
-      effect.disposeEffect();
+    flags &= ~RUNNING;
+    if ((flags & DISPOSED) != 0) {
+      disposeEffect();
     }
     endBatch();
   }
@@ -165,7 +183,11 @@ class Effect with Listenable {
 /// gets disposed, whichever happens first.
 void Function() effect(
   /// The effect callback
-  Function() fn,
-) {
-  return Effect(fn)();
+  Function() fn, {
+  String? name,
+}) {
+  return Effect(
+    fn,
+    options: EffectOptions(name: name),
+  )();
 }

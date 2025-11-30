@@ -11,20 +11,20 @@ mixin TrackedSignalMixin<T> on ReadonlySignal<T> {
   T? _previousValue;
 
   @override
-  void afterCreate(T val) {
-    super.afterCreate(val);
-    _initialValue = val;
+  void afterCreate(T value) {
+    super.afterCreate(value);
+    _initialValue = value;
     _previousValue = null;
   }
 
   @override
-  void beforeUpdate(val) {
+  void beforeUpdate(T value) {
     final ready = isInitialized;
-    super.beforeUpdate(val);
+    super.beforeUpdate(value);
     if (ready) {
       _previousValue = internalValue;
     } else {
-      afterCreate(val);
+      afterCreate(value);
     }
   }
 

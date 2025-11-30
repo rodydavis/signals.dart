@@ -115,14 +115,17 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
+    SignalOptions<AsyncState<S>>? options,
   }) {
-    return _bindLocal(computedFrom<S, A>(
-      signals,
-      fn,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-      lazy: lazy,
-    ),);
+    return _bindLocal(
+      computedFrom<S, A>(
+        signals,
+        fn,
+        initialValue: initialValue,
+        lazy: lazy,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
   /// Async Computed is syntax sugar around [FutureSignal].
@@ -146,14 +149,17 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     String? debugLabel,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     bool lazy = true,
+    SignalOptions<AsyncState<S>>? options,
   }) {
-    return _bindLocal(computedAsync<S>(
-      fn,
-      dependencies: dependencies,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-      lazy: lazy,
-    ),);
+    return _bindLocal(
+      computedAsync<S>(
+        fn,
+        dependencies: dependencies,
+        initialValue: initialValue,
+        lazy: lazy,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
   /// Create a signal from a future
@@ -163,14 +169,17 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     String? debugLabel,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     bool lazy = true,
+    SignalOptions<AsyncState<S>>? options,
   }) {
-    return _bindLocal(futureSignal<S>(
-      fn,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-      dependencies: dependencies,
-      lazy: lazy,
-    ),);
+    return _bindLocal(
+      futureSignal<S>(
+        fn,
+        initialValue: initialValue,
+        dependencies: dependencies,
+        lazy: lazy,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
   /// Create a signals from a stream
@@ -182,93 +191,117 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     void Function()? onDone,
     bool? cancelOnError,
     bool lazy = true,
+    SignalOptions<AsyncState<S>>? options,
   }) {
-    return _bindLocal(streamSignal<S>(
-      callback,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-      dependencies: dependencies,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-      lazy: lazy,
-    ),);
+    return _bindLocal(
+      streamSignal<S>(
+        callback,
+        initialValue: initialValue,
+        dependencies: dependencies,
+        onDone: onDone,
+        cancelOnError: cancelOnError,
+        lazy: lazy,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
   /// Create a signal holding an async value
   AsyncSignal<S> createAsyncSignal<S>(
     AsyncState<S> value, {
     String? debugLabel,
+    SignalOptions<AsyncState<S>>? options,
   }) {
-    return _bindLocal(asyncSignal<S>(
-      value,
-      debugLabel: debugLabel,
-    ),);
+    return _bindLocal(
+      asyncSignal<S>(
+        value,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
-  /// Create a signal<T> and watch for changes
+  /// Create a `Signal<T>` and watch for changes
   Signal<V> createSignal<V>(
     V val, {
     String? debugLabel,
+    SignalOptions<V>? options,
   }) {
-    return _bindLocal(signal<V>(
-      val,
-      debugLabel: debugLabel,
-    ),);
+    return _bindLocal(
+      signal<V>(
+        val,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
-  /// Create a [ListSignal]<T> and watch for changes
+  /// Create a `ListSignal<T>` and watch for changes
   ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
+    SignalOptions<List<V>>? options,
   }) {
-    return _bindLocal(ListSignal<V>(
-      list,
-      debugLabel: debugLabel,
-    ),);
+    return _bindLocal(
+      ListSignal<V>(
+        list,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
-  /// Create a [SetSignal]<T> and watch for changes
+  /// Create a `SetSignal<T>` and watch for changes
   SetSignal<V> createSetSignal<V>(
     Set<V> set, {
     String? debugLabel,
+    SignalOptions<Set<V>>? options,
   }) {
-    return _bindLocal(SetSignal<V>(
-      set,
-      debugLabel: debugLabel,
-    ),);
+    return _bindLocal(
+      SetSignal<V>(
+        set,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
-  /// Create a [QueueSignal]<T> and watch for changes
+  /// Create a `QueueSignal<T>` and watch for changes
   QueueSignal<V> createQueueSignal<V>(
     Queue<V> queue, {
     String? debugLabel,
+    SignalOptions<Queue<V>>? options,
   }) {
-    return _bindLocal(QueueSignal<V>(
-      queue,
-      debugLabel: debugLabel,
-    ),);
+    return _bindLocal(
+      QueueSignal<V>(
+        queue,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
-  /// Create a [MapSignal]<T> and watch for changes
+  /// Create a `MapSignal<T>` and watch for changes
   MapSignal<K, V> createMapSignal<K, V>(
     Map<K, V> value, {
     String? debugLabel,
+    SignalOptions<Map<K, V>>? options,
   }) {
-    return _bindLocal(MapSignal<K, V>(
-      value,
-      debugLabel: debugLabel,
-    ),);
+    return _bindLocal(
+      MapSignal<K, V>(
+        value,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
-  /// Create a computed<T> and watch for changes
+  /// Create a `Computed<T>` and watch for changes
   Computed<V> createComputed<V>(
     V Function() cb, {
     String? debugLabel,
+    SignalOptions<V>? options,
   }) {
-    return _bindLocal(computed<V>(
-      cb,
-      debugLabel: debugLabel,
-    ),);
+    return _bindLocal(
+      computed<V>(
+        cb,
+        options: options ?? SignalOptions(name: debugLabel),
+      ),
+    );
   }
 
   S _bindLocal<V, S extends ReadonlySignal<V>>(S val) {
@@ -276,13 +309,13 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return val;
   }
 
-  /// Bind an existing signal<T> and watch for changes
+  /// Bind an existing `Signal<T>` and watch for changes
   S bindSignal<V, S extends ReadonlySignal<V>>(S val) {
     _watch(val, false);
     return val;
   }
 
-  /// Unbind an existing signal<T> changes
+  /// Unbind an existing `Signal<T>` changes
   S unbindSignal<V, S extends ReadonlySignal<V>>(S val) {
     _unwatch(val);
     return val;
@@ -293,7 +326,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return bindSignal(val).value;
   }
 
-  /// Unwatch an existing signal<T> value changes
+  /// Unwatch an existing `Signal<T>` value changes
   V unwatchSignal<V, S extends ReadonlySignal<V>>(S val) {
     return unbindSignal(val).value;
   }
@@ -344,11 +377,11 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     dynamic Function() cb, {
     String? debugLabel,
     dynamic Function()? onDispose,
+    EffectOptions? options,
   }) {
     final s = effect(
       cb,
-      debugLabel: debugLabel,
-      onDispose: onDispose,
+      options: options ?? EffectOptions(name: debugLabel, onDispose: onDispose),
     );
     _effects.add(s);
     return () {

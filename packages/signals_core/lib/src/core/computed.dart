@@ -343,11 +343,11 @@ class Computed<T> extends signals.Computed<T>
   /// {@endtemplate}
   Computed(
     super.fn, {
-    this.debugLabel,
-    bool autoDispose = false,
-  }) {
-    this.autoDispose = autoDispose;
-    SignalsObserver.instance?.onComputedCreated(this);
+    custom_options.SignalOptions<T>? options,
+  }) : super(
+          options: options,
+        ) {
+    autoDispose = options?.autoDispose ?? false;
   }
 
   /// Override the current signal with a new value as if it was created with it
@@ -369,22 +369,30 @@ class Computed<T> extends signals.Computed<T>
   }
 
   @override
-  void afterCreate(T val) {
-    SignalsObserver.instance?.onComputedCreated(this);
-  }
+  void afterCreate(T value) {}
 
   @override
-  void beforeUpdate(T val) {
-    SignalsObserver.instance?.onComputedUpdated(this, val);
-  }
+  void beforeUpdate(T value) {}
 
   @override
-  final String? debugLabel;
+  String? get debugLabel => name;
+
+  @override
+  T get value {
+    if (disposed) {
+      print(
+        'computed warning: [$globalId|$debugLabel] has been read after disposed',
+      );
+    }
+    return super.value;
+  }
 
   /// Call the computed function and update the value
   void recompute() {
     value;
-    internalValue = fn();
+    final val = fn();
+    beforeUpdate(val);
+    internalValue = val;
     flags |= OUTDATED | NOTIFIED;
 
     for (var node = targets; node != null; node = node.nextTarget) {
@@ -398,9 +406,6 @@ class Computed<T> extends signals.Computed<T>
     flags |= DISPOSED;
   }
 
-  /// Returns a readonly signal
-  ReadonlySignal<T> readonly() => this;
-
   @override
   void unsubscribeFromNode(Node node) {
     super.unsubscribeFromNode(node);
@@ -409,65 +414,37 @@ class Computed<T> extends signals.Computed<T>
     }
   }
 
-  @override
-  T get value {
-    if (disposed) {
-      print(
-        'computed warning: [$globalId|$debugLabel] has been '
-        'read after disposed: ${StackTrace.current}',
-      );
-    }
-    return super.value;
-  }
-
-  @override
-  set internalValue(T value) {
-    beforeUpdate(value);
-    super.internalValue = value;
-  }
+  /// Returns a readonly signal
+  ReadonlySignal<T> readonly() => this;
 }
 
 /// A callback that is executed inside a computed.
 typedef ComputedCallback<T> = T Function();
 
 /// {@template computed}
-/// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
+/// Data is often derived from other pieces of data. For example, we might have a `firstName` signal and a `lastName` signal, and we want to display the full name. We could create a `fullName` signal and update it whenever `firstName` or `lastName` changes, but that would be tedious and error-prone.
 ///
-/// > `Computed` class extends the [`Signal`](/core/signal/) class, so you can use it anywhere you would use a signal.
+/// Instead, we can use a `computed` signal. A `computed` signal is a signal that derives its value from other signals. It's automatically updated whenever its dependencies change.
 ///
 /// ```dart
 /// import 'package:signals/signals.dart';
 ///
-/// final name = signal("Jane");
-/// final surname = signal("Doe");
+/// final firstName = signal('Jane');
+/// final lastName = signal('Doe');
 ///
-/// final fullName = computed(() => name.value + " " + surname.value);
+/// final fullName = computed(() => '${firstName.value} ${lastName.value}');
 ///
-/// // Logs: "Jane Doe"
-/// print(fullName.value);
+/// print(fullName.value); // Prints: Jane Doe
 ///
-/// // Updates flow through computed, but only if someone
-/// // subscribes to it. More on that later.
-/// name.value = "John";
-/// // Logs: "John Doe"
-/// print(fullName.value);
+/// firstName.value = 'John';
+/// print(fullName.value); // Prints: John Doe
 /// ```
 ///
-/// Any signal that is accessed inside the `computed`'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
+/// Any signal that is read inside the `computed` callback will be added as a dependency. When any of the dependencies change, the `computed` signal will be re-evaluated.
 ///
-/// > Computed signals are both lazily evaluated and memoized
+/// Computed signals are lazy, meaning they are only re-evaluated when their value is read. If a computed signal is not read, it will not be re-evaluated.
 ///
-/// ## Force Re-evaluation
-///
-/// You can force a computed signal to re-evaluate by calling its `.recompute` method. This will re-run the computed callback and update the computed signal's value.
-///
-/// ```dart
-/// final name = signal("Jane");
-/// final surname = signal("Doe");
-/// final fullName = computed(() => name.value + " " + surname.value);
-///
-/// fullName.recompute(); // Re-runs the computed callback
-/// ```
+/// Computed signals are also memoized, meaning they cache their value and only re-evaluate when their dependencies change.
 ///
 /// ## Disposing
 ///
@@ -486,20 +463,17 @@ typedef ComputedCallback<T> = T Function();
 ///
 /// A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
 ///
-/// This means that it will no longer react to changes in its dependencies.
-///
 /// ```dart
-/// final s = computed(() => 0);
+/// final s = signal(0);
 /// s.dispose();
-/// final value = s.value; // 0
-/// final b = computed(() => s.value); // 0
-/// // b will not react to changes in s
+/// final c = computed(() => s.value);
+/// // c will not react to changes in s
 /// ```
 ///
 /// You can check if a signal is disposed by calling the `.disposed` method.
 ///
 /// ```dart
-/// final s = computed(() => 0);
+/// final s = signal(0);
 /// print(s.disposed); // false
 /// s.dispose();
 /// print(s.disposed); // true
@@ -510,37 +484,6 @@ typedef ComputedCallback<T> = T Function();
 /// You can attach a callback to a signal that will be called when the signal is destroyed.
 ///
 /// ```dart
-/// final s = computed(() => 0);
-/// s.onDispose(() => print('Signal destroyed'));
-/// s.dispose();
-/// ```
-///
-///
-/// ## Flutter
-///
-/// In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createComputed` inside a stateful widget.
-///
-/// ```dart
-/// import 'package:flutter/material.dart';
-/// import 'package:signals/signals_flutter.dart';
-///
-/// class CounterWidget extends StatefulWidget {
-///   @override
-///   _CounterWidgetState createState() => _CounterWidgetState();
-/// }
-///
-/// class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
-///   late final counter = createSignal(0);
-///   late final isEven = createComputed(() => counter.value.isEven);
-///   late final isOdd = createComputed(() => counter.value.isOdd);
-///
-///   @override
-///   Widget build(BuildContext context) {
-///     return Scaffold(
-///       body: Center(
-///         child: Column(
-///           mainAxisAlignment: MainAxisAlignment.center,
-///           children: [
 ///             Text('Counter: even=$isEven, odd=$isOdd'),
 ///             ElevatedButton(
 ///               onPressed: () => counter.value++,
@@ -601,12 +544,10 @@ typedef ComputedCallback<T> = T Function();
 /// {@endtemplate}
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
-  String? debugLabel,
-  bool autoDispose = false,
+  custom_options.SignalOptions<T>? options,
 }) {
   return Computed<T>(
     compute,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

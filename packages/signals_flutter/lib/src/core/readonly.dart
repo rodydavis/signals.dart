@@ -19,8 +19,9 @@ FlutterReadonlySignal<T> readonly<T>(
 }) {
   return signal<T>(
     value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-    runCallbackOnListen: runCallbackOnListen,
+    options: core.SignalOptions(
+      name: debugLabel,
+      autoDispose: autoDispose,
+    ),
   );
 }

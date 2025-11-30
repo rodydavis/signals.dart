@@ -7,15 +7,19 @@ abstract class ReadonlySignal<T> = signals.ReadonlySignal<T>
 /// Readonly signal mixin for adding addition helper methods
 mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
   /// Check if a signal value is set (does not subscribe)
+  @override
   bool get isInitialized;
 
   /// Internal hook for after a signal is created
+  /// Internal hook for after a signal is created
   @internal
-  void afterCreate(T val);
+  @override
+  void afterCreate(T value);
 
   /// Internal hook for after a signal is updated
   @internal
-  void beforeUpdate(T val);
+  @override
+  void beforeUpdate(T value);
 
   /// Debug label for Debug Mode
   String? get debugLabel;

@@ -1,4 +1,4 @@
-library signals_flutter;
+library;
 
 export 'signals_core.dart';
 export 'src/extensions/signal.dart';

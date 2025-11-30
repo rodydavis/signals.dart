@@ -2,7 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  SignalsObserver.instance = null;
+  
   void testSignal(
     String message,
     IterableSignal<T> Function<T>(
@@ -279,24 +279,30 @@ void main() {
     'IterableSignal',
     <T>(val, {autoDispose = false, debugLabel}) => IterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: SignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'iterableSignal',
     <T>(val, {autoDispose = false, debugLabel}) => iterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: SignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'toSignal',
     <T>(val, {autoDispose = false, debugLabel}) {
       return val.toSignal(
-        autoDispose: autoDispose,
-        debugLabel: debugLabel,
+        options: SignalOptions(
+          autoDispose: autoDispose,
+          name: debugLabel,
+        ),
       );
     },
   );

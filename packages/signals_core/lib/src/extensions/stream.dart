@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../async/connect.dart';
 import '../async/stream.dart';
+import '../async/state.dart';
 import '../core/signals.dart';
 
 /// Extension on stream to provide helpful methods for signals
@@ -23,23 +24,15 @@ extension SignalStreamUtils<T> on Stream<T> {
   /// For returning a signal with the value that can be accessed sync use
   /// stream.toSyncSignal instead.
   StreamSignal<T> toStreamSignal({
-    bool? cancelOnError,
-    String? debugLabel,
     T? initialValue,
-    bool autoDispose = false,
-    bool lazy = true,
-    List<ReadonlySignal<dynamic>> dependencies = const [],
-    void Function()? onDone,
+    bool? cancelOnError,
+    SignalOptions<AsyncState<T>>? options,
   }) {
-    return streamSignal<T>(
+    return streamSignal(
       () => this,
-      cancelOnError: cancelOnError,
-      debugLabel: debugLabel,
       initialValue: initialValue,
-      autoDispose: autoDispose,
-      lazy: lazy,
-      dependencies: dependencies,
-      onDone: onDone,
+      cancelOnError: cancelOnError,
+      options: options,
     );
   }
 

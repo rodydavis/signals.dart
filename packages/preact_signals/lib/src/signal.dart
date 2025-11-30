@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'batch.dart';
 import 'globals.dart';
 import 'node.dart';
+import 'options.dart';
 import 'readonly.dart';
 
 /// Instance of a new plain signal
@@ -30,15 +31,41 @@ class Signal<T> with ReadonlySignal<T> {
     _isInitialized = true;
   }
 
-  Signal(this._internalValue)
-      : version = 0,
-        globalId = ++lastGlobalId,
-        _isInitialized = true;
+  /// Signal name
+  final String? name;
+  final void Function()? _watched;
+  final void Function()? _unwatched;
 
-  Signal.lazy()
-      : version = 0,
+  @override
+  /// Callback when the signal is watched
+  void Function()? get watched => _watched;
+
+  @override
+  /// Callback when the signal is unwatched
+  void Function()? get unwatched => _unwatched;
+
+  /// Create a new signal
+  Signal(
+    this._internalValue, {
+    SignalOptions<T>? options,
+  })  : version = 0,
         globalId = ++lastGlobalId,
-        _isInitialized = false;
+        _isInitialized = true,
+        _watched = options?.watched,
+        _unwatched = options?.unwatched,
+        name = options?.name {
+    afterCreate(_internalValue);
+  }
+
+  /// Create a new lazy signal
+  Signal.lazy({
+    SignalOptions<T>? options,
+  })  : version = 0,
+        globalId = ++lastGlobalId,
+        _isInitialized = false,
+        _watched = options?.watched,
+        _unwatched = options?.unwatched,
+        name = options?.name;
 
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
@@ -91,11 +118,14 @@ class Signal<T> with ReadonlySignal<T> {
   }
 
   @internal
+
+  /// Set the internal value and notify listeners
   void internalSetValue(T val) {
     if (batchIteration > 100) {
       throw Exception('Cycle detected');
     }
 
+    beforeUpdate(val);
     internalValue = val;
     version++;
     globalVersion++;
@@ -114,7 +144,11 @@ class Signal<T> with ReadonlySignal<T> {
 /// Create a new plain signal
 Signal<T> signal<T>(
   /// The initial value for the signal
-  T value,
-) {
-  return Signal<T>(value);
+  T value, {
+  SignalOptions<T>? options,
+}) {
+  return Signal<T>(
+    value,
+    options: options,
+  );
 }

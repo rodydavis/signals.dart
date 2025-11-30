@@ -24,7 +24,7 @@ void main() {
   }
 
   /// Sync on user emitted value with a default emission of 'guest'
-  final user = fetch().toFutureSignal(initialValue: 'guest');
+  final user = fetch().toSignal(initialValue: 'guest');
 
   /// When user Future resolve
   final greeting = computed(() => 'Hello, ${user.value.value}');

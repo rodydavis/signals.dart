@@ -44,8 +44,10 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   }) {
     return computed(
       () => selector(this),
-      autoDispose: autoDispose ?? this.autoDispose,
-      debugLabel: debugLabel,
+      options: SignalOptions<R>(
+        name: debugLabel,
+        autoDispose: autoDispose ?? this.autoDispose,
+      ),
     );
   }
 }

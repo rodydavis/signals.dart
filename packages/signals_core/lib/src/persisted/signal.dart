@@ -9,8 +9,7 @@ class PersistedSignal<T> extends Signal<T> with PersistedSignalMixin<T> {
   /// Creates a new `PersistedSignal`.
   PersistedSignal(
     super.internalValue, {
-    super.autoDispose,
-    super.debugLabel,
+    super.options,
     required this.key,
     required this.store,
     bool autoInit = true,

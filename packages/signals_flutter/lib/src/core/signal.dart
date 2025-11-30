@@ -18,8 +18,7 @@ class FlutterSignal<T> extends core.Signal<T>
   /// ```
   FlutterSignal(
     super.internalValue, {
-    super.autoDispose,
-    super.debugLabel,
+    super.options,
     this.runCallbackOnListen = false,
   });
 
@@ -32,8 +31,7 @@ class FlutterSignal<T> extends core.Signal<T>
   /// db.value = DatabaseConnect(...);
   /// ```
   FlutterSignal.lazy({
-    super.autoDispose,
-    super.debugLabel,
+    super.options,
     this.runCallbackOnListen = false,
   }) : super.lazy();
 
@@ -52,14 +50,12 @@ class FlutterSignal<T> extends core.Signal<T>
 /// ```
 FlutterSignal<T> signal<T>(
   T value, {
-  String? debugLabel,
-  bool autoDispose = false,
   bool runCallbackOnListen = false,
+  core.SignalOptions<T>? options,
 }) {
   return FlutterSignal<T>(
     value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
     runCallbackOnListen: runCallbackOnListen,
   );
 }
@@ -73,13 +69,11 @@ FlutterSignal<T> signal<T>(
 /// db.value = DatabaseConnect(...);
 /// ```
 FlutterSignal<T> lazySignal<T>({
-  String? debugLabel,
-  bool autoDispose = false,
   bool runCallbackOnListen = false,
+  core.SignalOptions<T>? options,
 }) {
   return FlutterSignal<T>.lazy(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
     runCallbackOnListen: runCallbackOnListen,
   );
 }

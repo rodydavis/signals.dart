@@ -2,7 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  SignalsObserver.instance = null;
+  
   group('map signal', () {
     test('make sure list is the same object', () {
       final map = <String, int>{'a': 1, 'b': 2, 'c': 3};

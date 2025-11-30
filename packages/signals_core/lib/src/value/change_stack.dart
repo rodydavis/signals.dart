@@ -30,8 +30,7 @@ class ChangeStackSignal<T> extends Signal<T> with ChangeStackSignalMixin<T> {
   ChangeStackSignal(
     super.value, {
     int? limit,
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   }) {
     this.limit = limit;
   }
@@ -55,11 +54,15 @@ ChangeStackSignal<T> changeStack<T>(
   String? debugLabel,
   int? limit,
   bool autoDispose = false,
+  SignalOptions<T>? options,
 }) {
   return ChangeStackSignal<T>(
     value,
-    debugLabel: debugLabel,
     limit: limit,
-    autoDispose: autoDispose,
+    options: options ??
+        SignalOptions<T>(
+          name: debugLabel,
+          autoDispose: autoDispose,
+        ),
   );
 }

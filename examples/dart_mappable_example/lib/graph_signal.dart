@@ -5,9 +5,14 @@ import 'graph.dart';
 class GraphSignal extends Signal<Graph> implements Graph {
   GraphSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
-  });
+    String? debugLabel,
+    bool autoDispose = false,
+  }) : super(
+          options: SignalOptions(
+            name: debugLabel,
+            autoDispose: autoDispose,
+          ),
+        );
 
   @override
   Vertex? operator [](String vertexId) => value[vertexId];

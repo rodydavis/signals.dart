@@ -7,8 +7,7 @@ class SetSignal<E> extends Signal<Set<E>>
   /// Creates a [SetSignal] with the given [value].
   SetSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   /// Inject: Update current signal value with iterable
@@ -50,14 +49,18 @@ class SetSignal<E> extends Signal<Set<E>>
 
 /// Create an [SetSignal] from [Set]
 SetSignal<T> setSignal<T>(
-  Set<T> list, {
+  Set<T> set, {
   String? debugLabel,
   bool autoDispose = false,
+  SignalOptions<Set<T>>? options,
 }) {
   return SetSignal<T>(
-    list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    set,
+    options: options ??
+        SignalOptions<Set<T>>(
+          name: debugLabel,
+          autoDispose: autoDispose,
+        ),
   );
 }
 
@@ -67,11 +70,15 @@ extension SignalSetUtils<T> on Set<T> {
   SetSignal<T> toSignal({
     String? debugLabel,
     bool autoDispose = false,
+    SignalOptions<Set<T>>? options,
   }) {
     return SetSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options ??
+          SignalOptions<Set<T>>(
+            name: debugLabel,
+            autoDispose: autoDispose,
+          ),
     );
   }
 }
