@@ -1,3 +1,3 @@
-library signals_core_extended;
+library;
 
 export 'package:signals_core/extended.dart';

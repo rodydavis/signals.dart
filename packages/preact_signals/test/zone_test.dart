@@ -803,5 +803,214 @@ void main() {
       await Future.delayed(Duration.zero);
       // If leaked, it might throw or run.
     });
+
+    test('batch with async function', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() {
+        callCount++;
+        s.value;
+      });
+
+      expect(callCount, 1);
+
+      await batch(() async {
+        s.value++;
+        await Future.delayed(Duration.zero);
+        s.value++;
+      });
+
+      expect(callCount, 2);
+    });
+
+    test('Concurrent async batches', () async {
+      final s1 = signal(0);
+      final s2 = signal(0);
+      int c1 = 0;
+      int c2 = 0;
+
+      effect(() {
+        c1++;
+        s1.value;
+      });
+      effect(() {
+        c2++;
+        s2.value;
+      });
+
+      expect(c1, 1);
+      expect(c2, 1);
+
+      final f1 = batch(() async {
+        s1.value++;
+        await Future.delayed(const Duration(milliseconds: 10));
+        s1.value++;
+      });
+
+      final f2 = batch(() async {
+        s2.value++;
+        await Future.delayed(const Duration(milliseconds: 20));
+        s2.value++;
+      });
+
+      // While batches are running, no updates should happen
+      expect(c1, 1);
+      expect(c2, 1);
+
+      await f1;
+      // Batch 1 done. s1 should notify. s2 still running.
+      expect(c1, 2);
+      expect(c2, 1);
+
+      await f2;
+      // Batch 2 done. s2 should notify.
+      expect(c1, 2);
+      expect(c2, 2);
+    });
+    test('batch(async) with nested untracked(sync)', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() {
+        callCount++;
+        s.value;
+      });
+      expect(callCount, 1);
+
+      await batch(() async {
+        s.value++;
+        untracked(() {
+          s.value;
+        });
+        await Future.delayed(Duration.zero);
+        s.value++;
+      });
+
+      expect(callCount, 2);
+      expect(s.value, 2);
+    });
+
+    test('batch(async) with nested untracked(async)', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() {
+        callCount++;
+        s.value;
+      });
+      expect(callCount, 1);
+
+      await batch(() async {
+        s.value++;
+        await untracked(() async {
+          s.value;
+          await Future.delayed(Duration.zero);
+          s.value;
+        });
+        s.value++;
+      });
+
+      expect(callCount, 2);
+      expect(s.value, 2);
+    });
+
+    test('effect(async) calling batch(async)', () async {
+      final s = signal(0);
+      final s2 = signal(0);
+      int callCount = 0;
+
+      effect(() async {
+        callCount++;
+        s.value;
+
+        await batch(() async {
+          s2.value = 1;
+          await Future.delayed(Duration.zero);
+          s2.value = 2;
+        });
+      });
+
+      await Future.delayed(Duration.zero);
+      await Future.delayed(Duration.zero);
+
+      expect(callCount, 1);
+      expect(s.value, 0);
+      expect(s2.value, 2);
+
+      s.value++;
+      await Future.delayed(Duration.zero);
+      await Future.delayed(Duration.zero);
+
+      expect(callCount, 2);
+      expect(s2.value, 2);
+    });
+
+    test('batch(async) nested in batch(async)', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() {
+        callCount++;
+        s.value;
+      });
+      expect(callCount, 1);
+
+      await batch(() async {
+        s.value++;
+        await batch(() async {
+          s.value++;
+          await Future.delayed(Duration.zero);
+          s.value++;
+        });
+        s.value++;
+      });
+
+      expect(callCount, 2);
+      expect(s.value, 4);
+    });
+
+    test('batch(sync) calling batch(async) - Nested Async Batch', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() {
+        callCount++;
+        s.value;
+      });
+      expect(callCount, 1);
+
+      await batch(() {
+        s.value++;
+        return batch(() async {
+          await Future.delayed(Duration.zero);
+          s.value++;
+        });
+      });
+
+      expect(callCount, 2);
+    });
+
+    test('untracked(async) calling batch(async)', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() {
+        callCount++;
+        s.value;
+      });
+      expect(callCount, 1);
+
+      await untracked(() async {
+        await batch(() async {
+          s.value++;
+          await Future.delayed(Duration.zero);
+          s.value++;
+        });
+      });
+
+      expect(callCount, 2);
+      expect(s.value, 2);
+    });
   });
 }

@@ -34,14 +34,48 @@ const TRACKING = 1 << 5;
 
 // Effects collected into a batch.
 
-@internal
-Effect? batchedEffect;
+// Effects collected into a batch.
 
 @internal
-int batchDepth = 0;
+class BatchContext {
+  Effect? batchedEffect;
+  int batchDepth = 0;
+  int batchIteration = 0;
+}
 
 @internal
-int batchIteration = 0;
+final batchContextKey = Object();
+
+@internal
+final globalBatchContext = BatchContext();
+
+@internal
+BatchContext get batchContext =>
+    Zone.current[batchContextKey] as BatchContext? ?? globalBatchContext;
+
+@internal
+Effect? get batchedEffect => batchContext.batchedEffect;
+
+@internal
+set batchedEffect(Effect? val) {
+  batchContext.batchedEffect = val;
+}
+
+@internal
+int get batchDepth => batchContext.batchDepth;
+
+@internal
+set batchDepth(int val) {
+  batchContext.batchDepth = val;
+}
+
+@internal
+int get batchIteration => batchContext.batchIteration;
+
+@internal
+set batchIteration(int val) {
+  batchContext.batchIteration = val;
+}
 
 // Currently evaluated computed or effect.
 @internal

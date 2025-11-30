@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:meta/meta.dart';
 
 import 'effect.dart';
@@ -77,7 +78,25 @@ T batch<T>(
   if (batchDepth > 0) {
     return fn();
   }
-  /*@__INLINE__**/ startBatch();
+  if (fn is Future Function()) {
+    final context = BatchContext();
+    return runZoned(() {
+      startBatch();
+      try {
+        final result = fn();
+        if (result is Future) {
+          return result.whenComplete(endBatch) as T;
+        }
+        endBatch();
+        return result;
+      } catch (e) {
+        endBatch();
+        rethrow;
+      }
+    }, zoneValues: {batchContextKey: context},);
+  }
+
+  startBatch();
   try {
     return fn();
   } finally {
