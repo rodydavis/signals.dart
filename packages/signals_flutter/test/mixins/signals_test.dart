@@ -9,13 +9,16 @@ void main() {
   SignalsObserver.instance = null;
 
   group('SignalsMixin', () {
-    testWidgets('createSignal/createComputed return FlutterSignal/FlutterComputed', (tester) async {
+    testWidgets(
+        'createSignal/createComputed return FlutterSignal/FlutterComputed',
+        (tester) async {
       final key = GlobalKey<MixinCounterState>();
-      
+
       final widget = MixinCounter(
         key: key,
         createSource: (context, self) => self.createSignal(4),
-        createReader: (context, self) => self.createComputed(() => self.source.value * 2),
+        createReader: (context, self) =>
+            self.createComputed(() => self.source.value * 2),
       );
 
       await tester.pumpWidget(widget);
@@ -24,13 +27,15 @@ void main() {
       expect(key.currentState!.display, isInstanceOf<FlutterComputed<int>>());
     });
 
-    testWidgets('disposes created signals when widget is unmounted', (tester) async {
+    testWidgets('disposes created signals when widget is unmounted',
+        (tester) async {
       final key = GlobalKey<MixinCounterState>();
 
       final widget = MixinCounter(
         key: key,
         createSource: (context, self) => self.createSignal(4),
-        createReader: (context, self) => self.createComputed(() => self.source.value * 2),
+        createReader: (context, self) =>
+            self.createComputed(() => self.source.value * 2),
       );
 
       await tester.pumpWidget(widget);
