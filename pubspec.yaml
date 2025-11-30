@@ -32,7 +32,7 @@ workspace:
   - packages/signals_flutter
   - packages/signals_hooks
   - packages/signals_lint
-  - benchmark
+
   - examples/html_todo_app
   - examples/clean_architecture
   - examples/eval_calculator
