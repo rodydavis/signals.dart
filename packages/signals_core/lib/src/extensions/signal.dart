@@ -39,12 +39,12 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// ```
   Computed<R> select<R>(
     R Function(ReadonlySignal<T>) selector, {
-    bool autoDispose = false,
+    bool? autoDispose = false,
     String? debugLabel,
   }) {
     return computed(
       () => selector(this),
-      autoDispose: autoDispose,
+      autoDispose: autoDispose ?? this.autoDispose,
       debugLabel: debugLabel,
     );
   }

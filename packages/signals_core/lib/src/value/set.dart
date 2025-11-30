@@ -43,7 +43,7 @@ class SetSignal<E> extends Signal<Set<E>>
     return Object.hashAll([
       globalId.hashCode,
       value.hashCode,
-      for (final item in value) item.hashCode
+      for (final item in value) item.hashCode,
     ]);
   }
 }

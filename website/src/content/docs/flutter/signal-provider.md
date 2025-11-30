@@ -3,9 +3,6 @@ title: SignalProvider
 description: Pass signals around the widget tree
 sidebar:
   order: 0
-  badge:
-    text: Updated
-    variant: note
 ---
 
 SignalProvider is an [InheritedNotifier](https://api.flutter.dev/flutter/widgets/InheritedNotifier-class.html) widget that allows you to pass signals around the widget tree.

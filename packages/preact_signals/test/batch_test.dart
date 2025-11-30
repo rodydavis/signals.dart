@@ -16,7 +16,7 @@ void main() {
         batch(() {
           throw Exception('hello');
         });
-      }, throwsException);
+      }, throwsException,);
     });
 
     test('should throw non-errors thrown from the callback', () {
@@ -191,7 +191,7 @@ void main() {
           b.value++;
           throw Exception('hello');
         });
-      }, throwsException);
+      }, throwsException,);
 
       expect(spy1.calls, 1);
       expect(spy2.calls, 1);
@@ -224,7 +224,7 @@ void main() {
         batch(() {
           a.value++;
         });
-      }, throwsException);
+      }, throwsException,);
 
       expect(spy1.calls, 1);
       expect(spy2.calls, 1);

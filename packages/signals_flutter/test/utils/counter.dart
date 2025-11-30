@@ -48,7 +48,7 @@ class CounterState extends State<Counter> {
               return Watch.builder(builder: (context) {
                 widget.callback();
                 return Text('Count: $display');
-              });
+              },);
             } else {
               return Watch((context) {
                 widget.callback();
@@ -59,7 +59,7 @@ class CounterState extends State<Counter> {
             return Builder(builder: (context) {
               widget.callback();
               return Text('Count: ${display.watch(context)}');
-            });
+            },);
           }
         }(),
         floatingActionButton: FloatingActionButton(

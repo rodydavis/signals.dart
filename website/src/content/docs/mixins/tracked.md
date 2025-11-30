@@ -3,9 +3,6 @@ title: TrackedSignalMixin
 description: Mixin for a Signal that stores the initial and previous value
 sidebar:
   order: 3
-  badge:
-    text: New
-    variant: tip
 ---
 
 TrackedSignalMixin is a mixin for a Signal that stores the initial and previous value.
