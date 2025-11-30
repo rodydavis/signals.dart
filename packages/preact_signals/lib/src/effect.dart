@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'batch.dart';
@@ -43,12 +45,18 @@ class Effect with Listenable {
     try {
       if ((flags & DISPOSED) != 0) return;
       if (fn == null) return;
-      currentEffect = this;
-      final cleanup = fn!();
-      currentEffect = null;
-      if (cleanup is Function) {
-        this.cleanup = cleanup;
-      }
+      runZoned(
+        () {
+          final cleanup = fn!();
+          if (cleanup is Function) {
+            this.cleanup = cleanup;
+          }
+        },
+        zoneValues: {
+          evalContextKey: this,
+          currentEffectKey: this,
+        },
+      );
     } finally {
       finish();
     }
@@ -65,9 +73,7 @@ class Effect with Listenable {
     prepareSources();
 
     startBatch();
-    final prevContext = evalContext;
-    evalContext = this;
-    return () => endEffect(prevContext);
+    return endEffect;
   }
 
   @override
@@ -110,17 +116,17 @@ class Effect with Listenable {
       startBatch();
 
       // Run cleanup functions always outside of any context.
-      final prevContext = evalContext;
-      evalContext = null;
       try {
-        cleanup();
+        runZoned(
+          () => cleanup!(),
+          zoneValues: {evalContextKey: null},
+        );
       } catch (e) {
         effect.flags &= ~RUNNING;
         effect.flags |= DISPOSED;
         effect.disposeEffect();
         rethrow;
       } finally {
-        evalContext = prevContext;
         endBatch();
       }
     }
@@ -139,13 +145,9 @@ class Effect with Listenable {
   }
 
   @internal
-  void endEffect(Listenable? prevContext) {
+  void endEffect() {
     final effect = this;
-    if (evalContext != effect) {
-      throw Exception('Out-of-order effect');
-    }
     effect.cleanupSources();
-    evalContext = prevContext;
 
     effect.flags &= ~RUNNING;
     if ((effect.flags & DISPOSED) != 0) {

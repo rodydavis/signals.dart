@@ -2,6 +2,8 @@
 
 // An named symbol/brand for detecting Signal instances even when they weren't
 // created using the same signals library version.
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'effect.dart';
@@ -43,7 +45,10 @@ int batchIteration = 0;
 
 // Currently evaluated computed or effect.
 @internal
-Listenable? evalContext;
+final evalContextKey = Object();
+
+@internal
+Listenable? get evalContext => Zone.current[evalContextKey] as Listenable?;
 
 // A global version number for signals, used for fast-pathing repeated
 // computed.peek()/computed.value calls when nothing has changed globally.
@@ -54,4 +59,7 @@ int globalVersion = 0;
 int lastGlobalId = 0;
 
 @internal
-Effect? currentEffect;
+final currentEffectKey = Object();
+
+@internal
+Effect? get currentEffect => Zone.current[currentEffectKey] as Effect?;

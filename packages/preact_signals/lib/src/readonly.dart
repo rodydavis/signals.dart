@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'effect.dart';
@@ -46,13 +48,7 @@ mixin class ReadonlySignal<T> {
   ///
   /// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
   T peek() {
-    final prevContext = evalContext;
-    evalContext = null;
-    try {
-      return value;
-    } finally {
-      evalContext = prevContext;
-    }
+    return runZoned(() => value, zoneValues: {evalContextKey: null});
   }
 
   /// Subscribe to value changes with a dispose function
@@ -190,13 +186,7 @@ mixin class ReadonlySignal<T> {
     final signal = this;
     return effect(() {
       final value = signal.value;
-      final prevContext = evalContext;
-      evalContext = null;
-      try {
-        fn(value);
-      } finally {
-        evalContext = prevContext;
-      }
+      runZoned(() => fn(value), zoneValues: {evalContextKey: null});
     });
   }
 
