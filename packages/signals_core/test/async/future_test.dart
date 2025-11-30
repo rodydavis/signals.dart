@@ -80,30 +80,46 @@ void main() {
       Future<int> future() async {
         calls++;
         await Future.delayed(const Duration(milliseconds: 5));
-        return 10;
+        // After the first future, return another value
+        return calls == 1 ? 10 : 20;
       }
 
       final signal = futureSignal(() => future());
       expect(signal.peek().isLoading, true);
       expect(calls, 1);
 
-      await signal.future;
-
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
+      final List<AsyncState<int>> states = [];
+      addTearDown(signal.subscribe((v) => states.add(v)));
+      expect(states.length, 1);
 
       await signal.future;
 
       expect(calls, 1);
       expect(signal.value.value, 10);
       expect(signal.value.error, null);
+      expect(states.length, 2);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+      expect(states.length, 2);
 
       await signal.reload();
 
+      print(states);
+
       expect(calls, 2);
-      expect(signal.value.value, 10);
+      expect(signal.value.value, 20);
       expect(signal.value.error, null);
+
+      expect(states, <AsyncState<int>>[
+        AsyncState.loading(),
+        AsyncState.data(10),
+        AsyncState.dataReloading(10),
+        AsyncState.data(20),
+      ]);
     });
 
     test('check refresh calls', () async {
@@ -112,30 +128,44 @@ void main() {
       Future<int> future() async {
         calls++;
         await Future.delayed(const Duration(milliseconds: 5));
-        return 10;
+        // After the first future, return another value
+        return calls == 1 ? 10 : 20;
       }
 
       final signal = futureSignal(() => future());
       expect(signal.peek().isLoading, true);
       expect(calls, 1);
 
-      await signal.future;
-
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
+      final List<AsyncState<int>> states = [];
+      addTearDown(signal.subscribe((v) => states.add(v)));
+      expect(states.length, 1);
 
       await signal.future;
 
       expect(calls, 1);
       expect(signal.value.value, 10);
       expect(signal.value.error, null);
+      expect(states.length, 2);
+
+      await signal.future;
+
+      expect(calls, 1);
+      expect(signal.value.value, 10);
+      expect(signal.value.error, null);
+      expect(states.length, 2);
 
       await signal.refresh();
 
       expect(calls, 2);
-      expect(signal.value.value, 10);
+      expect(signal.value.value, 20);
       expect(signal.value.error, null);
+
+      expect(states, <AsyncState<int>>[
+        AsyncState.loading(),
+        AsyncState.data(10),
+        AsyncState.dataRefreshing(10),
+        AsyncState.data(20),
+      ]);
     });
 
     test('dependencies', () async {
