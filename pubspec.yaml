@@ -6,8 +6,23 @@ environment:
 dev_dependencies:
   combine_coverage: ^1.0.1
   lints: ^5.0.0
-  melos: ^7.0.0
   yaml: ^3.1.2
+  melos: ^7.0.0
+
+melos:
+  scripts:
+    examples:
+      exec: dart scripts/examples.dart
+    analyze:
+      run: melos exec --no-private --ignore="signals_lint" -- dart analyze .
+    get:
+      run: melos exec --depends-on="signals" -- flutter pub get
+    test:
+      run: melos exec --dir-exists="test" --no-private --ignore="signals_lint" -- flutter test --coverage
+    coverage:
+      run: melos exec -- "\$MELOS_ROOT_PATH/scripts/combine_coverage.sh"
+    docs:
+      run: dart scripts/doc_comments.dart
 
 workspace:
   - packages/preact_signals
