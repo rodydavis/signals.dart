@@ -60,8 +60,8 @@ void main() {
       Stream<int> stream() async* {
         calls++;
         await Future.delayed(const Duration(milliseconds: 5));
-        // After the first call, return another value
-        yield* _stream(value: calls == 1 ? 10 : 20);
+        // Make it behave dynamically by returning the number of times it's called times 10
+        yield* _stream(value: calls * 10);
       }
 
       final signal = streamSignal(() => stream());
@@ -92,12 +92,27 @@ void main() {
       expect(calls, 2);
       expect(signal.value.value, 20);
       expect(signal.value.error, null);
+      expect(states.length, 4);
+
+      // Make sure that the stream is triggered multiple times if calling reload while it didn't finish loading
+      await Future.wait([
+        signal.reload(),
+        signal.reload(),
+      ]);
+      await signal.future;
+
+      expect(calls, 4); // 2 more calls
+      expect(signal.value.value, 40);
+      expect(signal.value.error, null);
 
       expect(states, <AsyncState<int>>[
         AsyncState.loading(),
         AsyncState.data(10),
         AsyncState.dataReloading(10),
         AsyncState.data(20),
+        AsyncState.dataReloading(20),
+        AsyncState.dataReloading(20),
+        AsyncState.data(40),
       ]);
     });
 
@@ -107,8 +122,8 @@ void main() {
       Stream<int> stream() async* {
         calls++;
         await Future.delayed(const Duration(milliseconds: 5));
-        // After the first call, return another value
-        yield* _stream(value: calls == 1 ? 10 : 20);
+        // Make it behave dynamically by returning the number of times it's called times 10
+        yield* _stream(value: calls * 10);
       }
 
       final signal = streamSignal(() => stream());
@@ -137,12 +152,27 @@ void main() {
       expect(calls, 2);
       expect(signal.value.value, 20);
       expect(signal.value.error, null);
+      expect(states.length, 4);
+
+      // Make sure the stream is triggered multiple times if calling refresh while it didn't finish loading
+      await Future.wait([
+        signal.refresh(),
+        signal.refresh(),
+      ]);
+      await signal.future;
+
+      expect(calls, 4); // 2 more calls
+      expect(signal.value.value, 40);
+      expect(signal.value.error, null);
 
       expect(states, <AsyncState<int>>[
         AsyncState.loading(),
         AsyncState.data(10),
         AsyncState.dataRefreshing(10),
         AsyncState.data(20),
+        AsyncState.dataRefreshing(20),
+        AsyncState.dataRefreshing(20),
+        AsyncState.data(40),
       ]);
     });
 
