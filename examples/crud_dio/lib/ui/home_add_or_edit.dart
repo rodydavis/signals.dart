@@ -1,7 +1,6 @@
 import 'package:crud_dio/model/post_model.dart';
 import 'package:crud_dio/signals/post_signals.dart';
 import 'package:flutter/material.dart';
-import 'package:signals/signals_flutter.dart';
 
 class HomeAddOrEdit extends StatefulWidget {
   final int? id;
@@ -16,6 +15,7 @@ class _HomeAddEditState extends State<HomeAddOrEdit> {
   TextEditingController _title = TextEditingController();
   TextEditingController _description = TextEditingController();
   Post? _post;
+  void Function()? _cleanup;
 
   @override
   void initState() {
@@ -30,7 +30,8 @@ class _HomeAddEditState extends State<HomeAddOrEdit> {
     }
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      postsService.postAddOrEdit.subscribe((_) {
+      if (!mounted) return;
+      _cleanup = postsService.postAddOrEdit.subscribe((_) {
         final messenger = ScaffoldMessenger.of(context);
         messenger.hideCurrentSnackBar();
         if (postsService.postAddOrEdit.value.hasError) {
@@ -46,7 +47,7 @@ class _HomeAddEditState extends State<HomeAddOrEdit> {
             barrierDismissible: false,
             builder: (context) {
               return Container(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withValues(alpha: 0.5),
                 child: const Center(
                   child: CircularProgressIndicator(
                     color: Colors.white,
@@ -61,11 +62,21 @@ class _HomeAddEditState extends State<HomeAddOrEdit> {
                 backgroundColor: Colors.green, content: Text('Saved')),
           );
           Future.delayed(const Duration(seconds: 1), () {
-            Navigator.of(context).pop();
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
           });
         }
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _cleanup?.call();
+    _title.dispose();
+    _description.dispose();
+    super.dispose();
   }
 
   @override

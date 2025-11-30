@@ -3,9 +3,6 @@ title: ChangeStackSignalMixin
 description: Mixin for a Signal that adds undo and redo functionality
 sidebar:
   order: 2
-  badge:
-    text: New
-    variant: tip
 ---
 
 ChangeStackSignalMixin is a mixin for a Signal that adds undo and redo functionality.

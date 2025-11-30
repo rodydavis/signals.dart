@@ -3,9 +3,6 @@ title: EventSinkSignalMixin
 description: Mixin for a Signal that implements EventSink
 sidebar:
   order: 5
-  badge:
-    text: New
-    variant: tip
 ---
 
 EventSinkSignalMixin is a mixin for a Signal that implements [EventSink](https://api.flutter.dev/flutter/dart-async/EventSink-class.html).

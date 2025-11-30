@@ -16,12 +16,12 @@ T watchSignal<T>(
     }
   }
   if (ctx is Element) {
-    final key = ctx.hashCode;
+    final key = identityHashCode(ctx);
     if (_elementRefs[key] == null) {
       final label = [
         'widget',
         ctx.widget.runtimeType.toString(),
-        ctx.widget.hashCode.toString(),
+        identityHashCode(ctx.widget).toString(),
       ].join('=');
       final watcher = ElementWatcher(
         key,
@@ -47,6 +47,6 @@ void unwatchSignal<T>(BuildContext context, core.ReadonlySignal<T> signal) {
       return state.unwatchSignal(signal);
     }
   }
-  final key = ctx.hashCode;
+  final key = identityHashCode(ctx);
   _elementRefs.remove(key)?.unwatch(signal);
 }
