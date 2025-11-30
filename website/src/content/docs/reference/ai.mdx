@@ -1,0 +1,79 @@
+---
+title: AI Integration
+description: How to use Signals documentation with LLMs
+sidebar:
+  order: 1
+---
+
+Signals provides a dedicated endpoint for Large Language Models (LLMs) to consume the documentation. This is useful for adding the entire documentation set as context for your AI coding assistant.
+
+## Endpoint
+
+```
+https://dartsignals.dev/llms.txt
+```
+
+This endpoint returns all documentation pages concatenated into a single Markdown file.
+
+## Usage
+
+### Antigravity
+
+You can ask Antigravity to read the documentation by providing the URL in your prompt:
+
+> Read https://dartsignals.dev/llms.txt and explain how to use computed signals.
+
+### Gemini CLI
+
+You can use the Gemini CLI to query the documentation. Create a `GEMINI.md` file in the root of your project with the following content:
+
+```markdown
+https://dartsignals.dev/llms.txt
+```
+
+Then you can query the CLI:
+
+```bash
+gemini "How do I use signals?"
+```
+
+### Firebase Studio
+
+In Firebase Studio, you can download the file as context and reference it locally by adding the file as context to the chat:
+
+```bash
+curl https://dartsignals.dev/llms.txt > signals.md
+```
+
+### VS Code
+
+If you are using **GitHub Copilot** or other AI extensions in VS Code:
+
+1. Download the `llms.txt` file:
+   ```bash
+   curl https://dartsignals.dev/llms.txt > signals.md
+   ```
+2. Open the file in VS Code.
+3. Reference it in your chat (e.g., `@signals.md` or by having it open).
+
+### Zed
+
+In the [Zed](https://zed.dev) editor, you can add the documentation to the assistant's context:
+
+1. Open the Assistant panel (`Cmd-?`).
+2. Type `/file` and select the downloaded `signals.md` (or paste the content).
+3. Ask your question.
+
+### Claude Code
+
+For Claude Code, you can add the documentation to your context:
+
+```bash
+claude --context https://dartsignals.dev/llms.txt
+```
+
+### Codex
+
+For tools powered by OpenAI Codex, you can provide the documentation as context by pasting the content or referencing the file if the tool supports it.
+
+

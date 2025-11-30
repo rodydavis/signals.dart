@@ -3,9 +3,6 @@ title: ValueNotifierSignalMixin
 description: Mixin for a Signal that implements ValueNotifier
 sidebar:
   order: 1
-  badge:
-    text: New
-    variant: tip
 ---
 
 ValueNotifierSignalMixin is a mixin for a Readonly Signal that implements [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html).

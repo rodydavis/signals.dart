@@ -5,57 +5,6 @@ import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
 
-@internal
-void cleanupEffect(Effect effect) {
-  final cleanup = effect.cleanup;
-  effect.cleanup = null;
-
-  if (cleanup != null) {
-    startBatch();
-
-    // Run cleanup functions always outside of any context.
-    final prevContext = evalContext;
-    evalContext = null;
-    try {
-      cleanup();
-    } catch (e) {
-      effect.flags &= ~RUNNING;
-      effect.flags |= DISPOSED;
-      disposeEffect(effect);
-      rethrow;
-    } finally {
-      evalContext = prevContext;
-      endBatch();
-    }
-  }
-}
-
-@internal
-void disposeEffect(Effect effect) {
-  for (var node = effect.sources; node != null; node = node.nextSource) {
-    node.source.unsubscribeFromNode(node);
-  }
-  effect.fn = null;
-  effect.sources = null;
-
-  cleanupEffect(effect);
-}
-
-@internal
-void endEffect(Effect effect, Listenable? prevContext) {
-  if (evalContext != effect) {
-    throw Exception('Out-of-order effect');
-  }
-  cleanupSources(effect);
-  evalContext = prevContext;
-
-  effect.flags &= ~RUNNING;
-  if ((effect.flags & DISPOSED) != 0) {
-    disposeEffect(effect);
-  }
-  endBatch();
-}
-
 /// Create an effect to run arbitrary code in response to signal changes.
 ///
 /// An effect tracks which signals are accessed within the given callback
@@ -64,7 +13,7 @@ void endEffect(Effect effect, Listenable? prevContext) {
 /// The callback may return a cleanup function. The cleanup function gets
 /// run once, either when the callback is next called or when the effect
 /// gets disposed, whichever happens first.
-class Effect implements Listenable {
+class Effect with Listenable {
   @internal
   Function()? fn;
 
@@ -112,13 +61,13 @@ class Effect implements Listenable {
     }
     flags |= RUNNING;
     flags &= ~DISPOSED;
-    cleanupEffect(this);
-    prepareSources(this);
+    cleanupEffect();
+    prepareSources();
 
     startBatch();
     final prevContext = evalContext;
     evalContext = this;
-    return () => endEffect(this, prevContext);
+    return () => endEffect(prevContext);
   }
 
   @override
@@ -134,7 +83,7 @@ class Effect implements Listenable {
   void dispose() {
     flags |= DISPOSED;
     if (!((flags & RUNNING) != 0)) {
-      disposeEffect(this);
+      disposeEffect();
     }
   }
 
@@ -149,6 +98,60 @@ class Effect implements Listenable {
     // Return a bound function instead of a wrapper like `() => effect._dispose()`,
     // because bound functions seem to be just as fast and take up a lot less memory.
     return dispose;
+  }
+
+  @internal
+  void cleanupEffect() {
+    final effect = this;
+    final cleanup = effect.cleanup;
+    effect.cleanup = null;
+
+    if (cleanup != null) {
+      startBatch();
+
+      // Run cleanup functions always outside of any context.
+      final prevContext = evalContext;
+      evalContext = null;
+      try {
+        cleanup();
+      } catch (e) {
+        effect.flags &= ~RUNNING;
+        effect.flags |= DISPOSED;
+        effect.disposeEffect();
+        rethrow;
+      } finally {
+        evalContext = prevContext;
+        endBatch();
+      }
+    }
+  }
+
+  @internal
+  void disposeEffect() {
+    final effect = this;
+    for (var node = effect.sources; node != null; node = node.nextSource) {
+      node.source.unsubscribeFromNode(node);
+    }
+    effect.fn = null;
+    effect.sources = null;
+
+    effect.cleanupEffect();
+  }
+
+  @internal
+  void endEffect(Listenable? prevContext) {
+    final effect = this;
+    if (evalContext != effect) {
+      throw Exception('Out-of-order effect');
+    }
+    effect.cleanupSources();
+    evalContext = prevContext;
+
+    effect.flags &= ~RUNNING;
+    if ((effect.flags & DISPOSED) != 0) {
+      effect.disposeEffect();
+    }
+    endBatch();
   }
 }
 

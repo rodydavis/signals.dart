@@ -2,11 +2,6 @@
 import 'dart:convert';
 
 import 'dart:developer' as developer;
-// ignore: implementation_imports
-import 'package:preact_signals/src/listenable.dart' show listenableSources;
-
-// ignore: implementation_imports
-import 'package:preact_signals/src/readonly.dart' show readonlySignalTargets;
 
 import 'core/signals.dart';
 import 'utils/constants.dart';
@@ -105,9 +100,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
-        'targets':
-            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
+        'sources': '',
+        'targets': '',
         'value': '',
         'type': 'computed',
       };
@@ -124,9 +118,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
-        'targets':
-            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
+        'sources': '',
+        'targets': '',
         'type': 'computed',
       };
     });
@@ -141,8 +134,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': instance.peek()?.toString(),
-        'targets':
-            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
+        'targets': '',
         'type': 'signal',
       };
     });
@@ -158,8 +150,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'targets':
-            readonlySignalTargets(instance).map((e) => e.globalId).join(','),
+        'targets': '',
         'type': 'signal',
       };
     });
@@ -177,7 +168,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
+        'sources': '',
         'value': '0',
         'type': 'effect',
       };
@@ -193,7 +184,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': listenableSources(instance).map((e) => e.globalId).join(','),
+        'sources': '',
         'value': '$count',
         'type': 'effect',
       };
@@ -220,41 +211,45 @@ class DevToolsSignalsObserver implements SignalsObserver {
     final signals = _signals
         .where((e) => e.target != null)
         .map((e) => e.target!)
-        .map((e) => {
-              'id': e.globalId,
-              'label': e.debugLabel,
-              'value': e.toString(),
-              'targets':
-                  readonlySignalTargets(e).map((e) => e.globalId).join(','),
-              'type': 'signal',
-            })
+        .map(
+          (e) => {
+            'id': e.globalId,
+            'label': e.debugLabel,
+            'value': e.toString(),
+            'targets': '',
+            'type': 'signal',
+          },
+        )
         .toList();
     final computed = _computed
         .where((e) => e.target != null)
         .map((e) => e.target!)
-        .map((e) => {
-              'id': e.globalId,
-              'label': e.debugLabel,
-              'value': e.toString(),
-              'sources': listenableSources(e).map((e) => e.globalId).join(','),
-              'targets':
-                  readonlySignalTargets(e).map((e) => e.globalId).join(','),
-              'type': 'computed',
-            })
+        .map(
+          (e) => {
+            'id': e.globalId,
+            'label': e.debugLabel,
+            'value': e.toString(),
+            'sources': '',
+            'targets': '',
+            'type': 'computed',
+          },
+        )
         .toList();
     final effects = _effects
         .where((e) => e.target != null)
         .map((e) => e.target!)
-        .map((e) => {
-              'id': e.globalId,
-              'label': e.debugLabel,
-              'value': '${_effectCount[e.globalId] ?? 0}',
-              'sources': listenableSources(e).map((e) => e.globalId).join(','),
-              'type': 'effect',
-            })
+        .map(
+          (e) => {
+            'id': e.globalId,
+            'label': e.debugLabel,
+            'value': '${_effectCount[e.globalId] ?? 0}',
+            'sources': '',
+            'type': 'effect',
+          },
+        )
         .toList();
     return {
-      'nodes': [...signals, ...computed, ...effects]
+      'nodes': [...signals, ...computed, ...effects],
     };
   }
 }

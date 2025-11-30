@@ -7,15 +7,15 @@ import 'node.dart';
 import 'signal.dart';
 
 /// An interface for read-only signals.
-abstract class ReadonlySignal<T> {
+mixin class ReadonlySignal<T> {
   /// Global ID of the signal
-  int get globalId;
+  int get globalId => throw UnimplementedError();
 
   /// Compute the current value
-  T get value;
+  T get value => throw UnimplementedError();
 
   @internal
-  T get internalValue;
+  T get internalValue => throw UnimplementedError();
 
   @override
   String toString() => value.toString();
@@ -56,16 +56,18 @@ abstract class ReadonlySignal<T> {
   }
 
   /// Subscribe to value changes with a dispose function
-  void Function() subscribe(void Function(T value) fn);
+  void Function() subscribe(void Function(T value) fn) =>
+      throw UnimplementedError();
 
   @internal
-  void subscribeToNode(Node node);
+  void subscribeToNode(Node node) => throw UnimplementedError();
 
   @internal
-  void unsubscribeFromNode(Node node);
+  void unsubscribeFromNode(Node node) => throw UnimplementedError();
 
   @internal
-  static void internalSubscribe(ReadonlySignal signal, Node node) {
+  void internalSubscribe(Node node) {
+    final signal = this;
     if (signal.targets != node && node.prevTarget == null) {
       node.nextTarget = signal.targets;
       if (signal.targets != null) {
@@ -78,7 +80,7 @@ abstract class ReadonlySignal<T> {
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
   @internal
-  int get version;
+  int get version => throw UnimplementedError();
 
   @internal
   Node? node;
@@ -87,28 +89,29 @@ abstract class ReadonlySignal<T> {
   Node? targets;
 
   @internal
-  bool internalRefresh();
+  bool internalRefresh() => throw UnimplementedError();
 
   @internal
   final Symbol brand = BRAND_SYMBOL;
-}
 
-@internal
-Iterable<Listenable> readonlySignalTargets(ReadonlySignal instance) sync* {
-  for (Node? node = instance.targets; node != null; node = node.nextTarget) {
-    yield node.target;
-  }
-}
-
-@internal
-Node? addDependency(ReadonlySignal signal) {
-  if (evalContext == null) {
-    return null;
+  @internal
+  Iterable<Listenable> readonlySignalTargets() sync* {
+    final instance = this;
+    for (Node? node = instance.targets; node != null; node = node.nextTarget) {
+      yield node.target;
+    }
   }
 
-  var node = signal.node;
-  if (node == null || node.target != evalContext) {
-    /**
+  @internal
+  Node? addDependency() {
+    final signal = this;
+    if (evalContext == null) {
+      return null;
+    }
+
+    var node = signal.node;
+    if (node == null || node.target != evalContext) {
+      /**
 		 * `signal` is a new dependency. Create a new dependency node, and set it
 		 * as the tail of the current context's dependency list. e.g:
 		 *
@@ -120,33 +123,33 @@ Node? addDependency(ReadonlySignal signal) {
 		 *               ↑
 		 *              tail (evalContext._sources)
 		 */
-    node = Node()
-      ..version = 0
-      ..source = signal
-      ..prevSource = evalContext!.sources
-      ..nextSource = null
-      ..target = evalContext!
-      ..prevTarget = null
-      ..nextTarget = null
-      ..rollbackNode = node;
+      node = Node()
+        ..version = 0
+        ..source = signal
+        ..prevSource = evalContext!.sources
+        ..nextSource = null
+        ..target = evalContext!
+        ..prevTarget = null
+        ..nextTarget = null
+        ..rollbackNode = node;
 
-    if (evalContext!.sources != null) {
-      evalContext!.sources!.nextSource = node;
-    }
-    evalContext!.sources = node;
-    signal.node = node;
+      if (evalContext!.sources != null) {
+        evalContext!.sources!.nextSource = node;
+      }
+      evalContext!.sources = node;
+      signal.node = node;
 
-    // Subscribe to change notifications from this dependency if we're in an effect
-    // OR evaluating a computed signal that in turn has subscribers.
-    if ((evalContext!.flags & TRACKING) != 0) {
-      signal.subscribeToNode(node);
-    }
-    return node;
-  } else if (node.version == -1) {
-    // `signal` is an existing dependency from a previous evaluation. Reuse it.
-    node.version = 0;
+      // Subscribe to change notifications from this dependency if we're in an effect
+      // OR evaluating a computed signal that in turn has subscribers.
+      if ((evalContext!.flags & TRACKING) != 0) {
+        signal.subscribeToNode(node);
+      }
+      return node;
+    } else if (node.version == -1) {
+      // `signal` is an existing dependency from a previous evaluation. Reuse it.
+      node.version = 0;
 
-    /**
+      /**
 		 * If `node` is not already the current tail of the dependency list (i.e.
 		 * there is a next node in the list), then make the `node` the new tail. e.g:
 		 *
@@ -159,60 +162,62 @@ Node? addDependency(ReadonlySignal signal) {
 		 *                     ↑
 		 *                    tail (evalContext._sources)
 		 */
-    if (node.nextSource != null) {
-      node.nextSource!.prevSource = node.prevSource;
+      if (node.nextSource != null) {
+        node.nextSource!.prevSource = node.prevSource;
 
-      if (node.prevSource != null) {
-        node.prevSource!.nextSource = node.nextSource;
+        if (node.prevSource != null) {
+          node.prevSource!.nextSource = node.nextSource;
+        }
+
+        node.prevSource = evalContext!.sources;
+        node.nextSource = null;
+
+        evalContext!.sources!.nextSource = node;
+        evalContext!.sources = node;
       }
 
-      node.prevSource = evalContext!.sources;
-      node.nextSource = null;
-
-      evalContext!.sources!.nextSource = node;
-      evalContext!.sources = node;
+      // We can assume that the currently evaluated effect / computed signal is already
+      // subscribed to change notifications from `signal` if needed.
+      return node;
     }
-
-    // We can assume that the currently evaluated effect / computed signal is already
-    // subscribed to change notifications from `signal` if needed.
-    return node;
+    return null;
   }
-  return null;
-}
 
-@internal
-void Function() signalSubscribe<T>(
-  ReadonlySignal<T> signal,
-  void Function(T value) fn,
-) {
-  return effect(() {
-    final value = signal.value;
-    final prevContext = evalContext;
-    evalContext = null;
-    try {
-      fn(value);
-    } finally {
-      evalContext = prevContext;
-    }
-  });
-}
+  @internal
+  void Function() signalSubscribe(
+    void Function(T value) fn,
+  ) {
+    final signal = this;
+    return effect(() {
+      final value = signal.value;
+      final prevContext = evalContext;
+      evalContext = null;
+      try {
+        fn(value);
+      } finally {
+        evalContext = prevContext;
+      }
+    });
+  }
 
-@internal
-void signalUnsubscribe(ReadonlySignal signal, Node node) {
-  // Only run the unsubscribe step if the signal has any subscribers to begin with.
-  if (signal.targets != null) {
-    final prev = node.prevTarget;
-    final next = node.nextTarget;
-    if (prev != null) {
-      prev.nextTarget = next;
-      node.prevTarget = null;
-    }
-    if (next != null) {
-      next.prevTarget = prev;
-      node.nextTarget = null;
-    }
-    if (node == signal.targets) {
-      signal.targets = next;
+  @internal
+  void signalUnsubscribe(Node node) {
+    final signal = this;
+    // Only run the unsubscribe step if the signal has any subscribers to begin with.
+    if (signal.targets != null) {
+      final prev = node.prevTarget;
+      final next = node.nextTarget;
+      if (prev != null) {
+        prev.nextTarget = next;
+        node.prevTarget = null;
+      }
+      if (next != null) {
+        next.prevTarget = prev;
+        node.nextTarget = null;
+      }
+      if (node == signal.targets) {
+        signal.targets = next;
+      }
     }
   }
 }

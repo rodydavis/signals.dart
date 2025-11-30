@@ -3,9 +3,6 @@ title: Watch
 description: Watch a signal for changes in Flutter
 sidebar:
   order: 3
-  badge:
-    text: Updated
-    variant: note
 ---
 
 ## Watch

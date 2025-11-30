@@ -3,9 +3,6 @@ title: FlutterComputed
 description: Pass signals around the widget tree
 sidebar:
   order: 1
-  badge:
-    text: New
-    variant: tip
 ---
 
 Since Signals 6.0.0, you can use the `signals_flutter` import to create signals that extend [ValueListenable](https://api.flutter.dev/flutter/foundation/ValueListenable-class.html).

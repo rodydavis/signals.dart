@@ -3,9 +3,6 @@ title: ValueListenableSignalMixin
 description: Mixin for a Readonly Signal that implements ValueListenable
 sidebar:
   order: 2
-  badge:
-    text: New
-    variant: tip
 ---
 
 ValueListenableSignalMixin is a mixin for a Readonly Signal that implements [ValueListenable](https://api.flutter.dev/flutter/foundation/ValueListenable-class.html).

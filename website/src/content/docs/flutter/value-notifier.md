@@ -3,9 +3,6 @@ title: ValueNotifier
 description: Easy conversion between ValueNotifier and Signal
 sidebar:
   order: 2
-  badge:
-    text: Updated
-    variant: note
 ---
 
 :::tip

@@ -170,7 +170,7 @@ part of 'signals.dart';
 /// @link https://dartsignals.dev/core/computed
 /// {@endtemplate}
 class Computed<T> extends signals.Computed<T>
-    with ReadonlySignalMixin<T>
+    with ReadonlySignalMixin<T>, SignalsAutoDisposeMixin<T>
     implements ReadonlySignal<T> {
   /// {@template computed}
   /// Data is often derived from other pieces of existing data. The `computed` function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.

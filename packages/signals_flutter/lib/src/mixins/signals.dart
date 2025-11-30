@@ -5,6 +5,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../signals_core.dart';
+import '../core/signal.dart' show FlutterSignal;
+import '../core/computed.dart' show FlutterComputed;
 
 typedef _SignalMetadata = ({
   bool? local,
@@ -122,7 +124,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       initialValue: initialValue,
       debugLabel: debugLabel,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Async Computed is syntax sugar around [FutureSignal].
@@ -153,7 +155,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       initialValue: initialValue,
       debugLabel: debugLabel,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Create a signal from a future
@@ -170,7 +172,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       debugLabel: debugLabel,
       dependencies: dependencies,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Create a signals from a stream
@@ -191,7 +193,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       onDone: onDone,
       cancelOnError: cancelOnError,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Create a signal holding an async value
@@ -202,18 +204,18 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(asyncSignal<S>(
       value,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a signal<T> and watch for changes
-  Signal<V> createSignal<V>(
+  FlutterSignal<V> createSignal<V>(
     V val, {
     String? debugLabel,
   }) {
     return _bindLocal(signal<V>(
       val,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [ListSignal]<T> and watch for changes
@@ -224,7 +226,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(ListSignal<V>(
       list,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [SetSignal]<T> and watch for changes
@@ -235,7 +237,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(SetSignal<V>(
       set,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [QueueSignal]<T> and watch for changes
@@ -246,7 +248,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(QueueSignal<V>(
       queue,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [MapSignal]<T> and watch for changes
@@ -257,18 +259,18 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(MapSignal<K, V>(
       value,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a computed<T> and watch for changes
-  Computed<V> createComputed<V>(
+  FlutterComputed<V> createComputed<V>(
     V Function() cb, {
     String? debugLabel,
   }) {
     return _bindLocal(computed<V>(
       cb,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   S _bindLocal<V, S extends ReadonlySignal<V>>(S val) {

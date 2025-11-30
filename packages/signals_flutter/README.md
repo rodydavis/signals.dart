@@ -24,4 +24,5 @@ To start using signals, check out the full [documentation](https://dartsignals.d
 |-------------------|------------------------------------------------------------------------------------------------------------------|
 | `signals`         | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                         |
 | `signals_core`    | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
+| `signals_hooks`   | [![signals_hooks](https://img.shields.io/pub/v/signals_hooks.svg)](https://pub.dev/packages/signals_hooks)       |
 | `signals_lint`    | [![signals_lint](https://img.shields.io/pub/v/signals_lint.svg)](https://pub.dev/packages/signals_lint)          |

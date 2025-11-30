@@ -3,9 +3,6 @@ title: SinkSignalMixin
 description: Mixin for a Signal that implements Sink
 sidebar:
   order: 5
-  badge:
-    text: New
-    variant: tip
 ---
 
 SinkSignalMixin is a mixin for a Signal that implements [Sink](https://api.flutter.dev/flutter/dart-core/Sink-class.html).

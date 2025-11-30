@@ -40,7 +40,7 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
     return Object.hashAll([
       globalId.hashCode,
       value.hashCode,
-      for (final item in value.entries) item.hashCode
+      for (final item in value.entries) item.hashCode,
     ]);
   }
 }
