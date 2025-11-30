@@ -66,6 +66,9 @@ mixin class ReadonlySignal<T> {
   /// ```
   ///
   /// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   T peek() {
     final prevContext = evalContext;
     evalContext = null;
@@ -133,6 +136,9 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   Node? addDependency() {
     final signal = this;
     if (evalContext == null) {

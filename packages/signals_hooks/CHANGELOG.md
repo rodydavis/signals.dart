@@ -1,3 +1,9 @@
+## 0.4.0
+
+- Bump signals to 6.3.0
+- Change return type for useSignal to FlutterSignal
+- Change return type for useComputed to FlutterComputed
+
 ## 0.3.1
 
 - Bump signals_flutter to 6.2.0

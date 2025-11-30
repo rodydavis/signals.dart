@@ -1,6 +1,6 @@
 library;
 
-export 'package:signals_flutter/signals_flutter.dart';
+export 'package:signals/signals_flutter.dart';
 
 export 'src/core.dart';
 export 'src/value.dart';

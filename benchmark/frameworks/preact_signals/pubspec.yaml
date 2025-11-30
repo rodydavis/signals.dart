@@ -1,0 +1,8 @@
+name: preact_signals_benchmark
+environment:
+  sdk: ^3.6.0
+resolution: workspace
+dependencies:
+  preact_signals:
+    path: ../../../packages/preact_signals
+  reactivity_benchmark: ^0.0.1

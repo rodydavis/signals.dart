@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:signals_flutter/signals_core.dart';
+import 'package:signals/signals_core.dart';
 
 import 'core.dart';
 

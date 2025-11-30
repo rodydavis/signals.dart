@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:signals_flutter/signals_flutter.dart';
+import 'package:signals/signals_flutter.dart';
 
 import 'core.dart';
 
@@ -65,10 +65,7 @@ ReadonlySignal<T> useValueListenableToSignal<T>(
   SignalOptions<T>? options,
 }) {
   final s = useMemoized(
-    () => valueListenableToSignal(
-      value,
-      options: options,
-    ),
+    () => valueListenableToSignal(value, options: options),
     keys,
   );
   return useExistingSignal(s, keys: keys);
