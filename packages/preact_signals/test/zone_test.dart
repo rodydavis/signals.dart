@@ -293,5 +293,130 @@ void main() {
 
       expect(callCount, 2);
     });
+    test('Hybrid: sync effect inside async effect', () async {
+      final s = signal(0);
+      int outerCount = 0;
+      int innerCount = 0;
+
+      effect(() async {
+        outerCount++;
+        await Future.delayed(Duration.zero);
+
+        // Sync effect inside async effect
+        effect(() {
+          innerCount++;
+          s.value;
+        });
+      });
+
+      await Future.delayed(Duration.zero);
+      expect(outerCount, 1);
+      expect(innerCount, 1);
+
+      s.value++;
+      await Future.delayed(Duration.zero);
+      expect(outerCount, 1);
+      expect(innerCount, 2);
+    });
+
+    test('Hybrid: async effect inside sync effect', () async {
+      final s = signal(0);
+      int outerCount = 0;
+      int innerCount = 0;
+
+      effect(() {
+        outerCount++;
+
+        // Async effect inside sync effect
+        effect(() async {
+          innerCount++;
+          s.value;
+          await Future.delayed(Duration.zero);
+          s.value;
+        });
+      });
+
+      await Future.delayed(Duration.zero);
+      expect(outerCount, 1);
+      expect(innerCount, 1);
+
+      s.value++;
+      await Future.delayed(Duration.zero);
+      // Outer sync effect runs once (no dependencies)
+      expect(outerCount, 1);
+      // Inner async effect runs again
+      expect(innerCount, 2);
+    });
+
+    test('Hybrid: computed inside async effect', () async {
+      final s = signal(0);
+      final c = computed(() => s.value * 2);
+      int callCount = 0;
+
+      effect(() async {
+        callCount++;
+        await Future.delayed(Duration.zero);
+        c.value;
+      });
+
+      await Future.delayed(Duration.zero);
+      expect(callCount, 1);
+
+      s.value++;
+      await Future.delayed(Duration.zero);
+      expect(callCount, 2);
+    });
+
+    test('Hybrid: untracked in sync effect nested in async effect', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() async {
+        await Future.delayed(Duration.zero);
+        effect(() {
+          untracked(() {
+            s.value;
+          });
+          callCount++;
+        });
+      });
+
+      await Future.delayed(Duration.zero);
+      expect(callCount, 1);
+
+      s.value++;
+      await Future.delayed(Duration.zero);
+      expect(callCount, 1);
+    });
+
+    test('Hybrid: error in sync effect nested in async effect', () async {
+      final s = signal(0);
+      int callCount = 0;
+
+      effect(() async {
+        await Future.delayed(Duration.zero);
+        try {
+          effect(() {
+            callCount++;
+            if (s.value > 0) throw Exception('fail');
+          });
+        } catch (e) {
+          // Should catch sync error
+        }
+      });
+
+      await Future.delayed(Duration.zero);
+      expect(callCount, 1);
+
+      try {
+        s.value++;
+      } catch (e) {
+        // Expected error from effect
+      }
+      await Future.delayed(Duration.zero);
+      expect(callCount, 2); // Effect runs, throws, but is caught?
+      // Actually, effect() catches its own errors usually.
+      // But let's verify it doesn't crash the async zone.
+    });
   });
 }

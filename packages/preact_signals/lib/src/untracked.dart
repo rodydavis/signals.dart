@@ -8,5 +8,22 @@ T untracked<T>(
   /// The callback function
   T Function() fn,
 ) {
-  return runZoned(fn, zoneValues: {evalContextKey: null});
+  if (Zone.current[evalContextKey] != null) {
+    return runZoned(() {
+      final prev = globalEvalContext;
+      globalEvalContext = null;
+      try {
+        return fn();
+      } finally {
+        globalEvalContext = prev;
+      }
+    }, zoneValues: {evalContextKey: null});
+  }
+  final prev = globalEvalContext;
+  globalEvalContext = null;
+  try {
+    return fn();
+  } finally {
+    globalEvalContext = prev;
+  }
 }

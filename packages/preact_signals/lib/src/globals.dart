@@ -48,7 +48,11 @@ int batchIteration = 0;
 final evalContextKey = Object();
 
 @internal
-Listenable? get evalContext => Zone.current[evalContextKey] as Listenable?;
+Listenable? globalEvalContext;
+
+@internal
+Listenable? get evalContext =>
+    globalEvalContext ?? (Zone.current[evalContextKey] as Listenable?);
 
 // A global version number for signals, used for fast-pathing repeated
 // computed.peek()/computed.value calls when nothing has changed globally.
@@ -62,4 +66,8 @@ int lastGlobalId = 0;
 final currentEffectKey = Object();
 
 @internal
-Effect? get currentEffect => Zone.current[currentEffectKey] as Effect?;
+Effect? globalCurrentEffect;
+
+@internal
+Effect? get currentEffect =>
+    globalCurrentEffect ?? (Zone.current[currentEffectKey] as Effect?);

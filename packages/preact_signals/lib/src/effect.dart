@@ -45,18 +45,44 @@ class Effect with Listenable {
     try {
       if ((flags & DISPOSED) != 0) return;
       if (fn == null) return;
-      runZoned(
-        () {
+
+      if (fn is Future Function()) {
+        runZoned(
+          () {
+            final prevEval = globalEvalContext;
+            final prevEffect = globalCurrentEffect;
+            globalEvalContext = null;
+            globalCurrentEffect = null;
+            try {
+              final cleanup = fn!();
+              if (cleanup is Function) {
+                this.cleanup = cleanup;
+              }
+            } finally {
+              globalEvalContext = prevEval;
+              globalCurrentEffect = prevEffect;
+            }
+          },
+          zoneValues: {
+            evalContextKey: this,
+            currentEffectKey: this,
+          },
+        );
+      } else {
+        final prevEval = globalEvalContext;
+        final prevEffect = globalCurrentEffect;
+        globalEvalContext = this;
+        globalCurrentEffect = this;
+        try {
           final cleanup = fn!();
           if (cleanup is Function) {
             this.cleanup = cleanup;
           }
-        },
-        zoneValues: {
-          evalContextKey: this,
-          currentEffectKey: this,
-        },
-      );
+        } finally {
+          globalEvalContext = prevEval;
+          globalCurrentEffect = prevEffect;
+        }
+      }
     } finally {
       finish();
     }
@@ -117,10 +143,28 @@ class Effect with Listenable {
 
       // Run cleanup functions always outside of any context.
       try {
-        runZoned(
-          () => cleanup!(),
-          zoneValues: {evalContextKey: null},
-        );
+        if (Zone.current[evalContextKey] != null) {
+          runZoned(
+            () {
+              final prev = globalEvalContext;
+              globalEvalContext = null;
+              try {
+                cleanup();
+              } finally {
+                globalEvalContext = prev;
+              }
+            },
+            zoneValues: {evalContextKey: null},
+          );
+        } else {
+          final prev = globalEvalContext;
+          globalEvalContext = null;
+          try {
+            cleanup!();
+          } finally {
+            globalEvalContext = prev;
+          }
+        }
       } catch (e) {
         effect.flags &= ~RUNNING;
         effect.flags |= DISPOSED;

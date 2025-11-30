@@ -48,7 +48,24 @@ mixin class ReadonlySignal<T> {
   ///
   /// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
   T peek() {
-    return runZoned(() => value, zoneValues: {evalContextKey: null});
+    if (Zone.current[evalContextKey] != null) {
+      return runZoned(() {
+        final prev = globalEvalContext;
+        globalEvalContext = null;
+        try {
+          return value;
+        } finally {
+          globalEvalContext = prev;
+        }
+      }, zoneValues: {evalContextKey: null});
+    }
+    final prev = globalEvalContext;
+    globalEvalContext = null;
+    try {
+      return value;
+    } finally {
+      globalEvalContext = prev;
+    }
   }
 
   /// Subscribe to value changes with a dispose function
@@ -186,7 +203,25 @@ mixin class ReadonlySignal<T> {
     final signal = this;
     return effect(() {
       final value = signal.value;
-      runZoned(() => fn(value), zoneValues: {evalContextKey: null});
+      if (Zone.current[evalContextKey] != null) {
+        runZoned(() {
+          final prev = globalEvalContext;
+          globalEvalContext = null;
+          try {
+            fn(value);
+          } finally {
+            globalEvalContext = prev;
+          }
+        }, zoneValues: {evalContextKey: null});
+      } else {
+        final prev = globalEvalContext;
+        globalEvalContext = null;
+        try {
+          fn(value);
+        } finally {
+          globalEvalContext = prev;
+        }
+      }
     });
   }
 

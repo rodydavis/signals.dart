@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:meta/meta.dart';
 
 import 'batch.dart';
@@ -84,20 +82,21 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
 
     try {
       prepareSources();
-      runZoned(
-        () {
-          final val = fn();
-          if (!_isInitialized ||
-              (flags & HAS_ERROR) != 0 ||
-              _internalValue != val ||
-              version == 0) {
-            internalValue = val;
-            flags &= ~HAS_ERROR;
-            version++;
-          }
-        },
-        zoneValues: {evalContextKey: this},
-      );
+      final prev = globalEvalContext;
+      globalEvalContext = this;
+      try {
+        final val = fn();
+        if (!_isInitialized ||
+            (flags & HAS_ERROR) != 0 ||
+            _internalValue != val ||
+            version == 0) {
+          internalValue = val;
+          flags &= ~HAS_ERROR;
+          version++;
+        }
+      } finally {
+        globalEvalContext = prev;
+      }
     } catch (err, stack) {
       error = SignalEffectException(err, stack);
       flags |= HAS_ERROR;
