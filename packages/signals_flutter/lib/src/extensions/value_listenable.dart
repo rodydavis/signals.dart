@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../signals_core.dart';
+import '../core/options.dart';
 
 /// Extension on [ValueListenable] to provide helpful methods for signals
 extension SignalValueListenableUtils<T> on ValueListenable<T> {
@@ -25,7 +26,7 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
   /// @link https://dartsignals.dev/flutter/value-listenable
   /// {@endtemplate}
   ReadonlySignal<T> toSignal({
-    SignalOptions<T>? options,
+    FlutterSignalOptions<T>? options,
   }) {
     final target = signal<T>(
       value,
@@ -65,7 +66,7 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
 /// {@endtemplate}
 ReadonlySignal<T> valueListenableToSignal<T>(
   ValueListenable<T> valueListenable, {
-  SignalOptions<T>? options,
+  FlutterSignalOptions<T>? options,
 }) {
   return valueListenable.toSignal(
     options: options,

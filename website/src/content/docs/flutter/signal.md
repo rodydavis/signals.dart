@@ -39,3 +39,33 @@ class MySignal extends FlutterSignal<int> {
   MySignal(int value) : super(value);
 }
 ```
+
+## Flutter Signal Options
+
+You can pass options to `signal` to customize its behavior.
+
+```dart
+import 'package:signals/signals_flutter.dart';
+
+final count = signal(
+  0,
+  options: FlutterSignalOptions(
+    name: 'Counter',
+    runCallbackOnListen: true,
+    autoDispose: true,
+    equalityCheck: SignalEquality.custom((a, b) => a == b),
+    watched: (val) => print('watched: $val'),
+    unwatched: (val) => print('unwatched: $val'),
+  ),
+);
+```
+
+### Properties
+
+- `name`: Debug label for the signal.
+- `autoDispose`: Automatically dispose the signal when it has no listeners.
+- `equalityCheck`: Custom equality check function.
+- `watched`: Callback when the signal is watched.
+- `unwatched`: Callback when the signal is unwatched.
+- `runCallbackOnListen`: Trigger the listener immediately when it is added.
+

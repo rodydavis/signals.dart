@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:signals_flutter/signals_flutter.dart';
+import 'package:signals_flutter/signals_flutter.dart' as signals;
 
 class CreateSignalExample extends StatefulWidget {
   const CreateSignalExample({
@@ -15,8 +15,11 @@ class CreateSignalExample extends StatefulWidget {
 }
 
 class _CreateSignalExampleState extends State<CreateSignalExample>
-    with SignalsMixin {
-  late final counter = createSignal(0, debugLabel: 'Counter');
+    with signals.SignalsMixin {
+  late final counter = createSignal(
+    0,
+    options: const signals.FlutterSignalOptions(name: 'Counter'),
+  );
 
   void _incrementCounter() => counter.value++;
 

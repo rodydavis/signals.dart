@@ -27,7 +27,7 @@ Signal<T> useValueNotifierToSignal<T>(
   List<Object?> keys = const <Object>[],
 
   /// The options for the signal.
-  SignalOptions<T>? options,
+  FlutterSignalOptions<T>? options,
 }) {
   final s = useMemoized(
     () => valueNotifierToSignal(
@@ -62,7 +62,7 @@ ReadonlySignal<T> useValueListenableToSignal<T>(
   List<Object?> keys = const <Object>[],
 
   /// The options for the signal.
-  SignalOptions<T>? options,
+  FlutterSignalOptions<T>? options,
 }) {
   final s = useMemoized(
     () => valueListenableToSignal(value, options: options),

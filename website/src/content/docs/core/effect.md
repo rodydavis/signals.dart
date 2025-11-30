@@ -89,7 +89,7 @@ You can assign a name to an effect for debugging purposes.
 ```dart
 effect(() {
   print('Hello World');
-}, name: 'effect');
+}, options: EffectOptions(name: 'effect'));
 ```
 
 ## Preventing Cycles

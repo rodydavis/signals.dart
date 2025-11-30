@@ -2,12 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:signals_core/signals_core.dart' as core;
 
 import '../mixins/value_notifier.dart';
+import 'options.dart';
 import 'readonly.dart';
 
 /// Simple writeable single
 class FlutterSignal<T> extends core.Signal<T>
     with ValueNotifierSignalMixin<T>
     implements ValueNotifier<T>, FlutterReadonlySignal<T> {
+  /// Options used to create the signal
+  final FlutterSignalOptions<T>? options;
+
   /// Simple writeable signal.
   ///
   /// ```dart
@@ -18,9 +22,8 @@ class FlutterSignal<T> extends core.Signal<T>
   /// ```
   FlutterSignal(
     super.value, {
-    super.options,
-    this.runCallbackOnListen = false,
-  });
+    this.options,
+  }) : super(options: options);
 
   /// Lazy signal that can be created with type T that
   /// the value will be assigned later.
@@ -31,12 +34,11 @@ class FlutterSignal<T> extends core.Signal<T>
   /// db.value = DatabaseConnect(...);
   /// ```
   FlutterSignal.lazy({
-    super.options,
-    this.runCallbackOnListen = false,
-  }) : super.lazy();
+    this.options,
+  }) : super.lazy(options: options);
 
   @override
-  bool runCallbackOnListen;
+  bool get runCallbackOnListen => options?.runCallbackOnListen ?? false;
 }
 
 /// Simple signal that can be created with type T that
@@ -50,25 +52,17 @@ class FlutterSignal<T> extends core.Signal<T>
 /// ```
 FlutterSignal<T> signal<T>(
   T value, {
-  String? debugLabel,
-  bool autoDispose = false,
-  bool runCallbackOnListen = false,
-  core.SignalOptions<T>? options,
+  FlutterSignalOptions<T>? options,
 }) {
   return FlutterSignal<T>(
     value,
-    options: options ??
-        core.SignalOptions<T>(
-          name: debugLabel,
-          autoDispose: autoDispose,
-        ),
-    runCallbackOnListen: runCallbackOnListen,
+    options: options,
   );
 }
 
 /// Create a [Signal] that is bound to a [ValueListenable]
 FlutterSignal<T> lazySignal<T>({
-  core.SignalOptions<T>? options,
+  FlutterSignalOptions<T>? options,
 }) {
   return FlutterSignal<T>.lazy(
     options: options,

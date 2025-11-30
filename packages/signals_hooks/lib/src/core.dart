@@ -74,7 +74,7 @@ FlutterSignal<T> useSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
-  SignalOptions<T>? options,
+  FlutterSignalOptions<T>? options,
 }) {
   final s = useMemoized(() => signal<T>(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
@@ -101,7 +101,7 @@ FlutterComputed<T> useComputed<T>(
   ///
   /// If any of the keys change, the computed signal will be re-created.
   List<Object?> keys = const <Object>[],
-  SignalOptions<T>? options,
+  FlutterSignalOptions<T>? options,
 }) {
   final s = useMemoized(() => computed<T>(value, options: options), keys);
   return useExistingSignal(s, keys: keys);

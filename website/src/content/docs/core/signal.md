@@ -97,6 +97,28 @@ final s = signal(
 );
 ```
 
+### Auto Dispose
+
+If a signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
+
+```dart
+final s = signal(0, options: SignalOptions(autoDispose: true));
+```
+
+### Watch Callbacks
+
+You can provide callbacks to be notified when the signal is watched or unwatched.
+
+```dart
+final s = signal(
+  0,
+  options: SignalOptions(
+    watched: (val) => print('watched: $val'),
+    unwatched: (val) => print('unwatched: $val'),
+  ),
+);
+```
+
 ## Disposing
 
 ### Auto Dispose
