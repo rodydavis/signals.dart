@@ -32,7 +32,10 @@ workspace:
   - packages/signals_flutter
   - packages/signals_hooks
   - packages/signals_lint
-  - benchmark
+
+  - benchmark/frameworks/preact_signals
+  - benchmark/frameworks/signals_core
+
   - examples/html_todo_app
   - examples/clean_architecture
   - examples/eval_calculator

@@ -5,12 +5,17 @@ import 'effect.dart';
 import 'globals.dart';
 
 @internal
-@pragma("vm:prefer-inline")
+@pragma('vm:prefer-inline')
+@pragma('dart2js:tryInline')
+@pragma('wasm:prefer-inline')
 void startBatch() {
   batchDepth++;
 }
 
 @internal
+@pragma('vm:prefer-inline')
+@pragma('dart2js:tryInline')
+@pragma('wasm:prefer-inline')
 void endBatch() {
   if (batchDepth > 1) {
     batchDepth--;
@@ -48,7 +53,7 @@ void endBatch() {
   batchDepth--;
 
   if (hasError) {
-    throw error!;
+    throwSignalEffectException(error!);
   }
 }
 

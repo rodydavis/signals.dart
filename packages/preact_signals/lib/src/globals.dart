@@ -105,3 +105,24 @@ Effect? globalCurrentEffect;
 @internal
 Effect? get currentEffect =>
     globalCurrentEffect ?? (Zone.current[currentEffectKey] as Effect?);
+
+@internal
+@pragma('vm:never-inline')
+@pragma('dart2js:noInline')
+void throwCycleDetected() {
+  throw Exception('Cycle detected');
+}
+
+@internal
+@pragma('vm:never-inline')
+@pragma('dart2js:noInline')
+void throwOutOfOrderEffect() {
+  throw Exception('Out-of-order effect');
+}
+
+@internal
+@pragma('vm:never-inline')
+@pragma('dart2js:noInline')
+void throwSignalEffectException(Object error) {
+  throw error;
+}

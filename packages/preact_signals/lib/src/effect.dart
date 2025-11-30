@@ -46,6 +46,9 @@ class Effect with Listenable {
 
   /// Run the effect callback
   @internal
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   void callback() {
     final finish = start();
     bool isAsync = false;
@@ -109,9 +112,12 @@ class Effect with Listenable {
 
   /// Start the effect
   @internal
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   void Function() start() {
     if ((flags & RUNNING) != 0) {
-      throw Exception('Cycle detected');
+      throwCycleDetected();
     }
     flags |= RUNNING;
     flags &= ~DISPOSED;
@@ -123,6 +129,9 @@ class Effect with Listenable {
   }
 
   @override
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   void notify() {
     if (!((flags & NOTIFIED) != 0)) {
       flags |= NOTIFIED;
@@ -214,6 +223,9 @@ class Effect with Listenable {
   @internal
   void endTracking() {
     final effect = this;
+    // if (evalContext != effect) {
+    //   throwOutOfOrderEffect();
+    // }
     effect.cleanupSources();
 
     effect.flags &= ~RUNNING;

@@ -69,6 +69,9 @@ class Signal<T> with ReadonlySignal<T> {
   }
 
   @override
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   T get value {
     final node = addDependency();
     if (node != null) {
@@ -96,9 +99,12 @@ class Signal<T> with ReadonlySignal<T> {
 
   /// Set the value of the signal internally
   @internal
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   void internalSetValue(T val) {
     if (batchIteration > 100) {
-      throw Exception('Cycle detected');
+      throwCycleDetected();
     }
 
     internalValue = val;
