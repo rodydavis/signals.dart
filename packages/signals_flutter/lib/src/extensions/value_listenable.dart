@@ -39,7 +39,7 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
     }
 
     addListener(updater);
-    target.onDispose(updater);
+    target.onDispose(() => removeListener(updater));
 
     return target;
   }
