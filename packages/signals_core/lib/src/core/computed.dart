@@ -170,7 +170,7 @@ part of 'signals.dart';
 /// @link https://dartsignals.dev/core/computed
 /// {@endtemplate}
 class Computed<T> extends signals.Computed<T>
-    with ReadonlySignalMixin<T>
+    with ReadonlySignalMixin<T>, SignalsAutoDisposeMixin<T>
     implements ReadonlySignal<T> {
   /// {@macro computed}
   Computed(

@@ -13,8 +13,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with SignalsMixin {
-  late final counter = this.createSignal(0);
-  late final counterText = this.createComputed(() => counter.value.toString());
+  late final counter = createSignal(0);
+  late final counterText = createComputed(() => counter.value.toString());
 
   @override
   Widget build(BuildContext context) {

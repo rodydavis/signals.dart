@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 
 import 'effect.dart';
 import 'globals.dart';
-import 'listenable.dart';
 
 @internal
 @pragma("vm:prefer-inline")
@@ -17,7 +16,7 @@ void endBatch() {
     return;
   }
 
-  Object? error;
+  SignalEffectException? error;
   bool hasError = false;
 
   while (batchedEffect != null) {
@@ -31,12 +30,12 @@ void endBatch() {
       effect.nextBatchedEffect = null;
       effect.flags &= ~NOTIFIED;
 
-      if (!((effect.flags & DISPOSED) != 0) && needsToRecompute(effect)) {
+      if (!((effect.flags & DISPOSED) != 0) && effect.needsToRecompute()) {
         try {
           effect.callback();
-        } catch (err) {
+        } catch (err, stack) {
           if (!hasError) {
-            error = err;
+            error = SignalEffectException(err, stack);
             hasError = true;
           }
         }
@@ -50,6 +49,18 @@ void endBatch() {
   if (hasError) {
     throw error!;
   }
+}
+
+/// Error for when a effect fails to run the callback
+class SignalEffectException implements Exception {
+  /// Error during callback
+  Object? error;
+
+  /// StackTrace for where the error started
+  StackTrace? stackTrace;
+
+  /// Error for when a effect fails to run the callback
+  SignalEffectException(this.error, [this.stackTrace]);
 }
 
 /// Combine multiple value updates into one "commit" at the end of the provided callback.

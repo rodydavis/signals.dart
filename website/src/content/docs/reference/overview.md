@@ -2,7 +2,7 @@
 title: Overview
 description: An overview of the signals library
 sidebar:
-  order: 1
+  order: 2
 ---
 
 Signals are not new and have been around for a long time. They are also known as [signals](https://en.wikipedia.org/wiki/Signals_and_slots) or [observables](https://en.wikipedia.org/wiki/Observable_pattern).

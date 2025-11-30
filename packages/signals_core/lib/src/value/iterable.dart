@@ -21,7 +21,7 @@ class IterableSignal<E> extends Signal<Iterable<E>>
     return Object.hashAll([
       globalId.hashCode,
       value.hashCode,
-      for (final item in value) item.hashCode
+      for (final item in value) item.hashCode,
     ]);
   }
 }

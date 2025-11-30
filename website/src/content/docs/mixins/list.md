@@ -3,9 +3,6 @@ title: ListSignalMixin
 description: Mixin for a Signal that adds reactive methods for List
 sidebar:
   order: 4
-  badge:
-    text: New
-    variant: tip
 ---
 
 ListSignalMixin is a mixin for a Signal that adds reactive methods for [List](https://api.flutter.dev/flutter/dart-core/List-class.html).

@@ -113,11 +113,13 @@ class Effect extends signals.Effect {
   Effect(
     super.fn, {
     this.debugLabel,
-  });
+  }) {
+    SignalsObserver.instance?.onEffectCreated(this);
+  }
 
   @override
   void Function() call() {
-    SignalsObserver.instance?.onEffectCreated(this);
+    SignalsObserver.instance?.onEffectCalled(this);
     return super.call();
   }
 

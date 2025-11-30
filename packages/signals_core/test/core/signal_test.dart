@@ -4,8 +4,6 @@ import 'dart:core';
 
 import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
-import 'package:preact_signals/src/listenable.dart';
-import 'package:preact_signals/src/readonly.dart' hide ReadonlySignal;
 
 void main() {
   SignalsObserver.instance = null;
@@ -66,19 +64,19 @@ void main() {
       });
       instance();
 
-      expect(listenableSources(instance).contains(a), true);
-      expect(listenableSources(instance).contains(b), false);
-      expect(readonlySignalTargets(a).contains(instance), true);
-      expect(readonlySignalTargets(b).contains(instance), false);
+      expect(instance.listenableSources().contains(a), true);
+      expect(instance.listenableSources().contains(b), false);
+      expect(a.readonlySignalTargets().contains(instance), true);
+      expect(b.readonlySignalTargets().contains(instance), false);
       expect(a.version, 0);
 
       a.value++;
       instance.dispose();
 
-      expect(listenableSources(instance).contains(a), false);
-      expect(listenableSources(instance).contains(b), false);
-      expect(readonlySignalTargets(a).contains(instance), false);
-      expect(readonlySignalTargets(b).contains(instance), false);
+      expect(instance.listenableSources().contains(a), false);
+      expect(instance.listenableSources().contains(b), false);
+      expect(a.readonlySignalTargets().contains(instance), false);
+      expect(b.readonlySignalTargets().contains(instance), false);
       expect(a.version, 1);
     });
 

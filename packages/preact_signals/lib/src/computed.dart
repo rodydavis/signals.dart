@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
@@ -9,7 +10,7 @@ import 'readonly.dart';
 ///
 /// The returned computed signal is read-only, and its value is automatically
 /// updated when any signals accessed from within the callback function change.
-class Computed<T> extends ReadonlySignal<T> implements Listenable {
+class Computed<T> with Listenable, ReadonlySignal<T> {
   @internal
   T Function() fn;
 
@@ -26,7 +27,7 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
   int flags;
 
   @internal
-  Object? error;
+  SignalEffectException? error;
 
   bool _isInitialized = false;
 
@@ -52,38 +53,38 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
 
   @override
   bool internalRefresh() {
-    this.flags &= ~NOTIFIED;
+    flags &= ~NOTIFIED;
 
-    if ((this.flags & RUNNING) != 0) {
+    if ((flags & RUNNING) != 0) {
       return false;
     }
 
     // If this computed signal has subscribed to updates from its dependencies
     // (TRACKING flag set) and none of them have notified about changes (OUTDATED
     // flag not set), then the computed value can't have changed.
-    if ((this.flags & (OUTDATED | TRACKING)) == TRACKING) {
+    if ((flags & (OUTDATED | TRACKING)) == TRACKING) {
       return true;
     }
-    this.flags &= ~OUTDATED;
+    flags &= ~OUTDATED;
 
-    if (this.internalGlobalVersion == globalVersion) {
+    if (internalGlobalVersion == globalVersion) {
       return true;
     }
-    this.internalGlobalVersion = globalVersion;
+    internalGlobalVersion = globalVersion;
 
     // Mark this computed signal running before checking the dependencies for value
     // changes, so that the RUNNING flag can be used to notice cyclical dependencies.
-    this.flags |= RUNNING;
-    if (version > 0 && !needsToRecompute(this)) {
-      this.flags &= ~RUNNING;
+    flags |= RUNNING;
+    if (version > 0 && !needsToRecompute()) {
+      flags &= ~RUNNING;
       return true;
     }
 
     final prevContext = evalContext;
     try {
-      prepareSources(this);
+      prepareSources();
       evalContext = this;
-      final val = this.fn();
+      final val = fn();
       if (!_isInitialized ||
           (flags & HAS_ERROR) != 0 ||
           _internalValue != val ||
@@ -92,13 +93,13 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
         flags &= ~HAS_ERROR;
         version++;
       }
-    } catch (err) {
-      error = err;
+    } catch (err, stack) {
+      error = SignalEffectException(err, stack);
       flags |= HAS_ERROR;
       version++;
     }
     evalContext = prevContext;
-    cleanupSources(this);
+    cleanupSources();
     flags &= ~RUNNING;
     return true;
   }
@@ -114,14 +115,14 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
         node.source.subscribeToNode(node);
       }
     }
-    ReadonlySignal.internalSubscribe(this, node);
+    internalSubscribe(node);
   }
 
   @override
   void unsubscribeFromNode(Node node) {
     // Only run the unsubscribe step if the computed signal has any subscribers.
     if (targets != null) {
-      signalUnsubscribe(this, node);
+      signalUnsubscribe(node);
 
       // Computed signal unsubscribes from its dependencies when it loses its last subscriber.
       // This makes it possible for unreferences subgraphs of computed signals to get garbage collected.
@@ -152,7 +153,7 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
       throw Exception('Cycle detected');
     }
 
-    final node = addDependency(this);
+    final node = addDependency();
     internalRefresh();
     if (node != null) {
       node.version = version;
@@ -168,7 +169,7 @@ class Computed<T> extends ReadonlySignal<T> implements Listenable {
 
   @override
   void Function() subscribe(void Function(T value) fn) {
-    return signalSubscribe(this, fn);
+    return signalSubscribe(fn);
   }
 }
 

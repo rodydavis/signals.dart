@@ -6,7 +6,7 @@ import 'node.dart';
 import 'readonly.dart';
 
 /// Instance of a new plain signal
-class Signal<T> extends ReadonlySignal<T> {
+class Signal<T> with ReadonlySignal<T> {
   @override
   final int globalId;
 
@@ -52,26 +52,26 @@ class Signal<T> extends ReadonlySignal<T> {
 
   @override
   void subscribeToNode(Node node) {
-    ReadonlySignal.internalSubscribe(this, node);
+    internalSubscribe(node);
   }
 
   @override
   void unsubscribeFromNode(Node node) {
-    signalUnsubscribe(this, node);
+    signalUnsubscribe(node);
   }
 
   @override
   void Function() subscribe(void Function(T value) fn) {
-    return signalSubscribe(this, fn);
+    return signalSubscribe(fn);
   }
 
   @override
   T get value {
-    final node = addDependency(this);
+    final node = addDependency();
     if (node != null) {
-      node.version = this.version;
+      node.version = version;
     }
-    return this.internalValue;
+    return internalValue;
   }
 
   /// Set the current value by a setter
@@ -83,7 +83,7 @@ class Signal<T> extends ReadonlySignal<T> {
     /// Skip equality check and update the value
     bool force = false,
   }) {
-    if (force || !isInitialized || val != this.internalValue) {
+    if (force || !isInitialized || val != internalValue) {
       internalSetValue(val);
       return true;
     }
@@ -96,8 +96,8 @@ class Signal<T> extends ReadonlySignal<T> {
       throw Exception('Cycle detected');
     }
 
-    this.internalValue = val;
-    this.version++;
+    internalValue = val;
+    version++;
     globalVersion++;
 
     startBatch();

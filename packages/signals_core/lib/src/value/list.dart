@@ -40,7 +40,7 @@ class ListSignal<E> extends Signal<List<E>>
     return Object.hashAll([
       globalId.hashCode,
       value.hashCode,
-      for (final item in value) item.hashCode
+      for (final item in value) item.hashCode,
     ]);
   }
 }

@@ -1,6 +1,4 @@
 import 'package:signals_core/signals_core.dart';
-import 'package:preact_signals/src/listenable.dart';
-import 'package:preact_signals/src/readonly.dart' hide ReadonlySignal;
 import 'package:test/test.dart';
 
 void main() {
@@ -43,18 +41,18 @@ void main() {
       });
       instance();
 
-      expect(listenableSources(instance).contains(a), true);
-      expect(listenableSources(instance).contains(b), false);
-      expect(readonlySignalTargets(a).contains(instance), true);
-      expect(readonlySignalTargets(b).contains(instance), false);
-      expect(listenableSources(a).contains(c), true);
+      expect(instance.listenableSources().contains(a), true);
+      expect(instance.listenableSources().contains(b), false);
+      expect(a.readonlySignalTargets().contains(instance), true);
+      expect(b.readonlySignalTargets().contains(instance), false);
+      expect(a.listenableSources().contains(c), true);
 
       instance.disposed = true;
 
-      expect(listenableSources(instance).contains(a), false);
-      expect(listenableSources(instance).contains(b), false);
-      expect(readonlySignalTargets(a).contains(instance), false);
-      expect(readonlySignalTargets(b).contains(instance), false);
+      expect(instance.listenableSources().contains(a), false);
+      expect(instance.listenableSources().contains(b), false);
+      expect(a.readonlySignalTargets().contains(instance), false);
+      expect(b.readonlySignalTargets().contains(instance), false);
     });
 
     group('dispose', () {
@@ -233,18 +231,18 @@ void main() {
       });
 
       test('should throw when evaluation throws', () {
-        final s = computed(() => throw Error());
+        final s = computed(() => throw Exception());
 
-        expect(() => s.peek(), throwsA(isA<Error>()));
+        expect(() => s.peek(), throwsException);
       });
 
       test(
           "should throw when previous evaluation threw and dependencies haven't changed",
           () {
-        final s = computed(() => throw Error());
+        final s = computed(() => throw Exception());
 
-        expect(() => s.value, throwsA(isA<Error>()));
-        expect(() => s.peek(), throwsA(isA<Error>()));
+        expect(() => s.value, throwsException);
+        expect(() => s.peek(), throwsException);
       });
 
       test('read after disposed', () {
