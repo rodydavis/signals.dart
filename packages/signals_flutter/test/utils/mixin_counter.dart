@@ -19,7 +19,9 @@ class MixinCounter extends StatefulWidget {
   final Signal<int> Function(BuildContext context, MixinCounterState self)
       createSource;
   final ReadonlySignal<int> Function(
-      BuildContext context, MixinCounterState self)? createReader;
+    BuildContext context,
+    MixinCounterState self,
+  )? createReader;
 
   @override
   State<MixinCounter> createState() => MixinCounterState();

@@ -124,7 +124,8 @@ String updateComment(
       padding = line.substring(0, line.indexOf('///'));
       out.add('$padding$startToken');
       out.addAll(
-          docToComment(replace, link).split('\n').map((e) => '$padding$e'));
+        docToComment(replace, link).split('\n').map((e) => '$padding$e'),
+      );
       out.add('$padding$endToken');
     } else if (line.contains(endToken)) {
       inside = false;

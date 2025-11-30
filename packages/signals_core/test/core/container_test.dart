@@ -75,9 +75,12 @@ void main() {
     });
 
     test('effect loop', () {
-      final counters = signalContainer<int, int>((e) {
-        return signal(e);
-      }, cache: true);
+      final counters = signalContainer<int, int>(
+        (e) {
+          return signal(e);
+        },
+        cache: true,
+      );
 
       int count = 0;
       effect(() {
