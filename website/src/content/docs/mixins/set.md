@@ -3,9 +3,6 @@ title: SetSignalMixin
 description: Mixin for a Signal that adds reactive methods for Set
 sidebar:
   order: 4
-  badge:
-    text: New
-    variant: tip
 ---
 
 SetSignalMixin is a mixin for a Signal that adds reactive methods for [Set](https://api.flutter.dev/flutter/dart-core/Set-class.html).

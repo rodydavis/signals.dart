@@ -3,9 +3,6 @@ title: IterableSignalMixin
 description: Mixin for a Signal that adds reactive methods for Iterable
 sidebar:
   order: 4
-  badge:
-    text: New
-    variant: tip
 ---
 
 IterableSignalMixin is a mixin for a Signal that adds reactive methods for [Iterable](https://api.flutter.dev/flutter/dart-core/Iterable-class.html).

@@ -4,13 +4,13 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.5.0
 
 dependencies:
   flutter:
     sdk: flutter
   signals: ^6.0.0
-  rxdart: ^0.27.7
+  rxdart: ^0.28.0
   flutter_xlider: ^3.5.0
   layout: ^1.0.5
   http: ^1.2.1
@@ -21,7 +21,9 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.4.9
   dart_mappable_builder: ^4.2.3
-  flutter_lints: ^3.0.2
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
+
+resolution: workspace

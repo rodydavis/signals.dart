@@ -3,9 +3,6 @@ title: QueueSignalMixin
 description: Mixin for a Signal that adds reactive methods for Queue
 sidebar:
   order: 4
-  badge:
-    text: New
-    variant: tip
 ---
 
 QueueSignalMixin is a mixin for a Signal that adds reactive methods for [Queue](https://api.flutter.dev/flutter/dart-collection/Queue-class.html).

@@ -10,10 +10,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/starlight": "^0.28.6",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/starlight": "^0.37.0",
     "@fontsource/ibm-plex-serif": "^5.0.8",
-    "astro": "^4.16.9",
+    "astro": "^5.16.3",
     "sharp": "^0.32.6",
     "typescript": "^5.3.2"
   }

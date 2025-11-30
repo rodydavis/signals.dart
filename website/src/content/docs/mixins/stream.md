@@ -3,9 +3,6 @@ title: StreamSignalMixin
 description: Mixin for a Signal that adds reactive methods for Stream
 sidebar:
   order: 4
-  badge:
-    text: New
-    variant: tip
 ---
 
 StreamSignalMixin is a mixin for a Signal that adds reactive methods for [Stream](https://api.flutter.dev/flutter/dart-async/Stream-class.html).
