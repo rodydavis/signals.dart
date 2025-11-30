@@ -77,7 +77,7 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
   S call(Arg arg) {
     if (cache) {
       return store.putIfAbsent(arg, () {
-        final t = _create(arg);
+        final t = untracked(() => _create(arg));
         if (t is SignalsAutoDisposeMixin) {
           (t as SignalsAutoDisposeMixin).onDispose(() => store.remove(arg));
         }
