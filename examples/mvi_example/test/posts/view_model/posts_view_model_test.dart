@@ -29,7 +29,7 @@ void main() {
   test('test FetchPosts event success', () {
     fakeAsync((async) {
       final posts = [
-        const Post(userId: 1, id: 1, title: 'title', body: 'body')
+        const Post(userId: 1, id: 1, title: 'title', body: 'body'),
       ];
 
       when(() => postsRepository.fetchPosts()).thenAnswer(

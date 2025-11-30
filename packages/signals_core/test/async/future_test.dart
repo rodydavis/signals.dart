@@ -141,12 +141,17 @@ void main() {
     test('dependencies', () async {
       final prefix = signal('a');
       final val = signal(0);
-      final f = futureSignal(() async {
-        final p = prefix();
-        final v = val();
-        await Future.delayed(const Duration(seconds: 1));
-        return '$p$v';
-      });
+      final f = futureSignal(
+        () async {
+          final p = prefix();
+          final v = val();
+          await Future.delayed(const Duration(seconds: 1));
+          return '$p$v';
+        },
+        options: StreamSignalOptions(
+          name: 'future',
+        ),
+      );
       expect(f.peek().isLoading, true);
 
       var result = await f.future;

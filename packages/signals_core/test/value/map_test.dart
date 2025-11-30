@@ -197,4 +197,56 @@ void main() {
       expect(value, true);
     });
   });
+
+  void testSignal(
+    String message,
+    MapSignal<K, V> Function<K, V>(
+      Map<K, V>, {
+      SignalOptions<Map<K, V>>? options,
+    }) create,
+  ) {
+    group('$message test', () {
+      group('autoDispose', () {
+        test('check last subscriber disposes', () {
+          final Map<String, int> map = <String, int>{'a': 1, 'b': 2, 'c': 3};
+          final s = create(map, options: SignalOptions(autoDispose: true));
+          final dispose = s.subscribe((_) => {});
+          expect(s.disposed, false);
+          dispose();
+          expect(s.disposed, true);
+        });
+        test('check last subscriber does not disposes', () {
+          final Map<String, int> map = <String, int>{'a': 1, 'b': 2, 'c': 3};
+          final s = create(map, options: SignalOptions(autoDispose: false));
+          final dispose = s.subscribe((_) => {});
+          expect(s.disposed, false);
+          dispose();
+          expect(s.disposed, false);
+        });
+      });
+    });
+  }
+
+  testSignal(
+    'MapSignal',
+    <K, V>(val, {options}) => MapSignal(
+      val,
+      options: options,
+    ),
+  );
+  testSignal(
+    'mapSignal',
+    <K, V>(val, {options}) => mapSignal(
+      val,
+      options: options,
+    ),
+  );
+  testSignal(
+    'toSignal',
+    <K, V>(val, {options}) {
+      return val.toSignal(
+        options: options,
+      );
+    },
+  );
 }

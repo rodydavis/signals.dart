@@ -7,10 +7,10 @@ import 'store.dart';
 /// A signal that persists its value in a key-value store.
 class PersistedSignal<T> extends Signal<T> with PersistedSignalMixin<T> {
   /// Creates a new `PersistedSignal`.
+  /// Creates a new `PersistedSignal`.
   PersistedSignal(
-    super.internalValue, {
-    super.autoDispose,
-    super.debugLabel,
+    super.value, {
+    super.options,
     required this.key,
     required this.store,
     bool autoInit = true,

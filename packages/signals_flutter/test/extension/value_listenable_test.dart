@@ -3,8 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
-  testWidgets('ValueListenable.toSignal() disposes listener',
-      (tester) async {
+  testWidgets('ValueListenable.toSignal() disposes listener', (tester) async {
     final listenable = ValueNotifier(0);
     final signal = listenable.toSignal();
 

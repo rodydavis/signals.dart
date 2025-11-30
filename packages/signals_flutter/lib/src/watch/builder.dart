@@ -64,9 +64,12 @@ class WatchBuilder<T extends Widget> extends StatefulWidget {
 
 class _WatchState<T extends Widget> extends State<WatchBuilder<T>>
     with SignalsMixin {
-  late final result = createComputed(() {
-    return widget.builder(context, widget.child);
-  }, debugLabel: widget.debugLabel,);
+  late final result = createComputed(
+    () {
+      return widget.builder(context, widget.child);
+    },
+    debugLabel: widget.debugLabel,
+  );
   bool _init = true;
 
   @override

@@ -1,9 +1,25 @@
 part of 'value.dart';
 
+/// Options for [ChangeStackSignal]
+class ChangeStackSignalOptions<T> extends SignalOptions<T> {
+  /// The limit of the history
+  final int? limit;
+
+  /// Options for [ChangeStackSignal]
+  const ChangeStackSignalOptions({
+    super.name,
+    super.autoDispose,
+    super.equalityCheck,
+    super.watched,
+    super.unwatched,
+    this.limit,
+  });
+}
+
 /// Change stack signal that can be used to call undo/redo on a value.
 ///
 /// ```dart
-/// final s = ChangeStackSignal(0, limit: 5);
+/// final s = ChangeStackSignal(0, options: ChangeStackSignalOptions(limit: 5));
 /// s.value = 1;
 /// s.value = 2;
 /// s.value = 3;
@@ -17,7 +33,7 @@ class ChangeStackSignal<T> extends Signal<T> with ChangeStackSignalMixin<T> {
   /// Change stack signal that can be used to call undo/redo on a value.
   ///
   /// ```dart
-  /// final s = ChangeStackSignal(0, limit: 5);
+  /// final s = ChangeStackSignal(0, options: ChangeStackSignalOptions(limit: 5));
   /// s.value = 1;
   /// s.value = 2;
   /// s.value = 3;
@@ -29,11 +45,9 @@ class ChangeStackSignal<T> extends Signal<T> with ChangeStackSignalMixin<T> {
   /// ```
   ChangeStackSignal(
     super.value, {
-    int? limit,
-    super.debugLabel,
-    super.autoDispose,
-  }) {
-    this.limit = limit;
+    ChangeStackSignalOptions<T>? options,
+  }) : super(options: options) {
+    limit = options?.limit;
   }
 }
 
@@ -52,14 +66,10 @@ class ChangeStackSignal<T> extends Signal<T> with ChangeStackSignalMixin<T> {
 /// ```
 ChangeStackSignal<T> changeStack<T>(
   T value, {
-  String? debugLabel,
-  int? limit,
-  bool autoDispose = false,
+  ChangeStackSignalOptions<T>? options,
 }) {
   return ChangeStackSignal<T>(
     value,
-    debugLabel: debugLabel,
-    limit: limit,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

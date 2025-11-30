@@ -45,14 +45,12 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   /// @link https://dartsignals.dev/flutter/value-notifier
   /// {@endtemplate}
   Signal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    SignalOptions<T>? options,
   }) {
     bool? self;
     final target = signal<T>(
       value,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
 
     void updater() {
@@ -126,11 +124,9 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
 /// {@endtemplate}
 Signal<T> valueNotifierToSignal<T>(
   ValueNotifier<T> valueNotifier, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<T>? options,
 }) {
   return valueNotifier.toSignal(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

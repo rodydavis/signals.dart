@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
 
 import 'batch.dart';
+import 'equality.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
+import 'options.dart';
 import 'readonly.dart';
 
 /// Create a new signal that is computed based on the values of other signals.
@@ -45,11 +47,16 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
     _isInitialized = true;
   }
 
-  Computed(this.fn)
+  Computed(this.fn, [SignalOptions<T>? options])
       : internalGlobalVersion = globalVersion - 1,
         flags = OUTDATED,
         version = 0,
-        globalId = ++lastGlobalId;
+        globalId = ++lastGlobalId {
+    name = options?.name;
+    watched = options?.watched;
+    unwatched = options?.unwatched;
+    equalityCheck = options?.equalityCheck ?? SignalEquality.standard<T>();
+  }
 
   @override
   bool internalRefresh() {
@@ -87,7 +94,7 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
       final val = fn();
       if (!_isInitialized ||
           (flags & HAS_ERROR) != 0 ||
-          _internalValue != val ||
+          !_equals(_internalValue, val) ||
           version == 0) {
         internalValue = val;
         flags &= ~HAS_ERROR;
@@ -102,6 +109,10 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
     cleanupSources();
     flags &= ~RUNNING;
     return true;
+  }
+
+  bool _equals(T a, T b) {
+    return equalityCheck.equals(a, b);
   }
 
   @override
@@ -179,7 +190,8 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
 /// updated when any signals accessed from within the callback function change.
 ReadonlySignal<T> computed<T>(
   /// The effect callback.
-  T Function() fn,
-) {
-  return Computed<T>(fn);
+  T Function() fn, [
+  SignalOptions<T>? options,
+]) {
+  return Computed<T>(fn, options);
 }

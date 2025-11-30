@@ -9,13 +9,15 @@ void main() {
       testWidgets('compelete with value', (tester) async {
         FutureSignal<int>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useFutureSignal(
-              () => Future.delayed(const Duration(seconds: 1), () => 1),
-              lazy: false,
-            );
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useFutureSignal(
+                () => Future.delayed(const Duration(seconds: 1), () => 1),
+                options: StreamSignalOptions(lazy: false),
+              );
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);
@@ -29,14 +31,16 @@ void main() {
       testWidgets('emit value', (tester) async {
         StreamSignal<int>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useStreamSignal(
-              () =>
-                  Stream.periodic(const Duration(seconds: 1), (i) => i).take(1),
-              lazy: false,
-            );
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useStreamSignal(
+                () => Stream.periodic(const Duration(seconds: 1), (i) => i)
+                    .take(1),
+                options: StreamSignalOptions(lazy: false),
+              );
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);
@@ -50,10 +54,12 @@ void main() {
       testWidgets('initial value', (tester) async {
         AsyncSignal<int>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useAsyncSignal<int>(const AsyncLoading());
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useAsyncSignal<int>(const AsyncLoading());
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);
@@ -62,10 +68,12 @@ void main() {
       testWidgets('set value', (tester) async {
         AsyncSignal<int>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useAsyncSignal<int>(const AsyncLoading());
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useAsyncSignal<int>(const AsyncLoading());
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         state!.value = const AsyncData(1);
@@ -81,17 +89,21 @@ void main() {
         final count = signal(0);
         FutureSignal<int>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useAsyncComputed(
-              () => Future.delayed(
-                const Duration(seconds: 1),
-                () => count.value * 2,
-              ),
-              dependencies: [count],
-              lazy: false,
-            );
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useAsyncComputed(
+                () => Future.delayed(
+                  const Duration(seconds: 1),
+                  () => count.value * 2,
+                ),
+                options: StreamSignalOptions(
+                  dependencies: [count],
+                  lazy: false,
+                ),
+              );
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);

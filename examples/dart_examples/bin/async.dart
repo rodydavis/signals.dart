@@ -13,7 +13,12 @@ void main() {
 
   /// First AsyncSignal emit the initial value then sync with
   /// idEmitter stream
-  final id = streamSignal(idEmitter, initialValue: 0);
+  /// First AsyncSignal emit the initial value then sync with
+  /// idEmitter stream
+  final id = streamSignal(
+    idEmitter,
+    options: StreamSignalOptions(initialValue: 0),
+  );
 
   /// Fetch id value as Future
   Future<String> fetch() async {
@@ -24,7 +29,9 @@ void main() {
   }
 
   /// Sync on user emitted value with a default emission of 'guest'
-  final user = fetch().toFutureSignal(initialValue: 'guest');
+  final user = fetch().toFutureSignal(
+    options: StreamSignalOptions(initialValue: 'guest'),
+  );
 
   /// When user Future resolve
   final greeting = computed(() => 'Hello, ${user.value.value}');

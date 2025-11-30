@@ -1,4 +1,4 @@
-library signals_core;
+library;
 
 export 'package:signals_core/signals_core.dart'
     hide signal, lazySignal, readonly, computed;

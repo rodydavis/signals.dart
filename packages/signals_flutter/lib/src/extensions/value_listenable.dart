@@ -25,13 +25,11 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
   /// @link https://dartsignals.dev/flutter/value-listenable
   /// {@endtemplate}
   ReadonlySignal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    SignalOptions<T>? options,
   }) {
     final target = signal<T>(
       value,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
 
     void updater() {
@@ -67,11 +65,9 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
 /// {@endtemplate}
 ReadonlySignal<T> valueListenableToSignal<T>(
   ValueListenable<T> valueListenable, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<T>? options,
 }) {
   return valueListenable.toSignal(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

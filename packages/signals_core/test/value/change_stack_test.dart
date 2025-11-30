@@ -8,7 +8,7 @@ void main() {
     test(
       'should do undo N times',
       () {
-        final s = changeStack(0, limit: 2);
+        final s = changeStack(0, options: ChangeStackSignalOptions(limit: 2));
         s.value = 1;
         s.value = 2;
         s.value = 3;
@@ -33,9 +33,7 @@ void main() {
     String message,
     ChangeStackSignal<T> Function<T>(
       T, {
-      bool autoDispose,
-      String? debugLabel,
-      int? limit,
+      ChangeStackSignalOptions<T>? options,
     }) create,
   ) {
     group('$message test', () {
@@ -110,7 +108,7 @@ void main() {
       });
 
       test('limit', () {
-        final s = create(0, limit: 1);
+        final s = create(0, options: ChangeStackSignalOptions(limit: 1));
 
         s.value = 1;
         s.value = 2;
@@ -122,20 +120,16 @@ void main() {
 
   testSignal(
     'ChangeStackSignal',
-    <T>(val, {autoDispose = false, debugLabel, limit}) => ChangeStackSignal(
+    <T>(val, {options}) => ChangeStackSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
-      limit: limit,
+      options: options,
     ),
   );
   testSignal(
     'changeStack',
-    <T>(val, {autoDispose = false, debugLabel, limit}) => changeStack(
+    <T>(val, {options}) => changeStack(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
-      limit: limit,
+      options: options,
     ),
   );
 }

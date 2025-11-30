@@ -2,7 +2,7 @@ import 'package:signals/signals.dart';
 
 /// Trigger [TimerSignalEvent]
 main() {
-  final timer = TimerSignal(every: Duration(seconds: 1));
+  final timer = TimerSignal(Duration(seconds: 1));
 
   effect(() {
     // Receive a TimerSignalEvent

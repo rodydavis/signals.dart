@@ -7,6 +7,12 @@ import 'node.dart';
 import 'signal.dart';
 
 /// An interface for read-only signals.
+import 'options.dart';
+import 'untracked.dart';
+
+import 'equality.dart';
+
+/// An interface for read-only signals.
 mixin class ReadonlySignal<T> {
   /// Global ID of the signal
   int get globalId => throw UnimplementedError();
@@ -16,6 +22,21 @@ mixin class ReadonlySignal<T> {
 
   @internal
   T get internalValue => throw UnimplementedError();
+
+  /// The name of the signal, used for debugging
+  String? name;
+
+  /// Callback when the signal is first subscribed to
+  @internal
+  SignalCallback<T>? watched;
+
+  /// Callback when the signal is no longer subscribed to
+  @internal
+  SignalCallback<T>? unwatched;
+
+  /// Custom equality check for the signal value
+  @internal
+  SignalEquality<T> equalityCheck = SignalEquality.standard<T>();
 
   @override
   String toString() => value.toString();
@@ -72,6 +93,15 @@ mixin class ReadonlySignal<T> {
       node.nextTarget = signal.targets;
       if (signal.targets != null) {
         signal.targets!.prevTarget = node;
+      } else {
+        // First subscriber
+        if (watched != null) {
+          untracked(() {
+            if (signal is Signal<T>) {
+              watched!(signal);
+            }
+          });
+        }
       }
       signal.targets = node;
     }
@@ -188,16 +218,19 @@ mixin class ReadonlySignal<T> {
     void Function(T value) fn,
   ) {
     final signal = this;
-    return effect(() {
-      final value = signal.value;
-      final prevContext = evalContext;
-      evalContext = null;
-      try {
-        fn(value);
-      } finally {
-        evalContext = prevContext;
-      }
-    });
+    return effect(
+      () {
+        final value = signal.value;
+        final prevContext = evalContext;
+        evalContext = null;
+        try {
+          fn(value);
+        } finally {
+          evalContext = prevContext;
+        }
+      },
+      EffectOptions(name: 'sub'),
+    );
   }
 
   @internal
@@ -217,6 +250,16 @@ mixin class ReadonlySignal<T> {
       }
       if (node == signal.targets) {
         signal.targets = next;
+        // Last subscriber
+        if (next == null) {
+          if (unwatched != null) {
+            untracked(() {
+              if (signal is Signal<T>) {
+                unwatched!(signal);
+              }
+            });
+          }
+        }
       }
     }
   }

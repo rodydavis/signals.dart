@@ -5,10 +5,10 @@ class ListSignal<E> extends Signal<List<E>>
     with IterableSignalMixin<E, List<E>>, ListSignalMixin<E, List<E>>
     implements List<E> {
   /// Creates a [ListSignal] with the given [value].
+  /// Creates a [ListSignal] with the given [value].
   ListSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   /// Inject: Update current signal value with iterable
@@ -48,13 +48,11 @@ class ListSignal<E> extends Signal<List<E>>
 /// Create an [ListSignal] from [List]
 ListSignal<T> listSignal<T>(
   List<T> list, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<List<T>>? options,
 }) {
   return ListSignal<T>(
     list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }
 
@@ -62,13 +60,11 @@ ListSignal<T> listSignal<T>(
 extension SignalListUtils<T> on List<T> {
   /// Convert an existing list to [ListSignal]
   ListSignal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    SignalOptions<List<T>>? options,
   }) {
     return ListSignal<T>(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
   }
 }

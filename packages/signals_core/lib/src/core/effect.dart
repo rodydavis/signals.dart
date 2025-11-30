@@ -207,9 +207,10 @@ class Effect extends signals.Effect {
   /// @link https://dartsignals.dev/core/effect
   /// {@endtemplate}
   Effect(
-    super.fn, {
-    this.debugLabel,
-  }) {
+    EffectCallback fn, {
+    EffectOptions? options,
+  })  : debugLabel = options?.name,
+        super(fn, options) {
     SignalsObserver.instance?.onEffectCreated(this);
   }
 
@@ -362,12 +363,12 @@ class Effect extends signals.Effect {
 /// {@endtemplate}
 EffectCleanup effect(
   EffectCallback fn, {
-  String? debugLabel,
+  EffectOptions? options,
   EffectCallback? onDispose,
 }) {
   final instance = Effect(
     fn,
-    debugLabel: debugLabel,
+    options: options,
   );
   if (onDispose != null) {
     instance._disposeCallbacks.add(onDispose);

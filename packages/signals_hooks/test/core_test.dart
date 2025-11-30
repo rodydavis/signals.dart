@@ -8,10 +8,12 @@ void main() {
     group('Signal', () {
       testWidgets('get value', (tester) async {
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useSignal(42);
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useSignal(42);
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -19,13 +21,15 @@ void main() {
 
       testWidgets('set value', (tester) async {
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useSignal(42);
-            return GestureDetector(
-              onTap: () => state.value++,
-              child: Text('$state', textDirection: TextDirection.ltr),
-            );
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useSignal(42);
+              return GestureDetector(
+                onTap: () => state.value++,
+                child: Text('$state', textDirection: TextDirection.ltr),
+              );
+            },
+          ),
         );
 
         // Click text and wait
@@ -39,11 +43,13 @@ void main() {
     group('Computed', () {
       testWidgets('get value', (tester) async {
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useSignal(42);
-            final computedState = useComputed(() => state.value * 2);
-            return Text('$computedState', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useSignal(42);
+              final computedState = useComputed(() => state.value * 2);
+              return Text('$computedState', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(find.text('84'), findsOneWidget);
@@ -51,14 +57,16 @@ void main() {
 
       testWidgets('set value', (tester) async {
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useSignal(42);
-            final computedState = useComputed(() => state.value * 2);
-            return GestureDetector(
-              onTap: () => state.value++,
-              child: Text('$computedState', textDirection: TextDirection.ltr),
-            );
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useSignal(42);
+              final computedState = useComputed(() => state.value * 2);
+              return GestureDetector(
+                onTap: () => state.value++,
+                child: Text('$computedState', textDirection: TextDirection.ltr),
+              );
+            },
+          ),
         );
 
         // Click text and wait
@@ -73,10 +81,12 @@ void main() {
       testWidgets('on mounted', (tester) async {
         int count = 0;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            useSignalEffect(() => count++);
-            return Container();
-          },),
+          HookBuilder(
+            builder: (context) {
+              useSignalEffect(() => count++);
+              return Container();
+            },
+          ),
         );
 
         expect(count, 1);
@@ -86,10 +96,12 @@ void main() {
         int count = 0;
         final state = signal(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            useSignalEffect(() => count = state.value);
-            return Container();
-          },),
+          HookBuilder(
+            builder: (context) {
+              useSignalEffect(() => count = state.value);
+              return Container();
+            },
+          ),
         );
 
         expect(count, 42);
@@ -103,13 +115,15 @@ void main() {
       testWidgets('on dispose', (tester) async {
         int count = 0;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            useSignalEffect(
-              () => count++,
-              onDispose: () => count = -1,
-            );
-            return Container();
-          },),
+          HookBuilder(
+            builder: (context) {
+              useSignalEffect(
+                () => count++,
+                onDispose: () => count = -1,
+              );
+              return Container();
+            },
+          ),
         );
 
         expect(count, 1);
@@ -124,10 +138,12 @@ void main() {
       testWidgets('get value', (tester) async {
         final state = signal(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final signal = useExistingSignal(state);
-            return Text('$signal', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final signal = useExistingSignal(state);
+              return Text('$signal', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -136,13 +152,15 @@ void main() {
       testWidgets('set value', (tester) async {
         final state = signal(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final signal = useExistingSignal(state);
-            return GestureDetector(
-              onTap: () => signal.value++,
-              child: Text('$signal', textDirection: TextDirection.ltr),
-            );
-          },),
+          HookBuilder(
+            builder: (context) {
+              final signal = useExistingSignal(state);
+              return GestureDetector(
+                onTap: () => signal.value++,
+                child: Text('$signal', textDirection: TextDirection.ltr),
+              );
+            },
+          ),
         );
 
         // Click text and wait
@@ -157,10 +175,12 @@ void main() {
       testWidgets('get value', (tester) async {
         final state = signal(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final value = useSignalValue(state);
-            return Text('$value', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final value = useSignalValue(state);
+              return Text('$value', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -169,13 +189,15 @@ void main() {
       testWidgets('set value', (tester) async {
         final state = signal(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final value = useSignalValue(state);
-            return GestureDetector(
-              onTap: () => state.value++,
-              child: Text('$value', textDirection: TextDirection.ltr),
-            );
-          },),
+          HookBuilder(
+            builder: (context) {
+              final value = useSignalValue(state);
+              return GestureDetector(
+                onTap: () => state.value++,
+                child: Text('$value', textDirection: TextDirection.ltr),
+              );
+            },
+          ),
         );
 
         // Click text and wait

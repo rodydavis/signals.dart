@@ -42,7 +42,7 @@ class Auth {
 
   late final settings = streamSignal(
     () => api.todosStream(currentUser().value?.id ?? 0),
-    dependencies: [currentUser],
+    options: StreamSignalOptions(dependencies: [currentUser]),
   );
 
   /// Computed signal that only emits when the user is logged in / out

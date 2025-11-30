@@ -71,6 +71,32 @@ final counter = signal(0);
 counter.set(1, force: true);
 ```
 
+## Options
+
+Signals can be created with optional parameters to customize their behavior.
+
+### Name
+
+You can assign a name to a signal for debugging purposes.
+
+```dart
+final s = signal(0, options: SignalOptions(name: 'counter'));
+print(s.name); // counter
+```
+
+### Equality Check
+
+You can provide a custom equality check function to determine if the signal value has changed.
+
+```dart
+final s = signal(
+  0,
+  options: SignalOptions(
+    equalityCheck: SignalEquality.custom((a, b) => a == b),
+  ),
+);
+```
+
 ## Disposing
 
 ### Auto Dispose
@@ -78,7 +104,7 @@ counter.set(1, force: true);
 If a signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
 
 ```dart
-final s = signal(0, autoDispose: true);
+final s = signal(0, options: SignalOptions(autoDispose: true));
 s.onDispose(() => print('Signal destroyed'));
 final dispose = s.subscribe((_) {});
 dispose();

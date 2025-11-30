@@ -28,27 +28,18 @@ FutureSignal<T> useFutureSignal<T>(
   /// new initial value.
   List<Object?> keys = const <Object>[],
 
-  /// The initial value of the signal.
-  T? initialValue,
-
-  /// A list of signals to watch for changes.
-  List<ReadonlySignal<dynamic>> dependencies = const [],
-
-  /// If true, the future will not be executed until the signal is read.
-  bool lazy = true,
-
-  /// The debug label for the signal.
-  String? debugLabel,
+  /// The options for the signal.
+  StreamSignalOptions<T>? options,
 }) {
-  final s = useMemoized(() {
-    return futureSignal(
-      value,
-      initialValue: initialValue,
-      dependencies: dependencies,
-      lazy: lazy,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return futureSignal(
+        value,
+        options: options,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -77,35 +68,18 @@ StreamSignal<T> useStreamSignal<T>(
   /// new initial value.
   List<Object?> keys = const <Object>[],
 
-  /// The initial value of the signal.
-  T? initialValue,
-
-  /// A callback to execute when the stream is done.
-  void Function()? onDone,
-
-  /// If true, the stream will be canceled on error.
-  bool? cancelOnError,
-
-  /// If true, the stream will not be subscribed to until the signal is read.
-  bool lazy = true,
-
-  /// A list of signals to watch for changes.
-  List<ReadonlySignal<dynamic>> dependencies = const [],
-
-  /// The debug label for the signal.
-  String? debugLabel,
+  /// The options for the signal.
+  StreamSignalOptions<T>? options,
 }) {
-  final s = useMemoized(() {
-    return streamSignal(
-      value,
-      onDone: onDone,
-      initialValue: initialValue,
-      cancelOnError: cancelOnError,
-      lazy: lazy,
-      dependencies: dependencies,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return streamSignal(
+        value,
+        options: options,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -134,10 +108,13 @@ AsyncSignal<T> useAsyncSignal<T>(
   /// new initial value.
   List<Object?> keys = const <Object>[],
 
-  /// The debug label for the signal.
-  String? debugLabel,
+  /// The options for the signal.
+  SignalOptions<AsyncState<T>>? options,
 }) {
-  final s = useMemoized(() => asyncSignal(value, debugLabel: debugLabel), keys);
+  final s = useMemoized(
+    () => asyncSignal(value, options: options),
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -170,26 +147,17 @@ FutureSignal<T> useAsyncComputed<T>(
   /// new initial value.
   List<Object?> keys = const <Object>[],
 
-  /// A list of signals to watch for changes.
-  List<ReadonlySignal<dynamic>> dependencies = const [],
-
-  /// If true, the future will not be executed until the signal is read.
-  bool lazy = true,
-
-  /// The initial value of the signal.
-  T? initialValue,
-
-  /// The debug label for the signal.
-  String? debugLabel,
+  /// The options for the signal.
+  StreamSignalOptions<T>? options,
 }) {
-  final s = useMemoized(() {
-    return computedAsync(
-      value,
-      dependencies: dependencies,
-      lazy: lazy,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return computedAsync(
+        value,
+        options: options,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }

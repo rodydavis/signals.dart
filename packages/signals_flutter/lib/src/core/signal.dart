@@ -17,9 +17,8 @@ class FlutterSignal<T> extends core.Signal<T>
   /// print(count.value); // 1
   /// ```
   FlutterSignal(
-    super.internalValue, {
-    super.autoDispose,
-    super.debugLabel,
+    super.value, {
+    super.options,
     this.runCallbackOnListen = false,
   });
 
@@ -32,8 +31,7 @@ class FlutterSignal<T> extends core.Signal<T>
   /// db.value = DatabaseConnect(...);
   /// ```
   FlutterSignal.lazy({
-    super.autoDispose,
-    super.debugLabel,
+    super.options,
     this.runCallbackOnListen = false,
   }) : super.lazy();
 
@@ -55,31 +53,24 @@ FlutterSignal<T> signal<T>(
   String? debugLabel,
   bool autoDispose = false,
   bool runCallbackOnListen = false,
+  core.SignalOptions<T>? options,
 }) {
   return FlutterSignal<T>(
     value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        core.SignalOptions<T>(
+          name: debugLabel,
+          autoDispose: autoDispose,
+        ),
     runCallbackOnListen: runCallbackOnListen,
   );
 }
 
-/// Lazy signal that can be created with type T that
-/// the value will be assigned later.
-///
-/// ```dart
-/// final db = lazySignal<DatabaseConnection>();
-/// ...
-/// db.value = DatabaseConnect(...);
-/// ```
+/// Create a [Signal] that is bound to a [ValueListenable]
 FlutterSignal<T> lazySignal<T>({
-  String? debugLabel,
-  bool autoDispose = false,
-  bool runCallbackOnListen = false,
+  core.SignalOptions<T>? options,
 }) {
   return FlutterSignal<T>.lazy(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-    runCallbackOnListen: runCallbackOnListen,
+    options: options,
   );
 }

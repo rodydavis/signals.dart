@@ -14,8 +14,7 @@ class FlutterComputed<T> extends core.Computed<T>
   /// updated when any signals accessed from within the callback function change.
   FlutterComputed(
     super.internalValue, {
-    super.autoDispose,
-    super.debugLabel,
+    super.options,
     this.runCallbackOnListen = false,
   });
 
@@ -29,14 +28,12 @@ class FlutterComputed<T> extends core.Computed<T>
 /// updated when any signals accessed from within the callback function change.
 FlutterComputed<T> computed<T>(
   T Function() compute, {
-  String? debugLabel,
-  bool autoDispose = false,
+  core.SignalOptions<T>? options,
   bool runCallbackOnListen = false,
 }) {
   return FlutterComputed<T>(
     compute,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
     runCallbackOnListen: runCallbackOnListen,
   );
 }

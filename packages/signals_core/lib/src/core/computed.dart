@@ -46,7 +46,7 @@ part of 'signals.dart';
 /// If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
 ///
 /// ```dart
-/// final s = computed(() => 0, autoDispose: true);
+/// final s = computed(() => 0, options: SignalOptions(autoDispose: true));
 /// s.onDispose(() => print('Signal destroyed'));
 /// final dispose = s.subscribe((_) {});
 /// dispose();
@@ -218,7 +218,7 @@ class Computed<T> extends signals.Computed<T>
   /// If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
   ///
   /// ```dart
-  /// final s = computed(() => 0, autoDispose: true);
+  /// final s = computed(() => 0, options: SignalOptions(autoDispose: true));
   /// s.onDispose(() => print('Signal destroyed'));
   /// final dispose = s.subscribe((_) {});
   /// dispose();
@@ -343,10 +343,10 @@ class Computed<T> extends signals.Computed<T>
   /// {@endtemplate}
   Computed(
     super.fn, {
-    this.debugLabel,
-    bool autoDispose = false,
+    SignalOptions<T>? options,
   }) {
-    this.autoDispose = autoDispose;
+    autoDispose = options?.autoDispose ?? false;
+    debugLabel = options?.name;
     SignalsObserver.instance?.onComputedCreated(this);
   }
 
@@ -379,7 +379,7 @@ class Computed<T> extends signals.Computed<T>
   }
 
   @override
-  final String? debugLabel;
+  late final String? debugLabel;
 
   /// Call the computed function and update the value
   void recompute() {
@@ -601,12 +601,10 @@ typedef ComputedCallback<T> = T Function();
 /// {@endtemplate}
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<T>? options,
 }) {
   return Computed<T>(
     compute,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

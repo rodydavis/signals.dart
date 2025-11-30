@@ -11,11 +11,15 @@ void main() {
       testWidgets('initial value', (tester) async {
         late ListSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useListSignal([1, 2, 3]);
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useListSignal([1, 2, 3]);
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         expect(find.text('[1, 2, 3]'), findsOneWidget);
@@ -24,11 +28,15 @@ void main() {
       testWidgets('add value', (tester) async {
         late ListSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useListSignal([1, 2, 3]);
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useListSignal([1, 2, 3]);
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         state.add(4);
@@ -42,11 +50,15 @@ void main() {
       testWidgets('initial value', (tester) async {
         late SetSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useSetSignal({1, 2, 3});
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useSetSignal({1, 2, 3});
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         expect(find.text('{1, 2, 3}'), findsOneWidget);
@@ -55,11 +67,15 @@ void main() {
       testWidgets('add value', (tester) async {
         late SetSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useSetSignal({1, 2, 3});
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useSetSignal({1, 2, 3});
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         state.add(4);
@@ -73,11 +89,15 @@ void main() {
       testWidgets('initial value', (tester) async {
         late IterableSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useIterableSignal([1, 2, 3]);
-            return Text(state.join(',').toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useIterableSignal([1, 2, 3]);
+              return Text(
+                state.join(',').toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         expect(find.text('1,2,3'), findsOneWidget);
@@ -88,11 +108,15 @@ void main() {
       testWidgets('initial value', (tester) async {
         late MapSignal<String, int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useMapSignal({'a': 1, 'b': 2});
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useMapSignal({'a': 1, 'b': 2});
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         expect(find.text('{a: 1, b: 2}'), findsOneWidget);
@@ -101,11 +125,15 @@ void main() {
       testWidgets('add value', (tester) async {
         late MapSignal<String, int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useMapSignal({'a': 1, 'b': 2});
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useMapSignal({'a': 1, 'b': 2});
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         state['c'] = 3;
@@ -119,11 +147,15 @@ void main() {
       testWidgets('initial value', (tester) async {
         late TrackedSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useTrackedSignal(42);
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useTrackedSignal(42);
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -132,11 +164,15 @@ void main() {
       testWidgets('set value', (tester) async {
         late TrackedSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useTrackedSignal(42);
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useTrackedSignal(42);
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         state.value = 43;
@@ -150,11 +186,15 @@ void main() {
       testWidgets('initial value', (tester) async {
         late QueueSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useQueueSignal(Queue.from([1, 2, 3]));
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useQueueSignal(Queue.from([1, 2, 3]));
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         expect(find.text('{1, 2, 3}'), findsOneWidget);
@@ -163,11 +203,15 @@ void main() {
       testWidgets('add value', (tester) async {
         late QueueSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useQueueSignal(Queue.from([1, 2, 3]));
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useQueueSignal(Queue.from([1, 2, 3]));
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         state.add(4);
@@ -181,11 +225,15 @@ void main() {
       testWidgets('initial value', (tester) async {
         late ChangeStackSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useChangeStackSignal(42);
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useChangeStackSignal(42);
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -194,11 +242,15 @@ void main() {
       testWidgets('set value', (tester) async {
         late ChangeStackSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useChangeStackSignal(42);
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useChangeStackSignal(42);
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         state.value = 43;
@@ -210,11 +262,15 @@ void main() {
       testWidgets('undo/redo', (tester) async {
         late ChangeStackSignal<int> state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state = useChangeStackSignal(42);
-            return Text(state.value.toString(),
-                textDirection: TextDirection.ltr,);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state = useChangeStackSignal(42);
+              return Text(
+                state.value.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
         );
 
         state.value = 43;

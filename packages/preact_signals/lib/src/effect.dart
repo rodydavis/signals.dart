@@ -4,6 +4,7 @@ import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
+import 'options.dart';
 
 /// Create an effect to run arbitrary code in response to signal changes.
 ///
@@ -32,10 +33,15 @@ class Effect with Listenable {
   @override
   int flags;
 
-  Effect(this.fn)
+  /// The name of the effect, used for debugging
+  String? name;
+
+  /// Create a new effect
+  Effect(this.fn, [EffectOptions? options])
       : flags = TRACKING,
         cleanup = null,
-        globalId = ++lastGlobalId;
+        globalId = ++lastGlobalId,
+        name = options?.name;
 
   @internal
   void callback() {
@@ -165,7 +171,8 @@ class Effect with Listenable {
 /// gets disposed, whichever happens first.
 void Function() effect(
   /// The effect callback
-  Function() fn,
-) {
-  return Effect(fn)();
+  Function() fn, [
+  EffectOptions? options,
+]) {
+  return Effect(fn, options)();
 }
