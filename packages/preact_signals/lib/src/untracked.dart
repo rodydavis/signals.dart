@@ -9,15 +9,18 @@ T untracked<T>(
   T Function() fn,
 ) {
   if (Zone.current[evalContextKey] != null) {
-    return runZoned(() {
-      final prev = globalEvalContext;
-      globalEvalContext = null;
-      try {
-        return fn();
-      } finally {
-        globalEvalContext = prev;
-      }
-    }, zoneValues: {evalContextKey: null});
+    return runZoned(
+      () {
+        final prev = globalEvalContext;
+        globalEvalContext = null;
+        try {
+          return fn();
+        } finally {
+          globalEvalContext = prev;
+        }
+      },
+      zoneValues: {evalContextKey: null},
+    );
   }
   final prev = globalEvalContext;
   globalEvalContext = null;

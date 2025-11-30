@@ -16,6 +16,7 @@ mixin class ReadonlySignal<T> {
   /// Compute the current value
   T get value => throw UnimplementedError();
 
+  /// Compute the current value
   @internal
   T get internalValue => throw UnimplementedError();
 
@@ -49,15 +50,18 @@ mixin class ReadonlySignal<T> {
   /// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
   T peek() {
     if (Zone.current[evalContextKey] != null) {
-      return runZoned(() {
-        final prev = globalEvalContext;
-        globalEvalContext = null;
-        try {
-          return value;
-        } finally {
-          globalEvalContext = prev;
-        }
-      }, zoneValues: {evalContextKey: null});
+      return runZoned(
+        () {
+          final prev = globalEvalContext;
+          globalEvalContext = null;
+          try {
+            return value;
+          } finally {
+            globalEvalContext = prev;
+          }
+        },
+        zoneValues: {evalContextKey: null},
+      );
     }
     final prev = globalEvalContext;
     globalEvalContext = null;
@@ -72,12 +76,15 @@ mixin class ReadonlySignal<T> {
   void Function() subscribe(void Function(T value) fn) =>
       throw UnimplementedError();
 
+  /// Subscribe to a node
   @internal
   void subscribeToNode(Node node) => throw UnimplementedError();
 
+  /// Unsubscribe from a node
   @internal
   void unsubscribeFromNode(Node node) => throw UnimplementedError();
 
+  /// Subscribe to this signal
   @internal
   void internalSubscribe(Node node) {
     final signal = this;
@@ -95,18 +102,23 @@ mixin class ReadonlySignal<T> {
   @internal
   int get version => throw UnimplementedError();
 
+  /// The dependency node for this signal
   @internal
   Node? node;
 
+  /// The target nodes for this signal
   @internal
   Node? targets;
 
+  /// Refresh the signal value
   @internal
   bool internalRefresh() => throw UnimplementedError();
 
+  /// The brand symbol for this signal
   @internal
   final Symbol brand = BRAND_SYMBOL;
 
+  /// Get the target listenables for this signal
   @internal
   Iterable<Listenable> readonlySignalTargets() sync* {
     final instance = this;
@@ -115,6 +127,7 @@ mixin class ReadonlySignal<T> {
     }
   }
 
+  /// Add a dependency to this signal
   @internal
   Node? addDependency() {
     final signal = this;
@@ -196,6 +209,7 @@ mixin class ReadonlySignal<T> {
     return null;
   }
 
+  /// Subscribe to this signal
   @internal
   void Function() signalSubscribe(
     void Function(T value) fn,
@@ -204,15 +218,18 @@ mixin class ReadonlySignal<T> {
     return effect(() {
       final value = signal.value;
       if (Zone.current[evalContextKey] != null) {
-        runZoned(() {
-          final prev = globalEvalContext;
-          globalEvalContext = null;
-          try {
-            fn(value);
-          } finally {
-            globalEvalContext = prev;
-          }
-        }, zoneValues: {evalContextKey: null});
+        runZoned(
+          () {
+            final prev = globalEvalContext;
+            globalEvalContext = null;
+            try {
+              fn(value);
+            } finally {
+              globalEvalContext = prev;
+            }
+          },
+          zoneValues: {evalContextKey: null},
+        );
       } else {
         final prev = globalEvalContext;
         globalEvalContext = null;
@@ -225,9 +242,12 @@ mixin class ReadonlySignal<T> {
     });
   }
 
+  /// Unsubscribe from this signal
   @internal
   void signalUnsubscribe(Node node) {
     final signal = this;
+    node.source = signal;
+
     // Only run the unsubscribe step if the signal has any subscribers to begin with.
     if (signal.targets != null) {
       final prev = node.prevTarget;

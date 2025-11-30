@@ -6,6 +6,7 @@ import 'node.dart';
 import 'readonly.dart';
 
 /// Instance of a new plain signal
+/// A signal that can be mutated.
 class Signal<T> with ReadonlySignal<T> {
   @override
   final int globalId;
@@ -30,11 +31,13 @@ class Signal<T> with ReadonlySignal<T> {
     _isInitialized = true;
   }
 
+  /// Create a new signal with the given value.
   Signal(this._internalValue)
       : version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = true;
 
+  /// Create a new lazy signal.
   Signal.lazy()
       : version = 0,
         globalId = ++lastGlobalId,
@@ -75,7 +78,8 @@ class Signal<T> with ReadonlySignal<T> {
   }
 
   /// Set the current value by a setter
-  set value(T val) => set(val);
+  /// Set the value of the signal.
+  set value(T value) => set(value);
 
   /// Set the current value by a method
   bool set(
@@ -90,6 +94,7 @@ class Signal<T> with ReadonlySignal<T> {
     return false;
   }
 
+  /// Set the value of the signal internally
   @internal
   void internalSetValue(T val) {
     if (batchIteration > 100) {

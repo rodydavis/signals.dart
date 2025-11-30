@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
-import 'node.dart';
 
 /// Create an effect to run arbitrary code in response to signal changes.
 ///
@@ -16,78 +15,99 @@ import 'node.dart';
 /// run once, either when the callback is next called or when the effect
 /// gets disposed, whichever happens first.
 class Effect with Listenable {
+  /// The callback function
   @internal
   Function()? fn;
 
   @override
   final int globalId;
 
+  /// The cleanup function
   @internal
   Function? cleanup;
 
-  @override
-  Node? sources;
-
+  /// The next effect in the batch
   @internal
   Effect? nextBatchedEffect;
 
   @override
   int flags;
 
+  /// The zone where the effect was created
+  @internal
+  final Zone creationZone;
+
+  /// Create a new effect
   Effect(this.fn)
       : flags = TRACKING,
         cleanup = null,
+        creationZone = Zone.current,
         globalId = ++lastGlobalId;
 
+  /// Run the effect callback
   @internal
   void callback() {
     final finish = start();
+    bool isAsync = false;
     try {
       if ((flags & DISPOSED) != 0) return;
       if (fn == null) return;
 
-      if (fn is Future Function()) {
-        runZoned(
-          () {
-            final prevEval = globalEvalContext;
-            final prevEffect = globalCurrentEffect;
-            globalEvalContext = null;
-            globalCurrentEffect = null;
-            try {
-              final cleanup = fn!();
-              if (cleanup is Function) {
-                this.cleanup = cleanup;
+      creationZone.run(() {
+        if (fn is Future Function()) {
+          runZoned(
+            () {
+              final prevEval = globalEvalContext;
+              final prevEffect = globalCurrentEffect;
+              globalEvalContext = null;
+              globalCurrentEffect = null;
+              try {
+                final result = fn!();
+                if (result is Future) {
+                  isAsync = true;
+                  result.whenComplete(() {
+                    endTracking();
+                  });
+                }
+                if (result is Function) {
+                  cleanup = result;
+                }
+              } finally {
+                globalEvalContext = prevEval;
+                globalCurrentEffect = prevEffect;
               }
-            } finally {
-              globalEvalContext = prevEval;
-              globalCurrentEffect = prevEffect;
+            },
+            zoneValues: {
+              evalContextKey: this,
+              currentEffectKey: this,
+            },
+          );
+        } else {
+          final prevEval = globalEvalContext;
+          final prevEffect = globalCurrentEffect;
+          globalEvalContext = this;
+          globalCurrentEffect = this;
+          try {
+            final cleanup = fn!();
+            if (cleanup is Function) {
+              this.cleanup = cleanup;
             }
-          },
-          zoneValues: {
-            evalContextKey: this,
-            currentEffectKey: this,
-          },
-        );
-      } else {
-        final prevEval = globalEvalContext;
-        final prevEffect = globalCurrentEffect;
-        globalEvalContext = this;
-        globalCurrentEffect = this;
-        try {
-          final cleanup = fn!();
-          if (cleanup is Function) {
-            this.cleanup = cleanup;
+          } finally {
+            globalEvalContext = prevEval;
+            globalCurrentEffect = prevEffect;
           }
-        } finally {
-          globalEvalContext = prevEval;
-          globalCurrentEffect = prevEffect;
         }
-      }
+      });
     } finally {
-      finish();
+      if (isAsync) {
+        endBatch();
+      } else {
+        finish();
+      }
     }
   }
 
+  /// Start the effect
   @internal
   void Function() start() {
     if ((flags & RUNNING) != 0) {
@@ -108,7 +128,7 @@ class Effect with Listenable {
       flags |= NOTIFIED;
       nextBatchedEffect = batchedEffect;
       batchedEffect = this;
-    }
+    } else {}
   }
 
   /// Dispose of the effect and stop future callbacks
@@ -132,6 +152,7 @@ class Effect with Listenable {
     return dispose;
   }
 
+  /// Cleanup the effect
   @internal
   void cleanupEffect() {
     final effect = this;
@@ -160,7 +181,7 @@ class Effect with Listenable {
           final prev = globalEvalContext;
           globalEvalContext = null;
           try {
-            cleanup!();
+            cleanup();
           } finally {
             globalEvalContext = prev;
           }
@@ -176,6 +197,7 @@ class Effect with Listenable {
     }
   }
 
+  /// Dispose the effect
   @internal
   void disposeEffect() {
     final effect = this;
@@ -188,8 +210,9 @@ class Effect with Listenable {
     effect.cleanupEffect();
   }
 
+  /// End tracking
   @internal
-  void endEffect() {
+  void endTracking() {
     final effect = this;
     effect.cleanupSources();
 
@@ -197,6 +220,12 @@ class Effect with Listenable {
     if ((effect.flags & DISPOSED) != 0) {
       effect.disposeEffect();
     }
+  }
+
+  /// End the effect
+  @internal
+  void endEffect() {
+    endTracking();
     endBatch();
   }
 }
