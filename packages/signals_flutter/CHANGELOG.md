@@ -1,3 +1,10 @@
+## 6.3.0
+
+- Fix listener on dispose for ValueListenable.toSignal()
+- Return FlutterSignal/FlutterComputed from SignalsMixin.createSignal/createComputed
+- Fix hashCode collision in .watchSignal
+- Bump signals_core to 6.2.1
+
 ## 6.2.0
 
 - Adding SignalsAutoDisposeMixin

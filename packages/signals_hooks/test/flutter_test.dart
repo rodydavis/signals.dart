@@ -9,10 +9,12 @@ void main() {
       testWidgets('get value', (tester) async {
         final notifier = ValueNotifier(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useValueNotifierToSignal(notifier);
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useValueNotifierToSignal(notifier);
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -21,10 +23,12 @@ void main() {
       testWidgets('set value from notifier', (tester) async {
         final notifier = ValueNotifier(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useValueNotifierToSignal(notifier);
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useValueNotifierToSignal(notifier);
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         notifier.value++;
@@ -37,10 +41,12 @@ void main() {
         final notifier = ValueNotifier(42);
         Signal<int>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useValueNotifierToSignal(notifier);
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useValueNotifierToSignal(notifier);
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         state!.value++;
@@ -55,10 +61,12 @@ void main() {
       testWidgets('get value', (tester) async {
         final notifier = ValueNotifier(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useValueListenableToSignal(notifier);
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useValueListenableToSignal(notifier);
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(find.text('42'), findsOneWidget);
@@ -67,10 +75,12 @@ void main() {
       testWidgets('set value from notifier', (tester) async {
         final notifier = ValueNotifier(42);
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            final state = useValueListenableToSignal(notifier);
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              final state = useValueListenableToSignal(notifier);
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         notifier.value++;

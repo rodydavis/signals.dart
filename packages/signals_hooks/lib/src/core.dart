@@ -1,5 +1,5 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:signals_flutter/signals_core.dart';
+import 'package:signals/signals_flutter.dart';
 
 import 'base.dart';
 
@@ -67,7 +67,7 @@ T useSignalValue<T, S extends ReadonlySignal<T>>(
 ///   }
 /// }
 /// ```
-Signal<T> useSignal<T>(
+FlutterSignal<T> useSignal<T>(
   T value, {
   /// A list of objects to watch for changes.
   ///
@@ -97,7 +97,7 @@ Signal<T> useSignal<T>(
 ///   }
 /// }
 /// ```
-Computed<T> useComputed<T>(
+FlutterComputed<T> useComputed<T>(
   T Function() value, {
   /// A list of objects to watch for changes.
   ///
@@ -145,6 +145,8 @@ void useSignalEffect(
   String? debugLabel,
 }) {
   useEffect(
-      () => effect(cb, onDispose: onDispose, debugLabel: debugLabel), keys,);
+    () => effect(cb, onDispose: onDispose, debugLabel: debugLabel),
+    keys,
+  );
   return;
 }
