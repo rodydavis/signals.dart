@@ -86,8 +86,7 @@ abstract class PersistedSignal<T> extends FlutterSignal<T>
     with PersistedSignalMixin<T> {
   PersistedSignal(
     super.internalValue, {
-    super.autoDispose,
-    super.debugLabel,
+    super.options,
     required this.key,
     required this.store,
   });

@@ -5,10 +5,10 @@ class SetSignal<E> extends Signal<Set<E>>
     with IterableSignalMixin<E, Set<E>>, SetSignalMixin<E, Set<E>>
     implements Set<E> {
   /// Creates a [SetSignal] with the given [value].
+  /// Creates a [SetSignal] with the given [value].
   SetSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   /// Inject: Update current signal value with iterable
@@ -51,13 +51,11 @@ class SetSignal<E> extends Signal<Set<E>>
 /// Create an [SetSignal] from [Set]
 SetSignal<T> setSignal<T>(
   Set<T> list, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<Set<T>>? options,
 }) {
   return SetSignal<T>(
     list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }
 
@@ -65,13 +63,11 @@ SetSignal<T> setSignal<T>(
 extension SignalSetUtils<T> on Set<T> {
   /// Convert an existing list to [SetSignal]
   SetSignal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    SignalOptions<Set<T>>? options,
   }) {
     return SetSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
   }
 }

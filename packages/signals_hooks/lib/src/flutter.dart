@@ -26,11 +26,14 @@ Signal<T> useValueNotifierToSignal<T>(
   /// new initial value.
   List<Object?> keys = const <Object>[],
 
-  /// The debug label for the signal.
-  String? debugLabel,
+  /// The options for the signal.
+  FlutterSignalOptions<T>? options,
 }) {
   final s = useMemoized(
-    () => valueNotifierToSignal(value, debugLabel: debugLabel),
+    () => valueNotifierToSignal(
+      value,
+      options: options,
+    ),
     keys,
   );
   return useExistingSignal(s, keys: keys);
@@ -58,11 +61,11 @@ ReadonlySignal<T> useValueListenableToSignal<T>(
   /// new initial value.
   List<Object?> keys = const <Object>[],
 
-  /// The debug label for the signal.
-  String? debugLabel,
+  /// The options for the signal.
+  FlutterSignalOptions<T>? options,
 }) {
   final s = useMemoized(
-    () => valueListenableToSignal(value, debugLabel: debugLabel),
+    () => valueListenableToSignal(value, options: options),
     keys,
   );
   return useExistingSignal(s, keys: keys);

@@ -5,23 +5,21 @@ class QueueSignal<T> extends Signal<Queue<T>>
     with QueueSignalMixin<T, Queue<T>>
     implements Queue<T> {
   /// Creates a [QueueSignal] with the given [value].
+  /// Creates a [QueueSignal] with the given [value].
   QueueSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 }
 
 /// Create an [QueueSignal] from [Queue]
 QueueSignal<T> queueSignal<T>(
   Queue<T> list, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<Queue<T>>? options,
 }) {
   return QueueSignal<T>(
     list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }
 
@@ -29,13 +27,11 @@ QueueSignal<T> queueSignal<T>(
 extension SignalQueueUtils<T> on Queue<T> {
   /// Convert an existing list to [QueueSignal]
   QueueSignal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    SignalOptions<Queue<T>>? options,
   }) {
     return QueueSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
   }
 }

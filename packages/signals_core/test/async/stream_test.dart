@@ -123,7 +123,7 @@ void main() {
       bool done = false;
       final signal = streamSignal(
         () => stream,
-        onDone: () => done = true,
+        options: StreamSignalOptions(onDone: () => done = true),
       );
       await signal.future;
       await signal.cancel();
@@ -149,12 +149,18 @@ void main() {
     });
 
     test('initial data', () {
-      final signal = streamSignal(() => _stream(), initialValue: 0);
+      final signal = streamSignal(
+        () => _stream(),
+        options: StreamSignalOptions(initialValue: 0),
+      );
       expect(signal.peek().requireValue, 0);
     });
 
     test('not lazy', () {
-      final signal = streamSignal(() => _stream(), lazy: false);
+      final signal = streamSignal(
+        () => _stream(),
+        options: StreamSignalOptions(lazy: false),
+      );
       expect(signal.peek().isLoading, true);
     });
 
@@ -197,7 +203,7 @@ void main() {
       bool done = false;
       final signal = streamSignal(
         () => _stream(),
-        onDone: () => done = true,
+        options: StreamSignalOptions(onDone: () => done = true),
       );
       await signal.future;
       await signal.cancel();
@@ -213,7 +219,7 @@ void main() {
     test('cancelOnError', () async {
       final signal = streamSignal(
         () => _stream(true),
-        cancelOnError: true,
+        options: StreamSignalOptions(cancelOnError: true),
       );
 
       signal.value;

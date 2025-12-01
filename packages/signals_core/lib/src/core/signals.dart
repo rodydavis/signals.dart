@@ -1,14 +1,16 @@
 // ignore_for_file: constant_identifier_names
+// Force recompile
 import 'package:meta/meta.dart';
 
 import '../devtool.dart';
 import '../utils/constants.dart';
 import 'dart:developer' as developer;
 import 'package:preact_signals/preact_signals.dart' as signals;
+export 'package:preact_signals/preact_signals.dart'
+    show SignalEquality, linkedSignal, LinkedSignal;
+
 // ignore: implementation_imports
 import 'package:preact_signals/src/globals.dart';
-// ignore: implementation_imports
-import 'package:preact_signals/src/node.dart';
 
 part 'observer.dart';
 part 'effect.dart';
@@ -18,6 +20,24 @@ part 'batch.dart';
 part 'untracked.dart';
 part 'readonly.dart';
 part 'auto_dispose.dart';
+
+/// Options for creating a signal
+class SignalOptions<T> extends signals.SignalOptions<T> {
+  /// Whether to automatically dispose the signal when it has no listeners
+  final bool autoDispose;
+
+  /// Options for creating a signal
+  const SignalOptions({
+    super.name,
+    super.equalityCheck,
+    super.watched,
+    super.unwatched,
+    this.autoDispose = false,
+  });
+}
+
+/// Options for creating an effect
+typedef EffectOptions = signals.EffectOptions;
 
 /// Signal usage error
 class SignalsError extends Error {
