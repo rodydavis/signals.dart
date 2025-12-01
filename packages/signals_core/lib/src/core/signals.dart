@@ -10,8 +10,6 @@ export 'package:preact_signals/preact_signals.dart' show SignalEquality;
 
 // ignore: implementation_imports
 import 'package:preact_signals/src/globals.dart';
-// ignore: implementation_imports
-import 'package:preact_signals/src/node.dart';
 
 part 'observer.dart';
 part 'effect.dart';

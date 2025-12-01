@@ -346,8 +346,8 @@ class Computed<T> extends signals.Computed<T>
     SignalOptions<T>? options,
   }) {
     autoDispose = options?.autoDispose ?? false;
-    debugLabel = options?.name;
     SignalsObserver.instance?.onComputedCreated(this);
+    _initAutoDispose();
   }
 
   /// Override the current signal with a new value as if it was created with it
@@ -378,9 +378,6 @@ class Computed<T> extends signals.Computed<T>
     SignalsObserver.instance?.onComputedUpdated(this, val);
   }
 
-  @override
-  late final String? debugLabel;
-
   /// Call the computed function and update the value
   void recompute() {
     value;
@@ -402,18 +399,10 @@ class Computed<T> extends signals.Computed<T>
   ReadonlySignal<T> readonly() => this;
 
   @override
-  void unsubscribeFromNode(Node node) {
-    super.unsubscribeFromNode(node);
-    if (autoDispose && targets == null) {
-      dispose();
-    }
-  }
-
-  @override
   T get value {
     if (disposed) {
       print(
-        'computed warning: [$globalId|$debugLabel] has been '
+        'computed warning: [$globalId|$name] has been '
         'read after disposed: ${StackTrace.current}',
       );
     }

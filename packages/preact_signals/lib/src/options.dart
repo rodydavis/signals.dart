@@ -1,8 +1,8 @@
 import 'equality.dart';
-import 'signal.dart';
+import 'readonly.dart';
 
 /// Callback for when a signal is watched or unwatched
-typedef SignalCallback<T> = void Function(Signal<T> signal);
+typedef SignalCallback<T> = void Function(ReadonlySignal<T> signal);
 
 /// Options for creating a signal
 class SignalOptions<T> {
@@ -29,6 +29,21 @@ class SignalOptions<T> {
     this.unwatched,
     SignalEquality<T>? equalityCheck,
   }) : _equalityCheck = equalityCheck;
+
+  /// Copy the options with new values
+  SignalOptions<T> copyWith({
+    String? name,
+    SignalCallback<T>? watched,
+    SignalCallback<T>? unwatched,
+    SignalEquality<T>? equalityCheck,
+  }) {
+    return SignalOptions<T>(
+      name: name ?? this.name,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+      equalityCheck: equalityCheck ?? this.equalityCheck,
+    );
+  }
 }
 
 /// Options for creating an effect

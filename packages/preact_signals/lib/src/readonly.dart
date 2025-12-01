@@ -66,9 +66,6 @@ mixin class ReadonlySignal<T> {
   /// ```
   ///
   /// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  @pragma('wasm:prefer-inline')
   T peek() {
     final prevContext = evalContext;
     evalContext = null;
@@ -92,21 +89,21 @@ mixin class ReadonlySignal<T> {
   @internal
   void internalSubscribe(Node node) {
     final signal = this;
-    if (signal.targets != node && node.prevTarget == null) {
-      node.nextTarget = signal.targets;
-      if (signal.targets != null) {
-        signal.targets!.prevTarget = node;
+    final targets = signal.targets;
+    if (targets != node && node.prevTarget == null) {
+      node.nextTarget = targets;
+      signal.targets = node;
+
+      if (targets != null) {
+        targets.prevTarget = node;
       } else {
         // First subscriber
         if (watched != null) {
           untracked(() {
-            if (signal is Signal<T>) {
-              watched!(signal);
-            }
+            watched!(signal);
           });
         }
       }
-      signal.targets = node;
     }
   }
 
@@ -136,9 +133,6 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  @pragma('wasm:prefer-inline')
   Node? addDependency() {
     final signal = this;
     if (evalContext == null) {
@@ -260,9 +254,7 @@ mixin class ReadonlySignal<T> {
         if (next == null) {
           if (unwatched != null) {
             untracked(() {
-              if (signal is Signal<T>) {
-                unwatched!(signal);
-              }
+              unwatched!(signal);
             });
           }
         }

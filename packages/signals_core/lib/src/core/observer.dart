@@ -59,37 +59,37 @@ abstract class SignalsObserver {
 class LoggingSignalsObserver extends SignalsObserver {
   @override
   void onComputedCreated<T>(Computed<T> instance) {
-    log('computed created: [${instance.globalId}|${instance.debugLabel}]');
+    log('computed created: [${instance.globalId}|${instance.name}]');
   }
 
   @override
   void onComputedUpdated<T>(Computed<T> instance, T value) {
-    log('computed updated: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('computed updated: [${instance.globalId}|${instance.name}] => $value');
   }
 
   @override
   void onSignalCreated<T>(Signal<T> instance, T value) {
-    log('signal created: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('signal created: [${instance.globalId}|${instance.name}] => $value');
   }
 
   @override
   void onSignalUpdated<T>(Signal<T> instance, T value) {
-    log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('signal updated: [${instance.globalId}|${instance.name}] => $value');
   }
 
   @override
   void onEffectCreated(Effect instance) {
-    log('effect created: [${instance.globalId}|${instance.debugLabel}]');
+    log('effect created: [${instance.globalId}|${instance.name}]');
   }
 
   @override
   void onEffectCalled(Effect instance) {
-    log('effect called: [${instance.globalId}|${instance.debugLabel}]');
+    log('effect called: [${instance.globalId}|${instance.name}]');
   }
 
   @override
   void onEffectRemoved(Effect instance) {
-    log('effect removed: [${instance.globalId}|${instance.debugLabel}]');
+    log('effect removed: [${instance.globalId}|${instance.name}]');
   }
 
   /// Logs a message to the console.

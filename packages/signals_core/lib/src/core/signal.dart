@@ -15,12 +15,10 @@ class Signal<T> extends signals.Signal<T>
   Signal(
     T value, {
     SignalOptions<T>? options,
-  }) : super(
-          value,
-          options,
-        ) {
+  }) : super(value, options) {
     autoDispose = options?.autoDispose ?? false;
     afterCreate(value);
+    _initAutoDispose();
   }
 
   /// Lazy signal that can be created with type T that
@@ -49,9 +47,6 @@ class Signal<T> extends signals.Signal<T>
   void beforeUpdate(T val) {
     SignalsObserver.instance?.onSignalUpdated(this, val);
   }
-
-  @override
-  String? get debugLabel => name;
 
   @override
   bool set(
@@ -94,14 +89,6 @@ class Signal<T> extends signals.Signal<T>
 
   /// Returns a readonly signal
   ReadonlySignal<T> readonly() => this;
-
-  @override
-  void unsubscribeFromNode(Node node) {
-    super.unsubscribeFromNode(node);
-    if (autoDispose && targets == null) {
-      dispose();
-    }
-  }
 
   /// Override the current signal with a new value as if it was created with it
   ///
