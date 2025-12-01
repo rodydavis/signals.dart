@@ -4,14 +4,7 @@ part of 'signals.dart';
 class Signal<T> extends signals.Signal<T>
     with ReadonlySignalMixin<T>, SignalsAutoDisposeMixin<T>
     implements ReadonlySignal<T> {
-  /// Simple writeable signal.
-  ///
-  /// ```dart
-  /// final count = signal(0);
-  /// print(count.value); // 0
-  /// count.value++;
-  /// print(count.value); // 1
-  /// ```
+  /// {@macro signal}
   Signal(
     super.internalValue, {
     this.debugLabel,
