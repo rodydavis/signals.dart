@@ -112,6 +112,8 @@ class Signal<T> with ReadonlySignal<T> {
   }
 
   @internal
+
+  /// @nodoc
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   @pragma('wasm:prefer-inline')

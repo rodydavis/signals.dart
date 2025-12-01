@@ -21,6 +21,8 @@ mixin class ReadonlySignal<T> {
   T get value => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   T get internalValue => throw UnimplementedError();
 
   /// The name of the signal, used for debugging
@@ -81,12 +83,18 @@ mixin class ReadonlySignal<T> {
       throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   void subscribeToNode(Node node) => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   void unsubscribeFromNode(Node node) => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   void internalSubscribe(Node node) {
     final signal = this;
     final targets = signal.targets;
@@ -113,18 +121,28 @@ mixin class ReadonlySignal<T> {
   int get version => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   Node? node;
 
   @internal
+
+  /// @nodoc
   Node? targets;
 
   @internal
+
+  /// @nodoc
   bool internalRefresh() => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   final Symbol brand = BRAND_SYMBOL;
 
   @internal
+
+  /// @nodoc
   Iterable<Listenable> readonlySignalTargets() sync* {
     final instance = this;
     for (Node? node = instance.targets; node != null; node = node.nextTarget) {
@@ -133,6 +151,8 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+
+  /// @nodoc
   Node? addDependency() {
     final signal = this;
     if (evalContext == null) {
@@ -214,6 +234,8 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+
+  /// @nodoc
   void Function() signalSubscribe(
     void Function(T value) fn,
   ) {
@@ -234,6 +256,8 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+
+  /// @nodoc
   void signalUnsubscribe(Node node) {
     final signal = this;
     // Only run the unsubscribe step if the signal has any subscribers to begin with.

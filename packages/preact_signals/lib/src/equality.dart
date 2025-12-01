@@ -1,5 +1,6 @@
 /// Signal equality check
 abstract class SignalEquality<T> {
+  /// @nodoc
   const SignalEquality();
 
   /// Check if two values are equal

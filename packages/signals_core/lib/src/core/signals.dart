@@ -6,7 +6,8 @@ import '../devtool.dart';
 import '../utils/constants.dart';
 import 'dart:developer' as developer;
 import 'package:preact_signals/preact_signals.dart' as signals;
-export 'package:preact_signals/preact_signals.dart' show SignalEquality;
+export 'package:preact_signals/preact_signals.dart'
+    show SignalEquality, linkedSignal, LinkedSignal;
 
 // ignore: implementation_imports
 import 'package:preact_signals/src/globals.dart';

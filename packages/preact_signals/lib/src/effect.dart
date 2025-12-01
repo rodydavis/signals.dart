@@ -16,18 +16,25 @@ import 'options.dart';
 /// gets disposed, whichever happens first.
 class Effect with Listenable {
   @internal
+
+  /// @nodoc
   Function()? fn;
 
   @override
   final int globalId;
 
   @internal
+
+  /// @nodoc
   Function? cleanup;
 
   @override
+  // ignore: overridden_fields
   Node? sources;
 
   @internal
+
+  /// @nodoc
   Effect? nextBatchedEffect;
 
   @override
@@ -44,6 +51,8 @@ class Effect with Listenable {
         name = options?.name;
 
   @internal
+
+  /// @nodoc
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   @pragma('wasm:prefer-inline')
@@ -64,6 +73,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   @pragma('wasm:prefer-inline')
@@ -116,6 +127,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   void cleanupEffect() {
     final effect = this;
     final cleanup = effect.cleanup;
@@ -142,6 +155,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   void disposeEffect() {
     final effect = this;
     for (var node = effect.sources; node != null; node = node.nextSource) {
@@ -154,6 +169,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   void endEffect(Listenable? prevContext) {
     final effect = this;
     if (evalContext != effect) {
