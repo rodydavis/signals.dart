@@ -1,10 +1,18 @@
 {
-  "signal": {
+  "Signal": {
     "scope": "dart",
     "prefix": "sig",
     "description": "A Signal Object (with label and auto dispose)",
     "body": [
       "final $1 = signal($2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Signal ($ extension)": {
+    "scope": "dart",
+    "prefix": "sig$",
+    "description": "A Signal Object (created with the $ extension)",
+    "body": [
+      "final $1 = $2.$;"
     ]
   },
   "Async Signal": {
@@ -18,15 +26,23 @@
   "Computed": {
     "scope": "dart",
     "prefix": "comp",
-    "description": " The computed function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal’s value.",
+    "description": "The computed function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal’s value.",
     "body": [
       "final $1 = computed(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Computed ($ extension)": {
+    "scope": "dart",
+    "prefix": "comp$",
+    "description": "A Computed Object (created with the $ extension)",
+    "body": [
+      "final $1 = (() => $2).$;"
     ]
   },
   "AsyncComputed": {
     "scope": "dart",
     "prefix": "ascomp",
-    "description": " Async Computed is syntax sugar around [FutureSignal].",
+    "description": "Async Computed is syntax sugar around [FutureSignal].",
     "body": [
       "final $1 = computedAsync(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
     ]
@@ -79,16 +95,48 @@
       "final $1 = futureSignal(() async => $2, debugLabel: '$1', autoDispose: ${3:false});"
     ]
   },
+  "StreamSignal": {
+    "scope": "dart",
+    "prefix": "ssig",
+    "description": "Returns a streamSignal instance.",
+    "body": [
+      "final $1 = streamSignal(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "TrackedSignal": {
+    "scope": "dart",
+    "prefix": "tsig",
+    "description": "A signal that tracks its previous and initial values.",
+    "body": [
+      "final $1 = trackedSignal($2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "LazySignal": {
+    "scope": "dart",
+    "prefix": "lazysig",
+    "description": "A signal that is initialized lazily.",
+    "body": [
+      "final $1 = lazySignal(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "PersistedSignal (JSON)": {
+    "scope": "dart",
+    "prefix": "persig",
+    "description": "A signal that persists its value as JSON.",
+    "body": [
+      "final $1 = persistedSignal('$1', $2, toJson: ($3) => $3.toJson(), fromJson: ($4) => $2.fromJson($4));"
+    ]
+  },
   "Signal Container (Read-only)": {
     "scope": "dart",
     "prefix": "rsigcon",
     "description": "Returns a read-only Signal Container.",
     "body": [
-      "final $1 = readonlySignalContainer<$2,$3>((arg) {;",
-      "       return computed<$2>(() => $4);",
-      "   },",
-      "   debugLabel: '$1',",
-      "   autoDispose: ${4:false},",
+      "final $1 = readonlySignalContainer<$2,$3>((arg) {",
+      "    return computed<$2>(() => $4);",
+      "},",
+      "debugLabel: '$1',",
+      "autoDispose: ${5:false},",
       ");"
     ]
   },
@@ -97,23 +145,15 @@
     "prefix": "sigcon",
     "description": "Returns a Signal Container.",
     "body": [
-      "final $1 = signalContainer<$2,$3>((arg) {;",
-      "       return signal<$2>($4);",
-      "   },",
-      "   debugLabel: '$1',",
-      "   autoDispose: ${4:false},",
+      "final $1 = signalContainer<$2,$3>((arg) {",
+      "    return signal<$2>($4);",
+      "},",
+      "debugLabel: '$1',",
+      "autoDispose: ${5:false},",
       ");"
     ]
   },
-  "StreamSignal": {
-    "scope": "dart",
-    "prefix": "stsig",
-    "description": "Returns a streamSignal instance.",
-    "body": [
-      "final $1 = futureSignal(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
-    ]
-  },
-  "Watch builder": {
+  "Watch.builder": {
     "scope": "dart",
     "prefix": "watchb",
     "description": "To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree.",
@@ -131,18 +171,13 @@
     "description": "To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree.",
     "body": ["Watch((context) => $1),"]
   },
-  "Value Signal": {
+  "Signal class with mixin": {
     "scope": "dart",
-    "prefix": "valsig",
-    "description": "Value Signal Class",
+    "prefix": "sigmixin",
+    "description": "Create a signal class with a mixin",
     "body": [
-      "class $1 extends ValueSignal<$2> {",
-      " $1(",
-      "     super.value, {",
-      "     super.autoDispose,",
-      "     super.equality,",
-      "     super.debugLabel = '$1',",
-      " });",
+      "class $1 with $2 {",
+      "  $1();",
       "}"
     ]
   }
