@@ -40,10 +40,10 @@ class PersistedEnumSignal<T extends Enum> extends PersistedSignal<T>
 }
 
 /// A `PersistedSignal` that stores a nullable enum value.
-class PersistedPersistedEnumSignal<T extends Enum> extends PersistedSignal<T?>
+class PersistedNullableEnumSignal<T extends Enum> extends PersistedSignal<T?>
     with _EnumPersistedSignal<T> {
-  /// Creates a new `PersistedEnumSignal`.
-  PersistedPersistedEnumSignal(
+  /// Creates a new `NullableEnumSignal`.
+  PersistedNullableEnumSignal(
     super.val,
     String key,
     this.values, {
