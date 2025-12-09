@@ -357,6 +357,17 @@ class StreamSignal<T> extends AsyncSignal<T> {
   }
 
   @override
+  Future<T> get future {
+    untracked(() {
+      // make sure the stream is exectuted,
+      // so the returned future will be completed eventually
+      value;
+    });
+
+    return super.future;
+  }
+
+  @override
   void setError(Object error, [StackTrace? stackTrace]) {
     super.setError(error, stackTrace);
     if (cancelOnError == true) {
