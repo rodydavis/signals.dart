@@ -82,8 +82,11 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
 
   @override
   V? remove(Object? key) {
+    final lengthBefore = value.length;
     final result = value.remove(key);
-    set(value, force: true);
+    if (value.length != lengthBefore) {
+      set(value, force: true);
+    }
     return result;
   }
 
