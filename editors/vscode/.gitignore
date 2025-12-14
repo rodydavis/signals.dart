@@ -1,2 +1,5 @@
+.vscode-test-web/
 node_modules/
+dist/
+.DS_Store
 *.vsix
