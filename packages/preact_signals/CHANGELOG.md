@@ -1,3 +1,7 @@
+## 1.9.4
+
+- Add @pragma for inline and errors
+
 ## 1.9.3
 
 - Expose SignalEffectException

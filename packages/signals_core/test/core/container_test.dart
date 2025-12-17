@@ -73,6 +73,22 @@ void main() {
       container.dispose();
       expect(container.store.length, 0);
     });
+
+    test('effect loop', () {
+      final counters = signalContainer<int, int>(
+        (e) {
+          return signal(e);
+        },
+        cache: true,
+      );
+
+      int count = 0;
+      effect(() {
+        print(counters(0).value);
+        count++;
+      });
+      expect(count, 1);
+    });
   });
 
   group('signal container (read-only)', () {

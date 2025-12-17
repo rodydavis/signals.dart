@@ -1,4 +1,4 @@
-library preact_signals;
+library;
 
 export 'src/signal.dart' show signal, Signal;
 export 'src/computed.dart' show computed, Computed;

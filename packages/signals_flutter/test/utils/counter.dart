@@ -45,10 +45,12 @@ class CounterState extends State<Counter> {
         body: () {
           if (widget.watch) {
             if (widget.builder) {
-              return Watch.builder(builder: (context) {
-                widget.callback();
-                return Text('Count: $display');
-              },);
+              return Watch.builder(
+                builder: (context) {
+                  widget.callback();
+                  return Text('Count: $display');
+                },
+              );
             } else {
               return Watch((context) {
                 widget.callback();
@@ -56,10 +58,12 @@ class CounterState extends State<Counter> {
               });
             }
           } else {
-            return Builder(builder: (context) {
-              widget.callback();
-              return Text('Count: ${display.watch(context)}');
-            },);
+            return Builder(
+              builder: (context) {
+                widget.callback();
+                return Text('Count: ${display.watch(context)}');
+              },
+            );
           }
         }(),
         floatingActionButton: FloatingActionButton(

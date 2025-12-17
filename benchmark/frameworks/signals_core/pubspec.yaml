@@ -1,0 +1,8 @@
+name: signals_core_benchmark
+environment:
+  sdk: ^3.6.0
+resolution: workspace
+dependencies:
+  signals_core:
+    path: ../../../packages/signals_core
+  reactivity_benchmark: ^0.0.1
