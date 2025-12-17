@@ -64,7 +64,10 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   void _setup() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cb = effect(() {
-        for (final s in _signals.values.where((e) => e.local != null)) {
+        // Snapshot to prevent ConcurrentModificationError if value access
+        // triggers bindSignal() which mutates _signals during iteration
+        final signals = _signals.values.where((e) => e.local != null).toList();
+        for (final s in signals) {
           s.target.value;
         }
         _rebuild();
@@ -385,14 +388,17 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   void clearSignalsAndEffects() {
     _cleanup?.call();
     _cleanup = null;
-    final local = _signals //
-        .values
+    // Snapshot collections to prevent ConcurrentModificationError
+    // dispose() and effect cleanup can trigger mutations
+    final local = _signals.values
         .where((e) => e.local == true)
-        .map((e) => e.target);
+        .map((e) => e.target)
+        .toList();
     for (final s in local) {
       s.dispose();
     }
-    for (final cb in _effects) {
+    final effects = List<EffectCleanup>.of(_effects);
+    for (final cb in effects) {
       cb();
     }
     _effects.clear();
