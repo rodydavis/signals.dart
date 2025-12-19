@@ -27,6 +27,29 @@ void main() {
       expect(result, 10);
     });
 
+    test('computedAsync with .future dependencies', () async {
+      var calls = 0;
+      final count = asyncSignal(AsyncData(0));
+
+      final s = computedAsync(() async {
+        calls++;
+        final future = count.future;
+        await Future.delayed(const Duration(milliseconds: 5));
+        return await future;
+      });
+
+      await expectLater(s.future, completion(0));
+      expect(calls, 1);
+
+      count.value = AsyncLoading();
+      final loadingExpectation = expectLater(s.future, completion(1));
+
+      count.value = AsyncData(1);
+      await expectLater(s.future, completion(1));
+      expect(calls, 2);
+      await loadingExpectation;
+    });
+
     test('computedFrom', () async {
       Future<int> future(List<int> ids) async {
         await Future.delayed(const Duration(milliseconds: 5));
@@ -47,6 +70,28 @@ void main() {
       final result = await completer.future;
 
       expect(result, 10);
+    });
+
+    test('computedFrom with .completion dependencies', () async {
+      var calls = 0;
+      final count = asyncSignal(AsyncData(0));
+
+      final s = computedFrom([count.completion], (_) async {
+        calls++;
+        await Future.delayed(const Duration(milliseconds: 5));
+        return await count.future;
+      });
+
+      await expectLater(s.future, completion(0));
+      expect(calls, 1);
+
+      count.value = AsyncLoading();
+      final loadingExpectation = expectLater(s.future, completion(1));
+
+      count.value = AsyncData(1);
+      await expectLater(s.future, completion(1));
+      expect(calls, 2);
+      await loadingExpectation;
     });
 
     test('check repeated calls', () async {

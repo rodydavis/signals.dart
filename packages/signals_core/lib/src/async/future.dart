@@ -170,6 +170,24 @@ class FutureSignal<T> extends StreamSignal<T> {
   /// count.value = 1; // resets the future
   /// s.value; // state with count 1
   /// ```
+  ///
+  /// If other async signals need to be tracked across an async gap and they are being awaited via their `.future`,
+  /// then use their `.completion` for the dependencies rather than the async signal itself.
+  /// This way the `futureSignal` will be reset when the tracked signal completes, effectively ignoring their transition into a loading state.
+  ///
+  /// ```dart
+  /// final count = asyncSignal(AsyncData(0));
+  ///
+  /// final s = futureSignal(
+  ///     () async => await count.future,
+  ///     dependencies: [count.completion],
+  /// );
+  ///
+  /// await s.future; // 0
+  /// count.value = AsyncLoading(); // ignored by the future signal
+  /// count.value = AsyncData(1);
+  /// await s.future; // 1
+  /// ```
   /// @link https://dartsignals.dev/async/future
   /// {@endtemplate}
   FutureSignal(

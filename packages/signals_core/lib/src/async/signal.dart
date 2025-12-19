@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-
 import '../core/signals.dart';
 import '../mixins/event_sink.dart';
 import 'state.dart';
@@ -173,60 +171,77 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
     super.value, {
     super.debugLabel,
     super.autoDispose,
-  }) : _initialValue = value;
+  })  : _initialValue = value,
+        _completion = _AsyncCompletionSignal<T>(
+          initialValue: value,
+          debugLabel: debugLabel != null ? '${debugLabel}_completion' : null,
+        );
+
+  @override
+  void dispose() {
+    _completion.dispose();
+    super.dispose();
+  }
 
   final AsyncState<T> _initialValue;
   bool _initialized = false;
 
-  /// Internal Completer for values
-  @internal
-  Completer<bool> completer = Completer<bool>();
+  final _AsyncCompletionSignal<T> _completion;
+
+  /// Tracks the async completion of this signal.
+  ///
+  /// Notifies if the value of this signal changes to [AsyncData] or [AsyncError],
+  /// but not if it changes to [AsyncLoading].
+  ///
+  /// Intended to be used for tracking dependencies across async gaps,
+  /// when awaiting the [future] of this signal.
+  ///
+  /// ```dart
+  /// computedFrom([someAsyncSignal.completion], (_) async {
+  ///   await Future.delayed(const Duration(seconds: 1));
+  ///   return await someAsyncSignal.future;
+  /// });
+  /// ```
+  ReadonlySignal<Future<T>> get completion => _completion;
 
   /// The future of the signal completer
-  Future<T> get future async {
-    value;
-    await completer.future;
-    return value.requireValue;
-  }
+  Future<T> get future => completion.value;
 
   /// Returns true if the signal is completed an error or data
   bool get isCompleted {
-    value;
-    return completer.isCompleted;
+    future;
+    return _completion.isCompleted;
+  }
+
+  @override
+  bool set(AsyncState<T> val, {bool force = false}) {
+    return batch(() {
+      _completion.setValue(val);
+      return super.set(val, force: force);
+    });
   }
 
   /// Set the error with optional stackTrace to [AsyncError]
   void setError(Object error, [StackTrace? stackTrace]) {
-    batch(() {
-      value = AsyncState.error(error, stackTrace);
-      if (completer.isCompleted) completer = Completer<bool>();
-      completer.complete(true);
-    });
+    set(AsyncState.error(error, stackTrace));
   }
 
   /// Set the value to [AsyncData]
   void setValue(T value) {
-    batch(() {
-      this.value = AsyncState.data(value);
-      if (completer.isCompleted) completer = Completer<bool>();
-      completer.complete(true);
-    });
+    set(AsyncState.data(value));
   }
 
   /// Set the loading state to [AsyncLoading]
   void setLoading([AsyncState<T>? state]) {
-    batch(() {
-      value = state ?? AsyncState.loading();
-      completer = Completer<bool>();
-    });
+    set(state ?? AsyncState.loading());
   }
 
   /// Reset the signal to the initial value
   void reset([AsyncState<T>? value]) {
     batch(() {
-      this.value = value ?? _initialValue;
+      super.value = value ?? _initialValue;
       _initialized = false;
-      if (completer.isCompleted) completer = Completer<bool>();
+      _completion.setValue(const AsyncLoading());
     });
   }
 
@@ -434,4 +449,70 @@ AsyncSignal<T> asyncSignal<T>(
     debugLabel: debugLabel,
     autoDispose: autoDispose,
   );
+}
+
+class _AsyncCompletionSignal<T> extends Signal<Future<T>> {
+  _AsyncCompletionSignal._(
+    Completer<T> completer, {
+    required super.debugLabel,
+  })  : _completer = completer,
+        super(_ignoreUncaughtErrors(completer.future));
+
+  factory _AsyncCompletionSignal({
+    required AsyncState<T> initialValue,
+    required String? debugLabel,
+  }) {
+    final completer = Completer<T>();
+
+    switch (initialValue) {
+      case AsyncLoading():
+        break;
+
+      case AsyncData(:final value):
+        completer.complete(value);
+        break;
+
+      case AsyncError(:final error, :final stackTrace):
+        completer.completeError(error, stackTrace);
+        break;
+    }
+
+    return _AsyncCompletionSignal._(completer, debugLabel: debugLabel);
+  }
+
+  Completer<T> _completer;
+
+  bool _initialized = false;
+  bool get isCompleted => _initialized && _completer.isCompleted;
+
+  void setValue(AsyncState<T> value) {
+    if (_completer.isCompleted) {
+      _completer = Completer<T>();
+      this.value = _ignoreUncaughtErrors(_completer.future);
+    }
+
+    switch (value) {
+      case AsyncLoading():
+        return;
+
+      case AsyncData(:final value):
+        _initialized = true;
+        _completer.complete(value);
+        return;
+
+      case AsyncError(:final error, :final stackTrace):
+        _initialized = true;
+        _completer.completeError(error, stackTrace);
+        return;
+    }
+  }
+
+  static Future<T> _ignoreUncaughtErrors<T>(Future<T> future) {
+    // Makes sure the future never reports an uncaught error to
+    // the current zone. Seems to be necessary to avoid uncaught
+    // errors to be reported when async signals are being used
+    // synchronously, i.e. when their .future is not used.
+    future.ignore();
+    return future;
+  }
 }
