@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../signals_core.dart';
+import '../core/options.dart';
 
 /// Extension on [ValueNotifier] to provide helpful methods for signals
 extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
@@ -45,14 +46,12 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   /// @link https://dartsignals.dev/flutter/value-notifier
   /// {@endtemplate}
   Signal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    FlutterSignalOptions<T>? options,
   }) {
     bool? self;
     final target = signal<T>(
       value,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
 
     void updater() {
@@ -126,11 +125,9 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
 /// {@endtemplate}
 Signal<T> valueNotifierToSignal<T>(
   ValueNotifier<T> valueNotifier, {
-  String? debugLabel,
-  bool autoDispose = false,
+  FlutterSignalOptions<T>? options,
 }) {
   return valueNotifier.toSignal(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

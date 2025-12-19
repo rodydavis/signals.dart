@@ -66,6 +66,11 @@ class SignalEffectException implements Exception {
 
   /// Error for when a effect fails to run the callback
   SignalEffectException(this.error, [this.stackTrace]);
+
+  @override
+  String toString() {
+    return error.toString();
+  }
 }
 
 /// Combine multiple value updates into one "commit" at the end of the provided callback.

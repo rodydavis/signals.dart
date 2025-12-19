@@ -33,7 +33,7 @@ class TickerSignal extends Signal<Duration> implements TickerProvider {
   /// ```
   TickerSignal({
     Duration? initialDuration,
-    super.debugLabel,
+    super.options,
   }) : super(initialDuration ?? Duration.zero) {
     initSchedulerBindingSignals(); // no-op if already called
     _cleanup = effect(() {
@@ -98,10 +98,11 @@ class TickerSignal extends Signal<Duration> implements TickerProvider {
 TickerSignal tickerSignal({
   Duration? initialDuration,
   String? debugLabel,
+  SignalOptions<Duration>? options,
 }) {
   return TickerSignal(
     initialDuration: initialDuration,
-    debugLabel: debugLabel,
+    options: options ?? SignalOptions<Duration>(name: debugLabel),
   );
 }
 // coverage:ignore-end

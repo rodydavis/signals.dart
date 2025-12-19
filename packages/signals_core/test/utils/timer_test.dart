@@ -7,8 +7,7 @@ void main() {
     String message,
     TimerSignal Function(
       Duration, {
-      bool autoDispose,
-      String debugLabel,
+      StreamSignalOptions? options,
     }) create,
   ) {
     group('$message test', () {
@@ -28,25 +27,22 @@ void main() {
 
   testSignal(
     'TimerSignal',
-    (val, {autoDispose = false, debugLabel = 'Timer'}) => TimerSignal(
-      every: val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+    (val, {options}) => TimerSignal(
+      val,
+      options: options as StreamSignalOptions<TimerSignalEvent>?,
     ),
   );
   testSignal(
     'timerSignal',
-    (val, {autoDispose = false, debugLabel = 'Timer'}) => timerSignal(
+    (val, {options}) => timerSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: options as StreamSignalOptions<TimerSignalEvent>?,
     ),
   );
   testSignal(
     'toSignal',
-    (val, {autoDispose = false, debugLabel = 'Timer'}) => val.toSignal(
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+    (val, {options}) => val.toSignal(
+      options: options as StreamSignalOptions<TimerSignalEvent>?,
     ),
   );
 }

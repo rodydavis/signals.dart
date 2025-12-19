@@ -1,8 +1,10 @@
 import 'package:meta/meta.dart';
 
 import 'batch.dart';
+import 'equality.dart';
 import 'globals.dart';
 import 'node.dart';
+import 'options.dart';
 import 'readonly.dart';
 
 /// Instance of a new plain signal
@@ -30,15 +32,27 @@ class Signal<T> with ReadonlySignal<T> {
     _isInitialized = true;
   }
 
-  Signal(this._internalValue)
+  /// Create a new signal with a value
+  Signal(this._internalValue, [SignalOptions<T>? options])
       : version = 0,
         globalId = ++lastGlobalId,
-        _isInitialized = true;
+        _isInitialized = true {
+    name = options?.name;
+    watched = options?.watched;
+    unwatched = options?.unwatched;
+    equalityCheck = options?.equalityCheck ?? SignalEquality.standard<T>();
+  }
 
-  Signal.lazy()
+  /// Create a new lazy signal
+  Signal.lazy([SignalOptions<T>? options])
       : version = 0,
         globalId = ++lastGlobalId,
-        _isInitialized = false;
+        _isInitialized = false {
+    name = options?.name;
+    watched = options?.watched;
+    unwatched = options?.unwatched;
+    equalityCheck = options?.equalityCheck ?? SignalEquality.standard<T>();
+  }
 
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
@@ -86,14 +100,20 @@ class Signal<T> with ReadonlySignal<T> {
     /// Skip equality check and update the value
     bool force = false,
   }) {
-    if (force || !isInitialized || val != internalValue) {
+    if (force || !isInitialized || !_equals(val, internalValue)) {
       internalSetValue(val);
       return true;
     }
     return false;
   }
 
+  bool _equals(T a, T b) {
+    return equalityCheck.equals(a, b);
+  }
+
   @internal
+
+  /// @nodoc
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   @pragma('wasm:prefer-inline')
@@ -120,7 +140,8 @@ class Signal<T> with ReadonlySignal<T> {
 /// Create a new plain signal
 Signal<T> signal<T>(
   /// The initial value for the signal
-  T value,
-) {
-  return Signal<T>(value);
+  T value, [
+  SignalOptions<T>? options,
+]) {
+  return Signal<T>(value, options);
 }

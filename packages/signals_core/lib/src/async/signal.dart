@@ -171,8 +171,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   /// A [Signal] that stores value in [AsyncState]
   AsyncSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   }) : _initialValue = value;
 
   final AsyncState<T> _initialValue;
@@ -426,12 +425,10 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
 /// {@endtemplate}
 AsyncSignal<T> asyncSignal<T>(
   AsyncState<T> value, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<AsyncState<T>>? options,
 }) {
   return AsyncSignal<T>(
     value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

@@ -17,8 +17,22 @@ mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
   @internal
   void beforeUpdate(T val);
 
-  /// Debug label for Debug Mode
-  String? get debugLabel;
+  /// Auto dispose the signal when there are no more listeners
+  bool get autoDispose;
+
+  /// Internal dispose method
+  @internal
+  void dispose();
+
+  void _initAutoDispose() {
+    if (autoDispose) {
+      final currentUnwatched = unwatched;
+      unwatched = (_) {
+        currentUnwatched?.call(this);
+        dispose();
+      };
+    }
+  }
 }
 
 /// Create a new plain readonly signal

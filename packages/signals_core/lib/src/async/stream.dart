@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:preact_signals/preact_signals.dart' as signals;
 import '../core/signals.dart';
 import 'signal.dart';
 import 'state.dart';
@@ -104,7 +105,7 @@ import 'state.dart';
 ///         final value = count();
 ///         yield value;
 ///     },
-///     dependencies: [count],
+///     options: StreamSignalOptions(dependencies: [count]),
 /// );
 /// s.value; // state with count 0
 /// count.value = 1; // resets the future
@@ -213,7 +214,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
   ///         final value = count();
   ///         yield value;
   ///     },
-  ///     dependencies: [count],
+  ///     options: StreamSignalOptions(dependencies: [count]),
   /// );
   /// s.value; // state with count 0
   /// count.value = 1; // resets the future
@@ -223,28 +224,26 @@ class StreamSignal<T> extends AsyncSignal<T> {
   /// {@endtemplate}
   StreamSignal(
     Stream<T> Function() fn, {
-    this.cancelOnError,
-    super.debugLabel,
-    T? initialValue,
-    this.dependencies = const [],
-    void Function()? onDone,
-    bool lazy = true,
-    super.autoDispose,
-  })  : _onDone = onDone,
+    StreamSignalOptions<T>? options,
+  })  : _onDone = options?.onDone,
+        cancelOnError = options?.cancelOnError,
+        dependencies = options?.dependencies ?? const [],
         _stream = computed(
           () {
-            for (final dep in dependencies) {
+            for (final dep in options?.dependencies ?? const []) {
               dep.value;
             }
             return fn();
           },
         ),
         super(
-          initialValue != null
-              ? AsyncState.data(initialValue)
+          options?.initialValue != null
+              ? AsyncState.data(options!.initialValue as T)
               : AsyncState.loading(),
+          options: options,
         ) {
-    if (!lazy) value;
+    if (options?.lazy ?? true) return;
+    value;
   }
 
   final Computed<Stream<T>> _stream;
@@ -365,6 +364,65 @@ class StreamSignal<T> extends AsyncSignal<T> {
   }
 }
 
+/// Options for [StreamSignal]
+class StreamSignalOptions<T> extends SignalOptions<AsyncState<T>> {
+  /// Initial value for the signal
+  final T? initialValue;
+
+  /// List of dependencies to recompute the stream
+  final List<ReadonlySignal<dynamic>> dependencies;
+
+  /// Callback when the stream is done
+  final void Function()? onDone;
+
+  /// Cancel the subscription on error
+  final bool? cancelOnError;
+
+  /// Whether to lazy load the stream
+  final bool lazy;
+
+  /// Options for [StreamSignal]
+  const StreamSignalOptions({
+    super.name,
+    super.autoDispose,
+    super.equalityCheck,
+    super.watched,
+    super.unwatched,
+    this.initialValue,
+    this.dependencies = const [],
+    this.onDone,
+    this.cancelOnError,
+    this.lazy = true,
+  });
+
+  /// Copy the options with new values
+  StreamSignalOptions<T> copyWith({
+    T? initialValue,
+    List<ReadonlySignal<dynamic>>? dependencies,
+    void Function()? onDone,
+    bool? cancelOnError,
+    bool? lazy,
+    String? name,
+    bool? autoDispose,
+    SignalEquality<AsyncState<T>>? equalityCheck,
+    signals.SignalCallback<AsyncState<T>>? watched,
+    signals.SignalCallback<AsyncState<T>>? unwatched,
+  }) {
+    return StreamSignalOptions(
+      initialValue: initialValue ?? this.initialValue,
+      dependencies: dependencies ?? this.dependencies,
+      onDone: onDone ?? this.onDone,
+      cancelOnError: cancelOnError ?? this.cancelOnError,
+      lazy: lazy ?? this.lazy,
+      name: name ?? this.name,
+      autoDispose: autoDispose ?? this.autoDispose,
+      equalityCheck: equalityCheck ?? this.equalityCheck,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+}
+
 /// {@template stream}
 /// Stream signals can be created by extension or method.
 ///
@@ -475,22 +533,10 @@ class StreamSignal<T> extends AsyncSignal<T> {
 /// {@endtemplate}
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() callback, {
-  T? initialValue,
-  String? debugLabel,
-  List<ReadonlySignal<dynamic>> dependencies = const [],
-  void Function()? onDone,
-  bool? cancelOnError,
-  bool lazy = true,
-  bool autoDispose = false,
+  StreamSignalOptions<T>? options,
 }) {
   return StreamSignal(
     callback,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    dependencies: dependencies,
-    onDone: onDone,
-    cancelOnError: cancelOnError,
-    lazy: lazy,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

@@ -4,6 +4,7 @@ import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
+import 'options.dart';
 
 /// Create an effect to run arbitrary code in response to signal changes.
 ///
@@ -15,29 +16,43 @@ import 'node.dart';
 /// gets disposed, whichever happens first.
 class Effect with Listenable {
   @internal
+
+  /// @nodoc
   Function()? fn;
 
   @override
   final int globalId;
 
   @internal
+
+  /// @nodoc
   Function? cleanup;
 
   @override
+  // ignore: overridden_fields
   Node? sources;
 
   @internal
+
+  /// @nodoc
   Effect? nextBatchedEffect;
 
   @override
   int flags;
 
-  Effect(this.fn)
+  /// The name of the effect, used for debugging
+  String? name;
+
+  /// Create a new effect
+  Effect(this.fn, [EffectOptions? options])
       : flags = TRACKING,
         cleanup = null,
-        globalId = ++lastGlobalId;
+        globalId = ++lastGlobalId,
+        name = options?.name;
 
   @internal
+
+  /// @nodoc
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   @pragma('wasm:prefer-inline')
@@ -58,6 +73,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   @pragma('wasm:prefer-inline')
@@ -110,6 +127,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   void cleanupEffect() {
     final effect = this;
     final cleanup = effect.cleanup;
@@ -136,6 +155,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   void disposeEffect() {
     final effect = this;
     for (var node = effect.sources; node != null; node = node.nextSource) {
@@ -148,6 +169,8 @@ class Effect with Listenable {
   }
 
   @internal
+
+  /// @nodoc
   void endEffect(Listenable? prevContext) {
     final effect = this;
     if (evalContext != effect) {
@@ -174,7 +197,8 @@ class Effect with Listenable {
 /// gets disposed, whichever happens first.
 void Function() effect(
   /// The effect callback
-  Function() fn,
-) {
-  return Effect(fn)();
+  Function() fn, [
+  EffectOptions? options,
+]) {
+  return Effect(fn, options)();
 }
