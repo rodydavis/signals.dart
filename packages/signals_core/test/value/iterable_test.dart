@@ -7,15 +7,14 @@ void main() {
     String message,
     IterableSignal<T> Function<T>(
       Iterable<T>, {
-      bool autoDispose,
-      String? debugLabel,
+      SignalOptions<Iterable<T>>? options,
     }) create,
   ) {
     group('$message test', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {
           final Iterable<String> iterable = <String>['a', 'b', 'c'];
-          final s = create(iterable, autoDispose: true);
+          final s = create(iterable, options: SignalOptions(autoDispose: true));
           final dispose = s.subscribe((_) => {});
           expect(s.disposed, false);
           dispose();
@@ -23,7 +22,8 @@ void main() {
         });
         test('check last subscriber does not disposes', () {
           final Iterable<String> iterable = <String>['a', 'b', 'c'];
-          final s = create(iterable, autoDispose: false);
+          final s =
+              create(iterable, options: SignalOptions(autoDispose: false));
           final dispose = s.subscribe((_) => {});
           expect(s.disposed, false);
           dispose();
@@ -277,26 +277,23 @@ void main() {
 
   testSignal(
     'IterableSignal',
-    <T>(val, {autoDispose = false, debugLabel}) => IterableSignal(
+    <T>(val, {options}) => IterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: options,
     ),
   );
   testSignal(
     'iterableSignal',
-    <T>(val, {autoDispose = false, debugLabel}) => iterableSignal(
+    <T>(val, {options}) => iterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: options,
     ),
   );
   testSignal(
     'toSignal',
-    <T>(val, {autoDispose = false, debugLabel}) {
+    <T>(val, {options}) {
       return val.toSignal(
-        autoDispose: autoDispose,
-        debugLabel: debugLabel,
+        options: options,
       );
     },
   );

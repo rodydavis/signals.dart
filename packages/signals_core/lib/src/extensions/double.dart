@@ -2,22 +2,31 @@ import '../core/signals.dart';
 
 /// Helper extensions for [ReadonlySignal<double>]
 extension DoubleSignalExtension on ReadonlySignal<double> {
+  /// Remainder
   double remainder(num other) => value.remainder(other);
 
+  /// Add
   double operator +(num other) => value + other;
 
+  /// Subtract
   double operator -(num other) => value - other;
 
+  /// Multiply
   double operator *(num other) => value * other;
 
+  /// Modulo
   double operator %(num other) => value % other;
 
+  /// Divide
   double operator /(num other) => value / other;
 
+  /// Integer divide
   int operator ~/(num other) => value ~/ other;
 
+  /// Negate
   double operator -() => -value;
 
+  /// Absolute value
   double abs() => value.abs();
 
   /// The sign of the double's numerical value.

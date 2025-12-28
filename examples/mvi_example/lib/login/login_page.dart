@@ -23,9 +23,9 @@ class _LoginPageState extends State<LoginPage>
   LoginViewModel provideViewModel() => widget.viewModel;
 
   // select only the isAuthenticating property from the state
-  late final isAuthenticating = computed(
+  late final Computed<bool> isAuthenticating = computed<bool>(
     () => viewModel.state.value.isAuthenticating,
-    debugLabel: 'isAuthenticating',
+    options: const FlutterSignalOptions<bool>(name: 'isAuthenticating'),
   );
 
   @override

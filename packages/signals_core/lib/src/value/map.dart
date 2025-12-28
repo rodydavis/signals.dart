@@ -5,10 +5,10 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
     with MapSignalMixin<K, V, Map<K, V>>
     implements Map<K, V> {
   /// Creates a [MapSignal] with the given [value].
+  /// Creates a [MapSignal] with the given [value].
   MapSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   /// Inject: Update current signal value with iterable
@@ -48,13 +48,11 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
 /// Create an [MapSignal] from [Map]
 MapSignal<K, V> mapSignal<K, V>(
   Map<K, V> map, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<Map<K, V>>? options,
 }) {
   return MapSignal<K, V>(
     map,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }
 
@@ -62,13 +60,11 @@ MapSignal<K, V> mapSignal<K, V>(
 extension SignalMapUtils<K, V> on Map<K, V> {
   /// Convert an existing list to [MapSignal]
   MapSignal<K, V> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    SignalOptions<Map<K, V>>? options,
   }) {
     return MapSignal<K, V>(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
   }
 }

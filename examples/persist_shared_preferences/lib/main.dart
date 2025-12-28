@@ -77,7 +77,12 @@ late final Signal<Settings> settings;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  settings = signal<Settings>(Settings(prefs), autoDispose: true);
+  settings = signal<Settings>(
+    Settings(prefs),
+    options: FlutterSignalOptions(
+      autoDispose: true,
+    ),
+  );
   runApp(const MyApp());
 }
 

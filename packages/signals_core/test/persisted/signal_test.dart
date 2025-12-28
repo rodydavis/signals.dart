@@ -4,9 +4,6 @@ import 'package:test/test.dart';
 // A mock store for testing
 class MockStore extends SignalsInMemoryKeyValueStore {
   @override
-  final Map<String, String?> store = {};
-
-  @override
   Future<String?> getItem(String key) async {
     return store[key];
   }
