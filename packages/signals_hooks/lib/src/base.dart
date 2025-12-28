@@ -24,6 +24,7 @@ class SignalHookState<T, S extends ReadonlySignal<T>>
   @override
   void dispose() {
     _cleanup?.call();
+    super.dispose();
   }
 
   void _listener() {
