@@ -14,6 +14,21 @@ import 'future.dart';
 /// ```
 ///
 /// Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
+///
+/// If async signals need to be tracked across an async gap and they are being awaited via their `.future`,
+/// then use their `.completion` for the dependencies rather than the async signal itself.
+/// This way the `computedFrom` will be reset when the tracked signal completes, effectively ignoring their transition into a loading state.
+///
+/// ```dart
+/// final count = asyncSignal(AsyncData(0));
+///
+/// final s = computedFrom([count.completion], (_) async => await count.future);
+///
+/// await s.future; // 0
+/// count.value = AsyncLoading(); // ignored by the computedFrom
+/// count.value = AsyncData(1);
+/// await s.future; // 1
+/// ```
 FutureSignal<T> computedFrom<T, A>(
   List<ReadonlySignal<A>> signals,
   Future<T> Function(List<A> args) fn, {
