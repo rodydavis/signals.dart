@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../core/readonly.dart';
-import '../core/signal.dart';
+import 'multi_signal.dart';
 
 /// Signal notifier widget
 class SignalProvider<T extends FlutterReadonlySignal>
@@ -12,6 +12,19 @@ class SignalProvider<T extends FlutterReadonlySignal>
     required T Function() create,
     required super.child,
   }) : _setup = create;
+
+  /// Takes a list of signals and a child and provides them to the widget tree
+  static MultiSignalProvider multi({
+    Key? key,
+    required List<FlutterReadonlySignal Function()> signals,
+    required Widget child,
+  }) {
+    return MultiSignalProvider(
+      key: key,
+      signals: signals,
+      child: child,
+    );
+  }
 
   final T Function() _setup;
 
