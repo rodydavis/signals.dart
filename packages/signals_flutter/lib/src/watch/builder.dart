@@ -88,11 +88,6 @@ class _WatchState<T extends Widget> extends State<WatchBuilder<T>>
     if (target is core.DevToolsSignalsObserver) {
       target.reassemble();
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      result.recompute();
-      if (mounted) setState(() {});
-      result.value;
-    });
   }
   // coverage:ignore-end
 
@@ -118,7 +113,9 @@ class _WatchState<T extends Widget> extends State<WatchBuilder<T>>
       for (final dep in widget.dependencies) {
         bindSignal(dep);
       }
-    } else if (oldWidget.builder != widget.builder) {
+    }
+
+    if (oldWidget.builder != widget.builder) {
       result.recompute();
     }
   }
