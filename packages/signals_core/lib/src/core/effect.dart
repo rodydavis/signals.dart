@@ -106,9 +106,6 @@ typedef EffectCallback = Function();
 class Effect extends signals.Effect {
   final _disposeCallbacks = <void Function()>{};
 
-  /// Label used for debugging
-  final String? debugLabel;
-
   /// {@template effect}
   /// The `effect` function is the last piece that makes everything reactive. When you access a signal inside its callback function, that signal and every dependency of said signal will be activated and subscribed to. In that regard it is very similar to [`computed(fn)`](/core/computed). By default all updates are lazy, so nothing will update until you access a signal inside `effect`.
   ///
@@ -207,9 +204,9 @@ class Effect extends signals.Effect {
   /// @link https://dartsignals.dev/core/effect
   /// {@endtemplate}
   Effect(
-    super.fn, {
-    this.debugLabel,
-  }) {
+    EffectCallback fn, {
+    EffectOptions? options,
+  }) : super(fn, options) {
     SignalsObserver.instance?.onEffectCreated(this);
   }
 
@@ -362,12 +359,12 @@ class Effect extends signals.Effect {
 /// {@endtemplate}
 EffectCleanup effect(
   EffectCallback fn, {
-  String? debugLabel,
+  EffectOptions? options,
   EffectCallback? onDispose,
 }) {
   final instance = Effect(
     fn,
-    debugLabel: debugLabel,
+    options: options,
   );
   if (onDispose != null) {
     instance._disposeCallbacks.add(onDispose);

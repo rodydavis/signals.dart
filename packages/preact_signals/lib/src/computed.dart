@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
 
 import 'batch.dart';
+import 'equality.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
+import 'options.dart';
 import 'readonly.dart';
 
 /// Create a new signal that is computed based on the values of other signals.
@@ -12,21 +14,28 @@ import 'readonly.dart';
 /// updated when any signals accessed from within the callback function change.
 class Computed<T> with Listenable, ReadonlySignal<T> {
   @internal
+
+  /// @nodoc
   T Function() fn;
 
   @override
   final int globalId;
 
   @override
+  // ignore: overridden_fields
   Node? sources;
 
   @internal
+
+  /// @nodoc
   int internalGlobalVersion;
 
   @override
   int flags;
 
   @internal
+
+  /// @nodoc
   SignalEffectException? error;
 
   bool _isInitialized = false;
@@ -40,16 +49,24 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   T get internalValue => _internalValue;
 
   @internal
+
+  /// @nodoc
   set internalValue(T value) {
     _internalValue = value;
     _isInitialized = true;
   }
 
-  Computed(this.fn)
+  /// Create a new computed signal
+  Computed(this.fn, [SignalOptions<T>? options])
       : internalGlobalVersion = globalVersion - 1,
         flags = OUTDATED,
         version = 0,
-        globalId = ++lastGlobalId;
+        globalId = ++lastGlobalId {
+    name = options?.name;
+    watched = options?.watched;
+    unwatched = options?.unwatched;
+    equalityCheck = options?.equalityCheck ?? SignalEquality.standard<T>();
+  }
 
   @override
   bool internalRefresh() {
@@ -87,7 +104,7 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
       final val = fn();
       if (!_isInitialized ||
           (flags & HAS_ERROR) != 0 ||
-          _internalValue != val ||
+          !_equals(_internalValue, val) ||
           version == 0) {
         internalValue = val;
         flags &= ~HAS_ERROR;
@@ -102,6 +119,10 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
     cleanupSources();
     flags &= ~RUNNING;
     return true;
+  }
+
+  bool _equals(T a, T b) {
+    return equalityCheck.equals(a, b);
   }
 
   @override
@@ -180,9 +201,10 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
 ///
 /// The returned computed signal is read-only, and its value is automatically
 /// updated when any signals accessed from within the callback function change.
-ReadonlySignal<T> computed<T>(
+Computed<T> computed<T>(
   /// The effect callback.
-  T Function() fn,
-) {
-  return Computed<T>(fn);
+  T Function() fn, [
+  SignalOptions<T>? options,
+]) {
+  return Computed<T>(fn, options);
 }

@@ -95,11 +95,11 @@ class DevToolsSignalsObserver implements SignalsObserver {
   @override
   void onComputedCreated<T>(Computed<T> instance) {
     if (!enabled) return;
-    log('computed created: [${instance.globalId}|${instance.debugLabel}]');
+    log('computed created: [${instance.globalId}|${instance.name}]');
     _debugPostEvent('ext.signals.computedCreate', () {
       return {
         'id': instance.globalId,
-        'label': instance.debugLabel,
+        'label': instance.name,
         'sources': '',
         'targets': '',
         'value': '',
@@ -112,11 +112,11 @@ class DevToolsSignalsObserver implements SignalsObserver {
   @override
   void onComputedUpdated<T>(Computed<T> instance, T value) {
     if (!enabled) return;
-    log('computed updated: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('computed updated: [${instance.globalId}|${instance.name}] => $value');
     _debugPostEvent('ext.signals.computedUpdate', () {
       return {
         'id': instance.globalId,
-        'label': instance.debugLabel,
+        'label': instance.name,
         'value': value?.toString(),
         'sources': '',
         'targets': '',
@@ -128,11 +128,11 @@ class DevToolsSignalsObserver implements SignalsObserver {
   @override
   void onSignalCreated<T>(Signal<T> instance, T value) {
     if (!enabled) return;
-    log('signal created: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('signal created: [${instance.globalId}|${instance.name}] => $value');
     _debugPostEvent('ext.signals.signalCreate', () {
       return {
         'id': instance.globalId,
-        'label': instance.debugLabel,
+        'label': instance.name,
         'value': instance.peek()?.toString(),
         'targets': '',
         'type': 'signal',
@@ -144,11 +144,11 @@ class DevToolsSignalsObserver implements SignalsObserver {
   @override
   void onSignalUpdated<T>(Signal<T> instance, T value) {
     if (!enabled) return;
-    log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
+    log('signal updated: [${instance.globalId}|${instance.name}] => $value');
     _debugPostEvent('ext.signals.signalUpdate', () {
       return {
         'id': instance.globalId,
-        'label': instance.debugLabel,
+        'label': instance.name,
         'value': value?.toString(),
         'targets': '',
         'type': 'signal',
@@ -167,7 +167,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
     _debugPostEvent('ext.signals.effectCreate', () {
       return {
         'id': instance.globalId,
-        'label': instance.debugLabel,
+        'label': instance.name,
         'sources': '',
         'value': '0',
         'type': 'effect',
@@ -183,7 +183,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
     _debugPostEvent('ext.signals.effectCalled', () {
       return {
         'id': instance.globalId,
-        'label': instance.debugLabel,
+        'label': instance.name,
         'sources': '',
         'value': '$count',
         'type': 'effect',
@@ -199,7 +199,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
     _debugPostEvent('ext.signals.effectRemove', () {
       return {
         'id': instance.globalId,
-        'label': instance.debugLabel,
+        'label': instance.name,
         // 'sources': instance.sources.map((e) => e.globalId).join(','),
         'value': '-1',
         'type': 'effect',
@@ -214,7 +214,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         .map(
           (e) => {
             'id': e.globalId,
-            'label': e.debugLabel,
+            'label': e.name,
             'value': e.toString(),
             'targets': '',
             'type': 'signal',
@@ -227,7 +227,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         .map(
           (e) => {
             'id': e.globalId,
-            'label': e.debugLabel,
+            'label': e.name,
             'value': e.toString(),
             'sources': '',
             'targets': '',
@@ -241,7 +241,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         .map(
           (e) => {
             'id': e.globalId,
-            'label': e.debugLabel,
+            'label': e.name,
             'value': '${_effectCount[e.globalId] ?? 0}',
             'sources': '',
             'type': 'effect',

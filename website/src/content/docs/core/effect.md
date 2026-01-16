@@ -78,6 +78,20 @@ final dispose = effect(() {
 dispose();
 ```
 
+## Options
+
+Effects can be created with optional parameters to customize their behavior.
+
+### Name
+
+You can assign a name to an effect for debugging purposes.
+
+```dart
+effect(() {
+  print('Hello World');
+}, options: EffectOptions(name: 'effect'));
+```
+
 ## Preventing Cycles
 
 :::danger

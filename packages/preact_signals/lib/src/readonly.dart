@@ -7,6 +7,12 @@ import 'node.dart';
 import 'signal.dart';
 
 /// An interface for read-only signals.
+import 'options.dart';
+import 'untracked.dart';
+
+import 'equality.dart';
+
+/// An interface for read-only signals.
 mixin class ReadonlySignal<T> {
   /// Global ID of the signal
   int get globalId => throw UnimplementedError();
@@ -15,7 +21,24 @@ mixin class ReadonlySignal<T> {
   T get value => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   T get internalValue => throw UnimplementedError();
+
+  /// The name of the signal, used for debugging
+  String? name;
+
+  /// Callback when the signal is first subscribed to
+  @internal
+  SignalCallback<T>? watched;
+
+  /// Callback when the signal is no longer subscribed to
+  @internal
+  SignalCallback<T>? unwatched;
+
+  /// Custom equality check for the signal value
+  @internal
+  SignalEquality<T> equalityCheck = SignalEquality.standard<T>();
 
   @override
   String toString() => value.toString();
@@ -45,9 +68,6 @@ mixin class ReadonlySignal<T> {
   /// ```
   ///
   /// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  @pragma('wasm:prefer-inline')
   T peek() {
     final prevContext = evalContext;
     evalContext = null;
@@ -63,20 +83,35 @@ mixin class ReadonlySignal<T> {
       throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   void subscribeToNode(Node node) => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   void unsubscribeFromNode(Node node) => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   void internalSubscribe(Node node) {
     final signal = this;
-    if (signal.targets != node && node.prevTarget == null) {
-      node.nextTarget = signal.targets;
-      if (signal.targets != null) {
-        signal.targets!.prevTarget = node;
-      }
+    final targets = signal.targets;
+    if (targets != node && node.prevTarget == null) {
+      node.nextTarget = targets;
       signal.targets = node;
+
+      if (targets != null) {
+        targets.prevTarget = node;
+      } else {
+        // First subscriber
+        if (watched != null) {
+          untracked(() {
+            watched!(signal);
+          });
+        }
+      }
     }
   }
 
@@ -86,18 +121,28 @@ mixin class ReadonlySignal<T> {
   int get version => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   Node? node;
 
   @internal
+
+  /// @nodoc
   Node? targets;
 
   @internal
+
+  /// @nodoc
   bool internalRefresh() => throw UnimplementedError();
 
   @internal
+
+  /// @nodoc
   final Symbol brand = BRAND_SYMBOL;
 
   @internal
+
+  /// @nodoc
   Iterable<Listenable> readonlySignalTargets() sync* {
     final instance = this;
     for (Node? node = instance.targets; node != null; node = node.nextTarget) {
@@ -106,9 +151,8 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
-  @pragma('vm:prefer-inline')
-  @pragma('dart2js:tryInline')
-  @pragma('wasm:prefer-inline')
+
+  /// @nodoc
   Node? addDependency() {
     final signal = this;
     if (evalContext == null) {
@@ -190,23 +234,30 @@ mixin class ReadonlySignal<T> {
   }
 
   @internal
+
+  /// @nodoc
   void Function() signalSubscribe(
     void Function(T value) fn,
   ) {
     final signal = this;
-    return effect(() {
-      final value = signal.value;
-      final prevContext = evalContext;
-      evalContext = null;
-      try {
-        fn(value);
-      } finally {
-        evalContext = prevContext;
-      }
-    });
+    return effect(
+      () {
+        final value = signal.value;
+        final prevContext = evalContext;
+        evalContext = null;
+        try {
+          fn(value);
+        } finally {
+          evalContext = prevContext;
+        }
+      },
+      EffectOptions(name: 'sub'),
+    );
   }
 
   @internal
+
+  /// @nodoc
   void signalUnsubscribe(Node node) {
     final signal = this;
     // Only run the unsubscribe step if the signal has any subscribers to begin with.
@@ -223,6 +274,14 @@ mixin class ReadonlySignal<T> {
       }
       if (node == signal.targets) {
         signal.targets = next;
+        // Last subscriber
+        if (next == null) {
+          if (unwatched != null) {
+            untracked(() {
+              unwatched!(signal);
+            });
+          }
+        }
       }
     }
   }

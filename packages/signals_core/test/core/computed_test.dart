@@ -70,14 +70,14 @@ void main() {
     });
     group('autoDispose', () {
       test('check last subscriber disposes', () {
-        final s = computed(() => 1, autoDispose: true);
+        final s = computed(() => 1, options: SignalOptions(autoDispose: true));
         final dispose = s.subscribe((_) => {});
         expect(s.disposed, false);
         dispose();
         expect(s.disposed, true);
       });
       test('check last subscriber does not disposes', () {
-        final s = computed(() => 1, autoDispose: false);
+        final s = computed(() => 1, options: SignalOptions(autoDispose: false));
         final dispose = s.subscribe((_) => {});
         expect(s.disposed, false);
         dispose();

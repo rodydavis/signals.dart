@@ -46,7 +46,7 @@ part of 'signals.dart';
 /// If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
 ///
 /// ```dart
-/// final s = computed(() => 0, autoDispose: true);
+/// final s = computed(() => 0, options: SignalOptions(autoDispose: true));
 /// s.onDispose(() => print('Signal destroyed'));
 /// final dispose = s.subscribe((_) {});
 /// dispose();
@@ -218,7 +218,7 @@ class Computed<T> extends signals.Computed<T>
   /// If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
   ///
   /// ```dart
-  /// final s = computed(() => 0, autoDispose: true);
+  /// final s = computed(() => 0, options: SignalOptions(autoDispose: true));
   /// s.onDispose(() => print('Signal destroyed'));
   /// final dispose = s.subscribe((_) {});
   /// dispose();
@@ -343,11 +343,11 @@ class Computed<T> extends signals.Computed<T>
   /// {@endtemplate}
   Computed(
     super.fn, {
-    this.debugLabel,
-    bool autoDispose = false,
+    SignalOptions<T>? options,
   }) {
-    this.autoDispose = autoDispose;
+    autoDispose = options?.autoDispose ?? false;
     SignalsObserver.instance?.onComputedCreated(this);
+    _initAutoDispose();
   }
 
   /// Override the current signal with a new value as if it was created with it
@@ -378,9 +378,6 @@ class Computed<T> extends signals.Computed<T>
     SignalsObserver.instance?.onComputedUpdated(this, val);
   }
 
-  @override
-  final String? debugLabel;
-
   /// Call the computed function and update the value
   void recompute() {
     value;
@@ -402,18 +399,10 @@ class Computed<T> extends signals.Computed<T>
   ReadonlySignal<T> readonly() => this;
 
   @override
-  void unsubscribeFromNode(Node node) {
-    super.unsubscribeFromNode(node);
-    if (autoDispose && targets == null) {
-      dispose();
-    }
-  }
-
-  @override
   T get value {
     if (disposed) {
       print(
-        'computed warning: [$globalId|$debugLabel] has been '
+        'computed warning: [$globalId|$name] has been '
         'read after disposed: ${StackTrace.current}',
       );
     }
@@ -601,12 +590,10 @@ typedef ComputedCallback<T> = T Function();
 /// {@endtemplate}
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<T>? options,
 }) {
   return Computed<T>(
     compute,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

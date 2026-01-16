@@ -5,10 +5,10 @@ class IterableSignal<E> extends Signal<Iterable<E>>
     with IterableSignalMixin<E, Iterable<E>>
     implements Iterable<E> {
   /// Creates a [IterableSignal] with the given [value].
+  /// Creates a [IterableSignal] with the given [value].
   IterableSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   @override
@@ -29,13 +29,11 @@ class IterableSignal<E> extends Signal<Iterable<E>>
 /// Create an [IterableSignal] from [Iterable]
 IterableSignal<T> iterableSignal<T>(
   Iterable<T> iterable, {
-  String? debugLabel,
-  bool autoDispose = false,
+  SignalOptions<Iterable<T>>? options,
 }) {
   return IterableSignal<T>(
     iterable,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }
 
@@ -43,13 +41,11 @@ IterableSignal<T> iterableSignal<T>(
 extension SignalIterableUtils<T> on Iterable<T> {
   /// Convert an existing list to [IterableSignal]
   IterableSignal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    SignalOptions<Iterable<T>>? options,
   }) {
     return IterableSignal<T>(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
   }
 }

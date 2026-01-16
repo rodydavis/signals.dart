@@ -74,11 +74,9 @@ FlutterSignal<T> useSignal<T>(
   /// If any of the keys change, the signal will be re-created with the
   /// new initial value.
   List<Object?> keys = const <Object>[],
-
-  /// The debug label for the signal.
-  String? debugLabel,
+  FlutterSignalOptions<T>? options,
 }) {
-  final s = useMemoized(() => signal(value, debugLabel: debugLabel), keys);
+  final s = useMemoized(() => signal<T>(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -103,11 +101,9 @@ FlutterComputed<T> useComputed<T>(
   ///
   /// If any of the keys change, the computed signal will be re-created.
   List<Object?> keys = const <Object>[],
-
-  /// The debug label for the computed signal.
-  String? debugLabel,
+  FlutterSignalOptions<T>? options,
 }) {
-  final s = useMemoized(() => computed(value, debugLabel: debugLabel), keys);
+  final s = useMemoized(() => computed<T>(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -140,12 +136,10 @@ void useSignalEffect(
 
   /// A callback that is executed when the effect is disposed.
   dynamic Function()? onDispose,
-
-  /// The debug label for the effect.
-  String? debugLabel,
+  EffectOptions? options,
 }) {
   useEffect(
-    () => effect(cb, onDispose: onDispose, debugLabel: debugLabel),
+    () => effect(cb, onDispose: onDispose, options: options),
     keys,
   );
   return;

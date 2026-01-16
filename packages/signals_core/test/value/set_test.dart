@@ -7,15 +7,14 @@ void main() {
     String message,
     SetSignal<T> Function<T>(
       Set<T>, {
-      bool autoDispose,
-      String? debugLabel,
+      SignalOptions<Set<T>>? options,
     }) create,
   ) {
     group('$message test', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {
           final Set<String> list = <String>{'a', 'b', 'c'};
-          final s = create(list, autoDispose: true);
+          final s = create(list, options: SignalOptions(autoDispose: true));
           final dispose = s.subscribe((_) => {});
           expect(s.disposed, false);
           dispose();
@@ -23,7 +22,7 @@ void main() {
         });
         test('check last subscriber does not disposes', () {
           final Set<String> list = <String>{'a', 'b', 'c'};
-          final s = create(list, autoDispose: false);
+          final s = create(list, options: SignalOptions(autoDispose: false));
           final dispose = s.subscribe((_) => {});
           expect(s.disposed, false);
           dispose();
@@ -411,26 +410,23 @@ void main() {
 
   testSignal(
     'SetSignal',
-    <T>(val, {autoDispose = false, debugLabel}) => SetSignal(
+    <T>(val, {options}) => SetSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: options,
     ),
   );
   testSignal(
     'setSignal',
-    <T>(val, {autoDispose = false, debugLabel}) => setSignal(
+    <T>(val, {options}) => setSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: options,
     ),
   );
   testSignal(
     'toSignal',
-    <T>(val, {autoDispose = false, debugLabel}) {
+    <T>(val, {options}) {
       return val.toSignal(
-        autoDispose: autoDispose,
-        debugLabel: debugLabel,
+        options: options,
       );
     },
   );

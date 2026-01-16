@@ -122,14 +122,14 @@ void main() {
     group('dispose', () {
       group('autoDispose', () {
         test('check last subscriber disposes', () {
-          final s = signal(1, autoDispose: true);
+          final s = signal(1, options: SignalOptions(autoDispose: true));
           final dispose = s.subscribe((_) => {});
           expect(s.disposed, false);
           dispose();
           expect(s.disposed, true);
         });
         test('check last subscriber does not disposes', () {
-          final s = signal(1, autoDispose: false);
+          final s = signal(1, options: SignalOptions(autoDispose: false));
           final dispose = s.subscribe((_) => {});
           expect(s.disposed, false);
           dispose();
@@ -160,7 +160,7 @@ void main() {
       test('read/write after dispose should throw', () {
         int calls = 0;
         final v = [1, 2];
-        final s = signal(v, autoDispose: true);
+        final s = signal(v, options: SignalOptions(autoDispose: true));
         s.onDispose(() => calls++);
         expect(s.value, v);
         final dispose = s.subscribe((_) => {});
@@ -171,7 +171,7 @@ void main() {
       });
 
       test('should autoDispose signal when it has no listeners', () {
-        var count = signal(2, autoDispose: true);
+        var count = signal(2, options: SignalOptions(autoDispose: true));
         var multiple = signal(2);
         var product = computed(() => count() * multiple());
 

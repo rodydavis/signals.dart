@@ -43,6 +43,32 @@ final fullName = computed(() => name.value + " " + surname.value);
 fullName.recompute(); // Re-runs the computed callback
 ```
 
+## Options
+
+Computed signals can be created with optional parameters to customize their behavior.
+
+### Name
+
+You can assign a name to a computed signal for debugging purposes.
+
+```dart
+final s = computed(() => 0, options: SignalOptions(name: 'computed'));
+print(s.name); // computed
+```
+
+### Equality Check
+
+You can provide a custom equality check function to determine if the computed value has changed.
+
+```dart
+final s = computed(
+  () => 0,
+  options: SignalOptions(
+    equalityCheck: SignalEquality.custom((a, b) => a == b),
+  ),
+);
+```
+
 ## Disposing
 
 ### Auto Dispose
@@ -50,7 +76,7 @@ fullName.recompute(); // Re-runs the computed callback
 If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
 
 ```dart
-final s = computed(() => 0, autoDispose: true);
+final s = computed(() => 0, options: SignalOptions(autoDispose: true));
 s.onDispose(() => print('Signal destroyed'));
 final dispose = s.subscribe((_) {});
 dispose();

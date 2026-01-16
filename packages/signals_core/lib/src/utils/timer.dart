@@ -4,58 +4,45 @@ import '../../signals_core.dart';
 typedef TimerSignalEvent = ({int iteration, int millis});
 
 /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
+/// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
 class TimerSignal extends StreamSignal<TimerSignalEvent> {
   /// Trigger an [TimerSignalEvent] every duration
   final Duration every;
 
   /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
-  TimerSignal({
-    required this.every,
-    String super.debugLabel = 'Timer',
-    super.cancelOnError,
-    super.autoDispose,
+  TimerSignal(
+    this.every, {
+    StreamSignalOptions<TimerSignalEvent>? options,
   }) : super(
           () => Stream<TimerSignalEvent>.periodic(
             every,
-            (c) => _emit(c + 1),
+            (c) => (iteration: c + 1, millis: (c + 1) * every.inMilliseconds),
           ),
-          initialValue: _emit(0),
+          options: (options ?? StreamSignalOptions<TimerSignalEvent>())
+              .copyWith(initialValue: (iteration: 0, millis: 0)),
         );
-
-  static TimerSignalEvent _emit(int count) => (
-        iteration: count,
-        millis: DateTime.now().millisecondsSinceEpoch,
-      );
 }
 
-/// Expose Duration as a [TimerSignal]
-extension TimerSignalDurationUtils on Duration {
-  /// Expose Duration as a [TimerSignal]
-  TimerSignal toSignal({
-    String debugLabel = 'Timer',
-    bool? cancelOnError,
-    bool autoDispose = false,
-  }) {
-    return TimerSignal(
-      every: this,
-      debugLabel: debugLabel,
-      cancelOnError: cancelOnError,
-      autoDispose: autoDispose,
-    );
-  }
-}
-
-/// Create a [TimerSignal]
+/// Create a timer signal
 TimerSignal timerSignal(
-  Duration every, {
-  String debugLabel = 'Timer',
-  bool? cancelOnError,
-  bool autoDispose = false,
+  Duration duration, {
+  StreamSignalOptions<TimerSignalEvent>? options,
 }) {
   return TimerSignal(
-    every: every,
-    debugLabel: debugLabel,
-    cancelOnError: cancelOnError,
-    autoDispose: autoDispose,
+    duration,
+    options: options,
   );
+}
+
+/// Extension on duration to provide helpful methods for signals
+extension SignalTimerUtils on Duration {
+  /// Convert a duration to a timer signal
+  TimerSignal toSignal({
+    StreamSignalOptions<TimerSignalEvent>? options,
+  }) {
+    return TimerSignal(
+      this,
+      options: options,
+    );
+  }
 }

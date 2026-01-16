@@ -1,5 +1,6 @@
 import '../core/signals.dart';
 import 'future.dart';
+import 'stream.dart';
 
 /// Async Computed is syntax sugar around [FutureSignal].
 ///
@@ -17,18 +18,13 @@ import 'future.dart';
 FutureSignal<T> computedFrom<T, A>(
   List<ReadonlySignal<A>> signals,
   Future<T> Function(List<A> args) fn, {
-  T? initialValue,
-  String? debugLabel,
-  bool autoDispose = false,
-  bool lazy = true,
+  StreamSignalOptions<T>? options,
 }) {
-  return FutureSignal<T>(
+  return futureSignal(
     () => fn(signals.map((e) => e()).toList()),
-    dependencies: signals,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-    lazy: lazy,
+    options: (options ?? StreamSignalOptions<T>()).copyWith(
+      dependencies: signals,
+    ),
   );
 }
 
@@ -49,18 +45,10 @@ FutureSignal<T> computedFrom<T, A>(
 /// Any signal that is read inside the callback will be tracked as a dependency and the computed signal will be re-evaluated when any of the dependencies change.
 FutureSignal<T> computedAsync<T>(
   Future<T> Function() fn, {
-  T? initialValue,
-  String? debugLabel,
-  bool autoDispose = false,
-  List<ReadonlySignal<dynamic>> dependencies = const [],
-  bool lazy = true,
+  StreamSignalOptions<T>? options,
 }) {
-  return FutureSignal<T>(
+  return futureSignal(
     fn,
-    dependencies: dependencies,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-    lazy: lazy,
+    options: options,
   );
 }

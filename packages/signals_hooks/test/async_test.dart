@@ -13,7 +13,7 @@ void main() {
             builder: (context) {
               state ??= useFutureSignal(
                 () => Future.delayed(const Duration(seconds: 1), () => 1),
-                lazy: false,
+                options: StreamSignalOptions(lazy: false),
               );
               return Text('$state', textDirection: TextDirection.ltr);
             },
@@ -36,7 +36,7 @@ void main() {
               state ??= useStreamSignal(
                 () => Stream.periodic(const Duration(seconds: 1), (i) => i)
                     .take(1),
-                lazy: false,
+                options: StreamSignalOptions(lazy: false),
               );
               return Text('$state', textDirection: TextDirection.ltr);
             },
@@ -96,8 +96,10 @@ void main() {
                   const Duration(seconds: 1),
                   () => count.value * 2,
                 ),
-                dependencies: [count],
-                lazy: false,
+                options: StreamSignalOptions(
+                  dependencies: [count],
+                  lazy: false,
+                ),
               );
               return Text('$state', textDirection: TextDirection.ltr);
             },

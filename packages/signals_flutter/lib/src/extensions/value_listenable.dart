@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../signals_core.dart';
+import '../core/options.dart';
 
 /// Extension on [ValueListenable] to provide helpful methods for signals
 extension SignalValueListenableUtils<T> on ValueListenable<T> {
@@ -25,13 +26,11 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
   /// @link https://dartsignals.dev/flutter/value-listenable
   /// {@endtemplate}
   ReadonlySignal<T> toSignal({
-    String? debugLabel,
-    bool autoDispose = false,
+    FlutterSignalOptions<T>? options,
   }) {
     final target = signal<T>(
       value,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options,
     );
 
     void updater() {
@@ -67,11 +66,9 @@ extension SignalValueListenableUtils<T> on ValueListenable<T> {
 /// {@endtemplate}
 ReadonlySignal<T> valueListenableToSignal<T>(
   ValueListenable<T> valueListenable, {
-  String? debugLabel,
-  bool autoDispose = false,
+  FlutterSignalOptions<T>? options,
 }) {
   return valueListenable.toSignal(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

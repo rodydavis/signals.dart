@@ -409,14 +409,16 @@ void main() {
       final a = signal(0.0);
       var i = 0;
 
-      final fn = () => effect(() {
-            // Prevent test suite from spinning if limit is not hit
-            if (i++ > 200) {
-              throw Exception("test failed");
-            }
-            a.value;
-            a.value = double.nan;
-          });
+      void fn() {
+        effect(() {
+          // Prevent test suite from spinning if limit is not hit
+          if (i++ > 200) {
+            throw Exception("test failed");
+          }
+          a.value;
+          a.value = double.nan;
+        });
+      }
 
       expect(fn, throwsException);
     });
@@ -431,13 +433,15 @@ void main() {
         return double.nan;
       });
 
-      final fn = () => effect(() {
-            // Prevent test suite from spinning if limit is not hit
-            if (i++ > 200) {
-              throw Exception("test failed");
-            }
-            c.value;
-          });
+      void fn() {
+        effect(() {
+          // Prevent test suite from spinning if limit is not hit
+          if (i++ > 200) {
+            throw Exception("test failed");
+          }
+          c.value;
+        });
+      }
 
       expect(fn, throwsException);
     });

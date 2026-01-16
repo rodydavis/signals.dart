@@ -5,8 +5,7 @@ import 'graph.dart';
 class GraphSignal extends Signal<Graph> implements Graph {
   GraphSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   });
 
   @override
