@@ -1,10 +1,18 @@
 {
-  "signal": {
+  "Signal": {
     "scope": "dart",
     "prefix": "sig",
     "description": "A Signal Object (with label and auto dispose)",
     "body": [
       "final $1 = signal($2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Signal ($ extension)": {
+    "scope": "dart",
+    "prefix": "sig$",
+    "description": "A Signal Object (created with the $ extension)",
+    "body": [
+      "final $1 = $2.$;"
     ]
   },
   "Async Signal": {
@@ -18,17 +26,33 @@
   "Computed": {
     "scope": "dart",
     "prefix": "comp",
-    "description": " The computed function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal’s value.",
+    "description": "The computed function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal’s value.",
     "body": [
       "final $1 = computed(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Computed ($ extension)": {
+    "scope": "dart",
+    "prefix": "comp$",
+    "description": "A Computed Object (created with the $ extension)",
+    "body": [
+      "final $1 = (() => $2).$;"
     ]
   },
   "AsyncComputed": {
     "scope": "dart",
     "prefix": "ascomp",
-    "description": " Async Computed is syntax sugar around [FutureSignal].",
+    "description": "Async Computed is syntax sugar around [FutureSignal].",
     "body": [
       "final $1 = computedAsync(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "Computed From": {
+    "scope": "dart",
+    "prefix": "compfrom",
+    "description": "Creates a computed signal from a list of signals.",
+    "body": [
+      "final $1 = computedFrom([$2], ($3) => $4);"
     ]
   },
   "ChangeStackSignal": {
@@ -79,16 +103,48 @@
       "final $1 = futureSignal(() async => $2, debugLabel: '$1', autoDispose: ${3:false});"
     ]
   },
+  "StreamSignal": {
+    "scope": "dart",
+    "prefix": "ssig",
+    "description": "Returns a streamSignal instance.",
+    "body": [
+      "final $1 = streamSignal(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "TrackedSignal": {
+    "scope": "dart",
+    "prefix": "tsig",
+    "description": "A signal that tracks its previous and initial values.",
+    "body": [
+      "final $1 = trackedSignal($2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "LazySignal": {
+    "scope": "dart",
+    "prefix": "lazysig",
+    "description": "A signal that is initialized lazily.",
+    "body": [
+      "final $1 = lazySignal(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+    ]
+  },
+  "PersistedSignal (JSON)": {
+    "scope": "dart",
+    "prefix": "persig",
+    "description": "A signal that persists its value as JSON.",
+    "body": [
+      "final $1 = persistedSignal('$1', $2, toJson: ($3) => $3.toJson(), fromJson: ($4) => $2.fromJson($4));"
+    ]
+  },
   "Signal Container (Read-only)": {
     "scope": "dart",
     "prefix": "rsigcon",
     "description": "Returns a read-only Signal Container.",
     "body": [
-      "final $1 = readonlySignalContainer<$2,$3>((arg) {;",
-      "       return computed<$2>(() => $4);",
-      "   },",
-      "   debugLabel: '$1',",
-      "   autoDispose: ${4:false},",
+      "final $1 = readonlySignalContainer<$2,$3>((arg) {",
+      "    return computed<$2>(() => $4);",
+      "},",
+      "debugLabel: '$1',",
+      "autoDispose: ${5:false},",
       ");"
     ]
   },
@@ -97,23 +153,62 @@
     "prefix": "sigcon",
     "description": "Returns a Signal Container.",
     "body": [
-      "final $1 = signalContainer<$2,$3>((arg) {;",
-      "       return signal<$2>($4);",
-      "   },",
-      "   debugLabel: '$1',",
-      "   autoDispose: ${4:false},",
+      "final $1 = signalContainer<$2,$3>((arg) {",
+      "    return signal<$2>($4);",
+      "},",
+      "debugLabel: '$1',",
+      "autoDispose: ${5:false},",
       ");"
     ]
   },
-  "StreamSignal": {
+  "Effect": {
     "scope": "dart",
-    "prefix": "stsig",
-    "description": "Returns a streamSignal instance.",
+    "prefix": "effect",
+    "description": "Creates an effect.",
     "body": [
-      "final $1 = futureSignal(() => $2, debugLabel: '$1', autoDispose: ${3:false});"
+      "effect(() {",
+      "  $1",
+      "});"
     ]
   },
-  "Watch builder": {
+  "Batch": {
+    "scope": "dart",
+    "prefix": "batch",
+    "description": "Batches multiple signal writes into a single update.",
+    "body": [
+      "batch(() {",
+      "  $1",
+      "});"
+    ]
+  },
+  "Untracked": {
+    "scope": "dart",
+    "prefix": "untracked",
+    "description": "Reads a signal without subscribing to it.",
+    "body": [
+      "untracked(() => $1)"
+    ]
+  },
+  "Connect": {
+    "scope": "dart",
+    "prefix": "connect",
+    "description": "Connects a signal to a stream.",
+    "body": [
+      "final $1 = connect($2);",
+      "$1 << $3;"
+    ]
+  },
+  "TrackedSignalMixin": {
+    "scope": "dart",
+    "prefix": "tsigmixin",
+    "description": "Creates a class with TrackedSignalMixin.",
+    "body": [
+      "class $1 extends Signal<$2> with TrackedSignalMixin<$2> {",
+      "  $1(super.value);",
+      "}"
+    ]
+  },
+  "Watch.builder": {
     "scope": "dart",
     "prefix": "watchb",
     "description": "To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree.",
@@ -131,19 +226,204 @@
     "description": "To watch a signal for changes in Flutter, use the Watch widget. This will only rebuild this widget method and not the entire widget tree.",
     "body": ["Watch((context) => $1),"]
   },
-  "Value Signal": {
+  ".watch(context)": {
     "scope": "dart",
-    "prefix": "valsig",
-    "description": "Value Signal Class",
+    "prefix": "watchc",
+    "description": "Watches a signal for changes and rebuilds the widget.",
     "body": [
-      "class $1 extends ValueSignal<$2> {",
-      " $1(",
-      "     super.value, {",
-      "     super.autoDispose,",
-      "     super.equality,",
-      "     super.debugLabel = '$1',",
-      " });",
+      "$1.watch(context)"
+    ]
+  },
+  "SignalsMixin": {
+    "scope": "dart",
+    "prefix": "sigsmixin",
+    "description": "Adds SignalsMixin to a stateful widget.",
+    "body": [
+      "class $1 extends StatefulWidget {",
+      "  @override",
+      "  _$1State createState() => _$1State();",
+      "}",
+      "",
+      "class _$1State extends State<$1> with SignalsMixin {",
+      "  late final $2 = createSignal($3);",
+      "  late final $4 = createComputed(() => $5);",
+      "",
+      "  @override",
+      "  Widget build(BuildContext context) {",
+      "    return $6;",
+      "  }",
       "}"
+    ]
+  },
+  "SignalProvider": {
+    "scope": "dart",
+    "prefix": "sigprovider",
+    "description": "Creates a SignalProvider.",
+    "body": [
+      "SignalProvider<${1:Counter}>(",
+      "  create: () => ${1:Counter}(0),",
+      "  child: $2,",
+      ")"
+    ]
+  },
+  "ValueNotifier.toSignal()": {
+    "scope": "dart",
+    "prefix": "vntosig",
+    "description": "Converts a ValueNotifier to a signal.",
+    "body": [
+      "final $1 = $2.toSignal();"
+    ]
+  },
+  "ValueListenable.toSignal()": {
+    "scope": "dart",
+    "prefix": "vltosig",
+    "description": "Converts a ValueListenable to a signal.",
+    "body": [
+      "final $1 = $2.toSignal();"
+    ]
+  },
+  "ValueNotifierSignalMixin": {
+    "scope": "dart",
+    "prefix": "vnsigmixin",
+    "description": "Creates a class with ValueNotifierSignalMixin.",
+    "body": [
+      "class $1 extends Signal<$2> with ValueNotifierSignalMixin<$2> {",
+      "  $1(super.value);",
+      "}"
+    ]
+  },
+  "ValueListenableSignalMixin": {
+    "scope": "dart",
+    "prefix": "vlsigmixin",
+    "description": "Creates a class with ValueListenableSignalMixin.",
+    "body": [
+      "class $1 extends Signal<$2> with ValueListenableSignalMixin<$2> {",
+      "  $1(super.value);",
+      "}"
+    ]
+  },
+  "Signal class with mixin": {
+    "scope": "dart",
+    "prefix": "sigmixin",
+    "description": "Create a signal class with a mixin",
+    "body": [
+      "class $1 with $2 {",
+      "  $1();",
+      "}"
+    ]
+  },
+  "useSignal": {
+    "scope": "dart",
+    "prefix": "usesig",
+    "description": "Creates a new signal inside of a hook widget.",
+    "body": [
+      "final $1 = useSignal($2);"
+    ]
+  },
+  "useComputed": {
+    "scope": "dart",
+    "prefix": "usecomp",
+    "description": "Creates a new computed signal inside of a hook widget.",
+    "body": [
+      "final $1 = useComputed(() => $2);"
+    ]
+  },
+  "useSignalEffect": {
+    "scope": "dart",
+    "prefix": "usesigeffect",
+    "description": "Creates a new effect inside of a hook widget.",
+    "body": [
+      "useSignalEffect(() {",
+      "  $1",
+      "});"
+    ]
+  },
+  "useExistingSignal": {
+    "scope": "dart",
+    "prefix": "useexistingsig",
+    "description": "Binds an existing signal inside of a hook widget.",
+    "body": [
+      "final $1 = useExistingSignal($2);"
+    ]
+  },
+  "useSignalValue": {
+    "scope": "dart",
+    "prefix": "usesigval",
+    "description": "Gets the value of a signal directly.",
+    "body": [
+      "final $1 = useSignalValue($2);"
+    ]
+  },
+  "useFutureSignal": {
+    "scope": "dart",
+    "prefix": "usefusig",
+    "description": "Creates a new `FutureSignal` and subscribes to it.",
+    "body": [
+      "final $1 = useFutureSignal(() => $2);"
+    ]
+  },
+  "useStreamSignal": {
+    "scope": "dart",
+    "prefix": "usessig",
+    "description": "Creates a new `StreamSignal` and subscribes to it.",
+    "body": [
+      "final $1 = useStreamSignal(() => $2);"
+    ]
+  },
+  "useAsyncSignal": {
+    "scope": "dart",
+    "prefix": "useasig",
+    "description": "Creates a new `AsyncSignal` and subscribes to it.",
+    "body": [
+      "final $1 = useAsyncSignal(AsyncState.data($2));"
+    ]
+  },
+  "useAsyncComputed": {
+    "scope": "dart",
+    "prefix": "useascomp",
+    "description": "Creates a new `FutureSignal` from a computed async value and subscribes to it.",
+    "body": [
+      "final $1 = useAsyncComputed(() async => $2);"
+    ]
+  },
+  "useListSignal": {
+    "scope": "dart",
+    "prefix": "uselstsig",
+    "description": "Creates a new `ListSignal` and subscribes to it.",
+    "body": [
+      "final $1 = useListSignal([$2]);"
+    ]
+  },
+  "useSetSignal": {
+    "scope": "dart",
+    "prefix": "usestsig",
+    "description": "Creates a new `SetSignal` and subscribes to it.",
+    "body": [
+      "final $1 = useSetSignal({$2});"
+    ]
+  },
+  "useMapSignal": {
+    "scope": "dart",
+    "prefix": "usempsig",
+    "description": "Creates a new `MapSignal` and subscribes to it.",
+    "body": [
+      "final $1 = useMapSignal({$2});"
+    ]
+  },
+  "useValueNotifierToSignal": {
+    "scope": "dart",
+    "prefix": "usevntosig",
+    "description": "Creates a new `Signal` from a `ValueNotifier` and subscribes to it.",
+    "body": [
+      "final $1 = useValueNotifierToSignal($2);"
+    ]
+  },
+  "useValueListenableToSignal": {
+    "scope": "dart",
+    "prefix": "usevltosig",
+    "description": "Creates a new `ReadonlySignal` from a `ValueListenable` and subscribes to it.",
+    "body": [
+      "final $1 = useValueListenableToSignal($2);"
     ]
   }
 }
