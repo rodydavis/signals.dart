@@ -1,3 +1,9 @@
+## 6.3.0
+
+- Fix accessing cached SignalContainer in Effect causing loop
+- Bump signals_flutter to 6.3.0
+- Bump signals_core to 6.2.1
+
 ## 6.2.0
 
 - Adding SignalsAutoDisposeMixin

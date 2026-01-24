@@ -1,3 +1,8 @@
+## 6.2.1
+
+- Replace benchmark with dart-reactivity-benchmark
+- Bump preact_signals to 1.9.4
+
 ## 6.2.0
 
 - Adding SignalsAutoDisposeMixin

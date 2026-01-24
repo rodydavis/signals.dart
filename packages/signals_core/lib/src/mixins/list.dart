@@ -135,7 +135,9 @@ mixin ListSignalMixin<E, T extends List<E>> on Signal<T> implements List<E> {
   @override
   bool remove(Object? value) {
     final result = this.value.remove(value);
-    set(this.value, force: true);
+    if (result) {
+      set(this.value, force: true);
+    }
     return result;
   }
 

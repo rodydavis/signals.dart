@@ -21,9 +21,9 @@ class PersistedBoolSignal extends PersistedSignal<bool> {
 }
 
 /// A `PersistedSignal` that stores a nullable string value.
-class PersistedPersistedBoolSignal extends PersistedSignal<bool?> {
-  /// Creates a new `PersistedBoolSignal`.
-  PersistedPersistedBoolSignal(
+class PersistedNullableBoolSignal extends PersistedSignal<bool?> {
+  /// Creates a new `NullableBoolSignal`.
+  PersistedNullableBoolSignal(
     super.val,
     String key, {
     SignalsKeyValueStore? store,

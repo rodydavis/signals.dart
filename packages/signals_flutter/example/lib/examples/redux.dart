@@ -43,8 +43,7 @@ AppState reducer(AppState state, AppAction action) {
         state.searchQuery,
       ),
     UpdateItemAction action => AppState(
-        List.from(state.items)
-          ..[action.index] = action.item,
+        List.from(state.items)..[action.index] = action.item,
         state.searchQuery,
       ),
     PerformSearchAction action => AppState(state.items, action.query),
@@ -119,7 +118,8 @@ class Example extends StatelessWidget {
                   key: ValueKey((store.items.value.length, index)),
                   title: TextFormField(
                     initialValue: item,
-                    onChanged: (val) => store.dispatch(UpdateItemAction(index, val)),
+                    onChanged: (val) =>
+                        store.dispatch(UpdateItemAction(index, val)),
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),

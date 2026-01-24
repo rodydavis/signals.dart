@@ -412,6 +412,17 @@ void main() {
           expect(value, true);
         });
 
+        test('remove should only notify when successful', () {
+          final List<String> list = <String>['a', 'b', 'c'];
+          final s = create(list);
+          var called = 0;
+          s.subscribe((_) => called++);
+          expect(called, 1);
+          final result = s.remove('d');
+          expect(result, false);
+          expect(called, 1);
+        });
+
         test('removeWhere', () {
           final List<String> list = <String>['a', 'b', 'c'];
           final s = create(list);

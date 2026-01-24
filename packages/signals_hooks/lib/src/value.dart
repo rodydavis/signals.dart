@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:signals_flutter/signals_core.dart';
+import 'package:signals/signals_core.dart';
 
 import 'core.dart';
 
@@ -203,6 +203,8 @@ ChangeStackSignal<T> useChangeStackSignal<T>(
   String? debugLabel,
 }) {
   final s = useMemoized(
-      () => changeStack(value, limit: limit, debugLabel: debugLabel), keys,);
+    () => changeStack(value, limit: limit, debugLabel: debugLabel),
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }

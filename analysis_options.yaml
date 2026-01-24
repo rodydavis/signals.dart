@@ -15,4 +15,8 @@ include: package:lints/recommended.yaml
 
 linter:
   rules:
+    - require_trailing_commas
+    - prefer_relative_imports
     - public_member_api_docs
+formatter:
+  trailing_commas: preserve

@@ -50,9 +50,9 @@ void main() {
       });
     });
 
-    group('PersistedPersistedBoolSignal', () {
+    group('PersistedNullableBoolSignal', () {
       test('it should persist a nullable bool value', () async {
-        final signal = PersistedPersistedBoolSignal(true, 'nullable_bool_key');
+        final signal = PersistedNullableBoolSignal(true, 'nullable_bool_key');
         await signal.init();
         expect(signal.value, true);
 
@@ -61,7 +61,7 @@ void main() {
         final item = await store.getItem('nullable_bool_key');
         expect(item, '');
 
-        final signal2 = PersistedPersistedBoolSignal(true, 'nullable_bool_key');
+        final signal2 = PersistedNullableBoolSignal(true, 'nullable_bool_key');
         await signal2.init();
         expect(signal2.value, null);
       });
@@ -122,10 +122,13 @@ void main() {
       });
     });
 
-    group('PersistedPersistedEnumSignal', () {
+    group('PersistedNullableEnumSignal', () {
       test('it should persist a nullable enum value', () async {
-        final signal = PersistedPersistedEnumSignal(
-            TestEnum.a, 'nullable_enum_key', TestEnum.values,);
+        final signal = PersistedNullableEnumSignal(
+          TestEnum.a,
+          'nullable_enum_key',
+          TestEnum.values,
+        );
         await signal.init();
         expect(signal.value, TestEnum.a);
 
@@ -134,8 +137,11 @@ void main() {
         final item = await store.getItem('nullable_enum_key');
         expect(item, '');
 
-        final signal2 = PersistedPersistedEnumSignal(
-            TestEnum.a, 'nullable_enum_key', TestEnum.values,);
+        final signal2 = PersistedNullableEnumSignal(
+          TestEnum.a,
+          'nullable_enum_key',
+          TestEnum.values,
+        );
         await signal2.init();
         expect(signal2.value, null);
       });

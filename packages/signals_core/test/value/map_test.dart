@@ -45,6 +45,17 @@ void main() {
       expect(s.containsKey('c'), false);
     });
 
+    test('remove should only notify when successful', () {
+      final map = <String, int>{'a': 1, 'b': 2, 'c': 3};
+      final s = map.toSignal();
+      var called = 0;
+      s.subscribe((_) => called++);
+      expect(called, 1);
+      final result = s.remove('d');
+      expect(result, null);
+      expect(called, 1);
+    });
+
     test('<<', () {
       final a = mapSignal<int, int>({1: 1});
       final b = mapSignal<int, int>({2: 2});

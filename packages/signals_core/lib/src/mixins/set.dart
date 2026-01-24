@@ -49,7 +49,9 @@ mixin SetSignalMixin<E, T extends Set<E>> on Signal<T> implements Set<E> {
   bool remove(Object? value) {
     final list = this.value;
     final result = list.remove(value);
-    set(list, force: true);
+    if (result) {
+      set(list, force: true);
+    }
     return result;
   }
 
