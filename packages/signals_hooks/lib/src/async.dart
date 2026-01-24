@@ -1,5 +1,5 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:signals_flutter/signals_core.dart';
+import 'package:signals/signals_core.dart';
 
 import 'core.dart';
 
@@ -40,15 +40,18 @@ FutureSignal<T> useFutureSignal<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return futureSignal(
-      value,
-      initialValue: initialValue,
-      dependencies: dependencies,
-      lazy: lazy,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return futureSignal(
+        value,
+        initialValue: initialValue,
+        dependencies: dependencies,
+        lazy: lazy,
+        debugLabel: debugLabel,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -95,17 +98,20 @@ StreamSignal<T> useStreamSignal<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return streamSignal(
-      value,
-      onDone: onDone,
-      initialValue: initialValue,
-      cancelOnError: cancelOnError,
-      lazy: lazy,
-      dependencies: dependencies,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return streamSignal(
+        value,
+        onDone: onDone,
+        initialValue: initialValue,
+        cancelOnError: cancelOnError,
+        lazy: lazy,
+        dependencies: dependencies,
+        debugLabel: debugLabel,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -182,14 +188,17 @@ FutureSignal<T> useAsyncComputed<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return computedAsync(
-      value,
-      dependencies: dependencies,
-      lazy: lazy,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return computedAsync(
+        value,
+        dependencies: dependencies,
+        lazy: lazy,
+        initialValue: initialValue,
+        debugLabel: debugLabel,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }

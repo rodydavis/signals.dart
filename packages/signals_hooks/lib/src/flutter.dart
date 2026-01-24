@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:signals_flutter/signals_flutter.dart';
+import 'package:signals/signals_flutter.dart';
 
 import 'core.dart';
 
@@ -30,7 +30,9 @@ Signal<T> useValueNotifierToSignal<T>(
   String? debugLabel,
 }) {
   final s = useMemoized(
-      () => valueNotifierToSignal(value, debugLabel: debugLabel), keys,);
+    () => valueNotifierToSignal(value, debugLabel: debugLabel),
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -60,6 +62,8 @@ ReadonlySignal<T> useValueListenableToSignal<T>(
   String? debugLabel,
 }) {
   final s = useMemoized(
-      () => valueListenableToSignal(value, debugLabel: debugLabel), keys,);
+    () => valueListenableToSignal(value, debugLabel: debugLabel),
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }

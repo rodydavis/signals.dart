@@ -148,9 +148,12 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   }
 
   @override
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   T get value {
     if ((flags & RUNNING) != 0) {
-      throw Exception('Cycle detected');
+      throwCycleDetected();
     }
 
     final node = addDependency();
@@ -159,7 +162,7 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
       node.version = version;
     }
     if ((flags & HAS_ERROR) != 0) {
-      throw error!;
+      throwSignalEffectException(error!);
     }
     return _internalValue;
   }

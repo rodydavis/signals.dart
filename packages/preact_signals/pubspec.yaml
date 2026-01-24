@@ -1,6 +1,6 @@
 name: preact_signals
 description: Dart port of Preact.js Signals
-version: 1.9.3
+version: 1.9.4
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://dartsignals.dev/
 documentation: https://dartsignals.dev/

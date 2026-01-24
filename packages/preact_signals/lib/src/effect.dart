@@ -38,6 +38,9 @@ class Effect with Listenable {
         globalId = ++lastGlobalId;
 
   @internal
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   void callback() {
     final finish = start();
     try {
@@ -55,9 +58,12 @@ class Effect with Listenable {
   }
 
   @internal
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   void Function() start() {
     if ((flags & RUNNING) != 0) {
-      throw Exception('Cycle detected');
+      throwCycleDetected();
     }
     flags |= RUNNING;
     flags &= ~DISPOSED;
@@ -71,6 +77,9 @@ class Effect with Listenable {
   }
 
   @override
+  @pragma('vm:prefer-inline')
+  @pragma('dart2js:tryInline')
+  @pragma('wasm:prefer-inline')
   void notify() {
     if (!((flags & NOTIFIED) != 0)) {
       flags |= NOTIFIED;
@@ -142,7 +151,7 @@ class Effect with Listenable {
   void endEffect(Listenable? prevContext) {
     final effect = this;
     if (evalContext != effect) {
-      throw Exception('Out-of-order effect');
+      throwOutOfOrderEffect();
     }
     effect.cleanupSources();
     evalContext = prevContext;

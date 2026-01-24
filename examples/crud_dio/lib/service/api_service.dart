@@ -1,6 +1,5 @@
 import 'package:crud_dio/helper/dio_helper.dart';
 import 'package:crud_dio/model/post_model.dart';
-import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'api_service.g.dart';

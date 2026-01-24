@@ -12,11 +12,14 @@ void main() {
     });
 
     test('should throw errors thrown from the callback', () {
-      expect(() {
-        batch(() {
-          throw Exception('hello');
-        });
-      }, throwsException,);
+      expect(
+        () {
+          batch(() {
+            throw Exception('hello');
+          });
+        },
+        throwsException,
+      );
     });
 
     test('should throw non-errors thrown from the callback', () {
@@ -185,13 +188,16 @@ void main() {
       spy1.resetHistory();
       spy2.resetHistory();
 
-      expect(() {
-        batch(() {
-          a.value++;
-          b.value++;
-          throw Exception('hello');
-        });
-      }, throwsException,);
+      expect(
+        () {
+          batch(() {
+            a.value++;
+            b.value++;
+            throw Exception('hello');
+          });
+        },
+        throwsException,
+      );
 
       expect(spy1.calls, 1);
       expect(spy2.calls, 1);
@@ -220,11 +226,14 @@ void main() {
       spy1.resetHistory();
       spy2.resetHistory();
 
-      expect(() {
-        batch(() {
-          a.value++;
-        });
-      }, throwsException,);
+      expect(
+        () {
+          batch(() {
+            a.value++;
+          });
+        },
+        throwsException,
+      );
 
       expect(spy1.calls, 1);
       expect(spy2.calls, 1);
