@@ -12,6 +12,7 @@ export 'src/async/signal.dart';
 export 'src/async/stream.dart';
 export 'src/async/future.dart';
 export 'src/async/computed.dart';
+export 'src/async/mutation.dart';
 
 // Extensions
 export 'src/extensions/object.dart' hide SignalObjectUtils;
