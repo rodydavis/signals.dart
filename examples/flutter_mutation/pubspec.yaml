@@ -1,0 +1,25 @@
+name: flutter_mutation
+description: Examples that rely on MutationSignal
+publish_to: "none"
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  signals: ^6.0.0
+  provider: ^6.1.5
+  rxdart: ^0.28.0
+  diffutil_dart: ^4.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+
+resolution: workspace

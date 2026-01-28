@@ -55,5 +55,6 @@ workspace:
   - examples/get_it_signals
   - examples/auth_flow
   - examples/flutter_async
+  - examples/flutter_mutation
   - examples/shopping_cart
   - examples/html_canvas
