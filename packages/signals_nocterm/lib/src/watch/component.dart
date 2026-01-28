@@ -1,198 +1,198 @@
 part of 'watch.dart';
 
-/// A component that rebuilds when any signal it depends on changes.
+/// ## Watch
 ///
-/// Use this component for fine-grained rebuilds. Only the subtree inside
-/// the [Watch] component will rebuild when a signal changes.
-///
-/// ## Example
+/// To watch a signal for changes in Nocterm, use the `Watch` component. This will only rebuild this component method and not the entire component tree.
 ///
 /// ```dart
-/// final count = signal(0);
-///
-/// class MyComponent extends StatelessComponent {
-///   const MyComponent({super.key});
-///
-///   @override
-///   Component build(BuildContext context) {
-///     return Column(
-///       children: [
-///         // Only this part rebuilds when count changes
-///         Watch((context) => Text('Count: ${count()}')),
-///         // This part never rebuilds
-///         Text('Static text'),
-///       ],
-///     );
-///   }
+/// final signal = signal(10);
+/// ...
+/// @override
+/// Component build(BuildContext context) {
+///   return Watch((context) => Text('$signal'));
 /// }
 /// ```
-class Watch extends StatefulComponent {
-  /// Creates a [Watch] component.
+///
+/// This will also automatically unsubscribe when the component is disposed.
+///
+/// Any inherited components referenced inside the Watch scope will be subscribed to for updates and retrigger the builder method.
+///
+/// There is also a drop in replacement for builder:
+///
+/// ```diff
+/// final signal = signal(10);
+/// ...
+/// @override
+/// Component build(BuildContext context) {
+/// -  return Builder(
+/// +  return Watch.builder(
+///     builder: (context) => Text('$signal'),
+///   );
+/// }
+/// ```
+class Watch<T extends Component> extends StatelessComponent {
+  /// Minimal builder for signal changes that rerender a component tree.
+  ///
+  /// ```dart
+  /// final counter = signal(0);
+  /// ...
+  /// Watch((context) => Text('$counter'))
+  /// ```
   const Watch(
     this.builder, {
     super.key,
+    this.debugLabel,
+    this.dependencies = const [],
   });
 
-  /// The builder function that returns the component tree.
+  /// Drop in replacement for the Nocterm builder component.
   ///
-  /// This function is called whenever any signal accessed inside it changes.
-  final Component Function(BuildContext context) builder;
+  /// ```diff
+  /// final counter = signal(0);
+  /// ...
+  /// - Builder(
+  /// + Watch.builder(
+  ///   builder: (context) {
+  ///     return Text('$counter');
+  ///   }
+  /// )
+  /// ```
+  const Watch.builder({
+    super.key,
+    required this.builder,
+    this.debugLabel,
+    this.dependencies = const [],
+  });
 
-  @override
-  State<Watch> createState() => _WatchState();
-}
+  /// The component to rebuild when any signals change
+  final T Function(BuildContext context) builder;
 
-class _WatchState extends State<Watch> {
-  core.EffectCleanup? _cleanup;
-  Component? _child;
+  /// Optional debug label to use for devtools
+  final String? debugLabel;
 
-  @override
-  void initState() {
-    super.initState();
-    _rebuild();
-  }
-
-  @override
-  void didUpdateComponent(Watch oldComponent) {
-    super.didUpdateComponent(oldComponent);
-    if (oldComponent.builder != component.builder) {
-      _rebuild();
-    }
-  }
-
-  void _rebuild() {
-    _cleanup?.call();
-    _cleanup = core.effect(() {
-      final child = component.builder(context);
-      if (_child != child) {
-        _child = child;
-        _scheduleRebuild();
-      }
-    });
-  }
-
-  void _scheduleRebuild() async {
-    if (!mounted) return;
-
-    final scheduler = SchedulerBinding.instance;
-    if (scheduler.schedulerPhase != SchedulerPhase.idle) {
-      await scheduler.endOfFrame;
-      if (!mounted) return;
-    }
-
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    _cleanup?.call();
-    _cleanup = null;
-    super.dispose();
-  }
+  /// List of optional dependencies to watch
+  final List<core.ReadonlySignal<dynamic>> dependencies;
 
   @override
   Component build(BuildContext context) {
-    return _child ?? const SizedBox.shrink();
+    return WatchBuilder(
+      builder: (context, _) => builder(context),
+      debugLabel: debugLabel,
+      dependencies: dependencies,
+    );
   }
 }
 
+/// ## WatchBuilder
+///
 /// A builder component that rebuilds when any signal it depends on changes.
-///
-/// This is an alternative to [Watch] that provides access to the current
-/// signal value through a callback pattern.
-///
-/// ## Example
+/// This is the internal implementation used by [Watch].
 ///
 /// ```dart
-/// final count = signal(0);
-///
-/// WatchBuilder<int>(
-///   signal: count,
-///   builder: (context, value, child) {
-///     return Text('Count: $value');
-///   },
+/// final counter = signal(0);
+/// ...
+/// WatchBuilder(
+///   builder: (context, child) => Text('$counter'),
+///   child: const ExpensiveWidget(), // Optional cached child
 /// )
 /// ```
-class WatchBuilder<T> extends StatefulComponent {
-  /// Creates a [WatchBuilder] component.
+class WatchBuilder<T extends Component> extends StatefulComponent {
+  /// Minimal builder for signal changes that rerender a component tree.
+  ///
+  /// ```dart
+  /// final counter = signal(0);
+  /// ...
+  /// WatchBuilder(
+  ///   builder: (context, child) => Text('$counter'),
+  /// )
+  /// ```
   const WatchBuilder({
     super.key,
-    required this.signal,
     required this.builder,
+    this.debugLabel,
+    this.dependencies = const [],
     this.child,
   });
 
-  /// The signal to watch.
-  final core.ReadonlySignal<T> signal;
+  /// The component to rebuild when any signals change
+  final T Function(BuildContext context, Component? child) builder;
 
-  /// The builder function that returns the component tree.
-  final Component Function(BuildContext context, T value, Component? child)
-      builder;
+  /// Optional debug label to use for devtools
+  final String? debugLabel;
 
-  /// An optional child component that doesn't depend on the signal.
-  ///
-  /// This child is passed to the builder and won't be rebuilt when
-  /// the signal changes.
+  /// Cached component to pass in
   final Component? child;
+
+  /// List of optional dependencies to watch
+  final List<core.ReadonlySignal<dynamic>> dependencies;
 
   @override
   State<WatchBuilder<T>> createState() => _WatchBuilderState<T>();
 }
 
-class _WatchBuilderState<T> extends State<WatchBuilder<T>> {
-  VoidCallback? _cleanup;
-  late T _value;
+class _WatchBuilderState<T extends Component> extends State<WatchBuilder<T>>
+    with SignalsMixin {
+  late final result = createComputed(
+    () {
+      return component.builder(context, component.child);
+    },
+    debugLabel: component.debugLabel,
+  );
+  bool _init = true;
 
   @override
   void initState() {
     super.initState();
-    _value = component.signal.value;
-    _subscribe();
+    for (final dep in component.dependencies) {
+      bindSignal(dep);
+    }
+  }
+
+  // coverage:ignore-start
+  @override
+  void reassemble() {
+    super.reassemble();
+    final target = core.SignalsObserver.instance;
+    if (target is core.DevToolsSignalsObserver) {
+      target.reassemble();
+    }
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      result.recompute();
+      if (mounted) setState(() {});
+      result.value;
+    });
+  }
+  // coverage:ignore-end
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_init) {
+      // Called on first build (we do not need to rebuild yet)
+      _init = false;
+      return;
+    }
+    result.recompute();
   }
 
   @override
-  void didUpdateComponent(WatchBuilder<T> oldComponent) {
+  void didUpdateComponent(covariant WatchBuilder<T> oldComponent) {
     super.didUpdateComponent(oldComponent);
-    if (oldComponent.signal != component.signal) {
-      _unsubscribe();
-      _value = component.signal.value;
-      _subscribe();
+    if (oldComponent.dependencies != component.dependencies) {
+      for (final dep in oldComponent.dependencies) {
+        final idx = component.dependencies.indexOf(dep);
+        if (idx == -1) unbindSignal(dep);
+      }
+      for (final dep in component.dependencies) {
+        bindSignal(dep);
+      }
+    } else if (oldComponent.builder != component.builder) {
+      result.recompute();
     }
-  }
-
-  void _subscribe() {
-    _cleanup = component.signal.subscribe((value) {
-      _scheduleRebuild(value);
-    });
-  }
-
-  void _unsubscribe() {
-    _cleanup?.call();
-    _cleanup = null;
-  }
-
-  void _scheduleRebuild(T value) async {
-    if (!mounted) return;
-
-    final scheduler = SchedulerBinding.instance;
-    if (scheduler.schedulerPhase != SchedulerPhase.idle) {
-      await scheduler.endOfFrame;
-      if (!mounted) return;
-    }
-
-    setState(() {
-      _value = value;
-    });
-  }
-
-  @override
-  void dispose() {
-    _unsubscribe();
-    super.dispose();
   }
 
   @override
   Component build(BuildContext context) {
-    return component.builder(context, _value, component.child);
+    return result.value;
   }
 }

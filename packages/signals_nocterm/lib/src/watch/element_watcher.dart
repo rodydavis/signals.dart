@@ -112,10 +112,16 @@ class ElementWatcher {
 
   /// Dispose of the element watcher and all the listeners
   void dispose() {
-    for (final cleanup in _watch.values) {
+    // Snapshot the values to prevent ConcurrentModificationError
+    // if cleanup callbacks trigger signal updates that modify the maps
+    final watchCleanups = List<VoidCallback>.of(_watch.values);
+    final listenCleanups = List<VoidCallback>.of(_listen.values);
+    _watch.clear();
+    _listen.clear();
+    for (final cleanup in watchCleanups) {
       cleanup();
     }
-    for (final cleanup in _listen.values) {
+    for (final cleanup in listenCleanups) {
       cleanup();
     }
     _removeSignalWatchers();
