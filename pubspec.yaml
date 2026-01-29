@@ -33,6 +33,7 @@ workspace:
   - packages/signals_flutter
   - packages/signals_hooks
   - packages/signals_lint
+  - packages/signals_nocterm
 
   - benchmark/frameworks/preact_signals
   - benchmark/frameworks/signals_core
