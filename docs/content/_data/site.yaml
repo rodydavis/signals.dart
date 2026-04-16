@@ -1,0 +1,12 @@
+# Site Configuration
+titleBase: DOCS
+favicon: favicon.svg
+
+# Social media links
+social:
+  - name: Github
+    url: https://github.com/rodydavis
+  - name: X/Twitter
+    url: https://twitter.com/rodydavis
+  - name: YouTube
+    url: https:/youtube.com/rodydavis

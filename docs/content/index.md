@@ -1,0 +1,43 @@
+---
+title: Signals.dart
+description: signal, effect, computed, batch, untracked
+template: splash
+hero:
+  tagline: Do more by doing less
+  image:
+    file: ../../assets/logo.svg
+  actions:
+    - text: Get Started
+      link: reference/install/
+      icon: right-arrow
+      variant: primary
+    # - text: Explore on pub.dev
+    #   link: https://pub.dev/packages/signals
+    #   icon: external
+    - text: Try on idx.dev
+      link: https://idx.google.com/new?template=https://github.com/rodydavis/signals.dart
+      icon: external
+---
+## Features
+
+<CardGrid stagger="true">
+	<Card title="Fine grained reactivity" icon="pencil">
+		Based on Preact Signals and provides a fine grained reactivity system that will automatically track dependencies and free them when no longer needed.
+	</Card>
+	<Card title="100% Dart Native" icon="forward-slash">
+		Supports Dart JS (HTML), Shelf Server, CLI (and Native), VM, Flutter (Web, Mobile and Desktop). Signals can be used in any Dart project!
+	</Card>
+	<Card title="Lazy evaluation" icon="approve-check">
+		Signals are lazy and will only compute values when read. If a signal is not read, it will not be computed.
+	</Card>
+	<Card title="Flexible API" icon="puzzle">
+		Every app is different and signals can be composed in multiple ways. There are a few rules to follow but the API surface is small.
+	</Card>
+	<Card title="Surgical Rendering" icon="star">
+		Widgets can be rebuilt surgically, only marking dirty the parts of the Widget tree that need to be updated and if mounted.
+	</Card>
+</CardGrid>
+
+<br/>
+
+<iframe src="https://dartpad.dev/?id=1b2f58d30c33ee2ee5c5a159b8867861?theme=dark" style="width: 100%; height: 600px;"></iframe>

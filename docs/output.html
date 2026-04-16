@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="/"/>
+    <meta charset="utf-8"/>
+    <title>Computed | DOCS</title>
+    <meta property="og:title" content="Computed | DOCS"/>
+    <link href="favicon.svg" rel="icon" type="image/png"/>
+    <meta name="description" content="Create a signal that derives its value from other signals"/>
+    <meta property="og:description" content="Create a signal that derives its value from other signals"/>
+    <style>
+      .docs .header-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        backdrop-filter: blur(8px);
+      }
+      .docs .main-container {
+        padding: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @media all and (min-width: 768px) {
+        .docs .main-container {
+          padding-left: 1.25rem;
+          padding-right: 1.25rem;
+        }
+      }
+      .docs .main-container .sidebar-barrier {
+        position: absolute;
+        z-index: 9;
+        opacity: 0.0;
+        pointer-events: none;
+        background-color: var(--background);
+        inset: 0;
+      }
+      .docs .main-container .sidebar-barrier:has(+ .sidebar-container.open) {
+        opacity: 0.5;
+        pointer-events: auto;
+      }
+      .docs .main-container .sidebar-container {
+        position: fixed;
+        top: 4rem;
+        bottom: 0;
+        z-index: 10;
+        width: 17rem;
+        overflow-y: auto;
+        transition: transform 150ms ease-in-out;
+        transform: translateX(-100%);
+      }
+      @media all and (min-width: 768px) {
+        .docs .main-container .sidebar-container {
+          margin-left: -1.25rem;
+        }
+      }
+      @media all and (min-width: 1024px) {
+        .docs .main-container .sidebar-container {
+          margin-left: 0;
+          transform: translateX(0);
+        }
+      }
+      @media all and (max-width: 1023px) {
+        .docs .main-container .sidebar-container {
+          position: fixed;
+          top: 0;
+          border-right-style: solid;
+          border-right-color: #0000000d;
+          border-right-width: 1px;
+          background-color: var(--background);
+        }
+      }
+      .docs .main-container .sidebar-container.open {
+        transform: translateX(0);
+      }
+      .docs .main-container main {
+        position: relative;
+        padding-top: 4rem;
+      }
+      @media all and (min-width: 1024px) {
+        .docs .main-container main {
+          padding-left: 17rem;
+        }
+      }
+      .docs .main-container main > div {
+        display: flex;
+        padding-top: 2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        justify-content: center;
+      }
+      @media all and (min-width: 1024px) {
+        .docs .main-container main > div {
+          padding-left: 4rem;
+        }
+      }
+      .docs .main-container main > div .content-container {
+        min-width: 0;
+        max-width: 80rem;
+        padding-right: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0%;
+      }
+      @media all and (min-width: 1280px) {
+        .docs .main-container main > div .content-container {
+          padding-right: 3rem;
+        }
+      }
+      .docs .main-container main > div .content-container .content-header {
+        margin-bottom: 2rem;
+        color: var(--content-headings);
+      }
+      .docs .main-container main > div .content-container .content-header h1 {
+        font-size: 2rem;
+        line-height: 2.25rem;
+      }
+      .docs .main-container main > div .content-container .content-header p {
+        margin-top: 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1.25rem;
+      }
+      .docs .main-container main > div .content-container .content-header img {
+        margin-top: 1rem;
+        border-radius: 0.375rem;
+      }
+      .docs .main-container main > div .content-container .content-footer {
+        margin-top: 2rem;
+      }
+      .docs .main-container main > div aside.toc {
+        display: none;
+        position: relative;
+        width: 17rem;
+      }
+      @media all and (min-width: 1280px) {
+        .docs .main-container main > div aside.toc {
+          display: block;
+        }
+      }
+      .docs .main-container main > div aside.toc > div {
+        position: sticky;
+        top: 6rem;
+      }
+      .docs .main-container main > div aside.toc h3 {
+        margin-bottom: 0.5rem;
+        opacity: 0.75;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.25rem;
+      }
+      .docs .main-container main > div aside.toc ul {
+        margin-top: 1rem;
+      }
+      .docs .main-container main > div aside.toc li {
+        margin-top: 0.5rem;
+        font-size: 14px;
+      }
+    </style>
+    <!--$-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+      .header {
+        display: flex;
+        height: 4rem;
+        padding: 0.25rem 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        border-bottom-style: solid;
+        border-bottom-color: #0000000d;
+        border-bottom-width: 1px;
+        align-items: center;
+        column-gap: 1rem;
+      }
+      @media all and (min-width: 768px) {
+        .header {
+          padding-left: 2.5rem;
+          padding-right: 2.5rem;
+        }
+      }
+      .header .header-title {
+        display: inline-flex;
+        align-items: center;
+        column-gap: 0.75rem;
+        flex-basis: 17rem;
+      }
+      .header .header-title img {
+        width: auto;
+        height: 1.5rem;
+      }
+      .header .header-title span {
+        font-weight: 700;
+      }
+      .header .header-content {
+        display: flex;
+        justify-content: end;
+        flex-grow: 1;
+      }
+      .header .header-items {
+        display: flex;
+        column-gap: 0.25rem;
+      }
+    </style>
+    <style>
+      .sidebar-toggle-button {
+        display: none;
+        width: 2rem;
+        height: 2rem;
+        justify-content: center;
+        align-items: center;
+      }
+      @media all and (max-width: 1024px) {
+        [data-has-sidebar] .sidebar-toggle-button {
+          display: flex;
+        }
+      }
+    </style>
+    <script id="theme-script">
+                  let userTheme = window.localStorage.getItem('jaspr:theme');
+                  if (userTheme != null) {
+                    document.documentElement.setAttribute('data-theme', userTheme);
+                  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                  } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                  }
+                
+    </script>
+    <style>
+      .sidebar {
+        position: relative;
+        padding-top: 0.75rem;
+        padding-left: 0.5rem;
+        padding-bottom: 1.25rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+      @media all and (min-width: 1024px) {
+        .sidebar {
+          padding-top: 0;
+        }
+      }
+      .sidebar .sidebar-close {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+      }
+      @media all and (min-width: 1024px) {
+        .sidebar .sidebar-close {
+          display: none;
+        }
+      }
+      .sidebar .sidebar-group {
+        padding-top: 1.5rem;
+        padding-right: 0.75rem;
+      }
+      .sidebar .sidebar-group h3 {
+        padding-left: 0.75rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .sidebar .sidebar-group ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      .sidebar .sidebar-group li div {
+        display: flex;
+        margin-bottom: 1px;
+        border-radius: 0.375rem;
+        opacity: 0.75;
+        overflow: hidden;
+        transition: all 150ms ease-in-out;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .sidebar .sidebar-group li div:hover {
+        opacity: 1.0;
+        background-color: #0000000d;
+      }
+      .sidebar .sidebar-group li div.active {
+        opacity: 1.0;
+        color: var(--primary);
+        font-weight: 700;
+        background-color: color-mix(in srgb, currentColor 15%, transparent);
+      }
+      .sidebar .sidebar-group li a {
+        display: inline-flex;
+        padding-top: 0.5rem;
+        padding-left: 12px;
+        padding-bottom: 0.5rem;
+        flex-grow: 1;
+      }
+    </style>
+    <style>
+      :root {
+        --primary: oklch(0.681 0.162 75.834);
+        --background: oklch(0.984 0.003 247.858);
+        --text: oklch(0.373 0.034 259.733);
+        --content-headings: oklch(0.21 0.034 264.665);
+        --content-lead: oklch(0.446 0.03 256.802);
+        --content-links: oklch(0.21 0.034 264.665);
+        --content-bold: oklch(0.21 0.034 264.665);
+        --content-counters: oklch(0.551 0.027 264.364);
+        --content-bullets: oklch(0.872 0.01 258.338);
+        --content-hr: oklch(0.928 0.006 264.531);
+        --content-quotes: oklch(0.21 0.034 264.665);
+        --content-quote-borders: oklch(0.795 0.184 86.047);
+        --content-captions: oklch(0.551 0.027 264.364);
+        --content-kbd: oklch(0.21 0.034 264.665);
+        --content-kbd-shadows: oklch(0.21 0.034 264.665);
+        --content-code: oklch(0.21 0.034 264.665);
+        --content-pre-code: oklch(0.928 0.006 264.531);
+        --content-pre-bg: oklch(0.278 0.033 256.848);
+        --content-th-borders: oklch(0.872 0.01 258.338);
+        --content-td-borders: oklch(0.928 0.006 264.531);
+      }
+      :root[data-theme="dark"] {
+        --primary: oklch(0.795 0.184 86.047);
+        --background: oklch(0.129 0.042 264.695);
+        --text: oklch(0.928 0.006 264.531);
+        --content-headings: white;
+        --content-lead: oklch(0.707 0.022 261.325);
+        --content-links: white;
+        --content-bold: white;
+        --content-counters: oklch(0.707 0.022 261.325);
+        --content-bullets: oklch(0.446 0.03 256.802);
+        --content-hr: oklch(0.373 0.034 259.733);
+        --content-quotes: oklch(0.967 0.003 264.542);
+        --content-captions: oklch(0.707 0.022 261.325);
+        --content-kbd: white;
+        --content-kbd-shadows: white;
+        --content-code: white;
+        --content-pre-code: oklch(0.872 0.01 258.338);
+        --content-pre-bg: rgb(0 0 0 / 50%);
+        --content-th-borders: oklch(0.446 0.03 256.802);
+        --content-td-borders: oklch(0.373 0.034 259.733);
+      }
+      *, :after, :before {
+        box-sizing: border-box;
+        border: solid #e5e7eb 0;
+      }
+      :host,html {
+        line-height: 1.5em;
+        -webkit-text-size-adjust: 100%;
+        -moz-tab-size: 4;
+        tab-size: 4;
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        margin: 0;
+        line-height: inherit;
+        -webkit-font-smoothing: antialiased;
+      }
+      hr {
+        height: 0;
+        border-top-style: solid;
+        border-top-width: 1px;
+        color: inherit;
+      }
+      a {
+        color: inherit;
+        text-decoration: inherit;
+      }
+      b, strong {
+        font-weight: bolder;
+      }
+      code, kbd, pre, samp {
+        font-size: 1em;
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+      }
+      small {
+        font-size: 80%;
+      }
+      sub, sup {
+        position: relative;
+        font-size: 75%;
+        line-height: 0;
+        vertical-align: baseline;
+      }
+      sub {
+        position: relative;
+        bottom: -0.25em;
+      }
+      sup {
+        position: relative;
+        top: -0.5em;
+      }
+      table {
+        border: solid inherit;
+        text-indent: 0;
+        border-collapse: collapse;
+      }
+      button, input, optgroup, select, textarea {
+        padding: 0;
+        margin: 0;
+        color: inherit;
+        font-family: inherit;
+        font-size: 100%;
+        font-weight: inherit;
+        letter-spacing: inherit;
+        line-height: inherit;
+        font-feature-settings: inherit;
+        font-variation-settings: inherit;
+      }
+      button, select {
+        text-transform: none;
+      }
+      button, input[type=button], input[type=reset], input[type=submit] {
+        -webkit-appearance: button;
+        background-color: transparent;
+        background-image: none;
+      }
+      :-moz-focusring {
+        outline: auto;
+      }
+      :-moz-ui-invalid {
+        box-shadow: none;
+      }
+      progress {
+        vertical-align: baseline;
+      }
+      ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+        height: auto;
+      }
+      [type=search] {
+        -webkit-appearance: textfield;
+        outline-offset: -2px;
+      }
+      ::-webkit-search-decoration {
+        -webkit-appearance: none;
+      }
+      ::-webkit-file-upload-button {
+        -webkit-appearance: button;
+        font: inherit;
+      }
+      summary {
+        display: list-item;
+      }
+      blockquote, dd, dl, figure, h1, h2, h3, h4, h5, h6, hr, p, pre {
+        margin: 0;
+      }
+      fieldset {
+        margin: 0;
+      }
+      fieldset, legend {
+        padding: 0;
+      }
+      menu, ol, ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      dialog {
+        padding: 0;
+      }
+      textarea {
+        resize: vertical;
+      }
+      input::placeholder, textarea::placeholder {
+        opacity: 1.0;
+        color: #9ca3af;
+      }
+      [role=button], button {
+        cursor: pointer;
+      }
+      :disabled {
+        cursor: default;
+      }
+      audio, canvas, embed, iframe, img, object, svg, video {
+        display: block;
+        vertical-align: middle;
+      }
+      img, video {
+        height: auto;
+        max-width: 100%;
+      }
+      :root {
+        --content-font: 'Open Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        --content-code-font: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+      }
+      :host,html {
+        font-family: var(--content-font);
+      }
+      code, kbd, pre, samp {
+        font-family: var(--content-code-font);
+      }
+      body {
+        color: var(--text);
+        background-color: var(--background);
+      }
+      .content {
+        color: var(--text);
+        font-size: 1rem;
+        line-height: 1.75em;
+      }
+      .content :where(a):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-links);
+        font-weight: 500;
+        text-decoration: underline;
+      }
+      .content :where(strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-bold);
+        font-weight: 600;
+      }
+      .content :where(a strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(blockquote strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(thead th strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(ol):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: decimal;
+      }
+      .content :where(ol[type="A"]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: upper-alpha;
+      }
+      .content :where(ol[type="a"]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: lower-alpha;
+      }
+      .content :where(ol[type="A" s]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: upper-alpha;
+      }
+      .content :where(ol[type="a" s]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: lower-alpha;
+      }
+      .content :where(ol[type="I"]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: upper-roman;
+      }
+      .content :where(ol[type="i"]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: lower-roman;
+      }
+      .content :where(ol[type="I" s]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: upper-roman;
+      }
+      .content :where(ol[type="i" s]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: lower-roman;
+      }
+      .content :where(ol[type="1"]):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: decimal;
+      }
+      .content :where(ul):not(:where([class~=not-content],[class~=not-content] *)) {
+        list-style-type: disc;
+      }
+      .content :where(ol > li::marker):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-counters);
+        font-weight: 400;
+      }
+      .content :where(ul > li::marker):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-bullets);
+      }
+      .content :where(dt):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-headings);
+        font-weight: 600;
+      }
+      .content :where(hr):not(:where([class~=not-content],[class~=not-content] *)) {
+        border: solid var(--content-hr);
+        border-top-width: 1px;
+      }
+      .content :where(blockquote):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-quotes);
+        font-weight: 500;
+        font-style: italic;
+        border-inline-start-width: 0.25rem;
+        border-inline-start-color: var(--content-quote-borders);
+        quotes: "\201C""\201D""\2018""\2019";
+      }
+      .content :where(blockquote p:first-of-type::before):not(:where([class~=not-content],[class~=not-content] *)) {
+        content: open-quote;
+      }
+      .content :where(blockquote p:last-of-type::after):not(:where([class~=not-content],[class~=not-content] *)) {
+        content: close-quote;
+      }
+      .content :where(h1):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-headings);
+        font-weight: 800;
+      }
+      .content :where(h1 strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+        font-weight: 900;
+      }
+      .content :where(h2):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-headings);
+        font-weight: 700;
+      }
+      .content :where(h2 strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+        font-weight: 800;
+      }
+      .content :where(h3):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-headings);
+        font-weight: 600;
+      }
+      .content :where(h3 strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+        font-weight: 700;
+      }
+      .content :where(h4):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-headings);
+        font-weight: 600;
+      }
+      .content :where(h4 strong):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+        font-weight: 700;
+      }
+      .content :where(picture):not(:where([class~=not-content],[class~=not-content] *)) {
+        display: block;
+      }
+      .content :where(kbd):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-kbd);
+        font-family: inherit;
+        font-weight: 500;
+      }
+      .content :where(code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-code);
+        font-weight: 600;
+      }
+      .content :where(code::before):not(:where([class~=not-content],[class~=not-content] *)) {
+        content: "`";
+      }
+      .content :where(code::after):not(:where([class~=not-content],[class~=not-content] *)) {
+        content: "`";
+      }
+      .content :where(a code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(h1 code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(h2 code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(h3 code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(h4 code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(blockquote code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(thead th code):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: inherit;
+      }
+      .content :where(pre):not(:where([class~=not-content],[class~=not-content] *)) {
+        overflow-x: auto;
+        color: var(--content-pre-code);
+        font-weight: 400;
+        background-color: var(--content-pre-bg);
+      }
+      .content :where(pre code):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding: 0;
+        border: solid 0;
+        border-radius: 0;
+        color: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        background-color: transparent;
+      }
+      .content :where(pre code::before):not(:where([class~=not-content],[class~=not-content] *)) {
+        content: none;
+      }
+      .content :where(pre code::after):not(:where([class~=not-content],[class~=not-content] *)) {
+        content: none;
+      }
+      .content :where(table):not(:where([class~=not-content],[class~=not-content] *)) {
+        width: 100%;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        table-layout: auto;
+      }
+      .content :where(thead):not(:where([class~=not-content],[class~=not-content] *)) {
+        border-bottom-style: solid;
+        border-bottom-color: var(--content-th-borders);
+        border-bottom-width: 1px;
+      }
+      .content :where(thead th):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-headings);
+        font-weight: 600;
+        vertical-align: bottom;
+      }
+      .content :where(tbody tr):not(:where([class~=not-content],[class~=not-content] *)) {
+        border-bottom-style: solid;
+        border-bottom-color: var(--content-td-borders);
+        border-bottom-width: 1px;
+      }
+      .content :where(tbody tr:last-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        border-bottom-style: solid;
+        border-bottom-width: 0;
+      }
+      .content :where(tbody td):not(:where([class~=not-content],[class~=not-content] *)) {
+        vertical-align: baseline;
+      }
+      .content :where(tfoot):not(:where([class~=not-content],[class~=not-content] *)) {
+        border-top-style: solid;
+        border-top-color: var(--content-th-borders);
+        border-top-width: 1px;
+      }
+      .content :where(tfoot td):not(:where([class~=not-content],[class~=not-content] *)) {
+        vertical-align: top;
+      }
+      .content :where(th, td):not(:where([class~=not-content],[class~=not-content] *)) {
+        text-align: start;
+      }
+      .content :where(figcaption):not(:where([class~=not-content],[class~=not-content] *)) {
+        color: var(--content-captions);
+      }
+      .content :where(p):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+      }
+      .content :where(blockquote):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 1em;
+        margin-top: 1.6em;
+        margin-bottom: 1.6em;
+      }
+      .content :where(h1):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+        margin-bottom: 0.88em;
+        font-size: 2.25em;
+        line-height: 1.11em;
+      }
+      .content :where(h2):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 1.5em;
+        margin-bottom: 1em;
+        font-size: 1.5em;
+        line-height: 1.33em;
+      }
+      .content :where(h3):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 1.6em;
+        margin-bottom: 0.6em;
+        font-size: 1.25em;
+        line-height: 1.6em;
+      }
+      .content :where(h4):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 2em;
+        margin-bottom: 0.5em;
+        line-height: 1.5em;
+      }
+      .content :where(img):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 2em;
+        margin-bottom: 2em;
+      }
+      .content :where(picture):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 2em;
+        margin-bottom: 2em;
+      }
+      .content :where(picture > img):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .content :where(video):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 2em;
+        margin-bottom: 2em;
+      }
+      .content :where(kbd):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding: 0.1875rem 0.375rem 0.1875rem 0.375rem;
+        border-radius: 0.3125rem;
+        font-size: 0.875em;
+      }
+      .content :where(code):not(:where([class~=not-content],[class~=not-content] *)) {
+        font-size: 0.875em;
+      }
+      .content :where(h2 code):not(:where([class~=not-content],[class~=not-content] *)) {
+        font-size: 0.875em;
+      }
+      .content :where(h3 code):not(:where([class~=not-content],[class~=not-content] *)) {
+        font-size: 0.9em;
+      }
+      .content :where(pre):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding: 0.857em 1.14em 0.857em 1.14em;
+        margin-top: 1.71em;
+        margin-bottom: 1.71em;
+        border-radius: 0.375rem;
+        font-size: 0.875em;
+        line-height: 1.71em;
+      }
+      .content :where(ol):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 1.625em;
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+      }
+      .content :where(ul):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 1.625em;
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+      }
+      .content :where(li):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
+      .content :where(ol > li):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 0.375em;
+      }
+      .content :where(ul > li):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 0.375em;
+      }
+      .content :where(> ul > li p):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
+      }
+      .content :where(> ul > li > p:first-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 1.25em;
+      }
+      .content :where(> ul > li > p:last-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-bottom: 1.25em;
+      }
+      .content :where(> ol > li > p:first-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 1.25em;
+      }
+      .content :where(> ol > li > p:last-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-bottom: 1.25em;
+      }
+      .content :where(ul ul, ul ol, ol ul, ol ol):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
+      }
+      .content :where(dl):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+      }
+      .content :where(dt):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 1.25em;
+      }
+      .content :where(dd):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 1.625em;
+        margin-top: 0.5em;
+      }
+      .content :where(hr):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 3em;
+        margin-bottom: 3em;
+      }
+      .content :where(hr + *):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+      }
+      .content :where(h2 + *):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+      }
+      .content :where(h3 + *):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+      }
+      .content :where(h4 + *):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+      }
+      .content :where(table):not(:where([class~=not-content],[class~=not-content] *)) {
+        font-size: 0.875em;
+        line-height: 1.71em;
+      }
+      .content :where(thead th):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 0.57em;
+        padding-right: 0.57em;
+        padding-bottom: 0.57em;
+      }
+      .content :where(thead th:first-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 0;
+      }
+      .content :where(thead th:last-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-right: 0;
+      }
+      .content :where(tbody td, tfoot td):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding: 0.57em 0.57em 0.57em 0.57em;
+      }
+      .content :where(tbody td:first-child, tfoot td:first-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-left: 0;
+      }
+      .content :where(tbody td:last-child, tfoot td:last-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        padding-right: 0;
+      }
+      .content :where(figure):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 2em;
+        margin-bottom: 2em;
+      }
+      .content :where(figure > *):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .content :where(figcaption):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0.857em;
+        font-size: 0.875em;
+        line-height: 1.42em;
+      }
+      .content :where(> :first-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-top: 0;
+      }
+      .content :where(> :last-child):not(:where([class~=not-content],[class~=not-content] *)) {
+        margin-bottom: 0;
+      }
+    </style>
+    <style>
+      :is(h1, h2, h3, h4, h5, h6)[anchor="true"] {
+        display: flex;
+        align-items: baseline;
+        column-gap: 0.5rem;
+      }
+      :is(h1, h2, h3, h4, h5, h6)[anchor="true"] > a {
+        opacity: 0.0;
+        transition: opacity 300ms;
+        font-size: 0.8em;
+        text-decoration: none;
+      }
+      :is(h1, h2, h3, h4, h5, h6)[anchor="true"]:hover > a {
+        opacity: 0.8;
+      }
+      :is(h1, h2, h3, h4, h5, h6)[anchor="true"] > a:hover {
+        opacity: 1.0;
+      }
+    </style>
+    <!--/-->
+    <script src="main.client.dart.js" defer></script>
+    <style>
+      .clicker {
+        padding: 0.5rem;
+        margin-top: 1rem;
+        border: solid var(--primary);
+        border-radius: 0.5rem;
+      }
+      .tab-bar {
+        display: flex;
+        border-bottom-style: solid;
+        border-bottom-color: var(--content-hr);
+        border-bottom-width: 1px;
+        align-items: center;
+        column-gap: 1.25rem;
+      }
+      .tab-bar button {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        border-bottom-width: 2px;
+        font-weight: 700;
+      }
+      .tab-bar button:hover {
+        border-bottom-color: var(--content-hr);
+      }
+      .tab-bar button[active] {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+      }
+      figure.image.zoomable img {
+        cursor: zoom-in;
+      }
+      dialog.zoom-modal {
+        width: 100vw;
+        height: 100vh;
+        max-width: initial;
+        max-height: initial;
+        padding: 0;
+        margin: 0;
+        border: none;
+        outline-style: none;
+        overflow: hidden;
+        background-color: transparent;
+      }
+      dialog.zoom-modal .image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: var(--background);
+      }
+      dialog.zoom-modal img {
+        position: absolute;
+        cursor: zoom-out;
+        transition: transform 300ms;
+        transform-origin: top left;
+      }
+      .callout {
+        display: flex;
+        padding: 1rem 1.25rem;
+        margin-bottom: 0.75rem;
+        border: solid 1px;
+        border-radius: 0.75rem;
+        column-gap: 1rem;
+      }
+      .callout span:first-child {
+        padding-top: 0.25rem;
+        flex-shrink: 0;
+      }
+      .callout span:last-child > p {
+        margin: 0;
+      }
+      .callout.callout-info {
+        border: solid rgba(14,165,233,.2);
+        color: rgb(3 105 161);
+        background-color: rgba(186, 230, 253, .1);
+      }
+      .callout.callout-warning {
+        border: solid rgba(234,179,8,.2);
+        color: rgb(161 98 7);
+        background-color: hsla(53,98%,77%,.1);
+      }
+      .callout.callout-error {
+        border: solid rgba(239,68,68,.2);
+        color: rgb(185 28 28);
+        background-color: hsla(0,96%,89%,.1);
+      }
+      .callout.callout-success {
+        border: solid rgba(34,197,94,.2);
+        color: oklch(0.527 0.154 150.069);
+        background-color: rgba(187,247,208,.1);
+      }
+      [data-theme="dark"] .callout.callout-info {
+        border: solid rgba(14,165,233,.5);
+        color: inherit;
+        background-color: rgba(14,165,233,.1);
+      }
+      [data-theme="dark"] .callout.callout-warning {
+        border: solid rgba(234,179,8,.5);
+        color: inherit;
+        background-color: rgba(234,179,8,.1);
+      }
+      [data-theme="dark"] .callout.callout-error {
+        border: solid rgba(239,68,68,.5);
+        color: inherit;
+        background-color: rgba(239,68,68,.1);
+      }
+      [data-theme="dark"] .callout.callout-success {
+        border: solid rgba(34,197,94,.5);
+        color: inherit;
+        background-color: rgba(34,197,94,.1);
+      }
+      .code-block {
+        position: relative;
+      }
+      .code-block button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 10;
+        width: 1.25rem;
+        height: 1.25rem;
+        opacity: 0.0;
+        color: white;
+      }
+      .code-block:hover button {
+        opacity: 0.75;
+      }
+      .github-button {
+        display: flex;
+        padding: 0.4rem 0.7rem;
+        border-radius: 8px;
+        align-items: center;
+        column-gap: 0.5rem;
+        font-size: 0.7rem;
+        text-decoration: none;
+        line-height: 1.2em;
+      }
+      .github-button:hover {
+        background-color: color-mix(in srgb, currentColor 5%, transparent);
+      }
+      .github-button * {
+        transition: opacity 200ms ease-in-out;
+      }
+      .github-button:hover * {
+        opacity: 1 !important;
+      }
+      .github-button .github-icon {
+        width: 1.2rem;
+      }
+      .github-button .github-info {
+        display: flex;
+        flex-direction: column;
+      }
+      .github-button .github-info > span:first-child {
+        margin-bottom: 2px;
+        opacity: 0.9;
+        font-family: monospace;
+      }
+      .github-button .github-info > span:last-child {
+        display: flex;
+        opacity: 0.7;
+        align-items: center;
+        column-gap: 0.3em;
+        font-size: 0.9em;
+        font-weight: 800;
+      }
+      .github-button .github-info > span:last-child span {
+        font-weight: 500;
+      }
+      figure.image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .tabs .tab-content {
+        display: none;
+      }
+      .tabs .tab-content[active] {
+        display: initial;
+      }
+      .theme-toggle {
+        display: flex;
+        padding: 0.7rem;
+        border: unset;
+        border-radius: 8px;
+        outline: unset;
+        align-items: center;
+        background-color: transparent;
+      }
+      .theme-toggle:hover {
+        background-color: color-mix(in srgb, currentColor 5%, transparent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="docs">
+      <div class="header-container" data-has-sidebar>
+        <header class="header">
+          <!--@jaspr_content:sidebar_toggle_button-->
+          <button class="sidebar-toggle-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+            
+          </button>
+          <!--/@jaspr_content:sidebar_toggle_button-->
+          <a class="header-title" href="/"><img alt="Logo" src="/images/logo.svg"/><span>Signals.dart</span></a>
+          <div class="header-content">
+            <div class="header-items">
+              <!--@jaspr_content:theme_toggle-->
+              <button class="theme-toggle" style="visibility: hidden" aria-label="Theme Toggle">
+                <span><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="20px" height="20px"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></span>
+                <span style="display: none"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="20px" height="20px"><circle cx="12" cy="12" r="4"></circle><path d="M12 4h.01"></path><path d="M20 12h.01"></path><path d="M12 20h.01"></path><path d="M4 12h.01"></path><path d="M17.657 6.343h.01"></path><path d="M17.657 17.657h.01"></path><path d="M6.343 17.657h.01"></path><path d="M6.343 6.343h.01"></path></svg></span>
+              </button>
+              <!--/@jaspr_content:theme_toggle-->
+              <!--@jaspr_content:github_button data={"repo":"rodydavis/signals.dart"}-->
+              <a class="github-button not-content" href="https://github.com/rodydavis/signals.dart" target="_blank">
+                <div class="github-icon">
+                  <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+                  </svg>
+                </div>
+                <div class="github-info">
+                  <span>rodydavis/signals.dart</span>
+                  <span>★<span style="opacity: 0.0">9999</span><span></span>⑂<span style="opacity: 0.0">99</span></span>
+                </div>
+              </a>
+              <!--/@jaspr_content:github_button-->
+            </div>
+          </div>
+        </header>
+      </div>
+      <div class="main-container">
+        <div class="sidebar-barrier" role="button"></div>
+        <div class="sidebar-container">
+          <nav class="sidebar">
+            <button class="sidebar-close">
+              <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="20px" height="20px"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+            <div>
+              <div class="sidebar-group"><ul><li><div><a href="/">Overview</a></div></li></ul></div>
+              <div class="sidebar-group">
+                <h3>Reference</h3>
+                <ul>
+                  <li><div><a href="/reference/ai">AI Integration</a></div></li>
+                  <li><div><a href="/reference/install">Installing</a></div></li>
+                  <li><div><a href="/reference/overview">Overview</a></div></li>
+                </ul>
+              </div>
+              <div class="sidebar-group">
+                <h3>Core</h3>
+                <ul>
+                  <li><div><a href="/core/batch">Batch</a></div></li>
+                  <li><div class="active"><a href="/core/computed">Computed</a></div></li>
+                  <li><div><a href="/core/effect">Effect</a></div></li>
+                  <li><div><a href="/core/signal">Signal</a></div></li>
+                  <li><div><a href="/core/untracked">Untracked</a></div></li>
+                </ul>
+              </div>
+              <div class="sidebar-group">
+                <h3>Flutter</h3>
+                <ul>
+                  <li><div><a href="/flutter/devtools">DevTools</a></div></li>
+                  <li><div><a href="/flutter/computed">FlutterComputed</a></div></li>
+                  <li><div><a href="/flutter/signal">FlutterSignal</a></div></li>
+                  <li><div><a href="/flutter/hooks">Hooks</a></div></li>
+                  <li><div><a href="/flutter/signal-provider">SignalProvider</a></div></li>
+                  <li><div><a href="/flutter/value-listenable">ValueListenable</a></div></li>
+                  <li><div><a href="/flutter/value-notifier">ValueNotifier</a></div></li>
+                  <li><div><a href="/flutter/watch">Watch</a></div></li>
+                </ul>
+              </div>
+              <div class="sidebar-group">
+                <h3>Mixins</h3>
+                <ul>
+                  <li><div><a href="/mixins/change-stack">ChangeStackSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/event-sink">EventSinkSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/iterable">IterableSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/list">ListSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/queue">QueueSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/set">SetSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/signals-mixin">SignalsMixin</a></div></li>
+                  <li><div><a href="/mixins/sink">SinkSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/stream">StreamSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/tracked">TrackedSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/value-listenable">ValueListenableSignalMixin</a></div></li>
+                  <li><div><a href="/mixins/value-notifier">ValueNotifierSignalMixin</a></div></li>
+                </ul>
+              </div>
+              <div class="sidebar-group">
+                <h3>Async</h3>
+                <ul>
+                  <li><div><a href="/async/state">AsyncState</a></div></li>
+                  <li><div><a href="/async/computed">Computed</a></div></li>
+                  <li><div><a href="/async/connect">Connect</a></div></li>
+                  <li><div><a href="/async/future">FutureSignal</a></div></li>
+                  <li><div><a href="/async/stream">StreamSignal</a></div></li>
+                </ul>
+              </div>
+              <div class="sidebar-group">
+                <h3>Value</h3>
+                <ul>
+                  <li><div><a href="/value/change-stack">ChangeStack</a></div></li>
+                  <li><div><a href="/value/iterable">IterableSignal</a></div></li>
+                  <li><div><a href="/value/list">ListSignal</a></div></li>
+                  <li><div><a href="/value/map">MapSignal</a></div></li>
+                  <li><div><a href="/value/set">SetSignal</a></div></li>
+                </ul>
+              </div>
+              <div class="sidebar-group">
+                <h3>Utilities</h3>
+                <ul>
+                  <li><div><a href="/utilities/container">SignalContainer</a></div></li>
+                  <li><div><a href="/utilities/observer">SignalsObserver</a></div></li>
+                </ul>
+              </div>
+              <div class="sidebar-group">
+                <h3>Guides</h3>
+                <ul>
+                  <li><div><a href="/guides/bi-directional-data-flow">Bi-directional Data Flow</a></div></li>
+                  <li><div><a href="/guides/dependency-injection">Dependency Injection</a></div></li>
+                  <li><div><a href="/guides/persisted-signals">Persisted Signals</a></div></li>
+                  <li><div><a href="/guides/value-notifier">ValueNotifier</a></div></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+        <main>
+          <div>
+            <div class="content-container">
+              <div class="content-header"><h1>Computed</h1><p>Create a signal that derives its value from other signals</p></div>
+              <section class="content">
+                <p>
+                  Data is often derived from other pieces of existing data. The <code>computed</code> function lets you combine the values of multiple signals into a new signal that can be reacted to, or even used by additional computeds. When the signals accessed from within a computed callback change, the computed callback is re-executed and its new return value becomes the computed signal's value.
+                </p>
+                <blockquote>
+                  <p>
+                    <code>Computed</code> class extends the <a href="/core/signal/"><code>Signal</code></a> class, so you can use it anywhere you would use a signal.
+                  </p>
+                </blockquote>
+                <div class="tabs">
+                  <!--@jaspr_content:tab_bar data={"initialValue":"code","items":{"code":"Code","preview":"Preview"}}-->
+                  <div class="tab-bar"><button active>Code</button><button>Preview</button></div>
+                  <!--/@jaspr_content:tab_bar-->
+                  <div>
+                    <div class="tab-content" data-tab="code" label="Code" active>
+                      <div class="code-block">
+                        <!--@jaspr_content:code_block_copy_button-->
+                        <button>
+                          <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                            <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                          </svg>
+                        </button>
+                        <!--/@jaspr_content:code_block_copy_button-->
+                        <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">import</span><span style="color: #d4d4d4"> </span><span style="color: #ce9178">'package:signals/signals.dart'</span><span style="color: #d4d4d4">;</span>
+
+<span style="color: #569cd6">final</span> name <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">signal</span><span style="color: #5caeef">(</span><span style="color: #ce9178">"Jane"</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+<span style="color: #569cd6">final</span> surname <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">signal</span><span style="color: #5caeef">(</span><span style="color: #ce9178">"Doe"</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+
+<span style="color: #569cd6">final</span> fullName <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> name<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">+</span> <span style="color: #ce9178">" "</span> <span style="color: #d4d4d4">+</span> surname<span style="color: #d4d4d4">.</span><span>value<span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+
+<span style="color: #608b4e">// Logs: "Jane Doe"</span>
+<span style="color: #dcdcaa">print</span><span><span style="color: #5caeef">(</span>fullName</span><span style="color: #d4d4d4">.</span><span>value<span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+
+<span style="color: #608b4e">// Updates flow through computed, but only if someone</span>
+<span style="color: #608b4e">// subscribes to it. More on that later.</span>
+name<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #ce9178">"John"</span><span style="color: #d4d4d4">;</span>
+<span style="color: #608b4e">// Logs: "John Doe"</span>
+<span style="color: #dcdcaa">print</span><span><span style="color: #5caeef">(</span>fullName</span><span style="color: #d4d4d4">.</span><span>value<span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+</span></code></pre>
+                      </div>
+                    </div>
+                    <div class="tab-content" data-tab="preview" label="Preview">
+                      <!--@interactive_computed-->
+                      <div class="flex flex-col items-center text-center p-6 bg-[#0a0c10] text-slate-200 min-h-[300px] justify-center">
+                        <h3 class="font-bold mb-4 text-white">Interactive Computed Example</h3>
+                        <p class="mb-6 text-sm text-slate-400 max-w-lg">
+                          Variables firstName and lastName are signals. The fullName is a computed signal. Updating any underlying signal instantly re-evaluates the computed!
+                        </p>
+                        <div class="grid grid-cols-[auto_1fr] gap-4 mb-6 items-center text-left w-full max-w-sm">
+                          <label class="font-semibold text-slate-300">First Name</label>
+                          <input class="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded text-black bg-white dark:text-white dark:bg-slate-800" type="text" value="Jane"/>
+                          <label class="font-semibold text-slate-300">Last Name</label>
+                          <input class="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded text-black bg-white dark:text-white dark:bg-slate-800" type="text" value="Doe"/>
+                        </div>
+                        <div class="p-4 bg-yellow-100 dark:bg-yellow-900 rounded inline-block">
+                          <p class="text-sm font-semibold text-yellow-800 dark:text-yellow-100 uppercase tracking-wide mb-1">Computed &lt;fullName&gt;</p>
+                          <p class="text-2xl font-bold text-yellow-900 dark:text-yellow-50">Jane Doe</p>
+                        </div>
+                      </div>
+                      <!--/@interactive_computed-->
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  Any signal that is accessed inside the <code>computed</code>'s callback function will be automatically subscribed to and tracked as a dependency of the computed signal.
+                </p>
+                <blockquote><p>Computed signals are both lazily evaluated and memoized</p></blockquote>
+                <h2 id="force-re-evaluation" anchor="true"><span>Force Re-evaluation</span><a href="/core/computed#force-re-evaluation">#</a></h2>
+                <p>
+                  You can force a computed signal to re-evaluate by calling its <code>.recompute</code> method. This will re-run the computed callback and update the computed signal's value.
+                </p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">final</span> name <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">signal</span><span style="color: #5caeef">(</span><span style="color: #ce9178">"Jane"</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+<span style="color: #569cd6">final</span> surname <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">signal</span><span style="color: #5caeef">(</span><span style="color: #ce9178">"Doe"</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+<span style="color: #569cd6">final</span> fullName <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> name<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">+</span> <span style="color: #ce9178">" "</span> <span style="color: #d4d4d4">+</span> surname<span style="color: #d4d4d4">.</span><span>value<span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+
+fullName<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">recompute</span><span><span style="color: #5caeef">(</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span> <span style="color: #608b4e">// Re-runs the computed callback</span>
+</span></code></pre>
+                </div>
+                <h2 id="disposing" anchor="true"><span>Disposing</span><a href="/core/computed#disposing">#</a></h2>
+                <h3 id="auto-dispose" anchor="true"><span>Auto Dispose</span><a href="/core/computed#auto-dispose">#</a></h3>
+                <p>
+                  If a computed signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
+                </p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">final</span> s <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #b5cea8">0</span><span style="color: #d4d4d4">,</span> autoDispose<span style="color: #d4d4d4">:</span> <span style="color: #569cd6">true</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">onDispose</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #dcdcaa">print</span><span style="color: #dfb976">(</span><span style="color: #ce9178">'Signal destroyed'</span><span><span style="color: #dfb976">)</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+<span style="color: #569cd6">final</span> dispose <span style="color: #d4d4d4">=</span> s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">subscribe</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span>_<span style="color: #dfb976">)</span> <span style="color: #dfb976">{</span><span style="color: #dfb976">}</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+<span style="color: #dcdcaa">dispose</span><span><span style="color: #5caeef">(</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+<span style="color: #569cd6">final</span> value <span style="color: #d4d4d4">=</span> s<span style="color: #d4d4d4">.</span>value<span style="color: #d4d4d4">;</span> <span style="color: #608b4e">// 0</span>
+<span style="color: #608b4e">// prints: Signal destroyed</span>
+</span></code></pre>
+                </div>
+                <p>
+                  A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
+                </p>
+                <p>This means that it will no longer react to changes in its dependencies.</p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">final</span> s <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #b5cea8">0</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">dispose</span><span><span style="color: #5caeef">(</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+<span style="color: #569cd6">final</span> value <span style="color: #d4d4d4">=</span> s<span style="color: #d4d4d4">.</span>value<span style="color: #d4d4d4">;</span> <span style="color: #608b4e">// 0</span>
+<span style="color: #569cd6">final</span> b <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> s<span style="color: #d4d4d4">.</span><span>value<span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span> <span style="color: #608b4e">// 0</span>
+<span style="color: #608b4e">// b will not react to changes in s</span>
+</span></code></pre>
+                </div>
+                <p>You can check if a signal is disposed by calling the <code>.disposed</code> method.</p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">final</span> s <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #b5cea8">0</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+<span style="color: #dcdcaa">print</span><span><span style="color: #5caeef">(</span>s</span><span style="color: #d4d4d4">.</span><span>disposed<span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span> <span style="color: #608b4e">// false</span>
+s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">dispose</span><span><span style="color: #5caeef">(</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+<span style="color: #dcdcaa">print</span><span><span style="color: #5caeef">(</span>s</span><span style="color: #d4d4d4">.</span><span>disposed<span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span> <span style="color: #608b4e">// true</span>
+</span></code></pre>
+                </div>
+                <h3 id="on-dispose-callback" anchor="true"><span>On Dispose Callback</span><a href="/core/computed#on-dispose-callback">#</a></h3>
+                <p>You can attach a callback to a signal that will be called when the signal is destroyed.</p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">final</span> s <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #b5cea8">0</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">;</span>
+s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">onDispose</span><span><span style="color: #5caeef">(</span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #dcdcaa">print</span><span style="color: #dfb976">(</span><span style="color: #ce9178">'Signal destroyed'</span><span><span style="color: #dfb976">)</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">dispose</span><span><span style="color: #5caeef">(</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+</span></code></pre>
+                </div>
+                <h2 id="custom-computed" anchor="true"><span>Custom Computed</span><a href="/core/computed#custom-computed">#</a></h2>
+                <p>You can create a custom computed signal by extending the <code>Computed</code> class.</p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">class</span> <span style="color: #4ec9b0">MyComputed</span> <span style="color: #569cd6">extends</span> <span style="color: #4ec9b0">Computed</span><span style="color: #d4d4d4">&lt;</span><span style="color: #4ec9b0">int</span><span style="color: #d4d4d4">&gt;</span><span> <span style="color: #5caeef">{</span>
+  </span><span style="color: #4ec9b0">MyComputed</span><span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">:</span> <span style="color: #569cd6">super</span><span><span style="color: #dfb976">(</span><span style="color: #c172d9">(</span><span style="color: #c172d9">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #b5cea8">0</span><span style="color: #dfb976">)</span><span style="color: #d4d4d4">;</span><span>
+<span style="color: #5caeef">}</span>
+</span></span></code></pre>
+                </div>
+                <h2 id="flutter" anchor="true"><span>Flutter</span><a href="/core/computed#flutter">#</a></h2>
+                <p>
+                  In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the 
+                  <code>createComputed</code> inside a stateful widget.
+                </p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #569cd6">import</span><span style="color: #d4d4d4"> </span><span style="color: #ce9178">'package:flutter/material.dart'</span><span style="color: #d4d4d4">;</span>
+<span style="color: #569cd6">import</span><span style="color: #d4d4d4"> </span><span style="color: #ce9178">'package:signals/signals_flutter.dart'</span><span style="color: #d4d4d4">;</span>
+
+<span style="color: #569cd6">class</span> <span style="color: #4ec9b0">CounterWidget</span> <span style="color: #569cd6">extends</span> <span style="color: #4ec9b0">StatefulWidget</span><span> <span style="color: #5caeef">{</span>
+  </span><span style="color: #569cd6">@override</span>
+  <span style="color: #4ec9b0">_CounterWidgetState</span> <span style="color: #dcdcaa">createState</span><span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #4ec9b0">_CounterWidgetState</span><span><span style="color: #dfb976">(</span><span style="color: #dfb976">)</span></span><span style="color: #d4d4d4">;</span><span>
+<span style="color: #5caeef">}</span>
+
+</span><span style="color: #569cd6">class</span> <span style="color: #4ec9b0">_CounterWidgetState</span> <span style="color: #569cd6">extends</span> <span style="color: #4ec9b0">State</span><span style="color: #d4d4d4">&lt;</span><span style="color: #4ec9b0">CounterWidget</span><span style="color: #d4d4d4">&gt;</span> <span style="color: #569cd6">with</span> <span style="color: #4ec9b0">SignalsMixin</span><span> <span style="color: #5caeef">{</span>
+  </span><span style="color: #569cd6">late</span> <span style="color: #569cd6">final</span> counter <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">createSignal</span><span style="color: #dfb976">(</span><span style="color: #b5cea8">0</span><span style="color: #dfb976">)</span><span style="color: #d4d4d4">;</span>
+  <span style="color: #569cd6">late</span> <span style="color: #569cd6">final</span> isEven <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">createComputed</span><span><span style="color: #dfb976">(</span><span style="color: #c172d9">(</span><span style="color: #c172d9">)</span> </span><span style="color: #d4d4d4">=&gt;</span> counter<span style="color: #d4d4d4">.</span>value<span style="color: #d4d4d4">.</span><span>isEven<span style="color: #dfb976">)</span></span><span style="color: #d4d4d4">;</span>
+  <span style="color: #569cd6">late</span> <span style="color: #569cd6">final</span> isOdd <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">createComputed</span><span><span style="color: #dfb976">(</span><span style="color: #c172d9">(</span><span style="color: #c172d9">)</span> </span><span style="color: #d4d4d4">=&gt;</span> counter<span style="color: #d4d4d4">.</span>value<span style="color: #d4d4d4">.</span><span>isOdd<span style="color: #dfb976">)</span></span><span style="color: #d4d4d4">;</span>
+
+  <span style="color: #569cd6">@override</span>
+  <span style="color: #4ec9b0">Widget</span> <span style="color: #dcdcaa">build</span><span style="color: #dfb976">(</span><span style="color: #4ec9b0">BuildContext</span><span> context<span style="color: #dfb976">)</span> <span style="color: #dfb976">{</span>
+    </span><span style="color: #c586c0">return</span> <span style="color: #4ec9b0">Scaffold</span><span><span style="color: #c172d9">(</span>
+      body</span><span style="color: #d4d4d4">:</span> <span style="color: #4ec9b0">Center</span><span><span style="color: #4fb1bc">(</span>
+        child</span><span style="color: #d4d4d4">:</span> <span style="color: #4ec9b0">Column</span><span><span style="color: #97c26c">(</span>
+          mainAxisAlignment</span><span style="color: #d4d4d4">:</span> <span style="color: #4ec9b0">MainAxisAlignment</span><span style="color: #d4d4d4">.</span>center<span style="color: #d4d4d4">,</span>
+          children<span style="color: #d4d4d4">:</span><span> <span style="color: #abb2c0">[</span>
+            </span><span style="color: #4ec9b0">Text</span><span style="color: #5caeef">(</span><span style="color: #ce9178">'Counter: even=$</span><span style="color: #ce9178">isEven</span><span style="color: #ce9178">, odd=$</span><span style="color: #ce9178">isOdd</span><span style="color: #ce9178">'</span><span style="color: #5caeef">)</span><span style="color: #d4d4d4">,</span>
+            <span style="color: #4ec9b0">ElevatedButton</span><span><span style="color: #5caeef">(</span>
+              onPressed</span><span style="color: #d4d4d4">:</span><span> <span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> </span><span style="color: #d4d4d4">=&gt;</span> counter<span style="color: #d4d4d4">.</span>value<span style="color: #d4d4d4">++</span><span style="color: #d4d4d4">,</span>
+              child<span style="color: #d4d4d4">:</span> <span style="color: #4ec9b0">Text</span><span style="color: #dfb976">(</span><span style="color: #ce9178">'Increment'</span><span style="color: #dfb976">)</span><span style="color: #d4d4d4">,</span><span>
+            <span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">,</span><span>
+          <span style="color: #abb2c0">]</span></span><span style="color: #d4d4d4">,</span><span>
+        <span style="color: #97c26c">)</span></span><span style="color: #d4d4d4">,</span><span>
+      <span style="color: #4fb1bc">)</span></span><span style="color: #d4d4d4">,</span><span>
+    <span style="color: #c172d9">)</span></span><span style="color: #d4d4d4">;</span><span>
+  <span style="color: #dfb976">}</span>
+<span style="color: #5caeef">}</span>
+</span></span></code></pre>
+                </div>
+                <p>
+                  No <code>Watch</code> widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+                </p>
+                <p>
+                  The <code>SignalsMixin</code> is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+                </p>
+                <h2 id="testing" anchor="true"><span>Testing</span><a href="/core/computed#testing">#</a></h2>
+                <p>
+                  Testing computed signals is possible by converting a computed to a stream and testing it like any other stream in Dart.
+                </p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #dcdcaa">test</span><span style="color: #5caeef">(</span><span style="color: #ce9178">'test as stream'</span><span style="color: #d4d4d4">,</span><span> <span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> <span style="color: #dfb976">{</span>
+    </span><span style="color: #569cd6">final</span> a <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">signal</span><span style="color: #c172d9">(</span><span style="color: #b5cea8">0</span><span style="color: #c172d9">)</span><span style="color: #d4d4d4">;</span>
+    <span style="color: #569cd6">final</span> s <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #c172d9">(</span><span style="color: #4fb1bc">(</span><span style="color: #4fb1bc">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #dcdcaa">a</span><span><span style="color: #4fb1bc">(</span><span style="color: #4fb1bc">)</span><span style="color: #c172d9">)</span></span><span style="color: #d4d4d4">;</span>
+    <span style="color: #569cd6">final</span> stream <span style="color: #d4d4d4">=</span> s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">toStream</span><span><span style="color: #c172d9">(</span><span style="color: #c172d9">)</span></span><span style="color: #d4d4d4">;</span>
+
+    a<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #b5cea8">1</span><span style="color: #d4d4d4">;</span>
+    a<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #b5cea8">2</span><span style="color: #d4d4d4">;</span>
+    a<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #b5cea8">3</span><span style="color: #d4d4d4">;</span>
+
+    <span style="color: #dcdcaa">expect</span><span><span style="color: #c172d9">(</span>stream</span><span style="color: #d4d4d4">,</span> <span style="color: #dcdcaa">emitsInOrder</span><span><span style="color: #4fb1bc">(</span><span style="color: #97c26c">[</span></span><span style="color: #b5cea8">0</span><span style="color: #d4d4d4">,</span> <span style="color: #b5cea8">1</span><span style="color: #d4d4d4">,</span> <span style="color: #b5cea8">2</span><span style="color: #d4d4d4">,</span> <span style="color: #b5cea8">3</span><span><span style="color: #97c26c">]</span><span style="color: #4fb1bc">)</span><span style="color: #c172d9">)</span></span><span style="color: #d4d4d4">;</span><span>
+<span style="color: #dfb976">}</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+</span></code></pre>
+                </div>
+                <p>
+                  <code>emitsInOrder</code> is a matcher that will check if the stream emits the values in the correct order which in this case is each value after a signal is updated.
+                </p>
+                <p>
+                  You can also override the initial value of a computed signal when testing. This is is useful for mocking and testing specific value implementations.
+                </p>
+                <div class="code-block">
+                  <!--@jaspr_content:code_block_copy_button-->
+                  <button>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18px" height="18px">
+                      <rect rx="2" ry="2" x="8" y="8" width="14" height="14"></rect>
+                      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                    </svg>
+                  </button>
+                  <!--/@jaspr_content:code_block_copy_button-->
+                  <pre><code><span style="color: #b9eeff"><span style="color: #dcdcaa">test</span><span style="color: #5caeef">(</span><span style="color: #ce9178">'test with override'</span><span style="color: #d4d4d4">,</span><span> <span style="color: #dfb976">(</span><span style="color: #dfb976">)</span> <span style="color: #dfb976">{</span>
+    </span><span style="color: #569cd6">final</span> a <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">signal</span><span style="color: #c172d9">(</span><span style="color: #b5cea8">0</span><span style="color: #c172d9">)</span><span style="color: #d4d4d4">;</span>
+    <span style="color: #569cd6">final</span> s <span style="color: #d4d4d4">=</span> <span style="color: #dcdcaa">computed</span><span><span style="color: #c172d9">(</span><span style="color: #4fb1bc">(</span><span style="color: #4fb1bc">)</span> </span><span style="color: #d4d4d4">=&gt;</span> <span style="color: #dcdcaa">a</span><span><span style="color: #4fb1bc">(</span><span style="color: #4fb1bc">)</span><span style="color: #c172d9">)</span></span><span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">overrideWith</span><span style="color: #c172d9">(</span><span style="color: #d4d4d4">-</span><span style="color: #b5cea8">1</span><span style="color: #c172d9">)</span><span style="color: #d4d4d4">;</span>
+
+    <span style="color: #569cd6">final</span> stream <span style="color: #d4d4d4">=</span> s<span style="color: #d4d4d4">.</span><span style="color: #dcdcaa">toStream</span><span><span style="color: #c172d9">(</span><span style="color: #c172d9">)</span></span><span style="color: #d4d4d4">;</span>
+
+    a<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #b5cea8">1</span><span style="color: #d4d4d4">;</span>
+    a<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #b5cea8">2</span><span style="color: #d4d4d4">;</span>
+    a<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #b5cea8">2</span><span style="color: #d4d4d4">;</span> <span style="color: #608b4e">// check if skipped</span>
+    a<span style="color: #d4d4d4">.</span>value <span style="color: #d4d4d4">=</span> <span style="color: #b5cea8">3</span><span style="color: #d4d4d4">;</span>
+
+    <span style="color: #dcdcaa">expect</span><span><span style="color: #c172d9">(</span>stream</span><span style="color: #d4d4d4">,</span> <span style="color: #dcdcaa">emitsInOrder</span><span><span style="color: #4fb1bc">(</span><span style="color: #97c26c">[</span></span><span style="color: #d4d4d4">-</span><span style="color: #b5cea8">1</span><span style="color: #d4d4d4">,</span> <span style="color: #b5cea8">1</span><span style="color: #d4d4d4">,</span> <span style="color: #b5cea8">2</span><span style="color: #d4d4d4">,</span> <span style="color: #b5cea8">3</span><span><span style="color: #97c26c">]</span><span style="color: #4fb1bc">)</span><span style="color: #c172d9">)</span></span><span style="color: #d4d4d4">;</span><span>
+<span style="color: #dfb976">}</span><span style="color: #5caeef">)</span></span><span style="color: #d4d4d4">;</span>
+</span></code></pre>
+                </div>
+                <p>
+                  <code>overrideWith</code> returns a new computed signal with the same global id sets the value as if the computed callback returned it.
+                </p>
+              </section>
+            </div>
+            <aside class="toc">
+              <div>
+                <h3>On this page</h3>
+                <ul>
+                  <li style="padding-left: 0em"><a href="/core/computed#force-re-evaluation">Force Re-evaluation</a></li>
+                  <li style="padding-left: 0em"><a href="/core/computed#disposing">Disposing</a></li>
+                  <li style="padding-left: 0.75em"><a href="/core/computed#auto-dispose">Auto Dispose</a></li>
+                  <li style="padding-left: 0.75em"><a href="/core/computed#on-dispose-callback">On Dispose Callback</a></li>
+                  <li style="padding-left: 0em"><a href="/core/computed#custom-computed">Custom Computed</a></li>
+                  <li style="padding-left: 0em"><a href="/core/computed#flutter">Flutter</a></li>
+                  <li style="padding-left: 0em"><a href="/core/computed#testing">Testing</a></li>
+                </ul>
+              </div>
+            </aside>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

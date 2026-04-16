@@ -1,0 +1,45 @@
+---
+title: ChangeStackSignalMixin
+description: Mixin for a Signal that adds undo and redo functionality
+sidebar:
+  order: 2
+---
+
+ChangeStackSignalMixin is a mixin for a Signal that adds undo and redo functionality.
+
+<Callout>
+If you are just looking for initial and previous values, use the [TrackedSignalMixin](/mixins/tracked).
+</Callout>
+
+```dart
+class MySignal extends Signal<int> with ChangeStackSignalMixin<int> {
+  MySignal(super.internalValue);
+}
+
+void main() {
+  final signal = MySignal(0);
+  
+  signal.value = 1;
+  print(signal.canUndo); // true
+  signal.undo();
+  print(signal.value); // 0
+  print(signal.canUndo); // false
+  signal.redo();
+  print(signal.value); // 1
+}
+```
+<Callout type="warning">
+This mixin only works with values that are immutable or are copied when changed otherwise the initial and previous value will always be the same.
+</Callout>
+
+## Setting a limit
+
+You can set a limit to the number of changes that can be undone with the `limit` parameter.
+
+```dart
+class MySignal extends Signal<int> with ChangeStackSignalMixin<int> {
+  MySignal(int value) : super(value);
+
++  @override
++  int limit = 3;
+}

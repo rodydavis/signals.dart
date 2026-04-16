@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svgjs="http://svgjs.dev/svgjs" width="128" height="128" preserveAspectRatio="none"
+    viewBox="0 0 100 100">
+    <g mask="url(&quot;#SvgjsMask1459&quot;)" fill="none">
+        <rect width="100" height="100" x="0" y="0" fill="rgba(0, 0, 0, 1)"></rect>
+        <g mask="url(&quot;#SvgjsMask1460&quot;)">
+            <path d="M15 25L45 25L65 5L95 5" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M12.5 25 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M55 55L95 55" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M52.5 55 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 55 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M25 65L25 95" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M22.5 65 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM22.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M55 75L65 65L95 65" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M52.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 65 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M15 75L15 95" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M12.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM12.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M35 65L35 45L25 35L15 35L5 45L5 95" stroke-width="1.67"
+                stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M32.5 65 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM2.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M25 5L35 15L45 15L55 5" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M22.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM52.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M85 95L35 95" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M82.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM32.5 95 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M45 75L55 85L65 85L75 75L95 75" stroke-width="1.67"
+                stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M42.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 75 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M15 5L15 15L5 25L5 35" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M12.5 5 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM2.5 35 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M45 55L45 45L75 15L85 15L95 25L95 45" stroke-width="1.67"
+                stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M42.5 55 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM92.5 45 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M65 35L75 25L85 25" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M62.5 35 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM82.5 25 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+            <path d="M85 45L55 45" stroke-width="1.67" stroke="rgba(202, 205, 152, 1)"></path>
+            <path
+                d="M82.5 45 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0zM52.5 45 a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0z"
+                fill="rgba(202, 205, 152, 1)"></path>
+        </g>
+    </g>
+    <defs>
+        <mask id="SvgjsMask1459">
+            <rect width="100" height="100" fill="#ffffff"></rect>
+        </mask>
+        <mask id="SvgjsMask1460">
+            <rect width="100" height="100" fill="white"></rect>
+            <path
+                d="M13.75 25 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M53.75 55 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 55 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M23.75 65 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM23.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M53.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 65 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M13.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM13.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M33.75 65 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM3.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M23.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM53.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M83.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM33.75 95 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M43.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 75 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M13.75 5 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM3.75 35 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M43.75 55 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM93.75 45 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M63.75 35 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM83.75 25 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+            <path
+                d="M83.75 45 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0zM53.75 45 a1.25 1.25 0 1 0 2.5 0 a1.25 1.25 0 1 0 -2.5 0z"
+                fill="black"></path>
+        </mask>
+    </defs>
+</svg>
