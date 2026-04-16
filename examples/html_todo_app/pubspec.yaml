@@ -11,11 +11,10 @@ dependencies:
   signals: ^6.0.0
 
 dev_dependencies:
-  build_runner: ^2.4.9
+  build_runner: ^2.13.1
   build_web_compilers: ^4.0.10
   lints: ^5.0.0
 
 scripts:
   dev: webdev serve
 
-resolution: workspace
