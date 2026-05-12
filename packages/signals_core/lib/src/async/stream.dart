@@ -231,23 +231,27 @@ class StreamSignal<T> extends AsyncSignal<T> {
     bool lazy = true,
     super.autoDispose,
   })  : _onDone = onDone,
-        _stream = computed(
-          () {
-            for (final dep in dependencies) {
-              dep.value;
-            }
-            return fn();
-          },
-        ),
         super(
           initialValue != null
               ? AsyncState.data(initialValue)
               : AsyncState.loading(),
         ) {
+    _stream = computed(
+      () {
+        _resetTrigger.value;
+        for (final dep in dependencies) {
+          dep.value;
+        }
+        return fn();
+      },
+    );
     if (!lazy) value;
   }
 
-  final Computed<Stream<T>> _stream;
+  late final Computed<Stream<T>> _stream;
+
+  /// Bumped by [reset] to mark [_stream] as outdated for lazy re-evaluation.
+  final Signal<int> _resetTrigger = signal(0);
   bool _fetching = false;
   StreamSubscription<T>? _subscription;
   final void Function()? _onDone;
@@ -330,14 +334,40 @@ class StreamSignal<T> extends AsyncSignal<T> {
     await execute(_stream.value);
   }
 
+  /// Mark the signal for re-evaluation on the next read of `.value`.
+  ///
+  /// Preserves the previous value/error with a refreshing flag.
   @override
   void reset([AsyncState<T>? value]) {
-    super.reset(value);
-    _fetching = false;
-    _done = false;
+    _cleanup?.call();
+    _cleanup = null;
     _subscription?.cancel();
     _subscription = null;
-    init();
+    _fetching = false;
+    _done = false;
+    super.reset(value ?? _refreshingValueFor(super.value));
+    _resetTrigger.value++;
+  }
+
+  void _onUpstreamStreamChanged(Stream<T> src) {
+    _subscription?.cancel();
+    _subscription = null;
+    _fetching = false;
+    _done = false;
+    batch(() {
+      value = _refreshingValueFor(super.value);
+      if (completer.isCompleted) completer = Completer<bool>();
+    });
+    execute(src);
+  }
+
+  AsyncState<T> _refreshingValueFor(AsyncState<T> current) {
+    return switch (current) {
+      AsyncData<T> data => AsyncDataRefreshing<T>(data.value),
+      AsyncError<T> err =>
+        AsyncErrorRefreshing<T>(err.error, err.stackTrace),
+      AsyncLoading<T>() => AsyncLoading<T>(),
+    };
   }
 
   @override
@@ -349,10 +379,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
 
   @override
   AsyncState<T> get value {
-    _cleanup ??= _stream.subscribe((src) {
-      reset();
-      execute(src);
-    });
+    _cleanup ??= _stream.subscribe(_onUpstreamStreamChanged);
     return super.value;
   }
 

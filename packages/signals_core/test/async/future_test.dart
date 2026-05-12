@@ -138,6 +138,49 @@ void main() {
       expect(signal.value.error, null);
     });
 
+    test('reset preserves previous data with refreshing flag', () async {
+      Future<int> future() async {
+        await Future.delayed(const Duration(milliseconds: 5));
+        return 10;
+      }
+
+      final signal = futureSignal(() => future());
+
+      await signal.future;
+      expect(signal.value, isA<AsyncData<int>>());
+      expect(signal.value.value, 10);
+
+      signal.reset();
+
+      expect(signal.peek(), isA<AsyncDataRefreshing<int>>());
+      expect(signal.peek().value, 10);
+      expect(signal.peek().isLoading, true);
+      expect(signal.peek().hasValue, true);
+    });
+
+    test('reset is lazy: does not re-run future until next read', () async {
+      int calls = 0;
+
+      Future<int> future() async {
+        calls++;
+        await Future.delayed(const Duration(milliseconds: 5));
+        return calls;
+      }
+
+      final signal = futureSignal(() => future());
+
+      await signal.future;
+      expect(calls, 1);
+
+      signal.reset();
+      expect(calls, 1);
+
+      final result = await signal.future;
+      expect(calls, 2);
+      expect(result, 2);
+      expect(signal.value.value, 2);
+    });
+
     test('dependencies', () async {
       final prefix = signal('a');
       final val = signal(0);
