@@ -138,6 +138,44 @@ void main() {
       expect(signal.value.error, null);
     });
 
+    test('reload is awaitable across repeated calls', () async {
+      int calls = 0;
+
+      Future<int> future() async {
+        await Future.delayed(const Duration(milliseconds: 5));
+        return ++calls;
+      }
+
+      final signal = futureSignal(() => future());
+
+      expect(await signal.future, 1);
+
+      await signal.reload();
+      expect(signal.value.value, 2);
+
+      await signal.reload();
+      expect(signal.value.value, 3);
+    });
+
+    test('refresh is awaitable across repeated calls', () async {
+      int calls = 0;
+
+      Future<int> future() async {
+        await Future.delayed(const Duration(milliseconds: 5));
+        return ++calls;
+      }
+
+      final signal = futureSignal(() => future());
+
+      expect(await signal.future, 1);
+
+      await signal.refresh();
+      expect(signal.value.value, 2);
+
+      await signal.refresh();
+      expect(signal.value.value, 3);
+    });
+
     test('dependencies', () async {
       final prefix = signal('a');
       final val = signal(0);
