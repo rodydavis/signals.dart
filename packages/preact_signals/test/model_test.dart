@@ -26,7 +26,8 @@ extension type TypeSafeCounterModel(SignalModel<Map<String, dynamic>> _model) {
 
 void main() {
   group('createModel', () {
-    test('should capture newly constructed effects using callable constructor', () {
+    test('should capture newly constructed effects using callable constructor',
+        () {
       final CounterModelConstructor = createModel(() {
         final count = signal(0);
         final runCount = MutableInt(0);
@@ -49,7 +50,8 @@ void main() {
       model.dispose();
 
       (model['count'] as Signal<int>).value = 2;
-      expect((model['runCount'] as MutableInt).value, 2); // Should not rerun since effect is disposed!
+      expect((model['runCount'] as MutableInt).value,
+          2); // Should not rerun since effect is disposed!
     });
 
     test('should correctly isolate nested models without leakage', () {
@@ -167,7 +169,8 @@ void main() {
     });
 
     test('should support model constructors with parameters', () {
-      SignalModel<Map<String, dynamic>> createCounterWithInitial(int initialCount) {
+      SignalModel<Map<String, dynamic>> createCounterWithInitial(
+          int initialCount) {
         return createModel(() {
           final count = signal(initialCount);
           return <String, dynamic>{

@@ -42,6 +42,7 @@ abstract mixin class QueueSignalMixin<T, S extends Queue<T>>
   @override
   void clear() {
     value.clear();
+    set(value, force: true);
   }
 
   @override

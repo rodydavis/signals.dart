@@ -24,19 +24,21 @@ print(name.value); // 'Charlie'
 
 ## 2. Advanced Comparison Customization
 
-You can use `linkedSignalOptions` to define custom reset and preservation criteria based on structural object comparisons.
+You can use `LinkedSignalOptions` to define custom reset and preservation criteria based on structural object comparisons.
 
 ```dart
 final user = signal((id: 1, name: 'Alice'));
 
-final displayName = linkedSignalOptions<String, ({int id, String name})>(
-  source: () => user.value,
-  computation: (u, prev) {
-    // If the active user ID matches the previous, keep the override!
-    if (prev != null && prev.source.id == u.id) {
-      return prev.value;
-    }
-    return u.name; // Else, reset
-  },
+final displayName = linkedSignal<String, ({int id, String name})>(
+  () => user.value,
+  options: LinkedSignalOptions(
+    computation: (u, prev) {
+      // If the active user ID matches the previous, keep the override!
+      if (prev != null && prev.source.id == u.id) {
+        return prev.value;
+      }
+      return u.name; // Else, reset
+    },
+  ),
 );
 ```

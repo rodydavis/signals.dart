@@ -126,14 +126,16 @@ final selection = linkedSignal(() => size.value);
 
 // Advanced structural comparison:
 final user = signal((id: 1, name: 'Alice'));
-final name = linkedSignalOptions<String, ({int id, String name})>(
-  source: () => user.value,
-  computation: (u, prev) {
-    if (prev != null && prev.source.id == u.id) {
-      return prev.value; // Retain manual override
-    }
-    return u.name; // Reset on ID changes
-  },
+final name = linkedSignal<String, ({int id, String name})>(
+  () => user.value,
+  options: LinkedSignalOptions(
+    computation: (u, prev) {
+      if (prev != null && prev.source.id == u.id) {
+        return prev.value; // Retain manual override
+      }
+      return u.name; // Reset on ID changes
+    },
+  ),
 );
 ```
 

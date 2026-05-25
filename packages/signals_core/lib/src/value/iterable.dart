@@ -83,6 +83,7 @@ class IterableSignalOptions<E> extends SignalOptions<Iterable<E>> {
     super.autoDispose,
     super.watched,
     super.unwatched,
+    super.equality = const SignalDeepEquality(),
   });
 
   @override
@@ -91,12 +92,14 @@ class IterableSignalOptions<E> extends SignalOptions<Iterable<E>> {
     bool? autoDispose,
     void Function()? watched,
     void Function()? unwatched,
+    SignalEquality<Iterable<E>>? equality,
   }) {
     return IterableSignalOptions<E>(
       name: name ?? this.name,
       autoDispose: autoDispose ?? this.autoDispose,
       watched: watched ?? this.watched,
       unwatched: unwatched ?? this.unwatched,
+      equality: equality ?? equalityCheck,
     );
   }
 
@@ -107,9 +110,11 @@ class IterableSignalOptions<E> extends SignalOptions<Iterable<E>> {
         other.name == name &&
         other.autoDispose == autoDispose &&
         other.watched == watched &&
-        other.unwatched == unwatched;
+        other.unwatched == unwatched &&
+        other.equalityCheck == equalityCheck;
   }
 
   @override
-  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
+  int get hashCode =>
+      Object.hash(name, autoDispose, watched, unwatched, equalityCheck);
 }

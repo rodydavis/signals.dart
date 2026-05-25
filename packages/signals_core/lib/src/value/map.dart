@@ -102,6 +102,7 @@ class MapSignalOptions<K, V> extends SignalOptions<Map<K, V>> {
     super.autoDispose,
     super.watched,
     super.unwatched,
+    super.equality = const SignalDeepEquality(),
   });
 
   @override
@@ -110,12 +111,14 @@ class MapSignalOptions<K, V> extends SignalOptions<Map<K, V>> {
     bool? autoDispose,
     void Function()? watched,
     void Function()? unwatched,
+    SignalEquality<Map<K, V>>? equality,
   }) {
     return MapSignalOptions<K, V>(
       name: name ?? this.name,
       autoDispose: autoDispose ?? this.autoDispose,
       watched: watched ?? this.watched,
       unwatched: unwatched ?? this.unwatched,
+      equality: equality ?? equalityCheck,
     );
   }
 
@@ -126,9 +129,11 @@ class MapSignalOptions<K, V> extends SignalOptions<Map<K, V>> {
         other.name == name &&
         other.autoDispose == autoDispose &&
         other.watched == watched &&
-        other.unwatched == unwatched;
+        other.unwatched == unwatched &&
+        other.equalityCheck == equalityCheck;
   }
 
   @override
-  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
+  int get hashCode =>
+      Object.hash(name, autoDispose, watched, unwatched, equalityCheck);
 }

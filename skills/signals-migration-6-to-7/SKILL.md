@@ -112,7 +112,7 @@ SignalEffect(
 
 ## 4. Writable Computed Signals (`linkedSignal`)
 
-If you had custom logic synchronizing external updates back to a computed signal, migrate them to the native `linkedSignal` or `linkedSignalOptions`.
+If you had custom logic synchronizing external updates back to a computed signal, migrate them to the native `linkedSignal` or `LinkedSignalOptions`.
 
 ```dart
 final original = signal('Alice');
