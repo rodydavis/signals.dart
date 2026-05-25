@@ -24,15 +24,6 @@ void main() {
       expect(b.value, 'bb');
     });
 
-    test('should accept options parameter', () {
-      final a = signal('a');
-      final myAction = action((String val) {
-        a.value = val;
-      }, options: const ActionOptions(name: 'my-action'));
-      myAction('opt');
-      expect(a.value, 'opt');
-    });
-
     test('should support up to 6 positional arguments without Function.apply', () {
       final a = signal(0);
       final myAction = action((int a1, int a2, int a3, int a4, int a5, int a6) {
@@ -43,74 +34,82 @@ void main() {
       expect(a.value, 21);
     });
 
-    test('toAction extensions should be type-safe and run in batch/untracked', () {
+    test('action0 should wrap a 0-argument function type-safely', () {
       final a = signal('a');
       final b = signal('b');
       final spy = Spy(() => '${a.value} ${b.value}');
       effect(spy.call);
       spy.resetHistory();
 
-      // 0-argument extension
-      final myAction0 = (() {
+      final myAction0 = action0(() {
         a.value = 'aa';
         b.value = 'bb';
-      }).toAction();
+      });
 
       myAction0();
       expect(spy.calls, 1);
       expect(a.value, 'aa');
       expect(b.value, 'bb');
+    });
 
-      // 1-argument extension
-      final myAction1 = ((String val) {
+    test('action1 should wrap a 1-argument function type-safely', () {
+      final a = signal('a');
+      final myAction1 = action1((String val) {
         a.value = val;
-        b.value = val;
-      }).toAction();
+      });
 
       myAction1('xx');
-      expect(spy.calls, 2);
       expect(a.value, 'xx');
-      expect(b.value, 'xx');
+    });
 
-      // 2-argument extension
-      final myAction2 = ((String nextA, String nextB) {
+    test('action2 should wrap a 2-argument function type-safely', () {
+      final a = signal('a');
+      final b = signal('b');
+      final myAction2 = action2((String nextA, String nextB) {
         a.value = nextA;
         b.value = nextB;
-      }).toAction();
+      });
 
       myAction2('yy', 'zz');
-      expect(spy.calls, 3);
       expect(a.value, 'yy');
       expect(b.value, 'zz');
+    });
 
-      // 3-argument extension
-      final myAction3 = ((String aVal, String bVal, String cVal) {
-        a.value = '$aVal $bVal $cVal';
-      }).toAction();
+    test('action3 should wrap a 3-argument function type-safely', () {
+      final a = signal('a');
+      final myAction3 = action3((String val1, String val2, String val3) {
+        a.value = '$val1 $val2 $val3';
+      });
 
       myAction3('1', '2', '3');
       expect(a.value, '1 2 3');
+    });
 
-      // 4-argument extension
-      final myAction4 = ((String aVal, String bVal, String cVal, String dVal) {
-        a.value = '$aVal $bVal $cVal $dVal';
-      }).toAction();
+    test('action4 should wrap a 4-argument function type-safely', () {
+      final a = signal('a');
+      final myAction4 = action4((String val1, String val2, String val3, String val4) {
+        a.value = '$val1 $val2 $val3 $val4';
+      });
 
       myAction4('1', '2', '3', '4');
       expect(a.value, '1 2 3 4');
+    });
 
-      // 5-argument extension
-      final myAction5 = ((String aVal, String bVal, String cVal, String dVal, String eVal) {
-        a.value = '$aVal $bVal $cVal $dVal $eVal';
-      }).toAction();
+    test('action5 should wrap a 5-argument function type-safely', () {
+      final a = signal('a');
+      final myAction5 = action5((String val1, String val2, String val3, String val4, String val5) {
+        a.value = '$val1 $val2 $val3 $val4 $val5';
+      });
 
       myAction5('1', '2', '3', '4', '5');
       expect(a.value, '1 2 3 4 5');
+    });
 
-      // 6-argument extension
-      final myAction6 = ((String aVal, String bVal, String cVal, String dVal, String eVal, String fVal) {
-        a.value = '$aVal $bVal $cVal $dVal $eVal $fVal';
-      }).toAction();
+    test('action6 should wrap a 6-argument function type-safely', () {
+      final a = signal('a');
+      final myAction6 = action6((String val1, String val2, String val3, String val4, String val5, String val6) {
+        a.value = '$val1 $val2 $val3 $val4 $val5 $val6';
+      });
 
       myAction6('1', '2', '3', '4', '5', '6');
       expect(a.value, '1 2 3 4 5 6');

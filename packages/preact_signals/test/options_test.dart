@@ -185,27 +185,4 @@ void main() {
       expect(opt1 == opt3, isFalse);
     });
   });
-
-  group('ActionOptions', () {
-    test('copyWith', () {
-      const opt = ActionOptions(name: 'a');
-      final copiedNull = opt.copyWith();
-      expect(copiedNull.name, 'a');
-
-      final copiedNew = opt.copyWith(name: 'b');
-      expect(copiedNew.name, 'b');
-    });
-
-    test('equality and hashCode', () {
-      const opt1 = ActionOptions(name: 'test');
-      const opt2 = ActionOptions(name: 'test');
-      const opt3 = ActionOptions(name: 'other');
-
-      expect(opt1 == opt1, isTrue);
-      expect(opt1 == opt2, isTrue);
-      expect(opt1.hashCode, opt2.hashCode);
-      expect(opt1 == opt3, isFalse);
-      expect((opt1 as dynamic) == null, isFalse);
-    });
-  });
 }

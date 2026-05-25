@@ -158,22 +158,4 @@ class ComputedOptions<T> extends ReadonlySignalOptions<T> {
   int get hashCode => Object.hash(name, watched, unwatched);
 }
 
-/// Configuration options for an [action].
-class ActionOptions extends SignalOptionsBase {
-  /// Creates a new [ActionOptions] instance.
-  const ActionOptions({super.name});
 
-  /// Creates a copy of this options with custom overrides.
-  ActionOptions copyWith({String? name}) {
-    return ActionOptions(name: name ?? this.name);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is ActionOptions && other.name == name;
-  }
-
-  @override
-  int get hashCode => name.hashCode;
-}
