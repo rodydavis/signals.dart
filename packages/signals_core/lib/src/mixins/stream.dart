@@ -3,7 +3,8 @@ import 'dart:async';
 
 import '../../signals_core.dart';
 
-abstract mixin class StreamSignalMixin<T> implements ReadonlySignal<T>, Stream<T> {
+abstract mixin class StreamSignalMixin<T>
+    implements ReadonlySignal<T>, Stream<T> {
   final _controller = StreamController<T>.broadcast(sync: true);
 
   late final Stream<T> _stream = () {

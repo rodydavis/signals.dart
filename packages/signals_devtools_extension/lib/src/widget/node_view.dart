@@ -25,13 +25,10 @@ class NodeView extends StatelessWidget {
       final isEffect = item.type == 'effect';
       final isComputed = item.type == 'computed';
 
-      final Color accentColor = isEffect
-          ? Colors.pink
-          : (isComputed ? Colors.purple : Colors.blue);
+      final Color accentColor =
+          isEffect ? Colors.pink : (isComputed ? Colors.purple : Colors.blue);
 
-      final String typeIcon = isEffect
-          ? '↪️'
-          : (isComputed ? '⚡' : '🎯');
+      final String typeIcon = isEffect ? '↪️' : (isComputed ? '⚡' : '🎯');
 
       return Tooltip(
         message: '${item.type.toUpperCase()} (ID: ${item.id})',
@@ -89,7 +86,8 @@ class NodeView extends StatelessWidget {
                       '#${item.id}',
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontFamily: 'monospace',
-                        color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                        color:
+                            theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
                         fontSize: 9,
                       ),
                     ),
@@ -108,7 +106,8 @@ class NodeView extends StatelessWidget {
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontFamily: 'monospace',
                       fontWeight: FontWeight.bold,
-                      color: isEffect ? Colors.pink : theme.colorScheme.onSurface,
+                      color:
+                          isEffect ? Colors.pink : theme.colorScheme.onSurface,
                       fontSize: 12,
                     ),
                   ),

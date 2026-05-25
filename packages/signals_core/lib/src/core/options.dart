@@ -102,6 +102,7 @@ class SignalOptions<T> extends signals.SignalOptions<T> {
     this.autoDispose = false,
     super.watched,
     super.unwatched,
+    super.equality,
   });
 
   @override
@@ -116,6 +117,7 @@ class SignalOptions<T> extends signals.SignalOptions<T> {
       autoDispose: autoDispose ?? this.autoDispose,
       watched: watched ?? this.watched,
       unwatched: unwatched ?? this.unwatched,
+      equality: equalityCheck,
     );
   }
 
@@ -126,11 +128,13 @@ class SignalOptions<T> extends signals.SignalOptions<T> {
         other.name == name &&
         other.autoDispose == autoDispose &&
         other.watched == watched &&
-        other.unwatched == unwatched;
+        other.unwatched == unwatched &&
+        other.equalityCheck == equalityCheck;
   }
 
   @override
-  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
+  int get hashCode =>
+      Object.hash(name, autoDispose, watched, unwatched, equalityCheck);
 }
 
 /// Configuration options for a [Computed] extending [signals.ComputedOptions].

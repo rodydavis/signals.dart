@@ -3,7 +3,8 @@ import 'dart:math';
 
 import '../core/signals.dart';
 
-abstract mixin class ListSignalMixin<E, T extends List<E>> implements Signal<T>, List<E> {
+abstract mixin class ListSignalMixin<E, T extends List<E>>
+    implements Signal<T>, List<E> {
   @override
   List<R> cast<R>() {
     return value.cast<R>();

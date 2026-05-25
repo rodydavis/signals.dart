@@ -56,6 +56,7 @@ Map _wrapInAction(Map map) {
 /// A constructor for models taking 0 arguments.
 class SignalModelConstructor0<T> {
   final T Function() _factory;
+
   /// Creates a new instance of [SignalModelConstructor0].
   SignalModelConstructor0(this._factory);
 
@@ -84,6 +85,7 @@ class SignalModelConstructor0<T> {
 /// A constructor for models taking 1 argument.
 class SignalModelConstructor1<A, T> {
   final T Function(A) _factory;
+
   /// Creates a new instance of [SignalModelConstructor1].
   SignalModelConstructor1(this._factory);
 
@@ -112,6 +114,7 @@ class SignalModelConstructor1<A, T> {
 /// A constructor for models taking 2 arguments.
 class SignalModelConstructor2<A, B, T> {
   final T Function(A, B) _factory;
+
   /// Creates a new instance of [SignalModelConstructor2].
   SignalModelConstructor2(this._factory);
 
@@ -148,6 +151,7 @@ SignalModelConstructor1<A, T> createModel1<A, T>(T Function(A) factory) {
 }
 
 /// Creates a new model constructor taking 2 arguments.
-SignalModelConstructor2<A, B, T> createModel2<A, B, T>(T Function(A, B) factory) {
+SignalModelConstructor2<A, B, T> createModel2<A, B, T>(
+    T Function(A, B) factory) {
   return SignalModelConstructor2(factory);
 }

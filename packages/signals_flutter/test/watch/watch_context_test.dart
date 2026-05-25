@@ -37,7 +37,9 @@ void main() {
       expect(find.text('Count: 10'), findsOneWidget);
     });
 
-    testWidgets('De-duplicates multiple reads of the same signal on same context', (tester) async {
+    testWidgets(
+        'De-duplicates multiple reads of the same signal on same context',
+        (tester) async {
       final count = signal(5);
       int buildCount = 0;
 
@@ -69,7 +71,8 @@ void main() {
       expect(find.text('Sum: 20'), findsOneWidget);
     });
 
-    testWidgets('Multiple different signals watched on the same BuildContext', (tester) async {
+    testWidgets('Multiple different signals watched on the same BuildContext',
+        (tester) async {
       final sigA = signal('Hello');
       final sigB = signal('World');
       int buildCount = 0;
@@ -113,7 +116,8 @@ void main() {
       expect(find.text('Hey Signals'), findsOneWidget);
     });
 
-    testWidgets('Dynamic branching is persistent for .watch(context)', (tester) async {
+    testWidgets('Dynamic branching is persistent for .watch(context)',
+        (tester) async {
       // NOTE: Unlike SignalWidget which dynamically prunes subscriptions per-frame,
       // .watch(context) is a persistent subscription on the Element lifecycle.
       // A signal ever watched remains watched until the element is unmounted.
@@ -164,7 +168,8 @@ void main() {
       expect(buildCount, 3);
     });
 
-    testWidgets('unwatch(context) programmatically terminates subscription', (tester) async {
+    testWidgets('unwatch(context) programmatically terminates subscription',
+        (tester) async {
       final count = signal(0);
       int buildCount = 0;
       bool doWatch = true;
@@ -209,7 +214,8 @@ void main() {
       expect(buildCount, 2); // Build count remains 2!
     });
 
-    testWidgets('unmounting widget cleans up Expando entries properly', (tester) async {
+    testWidgets('unmounting widget cleans up Expando entries properly',
+        (tester) async {
       final sig = signal('Data');
       bool showChild = true;
       int childBuilds = 0;

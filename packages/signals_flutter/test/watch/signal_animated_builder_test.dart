@@ -46,7 +46,8 @@ void main() {
       expect(find.text('Count: 101'), findsOneWidget);
     });
 
-    testWidgets('caches and does not rebuild the static child subtree', (tester) async {
+    testWidgets('caches and does not rebuild the static child subtree',
+        (tester) async {
       final counter = signal(0);
       int builderCalls = 0;
       int heavyWidgetBuilds = 0;

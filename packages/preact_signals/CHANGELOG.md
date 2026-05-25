@@ -1,6 +1,10 @@
 ## 7.0.0
 
-- Major version synchronization across the board.
+- **Breaking Change**: Moved all equality checking logic into a dedicated [equality.dart](file:///packages/preact_signals/lib/src/equality.dart) file.
+- **Breaking Change**: Unified `SignalOptions` to accept a non-nullable `equality` parameter defaulting to `StandardEquality<Never>()`.
+- **Feature**: Exposed public `SignalEquality` subclasses: `StandardEquality`, `IdentityEquality`, `CustomEquality`, and `DeepEquality` to allow direct, cohesive constructor calls and imports.
+- **Optimization**: Optimized constant evaluations under generic subclasses by utilising `StandardEquality<Never>()` as a default covariant parameter check.
+- **Release**: Major version synchronization across the board.
 
 ## 6.3.1
 

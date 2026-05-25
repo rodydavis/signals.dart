@@ -116,20 +116,22 @@ void main() {
       expect(s.trimLeft(), 'Dart signals  ');
       expect(s.trimRight(), '  Dart signals');
       expect('Hi'.$ * 3, 'HiHiHi');
-      expect('x'.$ .padLeft(4, 'y'), 'yyyx');
-      expect('x'.$ .padRight(4, 'y'), 'xyyy');
+      expect('x'.$.padLeft(4, 'y'), 'yyyx');
+      expect('x'.$.padRight(4, 'y'), 'xyyy');
       expect(s.contains('Dart'), true);
-      expect('Dart'.$ .replaceFirst('a', 'o'), 'Dort');
-      expect('Dart'.$ .replaceFirstMapped('a', (m) => 'o'), 'Dort');
-      expect('Dart'.$ .replaceAll('a', 'o'), 'Dort');
-      expect('Dart'.$ .replaceAllMapped('a', (m) => 'o'), 'Dort');
-      expect('Dart'.$ .replaceRange(1, 3, 'o'), 'Dot');
-      expect('a b'.$ .split(' '), ['a', 'b']);
-      expect('a b'.$ .splitMapJoin(' ', onMatch: (m) => '-', onNonMatch: (n) => n), 'a-b');
-      expect('a'.$ .codeUnits, [97]);
-      expect('a'.$ .runes.toList(), [97]);
-      expect('DART'.$ .toLowerCase(), 'dart');
-      expect('dart'.$ .toUpperCase(), 'DART');
+      expect('Dart'.$.replaceFirst('a', 'o'), 'Dort');
+      expect('Dart'.$.replaceFirstMapped('a', (m) => 'o'), 'Dort');
+      expect('Dart'.$.replaceAll('a', 'o'), 'Dort');
+      expect('Dart'.$.replaceAllMapped('a', (m) => 'o'), 'Dort');
+      expect('Dart'.$.replaceRange(1, 3, 'o'), 'Dot');
+      expect('a b'.$.split(' '), ['a', 'b']);
+      expect(
+          'a b'.$.splitMapJoin(' ', onMatch: (m) => '-', onNonMatch: (n) => n),
+          'a-b');
+      expect('a'.$.codeUnits, [97]);
+      expect('a'.$.runes.toList(), [97]);
+      expect('DART'.$.toLowerCase(), 'dart');
+      expect('dart'.$.toUpperCase(), 'DART');
     });
   });
 }

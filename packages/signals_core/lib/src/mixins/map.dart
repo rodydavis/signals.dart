@@ -1,7 +1,8 @@
 // ignore_for_file: public_member_api_docs
 import '../core/signals.dart';
 
-abstract mixin class MapSignalMixin<K, V, T extends Map<K, V>> implements Signal<T>, Map<K, V> {
+abstract mixin class MapSignalMixin<K, V, T extends Map<K, V>>
+    implements Signal<T>, Map<K, V> {
   @override
   V? operator [](Object? key) {
     return value[key];

@@ -4,7 +4,8 @@ import 'package:signals_flutter/signals_flutter.dart';
 
 void main() {
   group('SignalEffect', () {
-    testWidgets('triggers callback on mount and signal changes', (tester) async {
+    testWidgets('triggers callback on mount and signal changes',
+        (tester) async {
       final count = signal(0);
       int callbackCalls = 0;
       int? lastValue;
@@ -44,7 +45,8 @@ void main() {
       expect(lastValue, 20);
     });
 
-    testWidgets('disposes effect when widget is removed from tree', (tester) async {
+    testWidgets('disposes effect when widget is removed from tree',
+        (tester) async {
       final count = signal(0);
       int callbackCalls = 0;
 
@@ -83,7 +85,9 @@ void main() {
       expect(callbackCalls, 2); // Still 2
     });
 
-    testWidgets('handles didUpdateWidget by disposing old effect and starting new one', (tester) async {
+    testWidgets(
+        'handles didUpdateWidget by disposing old effect and starting new one',
+        (tester) async {
       final count = signal(0);
       int callbackCallsA = 0;
       int callbackCallsB = 0;
@@ -134,7 +138,8 @@ void main() {
       expect(callbackCallsB, 2); // Increments to 2
     });
 
-    testWidgets('SignalListener type alias behaves exactly as SignalEffect', (tester) async {
+    testWidgets('SignalListener type alias behaves exactly as SignalEffect',
+        (tester) async {
       final count = signal(0);
       int callbackCalls = 0;
 

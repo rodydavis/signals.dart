@@ -24,7 +24,8 @@ void main() {
       expect(b.value, 'bb');
     });
 
-    test('action0 should wrap a 0-argument function in batch and untracked', () {
+    test('action0 should wrap a 0-argument function in batch and untracked',
+        () {
       final a = signal('a');
       final b = signal('b');
       final spy = Spy(() => '${a.value} ${b.value}');
@@ -43,7 +44,8 @@ void main() {
       expect(b.value, 'bb');
     });
 
-    test('action1 should wrap a 1-argument function in batch and untracked', () {
+    test('action1 should wrap a 1-argument function in batch and untracked',
+        () {
       final a = signal('a');
       final b = signal('b');
       final spy = Spy(() => '${a.value} ${b.value}');
@@ -62,7 +64,8 @@ void main() {
       expect(b.value, 'xx');
     });
 
-    test('action2 should wrap a 2-argument function in batch and untracked', () {
+    test('action2 should wrap a 2-argument function in batch and untracked',
+        () {
       final a = signal('a');
       final b = signal('b');
       final spy = Spy(() => '${a.value} ${b.value}');

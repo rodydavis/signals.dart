@@ -1,7 +1,8 @@
 // ignore_for_file: public_member_api_docs
 import '../core/signals.dart';
 
-abstract mixin class IterableSignalMixin<E, T extends Iterable<E>> implements Signal<T>, Iterable<E> {
+abstract mixin class IterableSignalMixin<E, T extends Iterable<E>>
+    implements Signal<T>, Iterable<E> {
   @override
   bool any(bool Function(E element) test) {
     return value.any(test);

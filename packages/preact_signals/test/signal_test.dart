@@ -181,11 +181,13 @@ void main() {
       final a = signal(0, const SignalOptions(name: 'counter'));
       expect(a.name, 'counter');
 
-      final b = computed(() => a.value, const ComputedOptions(name: 'doubleCounter'));
+      final b =
+          computed(() => a.value, const ComputedOptions(name: 'doubleCounter'));
       expect(b.name, 'doubleCounter');
     });
 
-    test('should support watched and unwatched callbacks via SignalOptions', () {
+    test('should support watched and unwatched callbacks via SignalOptions',
+        () {
       var watchedCalls = 0;
       var unwatchedCalls = 0;
       final a = signal(
@@ -247,7 +249,8 @@ void main() {
       expect(calls, [1, 2]);
     });
 
-    test('should support name option via ReadonlySignalOptions in readonly()', () {
+    test('should support name option via ReadonlySignalOptions in readonly()',
+        () {
       final a = readonly(0, const ReadonlySignalOptions(name: 'constant'));
       expect(a.name, 'constant');
     });

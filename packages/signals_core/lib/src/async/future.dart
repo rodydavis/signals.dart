@@ -405,8 +405,7 @@ FutureSignal<T> futureSignal<T>(
   T? initialValue,
   @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead')
   List<ReadonlySignal<dynamic>>? dependencies,
-  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
-  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy,
   @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
   bool? autoDispose,
   @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')

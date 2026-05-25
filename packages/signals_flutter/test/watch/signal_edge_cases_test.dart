@@ -71,7 +71,8 @@ void main() {
   });
 
   group('SignalWidget Edge Cases', () {
-    testWidgets('Zero signals read does not subscribe or crash', (tester) async {
+    testWidgets('Zero signals read does not subscribe or crash',
+        (tester) async {
       int buildCount = 0;
       await tester.pumpWidget(
         MaterialApp(
@@ -85,7 +86,8 @@ void main() {
       expect(find.text('Zero Signals'), findsOneWidget);
     });
 
-    testWidgets('Re-binding identical signals does not redundant-subscribe', (tester) async {
+    testWidgets('Re-binding identical signals does not redundant-subscribe',
+        (tester) async {
       final countA = signal(10);
       final countB = signal(20);
       int buildCount = 0;
@@ -115,7 +117,9 @@ void main() {
       expect(buildCount, 3);
     });
 
-    testWidgets('Exception safety: build error does not contaminate next widget build', (tester) async {
+    testWidgets(
+        'Exception safety: build error does not contaminate next widget build',
+        (tester) async {
       final counter = signal(0);
 
       // 1. Initial successful build
@@ -159,7 +163,9 @@ void main() {
       expect(find.text('Clean: 101'), findsOneWidget);
     });
 
-    testWidgets('Multiple rapid updates in one frame only triggers a single rebuild', (tester) async {
+    testWidgets(
+        'Multiple rapid updates in one frame only triggers a single rebuild',
+        (tester) async {
       final counter = signal(0);
       int buildCount = 0;
 

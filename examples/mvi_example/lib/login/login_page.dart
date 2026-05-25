@@ -73,7 +73,8 @@ class _LoginPageState extends State<LoginPage>
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SignalBuilder(builder: (context) {
+        child: SignalBuilder(
+          builder: (context) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,

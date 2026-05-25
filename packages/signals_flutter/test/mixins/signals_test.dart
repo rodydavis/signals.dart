@@ -18,7 +18,8 @@ class FullMixinWidgetState extends State<FullMixinWidget> with SignalsMixin {
   late final sFuture = createFutureSignal(() => Future.value(2));
   late final sStream = createStreamSignal(() => Stream.value(3));
   late final sAsync = createAsyncSignal(AsyncState.data(4));
-  late final sComputedFrom = createComputedFrom<int, int>([sSignal], (args) => Future.value(5));
+  late final sComputedFrom =
+      createComputedFrom<int, int>([sSignal], (args) => Future.value(5));
   late final sComputedAsync = createComputedAsync(() => Future.value(6));
   late final sList = createListSignal([7]);
   late final sSet = createSetSignal({8});
@@ -157,8 +158,9 @@ void main() {
 
       // Test unlistenSignal
       state.unlistenSignal(state.sSignal, () {}); // Non-matching dummy callback
-      state.unlistenSignal(state.sSignal, state.sSignal.value.toString as void Function()); // Another
-      
+      state.unlistenSignal(state.sSignal,
+          state.sSignal.value.toString as void Function()); // Another
+
       // Test unwatch
       state.unbindSignal(state.externalSignal);
       state.unwatchSignal(state.externalSignal);

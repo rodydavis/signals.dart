@@ -3,7 +3,8 @@ import 'dart:collection';
 
 import '../core/signals.dart';
 
-abstract mixin class QueueSignalMixin<T, S extends Queue<T>> implements Signal<S>, Queue<T> {
+abstract mixin class QueueSignalMixin<T, S extends Queue<T>>
+    implements Signal<S>, Queue<T> {
   @override
   void add(T value) {
     this.value.add(value);

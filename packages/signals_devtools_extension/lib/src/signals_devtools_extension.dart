@@ -102,7 +102,8 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
                       Text(
                         'Connected',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                          color: theme.colorScheme.onSurfaceVariant
+                              .withOpacity(0.6),
                         ),
                       ),
                     ],
@@ -120,7 +121,9 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
                         ),
                         label: Text(isPausedVal ? 'Resume' : 'Pause'),
                         style: TextButton.styleFrom(
-                          foregroundColor: isPausedVal ? Colors.green : theme.colorScheme.primary,
+                          foregroundColor: isPausedVal
+                              ? Colors.green
+                              : theme.colorScheme.primary,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -179,7 +182,8 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
                       Text(
                         'Match JS Signals DevTools features',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onPrimaryContainer.withOpacity(0.8),
+                          color: theme.colorScheme.onPrimaryContainer
+                              .withOpacity(0.8),
                         ),
                       ),
                     ],
@@ -188,27 +192,31 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
               ),
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   children: [
                     SwitchListTile(
                       value: true,
                       onChanged: (val) {},
                       title: const Text('Enable debug updates'),
-                      subtitle: const Text('Capture signals modifications in real time'),
+                      subtitle: const Text(
+                          'Capture signals modifications in real time'),
                     ),
                     const Divider(),
                     SwitchListTile(
                       value: true,
                       onChanged: (val) {},
                       title: const Text('Group related updates'),
-                      subtitle: const Text('Coalesce sequential updates to the same signal'),
+                      subtitle: const Text(
+                          'Coalesce sequential updates to the same signal'),
                     ),
                     const Divider(),
                     SwitchListTile(
                       value: false,
                       onChanged: (val) {},
                       title: const Text('Enable console logging'),
-                      subtitle: const Text('Print signals changes directly to VM debug console'),
+                      subtitle: const Text(
+                          'Print signals changes directly to VM debug console'),
                     ),
                   ],
                 ),
@@ -289,14 +297,18 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
             Icon(
               icon,
               size: 16,
-              color: active ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+              color: active
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 8),
             Text(
               label,
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: active ? FontWeight.bold : FontWeight.normal,
-                color: active ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                color: active
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ],

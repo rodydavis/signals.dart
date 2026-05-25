@@ -244,4 +244,28 @@ final constant = readonly(
 - **`name`**: A debug name for tracing or inspecting.
 - **`watched`**: A callback executed when the signal transitions from having 0 to $\ge 1$ active listeners.
 - **`unwatched`**: A callback executed when the signal transitions from having active listeners back to 0.
+- **`equality`**: A `SignalEquality<T>` object to customize how value updates are compared. When a new value is written to the signal, the equality check determines if listeners should be notified.
+
+### Signal Equality (`SignalEquality`)
+
+By default, signals use standard Dart equality checks (`operator ==`) to decide whether a new value differs from the current one. You can customize this behavior:
+
+```dart
+// Standard equality (default, uses ==)
+final s1 = signal(1, SignalOptions(equality: SignalEquality.standard()));
+
+// Identity equality (uses identical(a, b))
+final s2 = signal(myObj, SignalOptions(equality: SignalEquality.identity()));
+
+// Deep collection equality (recursively compares Lists, Maps, and Sets)
+final s3 = signal([1, 2, 3], SignalOptions(equality: SignalEquality.deep()));
+
+// Custom equality callback
+final s4 = signal(
+  User(id: 1, name: 'Alice'),
+  SignalOptions(
+    equality: SignalEquality.custom((a, b) => a.id == b.id),
+  ),
+);
+```
 

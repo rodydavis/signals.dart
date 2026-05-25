@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart' show ValueNotifier, VoidCallback;
 import '../../signals_core.dart';
 
 /// [ValueNotifier] implementation for [Signal]
-abstract mixin class ValueNotifierSignalMixin<T> implements Signal<T>, ValueNotifier<T> {
+abstract mixin class ValueNotifierSignalMixin<T>
+    implements Signal<T>, ValueNotifier<T> {
   final _listeners = <VoidCallback, void Function()>{};
 
   /// If true, the callback will be run when the listener is added

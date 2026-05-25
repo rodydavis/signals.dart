@@ -76,7 +76,8 @@ class Signal<T> extends signals.Signal<T>
   String? get debugLabel => name;
 
   /// Optional method to check if to values are the same
-  bool Function(T a, T b) equalityCheck = identical;
+  @override
+  signals.SignalEquality<T> get equalityCheck => super.equalityCheck;
 
   @override
   bool set(
@@ -87,7 +88,7 @@ class Signal<T> extends signals.Signal<T>
     if (disposed) {
       throw SignalsWriteAfterDisposeError(this);
     }
-    if (force || !isInitialized || !equalityCheck(val, internalValue)) {
+    if (force || !isInitialized || !equalityCheck.equals(val, internalValue)) {
       beforeUpdate(val);
       internalSetValue(val);
       return true;

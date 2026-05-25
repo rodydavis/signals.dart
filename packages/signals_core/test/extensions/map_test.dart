@@ -27,7 +27,8 @@ void main() {
       expect(s.isNotEmpty, true);
       expect(s.keys, ['a', 'b']);
       expect(s.length, 2);
-      expect(s.map((k, v) => MapEntry(k.toUpperCase(), v * 2)), {'A': 2, 'B': 4});
+      expect(
+          s.map((k, v) => MapEntry(k.toUpperCase(), v * 2)), {'A': 2, 'B': 4});
       expect(s.values, [1, 2]);
     });
 

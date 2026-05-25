@@ -4,7 +4,8 @@ import '../async/state.dart';
 import '../core/signals.dart';
 
 /// [EventSink] implementation for [AsyncState]
-abstract mixin class EventSinkSignalMixin<T> implements Signal<AsyncState<T>>, EventSink<T> {
+abstract mixin class EventSinkSignalMixin<T>
+    implements Signal<AsyncState<T>>, EventSink<T> {
   @override
   void add(T event) {
     set(AsyncState.data(event));

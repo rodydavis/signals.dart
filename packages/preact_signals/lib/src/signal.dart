@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 import 'batch.dart';
+import 'equality.dart';
 import 'globals.dart';
 import 'node.dart';
 import 'options.dart';
@@ -19,6 +20,12 @@ class Signal<T> with ReadonlySignal<T> {
 
   @override
   final void Function()? unwatched;
+
+  /// Signal equality check
+  final SignalEquality<T> _equalityCheck;
+
+  /// Get the active equality check
+  SignalEquality<T> get equalityCheck => _equalityCheck;
 
   /// Check if the value is set and not a lazy signal
   bool get isInitialized => _isInitialized;
@@ -49,9 +56,14 @@ class Signal<T> with ReadonlySignal<T> {
     void Function()? watched,
     void Function()? unwatched,
     ReadonlySignalOptions<T>? options,
+    SignalEquality<T>? equality,
   })  : name = options?.name ?? name,
         watched = options?.watched ?? watched,
         unwatched = options?.unwatched ?? unwatched,
+        _equalityCheck =
+            (options is SignalOptions<T> ? options.equalityCheck : null) ??
+                equality ??
+                const StandardEquality<Never>(),
         version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = true;
@@ -61,9 +73,14 @@ class Signal<T> with ReadonlySignal<T> {
     void Function()? watched,
     void Function()? unwatched,
     ReadonlySignalOptions<T>? options,
+    SignalEquality<T>? equality,
   })  : name = options?.name ?? name,
         watched = options?.watched ?? watched,
         unwatched = options?.unwatched ?? unwatched,
+        _equalityCheck =
+            (options is SignalOptions<T> ? options.equalityCheck : null) ??
+                equality ??
+                const StandardEquality<Never>(),
         version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = false;
@@ -114,7 +131,7 @@ class Signal<T> with ReadonlySignal<T> {
     /// Skip equality check and update the value
     bool force = false,
   }) {
-    if (force || !isInitialized || val != internalValue) {
+    if (force || !isInitialized || !equalityCheck.equals(val, internalValue)) {
       internalSetValue(val);
       return true;
     }

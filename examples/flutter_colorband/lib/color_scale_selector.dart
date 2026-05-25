@@ -48,7 +48,8 @@ class ColorNameStream extends StatelessWidget {
   const ColorNameStream({super.key});
 
   @override
-  build(context) => SignalBuilder(builder: (context) {
+  build(context) => SignalBuilder(
+        builder: (context) {
           return signals.colorNameSignalStream.value.map(
               data: (name) => Semantics(
                     label: 'Current color',

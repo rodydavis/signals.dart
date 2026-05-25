@@ -36,7 +36,8 @@ typedef _SignalMetadata = ({
 ///   ...
 /// }
 /// ```
-@Deprecated('Use SignalWidget, SignalStatefulWidget, or Watch/SignalBuilder instead for superior, self-contained reactivity without stateful mixin overhead.')
+@Deprecated(
+    'Use SignalWidget, SignalStatefulWidget, or Watch/SignalBuilder instead for superior, self-contained reactivity without stateful mixin overhead.')
 mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   final _signals = HashMap.of(<int, _SignalMetadata>{});
   EffectCleanup? _cleanup;

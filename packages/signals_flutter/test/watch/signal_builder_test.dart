@@ -8,7 +8,8 @@ void main() {
   });
 
   group('SignalBuilder', () {
-    testWidgets('surgically rebuilds builder block on signal change', (tester) async {
+    testWidgets('surgically rebuilds builder block on signal change',
+        (tester) async {
       final counter = signal(50);
       int parentBuilds = 0;
       int builderBuilds = 0;
@@ -50,7 +51,9 @@ void main() {
       expect(find.text('Counter: 51'), findsOneWidget);
     });
 
-    testWidgets('handles high-frequency updates from multiple signals synchronously with exactly one rebuild', (tester) async {
+    testWidgets(
+        'handles high-frequency updates from multiple signals synchronously with exactly one rebuild',
+        (tester) async {
       final signalA = signal(0);
       final signalB = signal(0);
       final signalC = signal(0);
@@ -62,7 +65,8 @@ void main() {
             body: SignalBuilder(
               builder: (context) {
                 builderBuilds++;
-                return Text('A: ${signalA.value}, B: ${signalB.value}, C: ${signalC.value}');
+                return Text(
+                    'A: ${signalA.value}, B: ${signalB.value}, C: ${signalC.value}');
               },
             ),
           ),

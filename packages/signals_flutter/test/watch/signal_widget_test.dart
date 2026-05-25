@@ -76,7 +76,8 @@ void main() {
   });
 
   group('SignalWidget (Stateless)', () {
-    testWidgets('automatically tracks and rebuilds on signal change', (tester) async {
+    testWidgets('automatically tracks and rebuilds on signal change',
+        (tester) async {
       final counter = signal(10);
       int buildCount = 0;
 
@@ -103,7 +104,9 @@ void main() {
   });
 
   group('SignalStatefulWidget (Stateful)', () {
-    testWidgets('automatically tracks and rebuilds stateful widget build on signal change', (tester) async {
+    testWidgets(
+        'automatically tracks and rebuilds stateful widget build on signal change',
+        (tester) async {
       final counter = signal(20);
       int buildCount = 0;
 
@@ -130,7 +133,8 @@ void main() {
   });
 
   group('Dynamic Branching', () {
-    testWidgets('correctly cleans up and updates dependencies dynamically', (tester) async {
+    testWidgets('correctly cleans up and updates dependencies dynamically',
+        (tester) async {
       final showB = signal(false);
       final signalA = signal(1);
       final signalB = signal(100);
@@ -183,7 +187,8 @@ void main() {
   });
 
   group('Hot Reload Compatibility', () {
-    testWidgets('SignalWidget maintains perfect reactivity after hot reload', (tester) async {
+    testWidgets('SignalWidget maintains perfect reactivity after hot reload',
+        (tester) async {
       final counter = signal(50);
       int buildCount = 0;
 
@@ -222,7 +227,9 @@ void main() {
       expect(find.text('Count: 52'), findsOneWidget);
     });
 
-    testWidgets('SignalStatefulWidget maintains perfect reactivity after hot reload', (tester) async {
+    testWidgets(
+        'SignalStatefulWidget maintains perfect reactivity after hot reload',
+        (tester) async {
       final counter = signal(60);
       int buildCount = 0;
 

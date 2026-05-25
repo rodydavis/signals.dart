@@ -16,15 +16,16 @@ class LinkedSignalPreviousState<T, S> {
 /// Options for creating a [LinkedSignal].
 class LinkedSignalOptions<T, S> extends SignalOptions<T> {
   /// Custom computation logic that runs when the source changes.
-  final T Function(S source, LinkedSignalPreviousState<T, S>? previous)? computation;
+  final T Function(S source, LinkedSignalPreviousState<T, S>? previous)?
+      computation;
 
   /// Optional equality check for the source values.
-  final bool Function(S a, S b)? equalityCheck;
+  final bool Function(S a, S b)? sourceEquality;
 
   /// Creates [LinkedSignalOptions].
   LinkedSignalOptions({
     this.computation,
-    this.equalityCheck,
+    this.sourceEquality,
     super.name,
     super.autoDispose,
   });
@@ -35,14 +36,15 @@ class LinkedSignalOptions<T, S> extends SignalOptions<T> {
     bool? autoDispose,
     void Function()? watched,
     void Function()? unwatched,
-    T Function(S source, LinkedSignalPreviousState<T, S>? previous)? computation,
-    bool Function(S a, S b)? equalityCheck,
+    T Function(S source, LinkedSignalPreviousState<T, S>? previous)?
+        computation,
+    bool Function(S a, S b)? sourceEquality,
   }) {
     return LinkedSignalOptions<T, S>(
       name: name ?? this.name,
       autoDispose: autoDispose ?? this.autoDispose,
       computation: computation ?? this.computation,
-      equalityCheck: equalityCheck ?? this.equalityCheck,
+      sourceEquality: sourceEquality ?? this.sourceEquality,
     );
   }
 
@@ -55,7 +57,7 @@ class LinkedSignalOptions<T, S> extends SignalOptions<T> {
         other.watched == watched &&
         other.unwatched == unwatched &&
         other.computation == computation &&
-        other.equalityCheck == equalityCheck;
+        other.sourceEquality == sourceEquality;
   }
 
   @override
@@ -65,7 +67,7 @@ class LinkedSignalOptions<T, S> extends SignalOptions<T> {
         watched,
         unwatched,
         computation,
-        equalityCheck,
+        sourceEquality,
       );
 }
 
@@ -76,7 +78,7 @@ class LinkedSignal<T, S> extends Signal<T> {
   final S Function() _source;
   final T Function(S source, LinkedSignalPreviousState<T, S>? previous)
       _computation;
-  final bool Function(S a, S b) _equalityCheck;
+  final bool Function(S a, S b) _sourceEquality;
 
   bool _hasLastSourceValue = false;
   S? _lastSourceValue;
@@ -95,8 +97,9 @@ class LinkedSignal<T, S> extends Signal<T> {
     required S Function() source,
     LinkedSignalOptions<T, S>? options,
   })  : _source = source,
-        _computation = options?.computation ?? ((sourceVal, _) => sourceVal as T),
-        _equalityCheck = options?.equalityCheck ?? identical,
+        _computation =
+            options?.computation ?? ((sourceVal, _) => sourceVal as T),
+        _sourceEquality = options?.sourceEquality ?? identical,
         super.lazy(options: options) {
     _trigger = signal(0);
     _sourceComputed = computed(_source);
@@ -108,7 +111,7 @@ class LinkedSignal<T, S> extends Signal<T> {
       final sourceVal = _sourceComputed.value;
 
       final sourceChanged = !_hasLastSourceValue ||
-          !_equalityCheck(sourceVal, _lastSourceValue as S);
+          !_sourceEquality(sourceVal, _lastSourceValue as S);
 
       if (sourceChanged) {
         final prev = _hasLastSourceValue

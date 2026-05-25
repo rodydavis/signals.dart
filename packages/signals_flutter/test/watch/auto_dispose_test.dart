@@ -25,7 +25,8 @@ class AutoDisposeStatefulWidget extends SignalStatefulWidget {
   });
 
   @override
-  State<AutoDisposeStatefulWidget> createState() => _AutoDisposeStatefulWidgetState();
+  State<AutoDisposeStatefulWidget> createState() =>
+      _AutoDisposeStatefulWidgetState();
 }
 
 class _AutoDisposeStatefulWidgetState extends State<AutoDisposeStatefulWidget> {
@@ -41,7 +42,8 @@ void main() {
   });
 
   group('Flutter autoDispose tests', () {
-    testWidgets('SignalWidget (Stateless) triggers autoDispose when unmounted', (tester) async {
+    testWidgets('SignalWidget (Stateless) triggers autoDispose when unmounted',
+        (tester) async {
       final s = signal(10, autoDispose: true);
       expect(s.disposed, isFalse);
 
@@ -61,7 +63,8 @@ void main() {
       expect(s.disposed, isTrue);
     });
 
-    testWidgets('SignalStatefulWidget triggers autoDispose when unmounted', (tester) async {
+    testWidgets('SignalStatefulWidget triggers autoDispose when unmounted',
+        (tester) async {
       final s = signal(10, autoDispose: true);
       expect(s.disposed, isFalse);
 
@@ -81,7 +84,8 @@ void main() {
       expect(s.disposed, isTrue);
     });
 
-    testWidgets('SignalBuilder triggers autoDispose when unmounted', (tester) async {
+    testWidgets('SignalBuilder triggers autoDispose when unmounted',
+        (tester) async {
       final s = signal(10, autoDispose: true);
       expect(s.disposed, isFalse);
 
@@ -103,7 +107,8 @@ void main() {
       expect(s.disposed, isTrue);
     });
 
-    testWidgets('SignalAnimatedBuilder triggers autoDispose when unmounted', (tester) async {
+    testWidgets('SignalAnimatedBuilder triggers autoDispose when unmounted',
+        (tester) async {
       final s = signal(10, autoDispose: true);
       expect(s.disposed, isFalse);
 

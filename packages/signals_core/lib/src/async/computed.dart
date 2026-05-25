@@ -21,8 +21,7 @@ FutureSignal<T> computedFrom<T, A>(
   AsyncSignalOptions<T>? options,
   @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead')
   T? initialValue,
-  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
-  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy,
   @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
   bool? autoDispose,
   @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
@@ -62,8 +61,7 @@ FutureSignal<T> computedAsync<T>(
   T? initialValue,
   @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead')
   List<ReadonlySignal<dynamic>>? dependencies,
-  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
-  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy,
   @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
   bool? autoDispose,
   @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')

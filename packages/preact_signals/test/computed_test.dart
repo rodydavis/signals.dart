@@ -423,10 +423,12 @@ void main() {
       test('should call watched when first subscription occurs', () {
         var watched = 0;
         var unwatched = 0;
-        final s = computed(() => 1, ComputedOptions(
-          watched: () => watched++,
-          unwatched: () => unwatched++,
-        ));
+        final s = computed(
+            () => 1,
+            ComputedOptions(
+              watched: () => watched++,
+              unwatched: () => unwatched++,
+            ));
         expect(watched, 0);
         final unsubscribe = s.subscribe((_) {});
         expect(watched, 1);
@@ -437,17 +439,23 @@ void main() {
         expect(unwatched, 1);
       });
 
-      test('should call watched when first subscription occurs w/ nested signal', () {
+      test(
+          'should call watched when first subscription occurs w/ nested signal',
+          () {
         var watched = 0;
         var unwatched = 0;
-        final s = signal(1, SignalOptions(
-          watched: () => watched++,
-          unwatched: () => unwatched++,
-        ));
-        final c = computed(() => s.value + 1, ComputedOptions(
-          watched: () => watched++,
-          unwatched: () => unwatched++,
-        ));
+        final s = signal(
+            1,
+            SignalOptions(
+              watched: () => watched++,
+              unwatched: () => unwatched++,
+            ));
+        final c = computed(
+            () => s.value + 1,
+            ComputedOptions(
+              watched: () => watched++,
+              unwatched: () => unwatched++,
+            ));
         expect(watched, 0);
         final unsubscribe = c.subscribe((_) {});
         expect(watched, 2);
@@ -568,7 +576,9 @@ void main() {
         expect(spy.calls, 1);
       });
 
-      test('should only update every signal once (jagged diamond graph + tails)', () {
+      test(
+          'should only update every signal once (jagged diamond graph + tails)',
+          () {
         //     A
         //   /   \
         //  B     C

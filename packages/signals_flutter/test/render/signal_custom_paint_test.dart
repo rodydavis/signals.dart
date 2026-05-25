@@ -29,7 +29,8 @@ void main() {
   });
 
   group('SignalCustomPaint', () {
-    testWidgets('repaints on signal change bypassing parent rebuilds', (tester) async {
+    testWidgets('repaints on signal change bypassing parent rebuilds',
+        (tester) async {
       final strokeWidth = signal(2.0);
       final painter = TestPainter(strokeWidth: strokeWidth);
       int parentBuilds = 0;
@@ -68,7 +69,8 @@ void main() {
   });
 
   group('SignalPainterWidget', () {
-    testWidgets('renders leaf object and repaints directly on signal change', (tester) async {
+    testWidgets('renders leaf object and repaints directly on signal change',
+        (tester) async {
       final progress = signal(0.1);
       int paintCount = 0;
       double paintedValue = 0.0;

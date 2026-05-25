@@ -7,7 +7,8 @@ import '../widgets/widgets.dart';
 /// Dynamic metadata storage attached directly to the Element instance.
 /// Expando is a weak-keyed map using object identity, meaning it is immune
 /// to identityHashCode collisions and doesn't prevent GC.
-final _elementSubscriptions = Expando<List<({int signalId, VoidCallback dispose})>>();
+final _elementSubscriptions =
+    Expando<List<({int signalId, VoidCallback dispose})>>();
 
 /// The Finalizer executes its callback when the Element is garbage-collected.
 /// It runs the signal subscription's disposer to prevent lapsed-listener leaks.
@@ -16,7 +17,8 @@ final _finalizer = Finalizer<VoidCallback>((dispose) => dispose());
 /// Signal extensions for watching value changes on BuildContext.
 extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Rebuild the [Element] that the current signal is inside of.
-  @Deprecated('Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.')
+  @Deprecated(
+      'Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.')
   T watch(
     BuildContext context, {
     String? debugLabel,
@@ -74,7 +76,8 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   }
 
   /// Stop subscriptions to updates on a signal for watchers.
-  @Deprecated('Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.')
+  @Deprecated(
+      'Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.')
   void unwatch(BuildContext context) {
     if (context is StatefulElement) {
       final state = context.state;

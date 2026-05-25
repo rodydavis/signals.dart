@@ -37,7 +37,8 @@ class SignalCustomPaint extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderSignalCustomPaint renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderSignalCustomPaint renderObject) {
     renderObject.painter = painter;
   }
 }
@@ -149,7 +150,8 @@ class SignalProxyWidget extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderSignalProxyBox renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderSignalProxyBox renderObject) {
     renderObject.signals = signals;
   }
 }

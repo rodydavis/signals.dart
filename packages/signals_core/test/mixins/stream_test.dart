@@ -99,7 +99,8 @@ void main() {
 
     test('asyncExpand', () async {
       final s = _Signal(10);
-      final asyncExpanded = s.asyncExpand((x) => Stream.fromIterable([x, x + 1]));
+      final asyncExpanded =
+          s.asyncExpand((x) => Stream.fromIterable([x, x + 1]));
       expect(await asyncExpanded.take(2).toList(), [10, 11]);
       s.dispose();
     });
@@ -192,7 +193,7 @@ void main() {
       final s = _Signal(10);
       Future.microtask(() => s.dispose());
       expect(await s.toList(), [10]);
-      
+
       final s2 = _Signal(10);
       Future.microtask(() => s2.dispose());
       expect(await s2.toSet(), {10});
@@ -203,7 +204,8 @@ void main() {
       final timeoutStream = s.timeout(const Duration(seconds: 1));
       expect(timeoutStream, isA<Stream<int>>());
 
-      final transformStream = s.transform(StreamTransformer<int, int>.fromHandlers());
+      final transformStream =
+          s.transform(StreamTransformer<int, int>.fromHandlers());
       expect(transformStream, isA<Stream<int>>());
       s.dispose();
     });

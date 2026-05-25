@@ -27,7 +27,9 @@ class _SpreadsheetCalculatorState extends State<SpreadsheetCalculator> {
   );
 
   Widget valueToWidget(ValueRow valueRow, BuildContext context) {
-    final valueDisplay = SignalBuilder(builder: (context) => Text(valueRow.signalObject.value.toString(), style: _style),
+    final valueDisplay = SignalBuilder(
+      builder: (context) =>
+          Text(valueRow.signalObject.value.toString(), style: _style),
     );
 
     if (valueRow.type == ValueType.number) {

@@ -249,68 +249,59 @@ class DevToolsSignalsObserver implements SignalsObserver {
   /// Returns a map representation of all active signals, computeds, and effects
   /// in the reactive graph.
   Map<String, dynamic> getNodes() {
-    final signals = _signals
-        .where((e) => e.target != null)
-        .map((e) => e.target!)
-        .map(
-          (e) {
-            final targets = <int>[];
-            for (var node = e.targets; node != null; node = node.nextTarget) {
-              targets.add(node.target.globalId);
-            }
-            return {
-              'id': e.globalId,
-              'label': e.debugLabel,
-              'value': e.toString(),
-              'targets': targets.join(','),
-              'type': 'signal',
-            };
-          },
-        )
-        .toList();
-    final computed = _computed
-        .where((e) => e.target != null)
-        .map((e) => e.target!)
-        .map(
-          (e) {
-            final sources = <int>[];
-            for (var node = e.sources; node != null; node = node.nextSource) {
-              sources.add(node.source.globalId);
-            }
-            final targets = <int>[];
-            for (var node = e.targets; node != null; node = node.nextTarget) {
-              targets.add(node.target.globalId);
-            }
-            return {
-              'id': e.globalId,
-              'label': e.debugLabel,
-              'value': e.toString(),
-              'sources': sources.join(','),
-              'targets': targets.join(','),
-              'type': 'computed',
-            };
-          },
-        )
-        .toList();
-    final effects = _effects
-        .where((e) => e.target != null)
-        .map((e) => e.target!)
-        .map(
-          (e) {
-            final sources = <int>[];
-            for (var node = e.sources; node != null; node = node.nextSource) {
-              sources.add(node.source.globalId);
-            }
-            return {
-              'id': e.globalId,
-              'label': e.debugLabel,
-              'value': '${_effectCount[e.globalId] ?? 0}',
-              'sources': sources.join(','),
-              'type': 'effect',
-            };
-          },
-        )
-        .toList();
+    final signals =
+        _signals.where((e) => e.target != null).map((e) => e.target!).map(
+      (e) {
+        final targets = <int>[];
+        for (var node = e.targets; node != null; node = node.nextTarget) {
+          targets.add(node.target.globalId);
+        }
+        return {
+          'id': e.globalId,
+          'label': e.debugLabel,
+          'value': e.toString(),
+          'targets': targets.join(','),
+          'type': 'signal',
+        };
+      },
+    ).toList();
+    final computed =
+        _computed.where((e) => e.target != null).map((e) => e.target!).map(
+      (e) {
+        final sources = <int>[];
+        for (var node = e.sources; node != null; node = node.nextSource) {
+          sources.add(node.source.globalId);
+        }
+        final targets = <int>[];
+        for (var node = e.targets; node != null; node = node.nextTarget) {
+          targets.add(node.target.globalId);
+        }
+        return {
+          'id': e.globalId,
+          'label': e.debugLabel,
+          'value': e.toString(),
+          'sources': sources.join(','),
+          'targets': targets.join(','),
+          'type': 'computed',
+        };
+      },
+    ).toList();
+    final effects =
+        _effects.where((e) => e.target != null).map((e) => e.target!).map(
+      (e) {
+        final sources = <int>[];
+        for (var node = e.sources; node != null; node = node.nextSource) {
+          sources.add(node.source.globalId);
+        }
+        return {
+          'id': e.globalId,
+          'label': e.debugLabel,
+          'value': '${_effectCount[e.globalId] ?? 0}',
+          'sources': sources.join(','),
+          'type': 'effect',
+        };
+      },
+    ).toList();
     return {
       'nodes': [...signals, ...computed, ...effects],
     };

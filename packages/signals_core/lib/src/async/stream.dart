@@ -539,8 +539,7 @@ StreamSignal<T> streamSignal<T>(
   void Function()? onDone,
   @Deprecated('Use options: AsyncSignalOptions(cancelOnError: ...) instead')
   bool? cancelOnError,
-  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
-  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy,
   @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
   bool? autoDispose,
   @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')

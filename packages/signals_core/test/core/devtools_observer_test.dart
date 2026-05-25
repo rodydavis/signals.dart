@@ -13,7 +13,9 @@ void main() {
     SignalsObserver.instance = null;
   });
 
-  test('DevToolsSignalsObserver tracks signal, computed and effect dependencies correctly', () {
+  test(
+      'DevToolsSignalsObserver tracks signal, computed and effect dependencies correctly',
+      () {
     final s1 = signal(1, options: const SignalOptions(name: 's1'));
     final s2 = signal(2, options: const SignalOptions(name: 's2'));
 
@@ -73,7 +75,8 @@ void main() {
     expect(s1Node['targets']?.split(','), containsAll([c1Id.toString()]));
     expect(s2Node['targets']?.split(','), containsAll([c1Id.toString()]));
 
-    expect(c1Node['sources']?.split(','), containsAll([s1Id.toString(), s2Id.toString()]));
+    expect(c1Node['sources']?.split(','),
+        containsAll([s1Id.toString(), s2Id.toString()]));
     expect(c1Node['targets']?.split(','), isNotEmpty);
 
     expect(c1Id.toString(), isNotNull);
