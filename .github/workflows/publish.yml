@@ -1,0 +1,36 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on release tags, e.g., v1.0.0, v1.0.0-beta.1
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # CRITICAL: Required for secure OIDC token exchange with pub.dev
+      contents: read  # Required for checking out the repository
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Bootstrap Workspace
+        run: |
+          melos bootstrap
+
+      - name: Publish to pub.dev
+        run: |
+          melos publish --no-dry-run -y
