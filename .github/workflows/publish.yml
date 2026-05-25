@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*' # Triggers on release tags, e.g., v1.0.0, v1.0.0-beta.1
+  workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
   publish:
