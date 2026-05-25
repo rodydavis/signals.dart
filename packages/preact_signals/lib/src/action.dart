@@ -27,17 +27,18 @@ Function action(Function fn, {ActionOptions? options}) {
   ]) {
     return batch(() {
       return untracked(() {
-        final args = [];
-        if (a0 is! _Sentinel) args.add(a0);
-        if (a1 is! _Sentinel) args.add(a1);
-        if (a2 is! _Sentinel) args.add(a2);
-        if (a3 is! _Sentinel) args.add(a3);
-        if (a4 is! _Sentinel) args.add(a4);
-        if (a5 is! _Sentinel) args.add(a5);
-        if (a6 is! _Sentinel) args.add(a6);
-        if (a7 is! _Sentinel) args.add(a7);
-        if (a8 is! _Sentinel) args.add(a8);
-        if (a9 is! _Sentinel) args.add(a9);
+        final args = [
+          if (a0 is! _Sentinel) a0,
+          if (a1 is! _Sentinel) a1,
+          if (a2 is! _Sentinel) a2,
+          if (a3 is! _Sentinel) a3,
+          if (a4 is! _Sentinel) a4,
+          if (a5 is! _Sentinel) a5,
+          if (a6 is! _Sentinel) a6,
+          if (a7 is! _Sentinel) a7,
+          if (a8 is! _Sentinel) a8,
+          if (a9 is! _Sentinel) a9,
+        ];
         return Function.apply(fn, args);
       });
     });
