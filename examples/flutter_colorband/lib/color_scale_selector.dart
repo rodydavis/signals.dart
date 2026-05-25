@@ -11,7 +11,7 @@ class ColorName extends StatelessWidget {
 
   @override
   build(context) {
-    return Watch((context) {
+    return SignalBuilder(builder: (context) {
       final color = signals.colorNameSignal.value;
       final conf = signals.confSignal.value;
 
@@ -48,8 +48,7 @@ class ColorNameStream extends StatelessWidget {
   const ColorNameStream({super.key});
 
   @override
-  build(context) => Watch(
-        (context) {
+  build(context) => SignalBuilder(builder: (context) {
           return signals.colorNameSignalStream.value.map(
               data: (name) => Semantics(
                     label: 'Current color',
@@ -79,7 +78,7 @@ class ColorSelector extends StatelessWidget {
       {super.key, required this.conf, required this.valueStyle});
 
   @override
-  build(context) => Watch((context) {
+  build(context) => SignalBuilder(builder: (context) {
         final band = signals.bandSignal.value;
 
         return SizedBox.expand(

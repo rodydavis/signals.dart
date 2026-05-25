@@ -33,15 +33,15 @@ class App extends StatelessWidget {
   }
 }
 
-class CounterExample extends StatefulWidget {
+class CounterExample extends SignalStatefulWidget {
   const CounterExample({super.key});
 
   @override
   State<CounterExample> createState() => _CounterExampleState();
 }
 
-class _CounterExampleState extends State<CounterExample> with SignalsMixin {
-  late final Signal<int> counter = createSignal(0);
+class _CounterExampleState extends State<CounterExample> {
+  final Signal<int> counter = signal(0);
 
   void _incrementCounter() {
     counter.value++;
@@ -61,7 +61,7 @@ class _CounterExampleState extends State<CounterExample> with SignalsMixin {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$counter',
+              '${counter.value}',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],

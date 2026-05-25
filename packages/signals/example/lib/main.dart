@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Counter extends StatefulWidget {
+class Counter extends SignalStatefulWidget {
   const Counter({super.key});
 
   @override
@@ -49,7 +49,7 @@ class _CounterState extends State<Counter> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '${_counter.watch(context)}',
+              '${_counter.value}',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],

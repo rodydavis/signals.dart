@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:signals_flutter/signals_flutter.dart';
 
 class CreateSignalExample extends StatefulWidget {
@@ -14,8 +13,7 @@ class CreateSignalExample extends StatefulWidget {
   State<CreateSignalExample> createState() => _CreateSignalExampleState();
 }
 
-class _CreateSignalExampleState extends State<CreateSignalExample>
-    with SignalsMixin {
+class _CreateSignalExampleState extends State<CreateSignalExample> {
   final counter = signal(0, debugLabel: 'Counter');
 
   void _incrementCounter() => counter.value++;
@@ -34,9 +32,9 @@ class _CreateSignalExampleState extends State<CreateSignalExample>
             const Text(
               'You have pushed the button this many times:',
             ),
-            Builder(builder: (context) {
+            SignalBuilder(builder: (context) {
               return Text(
-                '${this.watchSignal(counter)}',
+                '${counter.value}',
                 style: Theme.of(context).textTheme.headlineMedium,
               );
             }),

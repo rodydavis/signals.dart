@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/error/error.dart' hide LintCode;
 import 'package:analyzer/error/listener.dart';

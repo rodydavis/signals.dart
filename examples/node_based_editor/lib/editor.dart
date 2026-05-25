@@ -66,14 +66,14 @@ class _EditorState extends State<Editor> {
                     ..scale(0.9, 0.9)
                     ..translate(-(size.width / 2), -(size.height / 2))),
             ),
-            Watch((context) {
+            SignalBuilder(builder: (context) {
               return IconButton(
                 onPressed: () => toolbox.set(!toolbox()),
                 icon: Icon(toolbox() ? Icons.visibility_off : Icons.visibility),
                 tooltip: toolbox() ? 'Hide Toolbox' : 'Show Toolbox',
               );
             }),
-            Watch((context) {
+            SignalBuilder(builder: (context) {
               if (selection.isEmpty) return const SizedBox.shrink();
               return IconButton(
                 onPressed: () => selection.clear(),
@@ -81,7 +81,7 @@ class _EditorState extends State<Editor> {
                 tooltip: 'Clear selection',
               );
             }),
-            Watch((context) {
+            SignalBuilder(builder: (context) {
               if (nodes.isEmpty) return const SizedBox.shrink();
               return IconButton(
                 onPressed: () {

@@ -45,54 +45,56 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final index = tab.watch(context);
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Row(
-              children: [
-                NavigationRail(
-                  minWidth: 30,
-                  destinations: const [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.list),
-                      label: Text('List'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.account_tree),
-                      label: Text('Graph'),
-                    ),
-                  ],
-                  selectedIndex: index,
-                  onDestinationSelected: tab.set,
-                  labelType: NavigationRailLabelType.all,
-                ),
-                Expanded(
-                  child: SizedBox.expand(
-                    child: Builder(builder: (context) {
-                      if (index == 0) {
-                        return const NodesTable();
-                      } else {
-                        return const NodeGraph();
-                      }
-                    }),
+    return SignalBuilder(builder: (context) {
+      final index = tab.value;
+      return Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Row(
+                children: [
+                  NavigationRail(
+                    minWidth: 30,
+                    destinations: const [
+                      NavigationRailDestination(
+                        icon: Icon(Icons.list),
+                        label: Text('List'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.account_tree),
+                        label: Text('Graph'),
+                      ),
+                    ],
+                    selectedIndex: index,
+                    onDestinationSelected: tab.set,
+                    labelType: NavigationRailLabelType.all,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: SizedBox.expand(
+                      child: Builder(builder: (context) {
+                        if (index == 0) {
+                          return const NodesTable();
+                        } else {
+                          return const NodeGraph();
+                        }
+                      }),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Positioned(
-            bottom: 15,
-            left: 15,
-            child: IconButton(
-              onPressed: refreshNodes,
-              icon: Icon(Icons.refresh),
-              tooltip: 'Refresh nodes',
+            const Positioned(
+              bottom: 15,
+              left: 15,
+              child: IconButton(
+                onPressed: refreshNodes,
+                icon: Icon(Icons.refresh),
+                tooltip: 'Refresh nodes',
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

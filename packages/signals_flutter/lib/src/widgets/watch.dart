@@ -1,4 +1,6 @@
-part of 'watch.dart';
+import 'package:flutter/widgets.dart';
+import 'package:signals_core/signals_core.dart' as core;
+import 'signal_builder.dart';
 
 /// ## Watch
 ///
@@ -30,6 +32,9 @@ part of 'watch.dart';
 ///   );
 /// }
 /// ```
+@Deprecated(
+  'Use SignalBuilder instead for superior reactivity and consistent naming.',
+)
 class Watch<T extends Widget> extends StatelessWidget {
   /// Minimal builder for signal changes that rerender a widget tree.
   ///
@@ -75,11 +80,10 @@ class Watch<T extends Widget> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WatchBuilder(
-      // key: key,
-      builder: (context, _) => builder(context),
-      debugLabel: debugLabel,
+    return SignalBuilder(
       dependencies: dependencies,
+      debugLabel: debugLabel,
+      builder: builder,
     );
   }
 }

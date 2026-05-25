@@ -66,8 +66,7 @@ class _EditTodoState extends State<EditTodo> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Watch(
-                    (context) => CheckboxListTile(
+                  SignalBuilder(builder: (context) => CheckboxListTile(
                       title: const Text('Completed'),
                       value: completed.value,
                       onChanged: (val) => completed.value = val!,

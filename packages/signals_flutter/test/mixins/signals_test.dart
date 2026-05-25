@@ -53,7 +53,7 @@ class FullMixinWidgetState extends State<FullMixinWidget> with SignalsMixin {
   @override
   Widget build(BuildContext context) {
     // Test watchSignal and bindSignal
-    final extVal = this.watchSignal(externalSignal);
+    final extVal = watchSignal(externalSignal);
     return MaterialApp(
       home: Scaffold(
         body: Column(

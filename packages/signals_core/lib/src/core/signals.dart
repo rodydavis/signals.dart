@@ -18,6 +18,7 @@ part 'batch.dart';
 part 'untracked.dart';
 part 'readonly.dart';
 part 'auto_dispose.dart';
+part 'linked_signal.dart';
 
 /// Signal usage error
 class SignalsError extends Error {

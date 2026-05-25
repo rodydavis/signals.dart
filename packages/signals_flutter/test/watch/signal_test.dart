@@ -7,6 +7,7 @@ import '../utils/counter.dart';
 
 void main() {
   SignalsObserver.instance = null;
+
   group('.watch()', () {
     testWidgets('signal', (tester) async {
       int calls = 0;

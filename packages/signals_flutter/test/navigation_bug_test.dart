@@ -60,7 +60,7 @@ void main() {
   );
 }
 
-class _CollisionWidget extends StatefulWidget {
+class _CollisionWidget extends SignalStatefulWidget {
   const _CollisionWidget({
     required this.counter,
     required this.forcedHash,
@@ -76,7 +76,7 @@ class _CollisionWidget extends StatefulWidget {
   StatefulElement createElement() => _CollisionElement(this);
 }
 
-class _CollisionElement extends StatefulElement {
+class _CollisionElement extends SignalStatefulElement {
   _CollisionElement(super.widget);
 
   @override
@@ -86,7 +86,7 @@ class _CollisionElement extends StatefulElement {
 class _CollisionWidgetStateWithHash extends State<_CollisionWidget> {
   @override
   Widget build(BuildContext context) {
-    final count = widget.counter.watch(context);
+    final count = widget.counter.value;
     return Scaffold(
       body: Center(
         child: Text('Count: $count'),

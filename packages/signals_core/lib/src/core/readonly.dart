@@ -1,5 +1,8 @@
 part of 'signals.dart';
 
+/// Global callback when any signal is read.
+void Function(signals.ReadonlySignal)? onSignalRead;
+
 /// Read only signals can just retrieve a value but not update or cause mutations
 abstract class ReadonlySignal<T> = signals.ReadonlySignal<T>
     with ReadonlySignalMixin<T>, SignalsAutoDisposeMixin<T>;
@@ -19,6 +22,12 @@ mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
 
   /// Debug label for Debug Mode
   String? get debugLabel;
+
+  @override
+  T get value {
+    onSignalRead?.call(this);
+    return super.value;
+  }
 }
 
 /// Create a new plain readonly signal

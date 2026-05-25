@@ -1,11 +1,17 @@
 ---
 title: SignalsMixin
-description: Mixin for State that auto disposes signals
+description: Legacy mixin for State that auto disposes signals
 sidebar:
   order: 0
 ---
 
-SignalsMixin is a mixin for State that auto disposes signals when the widget is removed from the widget tree.
+> [!WARNING]
+> `SignalsMixin` has been **deprecated** in favor of inheriting from **`SignalStatefulWidget`** or using scoped **`SignalBuilder`** widgets. 
+> These newer architectures avoid the stateful lifecycle mixin overhead and offer superior, self-contained implicit element-level reactivity!
+
+---
+
+SignalsMixin is a legacy mixin for State that auto disposes signals when the widget is removed from the widget tree.
 
 :::note
 The mixin requires a `StatefulWidget` for the widget lifecycle methods.
