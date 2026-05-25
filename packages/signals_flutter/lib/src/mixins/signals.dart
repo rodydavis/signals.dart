@@ -220,7 +220,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a signal<T> and watch for changes
+  /// Create a `signal<T>` and watch for changes
   FlutterSignal<V> createSignal<V>(
     V val, {
     String? debugLabel,
@@ -233,7 +233,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [ListSignal]<T> and watch for changes
+  /// Create a [ListSignal] `<T>` and watch for changes
   ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
@@ -246,7 +246,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [SetSignal]<T> and watch for changes
+  /// Create a [SetSignal] `<T>` and watch for changes
   SetSignal<V> createSetSignal<V>(
     Set<V> set, {
     String? debugLabel,
@@ -259,7 +259,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [QueueSignal]<T> and watch for changes
+  /// Create a [QueueSignal] `<T>` and watch for changes
   QueueSignal<V> createQueueSignal<V>(
     Queue<V> queue, {
     String? debugLabel,
@@ -272,7 +272,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [MapSignal]<T> and watch for changes
+  /// Create a [MapSignal] `<K, V>` and watch for changes
   MapSignal<K, V> createMapSignal<K, V>(
     Map<K, V> value, {
     String? debugLabel,
@@ -285,7 +285,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a computed<T> and watch for changes
+  /// Create a `computed<T>` and watch for changes
   FlutterComputed<V> createComputed<V>(
     V Function() cb, {
     String? debugLabel,
@@ -303,13 +303,13 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return val;
   }
 
-  /// Bind an existing signal<T> and watch for changes
+  /// Bind an existing `signal<T>` and watch for changes
   S bindSignal<V, S extends ReadonlySignal<V>>(S val) {
     _watch(val, false);
     return val;
   }
 
-  /// Unbind an existing signal<T> changes
+  /// Unbind an existing `signal<T>` changes
   S unbindSignal<V, S extends ReadonlySignal<V>>(S val) {
     _unwatch(val);
     return val;
@@ -320,7 +320,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return bindSignal(val).value;
   }
 
-  /// Unwatch an existing signal<T> value changes
+  /// Unwatch an existing `signal<T>` value changes
   V unwatchSignal<V, S extends ReadonlySignal<V>>(S val) {
     return unbindSignal(val).value;
   }

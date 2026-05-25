@@ -2,25 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 // A mock store for testing
-class MockStore extends SignalsInMemoryKeyValueStore {
-  @override
-  final Map<String, String?> store = {};
-
-  @override
-  Future<String?> getItem(String key) async {
-    return store[key];
-  }
-
-  @override
-  Future<void> removeItem(String key) async {
-    store.remove(key);
-  }
-
-  @override
-  Future<void> setItem(String key, String value) async {
-    store[key] = value;
-  }
-}
+class MockStore extends SignalsInMemoryKeyValueStore {}
 
 enum TestEnum { a, b, c }
 

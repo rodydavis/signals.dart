@@ -75,9 +75,6 @@ class _ReorderableItemListState extends State<ReorderableItemList> {
   });
 
   void reorderItems(int oldIndex, int newIndex) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final items = filteredAndSortedItems.value;
     final ItemModel item = items.removeAt(oldIndex);
     items.insert(newIndex, item);
@@ -120,7 +117,7 @@ class _ReorderableItemListState extends State<ReorderableItemList> {
                       'Order: ${item.orderIndex}, Category: ${item.categoryId}'),
                 );
               },
-              onReorder: reorderItems,
+              onReorderItem: reorderItems,
             );
           }),
         ),
