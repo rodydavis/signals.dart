@@ -207,5 +207,41 @@ void main() {
         expect(find.text('43'), findsOneWidget);
       });
     });
+
+    group('LinkedSignal', () {
+      testWidgets('computes and resets value correctly', (tester) async {
+        final sourceSignal = signal(5);
+
+        await tester.pumpWidget(
+          HookBuilder(
+            builder: (context) {
+              final val = useLinkedSignal<int, int>(
+                () => sourceSignal.value,
+                options: LinkedSignalOptions(
+                  computation: (src, prev) => src * 2,
+                ),
+              );
+              return GestureDetector(
+                onTap: () => val.value = 99,
+                child: Text('$val', textDirection: TextDirection.ltr),
+              );
+            },
+          ),
+        );
+
+        // Initial computation: 5 * 2 = 10
+        expect(find.text('10'), findsOneWidget);
+
+        // Tap to override value to 99
+        await tester.tap(find.text('10'));
+        await tester.pumpAndSettle();
+        expect(find.text('99'), findsOneWidget);
+
+        // Change source to 6. Value should reset to 6 * 2 = 12
+        sourceSignal.value = 6;
+        await tester.pumpAndSettle();
+        expect(find.text('12'), findsOneWidget);
+      });
+    });
   });
 }

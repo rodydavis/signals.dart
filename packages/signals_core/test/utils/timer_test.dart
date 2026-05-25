@@ -55,4 +55,56 @@ void main() {
       ),
     ),
   );
+
+  group('TimerSignal fallback and deprecated options', () {
+    test('TimerSignal constructor default options', () {
+      final timer = TimerSignal(every: Duration(seconds: 1));
+      expect(timer.every, Duration(seconds: 1));
+      timer.dispose();
+    });
+
+    test('TimerSignal constructor deprecated options', () {
+      // ignore: deprecated_member_use_from_same_package
+      final timer = TimerSignal(
+        every: Duration(seconds: 1),
+        autoDispose: true,
+        debugLabel: 'CustomTimerLabel',
+      );
+      expect(timer.every, Duration(seconds: 1));
+      timer.dispose();
+    });
+
+    test('timerSignal function default options', () {
+      final timer = timerSignal(Duration(seconds: 1));
+      expect(timer.every, Duration(seconds: 1));
+      timer.dispose();
+    });
+
+    test('timerSignal function deprecated options', () {
+      // ignore: deprecated_member_use_from_same_package
+      final timer = timerSignal(
+        Duration(seconds: 1),
+        autoDispose: true,
+        debugLabel: 'CustomTimerLabel',
+      );
+      expect(timer.every, Duration(seconds: 1));
+      timer.dispose();
+    });
+
+    test('toSignal duration extension default options', () {
+      final timer = Duration(seconds: 1).toSignal();
+      expect(timer.every, Duration(seconds: 1));
+      timer.dispose();
+    });
+
+    test('toSignal duration extension deprecated options', () {
+      // ignore: deprecated_member_use_from_same_package
+      final timer = Duration(seconds: 1).toSignal(
+        autoDispose: true,
+        debugLabel: 'CustomTimerLabel',
+      );
+      expect(timer.every, Duration(seconds: 1));
+      timer.dispose();
+    });
+  });
 }

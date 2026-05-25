@@ -150,3 +150,41 @@ void useSignalEffect(
   );
   return;
 }
+
+/// Creates a new [LinkedSignal] and subscribes to it.
+///
+/// The signal is created only once and is preserved across widget rebuilds.
+/// It resets its value to the computation result whenever its source changes.
+///
+/// ```dart
+/// class MyWidget extends HookWidget {
+///   final int index;
+///   MyWidget(this.index);
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     final counter = useLinkedSignal(
+///       () => index,
+///       options: LinkedSignalOptions(
+///         computation: (source, previous) => source * 2,
+///       ),
+///     );
+///     return Text('${counter.value}');
+///   }
+/// }
+/// ```
+LinkedSignal<T, S> useLinkedSignal<T, S>(
+  S Function() source, {
+  LinkedSignalOptions<T, S>? options,
+
+  /// A list of objects to watch for changes.
+  ///
+  /// If any of the keys change, the signal will be re-created.
+  List<Object?> keys = const <Object>[],
+}) {
+  final s = useMemoized(
+    () => linkedSignal<T, S>(source, options: options),
+    keys,
+  );
+  return useExistingSignal(s, keys: keys);
+}
