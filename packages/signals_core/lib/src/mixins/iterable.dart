@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs
 import '../core/signals.dart';
 
 abstract mixin class IterableSignalMixin<E, T extends Iterable<E>> implements Signal<T>, Iterable<E> {

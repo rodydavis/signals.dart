@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs
 import 'dart:collection';
 
 import '../core/signals.dart';
@@ -59,7 +60,7 @@ abstract mixin class QueueSignalMixin<T, S extends Queue<T>> implements Signal<S
 
   @override
   Iterable<U> expand<U>(Iterable<U> Function(T element) toElements) {
-    return expand<U>(toElements);
+    return value.expand<U>(toElements);
   }
 
   @override
@@ -72,7 +73,7 @@ abstract mixin class QueueSignalMixin<T, S extends Queue<T>> implements Signal<S
 
   @override
   U fold<U>(U initialValue, U Function(U previousValue, T element) combine) {
-    return fold<U>(initialValue, combine);
+    return value.fold<U>(initialValue, combine);
   }
 
   @override
