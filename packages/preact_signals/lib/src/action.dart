@@ -34,18 +34,3 @@ Function action(Function fn, {ActionOptions? options}) {
   };
 }
 
-/// Wraps a 0-argument callback function in a type-safe action.
-R Function() action0<R>(R Function() fn, {ActionOptions? options}) {
-  return () => batch(() => untracked(fn));
-}
-
-/// Wraps a 1-argument callback function in a type-safe action.
-R Function(A) action1<A, R>(R Function(A) fn, {ActionOptions? options}) {
-  return (a) => batch(() => untracked(() => fn(a)));
-}
-
-/// Wraps a 2-argument callback function in a type-safe action.
-R Function(A, B) action2<A, B, R>(R Function(A, B) fn,
-    {ActionOptions? options}) {
-  return (a, b) => batch(() => untracked(() => fn(a, b)));
-}
