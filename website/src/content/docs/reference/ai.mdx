@@ -76,4 +76,20 @@ claude --context https://dartsignals.dev/llms.txt
 
 For tools powered by OpenAI Codex, you can provide the documentation as context by pasting the content or referencing the file if the tool supports it.
 
+## AI Developer Skills
+
+To enable AI coding assistants (such as Google Antigravity, Gemini, Claude, Cursor, GitHub Copilot, and others) to build high-quality reactive systems with `signals.dart` version 7, this repository includes prepackaged, high-fidelity developer **Skills**.
+
+These skills are located under the `/skills` directory of the repository and are fully modular:
+
+- **`signals-preact-dart`**: Deep knowledge and best practices for core reactive primitives (`signal`, `computed`, `effect`, `batch`, `untracked`).
+- **`signals-dart`**: Best practices for async signal operations (`FutureSignal`, `StreamSignal`), reactive collections, writable computed signals (`linkedSignal`), and value semantics.
+- **`signals-flutter`**: Comprehensive guides on element-level reactive UI integration, high-frequency GPU rendering bypasses, lifecycle side-effects, and `.watch(context)` extensions.
+- **`signals-migration-6-to-7`**: Detailed instructions, patterns, and refactoring techniques to safely upgrade applications from signals v6.x to v7.0.0.
+
+### How to use them:
+
+Simply reference the path to the desired skill directory in your AI prompt, or load the contents of the relevant `SKILL.md` files as system prompt templates for your AI coding assistant.
+
+
 
