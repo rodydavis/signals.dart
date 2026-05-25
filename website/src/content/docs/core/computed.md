@@ -180,3 +180,25 @@ test('test with override', () {
 ```
 
 `overrideWith` returns a new computed signal with the same global id sets the value as if the computed callback returned it.
+
+## Computed Options
+
+You can pass a `ComputedOptions` object to `computed()` to customize the debugging name and lifecycle callbacks of the computed signal:
+
+```dart
+final fullName = computed(
+  () => name.value + " " + surname.value,
+  ComputedOptions(
+    name: 'fullName',
+    watched: () => print('fullName is watched'),
+    unwatched: () => print('fullName is unwatched'),
+  ),
+);
+```
+
+### Options API
+
+- **`name`**: A debug name for tracing or inspecting.
+- **`watched`**: A callback executed when the computed signal transitions from having 0 to $\ge 1$ active listeners.
+- **`unwatched`**: A callback executed when the computed signal transitions from having active listeners back to 0.
+

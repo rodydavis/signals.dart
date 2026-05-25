@@ -218,3 +218,30 @@ test('test with override', () {
 ```
 
 `overrideWith` returns a new signal with the same global id sets the value as if it was created with it. This can be useful when using async signals or global signals used for dependency injection.
+
+## Signal Options
+
+You can pass a `SignalOptions` (or `ReadonlySignalOptions` in `readonly()`) object to customize debugging names and lifecycle callbacks:
+
+```dart
+final counter = signal(
+  0,
+  SignalOptions(
+    name: 'counter',
+    watched: () => print('counter is watched'),
+    unwatched: () => print('counter is unwatched'),
+  ),
+);
+
+final constant = readonly(
+  10,
+  const ReadonlySignalOptions(name: 'constant'),
+);
+```
+
+### Options API
+
+- **`name`**: A debug name for tracing or inspecting.
+- **`watched`**: A callback executed when the signal transitions from having 0 to $\ge 1$ active listeners.
+- **`unwatched`**: A callback executed when the signal transitions from having active listeners back to 0.
+

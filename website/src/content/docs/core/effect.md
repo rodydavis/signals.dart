@@ -102,3 +102,18 @@ Future<void> main() async {
 ```
 
 :::
+
+## Effect Options
+
+You can pass an `EffectOptions` object to `effect()` to customize the debugging name of the effect:
+
+```dart
+final dispose = effect(
+  () => print(fullName.value),
+  const EffectOptions(name: 'fullNameLogger'),
+);
+```
+
+### Options API
+
+- **`name`**: A debug name for tracing or inspecting the effect.
