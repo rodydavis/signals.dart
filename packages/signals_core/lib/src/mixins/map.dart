@@ -1,8 +1,6 @@
 import '../core/signals.dart';
 
-/// Mixin to upgrade an map signal with reactive properties
-mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
-    implements Map<K, V> {
+abstract mixin class MapSignalMixin<K, V, T extends Map<K, V>> implements Signal<T>, Map<K, V> {
   @override
   V? operator [](Object? key) {
     return value[key];

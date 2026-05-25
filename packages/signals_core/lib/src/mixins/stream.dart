@@ -2,21 +2,15 @@ import 'dart:async';
 
 import '../../signals_core.dart';
 
-/// [Stream] implementation for [AsyncState]
-mixin StreamSignalMixin<T> on ReadonlySignal<T> implements Stream<T> {
+abstract mixin class StreamSignalMixin<T> implements ReadonlySignal<T>, Stream<T> {
   final _controller = StreamController<T>.broadcast(sync: true);
 
   late final Stream<T> _stream = () {
     final s = toStream();
     onDispose(subscribe(_controller.add));
+    onDispose(_controller.close);
     return s;
   }();
-
-  @override
-  void dispose() {
-    _controller.close();
-    super.dispose();
-  }
 
   @override
   Future<bool> any(bool Function(T element) test) async {

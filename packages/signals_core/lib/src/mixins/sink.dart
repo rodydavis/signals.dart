@@ -1,7 +1,7 @@
 import '../core/signals.dart';
 
 /// [Sink] implementation for [Signal]
-mixin SinkSignalMixin<T> on Signal<T> implements Sink<T> {
+abstract mixin class SinkSignalMixin<T> implements Signal<T>, Sink<T> {
   @override
   void add(T event) {
     set(event);

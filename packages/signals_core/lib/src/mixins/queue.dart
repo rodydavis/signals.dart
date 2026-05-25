@@ -2,8 +2,7 @@ import 'dart:collection';
 
 import '../core/signals.dart';
 
-/// Mixin to upgrade an queue signal with reactive properties
-mixin QueueSignalMixin<T, S extends Queue<T>> on Signal<S> implements Queue<T> {
+abstract mixin class QueueSignalMixin<T, S extends Queue<T>> implements Signal<S>, Queue<T> {
   @override
   void add(T value) {
     this.value.add(value);

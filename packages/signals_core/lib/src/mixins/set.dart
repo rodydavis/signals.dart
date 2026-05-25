@@ -1,7 +1,6 @@
 import '../core/signals.dart';
 
-/// Mixin to upgrade an set signal with reactive properties
-mixin SetSignalMixin<E, T extends Set<E>> on Signal<T> implements Set<E> {
+abstract mixin class SetSignalMixin<E, T extends Set<E>> implements Signal<T>, Set<E> {
   @override
   bool add(E value) {
     final list = this.value;
