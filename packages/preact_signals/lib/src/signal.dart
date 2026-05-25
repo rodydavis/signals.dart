@@ -10,6 +10,15 @@ class Signal<T> with ReadonlySignal<T> {
   @override
   final int globalId;
 
+  @override
+  final String? name;
+
+  @override
+  final void Function()? watched;
+
+  @override
+  final void Function()? unwatched;
+
   /// Check if the value is set and not a lazy signal
   bool get isInitialized => _isInitialized;
   bool _isInitialized;
@@ -30,13 +39,20 @@ class Signal<T> with ReadonlySignal<T> {
     _isInitialized = true;
   }
 
-  Signal(this._internalValue)
-      : version = 0,
+  Signal(
+    this._internalValue, {
+    this.name,
+    this.watched,
+    this.unwatched,
+  })  : version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = true;
 
-  Signal.lazy()
-      : version = 0,
+  Signal.lazy({
+    this.name,
+    this.watched,
+    this.unwatched,
+  })  : version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = false;
 
@@ -120,7 +136,15 @@ class Signal<T> with ReadonlySignal<T> {
 /// Create a new plain signal
 Signal<T> signal<T>(
   /// The initial value for the signal
-  T value,
-) {
-  return Signal<T>(value);
+  T value, {
+  String? name,
+  void Function()? watched,
+  void Function()? unwatched,
+}) {
+  return Signal<T>(
+    value,
+    name: name,
+    watched: watched,
+    unwatched: unwatched,
+  );
 }

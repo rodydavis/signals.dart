@@ -176,5 +176,33 @@ void main() {
       final a = computed(() {});
       expect(a.brand, const Symbol('preact-signals'));
     });
+
+    test('should support name option', () {
+      final a = signal(0, name: 'counter');
+      expect(a.name, 'counter');
+
+      final b = computed(() => a.value, name: 'doubleCounter');
+      expect(b.name, 'doubleCounter');
+    });
+
+    test('should support watched and unwatched callbacks', () {
+      var watchedCalls = 0;
+      var unwatchedCalls = 0;
+      final a = signal(0,
+        watched: () => watchedCalls++,
+        unwatched: () => unwatchedCalls++,
+      );
+
+      expect(watchedCalls, 0);
+      expect(unwatchedCalls, 0);
+
+      final dispose = effect(() => a.value);
+      expect(watchedCalls, 1);
+      expect(unwatchedCalls, 0);
+
+      dispose();
+      expect(watchedCalls, 1);
+      expect(unwatchedCalls, 1);
+    });
   });
 }

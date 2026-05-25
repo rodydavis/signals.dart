@@ -32,7 +32,9 @@ class Effect with Listenable {
   @override
   int flags;
 
-  Effect(this.fn)
+  final String? name;
+
+  Effect(this.fn, {this.name})
       : flags = TRACKING,
         cleanup = null,
         globalId = ++lastGlobalId;
@@ -174,7 +176,8 @@ class Effect with Listenable {
 /// gets disposed, whichever happens first.
 void Function() effect(
   /// The effect callback
-  Function() fn,
-) {
-  return Effect(fn)();
+  Function() fn, {
+  String? name,
+}) {
+  return Effect(fn, name: name)();
 }

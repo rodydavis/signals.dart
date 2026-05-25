@@ -18,6 +18,15 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   final int globalId;
 
   @override
+  final String? name;
+
+  @override
+  final void Function()? watched;
+
+  @override
+  final void Function()? unwatched;
+
+  @override
   Node? sources;
 
   @internal
@@ -45,8 +54,12 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
     _isInitialized = true;
   }
 
-  Computed(this.fn)
-      : internalGlobalVersion = globalVersion - 1,
+  Computed(
+    this.fn, {
+    this.name,
+    this.watched,
+    this.unwatched,
+  })  : internalGlobalVersion = globalVersion - 1,
         flags = OUTDATED,
         version = 0,
         globalId = ++lastGlobalId;
@@ -182,7 +195,15 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
 /// updated when any signals accessed from within the callback function change.
 ReadonlySignal<T> computed<T>(
   /// The effect callback.
-  T Function() fn,
-) {
-  return Computed<T>(fn);
+  T Function() fn, {
+  String? name,
+  void Function()? watched,
+  void Function()? unwatched,
+}) {
+  return Computed<T>(
+    fn,
+    name: name,
+    watched: watched,
+    unwatched: unwatched,
+  );
 }

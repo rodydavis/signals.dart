@@ -5,6 +5,7 @@ import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
 import 'signal.dart';
+import 'untracked.dart';
 
 /// An interface for read-only signals.
 mixin class ReadonlySignal<T> {
@@ -13,6 +14,15 @@ mixin class ReadonlySignal<T> {
 
   /// Compute the current value
   T get value => throw UnimplementedError();
+
+  /// The name of the signal for debugging purposes.
+  String? get name => null;
+
+  /// Callback called when the signal goes from 0 to >=1 listeners.
+  void Function()? get watched => null;
+
+  /// Callback called when the signal goes from >=1 to 0 listeners.
+  void Function()? get unwatched => null;
 
   @internal
   T get internalValue => throw UnimplementedError();
@@ -75,6 +85,10 @@ mixin class ReadonlySignal<T> {
       node.nextTarget = signal.targets;
       if (signal.targets != null) {
         signal.targets!.prevTarget = node;
+      } else {
+        untracked(() {
+          signal.watched?.call();
+        });
       }
       signal.targets = node;
     }
@@ -223,6 +237,11 @@ mixin class ReadonlySignal<T> {
       }
       if (node == signal.targets) {
         signal.targets = next;
+        if (next == null) {
+          untracked(() {
+            signal.unwatched?.call();
+          });
+        }
       }
     }
   }
