@@ -11,6 +11,15 @@
 ehthumbs.db
 Thumbs.db
 .vscode/
+.vscode
+.vscode-test-web/
+.vscode-test-web
+.fvm/
+.fvm
+.idx/
+.idx
+.guides/
+.guides
 .idea/
 *.swp
 *.swo

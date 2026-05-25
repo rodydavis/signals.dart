@@ -6,7 +6,7 @@ Welcome to the `signals.dart` monorepo, a high-performance reactivity ecosystem 
 
 This project is managed with [Melos](https://melos.invertase.dev/) and follows a modular architecture.
 
-### [packages/](file:///Users/rodydavis/Developer/signals.dart/packages/CONTEXT.md)
+### [packages/](file:///Users/rodydavis/dev/signals.dart/packages/CONTEXT.md)
 The core library ecosystem.
 - **`preact_signals`**: The low-level internal reactivity engine.
 - **`signals_core`**: The primary Dart API with advanced types and extensions.
@@ -16,16 +16,16 @@ The core library ecosystem.
 - **`signals_hooks`**: Integration for `flutter_hooks` users.
 - **`signals_devtools_extension`**: Inspector for the Flutter DevTools.
 
-### [examples/](file:///Users/rodydavis/Developer/signals.dart/examples/CONTEXT.md)
+### [examples/](file:///Users/rodydavis/dev/signals.dart/examples/CONTEXT.md)
 A broad collection of sample projects:
 - **Flutter**: Counter, Shopping Cart, Infinite Scroll, Animations.
 - **Pure Dart**: CLI examples, integration with code generation.
 - **Experimental**: HTML Canvas, Node-based editors.
 
 ### Supporting Directories
-- **[scripts/](file:///Users/rodydavis/Developer/signals.dart/scripts/)**: Automation for project maintenance and documentation.
-- **[website/](file:///Users/rodydavis/Developer/signals.dart/website/)**: Source code for the [dartsignals.dev](https://dartsignals.dev) documentation.
-- **[benchmark/](file:///Users/rodydavis/Developer/signals.dart/benchmark/)**: Performance comparison suites.
+- **[scripts/](file:///Users/rodydavis/dev/signals.dart/scripts/)**: Automation for project maintenance and documentation.
+- **[website/](file:///Users/rodydavis/dev/signals.dart/website/)**: Source code for the [dartsignals.dev](https://dartsignals.dev) documentation.
+- **[benchmark/](file:///Users/rodydavis/dev/signals.dart/benchmark/)**: Performance comparison suites.
 
 ## Core Philosophies
 

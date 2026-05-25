@@ -15,13 +15,13 @@ A micro-library for high-performance reactivity, ported from Preact.js Signals t
 
 ## Directory Structure
 
-### [lib/](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/lib/CONTEXT.md)
+### [lib/](file:///Users/rodydavis/dev/signals.dart/packages/preact_signals/lib/CONTEXT.md)
 The public API for the engine.
-- **[src/](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/lib/src/CONTEXT.md)**: The internal "Pulse" reactivity algorithm.
+- **[src/](file:///Users/rodydavis/dev/signals.dart/packages/preact_signals/lib/src/CONTEXT.md)**: The internal reactivity algorithm.
 
-### [test/](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/test/)
+### [test/](file:///Users/rodydavis/dev/signals.dart/packages/preact_signals/test/)
 Comprehensive unit tests for the core engine behavior, including edge cases for dependency cycles and nested batches.
 
 ## Usage
 
-This package is intended for low-level usage or as a foundation for other libraries. For general application development, it is recommended to use **[signals_core](file:///Users/rodydavis/Developer/signals.dart/packages/signals_core/CONTEXT.md)** which provides more ergonomic Dart extensions.
+This package is intended for low-level usage or as a foundation for other libraries. For general application development, it is recommended to use **[signals_core](file:///Users/rodydavis/dev/signals.dart/packages/signals_core/CONTEXT.md)** which provides more ergonomic Dart extensions.
