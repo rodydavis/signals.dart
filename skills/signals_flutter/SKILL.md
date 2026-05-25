@@ -7,6 +7,21 @@ description: Highly optimized Flutter UI bindings and GPU rendering for reactive
 
 This skill covers optimizing Flutter UI bindings, element-level reactive tracking, and high-frequency rendering utilizing the `signals_flutter` package.
 
+## Related Documentation & Items
+
+### Widgets
+| Related File | Description |
+|---|---|
+| [signal_builder.md](widgets/signal_builder.md) | Localized subtree rebuilding widget utilizing the named `builder` callback signature. |
+| [signal_widget.md](widgets/signal_widget.md) | Component-level reactive stateless/stateful widgets resolving SignalsMixin deprecations. |
+| [signal_effect.md](widgets/signal_effect.md) | Layout-safe side effect orchestrator mapping trigger events (e.g. snackbars, dialogs, routes) cleanly. |
+| [signal_custom_paint.md](widgets/signal_custom_paint.md) | Ultra-high performance GPU render box bypass painting canvas operations at 120 FPS. |
+
+### Extensions
+| Related File | Description |
+|---|---|
+| [watch.md](extensions/watch.md) | Dynamic VM Expando element-level tracking context extensions supporting automatic teardowns. |
+
 ---
 
 ## 1. Widget Rebuild Optimization

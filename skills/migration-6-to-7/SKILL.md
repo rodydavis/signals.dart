@@ -7,6 +7,16 @@ description: Detailed guidelines, patterns, and rules for migrating codebases fr
 
 This guide provides comprehensive instructions for migrating applications and packages using `signals.dart` from version 6.x to 7.0.0.
 
+## Related Documentation & Items
+
+| Related File | Description |
+|---|---|
+| [signal_options.md](options/signal_options.md) | Guide to migrating scattered parameters (e.g. `autoDispose`, `debugLabel`) of `signal` and `computed` creators to the new unified options classes. |
+| [async_options.md](options/async_options.md) | Guidelines for migrating asynchronous signal creators (`futureSignal`, `streamSignal`) to use `AsyncSignalOptions`. |
+| [collection_options.md](options/collection_options.md) | Instructions on migrating collection-based signal creators to strongly typed collection options classes. |
+| [builder_migration.md](widgets/builder_migration.md) | Migration path for `SignalBuilder` constructor to use the required named `builder` parameter. |
+| [mixin_migration.md](widgets/mixin_migration.md) | Safe refactoring guidelines for replacing the deprecated `SignalsMixin` with `SignalWidget` or localized builders. |
+
 ---
 
 ## 1. Unified Options Classes (Named Parameter Pattern)

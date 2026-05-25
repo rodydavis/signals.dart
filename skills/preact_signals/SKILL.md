@@ -7,6 +7,16 @@ description: Core reactive programming best practices and primitive definitions 
 
 This skill covers the core reactive programming primitives and implementation patterns of the `preact_signals` package.
 
+## Related Documentation & Items
+
+| Related File | Description |
+|---|---|
+| [signal.md](core/signal.md) | Standard writeable reactive state primitive containing value accessors, mutation mechanics, and basic custom options. |
+| [computed.md](core/computed.md) | Lazy, memoized read-only derived state signal tracking reactive dependencies dynamically. |
+| [effect.md](core/effect.md) | Synchronous observer managing active subscription loops, dynamic dependency updates, and lifecycle teardown. |
+| [readonly.md](core/readonly.md) | Read-only signal views ensuring unidirectional data access flows. |
+| [batch.md](core/batch.md) | Transactional state mutation blocks optimizing reactive computations and preventing rendering/recompute churn. |
+
 ---
 
 ## 1. Core Primitives
