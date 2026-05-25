@@ -50,6 +50,7 @@ yarn-error.log*
 .packages
 .pub-cache/
 .pub/
-/build/
+build/
+coverage/
 *.flutter-plugins
 *.flutter-plugins-dependencies
