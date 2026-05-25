@@ -38,8 +38,8 @@ jobs:
       # Optional: Add testing/linting checks before attempting release
       - name: Run Quality Checks
         run: |
-          melos exec -- dart analyze
-          melos exec -- dart test
+          melos run analyze
+          melos run test
 
       - name: Dry-Run Publication Validation
         run: melos publish --dry-run

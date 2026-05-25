@@ -4,6 +4,22 @@ packages:
   - examples/*
   - packages/*
 
+scripts:
+  analyze:
+    exec: dart analyze .
+  test:dart:
+    exec: dart test
+    packageFilters:
+      dirExists: test
+      flutter: false
+  test:flutter:
+    exec: flutter test
+    packageFilters:
+      dirExists: test
+      flutter: true
+  test:
+    run: melos run test:dart --no-select && melos run test:flutter --no-select
+
 command:
   bootstrap:
     usePubspecOverrides: false
