@@ -242,5 +242,56 @@ void main() {
 
       myCounter.dispose();
     });
+
+    test('SignalModelOptions copyWith, equality, and hashCode', () {
+      const options1 = SignalModelOptions(name: 'model1', wrapInAction: true);
+      final options2 = options1.copyWith(name: 'model2');
+
+      expect(options2.name, 'model2');
+      expect(options2.wrapInAction, true);
+
+      const options3 = SignalModelOptions(name: 'model1', wrapInAction: true);
+      expect(options1, equals(options3));
+      expect(options1.hashCode, equals(options3.hashCode));
+      expect(options1, isNot(equals(options2)));
+    });
+
+    test('SignalModel []= operator works for Map values', () {
+      final modelConstructor = createModel(() => <String, dynamic>{'x': 1});
+      final model = modelConstructor();
+
+      expect(model['x'], 1);
+      model['x'] = 2;
+      expect(model['x'], 2);
+
+      model['y'] = 'newVal';
+      expect(model['y'], 'newVal');
+
+      model.dispose();
+    });
+
+    test('SignalModel [] operator returns null if value is not a Map', () {
+      final modelConstructor = createModel(() => 'not-a-map');
+      final model = modelConstructor();
+
+      expect(model['key'], isNull);
+
+      // Setting dynamic subscript on non-map should do nothing without crashing
+      model['key'] = 'val';
+      expect(model['key'], isNull);
+
+      model.dispose();
+    });
+
+    test('SignalModel fallback cast works for mismatched generic types', () {
+      final modelConstructor = createModel<Map<String, Function>>(() {
+        return <String, Function>{
+          'increment': () {},
+        };
+      });
+      final model = modelConstructor();
+      expect(model.value, isA<Map>());
+      model.dispose();
+    });
   });
 }

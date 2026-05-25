@@ -35,7 +35,7 @@ To upgrade the pinned submodule version:
    ```
 4. Return to the root workspace directory and stage the updated submodule pointer:
    ```bash
-   cd ../..
+   cd ...
    git add third_party/preactjs_signals
    ```
 
@@ -44,8 +44,8 @@ To upgrade the pinned submodule version:
 ## 2. Reviewing Upstream Core Architecture Changes
 
 Once the submodule is checked out to the new version, review the differences inside Preact's TypeScript core codebase:
-* Core Primitive File: [third_party/preactjs_signals/packages/core/src/index.ts](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/third_party/preactjs_signals/packages/core/src/index.ts)
-* Test Suite File: [third_party/preactjs_signals/packages/core/test/index.test.ts](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/third_party/preactjs_signals/packages/core/test/index.test.ts)
+* Core Primitive File: [third_party/preactjs_signals/packages/core/src/index.ts](third_party/preactjs_signals/packages/core/src/index.ts)
+* Test Suite File: [third_party/preactjs_signals/packages/core/test/index.test.ts](third_party/preactjs_signals/packages/core/test/index.test.ts)
 
 Compare changes to locate:
 1. **Algorithmic Optimizations**: Refinements in graph tracking, batch processing, or lazy evaluation cycles.
@@ -60,17 +60,17 @@ All ported logic must reside in the `packages/preact_signals` package.
 
 ### A. Code Synchronization
 Modify the corresponding Dart implementation files to accurately align with the updated Preact JS algorithms:
-* Core Signal Primitive: [packages/preact_signals/lib/src/signal.dart](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/packages/preact_signals/lib/src/signal.dart)
-* Computed Engine: [packages/preact_signals/lib/src/computed.dart](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/packages/preact_signals/lib/src/computed.dart)
-* Effect Engine: [packages/preact_signals/lib/src/effect.dart](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/packages/preact_signals/lib/src/effect.dart)
-* Batch Execution: [packages/preact_signals/lib/src/batch.dart](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/packages/preact_signals/lib/src/batch.dart)
+* Core Signal Primitive: [packages/preact_signals/lib/src/signal.dart](packages/preact_signals/lib/src/signal.dart)
+* Computed Engine: [packages/preact_signals/lib/src/computed.dart](packages/preact_signals/lib/src/computed.dart)
+* Effect Engine: [packages/preact_signals/lib/src/effect.dart](packages/preact_signals/lib/src/effect.dart)
+* Batch Execution: [packages/preact_signals/lib/src/batch.dart](packages/preact_signals/lib/src/batch.dart)
 
 > [!IMPORTANT]
 > Keep the Dart implementation highly semantic and idiomatic. While replicating Preact's structural logic is necessary to preserve reactive correctness and avoid cycles, leverage Dart's language features (such as `late` initializers, `WeakReference`, `Expando`, or `Extension types`) appropriately.
 
 ### B. Porting Upstream Tests
 Ensure any new test cases introduced in Preact core's test suite are ported to:
-* [packages/preact_signals/test/](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/packages/preact_signals/test/)
+* [packages/preact_signals/test/](packages/preact_signals/test/)
 
 ---
 
@@ -78,8 +78,8 @@ Ensure any new test cases introduced in Preact core's test suite are ported to:
 
 When changes are ported, increment package versions and document changes.
 
-1. **Semantic Versioning**: Increase the version in [packages/preact_signals/pubspec.yaml](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/packages/preact_signals/pubspec.yaml) based on whether changes are major (breaking changes), minor (features), or patch (bug fixes).
-2. **Changelog Documentation**: Document all changes and the specific upstream version tag synced in [packages/preact_signals/CHANGELOG.md](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework/packages/preact_signals/CHANGELOG.md).
+1. **Semantic Versioning**: Increase the version in [packages/preact_signals/pubspec.yaml](packages/preact_signals/pubspec.yaml) based on whether changes are major (breaking changes), minor (features), or patch (bug fixes).
+2. **Changelog Documentation**: Document all changes and the specific upstream version tag synced in [packages/preact_signals/CHANGELOG.md](packages/preact_signals/CHANGELOG.md).
 
 ---
 
