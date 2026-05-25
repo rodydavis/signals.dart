@@ -3,11 +3,13 @@ abstract class SignalOptionsBase {
   /// The name for debugging purposes.
   final String? name;
 
+  /// Creates a new [SignalOptionsBase] instance.
   const SignalOptionsBase({this.name});
 }
 
 /// Configuration options for reactive [Effect]s.
 class EffectOptions extends SignalOptionsBase {
+  /// Creates a new [EffectOptions] instance.
   const EffectOptions({super.name});
 }
 
@@ -19,6 +21,7 @@ class ReadonlySignalOptions<T> extends SignalOptionsBase {
   /// Callback called when the signal goes from >=1 to 0 listeners.
   final void Function()? unwatched;
 
+  /// Creates a new [ReadonlySignalOptions] instance.
   const ReadonlySignalOptions({
     super.name,
     this.watched,
@@ -28,6 +31,7 @@ class ReadonlySignalOptions<T> extends SignalOptionsBase {
 
 /// Configuration options for a [Signal].
 class SignalOptions<T> extends ReadonlySignalOptions<T> {
+  /// Creates a new [SignalOptions] instance.
   const SignalOptions({
     super.name,
     super.watched,
@@ -37,6 +41,7 @@ class SignalOptions<T> extends ReadonlySignalOptions<T> {
 
 /// Configuration options for a [Computed] signal.
 class ComputedOptions<T> extends ReadonlySignalOptions<T> {
+  /// Creates a new [ComputedOptions] instance.
   const ComputedOptions({
     super.name,
     super.watched,
