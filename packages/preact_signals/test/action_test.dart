@@ -244,6 +244,82 @@ void main() {
       ext2('1', '2');
       expect(a.value, '1 2');
 
+      final ext3 = ((String x, String y, String z) {
+        a.value = '$x $y $z';
+      }).action;
+      ext3('1', '2', '3');
+      expect(a.value, '1 2 3');
+
+      final ext4 = ((String w, String x, String y, String z) {
+        a.value = '$w $x $y $z';
+      }).action;
+      ext4('1', '2', '3', '4');
+      expect(a.value, '1 2 3 4');
+
+      final ext5 = ((String v, String w, String x, String y, String z) {
+        a.value = '$v $w $x $y $z';
+      }).action;
+      ext5('1', '2', '3', '4', '5');
+      expect(a.value, '1 2 3 4 5');
+
+      final ext6 = ((
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
+        a.value = '$u $v $w $x $y $z';
+      }).action;
+      ext6('1', '2', '3', '4', '5', '6');
+      expect(a.value, '1 2 3 4 5 6');
+
+      final ext7 = ((
+        String t,
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
+        a.value = '$t $u $v $w $x $y $z';
+      }).action;
+      ext7('1', '2', '3', '4', '5', '6', '7');
+      expect(a.value, '1 2 3 4 5 6 7');
+
+      final ext8 = ((
+        String s,
+        String t,
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
+        a.value = '$s $t $u $v $w $x $y $z';
+      }).action;
+      ext8('1', '2', '3', '4', '5', '6', '7', '8');
+      expect(a.value, '1 2 3 4 5 6 7 8');
+
+      final ext9 = ((
+        String r,
+        String s,
+        String t,
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
+        a.value = '$r $s $t $u $v $w $x $y $z';
+      }).action;
+      ext9('1', '2', '3', '4', '5', '6', '7', '8', '9');
+      expect(a.value, '1 2 3 4 5 6 7 8 9');
+
       final ext10 = ((
         String v1,
         String v2,
@@ -260,6 +336,102 @@ void main() {
       }).action;
       ext10('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
       expect(a.value, '1 2 3 4 5 6 7 8 9 10');
+    });
+
+    test('dynamic action() wrapper should cover all arities from 0 to 10', () {
+      final a = signal('a');
+
+      final act0 = action(() {
+        a.value = '0';
+      });
+      act0();
+      expect(a.value, '0');
+
+      final act1 = action((String x) {
+        a.value = x;
+      });
+      act1('1');
+      expect(a.value, '1');
+
+      final act2 = action((String x, String y) {
+        a.value = '$x $y';
+      });
+      act2('1', '2');
+      expect(a.value, '1 2');
+
+      final act3 = action((String x, String y, String z) {
+        a.value = '$x $y $z';
+      });
+      act3('1', '2', '3');
+      expect(a.value, '1 2 3');
+
+      final act4 = action((String w, String x, String y, String z) {
+        a.value = '$w $x $y $z';
+      });
+      act4('1', '2', '3', '4');
+      expect(a.value, '1 2 3 4');
+
+      final act5 = action((String v, String w, String x, String y, String z) {
+        a.value = '$v $w $x $y $z';
+      });
+      act5('1', '2', '3', '4', '5');
+      expect(a.value, '1 2 3 4 5');
+
+      final act6 = action((String u, String v, String w, String x, String y, String z) {
+        a.value = '$u $v $w $x $y $z';
+      });
+      act6('1', '2', '3', '4', '5', '6');
+      expect(a.value, '1 2 3 4 5 6');
+
+      final act7 = action((String t, String u, String v, String w, String x, String y, String z) {
+        a.value = '$t $u $v $w $x $y $z';
+      });
+      act7('1', '2', '3', '4', '5', '6', '7');
+      expect(a.value, '1 2 3 4 5 6 7');
+
+      final act8 = action((String s, String t, String u, String v, String w, String x, String y, String z) {
+        a.value = '$s $t $u $v $w $x $y $z';
+      });
+      act8('1', '2', '3', '4', '5', '6', '7', '8');
+      expect(a.value, '1 2 3 4 5 6 7 8');
+
+      final act9 = action((String r, String s, String t, String u, String v, String w, String x, String y, String z) {
+        a.value = '$r $s $t $u $v $w $x $y $z';
+      });
+      act9('1', '2', '3', '4', '5', '6', '7', '8', '9');
+      expect(a.value, '1 2 3 4 5 6 7 8 9');
+
+      final act10 = action((
+        String q,
+        String r,
+        String s,
+        String t,
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
+        a.value = '$q $r $s $t $u $v $w $x $y $z';
+      });
+      act10('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
+      expect(a.value, '1 2 3 4 5 6 7 8 9 10');
+
+      final act11 = (
+        String a,
+        String b,
+        String c,
+        String d,
+        String e,
+        String f,
+        String g,
+        String h,
+        String i,
+        String j,
+        String k,
+      ) {};
+      expect(action(act11), act11);
     });
   });
 }
