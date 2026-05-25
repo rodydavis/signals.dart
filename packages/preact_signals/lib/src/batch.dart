@@ -116,7 +116,7 @@ T batch<T>(
     return fn();
   }
   currentBatchSnapshotVersion = ++batchSnapshotVersion;
-  /*@__INLINE__**/ startBatch();
+  startBatch();
   try {
     return fn();
   } finally {

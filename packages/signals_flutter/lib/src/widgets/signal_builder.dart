@@ -16,15 +16,11 @@ class SignalBuilder extends SignalWidget {
   const SignalBuilder({
     super.key,
     required this.builder,
-    this.debugLabel,
     this.dependencies = const [],
   });
 
   /// The widget to rebuild when any signals change.
   final Widget Function(BuildContext context) builder;
-
-  /// Optional debug label to use for devtools.
-  final String? debugLabel;
 
   /// List of optional dependencies to watch.
   final List<core.ReadonlySignal<dynamic>> dependencies;

@@ -82,7 +82,6 @@ class Watch<T extends Widget> extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignalBuilder(
       dependencies: dependencies,
-      debugLabel: debugLabel,
       builder: builder,
     );
   }

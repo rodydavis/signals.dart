@@ -1,5 +1,6 @@
 import 'batch.dart';
 import 'untracked.dart';
+import 'options.dart';
 
 class _Sentinel {
   const _Sentinel();
@@ -9,7 +10,7 @@ class _Sentinel {
 ///
 /// When the returned function is called, it executes the original function
 /// inside a [batch] and [untracked] block.
-Function action(Function fn) {
+Function action(Function fn, {ActionOptions? options}) {
   return ([
     Object? a0 = const _Sentinel(),
     Object? a1 = const _Sentinel(),
@@ -34,16 +35,17 @@ Function action(Function fn) {
 }
 
 /// Wraps a 0-argument callback function in a type-safe action.
-R Function() action0<R>(R Function() fn) {
+R Function() action0<R>(R Function() fn, {ActionOptions? options}) {
   return () => batch(() => untracked(fn));
 }
 
 /// Wraps a 1-argument callback function in a type-safe action.
-R Function(A) action1<A, R>(R Function(A) fn) {
+R Function(A) action1<A, R>(R Function(A) fn, {ActionOptions? options}) {
   return (a) => batch(() => untracked(() => fn(a)));
 }
 
 /// Wraps a 2-argument callback function in a type-safe action.
-R Function(A, B) action2<A, B, R>(R Function(A, B) fn) {
+R Function(A, B) action2<A, B, R>(R Function(A, B) fn,
+    {ActionOptions? options}) {
   return (a, b) => batch(() => untracked(() => fn(a, b)));
 }

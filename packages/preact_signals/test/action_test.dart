@@ -83,5 +83,32 @@ void main() {
       expect(a.value, 'yy');
       expect(b.value, 'zz');
     });
+
+    test('should accept options parameter', () {
+      final a = signal('a');
+      final myAction = action((String val) {
+        a.value = val;
+      }, options: const ActionOptions(name: 'my-action'));
+      myAction('opt');
+      expect(a.value, 'opt');
+
+      final myAction0 = action0(() {
+        a.value = 'opt0';
+      }, options: const ActionOptions(name: 'my-action0'));
+      myAction0();
+      expect(a.value, 'opt0');
+
+      final myAction1 = action1((String val) {
+        a.value = val;
+      }, options: const ActionOptions(name: 'my-action1'));
+      myAction1('opt1');
+      expect(a.value, 'opt1');
+
+      final myAction2 = action2((String val1, String val2) {
+        a.value = '$val1 $val2';
+      }, options: const ActionOptions(name: 'my-action2'));
+      myAction2('opt2', 'opt2b');
+      expect(a.value, 'opt2 opt2b');
+    });
   });
 }
