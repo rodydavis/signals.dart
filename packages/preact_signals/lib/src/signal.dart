@@ -146,7 +146,7 @@ class Signal<T> with ReadonlySignal<T> {
 Signal<T> signal<T>(
   /// The initial value for the signal
   T value, [
-  ReadonlySignalOptions<T>? options,
+  SignalOptions<T>? options,
 ]) {
   return Signal<T>(
     value,

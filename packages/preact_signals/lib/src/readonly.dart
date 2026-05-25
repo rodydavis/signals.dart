@@ -254,5 +254,5 @@ ReadonlySignal<T> readonly<T>(
   T value, [
   ReadonlySignalOptions<T>? options,
 ]) {
-  return signal<T>(value, options);
+  return Signal<T>(value, options: options);
 }
