@@ -188,6 +188,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
     String? debugLabel,
   })  : _fn = fn,
         dependencies = options?.dependencies ?? dependencies ?? const [],
+        _computedFuture = computed(() => fn()),
         super(
           (options?.initialValue ?? initialValue) != null
               ? AsyncState.data((options?.initialValue ?? initialValue) as T)
@@ -198,7 +199,6 @@ class FutureSignal<T> extends AsyncSignal<T> {
                 name: debugLabel,
               ),
         ) {
-    _computedFuture = computed(() => _fn());
     if (!(options?.lazy ?? lazy ?? true)) value;
   }
 

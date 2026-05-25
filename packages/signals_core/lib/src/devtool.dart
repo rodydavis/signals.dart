@@ -110,7 +110,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         'label': instance.debugLabel,
         'sources': sources.join(','),
         'targets': targets.join(','),
-        'value': instance.peek()?.toString(),
+        'value': instance.isInitialized ? instance.peek()?.toString() : null,
         'type': 'computed',
       };
     });
@@ -153,7 +153,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'value': instance.peek()?.toString(),
+        'value': instance.isInitialized ? instance.peek()?.toString() : null,
         'targets': targets.join(','),
         'type': 'signal',
       };
