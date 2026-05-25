@@ -24,14 +24,25 @@ void main() {
       expect(b.value, 'bb');
     });
 
-    test('should support up to 6 positional arguments without Function.apply', () {
+    test('should support up to 10 positional arguments without Function.apply', () {
       final a = signal(0);
-      final myAction = action((int a1, int a2, int a3, int a4, int a5, int a6) {
-        a.value = a1 + a2 + a3 + a4 + a5 + a6;
+      final myAction = action((
+        int a1,
+        int a2,
+        int a3,
+        int a4,
+        int a5,
+        int a6,
+        int a7,
+        int a8,
+        int a9,
+        int a10,
+      ) {
+        a.value = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10;
       });
 
-      myAction(1, 2, 3, 4, 5, 6);
-      expect(a.value, 21);
+      myAction(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+      expect(a.value, 55);
     });
 
     test('action0 should wrap a 0-argument function type-safely', () {
@@ -87,7 +98,12 @@ void main() {
 
     test('action4 should wrap a 4-argument function type-safely', () {
       final a = signal('a');
-      final myAction4 = action4((String val1, String val2, String val3, String val4) {
+      final myAction4 = action4((
+        String val1,
+        String val2,
+        String val3,
+        String val4,
+      ) {
         a.value = '$val1 $val2 $val3 $val4';
       });
 
@@ -97,7 +113,13 @@ void main() {
 
     test('action5 should wrap a 5-argument function type-safely', () {
       final a = signal('a');
-      final myAction5 = action5((String val1, String val2, String val3, String val4, String val5) {
+      final myAction5 = action5((
+        String val1,
+        String val2,
+        String val3,
+        String val4,
+        String val5,
+      ) {
         a.value = '$val1 $val2 $val3 $val4 $val5';
       });
 
@@ -107,12 +129,98 @@ void main() {
 
     test('action6 should wrap a 6-argument function type-safely', () {
       final a = signal('a');
-      final myAction6 = action6((String val1, String val2, String val3, String val4, String val5, String val6) {
+      final myAction6 = action6((
+        String val1,
+        String val2,
+        String val3,
+        String val4,
+        String val5,
+        String val6,
+      ) {
         a.value = '$val1 $val2 $val3 $val4 $val5 $val6';
       });
 
       myAction6('1', '2', '3', '4', '5', '6');
       expect(a.value, '1 2 3 4 5 6');
+    });
+
+    test('action7 should wrap a 7-argument function type-safely', () {
+      final a = signal('a');
+      final myAction7 = action7((
+        String val1,
+        String val2,
+        String val3,
+        String val4,
+        String val5,
+        String val6,
+        String val7,
+      ) {
+        a.value = '$val1 $val2 $val3 $val4 $val5 $val6 $val7';
+      });
+
+      myAction7('1', '2', '3', '4', '5', '6', '7');
+      expect(a.value, '1 2 3 4 5 6 7');
+    });
+
+    test('action8 should wrap an 8-argument function type-safely', () {
+      final a = signal('a');
+      final myAction8 = action8((
+        String val1,
+        String val2,
+        String val3,
+        String val4,
+        String val5,
+        String val6,
+        String val7,
+        String val8,
+      ) {
+        a.value = '$val1 $val2 $val3 $val4 $val5 $val6 $val7 $val8';
+      });
+
+      myAction8('1', '2', '3', '4', '5', '6', '7', '8');
+      expect(a.value, '1 2 3 4 5 6 7 8');
+    });
+
+    test('action9 should wrap a 9-argument function type-safely', () {
+      final a = signal('a');
+      final myAction9 = action9((
+        String val1,
+        String val2,
+        String val3,
+        String val4,
+        String val5,
+        String val6,
+        String val7,
+        String val8,
+        String val9,
+      ) {
+        a.value = '$val1 $val2 $val3 $val4 $val5 $val6 $val7 $val8 $val9';
+      });
+
+      myAction9('1', '2', '3', '4', '5', '6', '7', '8', '9');
+      expect(a.value, '1 2 3 4 5 6 7 8 9');
+    });
+
+    test('action10 should wrap a 10-argument function type-safely', () {
+      final a = signal('a');
+      final myAction10 = action10((
+        String val1,
+        String val2,
+        String val3,
+        String val4,
+        String val5,
+        String val6,
+        String val7,
+        String val8,
+        String val9,
+        String val10,
+      ) {
+        a.value =
+            '$val1 $val2 $val3 $val4 $val5 $val6 $val7 $val8 $val9 $val10';
+      });
+
+      myAction10('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
+      expect(a.value, '1 2 3 4 5 6 7 8 9 10');
     });
   });
 }
