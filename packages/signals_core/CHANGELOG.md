@@ -1,3 +1,27 @@
+## 6.3.1
+
+ - **REFACTOR**: migrate signal mixins to mixin classes.
+ - **REFACTOR**: Rename persisted signal classes to correct typo.
+ - **REFACTOR**: Formatting.
+ - **REFACTOR**: allow setting a signal value inside computed.
+ - **REFACTOR**: inline signal subscribe.
+ - **REFACTOR**: share peek() between signal/computed.
+ - **REFACTOR**: inline cycle detection.
+ - **REFACTOR**: use untracked for signal subscribe.
+ - **FIX**: map.remove - only notify when value was removed.
+ - **FIX**(signals): accessing cached `SignalContainer` in `Effect` cause loop.
+ - **FIX**(signals): accessing cached `SignalContainer` in `Effect` cause loop.
+ - **FIX**: untracked always reset evaluation context.
+ - **FIX**: #179 and add overrideWith.
+ - **FIX**: #175 - add missing autoDispose/equality on signals.
+ - **FIX**: https://github.com/rodydavis/signals.dart/issues/156.
+ - **FEAT**: Impl loading for state reloading and refreshing classes.
+ - **FEAT**: Improve async state.
+ - **FEAT**: Changed Async{Loading,Data,Error} to be const.
+ - **FEAT**: Better type safety on Connect.
+ - **DOCS**: rename _computed => _fn.
+ - **DOCS**: rename some internal API methods.
+
 ## 6.2.1
 
 - Replace benchmark with dart-reactivity-benchmark

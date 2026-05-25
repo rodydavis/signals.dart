@@ -1,3 +1,7 @@
+## 6.3.1
+
+ - **FIX**: call super.dispose in SignalHookState.
+
 ## 0.4.0
 
 - Bump signals to 6.3.0

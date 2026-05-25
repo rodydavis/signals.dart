@@ -1,3 +1,11 @@
+## 6.3.1
+
+ - **REFACTOR**: migrate signal mixins to mixin classes.
+ - **FIX**(flutter): prevent ConcurrentModificationError in SignalsMixin.
+ - **FIX**(signals_flutter): remove listener on dispose for ValueListenable.toSignal().
+ - **FIX**: resolve hashCode collision in .watchSignal.
+ - **FEAT**(signals_flutter): return FlutterSignal/-Computed from SignalsMixin.createSignal/-Computed.
+
 ## 6.3.0
 
 - Fix listener on dispose for ValueListenable.toSignal()

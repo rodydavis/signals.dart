@@ -1,3 +1,5 @@
+## 6.3.1
+
 ## 5.0.0
 
 - add `signals_avoid_create_in_build_method` to show a warning for signals created in the build method

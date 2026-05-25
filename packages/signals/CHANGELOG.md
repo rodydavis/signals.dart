@@ -1,3 +1,7 @@
+## 6.3.1
+
+ - **FIX**: Doc comment package import.
+
 ## 6.3.0
 
 - Fix accessing cached SignalContainer in Effect causing loop
