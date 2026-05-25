@@ -24,22 +24,6 @@ void main() {
       expect(b.value, 'bb');
     });
 
-    test('should support Iterable and List arguments for unlimited elements', () {
-      final a = signal(0);
-      final myActionIterable = action((Iterable<int> args) {
-        a.value = args.fold(0, (sum, val) => sum + val);
-      });
-      final myActionList = action((List<int> args) {
-        a.value = args.fold(0, (sum, val) => sum + val) * 2;
-      });
-
-      myActionIterable([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-      expect(a.value, 78);
-
-      myActionList([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-      expect(a.value, 156);
-    });
-
     test('should support up to 10 positional arguments without Function.apply', () {
       final a = signal(0);
       final myAction = action((

@@ -7,12 +7,6 @@ import 'untracked.dart';
 /// inside a [batch] and [untracked] block.
 /// Supports functions of up to 10 positional arguments.
 Function action(Function fn) => switch (fn) {
-      void Function(Iterable<Never>) _ => (Iterable args) => batch(
-            () => untracked(() => (fn as dynamic)(args)),
-          ),
-      void Function(List<Never>) _ => (List args) => batch(
-            () => untracked(() => (fn as dynamic)(args)),
-          ),
       void Function() _ => () => batch(
             () => untracked(() => (fn as dynamic)()),
           ),
