@@ -33,24 +33,14 @@ void main() {
       expect(a.value, 'opt');
     });
 
-    test('should support up to 10 positional arguments', () {
+    test('should support up to 6 positional arguments without Function.apply', () {
       final a = signal(0);
-      final myAction = action((int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10) {
-        a.value = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10;
+      final myAction = action((int a1, int a2, int a3, int a4, int a5, int a6) {
+        a.value = a1 + a2 + a3 + a4 + a5 + a6;
       });
 
-      myAction(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-      expect(a.value, 55);
-    });
-
-    test('actionList should support unlimited arguments', () {
-      final a = signal(0);
-      final myAction = actionList((int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11) {
-        a.value = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11;
-      });
-
-      myAction([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-      expect(a.value, 66);
+      myAction(1, 2, 3, 4, 5, 6);
+      expect(a.value, 21);
     });
 
     test('toAction extensions should be type-safe and run in batch/untracked', () {
@@ -124,16 +114,6 @@ void main() {
 
       myAction6('1', '2', '3', '4', '5', '6');
       expect(a.value, '1 2 3 4 5 6');
-    });
-
-    test('toActionList extension should support unlimited list-based arguments', () {
-      final a = signal(0);
-      final myAction = ((int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11) {
-        a.value = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11;
-      }).toActionList();
-
-      myAction([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-      expect(a.value, 66);
     });
   });
 }
