@@ -2,75 +2,106 @@
 import 'package:preact_signals/preact_signals.dart';
 import 'package:test/test.dart';
 
-class CounterModel {
-  final count = signal(0);
-  int runCount = 0;
+class MutableInt {
+  int value;
+  MutableInt(this.value);
 
-  CounterModel() {
-    effect(() {
-      runCount = runCount + 1;
-      // read count.value to establish dependency
-      count.value;
-    });
-  }
+  @override
+  String toString() => value.toString();
 }
 
-extension type TypeSafeCounterModel(SignalModel<CounterModel> _model) {
-  int get runCount => _model.value.runCount;
-  int get count => _model.value.count.value;
-  set count(int val) => _model.value.count.value = val;
+extension type TypeSafeCounterModel(SignalModel<Map<String, dynamic>> _model) {
+  /// Access the run count.
+  int get runCount => (_model['runCount'] as MutableInt).value;
 
+  /// Access the count value.
+  int get count => (_model['count'] as Signal<int>).value;
+
+  /// Set the count value.
+  set count(int val) => (_model['count'] as Signal<int>).value = val;
+
+  /// Dispose of the model.
   void dispose() => _model.dispose();
 }
 
 void main() {
   group('createModel', () {
-    test('should capture newly constructed effects using callable constructor',
-        () {
-      final CounterModelConstructor = createModel(() => CounterModel());
+    test('should capture newly constructed effects using callable constructor', () {
+      final CounterModelConstructor = createModel(() {
+        final count = signal(0);
+        final runCount = MutableInt(0);
+        effect(() {
+          runCount.value++;
+          count.value;
+        });
+        return <String, dynamic>{
+          'count': count,
+          'runCount': runCount,
+        };
+      });
       final model = CounterModelConstructor();
 
-      expect(model.value.runCount, 1);
+      expect((model['runCount'] as MutableInt).value, 1);
 
-      model.value.count.value = 1;
-      expect(model.value.runCount, 2);
+      (model['count'] as Signal<int>).value = 1;
+      expect((model['runCount'] as MutableInt).value, 2);
 
       model.dispose();
 
-      model.value.count.value = 2;
-      expect(model.value.runCount,
-          2); // Should not rerun since effect is disposed!
+      (model['count'] as Signal<int>).value = 2;
+      expect((model['runCount'] as MutableInt).value, 2); // Should not rerun since effect is disposed!
     });
 
     test('should correctly isolate nested models without leakage', () {
       final OuterModel = createModel(() {
-        final InnerModel = createModel(() => CounterModel());
+        final InnerModel = createModel(() {
+          final count = signal(0);
+          final runCount = MutableInt(0);
+          effect(() {
+            runCount.value++;
+            count.value;
+          });
+          return <String, dynamic>{
+            'count': count,
+            'runCount': runCount,
+          };
+        });
         final inner = InnerModel();
-        final counter = CounterModel();
+
+        final count = signal(0);
+        final runCount = MutableInt(0);
+        effect(() {
+          runCount.value++;
+          count.value;
+        });
+        final counter = <String, dynamic>{
+          'count': count,
+          'runCount': runCount,
+        };
         return (inner, counter);
       });
 
       final outer = OuterModel();
       final (innerModel, outerCounter) = outer.value;
 
-      expect(innerModel.value.runCount, 1);
-      expect(outerCounter.runCount, 1);
+      expect((innerModel['runCount'] as MutableInt).value, 1);
+      expect((outerCounter['runCount'] as MutableInt).value, 1);
 
       // Trigger inner model
-      innerModel.value.count.value = 1;
-      expect(innerModel.value.runCount, 2);
-      expect(outerCounter.runCount, 1);
+      (innerModel['count'] as Signal<int>).value = 1;
+      expect((innerModel['runCount'] as MutableInt).value, 2);
+      expect((outerCounter['runCount'] as MutableInt).value, 1);
 
       // Dispose outer
       outer.dispose();
 
       // Outer counter effect should be disposed
-      outerCounter.count.value = 1;
-      expect(outerCounter.runCount, 1);
+      (outerCounter['count'] as Signal<int>).value = 1;
+      expect((outerCounter['runCount'] as MutableInt).value, 1);
 
       // Inner model effect is ALSO disposed because it was constructed inside the outer model's factory!
-      innerModel.value.count.value = 2;
-      expect(innerModel.value.runCount, 2);
+      (innerModel['count'] as Signal<int>).value = 2;
+      expect((innerModel['runCount'] as MutableInt).value, 2);
     });
 
     test('should clean up capturedEffects correctly on exceptions', () {
@@ -82,9 +113,20 @@ void main() {
       expect(() => FailModel(), throwsException);
 
       // Subsequent createModel call should succeed and not leak capturedEffects from the failed call
-      final SuccessModel = createModel(() => CounterModel());
+      final SuccessModel = createModel(() {
+        final count = signal(0);
+        final runCount = MutableInt(0);
+        effect(() {
+          runCount.value++;
+          count.value;
+        });
+        return <String, dynamic>{
+          'count': count,
+          'runCount': runCount,
+        };
+      });
       final model = SuccessModel();
-      expect(model.value.runCount, 1);
+      expect((model['runCount'] as MutableInt).value, 1);
 
       model.dispose();
     });
@@ -125,14 +167,16 @@ void main() {
     });
 
     test('should support model constructors with parameters', () {
-      final CounterWithInitial = createModel1((int initialCount) {
-        final count = signal(initialCount);
-        return <String, dynamic>{
-          'count': count,
-        };
-      });
+      SignalModel<Map<String, dynamic>> createCounterWithInitial(int initialCount) {
+        return createModel(() {
+          final count = signal(initialCount);
+          return <String, dynamic>{
+            'count': count,
+          };
+        })();
+      }
 
-      final model = CounterWithInitial(10);
+      final model = createCounterWithInitial(10);
       expect(model['count'].value, 10);
       model.dispose();
     });
@@ -172,7 +216,18 @@ void main() {
     });
 
     test('should support wrapping the model in a custom type-safe class', () {
-      final CounterModelConstructor = createModel(() => CounterModel());
+      final CounterModelConstructor = createModel(() {
+        final count = signal(0);
+        final runCount = MutableInt(0);
+        effect(() {
+          runCount.value++;
+          count.value;
+        });
+        return <String, dynamic>{
+          'count': count,
+          'runCount': runCount,
+        };
+      });
       final myCounter = TypeSafeCounterModel(CounterModelConstructor());
 
       expect(myCounter.runCount, 1);

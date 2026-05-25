@@ -31,9 +31,13 @@ class Signal<T> with ReadonlySignal<T> {
   bool get isInitialized => _isInitialized;
   bool _isInitialized;
 
+  /// @internal
+  /// The global batch snapshot version tracked during mutation cycles.
   @internal
   int batchSnapshotVersion = 0;
 
+  /// @internal
+  /// Set if the signal is initialized.
   @internal
   set isInitialized(bool val) {
     _isInitialized = val;
@@ -44,12 +48,15 @@ class Signal<T> with ReadonlySignal<T> {
   @override
   T get internalValue => _internalValue;
 
+  /// @internal
+  /// Set the internal raw value of the signal.
   @internal
   set internalValue(T value) {
     _internalValue = value;
     _isInitialized = true;
   }
 
+  /// Creates a new [Signal] instance with the given initial value.
   Signal(
     this._internalValue, {
     String? name,
@@ -68,6 +75,7 @@ class Signal<T> with ReadonlySignal<T> {
         globalId = ++lastGlobalId,
         _isInitialized = true;
 
+  /// Creates a new lazy [Signal] instance that is computed on-demand upon first read.
   Signal.lazy({
     String? name,
     void Function()? watched,
@@ -138,6 +146,8 @@ class Signal<T> with ReadonlySignal<T> {
     return false;
   }
 
+  /// @internal
+  /// Sets the internal value of the signal during batch updates.
   @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')

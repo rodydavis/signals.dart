@@ -12,6 +12,8 @@ import 'readonly.dart';
 /// The returned computed signal is read-only, and its value is automatically
 /// updated when any signals accessed from within the callback function change.
 class Computed<T> with Listenable, ReadonlySignal<T> {
+  /// @internal
+  /// The computation callback function.
   @internal
   T Function() fn;
 
@@ -27,15 +29,16 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   @override
   final void Function()? unwatched;
 
-  @override
-  Node? sources;
-
+  /// @internal
+  /// The internal global version of the computed signal.
   @internal
   int internalGlobalVersion;
 
   @override
   int flags;
 
+  /// @internal
+  /// The captured exception from the latest computation run, if any.
   @internal
   SignalEffectException? error;
 
@@ -49,12 +52,15 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   @override
   T get internalValue => _internalValue;
 
+  /// @internal
+  /// Set the internal value.
   @internal
   set internalValue(T value) {
     _internalValue = value;
     _isInitialized = true;
   }
 
+  /// Creates a new [Computed] signal instance with the computation callback [fn].
   Computed(
     this.fn, {
     String? name,

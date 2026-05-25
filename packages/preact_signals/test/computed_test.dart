@@ -424,11 +424,12 @@ void main() {
         var watched = 0;
         var unwatched = 0;
         final s = computed(
-            () => 1,
-            ComputedOptions(
-              watched: () => watched++,
-              unwatched: () => unwatched++,
-            ));
+          () => 1,
+          ComputedOptions(
+            watched: () => watched++,
+            unwatched: () => unwatched++,
+          ),
+        );
         expect(watched, 0);
         final unsubscribe = s.subscribe((_) {});
         expect(watched, 1);
@@ -445,17 +446,19 @@ void main() {
         var watched = 0;
         var unwatched = 0;
         final s = signal(
-            1,
-            SignalOptions(
-              watched: () => watched++,
-              unwatched: () => unwatched++,
-            ));
+          1,
+          SignalOptions(
+            watched: () => watched++,
+            unwatched: () => unwatched++,
+          ),
+        );
         final c = computed(
-            () => s.value + 1,
-            ComputedOptions(
-              watched: () => watched++,
-              unwatched: () => unwatched++,
-            ));
+          () => s.value + 1,
+          ComputedOptions(
+            watched: () => watched++,
+            unwatched: () => unwatched++,
+          ),
+        );
         expect(watched, 0);
         final unsubscribe = c.subscribe((_) {});
         expect(watched, 2);

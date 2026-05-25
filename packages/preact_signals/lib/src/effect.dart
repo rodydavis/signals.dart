@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
-import 'node.dart';
 import 'options.dart';
 
 /// Create an effect to run arbitrary code in response to signal changes.
@@ -15,26 +14,31 @@ import 'options.dart';
 /// run once, either when the callback is next called or when the effect
 /// gets disposed, whichever happens first.
 class Effect with Listenable {
+  /// @internal
+  /// The effect callback.
   @internal
   Function()? fn;
 
   @override
   final int globalId;
 
+  /// @internal
+  /// The cleanup callback.
   @internal
   Function? cleanup;
 
-  @override
-  Node? sources;
-
+  /// @internal
+  /// The next effect in the batched effects queue.
   @internal
   Effect? nextBatchedEffect;
 
   @override
   int flags;
 
+  /// The name of the effect for debugging.
   final String? name;
 
+  /// Creates a new [Effect] instance with the callback [fn].
   Effect(
     this.fn, {
     String? name,
@@ -48,6 +52,8 @@ class Effect with Listenable {
     }
   }
 
+  /// @internal
+  /// Executes the callback function and schedules cleanups.
   @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
@@ -68,6 +74,8 @@ class Effect with Listenable {
     }
   }
 
+  /// @internal
+  /// Starts tracking dependency subscriptions.
   @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
@@ -120,6 +128,8 @@ class Effect with Listenable {
     return dispose;
   }
 
+  /// @internal
+  /// Runs the user-defined cleanup callback if registered.
   @internal
   void cleanupEffect() {
     final effect = this;
@@ -146,6 +156,8 @@ class Effect with Listenable {
     }
   }
 
+  /// @internal
+  /// Disposes resources held by the effect.
   @internal
   void disposeEffect() {
     final effect = this;
@@ -158,6 +170,8 @@ class Effect with Listenable {
     effect.cleanupEffect();
   }
 
+  /// @internal
+  /// Concludes the current effect evaluation round and restores the evaluation context context.
   @internal
   void endEffect(Listenable? prevContext) {
     final effect = this;

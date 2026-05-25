@@ -18,7 +18,8 @@ final _finalizer = Finalizer<VoidCallback>((dispose) => dispose());
 extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// Rebuild the [Element] that the current signal is inside of.
   @Deprecated(
-      'Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.')
+    'Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.',
+  )
   T watch(
     BuildContext context, {
     String? debugLabel,
@@ -77,7 +78,8 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
 
   /// Stop subscriptions to updates on a signal for watchers.
   @Deprecated(
-      'Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.')
+    'Use implicit signal tracking in SignalWidget/SignalStatefulWidget, or localized builders like SignalBuilder/Watch instead.',
+  )
   void unwatch(BuildContext context) {
     if (context is StatefulElement) {
       final state = context.state;

@@ -158,8 +158,10 @@ void main() {
 
       // Test unlistenSignal
       state.unlistenSignal(state.sSignal, () {}); // Non-matching dummy callback
-      state.unlistenSignal(state.sSignal,
-          state.sSignal.value.toString as void Function()); // Another
+      state.unlistenSignal(
+        state.sSignal,
+        state.sSignal.value.toString as void Function(),
+      ); // Another
 
       // Test unwatch
       state.unbindSignal(state.externalSignal);

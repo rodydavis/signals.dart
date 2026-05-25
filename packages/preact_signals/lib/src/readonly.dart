@@ -25,6 +25,8 @@ mixin class ReadonlySignal<T> {
   /// Callback called when the signal goes from >=1 to 0 listeners.
   void Function()? get unwatched => null;
 
+  /// @internal
+  /// Internal getter for the raw value without subscription tracking.
   @internal
   T get internalValue => throw UnimplementedError();
 
@@ -73,12 +75,18 @@ mixin class ReadonlySignal<T> {
   void Function() subscribe(void Function(T value) fn) =>
       throw UnimplementedError();
 
+  /// @internal
+  /// Subscribes this signal to notifications from a given dependency [node].
   @internal
   void subscribeToNode(Node node) => throw UnimplementedError();
 
+  /// @internal
+  /// Unsubscribes this signal from notifications from a given dependency [node].
   @internal
   void unsubscribeFromNode(Node node) => throw UnimplementedError();
 
+  /// @internal
+  /// Internal subscription mechanism for targets.
   @internal
   void internalSubscribe(Node node) {
     final signal = this;
@@ -97,21 +105,33 @@ mixin class ReadonlySignal<T> {
 
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
+  /// @internal
+  /// The current mutation version of the signal.
   @internal
   int get version => throw UnimplementedError();
 
+  /// @internal
+  /// Node representing the dependency hook of this signal.
   @internal
   Node? node;
 
+  /// @internal
+  /// A linked list of subscription nodes pointing to targets.
   @internal
   Node? targets;
 
+  /// @internal
+  /// Refreshes the signal's value internally.
   @internal
   bool internalRefresh() => throw UnimplementedError();
 
+  /// @internal
+  /// Brand symbol to uniquely distinguish signals.
   @internal
   final Symbol brand = BRAND_SYMBOL;
 
+  /// @internal
+  /// Returns target listeners currently subscribing to this signal.
   @internal
   Iterable<Listenable> readonlySignalTargets() sync* {
     final instance = this;
@@ -120,6 +140,8 @@ mixin class ReadonlySignal<T> {
     }
   }
 
+  /// @internal
+  /// Adds this signal as a dependency of the current execution context.
   @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
@@ -204,6 +226,8 @@ mixin class ReadonlySignal<T> {
     return null;
   }
 
+  /// @internal
+  /// Registers a subscription callback [fn] on value changes.
   @internal
   void Function() signalSubscribe(
     void Function(T value) fn,
@@ -221,6 +245,8 @@ mixin class ReadonlySignal<T> {
     });
   }
 
+  /// @internal
+  /// Unregisters a subscription node.
   @internal
   void signalUnsubscribe(Node node) {
     final signal = this;

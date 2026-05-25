@@ -66,7 +66,8 @@ void main() {
               builder: (context) {
                 builderBuilds++;
                 return Text(
-                    'A: ${signalA.value}, B: ${signalB.value}, C: ${signalC.value}');
+                  'A: ${signalA.value}, B: ${signalB.value}, C: ${signalC.value}',
+                );
               },
             ),
           ),
