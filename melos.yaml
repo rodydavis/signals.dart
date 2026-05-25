@@ -7,4 +7,9 @@ packages:
 command:
   bootstrap:
     usePubspecOverrides: false
-
+  version:
+    # Generates precise changelogs based on conventional commits
+    updateGitTagRefs: true
+  publish:
+    # Explicitly targets pub.dev (or a private hosted registry)
+    registry: https://pub.dev
