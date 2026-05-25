@@ -242,13 +242,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
         cancelOnError = options?.cancelOnError ?? cancelOnError,
         dependencies = options?.dependencies ?? dependencies ?? const [],
         _stream = computed(
-          () {
-            final deps = options?.dependencies ?? dependencies ?? const [];
-            for (final dep in deps) {
-              dep.value;
-            }
-            return fn();
-          },
+          () => fn(),
         ),
         super(
           (options?.initialValue ?? initialValue) != null
@@ -269,6 +263,49 @@ class StreamSignal<T> extends AsyncSignal<T> {
   final void Function()? _onDone;
   bool _done = false;
   EffectCleanup? _cleanup;
+  EffectCleanup? _depCleanup;
+
+  EffectCleanup _listenToDeps() {
+    return untracked(() {
+      if (dependencies.isEmpty) return () {};
+      final cleanups = <void Function()>[];
+      for (final dep in dependencies) {
+        if (dep is AsyncSignal) {
+          AsyncState? prev;
+          final cleanup = dep.subscribe((val) {
+            final oldPrev = prev;
+            prev = val;
+            if (oldPrev == null) return;
+            if (oldPrev.isLoading && !val.isLoading) {
+              return;
+            }
+            if (oldPrev != val) {
+              reset();
+              execute(_stream.value);
+            }
+          });
+          cleanups.add(cleanup);
+        } else {
+          dynamic prev;
+          final cleanup = dep.subscribe((val) {
+            final oldPrev = prev;
+            prev = val;
+            if (oldPrev == null) return;
+            if (oldPrev != val) {
+              reset();
+              execute(_stream.value);
+            }
+          });
+          cleanups.add(cleanup);
+        }
+      }
+      return () {
+        for (final c in cleanups) {
+          c();
+        }
+      };
+    });
+  }
 
   /// Check if the signal is done
   bool get isDone => _done;
@@ -360,6 +397,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
   void dispose() {
     super.dispose();
     _cleanup?.call();
+    _depCleanup?.call();
     _subscription?.cancel();
   }
 
@@ -369,6 +407,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
       reset();
       execute(src);
     });
+    _depCleanup ??= _listenToDeps();
     return super.value;
   }
 

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../core/signals.dart';
 import 'signal.dart';
-import 'stream.dart';
+import 'state.dart';
 
 /// {@template future}
 /// Future signals can be created by extension or method.
@@ -88,7 +88,7 @@ import 'stream.dart';
 /// ```
 /// @link https://dartsignals.dev/async/future
 /// {@endtemplate}
-class FutureSignal<T> extends StreamSignal<T> {
+class FutureSignal<T> extends AsyncSignal<T> {
   /// {@template future}
   /// Future signals can be created by extension or method.
   ///
@@ -186,27 +186,133 @@ class FutureSignal<T> extends StreamSignal<T> {
     bool? autoDispose,
     @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
     String? debugLabel,
-  }) : super(
-          () => fn().asStream(),
-          options: (options ?? AsyncSignalOptions<T>()).copyWith(
-            initialValue: initialValue,
-            dependencies: dependencies,
-            lazy: lazy,
-            autoDispose: autoDispose,
-            name: debugLabel,
-            cancelOnError: true,
-          ),
-        );
+  })  : _fn = fn,
+        dependencies = options?.dependencies ?? dependencies ?? const [],
+        super(
+          (options?.initialValue ?? initialValue) != null
+              ? AsyncState.data((options?.initialValue ?? initialValue) as T)
+              : AsyncState.loading(),
+          options: options ??
+              AsyncSignalOptions<T>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        ) {
+    _computedFuture = computed(() => _fn());
+    if (!(options?.lazy ?? lazy ?? true)) value;
+  }
+
+  final Future<T> Function() _fn;
+
+  /// List of dependencies to recompute the future
+  final List<ReadonlySignal<dynamic>> dependencies;
+  late final Computed<Future<T>> _computedFuture;
+  Future<T>? _currentFuture;
+  EffectCleanup? _cleanup;
+  EffectCleanup? _depCleanup;
 
   @override
-  Future<void> refresh() async {
-    await super.refresh();
-    await future;
+  void dispose() {
+    super.dispose();
+    _cleanup?.call();
+    _depCleanup?.call();
+  }
+
+  void _executeFuture(Future<T> future) {
+    if (_currentFuture == future) return;
+
+    if (completer.isCompleted) {
+      completer = Completer<bool>();
+    }
+
+    _currentFuture = future;
+
+    future.then((val) {
+      if (_currentFuture == future) {
+        setValue(val);
+      }
+    }).catchError((Object err, StackTrace stackTrace) {
+      if (_currentFuture == future) {
+        setError(err, stackTrace);
+      }
+    });
+  }
+
+  @override
+  void reset([AsyncState<T>? value]) {
+    super.reset(value);
+    _currentFuture = null;
+    _computedFuture.recompute();
+  }
+
+  @override
+  void init() {
+    super.init();
+    _executeFuture(_computedFuture.value);
+  }
+
+  @override
+  AsyncState<T> get value {
+    _cleanup ??= _computedFuture.subscribe((future) {
+      _executeFuture(future);
+    });
+    _depCleanup ??= _listenToDeps();
+    return super.value;
+  }
+
+  EffectCleanup _listenToDeps() {
+    return untracked(() {
+      if (dependencies.isEmpty) return () {};
+      final cleanups = <void Function()>[];
+      for (final dep in dependencies) {
+        if (dep is AsyncSignal) {
+          AsyncState? prev;
+          final cleanup = dep.subscribe((val) {
+            final oldPrev = prev;
+            prev = val;
+            if (oldPrev == null) return;
+            if (oldPrev.isLoading && !val.isLoading) {
+              return;
+            }
+            if (oldPrev != val) {
+              reset();
+            }
+          });
+          cleanups.add(cleanup);
+        } else {
+          dynamic prev;
+          final cleanup = dep.subscribe((val) {
+            final oldPrev = prev;
+            prev = val;
+            if (oldPrev == null) return;
+            if (oldPrev != val) {
+              reset();
+            }
+          });
+          cleanups.add(cleanup);
+        }
+      }
+      return () {
+        for (final c in cleanups) {
+          c();
+        }
+      };
+    });
   }
 
   @override
   Future<void> reload() async {
     await super.reload();
+    _currentFuture = null;
+    _computedFuture.recompute();
+    await future;
+  }
+
+  @override
+  Future<void> refresh() async {
+    await super.refresh();
+    _currentFuture = null;
+    _computedFuture.recompute();
     await future;
   }
 }

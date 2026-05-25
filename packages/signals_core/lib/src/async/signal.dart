@@ -183,9 +183,9 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
 
   /// The future of the signal completer
   Future<T> get future async {
-    value;
+    untracked(() => value);
     await completer.future;
-    return value.requireValue;
+    return super.value.requireValue;
   }
 
   /// Returns true if the signal is completed an error or data
