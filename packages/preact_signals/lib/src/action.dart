@@ -136,7 +136,7 @@ Function action(Function fn) => switch (fn) {
     };
 
 // ---------------------------------------------------------------------------
-// Type-safe Global Wrappers (Refactored to concise arrow syntax)
+// Type-safe Global Wrappers
 // ---------------------------------------------------------------------------
 
 /// Wraps a 0-argument callback function in a type-safe action.
@@ -216,8 +216,7 @@ R Function(
         );
 
 // ---------------------------------------------------------------------------
-// NEW: Idiomatic Dart Extensions
-// This allows developers to call `myFunction.action` instead of `action1(myFunction)`
+// Idiomatic Dart Extensions
 // ---------------------------------------------------------------------------
 
 /// Extension on a 0-argument function to wrap it in a type-safe action.
