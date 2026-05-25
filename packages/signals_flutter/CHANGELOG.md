@@ -1,11 +1,18 @@
 ## 7.0.0
 
-- **BREAKING CHANGE**: Changed `SignalBuilder` constructor signature to require a named parameter `builder:` instead of a positional argument, matching Flutter's native `Builder` widget standard.
-- **FEAT**: Added new high-performance, GPU-accelerated drawing widget `SignalCustomPaint`.
-- **FEAT**: Added inline side-effects widgets `SignalEffect` and `SignalListener`.
-- **FEAT**: Added cache-optimized widget `SignalAnimatedBuilder`.
-- **FEAT**: Added `SignalWidget` and `SignalStatefulWidget` for stateless and stateful elements-layer implicit reactive contexts.
-- **FEAT**: Memory-safe `.watch(context)` extension powered by `Expando`, `WeakReference`, and `Finalizer` to completely prevent memory leaks and identity conflicts.
+### ⚠️ BREAKING CHANGES
+- **SignalBuilder Constructor**: Updated `SignalBuilder` to accept a required named parameter `required Widget Function(BuildContext) builder` instead of a positional function argument. This aligns it perfectly as a drop-in replacement for Flutter's native `Builder` widget.
+
+### 🚀 New Features
+- **SignalWidget & SignalStatefulWidget**: Added stateless and stateful base widgets that establish implicit reactive contexts directly at the element layer. Any signal value accessed synchronously via `.value` in their `build()` methods will automatically schedule surgical, frame-coalesced rebuilds.
+- **SignalAnimatedBuilder**: Added a modern transition builder widget designed for subtree rendering optimization. Accepts an optional pre-built static `child` widget which is cached and never rebuilt when signal values mutate.
+- **SignalEffect / SignalListener**: Added inline side-effects widgets that run reactive callbacks (e.g. snackbars, dialog triggers, routing) when tracked signals mutate. Handles setup, callback updates, and cleanup automatically on unmount.
+- **SignalCustomPaint & SignalPainterWidget**: Added canvas drawing targets that bypass element rebuild cycles by listening directly to signals at the rendering layer to trigger `markNeedsPaint()` directly.
+
+### ⚡ Deprecations & Optimizations
+- Deprecated legacy `Watch`, `WatchBuilder`, `SignalsMixin`, and the `.watch(context)` context watch extensions.
+- Modernized legacy `Watch` and `WatchBuilder` under the hood to act as lightweight, stateless adapters delegating directly to `SignalBuilder` and `SignalAnimatedBuilder` to achieve zero-allocation state overhead.
+- Optimized `.watch(context)` extension with a memory-safe `Expando`/`WeakReference`/`Finalizer` engine preventing lapsed-listener memory leaks and object identity hash collisions.
 
 ## 6.3.1
 

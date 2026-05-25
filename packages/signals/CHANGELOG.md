@@ -1,7 +1,16 @@
 ## 7.0.0
 
-- Bump dependencies to `signals_core: ^7.0.0` and `signals_flutter: ^7.0.0`.
-- Includes all major modernizations, `linkedSignal` implementation, async signal optimization, new Flutter rendering and side-effect components, and options value semantics.
+### ⚠️ BREAKING CHANGES
+- **FutureSignal Direct AsyncSignal Base**: `FutureSignal` now inherits directly from `AsyncSignal` instead of `StreamSignal`, optimizing performance and removing stream-backed event-sink/listener overhead.
+- **Signal Options Encapsulation**: Removed individual configuration named parameters (e.g. `autoDispose`, `debugLabel` / `name`) from all constructor signatures and global creator helper functions across `signals_core`. Options must be passed inside strongly-typed options configuration objects.
+- **SignalBuilder Constructor**: Updated `SignalBuilder` constructor signature to accept a required named parameter `builder:` instead of a positional function argument, aligning it with Flutter's native `Builder` widget.
+
+### 🚀 New Features
+- **Writable Computed Signals (`linkedSignal` / `linkedSignalOptions`)**: Implementation of Angular-style writable computed signals.
+- **New Flutter Rendering & Lifecycle Widgets**: Added stateless/stateful `SignalWidget`, static-cache optimized `SignalAnimatedBuilder`, inline side-effects `SignalEffect`/`SignalListener`, and GPU-accelerated drawing targeting `SignalCustomPaint`.
+- **Memory-Safe `.watch(context)` Extension**: Built `Expando`/`WeakReference`/`Finalizer`-based `.watch(context)` preventing lapsed-listener memory leaks.
+- **Value Semantics Options**: Integrated `copyWith`, `operator ==`, and `hashCode` across all option variants.
+- **Issue #433 Resolution**: Awaiting future signals no longer causes double callback execution when transitioning to a completed state.
 
 ## 6.3.1
 

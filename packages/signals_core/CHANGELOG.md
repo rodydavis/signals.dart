@@ -1,11 +1,17 @@
 ## 7.0.0
 
-- **BREAKING CHANGE**: Collection and async creators no longer accept individual configuration named parameters (e.g. `autoDispose`, `debugLabel` / `name`) directly. They must now be configured inside specific Options classes (e.g. `ListSignalOptions`, `AsyncSignalOptions`).
-- **BREAKING CHANGE**: `FutureSignal` now inherits directly from `AsyncSignal<T>` instead of `StreamSignal<T>`, optimizing performance and removing stream overhead. Stream-specific operations on `FutureSignal` are no longer supported.
-- **FEAT**: Resolved awaited futures double-evaluation (Issue #433) using `untracked` and explicit `isLoading -> completed` transition filtering.
-- **FEAT**: Fully implemented Angular-style writable computed signals (`linkedSignal` and `linkedSignalOptions`).
-- **FEAT**: Added custom `copyWith`, `operator ==`, and `hashCode` overrides across all signals options classes for complete value semantics.
-- **FEAT**: Enhanced DevToolsSignalsObserver to traverse doubly-linked list nodes.
+### ⚠️ BREAKING CHANGES
+- **FutureSignal Direct AsyncSignal Base**: `FutureSignal` no longer extends `StreamSignal` or supports stream-specific properties/methods. It now inherits directly from `AsyncSignal` to optimize future-based execution and eliminate stream event sink and subscription overhead.
+- **Signal Options Encapsulation**: Removed individual configuration named parameters (e.g. `autoDispose`, `debugLabel` / `name`) from all constructor signatures and global creator helper functions across `signals_core`. They must now be configured inside specific Options classes (e.g. `SignalOptions`, `ListSignalOptions`, `AsyncSignalOptions`, etc.).
+- **debugLabel Deprecation**: The `debugLabel` parameter has been deprecated across all constructors and creator methods. Use the `name` parameter inside their corresponding Options configuration objects to align with Preact/JS Signals options standards.
+
+### 🚀 New Features
+- **Issue #433 Resolution**: Resolved a double-triggering issue where awaiting a future signal re-executed the future callback a second time upon completion. Done by isolating context tracking and filtering out `isLoading -> completed` transitions.
+- **Colocated Options Classes**: Introduced highly modular options classes tailored for each domain (including `ListSignalOptions`, `SetSignalOptions`, `IterableSignalOptions`, `ChangeSignalOptions`, `AsyncSignalOptions`, and `PersistedSignalOptions`).
+- **Readonly Options Getter**: Added `toSignalOptions` on `ReadonlySignalOptions` to easily convert read-only signal configurations to writable signal configurations.
+- **Writable Computed Signals (`linkedSignal` / `linkedSignalOptions`)**: Implementation of Angular-style writable computed signals.
+- **Value Semantics**: Added custom `copyWith`, `operator ==`, and `hashCode` overrides across all signals options classes for complete value semantics and immutable comparisons.
+- **Doubly-Linked Node Traversals**: Enhanced `DevToolsSignalsObserver` to traverse doubly-linked list nodes.
 
 ## 6.3.1
 
