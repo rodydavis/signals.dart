@@ -7,3 +7,4 @@ export 'src/batch.dart' show batch, SignalEffectException;
 export 'src/untracked.dart' show untracked;
 export 'src/readonly.dart' show readonly, ReadonlySignal;
 export 'src/options.dart';
+export 'src/action.dart';
