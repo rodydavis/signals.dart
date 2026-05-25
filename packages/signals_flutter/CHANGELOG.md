@@ -1,3 +1,12 @@
+## 7.0.0
+
+- **BREAKING CHANGE**: Changed `SignalBuilder` constructor signature to require a named parameter `builder:` instead of a positional argument, matching Flutter's native `Builder` widget standard.
+- **FEAT**: Added new high-performance, GPU-accelerated drawing widget `SignalCustomPaint`.
+- **FEAT**: Added inline side-effects widgets `SignalEffect` and `SignalListener`.
+- **FEAT**: Added cache-optimized widget `SignalAnimatedBuilder`.
+- **FEAT**: Added `SignalWidget` and `SignalStatefulWidget` for stateless and stateful elements-layer implicit reactive contexts.
+- **FEAT**: Memory-safe `.watch(context)` extension powered by `Expando`, `WeakReference`, and `Finalizer` to completely prevent memory leaks and identity conflicts.
+
 ## 6.3.1
 
  - **REFACTOR**: migrate signal mixins to mixin classes.

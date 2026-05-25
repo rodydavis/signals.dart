@@ -1,3 +1,8 @@
+## 7.0.0
+
+- Bump `signals` dev-dependency to `^7.0.0`.
+- Update lint rules and diagnostics to support the new 7.0.0 API patterns.
+
 ## 6.3.1
 
 ## 5.0.0

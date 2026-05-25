@@ -1,3 +1,8 @@
+## 7.0.0
+
+- Bump dependencies to `signals_core: ^7.0.0` and `signals_flutter: ^7.0.0`.
+- Includes all major modernizations, `linkedSignal` implementation, async signal optimization, new Flutter rendering and side-effect components, and options value semantics.
+
 ## 6.3.1
 
  - **FIX**: Doc comment package import.

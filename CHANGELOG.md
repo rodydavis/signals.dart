@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 7.0.0 (2026-05-24)
+
+### Breaking Changes
+- **FutureSignal Direct AsyncSignal Base**: `FutureSignal` now extends `AsyncSignal` directly instead of `StreamSignal`, optimizing performance and removing stream-backed event-sink/listener overhead.
+- **Signal Options Encapsulation**: Removed individual configuration named parameters (e.g. `autoDispose`, `debugLabel`) from all signal creator functions across `signals_core`. Options must be passed inside strongly-typed options configuration objects.
+- **SignalBuilder Constructor**: Updated `SignalBuilder` constructor signature to accept a required named parameter `builder:` instead of a positional function argument.
+
+### New Features
+- **Writable Computed Signals (`linkedSignal` / `linkedSignalOptions`)**: Implementation of Angular-style writable computed signals.
+- **New Flutter Rendering & Lifecycle Widgets**: Added stateless/stateful `SignalWidget`, static-cache optimized `SignalAnimatedBuilder`, inline side-effects `SignalEffect`/`SignalListener`, and GPU-accelerated drawing targeting `SignalCustomPaint`.
+- **Memory-Safe watch Context Extension**: Built `Expando`/`WeakReference`/`Finalizer`-based `.watch(context)` preventing lapsed-listener memory leaks.
+- **Value Semantics options**: Integrated copyWith, operator ==, and hashCode across all option variants.
+
+---
+
 ## 2026-05-24
 
 ### Changes

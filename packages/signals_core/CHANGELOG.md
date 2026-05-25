@@ -1,3 +1,12 @@
+## 7.0.0
+
+- **BREAKING CHANGE**: Collection and async creators no longer accept individual configuration named parameters (e.g. `autoDispose`, `debugLabel` / `name`) directly. They must now be configured inside specific Options classes (e.g. `ListSignalOptions`, `AsyncSignalOptions`).
+- **BREAKING CHANGE**: `FutureSignal` now inherits directly from `AsyncSignal<T>` instead of `StreamSignal<T>`, optimizing performance and removing stream overhead. Stream-specific operations on `FutureSignal` are no longer supported.
+- **FEAT**: Resolved awaited futures double-evaluation (Issue #433) using `untracked` and explicit `isLoading -> completed` transition filtering.
+- **FEAT**: Fully implemented Angular-style writable computed signals (`linkedSignal` and `linkedSignalOptions`).
+- **FEAT**: Added custom `copyWith`, `operator ==`, and `hashCode` overrides across all signals options classes for complete value semantics.
+- **FEAT**: Enhanced DevToolsSignalsObserver to traverse doubly-linked list nodes.
+
 ## 6.3.1
 
  - **REFACTOR**: migrate signal mixins to mixin classes.

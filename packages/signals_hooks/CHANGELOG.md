@@ -1,3 +1,8 @@
+## 7.0.0
+
+- Bump `signals` dependency to `^7.0.0`.
+- Update return types and hooks interfaces to match the modernized 7.0.0 architecture.
+
 ## 6.3.1
 
  - **FIX**: call super.dispose in SignalHookState.

@@ -1,3 +1,7 @@
+## 7.0.0
+
+- Major version synchronization across the board.
+
 ## 6.3.1
 
 ## 1.9.4
