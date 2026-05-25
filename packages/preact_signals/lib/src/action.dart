@@ -82,6 +82,39 @@ extension ActionFunction2Extension<A, B, R> on R Function(A, B) {
   }
 }
 
+/// Extension on 3-argument functions to wrap them in a type-safe action.
+extension ActionFunction3Extension<A, B, C, R> on R Function(A, B, C) {
+  /// Wraps this function in a type-safe action.
+  R Function(A, B, C) toAction({ActionOptions? options}) {
+    return (a, b, c) => batch(() => untracked(() => this(a, b, c)));
+  }
+}
+
+/// Extension on 4-argument functions to wrap them in a type-safe action.
+extension ActionFunction4Extension<A, B, C, D, R> on R Function(A, B, C, D) {
+  /// Wraps this function in a type-safe action.
+  R Function(A, B, C, D) toAction({ActionOptions? options}) {
+    return (a, b, c, d) => batch(() => untracked(() => this(a, b, c, d)));
+  }
+}
+
+/// Extension on 5-argument functions to wrap them in a type-safe action.
+extension ActionFunction5Extension<A, B, C, D, E, R> on R Function(A, B, C, D, E) {
+  /// Wraps this function in a type-safe action.
+  R Function(A, B, C, D, E) toAction({ActionOptions? options}) {
+    return (a, b, c, d, e) => batch(() => untracked(() => this(a, b, c, d, e)));
+  }
+}
+
+/// Extension on 6-argument functions to wrap them in a type-safe action.
+extension ActionFunction6Extension<A, B, C, D, E, F, R> on R Function(A, B, C, D, E, F) {
+  /// Wraps this function in a type-safe action.
+  R Function(A, B, C, D, E, F) toAction({ActionOptions? options}) {
+    return (a, b, c, d, e, f) => batch(() => untracked(() => this(a, b, c, d, e, f)));
+  }
+}
+
+
 /// Extension on any function to wrap it in an action that accepts a list of arguments.
 extension ActionFunctionListExtension on Function {
   /// Wraps this function in an action that can be invoked with a list of arguments.

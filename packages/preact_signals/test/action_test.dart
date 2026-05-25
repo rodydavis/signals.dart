@@ -92,6 +92,38 @@ void main() {
       expect(spy.calls, 3);
       expect(a.value, 'yy');
       expect(b.value, 'zz');
+
+      // 3-argument extension
+      final myAction3 = ((String aVal, String bVal, String cVal) {
+        a.value = '$aVal $bVal $cVal';
+      }).toAction();
+
+      myAction3('1', '2', '3');
+      expect(a.value, '1 2 3');
+
+      // 4-argument extension
+      final myAction4 = ((String aVal, String bVal, String cVal, String dVal) {
+        a.value = '$aVal $bVal $cVal $dVal';
+      }).toAction();
+
+      myAction4('1', '2', '3', '4');
+      expect(a.value, '1 2 3 4');
+
+      // 5-argument extension
+      final myAction5 = ((String aVal, String bVal, String cVal, String dVal, String eVal) {
+        a.value = '$aVal $bVal $cVal $dVal $eVal';
+      }).toAction();
+
+      myAction5('1', '2', '3', '4', '5');
+      expect(a.value, '1 2 3 4 5');
+
+      // 6-argument extension
+      final myAction6 = ((String aVal, String bVal, String cVal, String dVal, String eVal, String fVal) {
+        a.value = '$aVal $bVal $cVal $dVal $eVal $fVal';
+      }).toAction();
+
+      myAction6('1', '2', '3', '4', '5', '6');
+      expect(a.value, '1 2 3 4 5 6');
     });
 
     test('toActionList extension should support unlimited list-based arguments', () {
