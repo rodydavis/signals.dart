@@ -5,6 +5,10 @@ on:
     branches:
       - main # Or your release branch
 
+concurrency:
+  group: publish
+  cancel-in-progress: false # Do not cancel in-progress runs to avoid partial/broken releases
+
 jobs:
   publish:
     # This must match the environment name you configured on pub.dev
