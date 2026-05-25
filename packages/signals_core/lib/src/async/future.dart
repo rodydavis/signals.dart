@@ -186,8 +186,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
     bool? autoDispose,
     @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
     String? debugLabel,
-  })  : _fn = fn,
-        dependencies = options?.dependencies ?? dependencies ?? const [],
+  })  : dependencies = options?.dependencies ?? dependencies ?? const [],
         _computedFuture = computed(() => fn()),
         super(
           (options?.initialValue ?? initialValue) != null
@@ -201,8 +200,6 @@ class FutureSignal<T> extends AsyncSignal<T> {
         ) {
     if (!(options?.lazy ?? lazy ?? true)) value;
   }
-
-  final Future<T> Function() _fn;
 
   /// List of dependencies to recompute the future
   final List<ReadonlySignal<dynamic>> dependencies;

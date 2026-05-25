@@ -22,6 +22,7 @@ void disableSignalsDevTools() {
 }
 
 /// Check if the signals devtools are enabled
+@Deprecated('Use the new signals_devtools_extension instead')
 bool get signalsDevToolsEnabled {
   final target = SignalsObserver.instance;
   if (target is DevToolsSignalsObserver) {
@@ -31,6 +32,7 @@ bool get signalsDevToolsEnabled {
 }
 
 /// Manually enable/disable signals devtools
+@Deprecated('Use the new signals_devtools_extension instead')
 set signalsDevToolsEnabled(bool value) {
   final target = SignalsObserver.instance;
   if (target is! DevToolsSignalsObserver && value) {
@@ -41,6 +43,7 @@ set signalsDevToolsEnabled(bool value) {
 }
 
 /// Signals DevTools observer
+@Deprecated('Use the new signals_devtools_extension instead')
 class DevToolsSignalsObserver implements SignalsObserver {
   final Set<WeakReference<ReadonlySignal>> _signals = {};
   final Set<WeakReference<Computed>> _computed = {};
