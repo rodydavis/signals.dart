@@ -172,5 +172,65 @@ void main() {
       expect(linked.disposed, true);
       expect(() => linked.value, throwsA(isA<SignalsReadAfterDisposeError>()));
     });
+
+    test('throws when writing to a disposed linkedSignal', () {
+      final source = signal(10);
+      final linked = linkedSignal(() => source.value);
+
+      linked.dispose();
+      expect(() => linked.value = 20,
+          throwsA(isA<SignalsWriteAfterDisposeError>()));
+    });
+  });
+
+  group('LinkedSignalOptions Edge Cases', () {
+    test('copyWith works correctly', () {
+      final options1 = LinkedSignalOptions<int, String>(
+        name: 'opt1',
+        autoDispose: true,
+        computation: (s, prev) => s.length,
+        sourceEquality: (a, b) => a == b,
+      );
+
+      final options2 = options1.copyWith(
+        name: 'opt2',
+      );
+
+      expect(options2.name, 'opt2');
+      expect(options2.autoDispose, true);
+      expect(options2.computation, options1.computation);
+      expect(options2.sourceEquality, options1.sourceEquality);
+    });
+
+    test('equality and hashCode work correctly', () {
+      final comp =
+          (String s, LinkedSignalPreviousState<int, String>? prev) => s.length;
+      final eq = (String a, String b) => a == b;
+
+      final options1 = LinkedSignalOptions<int, String>(
+        name: 'opt',
+        autoDispose: true,
+        computation: comp,
+        sourceEquality: eq,
+      );
+
+      final options2 = LinkedSignalOptions<int, String>(
+        name: 'opt',
+        autoDispose: true,
+        computation: comp,
+        sourceEquality: eq,
+      );
+
+      final options3 = LinkedSignalOptions<int, String>(
+        name: 'opt-different',
+        autoDispose: true,
+        computation: comp,
+        sourceEquality: eq,
+      );
+
+      expect(options1, equals(options2));
+      expect(options1.hashCode, equals(options2.hashCode));
+      expect(options1, isNot(equals(options3)));
+    });
   });
 }
