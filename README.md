@@ -36,7 +36,7 @@ VS Code Extension: https://marketplace.visualstudio.com/items?itemName=rodydavis
 
 ## AI Developer Skills
 
-To enable AI coding assistants (like Google Antigravity, Gemini, Claude, Cursor, GitHub Copilot, and others) to build high-quality reactive systems with `signals.dart` version 7, this repository includes prepackaged, high-fidelity developer **Skills**.
+To enable AI coding assistants (like Google Antigravity, Gemini, Claude, Cursor, GitHub Copilot, and others) to build high-quality reactive systems with `signals.dart`, this repository includes prepackaged, high-fidelity developer **Skills**.
 
 These skills are located under the [`./skills`](./skills) directory and are fully modular:
 
@@ -47,7 +47,14 @@ These skills are located under the [`./skills`](./skills) directory and are full
 
 ### How to use them:
 
-Simply reference the path to the desired skill directory in your AI prompt, or load the contents of the relevant `SKILL.md` files as system prompt templates for your AI coding assistant.
+#### 1. One-Command Installation via `skills.sh`
+You can instantly install all available signals skills into your global AI environment using the unified [skills.sh](https://skills.sh) registry CLI:
+```bash
+npx skills add rodydavis/signals.dart
+```
+
+#### 2. Manual Reference
+Simply reference the path to the desired skill directory in your AI prompt, or load the contents of the relevant `SKILL.md` files as context for your AI coding assistant.
 
 ## Contributors
 
