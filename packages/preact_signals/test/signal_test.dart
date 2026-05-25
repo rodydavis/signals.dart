@@ -177,26 +177,32 @@ void main() {
       expect(a.brand, const Symbol('preact-signals'));
     });
 
-    test('should support name option', () {
-      final a = signal(0, name: 'counter');
+    test('should support name option via options classes', () {
+      final a = signal(0, const SignalOptions(name: 'counter'));
       expect(a.name, 'counter');
 
-      final b = computed(() => a.value, name: 'doubleCounter');
+      final b = computed(() => a.value, const ComputedOptions(name: 'doubleCounter'));
       expect(b.name, 'doubleCounter');
     });
 
-    test('should support watched and unwatched callbacks', () {
+    test('should support watched and unwatched callbacks via SignalOptions', () {
       var watchedCalls = 0;
       var unwatchedCalls = 0;
-      final a = signal(0,
-        watched: () => watchedCalls++,
-        unwatched: () => unwatchedCalls++,
+      final a = signal(
+        0,
+        SignalOptions(
+          watched: () => watchedCalls++,
+          unwatched: () => unwatchedCalls++,
+        ),
       );
 
       expect(watchedCalls, 0);
       expect(unwatchedCalls, 0);
 
-      final dispose = effect(() => a.value);
+      final dispose = effect(
+        () => a.value,
+        const EffectOptions(name: 'logger'),
+      );
       expect(watchedCalls, 1);
       expect(unwatchedCalls, 0);
 

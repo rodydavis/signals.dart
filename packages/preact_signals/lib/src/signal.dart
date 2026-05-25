@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'batch.dart';
 import 'globals.dart';
 import 'node.dart';
+import 'options.dart';
 import 'readonly.dart';
 
 /// Instance of a new plain signal
@@ -41,18 +42,26 @@ class Signal<T> with ReadonlySignal<T> {
 
   Signal(
     this._internalValue, {
-    this.name,
-    this.watched,
-    this.unwatched,
-  })  : version = 0,
+    String? name,
+    void Function()? watched,
+    void Function()? unwatched,
+    SignalOptions<T>? options,
+  })  : name = options?.name ?? name,
+        watched = options?.watched ?? watched,
+        unwatched = options?.unwatched ?? unwatched,
+        version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = true;
 
   Signal.lazy({
-    this.name,
-    this.watched,
-    this.unwatched,
-  })  : version = 0,
+    String? name,
+    void Function()? watched,
+    void Function()? unwatched,
+    SignalOptions<T>? options,
+  })  : name = options?.name ?? name,
+        watched = options?.watched ?? watched,
+        unwatched = options?.unwatched ?? unwatched,
+        version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = false;
 
@@ -136,15 +145,11 @@ class Signal<T> with ReadonlySignal<T> {
 /// Create a new plain signal
 Signal<T> signal<T>(
   /// The initial value for the signal
-  T value, {
-  String? name,
-  void Function()? watched,
-  void Function()? unwatched,
-}) {
+  T value, [
+  SignalOptions<T>? options,
+]) {
   return Signal<T>(
     value,
-    name: name,
-    watched: watched,
-    unwatched: unwatched,
+    options: options,
   );
 }
