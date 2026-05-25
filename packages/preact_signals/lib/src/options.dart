@@ -93,7 +93,7 @@ class SignalOptions<T> extends ReadonlySignalOptions<T> {
     super.watched,
     super.unwatched,
     SignalEquality<T>? equality,
-  }) : _equalityCheck = equality ?? const StandardEquality<Never>();
+  }) : _equalityCheck = equality ?? SignalEquality.standard<Never>();
 
   @override
   SignalOptions<T> copyWith({

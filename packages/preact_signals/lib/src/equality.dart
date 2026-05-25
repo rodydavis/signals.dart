@@ -7,40 +7,43 @@ abstract class SignalEquality<T> {
   bool equals(Object? a, Object? b);
 
   /// Standard equality check (a == b)
-  static SignalEquality<T> standard<T>() => const StandardEquality<Never>();
+  static SignalEquality<T> standard<T>() =>
+      const SignalStandardEquality<Never>();
 
   /// Identity equality check (identical(a, b))
-  static SignalEquality<T> identity<T>() => const IdentityEquality<Never>();
+  static SignalEquality<T> identity<T>() =>
+      const SignalIdentityEquality<Never>();
 
   /// Deep equality check
-  static SignalEquality<T> deep<T>() => const DeepEquality<Never>();
+  static SignalEquality<T> deep<T>() => const SignalDeepEquality<Never>();
 
   /// Custom equality check
-  factory SignalEquality.custom(bool Function(T a, T b) fn) = CustomEquality<T>;
+  factory SignalEquality.custom(bool Function(T a, T b) fn) =
+      SignalCustomEquality<T>;
 }
 
 /// Standard equality check (a == b)
-class StandardEquality<T> extends SignalEquality<T> {
-  /// Creates a new [StandardEquality] instance.
-  const StandardEquality();
+class SignalStandardEquality<T> extends SignalEquality<T> {
+  /// Creates a new [SignalStandardEquality] instance.
+  const SignalStandardEquality();
   @override
   bool equals(Object? a, Object? b) => a == b;
 }
 
 /// Identity equality check (identical(a, b))
-class IdentityEquality<T> extends SignalEquality<T> {
-  /// Creates a new [IdentityEquality] instance.
-  const IdentityEquality();
+class SignalIdentityEquality<T> extends SignalEquality<T> {
+  /// Creates a new [SignalIdentityEquality] instance.
+  const SignalIdentityEquality();
   @override
   bool equals(Object? a, Object? b) => identical(a, b);
 }
 
 /// Custom equality check using a custom function
-class CustomEquality<T> extends SignalEquality<T> {
+class SignalCustomEquality<T> extends SignalEquality<T> {
   final bool Function(T a, T b) _fn;
 
-  /// Creates a new [CustomEquality] instance.
-  const CustomEquality(this._fn);
+  /// Creates a new [SignalCustomEquality] instance.
+  const SignalCustomEquality(this._fn);
   @override
   bool equals(Object? a, Object? b) {
     if (a is! T || b is! T) return false;
@@ -49,9 +52,9 @@ class CustomEquality<T> extends SignalEquality<T> {
 }
 
 /// Deep equality check for collections
-class DeepEquality<T> extends SignalEquality<T> {
-  /// Creates a new [DeepEquality] instance.
-  const DeepEquality();
+class SignalDeepEquality<T> extends SignalEquality<T> {
+  /// Creates a new [SignalDeepEquality] instance.
+  const SignalDeepEquality();
   @override
   bool equals(Object? a, Object? b) {
     // 1. Optimization: Check if they are the exact same object in memory

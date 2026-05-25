@@ -63,7 +63,7 @@ class Signal<T> with ReadonlySignal<T> {
         _equalityCheck =
             (options is SignalOptions<T> ? options.equalityCheck : null) ??
                 equality ??
-                const StandardEquality<Never>(),
+                const SignalStandardEquality<Never>(),
         version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = true;
@@ -80,7 +80,7 @@ class Signal<T> with ReadonlySignal<T> {
         _equalityCheck =
             (options is SignalOptions<T> ? options.equalityCheck : null) ??
                 equality ??
-                const StandardEquality<Never>(),
+                const SignalStandardEquality<Never>(),
         version = 0,
         globalId = ++lastGlobalId,
         _isInitialized = false;
