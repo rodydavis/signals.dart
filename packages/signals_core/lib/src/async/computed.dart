@@ -1,5 +1,6 @@
 import '../core/signals.dart';
 import 'future.dart';
+import 'signal.dart';
 
 /// Async Computed is syntax sugar around [FutureSignal].
 ///
@@ -17,18 +18,25 @@ import 'future.dart';
 FutureSignal<T> computedFrom<T, A>(
   List<ReadonlySignal<A>> signals,
   Future<T> Function(List<A> args) fn, {
+  AsyncSignalOptions<T>? options,
+  @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead')
   T? initialValue,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
+  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
-  bool lazy = true,
 }) {
   return FutureSignal<T>(
     () => fn(signals.map((e) => e()).toList()),
-    dependencies: signals,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-    lazy: lazy,
+    options: (options ?? AsyncSignalOptions<T>()).copyWith(
+      dependencies: signals,
+      initialValue: initialValue,
+      lazy: lazy,
+      autoDispose: autoDispose,
+      name: debugLabel,
+    ),
   );
 }
 
@@ -49,18 +57,26 @@ FutureSignal<T> computedFrom<T, A>(
 /// Any signal that is read inside the callback will be tracked as a dependency and the computed signal will be re-evaluated when any of the dependencies change.
 FutureSignal<T> computedAsync<T>(
   Future<T> Function() fn, {
+  AsyncSignalOptions<T>? options,
+  @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead')
   T? initialValue,
+  @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead')
+  List<ReadonlySignal<dynamic>>? dependencies,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
+  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
-  List<ReadonlySignal<dynamic>> dependencies = const [],
-  bool lazy = true,
 }) {
   return FutureSignal<T>(
     fn,
-    dependencies: dependencies,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-    lazy: lazy,
+    options: (options ?? AsyncSignalOptions<T>()).copyWith(
+      initialValue: initialValue,
+      dependencies: dependencies,
+      lazy: lazy,
+      autoDispose: autoDispose,
+      name: debugLabel,
+    ),
   );
 }

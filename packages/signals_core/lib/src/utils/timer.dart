@@ -11,15 +11,23 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
   /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
   TimerSignal({
     required this.every,
-    String super.debugLabel = 'Timer',
     super.cancelOnError,
-    super.autoDispose,
+    AsyncSignalOptions<TimerSignalEvent>? options,
+    @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
+    String? debugLabel,
   }) : super(
           () => Stream<TimerSignalEvent>.periodic(
             every,
             (c) => _emit(c + 1),
           ),
           initialValue: _emit(0),
+          options: options ??
+              AsyncSignalOptions<TimerSignalEvent>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel ?? 'Timer',
+              ),
         );
 
   static TimerSignalEvent _emit(int count) => (
@@ -32,15 +40,21 @@ class TimerSignal extends StreamSignal<TimerSignalEvent> {
 extension TimerSignalDurationUtils on Duration {
   /// Expose Duration as a [TimerSignal]
   TimerSignal toSignal({
-    String debugLabel = 'Timer',
     bool? cancelOnError,
-    bool autoDispose = false,
+    AsyncSignalOptions<TimerSignalEvent>? options,
+    @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
+    String? debugLabel,
   }) {
     return TimerSignal(
       every: this,
-      debugLabel: debugLabel,
       cancelOnError: cancelOnError,
-      autoDispose: autoDispose,
+      options: options ??
+          AsyncSignalOptions<TimerSignalEvent>(
+            autoDispose: autoDispose ?? false,
+            name: debugLabel ?? 'Timer',
+          ),
     );
   }
 }
@@ -48,14 +62,20 @@ extension TimerSignalDurationUtils on Duration {
 /// Create a [TimerSignal]
 TimerSignal timerSignal(
   Duration every, {
-  String debugLabel = 'Timer',
   bool? cancelOnError,
-  bool autoDispose = false,
+  AsyncSignalOptions<TimerSignalEvent>? options,
+  @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
+  String? debugLabel,
 }) {
   return TimerSignal(
     every: every,
-    debugLabel: debugLabel,
     cancelOnError: cancelOnError,
-    autoDispose: autoDispose,
+    options: options ??
+        AsyncSignalOptions<TimerSignalEvent>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel ?? 'Timer',
+        ),
   );
 }

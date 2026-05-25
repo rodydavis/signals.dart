@@ -534,5 +534,42 @@ void main() {
       expect(parentEffect.calls, 2);
       expect(childEffect.calls, 3);
     });
+
+    test('should not rerun an effect for a no-op batch assignment', () {
+      final foo = signal(42);
+      final spy = Spy(() => foo.value);
+
+      effect(spy.call);
+      expect(spy.calls, 1);
+      spy.resetHistory();
+
+      batch(() {
+        foo.value = 0;
+        foo.value = 42;
+      });
+
+      expect(spy.calls, 0);
+    });
+
+    test('should not rerun an effect for repeated no-op top-level batches', () {
+      final foo = signal(42);
+      final spy = Spy(() => foo.value);
+
+      effect(spy.call);
+      expect(spy.calls, 1);
+      spy.resetHistory();
+
+      batch(() {
+        foo.value = 0;
+        foo.value = 42;
+      });
+      expect(spy.calls, 0);
+
+      batch(() {
+        foo.value = -1;
+        foo.value = 42;
+      });
+      expect(spy.calls, 0);
+    });
   });
 }

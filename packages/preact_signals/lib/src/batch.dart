@@ -2,6 +2,38 @@ import 'package:meta/meta.dart';
 
 import 'effect.dart';
 import 'globals.dart';
+import 'signal.dart';
+
+@internal
+void recordBatchSnapshot(Signal source) {
+  // Only capture writes during the user-visible batch callback, not during effect flush.
+  if (batchDepth == 0 || batchIteration != 0) {
+    return;
+  }
+
+  if (source.batchSnapshotVersion != currentBatchSnapshotVersion) {
+    source.batchSnapshotVersion = currentBatchSnapshotVersion;
+    batchSnapshots = BatchSnapshot(
+      source: source,
+      value: source.internalValue,
+      version: source.version,
+      next: batchSnapshots,
+    );
+  }
+}
+
+@internal
+void reconcileBatchSnapshots() {
+  var snapshots = batchSnapshots;
+  batchSnapshots = null;
+
+  while (snapshots != null) {
+    if (snapshots.source.internalValue == snapshots.value) {
+      snapshots.source.version = snapshots.version;
+    }
+    snapshots = snapshots.next;
+  }
+}
 
 @internal
 @pragma('vm:prefer-inline')
@@ -23,6 +55,7 @@ void endBatch() {
 
   SignalEffectException? error;
   bool hasError = false;
+  reconcileBatchSnapshots();
 
   while (batchedEffect != null) {
     Effect? effect = batchedEffect;
@@ -82,6 +115,7 @@ T batch<T>(
   if (batchDepth > 0) {
     return fn();
   }
+  currentBatchSnapshotVersion = ++batchSnapshotVersion;
   /*@__INLINE__**/ startBatch();
   try {
     return fn();

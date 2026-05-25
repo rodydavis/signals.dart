@@ -5,12 +5,35 @@ abstract class SignalOptionsBase {
 
   /// Creates a new [SignalOptionsBase] instance.
   const SignalOptionsBase({this.name});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is SignalOptionsBase && other.name == name;
+  }
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 /// Configuration options for reactive [Effect]s.
 class EffectOptions extends SignalOptionsBase {
   /// Creates a new [EffectOptions] instance.
   const EffectOptions({super.name});
+
+  /// Creates a copy of this options with custom overrides.
+  EffectOptions copyWith({String? name}) {
+    return EffectOptions(name: name ?? this.name);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is EffectOptions && other.name == name;
+  }
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 /// Configuration options for a [ReadonlySignal].
@@ -27,6 +50,31 @@ class ReadonlySignalOptions<T> extends SignalOptionsBase {
     this.watched,
     this.unwatched,
   });
+
+  /// Creates a copy of this options with custom overrides.
+  ReadonlySignalOptions<T> copyWith({
+    String? name,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return ReadonlySignalOptions<T>(
+      name: name ?? this.name,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ReadonlySignalOptions<T> &&
+        other.name == name &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, watched, unwatched);
 }
 
 /// Configuration options for a [Signal].
@@ -37,6 +85,31 @@ class SignalOptions<T> extends ReadonlySignalOptions<T> {
     super.watched,
     super.unwatched,
   });
+
+  @override
+  SignalOptions<T> copyWith({
+    String? name,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return SignalOptions<T>(
+      name: name ?? this.name,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is SignalOptions<T> &&
+        other.name == name &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, watched, unwatched);
 }
 
 /// Configuration options for a [Computed] signal.
@@ -47,4 +120,29 @@ class ComputedOptions<T> extends ReadonlySignalOptions<T> {
     super.watched,
     super.unwatched,
   });
+
+  @override
+  ComputedOptions<T> copyWith({
+    String? name,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return ComputedOptions<T>(
+      name: name ?? this.name,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ComputedOptions<T> &&
+        other.name == name &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, watched, unwatched);
 }

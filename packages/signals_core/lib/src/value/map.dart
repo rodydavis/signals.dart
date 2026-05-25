@@ -7,9 +7,18 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
   /// Creates a [MapSignal] with the given [value].
   MapSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
-  });
+    MapSignalOptions<K, V>? options,
+    @Deprecated('Use options: MapSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: MapSignalOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super(
+          options: options ??
+              MapSignalOptions<K, V>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        );
 
   /// Inject: Update current signal value with iterable
   MapSignal<K, V> operator <<(Map<K, V> other) {
@@ -48,27 +57,78 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
 /// Create an [MapSignal] from [Map]
 MapSignal<K, V> mapSignal<K, V>(
   Map<K, V> map, {
+  MapSignalOptions<K, V>? options,
+  @Deprecated('Use options: MapSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: MapSignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
 }) {
   return MapSignal<K, V>(
     map,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        MapSignalOptions<K, V>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
   );
 }
 
-/// Extension on future to provide helpful methods for signals
+/// Utility extension methods on [Map] to convert them to [MapSignal]s.
 extension SignalMapUtils<K, V> on Map<K, V> {
   /// Convert an existing list to [MapSignal]
   MapSignal<K, V> toSignal({
+    MapSignalOptions<K, V>? options,
+    @Deprecated('Use options: MapSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: MapSignalOptions(name: ...) instead')
     String? debugLabel,
-    bool autoDispose = false,
   }) {
     return MapSignal<K, V>(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options ??
+          MapSignalOptions<K, V>(
+            autoDispose: autoDispose ?? false,
+            name: debugLabel,
+          ),
     );
   }
+}
+
+/// Configuration options for a [MapSignal].
+class MapSignalOptions<K, V> extends SignalOptions<Map<K, V>> {
+  /// Creates a new [MapSignalOptions] instance.
+  const MapSignalOptions({
+    super.name,
+    super.autoDispose,
+    super.watched,
+    super.unwatched,
+  });
+
+  @override
+  MapSignalOptions<K, V> copyWith({
+    String? name,
+    bool? autoDispose,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return MapSignalOptions<K, V>(
+      name: name ?? this.name,
+      autoDispose: autoDispose ?? this.autoDispose,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is MapSignalOptions<K, V> &&
+        other.name == name &&
+        other.autoDispose == autoDispose &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
 }

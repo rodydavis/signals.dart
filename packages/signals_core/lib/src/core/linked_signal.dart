@@ -13,6 +13,62 @@ class LinkedSignalPreviousState<T, S> {
   LinkedSignalPreviousState(this.source, this.value);
 }
 
+/// Options for creating a [LinkedSignal].
+class LinkedSignalOptions<T, S> extends SignalOptions<T> {
+  /// Custom computation logic that runs when the source changes.
+  final T Function(S source, LinkedSignalPreviousState<T, S>? previous)? computation;
+
+  /// Optional equality check for the source values.
+  final bool Function(S a, S b)? equalityCheck;
+
+  /// Creates [LinkedSignalOptions].
+  LinkedSignalOptions({
+    this.computation,
+    this.equalityCheck,
+    super.name,
+    super.autoDispose,
+  });
+
+  @override
+  LinkedSignalOptions<T, S> copyWith({
+    String? name,
+    bool? autoDispose,
+    void Function()? watched,
+    void Function()? unwatched,
+    T Function(S source, LinkedSignalPreviousState<T, S>? previous)? computation,
+    bool Function(S a, S b)? equalityCheck,
+  }) {
+    return LinkedSignalOptions<T, S>(
+      name: name ?? this.name,
+      autoDispose: autoDispose ?? this.autoDispose,
+      computation: computation ?? this.computation,
+      equalityCheck: equalityCheck ?? this.equalityCheck,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is LinkedSignalOptions<T, S> &&
+        other.name == name &&
+        other.autoDispose == autoDispose &&
+        other.watched == watched &&
+        other.unwatched == unwatched &&
+        other.computation == computation &&
+        other.equalityCheck == equalityCheck;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        name,
+        autoDispose,
+        watched,
+        unwatched,
+        computation,
+        equalityCheck,
+      );
+}
+
 /// A writable computed signal that derives its value from a source,
 /// but allows manual overrides. Whenever the source changes, the value
 /// is reset back to the computed default.
@@ -37,15 +93,11 @@ class LinkedSignal<T, S> extends Signal<T> {
   /// Creates a new [LinkedSignal].
   LinkedSignal({
     required S Function() source,
-    required T Function(S source, LinkedSignalPreviousState<T, S>? previous)
-        computation,
-    bool Function(S a, S b)? equalityCheck,
-    super.debugLabel,
-    super.autoDispose = false,
+    LinkedSignalOptions<T, S>? options,
   })  : _source = source,
-        _computation = computation,
-        _equalityCheck = equalityCheck ?? identical,
-        super.lazy() {
+        _computation = options?.computation ?? ((sourceVal, _) => sourceVal as T),
+        _equalityCheck = options?.equalityCheck ?? identical,
+        super.lazy(options: options) {
     _trigger = signal(0);
     _sourceComputed = computed(_source);
 
@@ -122,37 +174,15 @@ class LinkedSignal<T, S> extends Signal<T> {
   }
 }
 
-/// Creates a shorthand basic [LinkedSignal] that resets to its computed source
-/// value whenever its dependencies change, but allows manual edits.
-LinkedSignal<T, T> linkedSignal<T>(
-  T Function() source, {
-  bool Function(T a, T b)? equalityCheck,
-  String? debugLabel,
-  bool autoDispose = false,
-}) {
-  return LinkedSignal<T, T>(
-    source: source,
-    computation: (sourceVal, _) => sourceVal,
-    equalityCheck: equalityCheck,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
-  );
-}
-
-/// Creates a custom [LinkedSignal] with explicit source and computation logic.
-LinkedSignal<T, S> linkedSignalOptions<T, S>({
-  required S Function() source,
-  required T Function(S source, LinkedSignalPreviousState<T, S>? previous)
-      computation,
-  bool Function(S a, S b)? equalityCheck,
-  String? debugLabel,
-  bool autoDispose = false,
+/// Creates a [LinkedSignal] that derives its value from a source,
+/// but allows manual overrides. Whenever the source changes, the value
+/// is reset back to the computed default.
+LinkedSignal<T, S> linkedSignal<T, S>(
+  S Function() source, {
+  LinkedSignalOptions<T, S>? options,
 }) {
   return LinkedSignal<T, S>(
     source: source,
-    computation: computation,
-    equalityCheck: equalityCheck,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options,
   );
 }

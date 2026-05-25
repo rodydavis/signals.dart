@@ -171,8 +171,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   /// A [Signal] that stores value in [AsyncState]
   AsyncSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
+    super.options,
   }) : _initialValue = value;
 
   final AsyncState<T> _initialValue;
@@ -426,12 +425,115 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
 /// {@endtemplate}
 AsyncSignal<T> asyncSignal<T>(
   AsyncState<T> value, {
+  AsyncSignalOptions<T>? options,
+  @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
+  @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
 }) {
   return AsyncSignal<T>(
     value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        AsyncSignalOptions<T>(
+          name: debugLabel,
+          autoDispose: autoDispose ?? false,
+        ),
   );
+}
+
+/// Configuration options for an [AsyncSignal].
+class AsyncSignalOptions<T> extends SignalOptions<AsyncState<T>> {
+  /// The initial value of the async signal.
+  final T? initialValue;
+
+  /// The list of dependencies to watch/listen to.
+  final List<ReadonlySignal<dynamic>> dependencies;
+
+  /// Optional function called when a stream completes.
+  final void Function()? onDone;
+
+  /// Whether to cancel the stream subscription on error.
+  final bool? cancelOnError;
+
+  /// Whether the execution is lazy.
+  final bool lazy;
+
+  /// Creates a new [AsyncSignalOptions] instance.
+  const AsyncSignalOptions({
+    this.initialValue,
+    this.dependencies = const [],
+    this.onDone,
+    this.cancelOnError,
+    this.lazy = true,
+    super.name,
+    super.autoDispose,
+    super.watched,
+    super.unwatched,
+  });
+
+  /// Creates a copy of this options with custom overrides.
+  @override
+  AsyncSignalOptions<T> copyWith({
+    T? initialValue,
+    List<ReadonlySignal<dynamic>>? dependencies,
+    void Function()? onDone,
+    bool? cancelOnError,
+    bool? lazy,
+    bool? autoDispose,
+    String? name,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return AsyncSignalOptions<T>(
+      initialValue: initialValue ?? this.initialValue,
+      dependencies: dependencies ?? this.dependencies,
+      onDone: onDone ?? this.onDone,
+      cancelOnError: cancelOnError ?? this.cancelOnError,
+      lazy: lazy ?? this.lazy,
+      autoDispose: autoDispose ?? this.autoDispose,
+      name: name ?? this.name,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AsyncSignalOptions<T>) return false;
+    if (other.name != name ||
+        other.autoDispose != autoDispose ||
+        other.watched != watched ||
+        other.unwatched != unwatched ||
+        other.initialValue != initialValue ||
+        other.onDone != onDone ||
+        other.cancelOnError != cancelOnError ||
+        other.lazy != lazy) {
+      return false;
+    }
+    if (other.dependencies.length != dependencies.length) return false;
+    for (var i = 0; i < dependencies.length; i++) {
+      if (other.dependencies[i] != dependencies[i]) return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    var depHash = 0;
+    for (final dep in dependencies) {
+      depHash = Object.hash(depHash, dep);
+    }
+    return Object.hash(
+      name,
+      autoDispose,
+      watched,
+      unwatched,
+      initialValue,
+      onDone,
+      cancelOnError,
+      lazy,
+      depHash,
+    );
+  }
 }

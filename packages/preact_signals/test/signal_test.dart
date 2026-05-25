@@ -211,6 +211,42 @@ void main() {
       expect(unwatchedCalls, 1);
     });
 
+    test('should allow updating the signal from watched', () async {
+      final calls = <int>[];
+      var watchedCalls = 0;
+      var unwatchedCalls = 0;
+      late final Signal<int> s;
+      s = signal(
+        1,
+        SignalOptions(
+          watched: () {
+            watchedCalls++;
+            Future(() {
+              s.value = 2;
+            });
+          },
+          unwatched: () => unwatchedCalls++,
+        ),
+      );
+
+      expect(watchedCalls, 0);
+
+      final unsubscribe = s.subscribe((val) {
+        calls.add(s.value);
+      });
+      expect(watchedCalls, 1);
+
+      final unsubscribe2 = s.subscribe((val) {});
+      expect(watchedCalls, 1);
+
+      await Future.delayed(Duration.zero);
+      unsubscribe();
+      unsubscribe2();
+
+      expect(unwatchedCalls, 1);
+      expect(calls, [1, 2]);
+    });
+
     test('should support name option via ReadonlySignalOptions in readonly()', () {
       final a = readonly(0, const ReadonlySignalOptions(name: 'constant'));
       expect(a.name, 'constant');

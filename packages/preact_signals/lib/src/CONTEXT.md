@@ -23,6 +23,8 @@ A mixin that provides common logic for nodes that can have sources (Computed and
 - **[effect.dart](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/lib/src/effect.dart)**: A terminal consumer that runs a callback when dependencies change.
 - **[batch.dart](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/lib/src/batch.dart)**: Defers `notify()` calls until the end of a block, preventing unnecessary intermediate recomputations.
 - **[untracked.dart](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/lib/src/untracked.dart)**: Temporarily nullifies `evalContext` to allow reading signals without creating a subscription.
+- **[action.dart](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/lib/src/action.dart)**: Implements action-based untracked batching context for executing state-modifying logic.
+- **[model.dart](file:///Users/rodydavis/Developer/signals.dart/packages/preact_signals/lib/src/model.dart)**: Implements `createModel` features, effect-capturing stack lifecycles, and callable constructor types.
 
 ## Performance Design
 

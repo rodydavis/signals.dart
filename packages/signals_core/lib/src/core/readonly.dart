@@ -21,7 +21,9 @@ mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
   void beforeUpdate(T val);
 
   /// Debug label for Debug Mode
-  String? get debugLabel;
+  /// Debug label for Debug Mode
+  @Deprecated('Use name instead')
+  String? get debugLabel => name;
 
   @override
   T get value {
@@ -33,7 +35,19 @@ mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
 /// Create a new plain readonly signal
 ReadonlySignal<T> readonly<T>(
   /// The initial value for the signal
-  T value,
-) {
-  return signal<T>(value);
+  T value, {
+  ReadonlySignalOptions<T>? options,
+  @Deprecated('Use options: ReadonlySignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: ReadonlySignalOptions(name: ...) instead')
+  String? debugLabel,
+}) {
+  return signal<T>(
+    value,
+    options: options?.toSignalOptions ??
+        SignalOptions<T>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
+  );
 }

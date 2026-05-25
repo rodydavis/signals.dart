@@ -42,7 +42,11 @@ class Effect with Listenable {
   })  : name = options?.name ?? name,
         flags = TRACKING,
         cleanup = null,
-        globalId = ++lastGlobalId;
+        globalId = ++lastGlobalId {
+    if (capturedEffects != null) {
+      capturedEffects!.add(this);
+    }
+  }
 
   @internal
   @pragma('vm:prefer-inline')

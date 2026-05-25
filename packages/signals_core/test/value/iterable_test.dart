@@ -279,24 +279,30 @@ void main() {
     'IterableSignal',
     <T>(val, {autoDispose = false, debugLabel}) => IterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: IterableSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'iterableSignal',
     <T>(val, {autoDispose = false, debugLabel}) => iterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: IterableSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'toSignal',
     <T>(val, {autoDispose = false, debugLabel}) {
       return val.toSignal(
-        autoDispose: autoDispose,
-        debugLabel: debugLabel,
+        options: IterableSignalOptions(
+          autoDispose: autoDispose,
+          name: debugLabel,
+        ),
       );
     },
   );

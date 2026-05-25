@@ -49,12 +49,14 @@ void main() {
     });
   });
 
-  group('linkedSignalOptions (Advanced Syntax)', () {
+  group('linkedSignal (Advanced Syntax)', () {
     test('computes custom initial state correctly', () {
       final user = signal((id: 1, name: 'Alice'));
-      final nickname = linkedSignalOptions<String, ({int id, String name})>(
-        source: () => user.value,
-        computation: (u, prev) => prev != null ? prev.value : u.name,
+      final nickname = linkedSignal<String, ({int id, String name})>(
+        () => user.value,
+        options: LinkedSignalOptions(
+          computation: (u, prev) => prev != null ? prev.value : u.name,
+        ),
       );
 
       expect(nickname.value, 'Alice');
@@ -62,15 +64,17 @@ void main() {
 
     test('preserves manual override based on custom computation logic', () {
       final user = signal((id: 1, name: 'Alice'));
-      final nickname = linkedSignalOptions<String, ({int id, String name})>(
-        source: () => user.value,
-        computation: (u, prev) {
-          // If the user already set a custom nickname, keep it across source changes
-          if (prev != null) {
-            return prev.value;
-          }
-          return u.name;
-        },
+      final nickname = linkedSignal<String, ({int id, String name})>(
+        () => user.value,
+        options: LinkedSignalOptions(
+          computation: (u, prev) {
+            // If the user already set a custom nickname, keep it across source changes
+            if (prev != null) {
+              return prev.value;
+            }
+            return u.name;
+          },
+        ),
       );
 
       expect(nickname.value, 'Alice');
@@ -88,15 +92,17 @@ void main() {
 
     test('resets custom value based on previous source comparison', () {
       final user = signal((id: 1, name: 'Alice'));
-      final nickname = linkedSignalOptions<String, ({int id, String name})>(
-        source: () => user.value,
-        computation: (u, prev) {
-          // Only reset if the user ID actually changed
-          if (prev != null && prev.source.id == u.id) {
-            return prev.value;
-          }
-          return u.name;
-        },
+      final nickname = linkedSignal<String, ({int id, String name})>(
+        () => user.value,
+        options: LinkedSignalOptions(
+          computation: (u, prev) {
+            // Only reset if the user ID actually changed
+            if (prev != null && prev.source.id == u.id) {
+              return prev.value;
+            }
+            return u.name;
+          },
+        ),
       );
 
       expect(nickname.value, 'Alice');

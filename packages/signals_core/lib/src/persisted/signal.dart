@@ -9,12 +9,21 @@ class PersistedSignal<T> extends Signal<T> with PersistedSignalMixin<T> {
   /// Creates a new `PersistedSignal`.
   PersistedSignal(
     super.internalValue, {
-    super.autoDispose,
-    super.debugLabel,
     required this.key,
     required this.store,
+    PersistedSignalOptions<T>? options,
+    @Deprecated('Use options: PersistedSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: PersistedSignalOptions(name: ...) instead')
+    String? debugLabel,
     bool autoInit = true,
-  }) {
+  }) : super(
+          options: options ??
+              PersistedSignalOptions<T>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        ) {
     if (autoInit) init().ignore();
   }
 
@@ -77,4 +86,43 @@ mixin PersistedSignalMixin<T> on Signal<T> {
 
   /// Encodes the value to a string.
   String encode(T value) => jsonEncode(value);
+}
+
+/// Configuration options for a [PersistedSignal].
+class PersistedSignalOptions<T> extends SignalOptions<T> {
+  /// Creates a new [PersistedSignalOptions] instance.
+  const PersistedSignalOptions({
+    super.name,
+    super.autoDispose,
+    super.watched,
+    super.unwatched,
+  });
+
+  @override
+  PersistedSignalOptions<T> copyWith({
+    String? name,
+    bool? autoDispose,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return PersistedSignalOptions<T>(
+      name: name ?? this.name,
+      autoDispose: autoDispose ?? this.autoDispose,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is PersistedSignalOptions<T> &&
+        other.name == name &&
+        other.autoDispose == autoDispose &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
 }

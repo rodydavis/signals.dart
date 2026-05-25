@@ -207,3 +207,105 @@ batch(() {
 });
 // Now the callback completed and we'll trigger the effect.
 ```
+
+### `createModel(fn)`
+
+The `createModel` function provides a structured way to define disposable model instances that group signals, computed values, and actions together, matching the design of PreactJS Signals Core.
+
+#### 1. Defining a Model (Map-based with Callable Constructor)
+
+Models are defined using `createModel` with a factory function returning a `Map<String, dynamic>`. The returned object is a callable constructor.
+
+When a `Map` is returned, all functions in the map are automatically wrapped in `action()` under the hood, ensuring state-modifying actions run inside implicit batches and untracked contexts.
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+// Declare a model constructor
+final CounterModel = createModel(() {
+  final count = signal(0);
+  
+  return <String, dynamic>{
+    'count': count,
+    'increment': () => count.value += 1,
+    'decrement': () => count.value -= 1,
+  };
+});
+
+void main() {
+  // Instantiate the model
+  final counter = CounterModel();
+
+  // Read signals directly
+  print(counter['count'].value); // Logs: 0
+
+  // Call actions
+  counter['increment']();
+  print(counter['count'].value); // Logs: 1
+
+  // Clean up all captured effects
+  counter.dispose();
+}
+```
+
+#### 2. Class-based Models (Type-Safe)
+
+If you prefer full autocompletion, static type safety, and structured classes, you can return a class instance from your model factory instead:
+
+```dart
+class Counter {
+  final count = signal(0);
+  
+  void increment() => count.value++;
+}
+
+final CounterModel = createModel(() => Counter());
+
+void main() {
+  final model = CounterModel();
+  
+  // Access properties with complete type safety
+  model.value.increment();
+  print(model.value.count.value); // Logs: 1
+
+  model.dispose();
+}
+```
+
+#### 3. Zero-Overhead Type-Safe Wrappers (Extension Types)
+
+You can use Dart 3.3+ **Extension Types** to create type-safe wrappers around your model instance with zero runtime allocation overhead:
+
+```dart
+extension type TypeSafeCounter(SignalModel<Counter> _model) {
+  int get count => _model.value.count.value;
+  void increment() => _model.value.increment();
+  void dispose() => _model.dispose();
+}
+
+void main() {
+  final myCounter = TypeSafeCounter(CounterModel());
+  
+  myCounter.increment();
+  print(myCounter.count); // Logs: 1
+
+  myCounter.dispose();
+}
+```
+
+#### 4. Forwarding Parameters during Construction
+
+Use `createModel1` or `createModel2` to define constructors that accept parameters:
+
+```dart
+final CounterWithInitial = createModel1((int initialCount) {
+  final count = signal(initialCount);
+  return <String, dynamic>{
+    'count': count,
+  };
+});
+
+final counter = CounterWithInitial(10);
+print(counter['count'].value); // Logs: 10
+}
+```

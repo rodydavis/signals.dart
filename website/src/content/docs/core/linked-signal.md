@@ -44,7 +44,7 @@ print(selectedSize.value); // 'XL'
 
 ## 2. Advanced Options Syntax (Custom Computation & Previous State)
 
-Sometimes you want strict control over exactly what triggers the reset, or you need to know what the *previous* value of the signal was before it was reset. You can do this by using the `linkedSignalOptions` function and providing a custom `source` and `computation` callback.
+Sometimes you want strict control over exactly what triggers the reset, or you need to know what the *previous* value of the signal was before it was reset. You can do this by using the `linkedSignal` function and providing a custom `computation` callback.
 
 The `computation` callback has access to the current source value and a `previous` object containing:
 - `previous.source`: The previous value of the source callback.
@@ -56,8 +56,8 @@ import 'package:signals/signals.dart';
 final user = signal((id: 1, name: 'Alice'));
 
 // Explicitly link to a source and define custom reset logic
-final nickname = linkedSignalOptions<String, ({int id, String name})>(
-  source: () => user.value,
+final nickname = linkedSignal<String, ({int id, String name})>(
+  () => user.value,
   computation: (currentUser, previous) {
     // If the user already set a custom nickname, keep it across source changes
     if (previous != null) {

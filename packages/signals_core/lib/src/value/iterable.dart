@@ -7,9 +7,18 @@ class IterableSignal<E> extends Signal<Iterable<E>>
   /// Creates a [IterableSignal] with the given [value].
   IterableSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
-  });
+    IterableSignalOptions<E>? options,
+    @Deprecated('Use options: IterableSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: IterableSignalOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super(
+          options: options ??
+              IterableSignalOptions<E>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        );
 
   @override
   bool operator ==(Object other) {
@@ -26,30 +35,81 @@ class IterableSignal<E> extends Signal<Iterable<E>>
   }
 }
 
-/// Create an [IterableSignal] from [Iterable]
+/// Creates an [IterableSignal] with the given [iterable].
 IterableSignal<T> iterableSignal<T>(
   Iterable<T> iterable, {
+  IterableSignalOptions<T>? options,
+  @Deprecated('Use options: IterableSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: IterableSignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
 }) {
   return IterableSignal<T>(
     iterable,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        IterableSignalOptions<T>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
   );
 }
 
-/// Extension on future to provide helpful methods for signals
+/// Utility extension methods on [Iterable] to convert them to [IterableSignal]s.
 extension SignalIterableUtils<T> on Iterable<T> {
   /// Convert an existing list to [IterableSignal]
   IterableSignal<T> toSignal({
+    IterableSignalOptions<T>? options,
+    @Deprecated('Use options: IterableSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: IterableSignalOptions(name: ...) instead')
     String? debugLabel,
-    bool autoDispose = false,
   }) {
     return IterableSignal<T>(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options ??
+          IterableSignalOptions<T>(
+            autoDispose: autoDispose ?? false,
+            name: debugLabel,
+          ),
     );
   }
+}
+
+/// Configuration options for a [IterableSignal].
+class IterableSignalOptions<E> extends SignalOptions<Iterable<E>> {
+  /// Creates a new [IterableSignalOptions] instance.
+  const IterableSignalOptions({
+    super.name,
+    super.autoDispose,
+    super.watched,
+    super.unwatched,
+  });
+
+  @override
+  IterableSignalOptions<E> copyWith({
+    String? name,
+    bool? autoDispose,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return IterableSignalOptions<E>(
+      name: name ?? this.name,
+      autoDispose: autoDispose ?? this.autoDispose,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is IterableSignalOptions<E> &&
+        other.name == name &&
+        other.autoDispose == autoDispose &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
 }

@@ -343,10 +343,22 @@ class Computed<T> extends signals.Computed<T>
   /// {@endtemplate}
   Computed(
     super.fn, {
-    this.debugLabel,
-    bool autoDispose = false,
-  }) {
-    this.autoDispose = autoDispose;
+    ComputedOptions<T>? options,
+    @Deprecated('Use options: ComputedOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: ComputedOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super(
+          name: options?.name ?? debugLabel,
+          watched: options?.watched,
+          unwatched: options?.unwatched,
+          options: options ??
+              ComputedOptions<T>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        ) {
+    this.autoDispose = options?.autoDispose ?? autoDispose ?? false;
     SignalsObserver.instance?.onComputedCreated(this);
   }
 
@@ -379,7 +391,8 @@ class Computed<T> extends signals.Computed<T>
   }
 
   @override
-  final String? debugLabel;
+  @Deprecated('Use name instead')
+  String? get debugLabel => name;
 
   /// Call the computed function and update the value
   void recompute() {
@@ -601,12 +614,18 @@ typedef ComputedCallback<T> = T Function();
 /// {@endtemplate}
 Computed<T> computed<T>(
   ComputedCallback<T> compute, {
+  ComputedOptions<T>? options,
+  @Deprecated('Use options: ComputedOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: ComputedOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
 }) {
   return Computed<T>(
     compute,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        ComputedOptions<T>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
   );
 }

@@ -25,6 +25,9 @@ class Signal<T> with ReadonlySignal<T> {
   bool _isInitialized;
 
   @internal
+  int batchSnapshotVersion = 0;
+
+  @internal
   set isInitialized(bool val) {
     _isInitialized = val;
   }
@@ -127,6 +130,7 @@ class Signal<T> with ReadonlySignal<T> {
       throwCycleDetected();
     }
 
+    recordBatchSnapshot(this);
     internalValue = val;
     version++;
     globalVersion++;

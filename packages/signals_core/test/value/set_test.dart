@@ -413,24 +413,30 @@ void main() {
     'SetSignal',
     <T>(val, {autoDispose = false, debugLabel}) => SetSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: SetSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'setSignal',
     <T>(val, {autoDispose = false, debugLabel}) => setSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: SetSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'toSignal',
     <T>(val, {autoDispose = false, debugLabel}) {
       return val.toSignal(
-        autoDispose: autoDispose,
-        debugLabel: debugLabel,
+        options: SetSignalOptions(
+          autoDispose: autoDispose,
+          name: debugLabel,
+        ),
       );
     },
   );

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../core/signals.dart';
+import 'signal.dart';
 import 'stream.dart';
 
 /// {@template future}
@@ -174,12 +175,28 @@ class FutureSignal<T> extends StreamSignal<T> {
   /// {@endtemplate}
   FutureSignal(
     Future<T> Function() fn, {
-    super.initialValue,
-    super.debugLabel,
-    super.dependencies,
-    super.lazy,
-    super.autoDispose,
-  }) : super(() => fn().asStream(), cancelOnError: true);
+    AsyncSignalOptions<T>? options,
+    @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead')
+    T? initialValue,
+    @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead')
+    List<ReadonlySignal<dynamic>>? dependencies,
+    @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
+    bool? lazy,
+    @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super(
+          () => fn().asStream(),
+          options: (options ?? AsyncSignalOptions<T>()).copyWith(
+            initialValue: initialValue,
+            dependencies: dependencies,
+            lazy: lazy,
+            autoDispose: autoDispose,
+            name: debugLabel,
+            cancelOnError: true,
+          ),
+        );
 
   @override
   Future<void> refresh() async {
@@ -280,18 +297,26 @@ class FutureSignal<T> extends StreamSignal<T> {
 /// {@endtemplate}
 FutureSignal<T> futureSignal<T>(
   Future<T> Function() fn, {
+  AsyncSignalOptions<T>? options,
+  @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead')
   T? initialValue,
+  @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead')
+  List<ReadonlySignal<dynamic>>? dependencies,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
+  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
   String? debugLabel,
-  List<ReadonlySignal<dynamic>> dependencies = const [],
-  bool lazy = true,
-  bool autoDispose = false,
 }) {
   return FutureSignal(
     fn,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    dependencies: dependencies,
-    lazy: lazy,
-    autoDispose: autoDispose,
+    options: (options ?? AsyncSignalOptions<T>()).copyWith(
+      initialValue: initialValue,
+      dependencies: dependencies,
+      lazy: lazy,
+      autoDispose: autoDispose,
+      name: debugLabel,
+    ),
   );
 }

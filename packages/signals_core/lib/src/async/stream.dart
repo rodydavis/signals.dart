@@ -223,28 +223,44 @@ class StreamSignal<T> extends AsyncSignal<T> {
   /// {@endtemplate}
   StreamSignal(
     Stream<T> Function() fn, {
-    this.cancelOnError,
-    super.debugLabel,
+    AsyncSignalOptions<T>? options,
+    @Deprecated('Use options: AsyncSignalOptions(cancelOnError: ...) instead')
+    bool? cancelOnError,
+    @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead')
     T? initialValue,
-    this.dependencies = const [],
+    @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead')
+    List<ReadonlySignal<dynamic>>? dependencies,
+    @Deprecated('Use options: AsyncSignalOptions(onDone: ...) instead')
     void Function()? onDone,
-    bool lazy = true,
-    super.autoDispose,
-  })  : _onDone = onDone,
+    @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
+    bool? lazy,
+    @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
+    String? debugLabel,
+  })  : _onDone = options?.onDone ?? onDone,
+        cancelOnError = options?.cancelOnError ?? cancelOnError,
+        dependencies = options?.dependencies ?? dependencies ?? const [],
         _stream = computed(
           () {
-            for (final dep in dependencies) {
+            final deps = options?.dependencies ?? dependencies ?? const [];
+            for (final dep in deps) {
               dep.value;
             }
             return fn();
           },
         ),
         super(
-          initialValue != null
-              ? AsyncState.data(initialValue)
+          (options?.initialValue ?? initialValue) != null
+              ? AsyncState.data((options?.initialValue ?? initialValue) as T)
               : AsyncState.loading(),
+          options: options ??
+              AsyncSignalOptions<T>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
         ) {
-    if (!lazy) value;
+    if (!(options?.lazy ?? lazy ?? true)) value;
   }
 
   final Computed<Stream<T>> _stream;
@@ -475,22 +491,32 @@ class StreamSignal<T> extends AsyncSignal<T> {
 /// {@endtemplate}
 StreamSignal<T> streamSignal<T>(
   Stream<T> Function() callback, {
+  AsyncSignalOptions<T>? options,
+  @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead')
   T? initialValue,
-  String? debugLabel,
-  List<ReadonlySignal<dynamic>> dependencies = const [],
+  @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead')
+  List<ReadonlySignal<dynamic>>? dependencies,
+  @Deprecated('Use options: AsyncSignalOptions(onDone: ...) instead')
   void Function()? onDone,
+  @Deprecated('Use options: AsyncSignalOptions(cancelOnError: ...) instead')
   bool? cancelOnError,
-  bool lazy = true,
-  bool autoDispose = false,
+  @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead')
+  bool? lazy,
+  @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: AsyncSignalOptions(name: ...) instead')
+  String? debugLabel,
 }) {
   return StreamSignal(
     callback,
-    initialValue: initialValue,
-    debugLabel: debugLabel,
-    dependencies: dependencies,
-    onDone: onDone,
-    cancelOnError: cancelOnError,
-    lazy: lazy,
-    autoDispose: autoDispose,
+    options: (options ?? AsyncSignalOptions<T>()).copyWith(
+      initialValue: initialValue,
+      dependencies: dependencies,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+      lazy: lazy,
+      autoDispose: autoDispose,
+      name: debugLabel,
+    ),
   );
 }

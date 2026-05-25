@@ -557,24 +557,30 @@ void main() {
     'ListSignal',
     <T>(val, {autoDispose = false, debugLabel}) => ListSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: ListSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'listSignal',
     <T>(val, {autoDispose = false, debugLabel}) => listSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: ListSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'toSignal',
     <T>(val, {autoDispose = false, debugLabel}) {
       return val.toSignal(
-        autoDispose: autoDispose,
-        debugLabel: debugLabel,
+        options: ListSignalOptions(
+          autoDispose: autoDispose,
+          name: debugLabel,
+        ),
       );
     },
   );

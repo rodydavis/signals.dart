@@ -7,35 +7,95 @@ class QueueSignal<T> extends Signal<Queue<T>>
   /// Creates a [QueueSignal] with the given [value].
   QueueSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
-  });
+    QueueSignalOptions<T>? options,
+    @Deprecated('Use options: QueueSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: QueueSignalOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super(
+          options: options ??
+              QueueSignalOptions<T>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        );
 }
 
-/// Create an [QueueSignal] from [Queue]
+/// Creates a [QueueSignal] with the given [list] (Queue).
 QueueSignal<T> queueSignal<T>(
   Queue<T> list, {
+  QueueSignalOptions<T>? options,
+  @Deprecated('Use options: QueueSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: QueueSignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
 }) {
   return QueueSignal<T>(
     list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        QueueSignalOptions<T>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
   );
 }
 
-/// Extension on future to provide helpful methods for signals
+/// Utility extension methods on [Queue] to convert them to [QueueSignal]s.
 extension SignalQueueUtils<T> on Queue<T> {
   /// Convert an existing list to [QueueSignal]
   QueueSignal<T> toSignal({
+    QueueSignalOptions<T>? options,
+    @Deprecated('Use options: QueueSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: QueueSignalOptions(name: ...) instead')
     String? debugLabel,
-    bool autoDispose = false,
   }) {
     return QueueSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options ??
+          QueueSignalOptions<T>(
+            autoDispose: autoDispose ?? false,
+            name: debugLabel,
+          ),
     );
   }
+}
+
+/// Configuration options for a [QueueSignal].
+class QueueSignalOptions<T> extends SignalOptions<Queue<T>> {
+  /// Creates a new [QueueSignalOptions] instance.
+  const QueueSignalOptions({
+    super.name,
+    super.autoDispose,
+    super.watched,
+    super.unwatched,
+  });
+
+  @override
+  QueueSignalOptions<T> copyWith({
+    String? name,
+    bool? autoDispose,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return QueueSignalOptions<T>(
+      name: name ?? this.name,
+      autoDispose: autoDispose ?? this.autoDispose,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is QueueSignalOptions<T> &&
+        other.name == name &&
+        other.autoDispose == autoDispose &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
 }

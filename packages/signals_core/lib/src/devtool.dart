@@ -63,7 +63,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
   void reassemble() {
     final observer = SignalsObserver.instance;
     if (observer is! DevToolsSignalsObserver) return;
-    _debugPostEvent('ext.signals.reassemble', () => observer._getNodes());
+    _debugPostEvent('ext.signals.reassemble', () => observer.getNodes());
   }
 
 // ignore: public_member_api_docs
@@ -73,7 +73,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       'ext.signals.getAllNodes',
       (method, parameters) async {
         return developer.ServiceExtensionResponse.result(
-          json.encode(_getNodes()),
+          json.encode(getNodes()),
         );
       },
     );
@@ -97,12 +97,20 @@ class DevToolsSignalsObserver implements SignalsObserver {
     if (!enabled) return;
     log('computed created: [${instance.globalId}|${instance.debugLabel}]');
     _debugPostEvent('ext.signals.computedCreate', () {
+      final sources = <int>[];
+      for (var node = instance.sources; node != null; node = node.nextSource) {
+        sources.add(node.source.globalId);
+      }
+      final targets = <int>[];
+      for (var node = instance.targets; node != null; node = node.nextTarget) {
+        targets.add(node.target.globalId);
+      }
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': '',
-        'targets': '',
-        'value': '',
+        'sources': sources.join(','),
+        'targets': targets.join(','),
+        'value': instance.peek()?.toString(),
         'type': 'computed',
       };
     });
@@ -114,12 +122,20 @@ class DevToolsSignalsObserver implements SignalsObserver {
     if (!enabled) return;
     log('computed updated: [${instance.globalId}|${instance.debugLabel}] => $value');
     _debugPostEvent('ext.signals.computedUpdate', () {
+      final sources = <int>[];
+      for (var node = instance.sources; node != null; node = node.nextSource) {
+        sources.add(node.source.globalId);
+      }
+      final targets = <int>[];
+      for (var node = instance.targets; node != null; node = node.nextTarget) {
+        targets.add(node.target.globalId);
+      }
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'sources': '',
-        'targets': '',
+        'sources': sources.join(','),
+        'targets': targets.join(','),
         'type': 'computed',
       };
     });
@@ -130,11 +146,15 @@ class DevToolsSignalsObserver implements SignalsObserver {
     if (!enabled) return;
     log('signal created: [${instance.globalId}|${instance.debugLabel}] => $value');
     _debugPostEvent('ext.signals.signalCreate', () {
+      final targets = <int>[];
+      for (var node = instance.targets; node != null; node = node.nextTarget) {
+        targets.add(node.target.globalId);
+      }
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': instance.peek()?.toString(),
-        'targets': '',
+        'targets': targets.join(','),
         'type': 'signal',
       };
     });
@@ -146,11 +166,15 @@ class DevToolsSignalsObserver implements SignalsObserver {
     if (!enabled) return;
     log('signal updated: [${instance.globalId}|${instance.debugLabel}] => $value');
     _debugPostEvent('ext.signals.signalUpdate', () {
+      final targets = <int>[];
+      for (var node = instance.targets; node != null; node = node.nextTarget) {
+        targets.add(node.target.globalId);
+      }
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
         'value': value?.toString(),
-        'targets': '',
+        'targets': targets.join(','),
         'type': 'signal',
       };
     });
@@ -165,10 +189,14 @@ class DevToolsSignalsObserver implements SignalsObserver {
     _effectCount[instance.globalId] = 0;
     _effects.add(WeakReference(instance));
     _debugPostEvent('ext.signals.effectCreate', () {
+      final sources = <int>[];
+      for (var node = instance.sources; node != null; node = node.nextSource) {
+        sources.add(node.source.globalId);
+      }
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': '',
+        'sources': sources.join(','),
         'value': '0',
         'type': 'effect',
       };
@@ -181,10 +209,14 @@ class DevToolsSignalsObserver implements SignalsObserver {
     var count = _effectCount[instance.globalId] ??= 0;
     _effectCount[instance.globalId] = ++count;
     _debugPostEvent('ext.signals.effectCalled', () {
+      final sources = <int>[];
+      for (var node = instance.sources; node != null; node = node.nextSource) {
+        sources.add(node.source.globalId);
+      }
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        'sources': '',
+        'sources': sources.join(','),
         'value': '$count',
         'type': 'effect',
       };
@@ -197,27 +229,39 @@ class DevToolsSignalsObserver implements SignalsObserver {
     _effectCount.remove(instance.globalId);
     _effects.removeWhere((e) => e.target == instance);
     _debugPostEvent('ext.signals.effectRemove', () {
+      final sources = <int>[];
+      for (var node = instance.sources; node != null; node = node.nextSource) {
+        sources.add(node.source.globalId);
+      }
       return {
         'id': instance.globalId,
         'label': instance.debugLabel,
-        // 'sources': instance.sources.map((e) => e.globalId).join(','),
+        'sources': sources.join(','),
         'value': '-1',
         'type': 'effect',
       };
     });
   }
 
-  Map<String, dynamic> _getNodes() {
+  /// Returns a map representation of all active signals, computeds, and effects
+  /// in the reactive graph.
+  Map<String, dynamic> getNodes() {
     final signals = _signals
         .where((e) => e.target != null)
         .map((e) => e.target!)
         .map(
-          (e) => {
-            'id': e.globalId,
-            'label': e.debugLabel,
-            'value': e.toString(),
-            'targets': '',
-            'type': 'signal',
+          (e) {
+            final targets = <int>[];
+            for (var node = e.targets; node != null; node = node.nextTarget) {
+              targets.add(node.target.globalId);
+            }
+            return {
+              'id': e.globalId,
+              'label': e.debugLabel,
+              'value': e.toString(),
+              'targets': targets.join(','),
+              'type': 'signal',
+            };
           },
         )
         .toList();
@@ -225,13 +269,23 @@ class DevToolsSignalsObserver implements SignalsObserver {
         .where((e) => e.target != null)
         .map((e) => e.target!)
         .map(
-          (e) => {
-            'id': e.globalId,
-            'label': e.debugLabel,
-            'value': e.toString(),
-            'sources': '',
-            'targets': '',
-            'type': 'computed',
+          (e) {
+            final sources = <int>[];
+            for (var node = e.sources; node != null; node = node.nextSource) {
+              sources.add(node.source.globalId);
+            }
+            final targets = <int>[];
+            for (var node = e.targets; node != null; node = node.nextTarget) {
+              targets.add(node.target.globalId);
+            }
+            return {
+              'id': e.globalId,
+              'label': e.debugLabel,
+              'value': e.toString(),
+              'sources': sources.join(','),
+              'targets': targets.join(','),
+              'type': 'computed',
+            };
           },
         )
         .toList();
@@ -239,12 +293,18 @@ class DevToolsSignalsObserver implements SignalsObserver {
         .where((e) => e.target != null)
         .map((e) => e.target!)
         .map(
-          (e) => {
-            'id': e.globalId,
-            'label': e.debugLabel,
-            'value': '${_effectCount[e.globalId] ?? 0}',
-            'sources': '',
-            'type': 'effect',
+          (e) {
+            final sources = <int>[];
+            for (var node = e.sources; node != null; node = node.nextSource) {
+              sources.add(node.source.globalId);
+            }
+            return {
+              'id': e.globalId,
+              'label': e.debugLabel,
+              'value': '${_effectCount[e.globalId] ?? 0}',
+              'sources': sources.join(','),
+              'type': 'effect',
+            };
           },
         )
         .toList();

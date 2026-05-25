@@ -10,6 +10,7 @@ import 'package:preact_signals/src/globals.dart';
 // ignore: implementation_imports
 import 'package:preact_signals/src/node.dart';
 
+part 'options.dart';
 part 'observer.dart';
 part 'effect.dart';
 part 'computed.dart';

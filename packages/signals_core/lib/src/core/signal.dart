@@ -14,10 +14,22 @@ class Signal<T> extends signals.Signal<T>
   /// ```
   Signal(
     super.internalValue, {
-    this.debugLabel,
-    bool autoDispose = false,
-  }) {
-    this.autoDispose = autoDispose;
+    SignalOptions<T>? options,
+    @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: SignalOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super(
+          name: options?.name ?? debugLabel,
+          watched: options?.watched,
+          unwatched: options?.unwatched,
+          options: options ??
+              SignalOptions<T>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        ) {
+    this.autoDispose = options?.autoDispose ?? autoDispose ?? false;
     afterCreate(super.internalValue);
   }
 
@@ -30,10 +42,22 @@ class Signal<T> extends signals.Signal<T>
   /// db.value = DatabaseConnect(...);
   /// ```
   Signal.lazy({
-    this.debugLabel,
-    bool autoDispose = false,
-  }) : super.lazy() {
-    this.autoDispose = autoDispose;
+    SignalOptions<T>? options,
+    @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: SignalOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super.lazy(
+          name: options?.name ?? debugLabel,
+          watched: options?.watched,
+          unwatched: options?.unwatched,
+          options: options ??
+              SignalOptions<T>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        ) {
+    this.autoDispose = options?.autoDispose ?? autoDispose ?? false;
   }
 
   @override
@@ -48,7 +72,8 @@ class Signal<T> extends signals.Signal<T>
   }
 
   @override
-  final String? debugLabel;
+  @Deprecated('Use name instead')
+  String? get debugLabel => name;
 
   /// Optional method to check if to values are the same
   bool Function(T a, T b) equalityCheck = identical;
@@ -355,13 +380,19 @@ class Signal<T> extends signals.Signal<T>
 /// {@endtemplate}
 Signal<T> signal<T>(
   T value, {
+  SignalOptions<T>? options,
+  @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: SignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
 }) {
   return Signal<T>(
     value,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        SignalOptions<T>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
   );
 }
 
@@ -374,11 +405,17 @@ Signal<T> signal<T>(
 /// db.value = DatabaseConnect(...);
 /// ```
 Signal<T> lazySignal<T>({
+  SignalOptions<T>? options,
+  @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: SignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
 }) {
   return Signal<T>.lazy(
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        SignalOptions<T>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
   );
 }

@@ -7,9 +7,18 @@ class SetSignal<E> extends Signal<Set<E>>
   /// Creates a [SetSignal] with the given [value].
   SetSignal(
     super.value, {
-    super.debugLabel,
-    super.autoDispose,
-  });
+    SetSignalOptions<E>? options,
+    @Deprecated('Use options: SetSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: SetSignalOptions(name: ...) instead')
+    String? debugLabel,
+  }) : super(
+          options: options ??
+              SetSignalOptions<E>(
+                autoDispose: autoDispose ?? false,
+                name: debugLabel,
+              ),
+        );
 
   /// Inject: Update current signal value with iterable
   SetSignal<E> operator <<(Set<E> other) {
@@ -48,30 +57,81 @@ class SetSignal<E> extends Signal<Set<E>>
   }
 }
 
-/// Create an [SetSignal] from [Set]
+/// Creates a [SetSignal] with the given [list] (Set).
 SetSignal<T> setSignal<T>(
   Set<T> list, {
+  SetSignalOptions<T>? options,
+  @Deprecated('Use options: SetSignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
+  @Deprecated('Use options: SetSignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
 }) {
   return SetSignal<T>(
     list,
-    debugLabel: debugLabel,
-    autoDispose: autoDispose,
+    options: options ??
+        SetSignalOptions<T>(
+          autoDispose: autoDispose ?? false,
+          name: debugLabel,
+        ),
   );
 }
 
-/// Extension on future to provide helpful methods for signals
+/// Utility extension methods on [Set] to convert them to [SetSignal]s.
 extension SignalSetUtils<T> on Set<T> {
   /// Convert an existing list to [SetSignal]
   SetSignal<T> toSignal({
+    SetSignalOptions<T>? options,
+    @Deprecated('Use options: SetSignalOptions(autoDispose: ...) instead')
+    bool? autoDispose,
+    @Deprecated('Use options: SetSignalOptions(name: ...) instead')
     String? debugLabel,
-    bool autoDispose = false,
   }) {
     return SetSignal(
       this,
-      debugLabel: debugLabel,
-      autoDispose: autoDispose,
+      options: options ??
+          SetSignalOptions<T>(
+            autoDispose: autoDispose ?? false,
+            name: debugLabel,
+          ),
     );
   }
+}
+
+/// Configuration options for a [SetSignal].
+class SetSignalOptions<E> extends SignalOptions<Set<E>> {
+  /// Creates a new [SetSignalOptions] instance.
+  const SetSignalOptions({
+    super.name,
+    super.autoDispose,
+    super.watched,
+    super.unwatched,
+  });
+
+  @override
+  SetSignalOptions<E> copyWith({
+    String? name,
+    bool? autoDispose,
+    void Function()? watched,
+    void Function()? unwatched,
+  }) {
+    return SetSignalOptions<E>(
+      name: name ?? this.name,
+      autoDispose: autoDispose ?? this.autoDispose,
+      watched: watched ?? this.watched,
+      unwatched: unwatched ?? this.unwatched,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is SetSignalOptions<E> &&
+        other.name == name &&
+        other.autoDispose == autoDispose &&
+        other.watched == watched &&
+        other.unwatched == unwatched;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, autoDispose, watched, unwatched);
 }

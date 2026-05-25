@@ -38,14 +38,12 @@ extension ReadonlySignalUtils<T> on ReadonlySignal<T> {
   /// final b = a.select((val) => val()['a'] as int);
   /// ```
   Computed<R> select<R>(
-    R Function(ReadonlySignal<T>) selector, {
-    bool? autoDispose = false,
-    String? debugLabel,
-  }) {
+    R Function(ReadonlySignal<T>) selector, [
+    ComputedOptions<R>? options,
+  ]) {
     return computed(
       () => selector(this),
-      autoDispose: autoDispose ?? this.autoDispose,
-      debugLabel: debugLabel,
+      options: options,
     );
   }
 }

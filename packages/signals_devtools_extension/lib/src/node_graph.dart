@@ -91,7 +91,10 @@ class _NodeGraphState extends State<NodeGraph> {
 
   void setNodeSources(Graph mutator, $Node n) {
     final sources = n.sources?.split(',') ?? [];
-    final items = sources.map((e) => int.parse(e)).toList();
+    final items = sources
+        .map((e) => int.tryParse(e.trim()))
+        .whereType<int>()
+        .toList();
     for (final item in items) {
       addEdge(mutator, item, n.id, Colors.orange);
     }
@@ -99,7 +102,10 @@ class _NodeGraphState extends State<NodeGraph> {
 
   void setNodeTargets(Graph mutator, $Node n) {
     final sources = n.targets?.split(',') ?? [];
-    final items = sources.map((e) => int.parse(e)).toList();
+    final items = sources
+        .map((e) => int.tryParse(e.trim()))
+        .whereType<int>()
+        .toList();
     for (final item in items) {
       addEdge(mutator, n.id, item, Colors.green);
     }

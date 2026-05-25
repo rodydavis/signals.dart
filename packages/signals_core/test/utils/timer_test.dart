@@ -30,23 +30,29 @@ void main() {
     'TimerSignal',
     (val, {autoDispose = false, debugLabel = 'Timer'}) => TimerSignal(
       every: val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: AsyncSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'timerSignal',
     (val, {autoDispose = false, debugLabel = 'Timer'}) => timerSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: AsyncSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'toSignal',
     (val, {autoDispose = false, debugLabel = 'Timer'}) => val.toSignal(
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: AsyncSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
 }
