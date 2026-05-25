@@ -5,6 +5,7 @@ import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
 import 'signal.dart';
+import 'options.dart';
 import 'untracked.dart';
 
 /// An interface for read-only signals.
@@ -250,7 +251,8 @@ mixin class ReadonlySignal<T> {
 /// Create a new plain readonly signal
 ReadonlySignal<T> readonly<T>(
   /// The initial value for the signal
-  T value,
-) {
-  return signal<T>(value);
+  T value, [
+  ReadonlySignalOptions<T>? options,
+]) {
+  return signal<T>(value, options);
 }

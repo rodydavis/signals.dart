@@ -45,7 +45,7 @@ class Signal<T> with ReadonlySignal<T> {
     String? name,
     void Function()? watched,
     void Function()? unwatched,
-    SignalOptions<T>? options,
+    ReadonlySignalOptions<T>? options,
   })  : name = options?.name ?? name,
         watched = options?.watched ?? watched,
         unwatched = options?.unwatched ?? unwatched,
@@ -57,7 +57,7 @@ class Signal<T> with ReadonlySignal<T> {
     String? name,
     void Function()? watched,
     void Function()? unwatched,
-    SignalOptions<T>? options,
+    ReadonlySignalOptions<T>? options,
   })  : name = options?.name ?? name,
         watched = options?.watched ?? watched,
         unwatched = options?.unwatched ?? unwatched,
@@ -146,7 +146,7 @@ class Signal<T> with ReadonlySignal<T> {
 Signal<T> signal<T>(
   /// The initial value for the signal
   T value, [
-  SignalOptions<T>? options,
+  ReadonlySignalOptions<T>? options,
 ]) {
   return Signal<T>(
     value,

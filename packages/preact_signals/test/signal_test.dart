@@ -210,5 +210,10 @@ void main() {
       expect(watchedCalls, 1);
       expect(unwatchedCalls, 1);
     });
+
+    test('should support name option via ReadonlySignalOptions in readonly()', () {
+      final a = readonly(0, const ReadonlySignalOptions(name: 'constant'));
+      expect(a.name, 'constant');
+    });
   });
 }
