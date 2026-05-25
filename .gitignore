@@ -1,37 +1,55 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
+# ==========================================
+# 🌌 Federated Workspaces - Ultimate Ignores
+# ==========================================
+
+# --- System & Editor Files ---
 .DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
 .idea/
+*.swp
+*.swo
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# --- Bazel Convenience Symlinks & Outputs ---
+bazel-*
+bazel_out/
 
-# Flutter/Dart/Pub related
-# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
-/pubspec.lock
-**/doc/api/
+# --- C/C++ Outputs ---
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.out
+*.exe
+
+# --- Go Outputs ---
+*.test
+*.prof
+__debug_bin
+MODULE.bazel.lock
+
+# --- Node / JavaScript / pnpm ---
+node_modules/
+.npm/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Dart / Flutter ---
 .dart_tool/
 .packages
-build/
-
-pubspec_overrides.yaml
-
-.fvm/flutter_sdk
-.vscode/settings.json
-
-context_watch/
+.pub-cache/
+.pub/
+/build/
+*.flutter-plugins
+*.flutter-plugins-dependencies

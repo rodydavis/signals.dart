@@ -1,0 +1,7 @@
+load("@rules_flutter//flutter:defs.bzl", "dart_library")
+
+dart_library(
+    name = "signals_core",
+    srcs = glob(["lib/**/*.dart"]),
+    visibility = ["//visibility:public"],
+)
