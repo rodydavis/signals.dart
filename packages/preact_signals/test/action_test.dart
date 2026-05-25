@@ -238,5 +238,44 @@ void main() {
       myAction10('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
       expect(a.value, '1 2 3 4 5 6 7 8 9 10');
     });
+
+    test('extensions (ActionExt0 to ActionExt10) should wrap functions type-safely', () {
+      final a = signal('a');
+
+      final ext0 = (() {
+        a.value = '0';
+      }).action;
+      ext0();
+      expect(a.value, '0');
+
+      final ext1 = ((String x) {
+        a.value = x;
+      }).action;
+      ext1('1');
+      expect(a.value, '1');
+
+      final ext2 = ((String x, String y) {
+        a.value = '$x $y';
+      }).action;
+      ext2('1', '2');
+      expect(a.value, '1 2');
+
+      final ext10 = ((
+        String v1,
+        String v2,
+        String v3,
+        String v4,
+        String v5,
+        String v6,
+        String v7,
+        String v8,
+        String v9,
+        String v10,
+      ) {
+        a.value = '$v1 $v2 $v3 $v4 $v5 $v6 $v7 $v8 $v9 $v10';
+      }).action;
+      ext10('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
+      expect(a.value, '1 2 3 4 5 6 7 8 9 10');
+    });
   });
 }
