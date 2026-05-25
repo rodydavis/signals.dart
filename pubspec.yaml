@@ -28,11 +28,15 @@ melos:
 workspace:
   - packages/preact_signals
   - packages/signals
+  - packages/signals/example
   - packages/signals_core
   - packages/signals_devtools_extension
   - packages/signals_flutter
+  - packages/signals_flutter/example
   - packages/signals_hooks
+  - packages/signals_hooks/example
   - packages/signals_lint
+  - packages/signals_lint/example
 
   - benchmark/frameworks/preact_signals
   - benchmark/frameworks/signals_core

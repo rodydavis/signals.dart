@@ -22,7 +22,7 @@ scripts:
 
 command:
   bootstrap:
-    usePubspecOverrides: false
+    usePubspecOverrides: true
   version:
     # Generates precise changelogs based on conventional commits
     updateGitTagRefs: true
