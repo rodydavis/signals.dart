@@ -1,5 +1,5 @@
 ---
-name: signals_core
+name: signals-dart
 description: Advanced reactive state primitives, collections, mixins, and utilities of signals_core.
 ---
 
@@ -34,6 +34,74 @@ This skill details advanced state management primitives, reactive collections, a
 | [tracked_signal.md](utils/tracked_signal.md) | State history wrapper enabling clean out-of-the-box undo/redo mechanisms. |
 | [timer_signal.md](utils/timer_signal.md) | Periodically emitting stopwatch signal with built-in pause, resume, and reset. |
 | [connect.md](utils/connect.md) | Dynamic event connector feeding multiple external data pipelines into single targets. |
+
+---
+
+## Core Primitives Quick Start Guide
+
+The signals library exposes five core functions which are the building blocks to model any reactive business logic.
+
+### 1. `signal(initialValue)`
+Creates a new mutable signal container. You read a signal's value or subscribe to updates by accessing `.value`.
+```dart
+final counter = signal(0);
+print(counter.value); // 0
+counter.value = 1; // Mutates value and schedules dependent updates
+```
+
+#### `.peek()`
+Reads a signal's current value *without* subscribing to its mutations.
+```dart
+final counter = signal(0);
+final logCount = signal(0);
+
+effect(() {
+  print(counter.value);
+  // Read using peek to avoid subscribing/triggering loop
+  logCount.value = logCount.peek() + 1;
+});
+```
+
+### 2. `untracked(fn)`
+Executes a callback that reads signals without subscribing to any of them.
+```dart
+final counter = signal(0);
+final count = signal(0);
+
+effect(() {
+  print(counter.value);
+  count.value = untracked(() => count.value + 1);
+});
+```
+
+### 3. `computed(fn)`
+Combines the values of multiple signals into a lazy, memoized derived signal.
+```dart
+final first = signal('John');
+final last = signal('Doe');
+final fullName = computed(() => '${first.value} ${last.value}');
+print(fullName.value); // John Doe
+```
+
+### 4. `effect(fn)`
+Orchestrates immediate synchronous side effects by running a callback and subscribing to any signals read within it.
+```dart
+final name = signal('Jane');
+final dispose = effect(() => print('Hello $name'));
+dispose(); // Clean up subscription
+```
+
+### 5. `batch(fn)`
+Groups multiple signal writes into a single transaction, executing all dependent computed evaluations and effects exactly once at the end.
+```dart
+final a = signal(0);
+final b = signal(0);
+
+batch(() {
+  a.value = 1;
+  b.value = 2;
+});
+```
 
 ---
 

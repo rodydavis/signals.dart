@@ -1,5 +1,5 @@
 ---
-name: migration-6-to-7
+name: signals-migration-6-to-7
 description: Detailed guidelines, patterns, and rules for migrating codebases from signals.dart version 6.x to version 7.x.
 ---
 

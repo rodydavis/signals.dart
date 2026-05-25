@@ -1,5 +1,5 @@
 ---
-name: signals_flutter
+name: signals-flutter
 description: Highly optimized Flutter UI bindings and GPU rendering for reactive signals.
 ---
 
@@ -21,6 +21,74 @@ This skill covers optimizing Flutter UI bindings, element-level reactive trackin
 | Related File | Description |
 |---|---|
 | [watch.md](extensions/watch.md) | Dynamic VM Expando element-level tracking context extensions supporting automatic teardowns. |
+
+---
+
+## Core Primitives Quick Start Guide
+
+The signals library exposes five core functions which are the building blocks to model any reactive business logic.
+
+### 1. `signal(initialValue)`
+Creates a new mutable signal container. You read a signal's value or subscribe to updates by accessing `.value`.
+```dart
+final counter = signal(0);
+print(counter.value); // 0
+counter.value = 1; // Mutates value and schedules dependent updates
+```
+
+#### `.peek()`
+Reads a signal's current value *without* subscribing to its mutations.
+```dart
+final counter = signal(0);
+final logCount = signal(0);
+
+effect(() {
+  print(counter.value);
+  // Read using peek to avoid subscribing/triggering loop
+  logCount.value = logCount.peek() + 1;
+});
+```
+
+### 2. `untracked(fn)`
+Executes a callback that reads signals without subscribing to any of them.
+```dart
+final counter = signal(0);
+final count = signal(0);
+
+effect(() {
+  print(counter.value);
+  count.value = untracked(() => count.value + 1);
+});
+```
+
+### 3. `computed(fn)`
+Combines the values of multiple signals into a lazy, memoized derived signal.
+```dart
+final first = signal('John');
+final last = signal('Doe');
+final fullName = computed(() => '${first.value} ${last.value}');
+print(fullName.value); // John Doe
+```
+
+### 4. `effect(fn)`
+Orchestrates immediate synchronous side effects by running a callback and subscribing to any signals read within it.
+```dart
+final name = signal('Jane');
+final dispose = effect(() => print('Hello $name'));
+dispose(); // Clean up subscription
+```
+
+### 5. `batch(fn)`
+Groups multiple signal writes into a single transaction, executing all dependent computed evaluations and effects exactly once at the end.
+```dart
+final a = signal(0);
+final b = signal(0);
+
+batch(() {
+  a.value = 1;
+  b.value = 2;
+});
+```
 
 ---
 
