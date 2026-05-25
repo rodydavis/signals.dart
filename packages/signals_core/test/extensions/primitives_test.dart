@@ -50,6 +50,42 @@ void main() {
       expect(s.toStringAsPrecision(2), '5.0');
     });
 
+    test('NumSignalExtension cast tests', () {
+      final ReadonlySignal<num> s = 5.0.$;
+      expect(s + 3, 8.0);
+      expect(s - 3, 2.0);
+      expect(s * 3, 15.0);
+      expect(s % 3, 2.0);
+      expect(s / 2, 2.5);
+      expect(s ~/ 2, 2);
+      expect(-s, -5.0);
+      expect(s.remainder(3), 2.0);
+      expect(s < 6, true);
+      expect(s <= 5, true);
+      expect(s > 4, true);
+      expect(s >= 5, true);
+      expect(s.isNaN, false);
+      expect(s.isNegative, false);
+      expect(s.isInfinite, false);
+      expect(s.isFinite, true);
+      expect(s.abs(), 5.0);
+      expect(s.sign, 1.0);
+      expect(s.round(), 5);
+      expect(s.floor(), 5);
+      expect(s.ceil(), 5);
+      expect(s.truncate(), 5);
+      expect(s.roundToDouble(), 5.0);
+      expect(s.floorToDouble(), 5.0);
+      expect(s.ceilToDouble(), 5.0);
+      expect(s.truncateToDouble(), 5.0);
+      expect(s.clamp(1.0, 10.0), 5.0);
+      expect(s.toInt(), 5);
+      expect(s.toDouble(), 5.0);
+      expect(s.toStringAsFixed(1), '5.0');
+      expect(s.toStringAsExponential(1), '5.0e+0');
+      expect(s.toStringAsPrecision(2), '5.0');
+    });
+
     test('Int extensions', () {
       final s = 10.$;
       expect(s.value, 10);

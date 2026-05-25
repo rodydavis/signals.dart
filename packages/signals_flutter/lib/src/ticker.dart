@@ -33,6 +33,8 @@ class TickerSignal extends Signal<Duration> implements TickerProvider {
   /// ```
   TickerSignal({
     Duration? initialDuration,
+    super.options,
+    @Deprecated('Use options: SignalOptions(name: ...) instead')
     super.debugLabel,
   }) : super(initialDuration ?? Duration.zero) {
     initSchedulerBindingSignals(); // no-op if already called
@@ -97,10 +99,13 @@ class TickerSignal extends Signal<Duration> implements TickerProvider {
 /// ```
 TickerSignal tickerSignal({
   Duration? initialDuration,
+  SignalOptions<Duration>? options,
+  @Deprecated('Use options: SignalOptions(name: ...) instead')
   String? debugLabel,
 }) {
   return TickerSignal(
     initialDuration: initialDuration,
+    options: options,
     debugLabel: debugLabel,
   );
 }

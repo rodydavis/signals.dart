@@ -18,7 +18,10 @@ class FlutterSignal<T> extends core.Signal<T>
   /// ```
   FlutterSignal(
     super.internalValue, {
+    super.options,
+    @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
     super.autoDispose,
+    @Deprecated('Use options: SignalOptions(name: ...) instead')
     super.debugLabel,
     this.runCallbackOnListen = false,
   });
@@ -32,7 +35,10 @@ class FlutterSignal<T> extends core.Signal<T>
   /// db.value = DatabaseConnect(...);
   /// ```
   FlutterSignal.lazy({
+    super.options,
+    @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
     super.autoDispose,
+    @Deprecated('Use options: SignalOptions(name: ...) instead')
     super.debugLabel,
     this.runCallbackOnListen = false,
   }) : super.lazy();
@@ -52,12 +58,16 @@ class FlutterSignal<T> extends core.Signal<T>
 /// ```
 FlutterSignal<T> signal<T>(
   T value, {
+  core.SignalOptions<T>? options,
+  @Deprecated('Use options: SignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
+  @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
   bool runCallbackOnListen = false,
 }) {
   return FlutterSignal<T>(
     value,
+    options: options,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
     runCallbackOnListen: runCallbackOnListen,
@@ -73,11 +83,15 @@ FlutterSignal<T> signal<T>(
 /// db.value = DatabaseConnect(...);
 /// ```
 FlutterSignal<T> lazySignal<T>({
+  core.SignalOptions<T>? options,
+  @Deprecated('Use options: SignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
+  @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
   bool runCallbackOnListen = false,
 }) {
   return FlutterSignal<T>.lazy(
+    options: options,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
     runCallbackOnListen: runCallbackOnListen,

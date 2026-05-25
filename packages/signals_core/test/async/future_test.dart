@@ -208,5 +208,48 @@ void main() {
           reason:
               'the computed function was called an unexpected number of times');
     });
+
+    test('deprecated parameters and basic fallback options', () async {
+      final s = futureSignal(
+        () async => 42,
+        initialValue: 0,
+        lazy: false,
+        autoDispose: true,
+        debugLabel: 'dep-test',
+      );
+      expect(s.peek().value, 0);
+      await s.future;
+      expect(s.peek().value, 42);
+    });
+
+    test('dependencies containing AsyncSignal', () async {
+      final dep = asyncSignal<int>(AsyncState.data(1));
+      final s = futureSignal(
+        () async => dep.value.value ?? 0,
+        options: AsyncSignalOptions(dependencies: [dep]),
+      );
+
+      await s.future;
+      expect(s.value.value, 1);
+
+      // Trigger dependency update to AsyncLoading
+      dep.value = AsyncState.loading();
+      // Then trigger loaded value to hit loaded bypass branch
+      dep.value = AsyncState.data(2);
+
+      await s.future;
+      expect(s.value.value, 2);
+    });
+
+    test('dispose cleanups', () async {
+      final dep = signal(0);
+      final s = futureSignal(
+        () async => dep.value,
+        options: AsyncSignalOptions(dependencies: [dep]),
+      );
+      await s.future;
+      s.dispose();
+      expect(s.disposed, true);
+    });
   });
 }

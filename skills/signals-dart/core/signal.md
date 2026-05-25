@@ -25,7 +25,7 @@ final name = signal(
 ## 2. Reading and Writing
 
 - **Read**: Access the current value using the `.value` getter. This registers the signal as a dependency in the current reactive context (e.g. inside `computed` or `effect`).
-- **Write**: Mutate the current value using the `.value` setter. If the new value is not equal to the current value (based on the `equalityCheck` function, which defaults to `identical`), all active observers are notified and scheduled to recompute.
+- **Write**: Mutate the current value using the `.value` setter. If the new value is not equal to the current value (based on the `equalityCheck` function, which defaults to standard operator `==` comparison), all active observers are notified and scheduled to recompute.
 
 ```dart
 print(count.value); // Read value

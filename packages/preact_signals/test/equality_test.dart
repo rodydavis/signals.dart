@@ -86,6 +86,26 @@ void main() {
         expect(eq.equals({1, 2}, {2, 1}), isTrue);
         expect(eq.equals({1, 2}, {1, 3}), isFalse);
         expect(eq.equals({1, 2}, {1, 2, 3}), isFalse);
+
+        // Nested deep comparison in sets
+        expect(
+            eq.equals({
+              {1, 2},
+              [3, 4]
+            }, {
+              [3, 4],
+              {2, 1}
+            }),
+            isTrue);
+        expect(
+            eq.equals({
+              {1, 2},
+              [3, 4]
+            }, {
+              [3, 5],
+              {2, 1}
+            }),
+            isFalse);
       });
 
       test('mismatched collection types', () {

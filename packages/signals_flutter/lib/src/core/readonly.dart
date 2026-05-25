@@ -13,12 +13,16 @@ abstract class FlutterReadonlySignal<T> extends core.ReadonlySignal<T>
 FlutterReadonlySignal<T> readonly<T>(
   /// The initial value for the signal
   T value, {
+  core.SignalOptions<T>? options,
+  @Deprecated('Use options: SignalOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
+  @Deprecated('Use options: SignalOptions(autoDispose: ...) instead')
+  bool? autoDispose,
   bool runCallbackOnListen = false,
 }) {
   return signal<T>(
     value,
+    options: options,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
     runCallbackOnListen: runCallbackOnListen,

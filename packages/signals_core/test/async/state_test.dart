@@ -281,5 +281,80 @@ void main() {
         expect(value, 5);
       });
     });
+
+    test('requireValue throws UnsupportedError on AsyncError and AsyncLoading',
+        () {
+      final err = AsyncState<int>.error('error');
+      expect(() => err.requireValue, throwsA(isA<UnsupportedError>()));
+
+      final loading = AsyncState<int>.loading();
+      expect(() => loading.requireValue, throwsA(isA<UnsupportedError>()));
+    });
+
+    test('map and maybeMap with reloading and refreshing states', () {
+      final dataReloading = AsyncState<int>.dataReloading(10);
+      final dataRefreshing = AsyncState<int>.dataRefreshing(20);
+      final errorReloading = AsyncState<int>.errorReloading('err');
+      final errorRefreshing = AsyncState<int>.errorRefreshing('err');
+
+      // Test map with reloading/refreshing overrides
+      expect(
+        dataReloading.map(
+          data: (v) => 'data',
+          error: (e, s) => 'error',
+          loading: () => 'loading',
+          reloading: () => 'is-reloading',
+        ),
+        'is-reloading',
+      );
+
+      expect(
+        dataRefreshing.map(
+          data: (v) => 'data',
+          error: (e, s) => 'error',
+          loading: () => 'loading',
+          refreshing: () => 'is-refreshing',
+        ),
+        'is-refreshing',
+      );
+
+      // Test maybeMap with reloading/refreshing overrides
+      expect(
+        errorReloading.maybeMap(
+          reloading: () => 'is-reloading',
+          orElse: () => 'orElse',
+        ),
+        'is-reloading',
+      );
+
+      expect(
+        errorRefreshing.maybeMap(
+          refreshing: () => 'is-refreshing',
+          orElse: () => 'orElse',
+        ),
+        'is-refreshing',
+      );
+    });
+
+    test('equality and hashCodes for reloading and refreshing states', () {
+      final dr1 = AsyncState<int>.dataReloading(10);
+      final dr2 = AsyncState<int>.dataReloading(10);
+      final dr3 = AsyncState<int>.dataReloading(20);
+      final df1 = AsyncState<int>.dataRefreshing(10);
+
+      expect(dr1 == dr2, isTrue);
+      expect(dr1 == dr3, isFalse);
+      expect(dr1 == df1, isFalse);
+
+      final st = StackTrace.current;
+      final er1 = AsyncState<int>.errorReloading('err', st);
+      final er2 = AsyncState<int>.errorReloading('err', st);
+      final er3 = AsyncState<int>.errorReloading('err2', st);
+      final ef1 = AsyncState<int>.errorRefreshing('err', st);
+
+      expect(er1 == er2, isTrue);
+      expect(er1 == er3, isFalse);
+      expect(er1 == ef1, isFalse);
+    });
   });
 }

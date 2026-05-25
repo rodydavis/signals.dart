@@ -45,7 +45,7 @@ class _SignalEffectState extends State<SignalEffect> {
     super.initState();
     _cleanup = core.effect(
       () => widget.callback(context),
-      debugLabel: widget.debugLabel,
+      options: core.EffectOptions(name: widget.debugLabel),
     );
   }
 
@@ -56,7 +56,7 @@ class _SignalEffectState extends State<SignalEffect> {
       _cleanup?.call();
       _cleanup = core.effect(
         () => widget.callback(context),
-        debugLabel: widget.debugLabel,
+        options: core.EffectOptions(name: widget.debugLabel),
       );
     }
   }

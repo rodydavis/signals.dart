@@ -83,7 +83,20 @@ class SignalDeepEquality<T> extends SignalEquality<T> {
 
     // 5. Handle Sets
     if (a is Set && b is Set) {
-      return a.length == b.length && a.containsAll(b);
+      if (a.length != b.length) return false;
+      final bList = b.toList();
+      for (final elementA in a) {
+        bool found = false;
+        for (int i = 0; i < bList.length; i++) {
+          if (equals(elementA, bList[i])) {
+            bList.removeAt(i);
+            found = true;
+            break;
+          }
+        }
+        if (!found) return false;
+      }
+      return true;
     }
 
     // 6. Fallback to standard value equality

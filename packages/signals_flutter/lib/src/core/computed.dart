@@ -14,7 +14,10 @@ class FlutterComputed<T> extends core.Computed<T>
   /// updated when any signals accessed from within the callback function change.
   FlutterComputed(
     super.internalValue, {
+    super.options,
+    @Deprecated('Use options: ComputedOptions(autoDispose: ...) instead')
     super.autoDispose,
+    @Deprecated('Use options: ComputedOptions(name: ...) instead')
     super.debugLabel,
     this.runCallbackOnListen = false,
   });
@@ -29,12 +32,16 @@ class FlutterComputed<T> extends core.Computed<T>
 /// updated when any signals accessed from within the callback function change.
 FlutterComputed<T> computed<T>(
   T Function() compute, {
+  core.ComputedOptions<T>? options,
+  @Deprecated('Use options: ComputedOptions(name: ...) instead')
   String? debugLabel,
-  bool autoDispose = false,
+  @Deprecated('Use options: ComputedOptions(autoDispose: ...) instead')
+  bool? autoDispose,
   bool runCallbackOnListen = false,
 }) {
   return FlutterComputed<T>(
     compute,
+    options: options,
     debugLabel: debugLabel,
     autoDispose: autoDispose,
     runCallbackOnListen: runCallbackOnListen,
