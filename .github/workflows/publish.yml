@@ -2,11 +2,11 @@ name: Automated Package Publisher
 
 on:
   push:
-    branches:
-      - main # Or your release branch
+    tags:
+      - '*v*' # Triggers on any global tag (v6.3.1) or package-specific tag (signals-v6.3.1)
 
 concurrency:
-  group: publish
+  group: publish-${{ github.ref }}
   cancel-in-progress: false # Do not cancel in-progress runs to avoid partial/broken releases
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
     environment: pub.dev 
     permissions:
       id-token: write # Mandatory for OIDC authentication with pub.dev
-      contents: write  # Allows pushing git tags and changelog updates back to your repo
+      contents: read  # Only read access needed for publishing tag contents
     runs-on: ubuntu-latest
 
     steps:
@@ -44,13 +44,7 @@ jobs:
       - name: Dry-Run Publication Validation
         run: melos publish --dry-run
 
-      # Melos automatically versions changed packages and pushes them to pub.dev
-      - name: Version and Publish Packages
+      # Melos automatically publishes the packages matching the pushed git tags
+      - name: Publish Packages
         run: |
-          # Configure Git so Melos can push changelog updates and version bumps
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Automatically calculate versions, apply git tags, and release
-          melos version --yes
           melos publish --no-dry-run --yes
