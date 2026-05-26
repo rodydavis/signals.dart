@@ -699,6 +699,34 @@ class Sidebar extends StatelessComponent {
         },
       ),
     ]),
+    css('[data-theme="dark"] .package-switcher, html.dark .package-switcher', [
+      css('&').styles(
+        raw: {
+          'border-color': '#475569',
+          'background-color': '#1e293b',
+          'color': '#f8fafc',
+        },
+      ),
+      css('&:hover').styles(
+        raw: {
+          'border-color': '#64748b',
+          'background-color': '#0f172a',
+        },
+      ),
+      css('&:focus').styles(
+        raw: {
+          'border-color': '#3b82f6',
+        },
+      ),
+    ]),
+    css('[data-theme="dark"] .package-switcher option, html.dark .package-switcher option', [
+      css('&').styles(
+        raw: {
+          'background-color': '#1e293b',
+          'color': '#f8fafc',
+        },
+      ),
+    ]),
   ];
 }
 

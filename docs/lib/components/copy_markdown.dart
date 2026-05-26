@@ -153,7 +153,7 @@ class CopyMarkdown extends StatelessComponent {
               --tooltip-border: #cbd5e1;
               --tooltip-shadow: 0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
             }
-            html.dark {
+            html.dark, [data-theme="dark"] {
               --copy-btn-bg: #1e293b;
               --copy-btn-border: #475569;
               --copy-btn-color: #94a3b8;
