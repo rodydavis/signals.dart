@@ -149,7 +149,7 @@ T useSignalValue<T, S extends ReadonlySignal<T>>(
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     // Create a local signal managed by this HookWidget's lifecycle
-///     final count = useSignal(0, debugLabel: 'localCounter');
+///     final count = useSignal(0, const [], SignalOptions(name: 'localCounter'));
 ///
 ///     return Scaffold(
 ///       body: Center(
@@ -215,7 +215,7 @@ FlutterSignal<T> useSignal<T>(
 ///     // Derived full name computed from the individual signals
 ///     final fullName = useComputed(
 ///       () => '${firstName.value} ${lastName.value}',
-///       keys: [firstName, lastName],
+///       [firstName, lastName],
 ///     );
 ///
 ///     return Column(
@@ -339,10 +339,10 @@ void useSignalEffect(
 ///     // but allows local modifications in the meantime.
 ///     final usernameSignal = useLinkedSignal(
 ///       () => initialUsername,
-///       options: LinkedSignalOptions(
+///       [initialUsername],
+///       LinkedSignalOptions(
 ///         computation: (source, previous) => source,
 ///       ),
-///       keys: [initialUsername],
 ///     );
 ///
 ///     return Column(

@@ -7,9 +7,10 @@ import 'package:signals_core/signals_core.dart' as core;
 /// (such as showing snackbars, opening dialogs, navigating, or logging metrics) in response
 /// to signal updates, without triggering rebuilds of the child widget tree.
 /// 
-/// The [callback] runs immediately on mount and dynamically tracks any signals accessed
+/// The [effect] callback runs immediately on mount and dynamically tracks any signals accessed
 /// within its scope. The underlying subscription is automatically disposed when this widget
-/// is removed from the tree.
+/// is removed from the tree. You can optionally return a cleanup function (e.g. `void Function()`)
+/// to run before the next execution or when the widget is disposed.
 /// 
 /// ### Dialog and Snackbar Trigger Example
 /// ```dart
@@ -21,13 +22,15 @@ import 'package:signals_core/signals_core.dart' as core;
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     return SignalEffect(
-///       callback: (context) {
+///       effect: (context) {
 ///         // Triggers whenever 'count' updates:
 ///         if (count.value >= 10) {
 ///           ScaffoldMessenger.of(context).showSnackBar(
 ///             SnackBar(content: Text('Limit reached: ${count.value}!')),
 ///           );
 ///         }
+///         // Optional: return cleanup callback
+///         return () => print('Cleaning up effect');
 ///       },
 ///       child: ElevatedButton(
 ///         onPressed: () => count.value++,
@@ -40,7 +43,7 @@ import 'package:signals_core/signals_core.dart' as core;
 /// 
 /// > [!IMPORTANT]
 /// > Do not perform synchronous state changes or trigger widget rebuilds directly inside
-/// > the callback to prevent infinite reactive loops.
+/// > the effect callback to prevent infinite reactive loops.
 class SignalEffect extends StatefulWidget {
   /// Creates a [SignalEffect] widget.
   /// 

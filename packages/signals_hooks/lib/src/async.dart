@@ -40,7 +40,7 @@ import 'core.dart';
 ///     // Re-fetches user profile if userId changes
 ///     final userSignal = useFutureSignal(
 ///       () => fetchUserProfile(userId),
-///       keys: [userId],
+///       [userId],
 ///     );
 ///
 ///     return userSignal.value.map(
@@ -99,7 +99,7 @@ FutureSignal<T> useFutureSignal<T>(
 ///     // Subscribes to chat stream, automatically switching streams if channelId changes
 ///     final streamSignal = useStreamSignal(
 ///       () => listenToChannel(channelId),
-///       AsyncSignalOptions(keys: [channelId]),
+///       [channelId],
 ///     );
 ///
 ///     return streamSignal.value.map(
