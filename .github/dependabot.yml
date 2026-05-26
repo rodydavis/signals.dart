@@ -11,9 +11,3 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-
-  # Maintain NPM dependencies for the website
-  - package-ecosystem: "npm"
-    directory: "/website"
-    schedule:
-      interval: "weekly"
