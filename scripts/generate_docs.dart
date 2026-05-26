@@ -1863,7 +1863,13 @@ class DynamicHeader extends StatelessComponent {
           textDecoration: TextDecoration.none,
           raw: {'color': 'inherit'},
         ),
-        css('img').styles(height: 1.5.rem, width: Unit.auto),
+        css('img').styles(
+          height: 1.5.rem,
+          width: Unit.auto,
+          raw: {
+            'filter': 'brightness(0.3) contrast(1.3) saturate(1.5)',
+          },
+        ),
         css('span').styles(fontWeight: FontWeight.w700),
       ]),
       css('.header-content', [
@@ -1881,6 +1887,13 @@ class DynamicHeader extends StatelessComponent {
           gap: Gap.column(0.5.rem),
         ),
       ]),
+    ]),
+    css('[data-theme="dark"] .header .header-title img, html.dark .header .header-title img', [
+      css('&').styles(
+        raw: {
+          'filter': 'none',
+        },
+      ),
     ]),
   ];
 }
