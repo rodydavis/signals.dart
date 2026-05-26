@@ -204,5 +204,31 @@ void main() {
       );
       expect(cleanupCalls, 2);
     });
+
+    testWidgets('SignalEffect supports deprecated callback parameter',
+        (tester) async {
+      final count = signal(0);
+      int callbackCalls = 0;
+
+      final widget = MaterialApp(
+        home: Scaffold(
+          body: SignalEffect(
+            // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+            callback: (context) {
+              callbackCalls++;
+              count.value; // Track dependency
+            },
+            child: const Text('Deprecated Callback Child'),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(widget);
+      expect(callbackCalls, 1);
+
+      count.value = 50;
+      await tester.pump();
+      expect(callbackCalls, 2);
+    });
   });
 }

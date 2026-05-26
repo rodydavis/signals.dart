@@ -50,17 +50,24 @@ class SignalEffect extends StatefulWidget {
   /// The [effect] is executed inside a reactive effect.
   /// The [child] is rendered normally.
   const SignalEffect({
-    required this.effect,
+    dynamic Function(BuildContext context)? effect,
+    @Deprecated('Use effect instead')
+    void Function(BuildContext context)? callback,
     required this.child,
     this.debugLabel,
     super.key,
-  });
+  })  : assert(effect != null || callback != null,
+            'Either effect or callback must be provided'),
+        _effect = effect ?? callback;
 
   /// The callback that runs inside the reactive effect.
   ///
   /// Can optionally return a cleanup function (e.g. `void Function()`) that is run
   /// before the next execution of the callback or when the widget is disposed.
-  final dynamic Function(BuildContext context) effect;
+  final dynamic Function(BuildContext context)? _effect;
+
+  /// Gets the effect callback to run inside the reactive effect.
+  dynamic Function(BuildContext context) get effect => _effect!;
 
   /// The child widget to render.
   final Widget child;
