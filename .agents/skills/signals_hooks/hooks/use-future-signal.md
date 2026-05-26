@@ -12,12 +12,13 @@ class UserProfileView extends HookWidget {
   Widget build(BuildContext context) {
     final user = useFutureSignal(
       () => fetchUserProfile(),
+      const [],
       AsyncSignalOptions(name: 'user-profile'),
     );
 
     if (user.value.isLoading) return CircularProgressIndicator();
-    if (user.value.hasError) return Text('Error: ${user.value.error}');
-    return Text('Name: ${user.value.value}');
+    if (user.value.hasError) return Text('Error: \${user.value.error}');
+    return Text('Name: \${user.value.value}');
   }
 }
 ```

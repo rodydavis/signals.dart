@@ -13,10 +13,11 @@ class AsyncComputedView extends HookWidget {
     final count = useSignal(1);
     final user = useAsyncComputed(
       () => fetchUserById(count.value),
+      const [],
       AsyncSignalOptions(name: 'async-computed-user'),
     );
 
-    return Text('User: ${user.value.value?.name}');
+    return Text('User: \${user.value.value?.name}');
   }
 }
 ```

@@ -5,19 +5,24 @@ Creates a **ChangeStackSignal** that manages undo/redo history.
 ## Example
 
 ```dart
-class ChangeStackView extends HookWidget {
-  const ChangeStackView({super.key});
+class UndoRedoView extends HookWidget {
+  const UndoRedoView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final history = useChangeStackSignal(0, ChangeStackSignalOptions(name: 'history'));
-    return Column(
+    final history = useChangeStackSignal(
+      0,
+      const [],
+      ChangeSignalOptions(name: 'history-stack'),
+    );
+
+    return Row(
       children: [
-        Text('Count: ${history.value}'),
-        ElevatedButton(
-          onPressed: () => history.undo(),
-          child: Text('Undo'),
+        IconButton(
+          icon: Icon(Icons.undo),
+          onPressed: history.canUndo ? () => history.undo() : null,
         ),
+        Text('Value: \${history.value}'),
       ],
     );
   }

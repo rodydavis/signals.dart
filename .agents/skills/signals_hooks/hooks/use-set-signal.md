@@ -5,13 +5,18 @@ Creates a reactive **SetSignal** for set collections.
 ## Example
 
 ```dart
-class SetSignalView extends HookWidget {
-  const SetSignalView({super.key});
+class SetView extends HookWidget {
+  const SetView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final items = useSetSignal({1, 2, 3}, SetSignalOptions(name: 'unique-items'));
-    return Text('Count: ${items.length}');
+    final selectedIds = useSetSignal(
+      <int>{},
+      const [],
+      SetSignalOptions(name: 'selected-items'),
+    );
+
+    return Text('Selected: \${selectedIds.length}');
   }
 }
 ```

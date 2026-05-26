@@ -11,10 +11,12 @@ class LazySignalView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final lazyValue = useLazySignal<int>(
-      () => 42,
-      SignalOptions(name: 'lazy'),
+      options: SignalOptions(name: 'lazy'),
     );
-    return Text('Value: ${lazyValue.value}');
+    return ElevatedButton(
+      onPressed: () => lazyValue.value = 42,
+      child: Text(lazyValue.isInitialized ? 'Value: \${lazyValue.value}' : 'Initialize'),
+    );
   }
 }
 ```

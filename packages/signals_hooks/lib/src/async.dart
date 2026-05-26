@@ -55,10 +55,10 @@ import 'core.dart';
 /// }
 /// ````
 FutureSignal<T> useFutureSignal<T>(
-  Future<T> Function() value, {
-  AsyncSignalOptions<T>? options,
+  Future<T> Function() value, [
   List<Object?> keys = const <Object>[],
-}) {
+  AsyncSignalOptions<T>? options,
+]) {
   final s = useMemoized(
     () => futureSignal(value, options: options),
     keys,
@@ -111,10 +111,10 @@ FutureSignal<T> useFutureSignal<T>(
 /// }
 /// ````
 StreamSignal<T> useStreamSignal<T>(
-  Stream<T> Function() value, {
-  AsyncSignalOptions<T>? options,
+  Stream<T> Function() value, [
   List<Object?> keys = const <Object>[],
-}) {
+  AsyncSignalOptions<T>? options,
+]) {
   final s = useMemoized(
     () => streamSignal(value, options: options),
     keys,
@@ -179,10 +179,10 @@ StreamSignal<T> useStreamSignal<T>(
 /// }
 /// ````
 AsyncSignal<T> useAsyncSignal<T>(
-  AsyncState<T> value, {
-  AsyncSignalOptions<T>? options,
+  AsyncState<T> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  AsyncSignalOptions<T>? options,
+]) {
   final s = useMemoized(() => asyncSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
@@ -250,10 +250,10 @@ AsyncSignal<T> useAsyncSignal<T>(
 /// }
 /// ````
 FutureSignal<T> useAsyncComputed<T>(
-  Future<T> Function() value, {
-  AsyncSignalOptions<T>? options,
+  Future<T> Function() value, [
   List<Object?> keys = const <Object>[],
-}) {
+  AsyncSignalOptions<T>? options,
+]) {
   final s = useMemoized(
     () => computedAsync(value, options: options),
     keys,

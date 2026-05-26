@@ -5,13 +5,20 @@ Creates a reactive **IterableSignal** for iterable collections.
 ## Example
 
 ```dart
-class IterableSignalView extends HookWidget {
-  const IterableSignalView({super.key});
+class IterableView extends HookWidget {
+  const IterableView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final items = useIterableSignal([1, 2, 3], IterableSignalOptions(name: 'iterable'));
-    return Text('First: ${items.first}');
+    final numbers = useIterableSignal(
+      [1, 2, 3],
+      const [],
+      IterableSignalOptions(name: 'numbers-iterable'),
+    );
+
+    return Column(
+      children: numbers.map((n) => Text('\$n')).toList(),
+    );
   }
 }
 ```

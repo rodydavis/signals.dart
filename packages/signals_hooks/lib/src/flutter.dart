@@ -50,10 +50,10 @@ import 'core.dart';
 /// }
 /// ````
 Signal<T> useValueNotifierToSignal<T>(
-  ValueNotifier<T> value, {
-  SignalOptions<T>? options,
+  ValueNotifier<T> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  SignalOptions<T>? options,
+]) {
   final s = useMemoized(
     () => valueNotifierToSignal(
       value,
@@ -111,10 +111,10 @@ Signal<T> useValueNotifierToSignal<T>(
 /// }
 /// ````
 ReadonlySignal<T> useValueListenableToSignal<T>(
-  ValueListenable<T> value, {
-  SignalOptions<T>? options,
+  ValueListenable<T> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  SignalOptions<T>? options,
+]) {
   final s = useMemoized(
     () => valueListenableToSignal(
       value,

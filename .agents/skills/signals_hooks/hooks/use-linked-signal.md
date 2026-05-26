@@ -11,14 +11,15 @@ class LinkedSignalView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final source = useSignal(10);
-    final linked = useLinkedSignal(
+    final linked = useLinkedSignal<int, int>(
+      () => source.value,
+      const [],
       LinkedSignalOptions(
         name: 'linked',
-        read: () => source.value,
-        write: (val) => source.value = val,
+        computation: (src, prev) => src * 2,
       ),
     );
-    return Text('Linked: ${linked.value}');
+    return Text('Linked (derived): \${linked.value}');
   }
 }
 ```

@@ -10,10 +10,10 @@ class CounterWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final count = useSignal(0, SignalOptions(name: 'counter'));
+    final count = useSignal(0, const [], SignalOptions(name: 'counter'));
     return ElevatedButton(
       onPressed: () => count.value++,
-      child: Text('Count: ${count.value}'),
+      child: Text('Count: \${count.value}'),
     );
   }
 }

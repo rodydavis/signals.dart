@@ -12,10 +12,11 @@ class AsyncStateView extends HookWidget {
   Widget build(BuildContext context) {
     final state = useAsyncSignal(
       AsyncState.loading(),
+      const [],
       AsyncSignalOptions(name: 'async-task'),
     );
 
-    return Text('Task loaded: ${state.value.hasValue}');
+    return Text('Task loaded: \${state.value.hasValue}');
   }
 }
 ```

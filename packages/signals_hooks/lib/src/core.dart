@@ -168,10 +168,10 @@ T useSignalValue<T, S extends ReadonlySignal<T>>(
 /// }
 /// ````
 FlutterSignal<T> useSignal<T>(
-  T value, {
-  SignalOptions<T>? options,
+  T value, [
   List<Object?> keys = const <Object>[],
-}) {
+  SignalOptions<T>? options,
+]) {
   final s = useMemoized(() => signal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
@@ -231,10 +231,10 @@ FlutterSignal<T> useSignal<T>(
 /// }
 /// ````
 FlutterComputed<T> useComputed<T>(
-  T Function() value, {
-  ComputedOptions<T>? options,
+  T Function() value, [
   List<Object?> keys = const <Object>[],
-}) {
+  ComputedOptions<T>? options,
+]) {
   final s = useMemoized(() => computed(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
@@ -361,10 +361,10 @@ void useSignalEffect(
 /// }
 /// ````
 LinkedSignal<T, S> useLinkedSignal<T, S>(
-  S Function() source, {
-  LinkedSignalOptions<T, S>? options,
+  S Function() source, [
   List<Object?> keys = const <Object>[],
-}) {
+  LinkedSignalOptions<T, S>? options,
+]) {
   final s = useMemoized(
     () => linkedSignal<T, S>(source, options: options),
     keys,

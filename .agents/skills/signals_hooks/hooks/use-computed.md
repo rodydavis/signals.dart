@@ -11,8 +11,8 @@ class DoubledCounter extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final count = useSignal(10);
-    final doubled = useComputed(() => count.value * 2);
-    return Text('Doubled: ${doubled.value}');
+    final doubled = useComputed(() => count.value * 2, const [], ComputedOptions(name: 'doubled'));
+    return Text('Doubled: \${doubled.value}');
   }
 }
 ```

@@ -60,10 +60,10 @@ import 'core.dart';
 /// }
 /// ````
 ListSignal<T> useListSignal<T>(
-  List<T> value, {
-  ListSignalOptions<T>? options,
+  List<T> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  ListSignalOptions<T>? options,
+]) {
   final s = useMemoized(() => listSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
@@ -119,10 +119,10 @@ ListSignal<T> useListSignal<T>(
 /// }
 /// ````
 SetSignal<T> useSetSignal<T>(
-  Set<T> value, {
-  SetSignalOptions<T>? options,
+  Set<T> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  SetSignalOptions<T>? options,
+]) {
   final s = useMemoized(() => setSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
@@ -157,10 +157,10 @@ SetSignal<T> useSetSignal<T>(
 /// }
 /// ````
 IterableSignal<T> useIterableSignal<T>(
-  Iterable<T> value, {
-  IterableSignalOptions<T>? options,
+  Iterable<T> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  IterableSignalOptions<T>? options,
+]) {
   final s =
       useMemoized(() => iterableSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
@@ -212,10 +212,10 @@ IterableSignal<T> useIterableSignal<T>(
 /// }
 /// ````
 MapSignal<K, V> useMapSignal<K, V>(
-  Map<K, V> value, {
-  MapSignalOptions<K, V>? options,
+  Map<K, V> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  MapSignalOptions<K, V>? options,
+]) {
   final s = useMemoized(() => mapSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
@@ -262,10 +262,10 @@ MapSignal<K, V> useMapSignal<K, V>(
 /// }
 /// ````
 TrackedSignal<T> useTrackedSignal<T>(
-  T value, {
-  TrackedSignalOptions<T>? options,
+  T value, [
   List<Object?> keys = const <Object>[],
-}) {
+  TrackedSignalOptions<T>? options,
+]) {
   final s =
       useMemoized(() => trackedSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
@@ -318,10 +318,10 @@ TrackedSignal<T> useTrackedSignal<T>(
 /// }
 /// ````
 QueueSignal<T> useQueueSignal<T>(
-  Queue<T> value, {
-  QueueSignalOptions<T>? options,
+  Queue<T> value, [
   List<Object?> keys = const <Object>[],
-}) {
+  QueueSignalOptions<T>? options,
+]) {
   final s = useMemoized(() => queueSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
@@ -394,10 +394,10 @@ QueueSignal<T> useQueueSignal<T>(
 /// }
 /// ````
 ChangeStackSignal<T> useChangeStackSignal<T>(
-  T value, {
-  ChangeSignalOptions<T>? options,
+  T value, [
   List<Object?> keys = const <Object>[],
-}) {
+  ChangeSignalOptions<T>? options,
+]) {
   final s = useMemoized(
     () => changeStack(value, options: options),
     keys,

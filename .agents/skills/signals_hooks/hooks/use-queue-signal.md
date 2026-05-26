@@ -5,13 +5,18 @@ Creates a reactive **QueueSignal** for queue collections.
 ## Example
 
 ```dart
-class QueueSignalView extends HookWidget {
-  const QueueSignalView({super.key});
+class QueueView extends HookWidget {
+  const QueueView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final queue = useQueueSignal<int>([], QueueSignalOptions(name: 'queue'));
-    return Text('Queue size: ${queue.length}');
+    final queue = useQueueSignal(
+      Queue<String>(),
+      const [],
+      QueueSignalOptions(name: 'notification-queue'),
+    );
+
+    return Text('Notifications pending: \${queue.length}');
   }
 }
 ```

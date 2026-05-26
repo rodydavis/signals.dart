@@ -9,7 +9,7 @@ This skill provides comprehensive instructions and reference guidelines for util
 
 ## Modern Positional Options API
 
-In **signals.dart v7**, all hooks have been migrated to use a clean **positional Options pattern** instead of verbose named parameters. Options like `name`, `autoDispose`, or `equality` must be passed encapsulated inside their corresponding Options configuration object (e.g., `SignalOptions`, `AsyncSignalOptions`, `ListSignalOptions`) as the first positional argument.
+In **signals.dart v7**, all hooks have been migrated to use a clean **positional Options pattern** instead of verbose named parameters. The positional parameters are structured as `[keys, options]`. To supply options (like `name`, `autoDispose`, or `equality` inside classes like `SignalOptions`, `AsyncSignalOptions`, or `ListSignalOptions`), they must be passed as the **second** positional optional argument, with the `keys` dependency list passed as the **first** positional optional argument (e.g., `useSignal(value, const [], SignalOptions(name: 'counter'))`).
 
 ### Hook Reference Summary Table
 
@@ -41,5 +41,5 @@ In **signals.dart v7**, all hooks have been migrated to use a clean **positional
 ## Best Practices
 
 1. **Avoid Named Parameters**: Do NOT pass named configuration parameters (like `name` or `autoDispose`) directly to hooks. Always wrap them in the positional `Options` parameter.
-2. **Positional Keys**: The second positional parameter of most signals hooks is `keys` (list of dependencies). If any value in the keys changes, the signal is recreated.
+2. **Positional Parameter Order**: The first positional optional parameter is `keys` (list of dependencies), and the second positional optional parameter is `options` (the options configuration object).
 3. **Memory Safety**: `signals_hooks` automatically disposes all created signals and effects when the widget is unmounted, preventing memory leaks.

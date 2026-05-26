@@ -5,18 +5,18 @@ Subscribes to a Stream and exposes its events via a **StreamSignal**.
 ## Example
 
 ```dart
-class NotificationStreamView extends HookWidget {
-  const NotificationStreamView({super.key});
+class StreamTicksView extends HookWidget {
+  const StreamTicksView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final notifications = useStreamSignal(
-      () => streamNotifications(),
-      AsyncSignalOptions(name: 'notifications'),
+    final ticks = useStreamSignal(
+      () => Stream.periodic(Duration(seconds: 1), (i) => i),
+      const [],
+      AsyncSignalOptions(name: 'ticks-stream'),
     );
 
-    if (notifications.value.isLoading) return Text('Connecting...');
-    return Text('Latest Notification: ${notifications.value.value}');
+    return Text('Ticks: \${ticks.value.value ?? 0}');
   }
 }
 ```
