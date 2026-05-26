@@ -877,14 +877,11 @@ analyzer:
 - **🛡️ Diagnostic Logging & Coalescing**: Option to enable direct VM console print logging or group sequential microtask updates to inspect coalesced batch updates.
 ''',
         'code': '''
-// 1. Run your Flutter application in Debug or Profile Mode:
-//    flutter run
-//
-// 2. Open Dart DevTools inside your browser or IDE.
-//
-// 3. Locate the custom "Signals" tab in the main DevTools tab header panel.
-//
-// 4. Click the tab to immediately explore and profile your reactive states!
+# 1. Start your Flutter application in Debug or Profile Mode:
+flutter run
+
+# 2. Open Dart DevTools inside your browser or IDE
+# 3. Locate and click the custom "Signals" tab in the main DevTools panel
 '''
       };
 
@@ -1195,7 +1192,8 @@ void generateWebsiteMarkdown(
   if (code.isNotEmpty) {
     indexBuffer.writeln('## Quick Start');
     indexBuffer.writeln();
-    indexBuffer.writeln('```dart');
+    final lang = pkgName == 'signals_devtools_extension' ? 'bash' : 'dart';
+    indexBuffer.writeln('```$lang');
     indexBuffer.writeln(code.trim());
     indexBuffer.writeln('```');
     indexBuffer.writeln();

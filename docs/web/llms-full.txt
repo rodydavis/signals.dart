@@ -14018,15 +14018,12 @@ The `signals_devtools_extension` package provides a premium, highly interactive 
 
 ## Quick Start
 
-```dart
-// 1. Run your Flutter application in Debug or Profile Mode:
-//    flutter run
-//
-// 2. Open Dart DevTools inside your browser or IDE.
-//
-// 3. Locate the custom "Signals" tab in the main DevTools tab header panel.
-//
-// 4. Click the tab to immediately explore and profile your reactive states!
+```bash
+# 1. Start your Flutter application in Debug or Profile Mode:
+flutter run
+
+# 2. Open Dart DevTools inside your browser or IDE
+# 3. Locate and click the custom "Signals" tab in the main DevTools panel
 ```
 
 ## Package Contents
