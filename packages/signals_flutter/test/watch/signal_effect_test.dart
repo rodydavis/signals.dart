@@ -13,7 +13,7 @@ void main() {
       final widget = MaterialApp(
         home: Scaffold(
           body: SignalEffect(
-            callback: (context) {
+            effect: (context) {
               callbackCalls++;
               lastValue = count.value;
             },
@@ -53,7 +53,7 @@ void main() {
       final widget = MaterialApp(
         home: Scaffold(
           body: SignalEffect(
-            callback: (context) {
+            effect: (context) {
               callbackCalls++;
               count.value; // Track
             },
@@ -101,7 +101,7 @@ void main() {
         home: Scaffold(
           body: SignalBuilder(
             builder: (context) => SignalEffect(
-              callback: currentCallback.value,
+              effect: currentCallback.value,
               child: const Text('Helper Child'),
             ),
           ),
@@ -146,7 +146,7 @@ void main() {
       final widget = MaterialApp(
         home: Scaffold(
           body: SignalListener(
-            callback: (context) {
+            effect: (context) {
               callbackCalls++;
               count.value;
             },
@@ -172,7 +172,7 @@ void main() {
       final widget = MaterialApp(
         home: Scaffold(
           body: SignalEffect(
-            callback: (context) {
+            effect: (context) {
               callbackCalls++;
               count.value; // Track dependency
               return () {

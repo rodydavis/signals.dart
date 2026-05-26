@@ -11,7 +11,7 @@ final errorMessage = signal<String?>(null);
 
 Widget build(BuildContext context) {
   return SignalEffect(
-    callback: (context) {
+    effect: (context) {
       if (errorMessage.value != null) {
         // Trigger dialog asynchronously
         showDialog(

@@ -44,10 +44,10 @@ import 'package:signals_core/signals_core.dart' as core;
 class SignalEffect extends StatefulWidget {
   /// Creates a [SignalEffect] widget.
   /// 
-  /// The [callback] is executed inside a reactive effect.
+  /// The [effect] is executed inside a reactive effect.
   /// The [child] is rendered normally.
   const SignalEffect({
-    required this.callback,
+    required this.effect,
     required this.child,
     this.debugLabel,
     super.key,
@@ -57,7 +57,7 @@ class SignalEffect extends StatefulWidget {
   /// 
   /// Can optionally return a cleanup function (e.g. `void Function()`) that is run
   /// before the next execution of the callback or when the widget is disposed.
-  final dynamic Function(BuildContext context) callback;
+  final dynamic Function(BuildContext context) effect;
 
   /// The child widget to render.
   final Widget child;
@@ -76,7 +76,7 @@ class _SignalEffectState extends State<SignalEffect> {
   void initState() {
     super.initState();
     _cleanup = core.effect(
-      () => widget.callback(context),
+      () => widget.effect(context),
       options: core.EffectOptions(name: widget.debugLabel),
     );
   }
@@ -84,10 +84,10 @@ class _SignalEffectState extends State<SignalEffect> {
   @override
   void didUpdateWidget(covariant SignalEffect oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.callback != widget.callback) {
+    if (oldWidget.effect != widget.effect) {
       _cleanup?.call();
       _cleanup = core.effect(
-        () => widget.callback(context),
+        () => widget.effect(context),
         options: core.EffectOptions(name: widget.debugLabel),
       );
     }
