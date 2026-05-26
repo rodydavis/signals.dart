@@ -271,5 +271,130 @@ void main() {
       await tester.pumpAndSettle();
       expect(childBuilds, 2); // Child did not build again
     });
+
+    testWidgets('onSignalRead is called if not null', (tester) async {
+      final count = signal(0);
+      var called = false;
+      final old = onSignalRead;
+      onSignalRead = (s) {
+        called = true;
+      };
+      
+      final widget = MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              // ignore: deprecated_member_use_from_same_package
+              final val = count.watch(context);
+              return Text('Count: $val');
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(widget);
+      onSignalRead = old;
+      
+      expect(called, isTrue);
+    });
+
+    testWidgets('context is SignalElement branch', (tester) async {
+      final count = signal(42);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: StatelessWatchWidget(counter: count),
+          ),
+        ),
+      );
+      expect(find.text('Stateless Count: 42'), findsOneWidget);
+
+      final element = tester.element(find.byType(StatelessWatchWidget));
+      // ignore: deprecated_member_use_from_same_package
+      count.watch(element);
+    });
+
+    testWidgets('context is SignalStatefulElement branch', (tester) async {
+      final count = signal(43);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: StatefulWatchWidget(counter: count),
+          ),
+        ),
+      );
+      expect(find.text('Stateful Count: 43'), findsOneWidget);
+
+      final element = tester.element(find.byType(StatefulWatchWidget));
+      // ignore: deprecated_member_use_from_same_package
+      count.watch(element);
+    });
+
+    testWidgets('context is StatefulElement with SignalsMixin and unwatch', (tester) async {
+      final count = signal(100);
+      final key = GlobalKey<_MixinTestWidgetState>();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: MixinTestWidget(
+              key: key,
+              counter: count,
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Mixin Count: 100'), findsOneWidget);
+      
+      final state = key.currentState!;
+      // ignore: deprecated_member_use_from_same_package
+      count.watch(state.context);
+      
+      // Test unwatch with SignalsMixin
+      // ignore: deprecated_member_use_from_same_package
+      count.unwatch(state.context);
+    });
   });
+}
+
+class StatelessWatchWidget extends SignalWidget {
+  final Signal<int> counter;
+  const StatelessWatchWidget({super.key, required this.counter});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Stateless Count: ${counter.peek()}');
+  }
+}
+
+class StatefulWatchWidget extends SignalStatefulWidget {
+  final Signal<int> counter;
+  const StatefulWatchWidget({super.key, required this.counter});
+
+  @override
+  State<StatefulWatchWidget> createState() => _StatefulWatchWidgetState();
+}
+
+class _StatefulWatchWidgetState extends State<StatefulWatchWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Text('Stateful Count: ${widget.counter.peek()}');
+  }
+}
+
+class MixinTestWidget extends StatefulWidget {
+  final Signal<int> counter;
+  const MixinTestWidget({
+    super.key,
+    required this.counter,
+  });
+
+  @override
+  State<MixinTestWidget> createState() => _MixinTestWidgetState();
+}
+
+class _MixinTestWidgetState extends State<MixinTestWidget> with SignalsMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Text('Mixin Count: ${widget.counter.peek()}');
+  }
 }

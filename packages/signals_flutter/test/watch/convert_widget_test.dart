@@ -105,5 +105,64 @@ void main() {
       expect(buildCount, 2);
       expect(find.text('Count: 21'), findsOneWidget);
     });
+
+    testWidgets('StatelessElementConvertExtension watchSignal', (tester) async {
+      final counter = signal(100);
+      final widget = StandardStatelessElementWatch(counter: counter).toSignalWidget();
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: widget)));
+      expect(find.text('Stateless: 100'), findsOneWidget);
+      
+      counter.value = 101;
+      await tester.pumpAndSettle();
+      expect(find.text('Stateless: 101'), findsOneWidget);
+    });
+
+    testWidgets('StatefulElementConvertExtension watchSignal', (tester) async {
+      final counter = signal(200);
+      final widget = StandardStatefulElementWatch(counter: counter).toSignalStatefulWidget();
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: widget)));
+      expect(find.text('Stateful: 200'), findsOneWidget);
+      
+      counter.value = 201;
+      await tester.pumpAndSettle();
+      expect(find.text('Stateful: 201'), findsOneWidget);
+    });
   });
+}
+
+class StandardStatelessElementWatch extends StatelessWidget {
+  final Signal<int> counter;
+
+  const StandardStatelessElementWatch({
+    super.key,
+    required this.counter,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    (context as StatelessElement).watchSignal(counter);
+    return Text('Stateless: ${counter.peek()}');
+  }
+}
+
+class StandardStatefulElementWatch extends StatefulWidget {
+  final Signal<int> counter;
+
+  const StandardStatefulElementWatch({
+    super.key,
+    required this.counter,
+  });
+
+  @override
+  State<StandardStatefulElementWatch> createState() =>
+      _StandardStatefulElementWatchState();
+}
+
+class _StandardStatefulElementWatchState
+    extends State<StandardStatefulElementWatch> {
+  @override
+  Widget build(BuildContext context) {
+    (context as StatefulElement).watchSignal(widget.counter);
+    return Text('Stateful: ${widget.counter.peek()}');
+  }
 }

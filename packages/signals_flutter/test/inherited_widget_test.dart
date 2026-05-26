@@ -315,4 +315,109 @@ void main() {
       },
     );
   });
+
+  group('SignalProvider Edge Cases & Advanced Options', () {
+    testWidgets(
+      'SignalProvider.of with listen: false does not rebuild calling widget',
+      (WidgetTester tester) async {
+        final mySignal = MyTestSignal(100);
+        int buildCount = 0;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: SignalProvider<MyTestSignal>.value(
+              value: mySignal,
+              child: Builder(
+                builder: (context) {
+                  buildCount++;
+                  final retrieved = SignalProvider.of<MyTestSignal>(context, listen: false)!;
+                  return Text('Value: ${retrieved.peek()}');
+                },
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+        expect(buildCount, 1);
+        expect(find.text('Value: 100'), findsOneWidget);
+
+        // Mutate signal - should NOT trigger rebuild because listen: false
+        mySignal.value = 101;
+        await tester.pumpAndSettle();
+        expect(buildCount, 1); // Remains 1!
+        
+        mySignal.dispose();
+      },
+    );
+
+    testWidgets(
+      'SignalProvider.providerOf returns provider instance with listen true/false',
+      (WidgetTester tester) async {
+        final mySignal = MyTestSignal(200);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: SignalProvider<MyTestSignal>.value(
+              value: mySignal,
+              child: Builder(
+                builder: (context) {
+                  final provider1 = SignalProvider.providerOf<MyTestSignal>(context, listen: true);
+                  final provider2 = SignalProvider.providerOf<MyTestSignal>(context, listen: false);
+                  return Text('Provider1: ${provider1 != null}, Provider2: ${provider2 != null}');
+                },
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+        expect(find.text('Provider1: true, Provider2: true'), findsOneWidget);
+        mySignal.dispose();
+      },
+    );
+
+    testWidgets(
+      'SignalProvider.value didUpdateWidget updates exposed signal instance',
+      (WidgetTester tester) async {
+        final sigA = MyTestSignal(1);
+        final sigB = MyTestSignal(2);
+        var currentSignal = sigA;
+
+        late StateSetter setParentState;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StatefulBuilder(
+              builder: (context, setState) {
+                setParentState = setState;
+                return SignalProvider<MyTestSignal>.value(
+                  value: currentSignal,
+                  child: Builder(
+                    builder: (childContext) {
+                      final sig = SignalProvider.of<MyTestSignal>(childContext)!;
+                      return Text('Value: ${sig.value}');
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+        expect(find.text('Value: 1'), findsOneWidget);
+
+        // Update currentSignal and rebuild parent
+        setParentState(() {
+          currentSignal = sigB;
+        });
+        await tester.pumpAndSettle();
+        expect(find.text('Value: 2'), findsOneWidget);
+
+        sigA.dispose();
+        sigB.dispose();
+      },
+    );
+  });
 }
