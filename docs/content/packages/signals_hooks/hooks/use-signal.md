@@ -37,7 +37,7 @@ class CounterHookWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // Create a local signal managed by this HookWidget's lifecycle
-    final count = useSignal(0, debugLabel: 'localCounter');
+    final count = useSignal(0, keys: const [], options: SignalOptions(name: 'localCounter'));
 
     return Scaffold(
       body: Center(

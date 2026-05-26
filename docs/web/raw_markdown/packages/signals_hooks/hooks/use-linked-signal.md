@@ -36,10 +36,10 @@ class ProfileEditor extends HookWidget {
     // but allows local modifications in the meantime.
     final usernameSignal = useLinkedSignal(
       () => initialUsername,
+      keys: [initialUsername],
       options: LinkedSignalOptions(
         computation: (source, previous) => source,
       ),
-      keys: [initialUsername],
     );
 
     return Column(

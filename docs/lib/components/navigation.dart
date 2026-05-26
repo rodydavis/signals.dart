@@ -56,7 +56,9 @@ class DynamicHeader extends StatelessComponent {
           bottom: BorderSide(color: Color('#0000000d'), width: 1.px),
         ),
       ),
-      css.media(MediaQuery.all(minWidth: 768.px), [css('&').styles(padding: Padding.symmetric(horizontal: 2.5.rem))]),
+      css.media(MediaQuery.all(minWidth: 768.px), [
+        css('&').styles(padding: Padding.symmetric(horizontal: 2.5.rem))
+      ]),
       css('.header-title', [
         css('&').styles(
           display: Display.inlineFlex,
@@ -362,14 +364,8 @@ class DynamicSidebar extends StatelessComponent {
               SidebarLink(text: "useSignalValue", href: '/packages/signals_hooks/hooks/use-signal-value'),
               SidebarLink(text: "useStreamSignal", href: '/packages/signals_hooks/hooks/use-stream-signal'),
               SidebarLink(text: "useTrackedSignal", href: '/packages/signals_hooks/hooks/use-tracked-signal'),
-              SidebarLink(
-                text: "useValueListenableToSignal",
-                href: '/packages/signals_hooks/hooks/use-value-listenable-to-signal',
-              ),
-              SidebarLink(
-                text: "useValueNotifierToSignal",
-                href: '/packages/signals_hooks/hooks/use-value-notifier-to-signal',
-              ),
+              SidebarLink(text: "useValueListenableToSignal", href: '/packages/signals_hooks/hooks/use-value-listenable-to-signal'),
+              SidebarLink(text: "useValueNotifierToSignal", href: '/packages/signals_hooks/hooks/use-value-notifier-to-signal'),
             ],
           ),
           SidebarGroup(
@@ -396,10 +392,7 @@ class DynamicSidebar extends StatelessComponent {
           SidebarGroup(
             title: 'Flutter Components',
             links: [
-              SidebarLink(
-                text: "SignalsDevToolsExtension",
-                href: '/packages/signals_devtools_extension/flutter/devtools',
-              ),
+              SidebarLink(text: "SignalsDevToolsExtension", href: '/packages/signals_devtools_extension/flutter/devtools'),
             ],
           ),
         ],
@@ -419,46 +412,16 @@ class DynamicSidebar extends StatelessComponent {
           SidebarGroup(
             title: 'Flutter Components',
             links: [
-              SidebarLink(
-                text: "ConvertStatefulToSignalStatefulWidget",
-                href: '/packages/signals_lint/flutter/convert-stateful-to-signal-stateful-widget',
-              ),
-              SidebarLink(
-                text: "ConvertStatelessToSignalWidget",
-                href: '/packages/signals_lint/flutter/convert-stateless-to-signal-widget',
-              ),
-              SidebarLink(
-                text: "MigrateSignalsMixinToSignalStatefulWidget",
-                href: '/packages/signals_lint/flutter/migrate-signals-mixin-to-signal-stateful-widget',
-              ),
-              SidebarLink(
-                text: "MigrateWatchToSignalBuilder",
-                href: '/packages/signals_lint/flutter/migrate-watch-to-signal-builder',
-              ),
-              SidebarLink(
-                text: "SignalsAvoidCreateInBuildMethod",
-                href: '/packages/signals_lint/flutter/signals-avoid-create-in-build-method',
-              ),
-              SidebarLink(
-                text: "SignalsAvoidDeprecatedSignalsMixin",
-                href: '/packages/signals_lint/flutter/signals-avoid-deprecated-signals-mixin',
-              ),
-              SidebarLink(
-                text: "SignalsAvoidDeprecatedWatchExtension",
-                href: '/packages/signals_lint/flutter/signals-avoid-deprecated-watch-extension',
-              ),
-              SidebarLink(
-                text: "SignalsPreferNamedBuilder",
-                href: '/packages/signals_lint/flutter/signals-prefer-named-builder',
-              ),
-              SidebarLink(
-                text: "SignalsPreferUnifiedOptions",
-                href: '/packages/signals_lint/flutter/signals-prefer-unified-options',
-              ),
-              SidebarLink(
-                text: "WrapWithSignalBuilder",
-                href: '/packages/signals_lint/flutter/wrap-with-signal-builder',
-              ),
+              SidebarLink(text: "ConvertStatefulToSignalStatefulWidget", href: '/packages/signals_lint/flutter/convert-stateful-to-signal-stateful-widget'),
+              SidebarLink(text: "ConvertStatelessToSignalWidget", href: '/packages/signals_lint/flutter/convert-stateless-to-signal-widget'),
+              SidebarLink(text: "MigrateSignalsMixinToSignalStatefulWidget", href: '/packages/signals_lint/flutter/migrate-signals-mixin-to-signal-stateful-widget'),
+              SidebarLink(text: "MigrateWatchToSignalBuilder", href: '/packages/signals_lint/flutter/migrate-watch-to-signal-builder'),
+              SidebarLink(text: "SignalsAvoidCreateInBuildMethod", href: '/packages/signals_lint/flutter/signals-avoid-create-in-build-method'),
+              SidebarLink(text: "SignalsAvoidDeprecatedSignalsMixin", href: '/packages/signals_lint/flutter/signals-avoid-deprecated-signals-mixin'),
+              SidebarLink(text: "SignalsAvoidDeprecatedWatchExtension", href: '/packages/signals_lint/flutter/signals-avoid-deprecated-watch-extension'),
+              SidebarLink(text: "SignalsPreferNamedBuilder", href: '/packages/signals_lint/flutter/signals-prefer-named-builder'),
+              SidebarLink(text: "SignalsPreferUnifiedOptions", href: '/packages/signals_lint/flutter/signals-prefer-unified-options'),
+              SidebarLink(text: "WrapWithSignalBuilder", href: '/packages/signals_lint/flutter/wrap-with-signal-builder'),
             ],
           ),
         ],
@@ -611,8 +574,7 @@ class Sidebar extends StatelessComponent {
             ),
             option(
               value: '/packages/signals_flutter',
-              selected:
-                  currentUrl == '/packages/signals_flutter' || currentUrl.startsWith('/packages/signals_flutter/'),
+              selected: currentUrl == '/packages/signals_flutter' || currentUrl.startsWith('/packages/signals_flutter/'),
               [Component.text('📱 signals_flutter')],
             ),
             option(
@@ -632,9 +594,7 @@ class Sidebar extends StatelessComponent {
             ),
             option(
               value: '/packages/signals_devtools_extension',
-              selected:
-                  currentUrl == '/packages/signals_devtools_extension' ||
-                  currentUrl.startsWith('/packages/signals_devtools_extension/'),
+              selected: currentUrl == '/packages/signals_devtools_extension' || currentUrl.startsWith('/packages/signals_devtools_extension/'),
               [Component.text('🛠️ signals_devtools')],
             ),
             option(
@@ -730,8 +690,7 @@ class Sidebar extends StatelessComponent {
           'width': 'calc(100% - 2rem)',
           'appearance': 'none',
           '-webkit-appearance': 'none',
-          'background-image':
-              'url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%2364748b\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'m6 8 4 4 4-4\'/%3E%3C/svg%3E")',
+          'background-image': 'url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%2364748b\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'m6 8 4 4 4-4\'/%3E%3C/svg%3E")',
           'background-position': 'right 0.75rem center',
           'background-repeat': 'no-repeat',
           'background-size': '1.25rem',
@@ -783,3 +742,4 @@ class Sidebar extends StatelessComponent {
     ]),
   ];
 }
+

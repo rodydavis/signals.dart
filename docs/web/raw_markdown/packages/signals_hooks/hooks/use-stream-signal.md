@@ -36,7 +36,7 @@ class ChatMessagesWidget extends HookWidget {
     // Subscribes to chat stream, automatically switching streams if channelId changes
     final streamSignal = useStreamSignal(
       () => listenToChannel(channelId),
-      AsyncSignalOptions(keys: [channelId]),
+      keys: [channelId],
     );
 
     return streamSignal.value.map(

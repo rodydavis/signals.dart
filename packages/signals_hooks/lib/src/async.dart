@@ -40,7 +40,7 @@ import 'core.dart';
 ///     // Re-fetches user profile if userId changes
 ///     final userSignal = useFutureSignal(
 ///       () => fetchUserProfile(userId),
-///       [userId],
+///       keys: [userId],
 ///     );
 ///
 ///     return userSignal.value.map(
@@ -99,7 +99,7 @@ FutureSignal<T> useFutureSignal<T>(
 ///     // Subscribes to chat stream, automatically switching streams if channelId changes
 ///     final streamSignal = useStreamSignal(
 ///       () => listenToChannel(channelId),
-///       [channelId],
+///       keys: [channelId],
 ///     );
 ///
 ///     return streamSignal.value.map(
@@ -225,7 +225,7 @@ AsyncSignal<T> useAsyncSignal<T>(
 ///         if (searchQuery.value.isEmpty) return <SearchResult>[];
 ///         return await performSearch(searchQuery.value);
 ///       },
-///       dependencies: [searchQuery],
+///       options: AsyncSignalOptions(dependencies: [searchQuery]),
 ///     );
 ///
 ///     return Column(

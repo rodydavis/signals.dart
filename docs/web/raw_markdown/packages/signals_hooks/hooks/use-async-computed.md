@@ -41,7 +41,7 @@ class SearchResultsWidget extends HookWidget {
         if (searchQuery.value.isEmpty) return <SearchResult>[];
         return await performSearch(searchQuery.value);
       },
-      dependencies: [searchQuery],
+      options: AsyncSignalOptions(dependencies: [searchQuery]),
     );
 
     return Column(

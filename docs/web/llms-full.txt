@@ -21074,7 +21074,7 @@ class CounterHookWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // Create a local signal managed by this HookWidget's lifecycle
-    final count = useSignal(0, debugLabel: 'localCounter');
+    final count = useSignal(0, keys: const [], options: SignalOptions(name: 'localCounter'));
 
     return Scaffold(
       body: Center(
@@ -21181,7 +21181,7 @@ class ChatMessagesWidget extends HookWidget {
     // Subscribes to chat stream, automatically switching streams if channelId changes
     final streamSignal = useStreamSignal(
       () => listenToChannel(channelId),
-      AsyncSignalOptions(keys: [channelId]),
+      keys: [channelId],
     );
 
     return streamSignal.value.map(
@@ -21289,10 +21289,10 @@ class ProfileEditor extends HookWidget {
     // but allows local modifications in the meantime.
     final usernameSignal = useLinkedSignal(
       () => initialUsername,
+      keys: [initialUsername],
       options: LinkedSignalOptions(
         computation: (source, previous) => source,
       ),
-      keys: [initialUsername],
     );
 
     return Column(
@@ -21716,7 +21716,7 @@ class SearchResultsWidget extends HookWidget {
         if (searchQuery.value.isEmpty) return <SearchResult>[];
         return await performSearch(searchQuery.value);
       },
-      dependencies: [searchQuery],
+      options: AsyncSignalOptions(dependencies: [searchQuery]),
     );
 
     return Column(
