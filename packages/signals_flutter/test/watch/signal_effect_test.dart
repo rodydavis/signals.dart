@@ -162,5 +162,47 @@ void main() {
       await tester.pump();
       expect(callbackCalls, 2);
     });
+
+    testWidgets('SignalEffect supports optional cleanup return',
+        (tester) async {
+      final count = signal(0);
+      int callbackCalls = 0;
+      int cleanupCalls = 0;
+
+      final widget = MaterialApp(
+        home: Scaffold(
+          body: SignalEffect(
+            callback: (context) {
+              callbackCalls++;
+              count.value; // Track dependency
+              return () {
+                cleanupCalls++;
+              };
+            },
+            child: const Text('Cleanup Child'),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(widget);
+      expect(callbackCalls, 1);
+      expect(cleanupCalls, 0);
+
+      // Mutate to trigger re-run and run previous cleanup
+      count.value = 10;
+      await tester.pump();
+      expect(callbackCalls, 2);
+      expect(cleanupCalls, 1);
+
+      // Unmount the widget to trigger final cleanup
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Text('Unmounted'),
+          ),
+        ),
+      );
+      expect(cleanupCalls, 2);
+    });
   });
 }

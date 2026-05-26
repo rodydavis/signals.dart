@@ -54,7 +54,10 @@ class SignalEffect extends StatefulWidget {
   });
 
   /// The callback that runs inside the reactive effect.
-  final void Function(BuildContext context) callback;
+  /// 
+  /// Can optionally return a cleanup function (e.g. `void Function()`) that is run
+  /// before the next execution of the callback or when the widget is disposed.
+  final dynamic Function(BuildContext context) callback;
 
   /// The child widget to render.
   final Widget child;

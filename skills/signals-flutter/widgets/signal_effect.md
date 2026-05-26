@@ -19,6 +19,11 @@ Widget build(BuildContext context) {
           builder: (_) => AlertDialog(title: Text(errorMessage.value!)),
         );
       }
+
+      // Optional: Return a cleanup function
+      return () {
+        print('Cleaning up error dialog effect...');
+      };
     },
     child: const MainView(),
   );
