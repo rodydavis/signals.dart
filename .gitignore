@@ -63,3 +63,4 @@ build/
 coverage/
 *.flutter-plugins
 *.flutter-plugins-dependencies
+lcov.info
