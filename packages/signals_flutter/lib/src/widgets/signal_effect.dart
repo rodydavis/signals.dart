@@ -1,22 +1,51 @@
 import 'package:flutter/widgets.dart';
 import 'package:signals_core/signals_core.dart' as core;
 
-/// A widget that creates a reactive effect inline within the widget tree.
-///
-/// The [callback] is executed inside a reactive effect and automatically
-/// tracks any signals read within its scope. The effect is disposed when the
-/// widget is removed from the widget tree.
-///
+/// A widget that enables executing scoped reactive side-effects inline within the widget tree.
+/// 
+/// `SignalEffect` (and its direct type alias [SignalListener]) allows you to run side-effects
+/// (such as showing snackbars, opening dialogs, navigating, or logging metrics) in response
+/// to signal updates, without triggering rebuilds of the child widget tree.
+/// 
+/// The [callback] runs immediately on mount and dynamically tracks any signals accessed
+/// within its scope. The underlying subscription is automatically disposed when this widget
+/// is removed from the tree.
+/// 
+/// ### Dialog and Snackbar Trigger Example
 /// ```dart
-/// SignalEffect(
-///   callback: (context) {
-///     print('Counter value changed to ${counter.value}');
-///   },
-///   child: const Text('Counter Listener'),
-/// )
+/// final count = signal(0);
+/// 
+/// class SnackBarTrigger extends StatelessWidget {
+///   const SnackBarTrigger({super.key});
+/// 
+///   @override
+///   Widget build(BuildContext context) {
+///     return SignalEffect(
+///       callback: (context) {
+///         // Triggers whenever 'count' updates:
+///         if (count.value >= 10) {
+///           ScaffoldMessenger.of(context).showSnackBar(
+///             SnackBar(content: Text('Limit reached: ${count.value}!')),
+///           );
+///         }
+///       },
+///       child: ElevatedButton(
+///         onPressed: () => count.value++,
+///         child: const Text('Increment and Watch'),
+///       ),
+///     );
+///   }
+/// }
 /// ```
+/// 
+/// > [!IMPORTANT]
+/// > Do not perform synchronous state changes or trigger widget rebuilds directly inside
+/// > the callback to prevent infinite reactive loops.
 class SignalEffect extends StatefulWidget {
-  /// Constructor for [SignalEffect].
+  /// Creates a [SignalEffect] widget.
+  /// 
+  /// The [callback] is executed inside a reactive effect.
+  /// The [child] is rendered normally.
   const SignalEffect({
     required this.callback,
     required this.child,
@@ -73,5 +102,6 @@ class _SignalEffectState extends State<SignalEffect> {
   }
 }
 
-/// Type alias for [SignalEffect].
+/// Type alias for [SignalEffect] to provide a familiar and clear naming convention
+/// for developers coming from other reactive libraries (like Bloc, Provider, or Flutter hooks).
 typedef SignalListener = SignalEffect;

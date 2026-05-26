@@ -3,6 +3,48 @@ import 'dart:math';
 
 import '../core/signals.dart';
 
+/// A mixin that adds reactive `List` methods and operators to a [Signal]
+/// holding a [List] value.
+///
+/// This mixin delegates all standard [List] operations (such as mutations like `add`,
+/// `remove`, `insert`, `sort`, and `clear`, and accessor operators like `[]` and `[]=`)
+/// to the underlying list, while ensuring that any reads register a dependency
+/// and any mutations automatically trigger reactive updates.
+///
+/// :::note
+/// This mixin only works with signals that have a value type extending [List<E>].
+/// :::
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// class MyListSignal extends Signal<List<int>>
+///     with IterableSignalMixin<int, List<int>>, ListSignalMixin<int, List<int>> {
+///   MyListSignal(super.internalValue);
+/// }
+///
+/// void main() {
+///   final numbers = MyListSignal([1, 2, 3]);
+///
+///   effect(() {
+///     print('Elements: $numbers, Length: ${numbers.length}');
+///   }); // Prints: "Elements: [1, 2, 3], Length: 3"
+///
+///   // Adding an element (automatically calls set() and triggers updates)
+///   numbers.add(4); // Prints: "Elements: [1, 2, 3, 4], Length: 4"
+///
+///   // Modifying an element by index (triggers updates)
+///   numbers[0] = 10; // Prints: "Elements: [10, 2, 3, 4], Length: 4"
+/// }
+/// ```
+///
+/// :::tip
+/// Since mutations on `ListSignalMixin` notify listeners automatically, you do not
+/// need to assign `numbers.value = ...` to force updates. Methods like `add`, `addAll`,
+/// and operator `[]=` take care of notification.
+/// :::
 abstract mixin class ListSignalMixin<E, T extends List<E>>
     implements Signal<T>, List<E> {
   @override

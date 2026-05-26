@@ -1,6 +1,46 @@
 // ignore_for_file: public_member_api_docs
 import '../core/signals.dart';
 
+/// A mixin that adds reactive `Iterable` methods and properties to a [Signal]
+/// holding an [Iterable] value.
+///
+/// This mixin delegates all standard [Iterable] operations (such as `length`,
+/// `first`, `last`, `map`, `where`, and `any`) directly to the underlying
+/// collection, while ensuring that any read operations register a reactive
+/// dependency on the signal.
+///
+/// :::note
+/// This mixin only works with signals that have a value type extending [Iterable<E>].
+/// :::
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// class MyIterableSignal extends Signal<Iterable<int>>
+///     with IterableSignalMixin<int, Iterable<int>> {
+///   MyIterableSignal(super.internalValue);
+/// }
+///
+/// void main() {
+///   final numbers = MyIterableSignal([1, 2, 3]);
+///
+///   // Set up a reactive effect that prints the list size and first element
+///   effect(() {
+///     print('Size: ${numbers.length}, First: ${numbers.first}');
+///   }); // Prints: "Size: 3, First: 1"
+///
+///   // Update the signal value (triggers the effect)
+///   numbers.value = [10, 20, 30, 40]; // Prints: "Size: 4, First: 10"
+/// }
+/// ```
+///
+/// :::caution
+/// Direct mutation of elements inside the iterable will NOT notify listeners
+/// unless you reassign the value or use a specialized signal class like `ListSignal`,
+/// `SetSignal`, or `MapSignal` which automatically trigger updates when modified.
+/// :::
 abstract mixin class IterableSignalMixin<E, T extends Iterable<E>>
     implements Signal<T>, Iterable<E> {
   @override

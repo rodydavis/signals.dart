@@ -101,15 +101,60 @@ class SignalEffectException implements Exception {
   SignalEffectException(this.error, [this.stackTrace]);
 }
 
-/// Combine multiple value updates into one "commit" at the end of the provided callback.
+/// Combines multiple signal writes into a single update that is flushed only after the callback completes.
 ///
-/// Batches can be nested and changes are only flushed once the outermost batch callback
-/// completes.
+/// Under normal circumstances, writing to a signal immediately notifies all of its active subscribers
+/// (effects and computed signals), which can cause multiple redundant computations if you are updating
+/// several signals sequentially.
 ///
-/// Accessing a signal that has been modified within a batch will reflect its updated
-/// value.
+/// By wrapping your mutations in [batch], notifications are deferred. Subscribed [effect]s and [computed]
+/// signals will only run once at the very end of the batch callback block.
+///
+/// ### Nested Batches
+///
+/// Batches can be nested. Updates are only flushed when the *outermost* batch callback completes.
+///
+/// ### Mid-Batch Reads
+///
+/// If you read a mutated signal *inside* the batch callback, or access a computed signal that depends on a
+/// mutated signal, that signal is immediately computed and updated inline to ensure your code always operates
+/// on consistent, up-to-date data. However, other independent signals and effects are still deferred until
+/// the batch finishes.
+///
+/// Parameters:
+/// - [fn]: The callback function containing the signal write operations to be batched.
+///
+/// Returns:
+/// - The value returned by the callback function [fn].
+///
+/// ### Example Usage
+///
+/// ````dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// void main() {
+///   final name = signal("Jane");
+///   final surname = signal("Doe");
+///   final fullName = computed(() => "${name.value} ${surname.value}");
+///
+///   // Set up an effect that reacts to changes
+///   effect(() => print("Name changed to: ${fullName.value}"));
+///
+///   // Batching mutations ensures the effect runs only once
+///   batch(() {
+///     name.value = "John";
+///     surname.value = "Smith";
+///   });
+///   // Prints: "Name changed to: John Smith" (Only once, not twice!)
+/// }
+/// ````
+///
+/// :::tip
+/// Always use [batch] when performing multiple state transitions together. This avoids flickering UI, unnecessary
+/// rebuilds, and transient states where some dependencies are updated but others are not.
+/// :::
 T batch<T>(
-  /// The callback function
+  /// The callback function.
   T Function() fn,
 ) {
   if (batchDepth > 0) {

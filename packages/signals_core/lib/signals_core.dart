@@ -3,7 +3,36 @@ export 'src/utils/timer.dart';
 export 'src/value/value.dart';
 export 'src/core/container.dart';
 export 'src/core/signals.dart';
-export 'package:preact_signals/preact_signals.dart' show SignalEffectException;
+export 'package:preact_signals/preact_signals.dart'
+    show
+        SignalEffectException,
+        action,
+        action0,
+        action1,
+        action2,
+        action3,
+        action4,
+        action5,
+        action6,
+        action7,
+        action8,
+        action9,
+        action10,
+        createModel,
+        SignalModel,
+        SignalModelOptions,
+        SignalModelConstructor,
+        ActionExt0,
+        ActionExt1,
+        ActionExt2,
+        ActionExt3,
+        ActionExt4,
+        ActionExt5,
+        ActionExt6,
+        ActionExt7,
+        ActionExt8,
+        ActionExt9,
+        ActionExt10;
 
 // Async
 export 'src/async/connect.dart';

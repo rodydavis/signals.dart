@@ -1,6 +1,14 @@
 import '../core/signals.dart';
 
-/// Helper extensions for [ReadonlySignal<num>]
+/// Helper extensions for [ReadonlySignal<num>], providing convenient reactive math and comparison operations without needing to manually unwrap `.value`.
+///
+/// ```dart
+/// import 'package:signals_core/signals_core.dart';
+///
+/// final a = 5.0.$;
+/// final sum = a + 3; // 8.0 (evaluates reactively)
+/// final isGreater = a > 4; // true
+/// ```
 extension NumSignalExtension on ReadonlySignal<num> {
   /// Adds [other] to this number.
   ///
@@ -402,8 +410,15 @@ extension NumSignalExtension on ReadonlySignal<num> {
       value.toStringAsPrecision(precision);
 }
 
-/// Extensions for [num]
+/// Utility extension on [num] to easily lift a number into a reactive [Signal].
 extension SignalNumExtensions on num {
-  /// Return a signal from a num value
+  /// Lift a primitive [num] into a reactive [Signal<num>].
+  ///
+  /// ```dart
+  /// import 'package:signals_core/signals_core.dart';
+  ///
+  /// final counter = 10.$;
+  /// print(counter.value); // 10
+  /// ```
   Signal<num> get $ => signal<num>(this);
 }

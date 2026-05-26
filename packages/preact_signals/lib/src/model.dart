@@ -3,6 +3,20 @@ import 'effect.dart';
 import 'action.dart';
 
 /// Options for configuring a [SignalModel].
+///
+/// Provides configuration for debug labeling ([name]) and whether to automatically wrap Map functions
+/// in transaction-safe, batched actions ([wrapInAction]).
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final options = const SignalModelOptions(
+///   name: 'user-profile-model',
+///   wrapInAction: true,
+/// );
+/// ```
 class SignalModelOptions {
   /// The name or debug label of the model.
   final String? name;
@@ -44,7 +58,31 @@ class SignalModelOptions {
 ///
 /// It holds the instanced model [value] and all the [Effect]s that were captured
 /// during its construction. Disposing the [SignalModel] automatically disposes of all
-/// nested/captured effects.
+/// nested/captured effects, avoiding memory leaks.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// void main() {
+///   final counterModel = createModel(() {
+///     final count = signal(0);
+///     effect(() => print('Count is: ${count.value}'));
+///     return {
+///       'count': count,
+///       'increment': () => count.value++,
+///     };
+///   });
+///
+///   final model = counterModel();
+///   final increment = model['increment'] as Function;
+///   increment(); // Triggers print: Count is: 1
+///
+///   // Disposes of captured effects
+///   model.dispose();
+/// }
+/// ```
 class SignalModel<T> {
   /// The instanced model value.
   final T value;
@@ -98,7 +136,19 @@ Map _wrapInAction(Map map) {
   return map;
 }
 
-/// A constructor for models.
+/// A constructor for models that manages nested effects.
+///
+/// The model constructor starts capturing effects when called, storing them inside the returned [SignalModel].
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final myModel = SignalModelConstructor(() => 'data');
+/// final model = myModel();
+/// print(model.value); // Prints: data
+/// ```
 class SignalModelConstructor<T> {
   final T Function() _factory;
 
@@ -145,7 +195,47 @@ class SignalModelConstructor<T> {
   }
 }
 
-/// Creates a new model constructor.
+/// Creates a new model constructor with an instanced factory.
+///
+/// A [SignalModel] is an elegant wrapper around complex models (such as Maps or classes)
+/// that tracks and automatically disposes of any [Effect]s created during the model's
+/// instantiation.
+///
+/// When the returned [SignalModelConstructor] is invoked, it starts capturing nested effects.
+/// If the factory returns a standard Dart [Map], and `wrapInAction` is enabled (default), all nested
+/// functions within that Map are automatically wrapped in batched [action]s.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// // Define a reactive counter model constructor
+/// final counterModel = createModel(() {
+///   final count = signal(0);
+///   
+///   // Captured nested effect - will be disposed automatically!
+///   effect(() {
+///     print('Nested logger: count is ${count.value}');
+///   });
+///
+///   return {
+///     'count': count,
+///     'increment': () => count.value++,
+///   };
+/// });
+///
+/// void main() {
+///   // Instantiate the model
+///   final model = counterModel();
+///
+///   final increment = model['increment'] as Function;
+///   increment(); // Prints: Nested logger: count is 1
+///
+///   // Clean up all captured effects
+///   model.dispose();
+/// }
+/// ```
 SignalModelConstructor<T> createModel<T>(
   T Function() factory, {
   SignalModelOptions options = const SignalModelOptions(),

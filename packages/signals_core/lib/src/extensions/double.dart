@@ -1,6 +1,14 @@
 import '../core/signals.dart';
 
-/// Helper extensions for [ReadonlySignal<double>]
+/// Helper extensions for [ReadonlySignal<double>], enabling direct reactive arithmetic and rounding operations on double signals.
+///
+/// ```dart
+/// import 'package:signals_core/signals_core.dart';
+///
+/// final doubleSignal = 2.5.$;
+/// final rounded = doubleSignal.round(); // 3
+/// final negated = -doubleSignal; // -2.5
+/// ```
 extension DoubleSignalExtension on ReadonlySignal<double> {
   /// Returns the remainder of this value divided by [other].
   double remainder(num other) => value.remainder(other);
@@ -177,8 +185,15 @@ extension DoubleSignalExtension on ReadonlySignal<double> {
   double truncateToDouble() => value.truncateToDouble();
 }
 
-/// Extensions for [double]
+/// Utility extension on [double] to easily lift a double into a reactive [Signal].
 extension SignalDoubleExtensions on double {
-  /// Return a signal from a double value
+  /// Lift a primitive [double] into a reactive [Signal<double>].
+  ///
+  /// ```dart
+  /// import 'package:signals_core/signals_core.dart';
+  ///
+  /// final doubleSignal = 3.14.$;
+  /// print(doubleSignal.value); // 3.14
+  /// ```
   Signal<double> get $ => signal<double>(this);
 }

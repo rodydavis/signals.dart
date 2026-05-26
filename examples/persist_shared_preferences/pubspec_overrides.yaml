@@ -1,0 +1,11 @@
+dependency_overrides:
+  signals:
+    path: ../../packages/signals
+  signals_core:
+    path: ../../packages/signals_core
+  signals_flutter:
+    path: ../../packages/signals_flutter
+  signals_hooks:
+    path: ../../packages/signals_hooks
+  preact_signals:
+    path: ../../packages/preact_signals

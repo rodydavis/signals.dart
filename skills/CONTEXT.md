@@ -26,6 +26,12 @@ Guidelines for the low-level `preact_signals` internal reactivity engine.
 Refactoring guides for upgrading from signals.dart 6.x to 7.x.
 - Covers: migrating parameters to unified options classes, updating asynchronous creators, refactoring positional builders, and phasing out `SignalsMixin`.
 
+### 5. [signals-lint/](signals-lint/SKILL.md)
+Guidelines for working with static analysis compiler warnings and automated quick-fix refactoring assists.
+
+### 6. [signals-hooks/](signals-hooks/SKILL.md)
+Guidelines for integrating reactive signals seamlessly inside standard flutter_hooks widgets.
+
 ## Dependencies/Relationships
 
 - **Repository Packages (`packages/`)**: These instructions directly align with and validate against the packages in the monorepo (e.g. `preact_signals`, `signals_core`, `signals_flutter`, `signals_hooks`, `signals_lint`).
@@ -33,8 +39,10 @@ Refactoring guides for upgrading from signals.dart 6.x to 7.x.
 
 ## Usage/Exports
 
-This folder exposes the four major training skills:
+This folder exposes the six major training skills:
 - `signals-dart`
 - `signals-flutter`
 - `signals-preact-dart`
 - `signals-migration-6-to-7`
+- `signals-lint`
+- `signals-hooks`

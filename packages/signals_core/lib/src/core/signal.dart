@@ -62,13 +62,17 @@ class Signal<T> extends signals.Signal<T>
 
   @override
   void afterCreate(T val) {
-    SignalsObserver.instance?.onSignalCreated(this, val);
+    if (kDebugMode) {
+      SignalsObserver.instance?.onSignalCreated(this, val);
+    }
     isInitialized = true;
   }
 
   @override
   void beforeUpdate(T val) {
-    SignalsObserver.instance?.onSignalUpdated(this, val);
+    if (kDebugMode) {
+      SignalsObserver.instance?.onSignalUpdated(this, val);
+    }
   }
 
   @override
@@ -123,9 +127,9 @@ class Signal<T> extends signals.Signal<T>
     }
   }
 
-  /// Override the current signal with a new value as if it was created with it
+  /// Override the current signal with a new value as if it was created with it.
   ///
-  /// This does not trigger any updates
+  /// This does not trigger any updates.
   ///
   /// ```dart
   /// var counter = signal(0);
@@ -133,6 +137,10 @@ class Signal<T> extends signals.Signal<T>
   /// // Override the signal with a new value
   /// counter = counter.overrideWith(1);
   /// ```
+  @Deprecated(
+    'Use direct signal mutation in tests, or wrap signals in Ref from lite_ref and use Ref.overrideWith instead. '
+    'This method will be removed in a future major release.',
+  )
   Signal<T> overrideWith(T val) {
     version = 0;
     afterCreate(val);
@@ -177,145 +185,116 @@ class Signal<T> extends signals.Signal<T>
 // }
 
 /// {@template signal}
-/// The `signal` function creates a new signal. A signal is a container for a value that can change over time. You can read a signal's value or subscribe to value updates by accessing its `.value` property.
+/// A `Signal` is a reactive container for a value that changes over time. It forms the bedrock of the reactive framework, allowing fine-grained, glitch-free propagation of state updates to dependent computeds and effects.
 ///
+/// You can read a signal's current state, mutate it to dispatch updates, or subscribe to changes by accessing its `.value` property inside any active reactive context.
+///
+/// ### Core Example
 /// ```dart
 /// import 'package:signals/signals.dart';
 ///
+/// // Create a reactive signal holding an integer
 /// final counter = signal(0);
 ///
-/// // Read value from signal, logs: 0
+/// // Read the value: prints 0
 /// print(counter.value);
 ///
-/// // Write to a signal
+/// // Write to a signal: dispatches updates to all downstreams synchronously
 /// counter.value = 1;
 /// ```
 ///
-/// Signals can be created globally, inside classes or functions. It's up to you how you want to structure your app.
+/// ---
 ///
-/// It is not recommended to create signals inside effects or computed, as this will create a new signal every time the effect or computed is triggered. This can lead to unexpected behavior.
+/// ## Key API Capabilities
 ///
-/// In Flutter do not create signals inside `build` methods, as this will create a new signal every time the widget is rebuilt.
+/// ### 1. Reading & Writing via `.value`
+/// The `.value` property is the default way to interact with a signal. 
+/// - **Inside a Reactive Context:** Accessing `.value` inside a [computed] block or [effect] callback automatically registers the signal as a dependency, establishing an active subscription.
+/// - **Outside a Reactive Context:** Acts as a standard getter and setter, allowing you to fetch or update the underlying state.
 ///
-/// ## Writing to a signal
-///
-/// Writing to a signal is done by setting its `.value` property. Changing a signal's value synchronously updates every [computed](/core/computed) and [effect](/core/effect) that depends on that signal, ensuring your app state is always consistent.
-///
-/// ## .peek()
-///
-/// In the rare instance that you have an effect that should write to another signal based on the previous value, but you _don't_ want the effect to be subscribed to that signal, you can read a signals's previous value via `signal.peek()`.
+/// ### 2. Non-reactive Reads via `.peek()`
+/// If you need to read a signal's current value *without* subscribing to its updates inside a reactive context, use the `.peek()` method. This is invaluable when writing to another signal inside an effect based on the previous state, preventing infinite update loops (cycles).
 ///
 /// ```dart
 /// final counter = signal(0);
-/// final effectCount = signal(0);
+/// final effectTriggerCount = signal(0);
 ///
 /// effect(() {
-/// 	print(counter.value);
+///   // Subscribes to changes of `counter`
+///   final current = counter.value;
+///   print('Counter updated: $current');
 ///
-/// 	// Whenever this effect is triggered, increase `effectCount`.
-/// 	// But we don't want this signal to react to `effectCount`
-/// 	effectCount.value = effectCount.peek() + 1;
+///   // Read current count non-reactively and increment.
+///   // The effect will NOT subscribe to `effectTriggerCount`.
+///   effectTriggerCount.value = effectTriggerCount.peek() + 1;
 /// });
 /// ```
 ///
-/// Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
-///
-/// ## .value
-///
-/// The `.value` property of a signal is used to read or write to the signal. If used inside an effect or computed, it will subscribe to the signal and trigger the effect or computed whenever the signal's value changes.
+/// ### 3. Accessing the Previous State via `.previousValue`
+/// Signals automatically cache their immediately preceding value. Accessing `.previousValue` lets you perform diffing or historic analysis. Like `.peek()`, reading `.previousValue` does not establish a reactive dependency.
 ///
 /// ```dart
-/// final counter = signal(0);
+/// final username = signal("initial_user");
 ///
 /// effect(() {
-/// 	print(counter.value);
+///   print('Current Username: ${username.value}');
+///   print('Previous Username: ${username.previousValue}');
 /// });
 ///
-/// counter.value = 1;
+/// username.value = "new_user";
+/// // Prints:
+/// // Current Username: new_user
+/// // Previous Username: initial_user
 /// ```
 ///
-/// ## .previousValue
-///
-/// The `.previousValue` property of a signal is used to read the previous value of the signal. If used inside an effect or computed, it will not subscribe to the signal and not trigger the effect or computed whenever the signal's value changes.
+/// ### 4. Force Updates via `.set()`
+/// When dealing with mutable data types (e.g., custom class instances, collections), mutating properties directly does not change the instance reference. You can force an update using `.set(..., force: true)` to skip standard equality checks and notify all downstreams.
 ///
 /// ```dart
-/// final counter = signal(0);
-///
-/// effect(() {
-/// 	print('Current value: ${counter.value}');
-/// 	print('Previous value: ${counter.previousValue}');
-/// });
-///
-/// counter.value = 1;
+/// final numbers = signal([1, 2, 3]);
+/// 
+/// // Modify the list in-place and force notify
+/// numbers.value.add(4);
+/// numbers.set(numbers.value, force: true);
 /// ```
 ///
-/// ## Force Update
+/// ---
 ///
-/// If you want to force an update for a signal, you can call the `.set(..., force: true)` method. This will trigger all effects and mark all computed as dirty.
+/// ## Lifecycle & Resource Management
 ///
-/// ```dart
-/// final counter = signal(0);
-/// counter.set(1, force: true);
-/// ```
-///
-/// ## Disposing
-///
-/// ### Auto Dispose
-///
-/// If a signal is created with autoDispose set to true, it will automatically dispose itself when there are no more listeners.
+/// ### Auto-Disposal
+/// If a signal is constructed with `autoDispose: true`, it will automatically destroy itself when it no longer has active reactive listeners (subscriptions). This prevents memory leaks by freeing resources as soon as they are out of scope.
 ///
 /// ```dart
-/// final s = signal(0, autoDispose: true);
-/// s.onDispose(() => print('Signal destroyed'));
+/// final s = signal(0, options: SignalOptions(autoDispose: true));
+///
+/// s.onDispose(() => print('Signal has been disposed!'));
+///
+/// // Create active subscriber
 /// final dispose = s.subscribe((_) {});
-/// dispose();
-/// final value = s.value; // 0
-/// // prints: Signal destroyed
+/// 
+/// // Cancel subscription: s has no listeners, so it self-disposes
+/// dispose(); 
+/// // Prints: "Signal has been disposed!"
 /// ```
 ///
-/// A auto disposing signal does not require its dependencies to be auto disposing. When it is disposed it will freeze its value and stop tracking its dependencies.
+/// You can manually verify the lifecycle state using `.disposed`, or register custom clean-up routines via `.onDispose(callback)`.
 ///
-/// ```dart
-/// final s = signal(0);
-/// s.dispose();
-/// final c = computed(() => s.value);
-/// // c will not react to changes in s
-/// ```
+/// ---
 ///
-/// You can check if a signal is disposed by calling the `.disposed` method.
+/// ## Flutter Integration
+/// In Flutter applications, manage state and reactivity seamlessly by using [SignalWidget] (for stateless widgets) or [SignalStatefulWidget] (for stateful widgets).
+/// These widgets establish an implicit reactive context directly at the element layer. Any signal accessed via `.value` inside the `build` method is automatically tracked, and the widget automatically rebuilds when they mutate.
 ///
-/// ```dart
-/// final s = signal(0);
-/// print(s.disposed); // false
-/// s.dispose();
-/// print(s.disposed); // true
-/// ```
-///
-/// ### On Dispose Callback
-///
-/// You can attach a callback to a signal that will be called when the signal is destroyed.
-///
-/// ```dart
-/// final s = signal(0);
-/// s.onDispose(() => print('Signal destroyed'));
-/// s.dispose();
-/// ```
-///
-/// ## Flutter
-///
-/// In Flutter if you want to create a signal that automatically disposes itself when the widget is removed from the widget tree and rebuilds the widget when the signal changes, you can use the `createSignal` inside a stateful widget.
-///
+/// ### Stateless Example with [SignalWidget]
 /// ```dart
 /// import 'package:flutter/material.dart';
 /// import 'package:signals/signals_flutter.dart';
 ///
-/// class CounterWidget extends StatefulWidget {
-///   @override
-///   _CounterWidgetState createState() => _CounterWidgetState();
-/// }
+/// final counter = signal(0);
 ///
-/// class _CounterWidgetState extends State<CounterWidget> with SignalsAutoDisposeMixin {
-///   late final counter = createSignal(0);
+/// class CounterDisplay extends SignalWidget {
+///   const CounterDisplay({super.key});
 ///
 ///   @override
 ///   Widget build(BuildContext context) {
@@ -324,10 +303,10 @@ class Signal<T> extends signals.Signal<T>
 ///         child: Column(
 ///           mainAxisAlignment: MainAxisAlignment.center,
 ///           children: [
-///             Text('Counter: $counter'),
+///             Text('Count: ${counter.value}'),
 ///             ElevatedButton(
 ///               onPressed: () => counter.value++,
-///               child: Text('Increment'),
+///               child: const Text('Increment'),
 ///             ),
 ///           ],
 ///         ),
@@ -337,46 +316,75 @@ class Signal<T> extends signals.Signal<T>
 /// }
 /// ```
 ///
-/// No `Watch` widget or extension is needed, the signal will automatically dispose itself when the widget is removed from the widget tree.
+/// ### Stateful Example with [SignalStatefulWidget]
+/// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:signals/signals_flutter.dart';
 ///
-/// The `SignalsAutoDisposeMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
+/// class CounterDisplay extends SignalStatefulWidget {
+///   const CounterDisplay({super.key});
+///   
+///   @override
+///   State<CounterDisplay> createState() => _CounterDisplayState();
+/// }
 ///
-/// ## Testing
+/// class _CounterDisplayState extends State<CounterDisplay> {
+///   // Local signal scoped to this widget state:
+///   final counter = signal(0);
 ///
-/// Testing signals is possible by converting a signal to a stream and testing it like any other stream in Dart.
+///   @override
+///   Widget build(BuildContext context) {
+///     return Scaffold(
+///       body: Center(
+///         child: Column(
+///           mainAxisAlignment: MainAxisAlignment.center,
+///           children: [
+///             Text('Count: ${counter.value}'),
+///             ElevatedButton(
+///               onPressed: () => counter.value++,
+///               child: const Text('Increment'),
+///             ),
+///           ],
+///         ),
+///       ),
+///     );
+///   }
+/// }
+/// ```
+///
+/// ---
+///
+/// ## Testing Strategies
+///
+/// ### 1. Converting to Streams
+/// You can convert any reactive signal into a standard Dart [Stream] by calling `.toStream()`. This is highly beneficial for testing signal value sequences in order using test matchers.
 ///
 /// ```dart
-/// test('test as stream', () {
-///   final s = signal(0);
-///   final stream = s.toStream(); // create a stream of values
+/// test('emits sequential count updates in order', () async {
+///   final counter = signal(0);
+///   final stream = counter.toStream();
 ///
-///   s.value = 1;
-///   s.value = 2;
-///   s.value = 3;
+///   counter.value = 1;
+///   counter.value = 2;
 ///
-///   expect(stream, emitsInOrder([0, 1, 2, 3]));
+///   await expectLater(stream, emitsInOrder([0, 1, 2]));
 /// });
 /// ```
 ///
-/// `emitsInOrder` is a matcher that will check if the stream emits the values in the correct order which in this case is each value after a signal is updated.
-///
-/// You can also override the initial value of a signal when testing. This is is useful for mocking and testing specific value implementations.
+/// ### 2. Dependency Injection & Mock Overrides
+/// Global or lazy signals used across your application can be mocked or overridden during testing via `.overrideWith(value)`. This returns a new signal sharing the same global identifier, helping you mock complex state dependencies seamlessly.
 ///
 /// ```dart
-/// test('test with override', () {
-///   final s = signal(0).overrideWith(-1);
-///
-///   final stream = s.toStream();
-///
-///   s.value = 1;
-///   s.value = 2;
-///   s.value = 3;
-///
-///   expect(stream, emitsInOrder([-1, 1, 2, 3]));
+/// test('mocking global signals', () {
+///   final apiToken = signal("production_token");
+///   
+///   // Override with test mock token
+///   apiToken.overrideWith("mock_test_token");
+///   
+///   expect(apiToken.value, "mock_test_token");
 /// });
 /// ```
 ///
-/// `overrideWith` returns a new signal with the same global id sets the value as if it was created with it. This can be useful when using async signals or global signals used for dependency injection.
 /// @link https://dartsignals.dev/core/signal
 /// {@endtemplate}
 Signal<T> signal<T>(

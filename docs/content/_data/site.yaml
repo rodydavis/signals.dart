@@ -1,0 +1,14 @@
+# Site Configuration
+titleBase: Signals
+favicon: favicon.svg
+
+# Social media links
+social:
+  - name: Github
+    url: https://github.com/rodydavis
+  - name: YouTube
+    url: https://youtube.com/rodydavis
+  - name: X/Twitter
+    url: https://twitter.com/rodydavis
+  - name: LinkedIn
+    url: https://www.linkedin.com/in/rodydavis

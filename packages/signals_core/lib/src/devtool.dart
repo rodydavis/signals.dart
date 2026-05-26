@@ -52,6 +52,22 @@ class DevToolsSignalsObserver implements SignalsObserver {
 
   bool _devToolsInitialized = false;
   bool _devToolsEnabled = kDebugMode;
+  int _pruneCounter = 0;
+
+  void _pruneIfNeeded() {
+    _pruneCounter++;
+    if (_pruneCounter >= 100) {
+      _pruneCounter = 0;
+      _signals.removeWhere((ref) => ref.target == null);
+      _computed.removeWhere((ref) => ref.target == null);
+      _effects.removeWhere((ref) => ref.target == null);
+      final activeEffectIds = _effects
+          .map((ref) => ref.target?.globalId)
+          .whereType<int>()
+          .toSet();
+      _effectCount.removeWhere((id, _) => !activeEffectIds.contains(id));
+    }
+  }
 
   /// Check if devTools is enabled
   bool get enabled => _devToolsEnabled;
@@ -118,6 +134,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       };
     });
     _computed.add(WeakReference(instance));
+    _pruneIfNeeded();
   }
 
   @override
@@ -162,6 +179,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
       };
     });
     _signals.add(WeakReference(instance));
+    _pruneIfNeeded();
   }
 
   @override
@@ -191,6 +209,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
     if (!enabled) return;
     _effectCount[instance.globalId] = 0;
     _effects.add(WeakReference(instance));
+    _pruneIfNeeded();
     _debugPostEvent('ext.signals.effectCreate', () {
       final sources = <int>[];
       for (var node = instance.sources; node != null; node = node.nextSource) {

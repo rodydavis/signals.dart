@@ -1,4 +1,40 @@
-/// Signal equality check
+/// Defines the equality check algorithm used by signals to determine if a new value
+/// actually differs from the current value.
+///
+/// By default, signals use standard Dart operator equality (`==`). However, you can configure
+/// a signal to use different strategies, such as deep equality check for collections or custom comparator checks.
+///
+/// Strategies:
+/// - [standard]: Default value equality (`a == b`).
+/// - [identity]: Identity-based comparison (`identical(a, b)`).
+/// - [deep]: Deep collection comparison for Lists, Maps, and Sets.
+/// - [custom]: User-defined boolean comparison function.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// void main() {
+///   // Create a list signal using deep equality check
+///   final items = signal(
+///     [1, 2, 3],
+///     options: SignalOptions(
+///       equality: SignalEquality.deep(),
+///     ),
+///   );
+///
+///   effect(() {
+///     print('Items changed: ${items.value}');
+///   });
+///
+///   // Reassigning an identical value structure does NOT trigger a rebuild!
+///   items.value = [1, 2, 3]; 
+///
+///   // Triggers rebuild
+///   items.value = [1, 2, 3, 4];
+/// }
+/// ```
 abstract class SignalEquality<T> {
   /// @nodoc
   const SignalEquality();
@@ -7,22 +43,40 @@ abstract class SignalEquality<T> {
   bool equals(Object? a, Object? b);
 
   /// Standard equality check (a == b)
+  ///
+  /// Matches two objects if their standard `==` operator returns true.
+  /// This is the default strategy used by all signals.
   static SignalEquality<T> standard<T>() =>
       const SignalStandardEquality<Never>();
 
   /// Identity equality check (identical(a, b))
+  ///
+  /// Matches two objects only if they are the exact same instance in memory.
   static SignalEquality<T> identity<T>() =>
       const SignalIdentityEquality<Never>();
 
   /// Deep equality check
+  ///
+  /// Matches collections (Lists, Maps, Sets) recursively by comparing their items.
   static SignalEquality<T> deep<T>() => const SignalDeepEquality<Never>();
 
   /// Custom equality check
+  ///
+  /// Uses a user-provided boolean function [fn] to check for equality.
   factory SignalEquality.custom(bool Function(T a, T b) fn) =
       SignalCustomEquality<T>;
 }
 
 /// Standard equality check (a == b)
+///
+/// Matches two objects using the standard Dart operator `==`.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// final equality = SignalEquality.standard<int>();
+/// print(equality.equals(5, 5)); // true
+/// ```
 class SignalStandardEquality<T> extends SignalEquality<T> {
   /// Creates a new [SignalStandardEquality] instance.
   const SignalStandardEquality();
@@ -31,6 +85,18 @@ class SignalStandardEquality<T> extends SignalEquality<T> {
 }
 
 /// Identity equality check (identical(a, b))
+///
+/// Matches two objects only if they point to the exact same instance in memory.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// final listA = [1, 2];
+/// final listB = [1, 2];
+/// final equality = SignalEquality.identity<List<int>>();
+/// print(equality.equals(listA, listB)); // false
+/// print(equality.equals(listA, listA)); // true
+/// ```
 class SignalIdentityEquality<T> extends SignalEquality<T> {
   /// Creates a new [SignalIdentityEquality] instance.
   const SignalIdentityEquality();
@@ -39,6 +105,14 @@ class SignalIdentityEquality<T> extends SignalEquality<T> {
 }
 
 /// Custom equality check using a custom function
+///
+/// Uses a custom comparison function to determine if two values of type [T] are equal.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// final equality = SignalEquality.custom((User a, User b) => a.id == b.id);
+/// ```
 class SignalCustomEquality<T> extends SignalEquality<T> {
   final bool Function(T a, T b) _fn;
 
@@ -52,6 +126,15 @@ class SignalCustomEquality<T> extends SignalEquality<T> {
 }
 
 /// Deep equality check for collections
+///
+/// Recursively compares Lists, Maps, and Sets to see if their nested elements are equal.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// final equality = SignalEquality.deep();
+/// print(equality.equals([1, [2, 3]], [1, [2, 3]])); // true
+/// ```
 class SignalDeepEquality<T> extends SignalEquality<T> {
   /// Creates a new [SignalDeepEquality] instance.
   const SignalDeepEquality();

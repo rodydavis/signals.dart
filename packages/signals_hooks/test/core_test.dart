@@ -243,5 +243,32 @@ void main() {
         expect(find.text('12'), findsOneWidget);
       });
     });
+
+    group('LazySignal', () {
+      testWidgets('starts uninitialized and sets value correctly', (tester) async {
+        await tester.pumpWidget(
+          HookBuilder(
+            builder: (context) {
+              final s = useLazySignal<int>();
+              return GestureDetector(
+                onTap: () => s.value = 42,
+                child: Text(
+                  !s.isInitialized ? 'uninitialized' : '${s.value}',
+                  textDirection: TextDirection.ltr,
+                ),
+              );
+            },
+          ),
+        );
+
+        expect(find.text('uninitialized'), findsOneWidget);
+
+        await tester.tap(find.text('uninitialized'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('42'), findsOneWidget);
+      });
+    });
   });
 }
+

@@ -8,6 +8,7 @@
 - **SignalAnimatedBuilder**: Added a modern transition builder widget designed for subtree rendering optimization. Accepts an optional pre-built static `child` widget which is cached and never rebuilt when signal values mutate.
 - **SignalEffect / SignalListener**: Added inline side-effects widgets that run reactive callbacks (e.g. snackbars, dialog triggers, routing) when tracked signals mutate. Handles setup, callback updates, and cleanup automatically on unmount.
 - **SignalCustomPaint & SignalPainterWidget**: Added canvas drawing targets that bypass element rebuild cycles by listening directly to signals at the rendering layer to trigger `markNeedsPaint()` directly.
+- **Widget & Element Conversion Options**: Added `toSignalWidget()` on `StatelessWidget` and `toSignalStatefulWidget()` on `StatefulWidget` to seamlessly upgrade standard widgets to reactive versions. Also added `watchSignal` extensions on `StatelessElement` and `StatefulElement`.
 
 ### ⚡ Deprecations & Optimizations
 - Deprecated legacy `Watch`, `WatchBuilder`, `SignalsMixin`, and the `.watch(context)` context watch extensions.

@@ -169,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      sha256: "09bad715f418841f976c77db72d5398dc1253c21fb9c0c7f0b0b985860b2d58e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   cupertino_icons:
     dependency: transitive
     description:
@@ -392,6 +400,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.4.0"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      sha256: "6d1264f2dffa1b1101c25a91dff0dc2daee4c18e87cd8538729773c073dbf602"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.6"
   http:
     dependency: transitive
     description:
@@ -424,6 +440,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  jaspr:
+    dependency: "direct main"
+    description:
+      name: jaspr
+      sha256: "0a27800a0ae8c9f5c606c278d29ce535bfddde00932aa2b56a67c2b0bd86fd80"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.23.1"
   json_annotation:
     dependency: transitive
     description:
@@ -656,14 +680,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
-  reactivity_benchmark:
-    dependency: transitive
-    description:
-      name: reactivity_benchmark
-      sha256: f8eb337ef5d044cfa08389f3bfd872d82980c5e17486d385f889eafd17ad0279
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
   rxdart:
     dependency: transitive
     description:
@@ -680,6 +696,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.2"
+  shelf_gzip:
+    dependency: transitive
+    description:
+      name: shelf_gzip
+      sha256: "4f4b793c0f969f348aece1ab4cc05fceba9fea431c1ce76b1bc0fa369cecfc15"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   shelf_packages_handler:
     dependency: transitive
     description:
@@ -688,6 +712,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  shelf_proxy:
+    dependency: transitive
+    description:
+      name: shelf_proxy
+      sha256: "0c3a7b2b4c111cae8a6d9077701e0622c6013d38a780373ac359d6d45b3aa10b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   shelf_static:
     dependency: transitive
     description:
@@ -821,6 +853,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.0.14"
+  universal_web:
+    dependency: transitive
+    description:
+      name: universal_web
+      sha256: "618a9d8659e9429875f69d4da0fb9c0c143d3d4cdab28b4545502088aa50ed62"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1+1"
   url_launcher:
     dependency: transitive
     description:

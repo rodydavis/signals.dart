@@ -54,6 +54,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_hooks:
+    dependency: transitive
+    description:
+      name: flutter_hooks
+      sha256: "8ae1f090e5f4ef5cfa6670ce1ab5dddadd33f3533a7f9ba19d9f958aa2a89f42"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.21.3+1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -132,10 +140,10 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861
+      sha256: "31bd099b47c10cd1aeb55146a2d46ce0277630ecef3f7dae54ad7873f36696cd"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.19"
+    version: "0.12.20"
   material_color_utilities:
     dependency: transitive
     description:
@@ -148,10 +156,10 @@ packages:
     dependency: transitive
     description:
       name: meta
-      sha256: "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394"
+      sha256: df0c643f44ad098eb37988027a8e2b2b5a031fd3977f06bbfd3a76637e8df739
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.0"
+    version: "1.18.2"
   path:
     dependency: transitive
     description:
@@ -161,37 +169,40 @@ packages:
     source: hosted
     version: "1.9.1"
   preact_signals:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: preact_signals
-      sha256: ad45313c86b2228536a16d3dfc86da8263705d4acb4136c42907378de6910d8c
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.9.4"
+      path: "../../packages/preact_signals"
+      relative: true
+    source: path
+    version: "7.0.0"
   signals:
     dependency: "direct main"
     description:
-      name: signals
-      sha256: "0d644f4ec8ce4862c61e3d3d1168d08a7b9b6ecbe067d4f96e26dd35287f5dcd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.3.0"
+      path: "../../packages/signals"
+      relative: true
+    source: path
+    version: "7.0.0"
   signals_core:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_core
-      sha256: ea427bd53619e69e6f6cf244177e3b72870e433065c807600fb496fd80611c9f
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.2.1"
+      path: "../../packages/signals_core"
+      relative: true
+    source: path
+    version: "7.0.0"
   signals_flutter:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: signals_flutter
-      sha256: "7c83418f47e3538685217e583f0fbd17a29716fa1a9ce2247e2455786e8ea81a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.3.0"
+      path: "../../packages/signals_flutter"
+      relative: true
+    source: path
+    version: "7.0.0"
+  signals_hooks:
+    dependency: "direct overridden"
+    description:
+      path: "../../packages/signals_hooks"
+      relative: true
+    source: path
+    version: "7.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -241,26 +252,26 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: "8161c84903fd860b26bfdefb7963b3f0b68fee7adea0f59ef805ecca346f0c7a"
+      sha256: "2a122cbe059f8b610d3a5415f42e255b6c17b1f21eee1d960f31080237fb4f11"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.10"
+    version: "0.7.12"
   vector_math:
     dependency: transitive
     description:
       name: vector_math
-      sha256: d530bd74fea330e6e364cda7a85019c434070188383e1cd8d9777ee586914c5b
+      sha256: "47a1b32ee755c3fcffa33db52a7258c137f97bdb2209a1075be847809fac4ccf"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.0"
   vm_service:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "046d3928e16fa4dc46e8350415661755ab759d9fc97fc21b5ab295f71e4f0499"
+      sha256: "0016aef94fc66495ac78af5859181e3f3bf2026bd8eecc72b9565601e19ab360"
       url: "https://pub.dev"
     source: hosted
-    version: "15.1.0"
+    version: "15.2.0"
 sdks:
-  dart: ">=3.9.0-0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  dart: ">=3.10.0 <4.0.0"
+  flutter: ">=3.32.0"

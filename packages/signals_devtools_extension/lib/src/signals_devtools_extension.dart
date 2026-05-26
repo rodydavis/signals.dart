@@ -10,6 +10,31 @@ import 'package:signals_devtools_extension/src/widget/updates_view.dart';
 
 import 'nodes_state.dart';
 
+/// The main widget of the Signals DevTools Extension.
+///
+/// Wraps the [SignalsExtensionHomePage] inside a `DevToolsExtension` container
+/// supplied by the `devtools_extensions` package. This allows it to:
+/// - Connect securely to the Dart VM Service.
+/// - Retrieve the application context and themes from DevTools.
+/// - Render custom debugging tabs directly as a pane in Flutter DevTools.
+///
+/// ### UI Elements
+///
+/// The UI is structured into two main diagnostic views:
+///
+/// 1. **Updates Feed**:
+///    - Displays a live, chronological stream of all signal value updates, computed evaluations, and effect executions.
+///    - Includes previous and new values, timestamps, and active pause/resume capabilities to let developers snapshot reactions.
+///
+/// 2. **Dependency Graph**:
+///    - An interactive dependency visualizer powered by `GraphView`.
+///    - Shows the relationship and flow of reactive nodes: `Signals` (sources) -> `Computeds` (intermediates) -> `Effects` (sinks).
+///    - Hovering or clicking on a node highlights its dependencies and current value.
+///
+/// :::info
+/// This panel leverages service extensions registered by `signals_core` in debug mode. It tracks creation,
+/// updates, and removal of nodes dynamically using standard event streams.
+/// :::
 class SignalsDevToolsExtension extends StatelessWidget {
   const SignalsDevToolsExtension({super.key});
 

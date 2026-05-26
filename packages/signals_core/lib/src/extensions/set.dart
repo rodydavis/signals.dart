@@ -1,7 +1,15 @@
 // ignore_for_file: public_member_api_docs
 import '../core/signals.dart';
 
-/// Helper extensions for [ReadonlySignal<Set>]
+/// Helper extensions for [ReadonlySignal<Set<E>>], providing delegators to compute set operations reactively.
+///
+/// ```dart
+/// import 'package:signals_core/signals_core.dart';
+///
+/// final setA = {1, 2, 3}.$;
+/// final setB = {3, 4, 5}.$;
+/// final diff = computed(() => setA.difference(setB.value)); // {1, 2}
+/// ```
 extension ReadonlySetSignalExtension<E> on ReadonlySignal<Set<E>> {
   Set<R> cast<R>() {
     return value.cast<R>();
@@ -28,7 +36,22 @@ extension ReadonlySetSignalExtension<E> on ReadonlySignal<Set<E>> {
   }
 }
 
-/// Helper extensions for [Signal<Set>]
+/// Helper extensions for [Signal<Set<E>>] to perform mutation operations that automatically notify downstreams.
+///
+/// Under the hood, these methods mutate the underlying set and call `set(..., force: true)` to trigger all listeners and computations.
+///
+/// ```dart
+/// import 'package:signals_core/signals_core.dart';
+///
+/// final tags = <String>{}.$;
+///
+/// effect(() {
+///   print('Tags: ${tags.value}');
+/// });
+///
+/// tags.add('dart'); // Automatically prints: Tags: {dart}
+/// tags.addAll(['flutter', 'signals']); // Automatically prints: Tags: {dart, flutter, signals}
+/// ```
 extension SetSignalExtension<E> on Signal<Set<E>> {
   bool add(E value) {
     final list = this.value;
@@ -77,8 +100,15 @@ extension SetSignalExtension<E> on Signal<Set<E>> {
   }
 }
 
-/// Extensions for [Set<E>]
+/// Utility extension on [Set] to easily lift a set into a reactive [Signal].
 extension SignalSetExtensions<E> on Set<E> {
-  /// Return a signal from a Set value
+  /// Lift a primitive [Set] into a reactive [Signal<Set<E>>].
+  ///
+  /// ```dart
+  /// import 'package:signals_core/signals_core.dart';
+  ///
+  /// final tags = {'sports', 'news'}.$;
+  /// print(tags.value); // {'sports', 'news'}
+  /// ```
   Signal<Set<E>> get $ => signal<Set<E>>(this);
 }

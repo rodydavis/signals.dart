@@ -5,14 +5,28 @@ import 'globals.dart';
 import 'listenable.dart';
 import 'options.dart';
 
-/// Create an effect to run arbitrary code in response to signal changes.
+/// Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
 ///
-/// An effect tracks which signals are accessed within the given callback
-/// function `fn`, and re-runs the callback when those signals change.
+/// An [Effect] tracks which signals are accessed within its callback function,
+/// and automatically schedules itself to re-run whenever those dependencies change.
 ///
-/// The callback may return a cleanup function. The cleanup function gets
-/// run once, either when the callback is next called or when the effect
-/// gets disposed, whichever happens first.
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final count = signal(0);
+///
+/// void main() {
+///   final logger = Effect(() {
+///     print('Active count is: ${count.value}');
+///     return () => print('Cleaning up effect!');
+///   });
+///
+///   count.value = 1; // Prints: "Cleaning up effect!" then "Active count is: 1"
+///   logger.dispose();
+/// }
+/// ```
 class Effect with Listenable {
   /// @internal
   /// The effect callback.
@@ -189,16 +203,27 @@ class Effect with Listenable {
   }
 }
 
-/// Create an effect to run arbitrary code in response to signal changes.
+/// Convenient global constructor for creating and immediately starting an [Effect].
 ///
-/// An effect tracks which signals are accessed within the given callback
-/// function `fn`, and re-runs the callback when those signals change.
+/// Returns a disposer function that can be called to stop the effect and unsubscribe
+/// it from all tracked signals.
 ///
-/// The callback may return a cleanup function. The cleanup function gets
-/// run once, either when the callback is next called or when the effect
-/// gets disposed, whichever happens first.
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final count = signal(0);
+/// final dispose = effect(() {
+///   print('Count is: ${count.value}');
+/// });
+///
+/// void main() {
+///   count.value = 10; // Prints: Count is: 10
+///   dispose(); // Unsubscribes and cleans up resources
+/// }
+/// ```
 void Function() effect(
-  /// The effect callback
   Function() fn, [
   EffectOptions? options,
 ]) {

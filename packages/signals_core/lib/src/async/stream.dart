@@ -339,6 +339,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
     _onDone?.call();
     await _subscription?.cancel();
     _subscription = null;
+    _fetching = false;
   }
 
   /// Check if the subscription is paused

@@ -37,6 +37,5 @@ workspace:
   - packages/signals_hooks/example
   - packages/signals_lint
   - packages/signals_lint/example
-
-  - benchmark/frameworks/preact_signals
-  - benchmark/frameworks/signals_core
+dependencies:
+  jaspr: ^0.23.1

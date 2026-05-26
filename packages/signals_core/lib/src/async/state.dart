@@ -14,164 +14,52 @@ typedef AsyncDataBuilder<E, T> = E Function(
 typedef AsyncStateBuilder<E> = E Function();
 
 /// {@template state}
-/// `AsyncState` is class commonly used with Future/Stream signals to represent the states the signal can be in.
+/// A sealed union representing the lifecycle states of an asynchronous operation.
 ///
-/// ## AsyncSignal
+/// `AsyncState<T>` is commonly wrapped by `AsyncSignal` or returned by asynchronous
+/// computed signals (`computedAsync`, `computedFrom`) to model loading, success (data),
+/// and error outcomes.
 ///
-/// `AsyncState` is the default state if you want to create a `AsyncSignal` directly:
+/// ### State Hierarchy
+/// The states are modeled as a robust hierarchy of immutable types:
+/// - [AsyncLoading]: Pure loading state with no pre-existing data.
+/// - [AsyncData]: Success state holding a resolved value of type `T`.
+///   - [AsyncDataRefreshing]: Refreshing in the background (holding historical data).
+///   - [AsyncDataReloading]: Reloading (holding historical data).
+/// - [AsyncError]: Failure state holding an error and optional stack trace.
+///   - [AsyncErrorRefreshing]: Refreshing in the background (holding historical error).
+///   - [AsyncErrorReloading]: Reloading (holding historical error).
 ///
-/// ```dart
-/// final s = asyncSignal(AsyncState.data(1));
-/// s.value = AsyncState.loading(); // or AsyncLoading();
-/// s.value = AsyncState.error('Error', null); // or AsyncError();
-/// ```
+/// ### Pattern Matching & Switch Expressions
+/// Standard Dart switch expressions provide type-safe branching across all states:
 ///
-/// ## AsyncState
-///
-/// `AsyncState` is a sealed union made up of `AsyncLoading`, `AsyncData` and `AsyncError`.
-///
-/// ### .future
-///
-/// Sometimes you need to await a signal value in a async function until a value is completed and in this case use the .future getter.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// s.value = AsyncState.data(1);
-/// await s.future; // Waits until data or error is set
-/// ```
-///
-/// ### .isCompleted
-///
-/// Returns true if the future has completed with an error or value:
+/// > [!IMPORTANT]
+/// > **Branch Matching Order & Existing Value Preservation:**
+/// > Since reloading and refreshing states (e.g., `AsyncDataRefreshing`, `AsyncDataReloading`) implement both `AsyncData` and `AsyncLoading`, matching on `AsyncLoading` **first** will prematurely swallow existing data!
+/// > Always place `AsyncData` and `AsyncError` branches **before** `AsyncLoading` to ensure pre-existing data or error states are successfully rendered during refreshes:
 ///
 /// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// s.value = AsyncState.data(1);
-/// print(s.isCompleted); // true
-/// ```
-///
-/// ### .hasValue
-///
-/// Returns true if the state has a value - `AsyncData`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.hasValue); // false
-/// s.value = AsyncState.data(1);
-/// print(s.hasValue); // true
-/// ```
-///
-/// ### .hasError
-///
-/// Returns true if the state has a error - `AsyncError`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.hasError); // false
-/// s.value = AsyncState.error('error');
-/// print(s.hasError); // true
-/// ```
-///
-/// ### .isRefreshing
-///
-/// Returns true if the state is refreshing - `AsyncDataRefreshing` or `AsyncErrorRefreshing`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.isRefreshing); // false
-/// s.value = AsyncState.errorRefreshing('error');
-/// print(s.isRefreshing); // true
-/// s.value = AsyncState.dataRefreshing(1);
-/// print(s.isRefreshing); // true
-/// ```
-///
-/// ### .isReloading
-///
-/// Returns true if the state is refreshing - `AsyncDataReloading` or `AsyncErrorReloading`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.isReloading); // false
-/// s.value = AsyncState.dataReloading(1);
-/// print(s.isReloading); // true
-/// s.value = AsyncState.errorReloading('error');
-/// print(s.isReloading); // true
-/// ```
-///
-/// ### .requireValue
-///
-/// Force unwrap the value of the state
-/// and throw an error if it has an error or is null - `AsyncData`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.data(1));
-/// print(s.requireValue); // 1
-/// ```
-///
-/// ### .value
-///
-/// Return the current value if exists - `AsyncData`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.data(1));
-/// print(s.value); // 1 or null
-/// ```
-///
-/// ### .error
-///
-/// Return the current error if exists - `AsyncError`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.error('error'));
-/// print(s.error); // 'error' or null
-/// ```
-///
-/// ### .stackTrace
-///
-/// Return the current stack trace if exists - `AsyncError`.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.error('error', StackTrace(...)));
-/// print(s.stackTrace); // StackTrace(...) or null
-/// ```
-///
-/// ### .map
-///
-/// If you want to handle the states of the signal `map` will enforce all branching.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// signal.value.map(
-///  data: (value) => 'Value: $value',
-///  error: (error, stackTrace) => 'Error: $error',
-///  loading: () => 'Loading...',
-/// );
-/// ```
-///
-/// ### .maybeMap
-///
-/// If you want to handle some of the states of the signal `maybeMap` will provide a default and optional overrides.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// signal.value.maybeMap(
-///  data: (value) => 'Value: $value',
-///  orElse: () => 'Loading...',
-/// );
-/// ```
-///
-/// ### Pattern Matching
-///
-/// Instead of `map` and `maybeMap` it is also possible to use [dart switch expressions](https://dart.dev/language/patterns) to handle the branching.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// final value = switch (signal.value) {
-///     AsyncData<int> data => 'value: ${data.value}',
-///     AsyncError<int> error => 'error: ${error.error}',
-///     AsyncLoading<int>() => 'loading',
+/// final value = switch (state) {
+///     AsyncDataRefreshing<int> r => 'Refreshing with value: ${r.value}',
+///     AsyncDataReloading<int> r => 'Reloading with value: ${r.value}',
+///     AsyncData<int> data => 'Stable value: ${data.value}',
+///     AsyncErrorRefreshing<int> r => 'Refreshing error: ${r.error}',
+///     AsyncErrorReloading<int> r => 'Reloading error: ${r.error}',
+///     AsyncError<int> error => 'Stable error: ${error.error}',
+///     AsyncLoading<int>() => 'Pure Loading State (no prior data)',
 /// };
 /// ```
+///
+/// ### Standard Branching Methods (`map` and `maybeMap`)
+/// If you prefer standard callbacks over switch expressions, use `map` or `maybeMap`:
+/// ```dart
+/// state.map(
+///   data: (value) => 'Value: $value',
+///   error: (error, stackTrace) => 'Error: $error',
+///   loading: () => 'Loading...',
+/// );
+/// ```
+///
 /// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
 sealed class AsyncState<T> {

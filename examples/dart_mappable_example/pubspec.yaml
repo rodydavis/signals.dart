@@ -11,7 +11,7 @@ dependencies:
   dart_mappable: ^4.2.2
   flutter:
     sdk: flutter
-  signals: ^6.0.0
+  signals: ^7.0.0
 
 dev_dependencies:
   flutter_test:

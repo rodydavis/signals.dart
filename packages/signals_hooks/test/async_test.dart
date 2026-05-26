@@ -13,7 +13,7 @@ void main() {
             builder: (context) {
               state ??= useFutureSignal(
                 () => Future.delayed(const Duration(seconds: 1), () => 1),
-                lazy: false,
+                options: AsyncSignalOptions(lazy: false),
               );
               return Text('$state', textDirection: TextDirection.ltr);
             },
@@ -36,7 +36,7 @@ void main() {
               state ??= useStreamSignal(
                 () => Stream.periodic(const Duration(seconds: 1), (i) => i)
                     .take(1),
-                lazy: false,
+                options: AsyncSignalOptions(lazy: false),
               );
               return Text('$state', textDirection: TextDirection.ltr);
             },
@@ -96,8 +96,10 @@ void main() {
                   const Duration(seconds: 1),
                   () => count.value * 2,
                 ),
-                dependencies: [count],
-                lazy: false,
+                options: AsyncSignalOptions(
+                  dependencies: [count],
+                  lazy: false,
+                ),
               );
               return Text('$state', textDirection: TextDirection.ltr);
             },
@@ -117,5 +119,30 @@ void main() {
         expect(state!.value.value, 2);
       });
     });
+
+    group('useConnect', () {
+      testWidgets('connects stream to signal and disposes subscription', (tester) async {
+        final counter = signal(0);
+        final stream = Stream<int>.value(42);
+
+        await tester.pumpWidget(
+          HookBuilder(
+            builder: (context) {
+              useConnect(counter, stream: stream);
+              return Text('${counter.value}', textDirection: TextDirection.ltr);
+            },
+          ),
+        );
+
+        // Allow stream emission
+        await tester.pumpAndSettle();
+        expect(counter.value, 42);
+
+        // Unmount widget
+        await tester.pumpWidget(Container());
+        expect(counter.disposed, true);
+      });
+    });
   });
 }
+

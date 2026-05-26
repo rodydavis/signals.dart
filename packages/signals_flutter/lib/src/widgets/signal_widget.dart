@@ -1,21 +1,39 @@
 import 'package:flutter/widgets.dart';
 import 'package:signals_core/signals_core.dart' as core;
 
-/// A [StatelessWidget] that automatically tracks any signals read during its [build] phase.
-///
-/// Subclasses of [SignalWidget] do not need to call `.watch(context)` or wrap their build
-/// in a builder; any signal value accessed synchronously will automatically trigger rebuilds.
-///
+/// A reactive [StatelessWidget] that implicitly tracks and rebuilds on signal changes.
+/// 
+/// `SignalWidget` establishes a dynamic reactive context directly at the Flutter element layer.
+/// Any signal accessed via `.value` inside the [build] method is **implicitly tracked** and
+/// subscribed to. When any of these signals mutate, only this widget is rebuilt.
+/// 
+/// This offers a clean, Javascript-style reactivity experience without needing manual
+/// builder widgets (like `SignalBuilder`) or deprecated context watch extensions.
+/// 
+/// ### Implicit Reactivity Example (Stateless)
 /// ```dart
-/// final counter = signal(0);
-///
-/// class MyWidget extends SignalWidget {
+/// final username = signal('Rody');
+/// final status = signal('Online');
+/// 
+/// class UserProfileView extends SignalWidget {
+///   const UserProfileView({super.key});
+/// 
 ///   @override
 ///   Widget build(BuildContext context) {
-///     return Text('Count: ${counter.value}');
+///     // 'username' and 'status' are implicitly tracked on access:
+///     return Column(
+///       children: [
+///         Text('Name: ${username.value}'),
+///         Text('Status: ${status.value}'),
+///       ],
+///     );
 ///   }
 /// }
 /// ```
+/// 
+/// > [!IMPORTANT]
+/// > Only signals accessed *synchronously* during the execution of the `build` method are tracked.
+/// > Signals read inside async callbacks, listeners, or deferred tasks are not subscribed to.
 abstract class SignalWidget extends StatelessWidget {
   /// Constructor for [SignalWidget].
   const SignalWidget({super.key});

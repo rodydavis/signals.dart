@@ -7,7 +7,27 @@ import 'node.dart';
 import 'options.dart';
 import 'readonly.dart';
 
-/// Instance of a new plain signal
+/// Represents a mutable reactive state container.
+///
+/// Signals hold a single [value] that can be read or modified. When a signal's value
+/// is updated, any active computations (like [Computed]) or effects (like [effect]) that
+/// read the signal's value are automatically notified and scheduled to re-run.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// void main() {
+///   final count = Signal(0);
+///
+///   effect(() {
+///     print('Count is: ${count.value}');
+///   });
+///
+///   count.value = 5; // Triggers print: Count is: 5
+/// }
+/// ```
 class Signal<T> with ReadonlySignal<T> {
   @override
   final int globalId;
@@ -173,9 +193,17 @@ class Signal<T> with ReadonlySignal<T> {
   }
 }
 
-/// Create a new plain signal
+/// Convenient global constructor for creating a mutable reactive state signal.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final count = signal(0);
+/// final name = signal('Jane');
+/// ```
 Signal<T> signal<T>(
-  /// The initial value for the signal
   T value, [
   SignalOptions<T>? options,
 ]) {

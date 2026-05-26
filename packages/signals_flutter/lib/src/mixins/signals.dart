@@ -14,26 +14,93 @@ typedef _SignalMetadata = ({
   ({Function cb, EffectCleanup cleanup})? listener,
 });
 
-/// Signals mixin that will automatically rebuild the widget tree when any of
-/// the signals change and dispose of any signals and effects created locally.
-///
+/// A State mixin that automatically handles subscription and cleanup of signals
+/// and effects created locally within a [StatefulWidget].
+/// 
+/// :::caution
+/// **DEPRECATED**: This mixin is deprecated. While fully supported for backward compatibility,
+/// it adds extra stateful widget lifecycle overhead and manual binding.
+/// 
+/// For superior, self-contained reactivity without mixin overhead, migrate to modern, high-performance APIs:
+/// - Use [SignalWidget] for stateless reactive widgets.
+/// - Use [SignalStatefulWidget] for stateful reactive widgets.
+/// - Use [SignalBuilder] for surgical, localized rebuilding.
+/// :::
+/// 
+/// ### Legacy Usage Example
 /// ```dart
-/// class MyWidget extends StatefulWidget {
-///  ...
+/// class CounterWidget extends StatefulWidget {
+///   const CounterWidget({super.key});
+/// 
+///   @override
+///   State<CounterWidget> createState() => _CounterWidgetState();
 /// }
-///
-/// class _MyWidget extends State<MyWidget> with SignalsMixin {
-///   late var _signal = this.createSignal(0);
-///   late var _computed = this.createComputed(() => _signal() * 2);
-///
+/// 
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
+///   late final count = createSignal(0);
+///   late final doubled = createComputed(() => count.value * 2);
+/// 
 ///   @override
 ///   void initState() {
 ///     super.initState();
-///     this.createEffect(() {
-///       print('count: $_signal, double: $_computed');
+///     createEffect(() {
+///       print('Count: ${count.value}, Doubled: ${doubled.value}');
 ///     });
 ///   }
-///   ...
+/// 
+///   @override
+///   Widget build(BuildContext context) {
+///     return Column(
+///       children: [
+///         Text('Count: ${count.value}'),
+///         Text('Doubled: ${doubled.value}'),
+///         ElevatedButton(
+///           onPressed: () => count.value++,
+///           child: const Text('Increment'),
+///         ),
+///       ],
+///     );
+///   }
+/// }
+/// ```
+/// 
+/// ### Modern Migration Example
+/// ```dart
+/// // Modern alternative using SignalStatefulWidget:
+/// class CounterWidget extends SignalStatefulWidget {
+///   const CounterWidget({super.key});
+/// 
+///   @override
+///   State<CounterWidget> createState() => _CounterWidgetState();
+/// }
+/// 
+/// class _CounterWidgetState extends State<CounterWidget> {
+///   final count = signal(0);
+///   late final doubled = computed(() => count.value * 2);
+/// 
+///   @override
+///   void initState() {
+///     super.initState();
+///     // For non-widget effects, use the standard `effect` function:
+///     effect(() {
+///       print('Count: ${count.value}, Doubled: ${doubled.value}');
+///     });
+///   }
+/// 
+///   @override
+///   Widget build(BuildContext context) {
+///     // Implicitly tracks both signals and rebuilds on change:
+///     return Column(
+///       children: [
+///         Text('Count: ${count.value}'),
+///         Text('Doubled: ${doubled.value}'),
+///         ElevatedButton(
+///           onPressed: () => count.value++,
+///           child: const Text('Increment'),
+///         ),
+///       ],
+///     );
+///   }
 /// }
 /// ```
 @Deprecated(

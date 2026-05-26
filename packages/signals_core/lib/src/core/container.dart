@@ -1,5 +1,8 @@
 import '../value/value.dart';
 import 'signals.dart';
+import '../async/future.dart';
+import '../async/state.dart';
+import '../async/stream.dart';
 
 /// Signal container used to create signals based on args
 ///
@@ -62,6 +65,9 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
   /// If true then signals will be cached when created
   final bool cache;
 
+  /// Optional callback when a signal is removed/evicted from the cache
+  final void Function(Arg key, S signal)? onEvict;
+
   /// Store of created signals (if cache is true)
   final store = mapSignal<Arg, S>({});
 
@@ -71,6 +77,7 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
   SignalContainer(
     this._create, {
     this.cache = false,
+    this.onEvict,
   });
 
   /// Create the signal with the given args
@@ -81,7 +88,7 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
           final t = _create(arg);
           if (t is SignalsAutoDisposeMixin) {
             (t as SignalsAutoDisposeMixin)
-                .onDispose(() => untracked(() => store.remove(arg)));
+                .onDispose(() => untracked(() => remove(arg)));
           }
           return t;
         }),
@@ -92,21 +99,73 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
   }
 
   /// Remove a signal from the cache
-  S? remove(Arg arg) => store.remove(arg);
+  S? remove(Arg arg) {
+    final signal = store.remove(arg);
+    if (signal != null) {
+      onEvict?.call(arg, signal);
+    }
+    return signal;
+  }
 
   /// Check if signal is currently stored in the cache
   bool containsKey(Arg arg) => store.containsKey(arg);
 
   /// Clear the cache
-  void clear() => store.clear();
+  void clear() {
+    if (onEvict != null) {
+      for (final entry in store.entries) {
+        onEvict!(entry.key, entry.value);
+      }
+    }
+    store.clear();
+  }
 
   /// Dispose of all created signals
   void dispose() {
+    if (onEvict != null) {
+      for (final entry in store.entries) {
+        onEvict!(entry.key, entry.value);
+      }
+    }
     for (final signal
         in store.values.whereType<SignalsAutoDisposeMixin>().toList()) {
       signal.dispose();
     }
     store.dispose();
+  }
+
+  /// Returns the number of cached signals.
+  int get length => store.length;
+
+  /// Returns true if the cache is empty.
+  bool get isEmpty => store.isEmpty;
+
+  /// Returns true if the cache is not empty.
+  bool get isNotEmpty => store.isNotEmpty;
+
+  /// Returns all currently cached keys.
+  Iterable<Arg> get keys => store.keys;
+
+  /// Returns all currently cached signals.
+  Iterable<S> get values => store.values;
+
+  /// Returns all currently cached entries.
+  Iterable<MapEntry<Arg, S>> get entries => store.entries;
+
+  /// Retrieve the cached signal for [arg] if it exists, without creating a new one if it is missing.
+  S? lookup(Arg arg) => store[arg];
+
+  /// Filter and remove matching cached signals.
+  void removeWhere(bool Function(Arg key, S signal) test) {
+    final toRemove = <Arg>[];
+    for (final entry in store.entries) {
+      if (test(entry.key, entry.value)) {
+        toRemove.add(entry.key);
+      }
+    }
+    for (final key in toRemove) {
+      remove(key);
+    }
   }
 }
 
@@ -127,10 +186,12 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
 SignalContainer<T, Arg, ReadonlySignal<T>> readonlySignalContainer<T, Arg>(
   ReadonlySignal<T> Function(Arg) create, {
   bool cache = false,
+  void Function(Arg key, ReadonlySignal<T> signal)? onEvict,
 }) {
   return SignalContainer<T, Arg, ReadonlySignal<T>>(
     create,
     cache: cache,
+    onEvict: onEvict,
   );
 }
 
@@ -152,9 +213,68 @@ SignalContainer<T, Arg, ReadonlySignal<T>> readonlySignalContainer<T, Arg>(
 SignalContainer<T, Arg, Signal<T>> signalContainer<T, Arg>(
   Signal<T> Function(Arg) create, {
   bool cache = false,
+  void Function(Arg key, Signal<T> signal)? onEvict,
 }) {
   return SignalContainer<T, Arg, Signal<T>>(
     create,
     cache: cache,
+    onEvict: onEvict,
+  );
+}
+
+/// Create a signal container for computed signals based on args.
+///
+/// ```dart
+/// final container = computedContainer<int, int>((arg) {
+///   return computed(() => sourceSignal.value * arg);
+/// });
+/// ```
+SignalContainer<T, Arg, Computed<T>> computedContainer<T, Arg>(
+  Computed<T> Function(Arg) create, {
+  bool cache = false,
+  void Function(Arg key, Computed<T> signal)? onEvict,
+}) {
+  return SignalContainer<T, Arg, Computed<T>>(
+    create,
+    cache: cache,
+    onEvict: onEvict,
+  );
+}
+
+/// Create a signal container for FutureSignals based on args.
+///
+/// ```dart
+/// final container = futureSignalContainer<Post, int>((id) {
+///   return futureSignal(() => fetchPost(id));
+/// });
+/// ```
+SignalContainer<AsyncState<T>, Arg, FutureSignal<T>> futureSignalContainer<T, Arg>(
+  FutureSignal<T> Function(Arg) create, {
+  bool cache = false,
+  void Function(Arg key, FutureSignal<T> signal)? onEvict,
+}) {
+  return SignalContainer<AsyncState<T>, Arg, FutureSignal<T>>(
+    create,
+    cache: cache,
+    onEvict: onEvict,
+  );
+}
+
+/// Create a signal container for StreamSignals based on args.
+///
+/// ```dart
+/// final container = streamSignalContainer<Message, int>((roomId) {
+///   return streamSignal(() => listenToRoom(roomId));
+/// });
+/// ```
+SignalContainer<AsyncState<T>, Arg, StreamSignal<T>> streamSignalContainer<T, Arg>(
+  StreamSignal<T> Function(Arg) create, {
+  bool cache = false,
+  void Function(Arg key, StreamSignal<T> signal)? onEvict,
+}) {
+  return SignalContainer<AsyncState<T>, Arg, StreamSignal<T>>(
+    create,
+    cache: cache,
+    onEvict: onEvict,
   );
 }

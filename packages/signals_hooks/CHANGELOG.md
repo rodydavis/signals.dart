@@ -1,7 +1,10 @@
 ## 7.0.0
 
+- Modernized all hook APIs to accept a positional `options` parameter instead of named options.
+- Added new `useLinkedSignal` and `useLazySignal` hooks.
+- Added support for passing positional `SignalOptions` and `AsyncSignalOptions` across all hooks.
+- Re-exported core reactive primitives from `signals_core` including `action`, `action0`-`action10`, and `createModel`.
 - Bump `signals` dependency to `^7.0.0`.
-- Update return types and hooks interfaces to match the modernized 7.0.0 architecture.
 
 ## 6.3.1
 

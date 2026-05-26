@@ -89,5 +89,49 @@ void main() {
         expect(find.text('43'), findsOneWidget);
       });
     });
+
+    group('SignalHookWidget & SignalHookBuilder', () {
+      testWidgets('implicitly tracks signal and supports hooks', (tester) async {
+        final count = signal(0);
+        late FocusNode focusNode;
+
+        await tester.pumpWidget(
+          SignalHookBuilder(
+            builder: (context) {
+              focusNode = useFocusNode();
+              return Text('${count.value}', textDirection: TextDirection.ltr);
+            },
+          ),
+        );
+
+        expect(find.text('0'), findsOneWidget);
+        expect(focusNode, isNotNull);
+
+        count.value++;
+        await tester.pumpAndSettle();
+
+        expect(find.text('1'), findsOneWidget);
+      });
+
+      testWidgets('supports watch(context) explicitly on SignalHookWidget', (tester) async {
+        final count = signal(42);
+
+        await tester.pumpWidget(
+          SignalHookBuilder(
+            builder: (context) {
+              final val = count.watch(context);
+              return Text('$val', textDirection: TextDirection.ltr);
+            },
+          ),
+        );
+
+        expect(find.text('42'), findsOneWidget);
+
+        count.value++;
+        await tester.pumpAndSettle();
+
+        expect(find.text('43'), findsOneWidget);
+      });
+    });
   });
 }

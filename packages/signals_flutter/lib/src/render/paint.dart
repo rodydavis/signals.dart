@@ -2,8 +2,46 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:signals_core/signals_core.dart' as core;
 
-/// Custom painter that automatically repaints when any of the provided signals change,
-/// bypassing the widget build and layout phases.
+/// A premium custom painter that automatically repaints when any observed signal changes,
+/// bypassing Flutter's widget build and layout phases completely.
+/// 
+/// `SignalCustomPainter` registers subscriptions to the provided list of [signals]. When any
+/// of these signals fire, a GPU repaint is scheduled directly via `markNeedsPaint()`, bypassing
+/// the widget-tree build cycle and layout passes for unmatched graphics performance.
+/// 
+/// ### Canvas Particle/Graph Example
+/// ```dart
+/// final cursorOffset = signal(const Offset(0, 0));
+/// 
+/// class StarField extends StatelessWidget {
+///   const StarField({super.key});
+/// 
+///   @override
+///   Widget build(BuildContext context) {
+///     return SignalCustomPaint(
+///       painter: StarPainter(cursorOffset),
+///       child: const SizedBox.expand(),
+///     );
+///   }
+/// }
+/// 
+/// class StarPainter extends SignalCustomPainter {
+///   StarPainter(this.offsetSignal) : super(signals: [offsetSignal]);
+/// 
+///   final ReadonlySignal<Offset> offsetSignal;
+/// 
+///   @override
+///   void paint(Canvas canvas, Size size) {
+///     final paint = Paint()..color = Colors.amber;
+///     // Access the signal's value to paint.
+///     // Note: Signal tracking is suspended during paint, so .value or .peek() are both safe!
+///     canvas.drawCircle(offsetSignal.value, 15.0, paint);
+///   }
+/// 
+///   @override
+///   bool shouldRepaint(covariant StarPainter oldDelegate) => true;
+/// }
+/// ```
 abstract class SignalCustomPainter {
   /// The list of signals to observe for changes.
   final List<core.ReadonlySignal<dynamic>> signals;
@@ -18,8 +56,11 @@ abstract class SignalCustomPainter {
   bool shouldRepaint(covariant SignalCustomPainter oldDelegate);
 }
 
-/// A high-performance custom paint widget that subscribes to signals
-/// and repaints its canvas directly on the GPU without triggering widget rebuilds or layout.
+/// A high-performance canvas painting widget that subscribes to signals and renders
+/// directly on the GPU, completely bypassing the widget build and layout phases.
+/// 
+/// Use `SignalCustomPaint` in performance-critical rendering scenarios like real-time charts,
+/// complex visual animations, particle systems, or game loops.
 class SignalCustomPaint extends SingleChildRenderObjectWidget {
   /// The painter to draw on the canvas.
   final SignalCustomPainter painter;
@@ -160,7 +201,34 @@ class SignalProxyWidget extends SingleChildRenderObjectWidget {
   }
 }
 
-/// A high-performance leaf render object widget that bypasses Build/Layout and paints on canvas.
+/// A high-performance, leaf render-object widget driven by a double progress signal.
+/// 
+/// `SignalPainterWidget` bypasses the entire widget build and layout phases, subscribing
+/// directly to a [progress] signal and rendering on the canvas. When [progress] updates,
+/// only the GPU paint phase is run.
+/// 
+/// ### Example
+/// ```dart
+/// final progress = signal(0.0);
+/// 
+/// @override
+/// Widget build(BuildContext context) {
+///   return SignalPainterWidget(
+///     progress: progress,
+///     painter: (canvas, size, value) {
+///       final paint = Paint()
+///         ..color = Colors.blue
+///         ..style = PaintingStyle.stroke
+///         ..strokeWidth = 4.0;
+///       canvas.drawCircle(
+///         Offset(size.width / 2, size.height / 2),
+///         value * 50.0,
+///         paint,
+///       );
+///     },
+///   );
+/// }
+/// ```
 class SignalPainterWidget extends LeafRenderObjectWidget {
   /// The progress signal whose value will be passed to [painter].
   final core.ReadonlySignal<double> progress;

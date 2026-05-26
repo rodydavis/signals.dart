@@ -2,35 +2,20 @@ import 'package:flutter/widgets.dart';
 import 'package:signals_core/signals_core.dart' as core;
 import 'signal_builder.dart';
 
-/// ## Watch
-///
-/// To watch a signal for changes in Flutter, use the `Watch` widget. This will only rebuild this widget method and not the entire widget tree.
-///
+/// A deprecated widget for watching signal changes in the widget tree.
+/// 
+/// :::caution
+/// **DEPRECATED**: Use [SignalBuilder] instead for superior, self-contained reactivity
+/// and consistent API design.
+/// :::
+/// 
+/// ### Migration to [SignalBuilder]
 /// ```dart
-/// final signal = signal(10);
-/// ...
-/// @override
-/// Widget build(BuildContext context) {
-///   return Watch((context, _) => Text('$signal'));
-/// }
-/// ```
-///
-/// This will also automatically unsubscribe when the widget is disposed.
-///
-/// Any inherited widgets referenced to inside the Watch scope will be subscribed to for updates ([MediaQuery](https://api.flutter.dev/flutter/widgets/MediaQuery-class.html), [Theme](https://api.flutter.dev/flutter/material/Theme-class.html), etc.) and retrigger the builder method.
-///
-/// There is also a drop in replacement for builder:
-///
-/// ```diff
-/// final signal = signal(10);
-/// ...
-/// @override
-/// Widget build(BuildContext context) {
-/// -  return Builder(
-/// +  return Watch.builder(
-///     builder: (context, _) => Text('$signal'),
-///   );
-/// }
+/// // Deprecated legacy pattern:
+/// Watch((context) => Text('$counter'))
+/// 
+/// // Modern, streamlined pattern:
+/// SignalBuilder(builder: (context) => Text('${counter.value}'))
 /// ```
 @Deprecated(
   'Use SignalBuilder instead for superior reactivity and consistent naming.',

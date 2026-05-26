@@ -7,10 +7,26 @@ import 'node.dart';
 import 'options.dart';
 import 'readonly.dart';
 
-/// Create a new signal that is computed based on the values of other signals.
+/// Represents a derived reactive state value computed from one or more other signals.
 ///
-/// The returned computed signal is read-only, and its value is automatically
-/// updated when any signals accessed from within the callback function change.
+/// Computed signals are read-only, lazily evaluated, and cached (memoized).
+/// Their values automatically update when any dependency signals accessed inside the
+/// callback function change.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final count = signal(2);
+/// final doubleCount = Computed(() => count.value * 2);
+///
+/// void main() {
+///   print(doubleCount.value); // Prints: 4
+///   count.value = 5;
+///   print(doubleCount.value); // Prints: 10
+/// }
+/// ```
 class Computed<T> with Listenable, ReadonlySignal<T> {
   /// @internal
   /// The computation callback function.
@@ -200,12 +216,26 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   }
 }
 
-/// Create a new signal that is computed based on the values of other signals.
+/// Convenient global constructor for creating a derived computed signal.
 ///
-/// The returned computed signal is read-only, and its value is automatically
-/// updated when any signals accessed from within the callback function change.
+/// Computed signals are lazily evaluated and cached (memoized). Their values
+/// automatically update when any dependency signals accessed inside the callback function change.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final firstName = signal('Jane');
+/// final lastName = signal('Doe');
+///
+/// final fullName = computed(() => '${firstName.value} ${lastName.value}');
+///
+/// void main() {
+///   print(fullName.value); // Prints: Jane Doe
+/// }
+/// ```
 ReadonlySignal<T> computed<T>(
-  /// The effect callback.
   T Function() fn, [
   ComputedOptions<T>? options,
 ]) {

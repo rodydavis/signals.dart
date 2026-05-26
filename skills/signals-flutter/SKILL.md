@@ -55,7 +55,7 @@ This skill covers optimizing Flutter UI bindings, element-level reactive trackin
 ### Flutter Extensions
 | Related File | Description |
 |---|---|
-| [watch.md](extensions/watch.md) | Dynamic VM Expando element-level tracking context extensions supporting automatic teardowns. |
+| [watch.md](extensions/watch.md) | [DEPRECATED] Legacy context-level watch extension (prefer SignalBuilder or SignalWidget). |
 
 ---
 
@@ -133,14 +133,24 @@ batch(() {
 Provides localized, context-isolated widget rebuilding. Wrap only the smallest possible widgets in `SignalBuilder` to keep rendering extremely high-performance.
 ```dart
 SignalBuilder(
-  builder: (context, value) => Text('Count: $value'),
+  builder: (context) => Text('Count: ${counter.value}'),
 )
 ```
 
-### B. Element-Level `.watch(context)` Extension
-Attaches subscriptions safely using VM Expando and a clean Finalizer teardown loop to avoid leaks.
-- Avoid mixins like `SignalsMixin`.
-- Use `.watch(context)` when context-based subtree scoping is required.
+### B. Reactive Component Widgets (`SignalWidget` / `SignalStatefulWidget`)
+In v7, `SignalsMixin` and `BuildContext.watch(context)` are **deprecated** (and will trigger warnings via custom lint rules). Instead of mixins or context extension watches, inherit from `SignalWidget` or `SignalStatefulWidget` for automatic, highly optimized reactive tracking inside standard widget trees:
+
+```dart
+// Reactive Stateless Widget
+class MyWidget extends SignalWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Count: ${counter.value}');
+  }
+}
+```
 
 ---
 

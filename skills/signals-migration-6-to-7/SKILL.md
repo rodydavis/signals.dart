@@ -122,3 +122,14 @@ print(display.value); // 'Alice'
 display.value = 'Bob'; // Override manual write
 original.value = 'Charlie'; // Source changes -> resets display to 'Charlie'
 ```
+
+---
+
+## 5. Automated Refactoring via `signals_lint`
+
+To make migrating from v6 to v7 completely effortless, the **`signals_lint`** tool analyzes your code and surfaces instant, automated quick-fixes/assists under your IDE's action menu (`Alt+Enter` or `Cmd+.`):
+
+- **Strips legacy `with SignalsMixin`** and replaces the widget with a high-performance `SignalStatefulWidget` automatically.
+- **Converts positional `Watch`** and `Watch.builder` instances into unified `SignalBuilder` components.
+- **Promotes standard `StatelessWidget` and `StatefulWidget`** widgets to reactive `SignalWidget` and `SignalStatefulWidget` widgets on command.
+- **Quickly wraps any widget** expression in a surgically targeted `SignalBuilder`.

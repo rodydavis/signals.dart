@@ -219,7 +219,7 @@ class FutureSignal<T> extends AsyncSignal<T> {
     if (_currentFuture == future) return;
 
     if (completer.isCompleted) {
-      completer = Completer<bool>();
+      completer = Completer<T>();
     }
 
     _currentFuture = future;

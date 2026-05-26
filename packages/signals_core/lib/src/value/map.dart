@@ -1,6 +1,44 @@
 part of 'value.dart';
 
-/// A [Signal] that holds a [Map].
+/// A reactive [Signal] that holds a [Map] and implements the [Map] interface.
+///
+/// [MapSignal] lets you listen to changes on a map reactively and mutate it directly using
+/// standard map operations (like adding/modifying keys with `operator []=`, `addAll`, `remove`,
+/// `clear`, etc.). Any mutations automatically trigger reactive updates to all active listeners
+/// (e.g., inside an [effect] or [computed]).
+///
+/// Additionally, [MapSignal] defines convenient operators:
+/// - `<<` injects/adds all entries from another map into the current map.
+/// - `&` forks/concatenates the map with another map into a new [MapSignal].
+/// - `|` pipes/concatenates the map with another signal holding a map into a new [MapSignal].
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// void main() {
+///   final settings = mapSignal<String, dynamic>({
+///     'theme': 'light',
+///     'notifications': true,
+///   });
+///
+///   effect(() {
+///     print('Theme is currently: ${settings['theme']}');
+///   }); // Prints: "Theme is currently: light"
+///
+///   // Update key/value pair directly (triggers updates)
+///   settings['theme'] = 'dark'; // Prints: "Theme is currently: dark"
+///
+///   // Expose standard Map methods
+///   settings.remove('notifications');
+/// }
+/// ```
+///
+/// :::tip
+/// Mutating the collection directly calls the reactive set() routine under the hood automatically. You
+/// do not need to assign `settings.value = ...` manually!
+/// :::
 class MapSignal<K, V> extends Signal<Map<K, V>>
     with MapSignalMixin<K, V, Map<K, V>>
     implements Map<K, V> {
@@ -54,7 +92,15 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
   }
 }
 
-/// Create an [MapSignal] from [Map]
+/// Creates a [MapSignal] initialized with the provided [map].
+///
+/// This is a convenience helper function for creating reactive map signals.
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// final settings = mapSignal({'theme': 'dark'});
+/// ```
 MapSignal<K, V> mapSignal<K, V>(
   Map<K, V> map, {
   MapSignalOptions<K, V>? options,
@@ -75,7 +121,14 @@ MapSignal<K, V> mapSignal<K, V>(
 
 /// Utility extension methods on [Map] to convert them to [MapSignal]s.
 extension SignalMapUtils<K, V> on Map<K, V> {
-  /// Convert an existing list to [MapSignal]
+  /// Convert this existing [Map] to a reactive [MapSignal].
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final myMap = {'key': 'value'};
+  /// final signal = myMap.toSignal();
+  /// ```
   MapSignal<K, V> toSignal({
     MapSignalOptions<K, V>? options,
     @Deprecated('Use options: MapSignalOptions(autoDispose: ...) instead')

@@ -1,6 +1,45 @@
 part of 'value.dart';
 
-/// A [Signal] that holds a [Set].
+/// A reactive [Signal] that holds a [Set] and implements the [Set] interface.
+///
+/// [SetSignal] lets you listen to changes on a set reactively and mutate it directly using
+/// standard set operations (like `add`, `addAll`, `remove`, `clear`, etc.). Any mutations
+/// automatically trigger reactive updates to all active listeners (e.g., inside an [effect]
+/// or [computed]).
+///
+/// Additionally, [SetSignal] defines convenient operators:
+/// - `<<` injects/adds all items from another set into the current set.
+/// - `&` forks/unions the set with another set into a new [SetSignal].
+/// - `|` pipes/unions the set with another signal holding an iterable into a new [SetSignal].
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// void main() {
+///   final numbers = setSignal<int>({1, 2, 3});
+///
+///   effect(() {
+///     print('Set content: $numbers, Length: ${numbers.length}');
+///   }); // Prints: "Set content: {1, 2, 3}, Length: 3"
+///
+///   // Standard mutation (triggers updates)
+///   numbers.add(4); // Prints: "Set content: {1, 2, 3, 4}, Length: 4"
+///
+///   // Removing an element (triggers updates)
+///   numbers.remove(1); // Prints: "Set content: {2, 3, 4}, Length: 3"
+///
+///   // Set intersection (reactive query)
+///   final common = numbers.intersection({3, 4, 5});
+///   print(common); // Prints: {3, 4}
+/// }
+/// ```
+///
+/// :::tip
+/// Mutating the collection directly calls the reactive set() routine under the hood automatically. You
+/// do not need to assign `numbers.value = ...` manually!
+/// :::
 class SetSignal<E> extends Signal<Set<E>>
     with IterableSignalMixin<E, Set<E>>, SetSignalMixin<E, Set<E>>
     implements Set<E> {
@@ -57,7 +96,15 @@ class SetSignal<E> extends Signal<Set<E>>
   }
 }
 
-/// Creates a [SetSignal] with the given [list] (Set).
+/// Creates a [SetSignal] initialized with the provided [set].
+///
+/// This is a convenience helper function for creating reactive set signals.
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// final mySet = setSignal({1, 2, 3});
+/// ```
 SetSignal<T> setSignal<T>(
   Set<T> list, {
   SetSignalOptions<T>? options,
@@ -78,7 +125,14 @@ SetSignal<T> setSignal<T>(
 
 /// Utility extension methods on [Set] to convert them to [SetSignal]s.
 extension SignalSetUtils<T> on Set<T> {
-  /// Convert an existing list to [SetSignal]
+  /// Convert this existing [Set] to a reactive [SetSignal].
+  ///
+  /// ```dart
+  /// import 'package:signals/signals.dart';
+  ///
+  /// final mySet = {1, 2, 3};
+  /// final signal = mySet.toSignal();
+  /// ```
   SetSignal<T> toSignal({
     SetSignalOptions<T>? options,
     @Deprecated('Use options: SetSignalOptions(autoDispose: ...) instead')

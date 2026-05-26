@@ -7,164 +7,61 @@ import '../mixins/event_sink.dart';
 import 'state.dart';
 
 /// {@template signal}
-/// `AsyncState` is class commonly used with Future/Stream signals to represent the states the signal can be in.
+/// A [Signal] specifically designed for manual asynchronous state management.
 ///
-/// ## AsyncSignal
+/// `AsyncSignal<T>` wraps an [AsyncState<T>] (which can be loading, data, or error)
+/// and provides utility getters like [.future] to easily await its completion.
 ///
-/// `AsyncState` is the default state if you want to create a `AsyncSignal` directly:
-///
+/// ### Simple Example
 /// ```dart
-/// final s = asyncSignal(AsyncState.data(1));
-/// s.value = AsyncState.loading(); // or AsyncLoading();
-/// s.value = AsyncState.error('Error', null); // or AsyncError();
+/// // Create an AsyncSignal starting in a loading state
+/// final weather = asyncSignal<double>(AsyncState.loading());
+///
+/// // Update the value with data
+/// weather.value = AsyncState.data(72.5); // or AsyncData(72.5)
+///
+/// // Or set an error
+/// weather.value = AsyncState.error('Failed to fetch weather', null);
 /// ```
 ///
-/// ## AsyncState
-///
-/// `AsyncState` is a sealed union made up of `AsyncLoading`, `AsyncData` and `AsyncError`.
-///
-/// ### .future
-///
-/// Sometimes you need to await a signal value in a async function until a value is completed and in this case use the .future getter.
+/// ### Awaiting Completion with `.future`
+/// Sometimes you need to await the signal until it completes with a value.
+/// You can await the [.future] getter, which returns a `Future<T>` that resolves
+/// when a data value is pushed, or throws when an error is set.
 ///
 /// ```dart
 /// final s = asyncSignal<int>(AsyncState.loading());
-/// s.value = AsyncState.data(1);
-/// await s.future; // Waits until data or error is set
+///
+/// // Start a background task
+/// Future.delayed(Duration(seconds: 1), () => s.setValue(42));
+///
+/// // Await the completion of the signal!
+/// final result = await s.future; // Waits and resolves to 42
 /// ```
 ///
-/// ### .isCompleted
+/// ### Direct Mutators: `setValue`, `setError`, and `setLoading`
+/// Instead of manually instantiating [AsyncData] or [AsyncError], you can use
+/// helper methods directly on `AsyncSignal`:
+/// - `s.setValue(value)` wraps the value in `AsyncData` and notifies listeners.
+/// - `s.setError(error, [stackTrace])` wraps the error in `AsyncError` and notifies.
+/// - `s.setLoading()` puts the signal back into a clean `AsyncLoading` state.
 ///
-/// Returns true if the future has completed with an error or value:
-///
+/// ### EventSink Integration
+/// `AsyncSignal` implements the standard [EventSink] interface. You can pass it directly
+/// to stream listeners or use it to pipeline event streams:
 /// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// s.value = AsyncState.data(1);
-/// print(s.isCompleted); // true
-/// ```
+/// final numbers = Stream.periodic(Duration(seconds: 1), (i) => i).take(5);
+/// final counter = asyncSignal<int>(AsyncState.loading());
 ///
-/// ### .hasValue
-///
-/// Returns true if a value has been set regardless of the state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.hasValue); // false
-/// s.value = AsyncState.data(1);
-/// print(s.hasValue); // true
-/// ```
-///
-/// ### .hasError
-///
-/// Returns true if a error has been set regardless of the state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.hasError); // false
-/// s.value = AsyncState.error('error', null);
-/// print(s.hasError); // true
-/// ```
-///
-/// ### .isRefreshing
-///
-/// Returns true if the state is refreshing with a loading flag, has a value or error and is not the loading state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.isRefreshing); // false
-/// s.value = AsyncState.error('error', null, isLoading: true);
-/// print(s.isRefreshing); // true
-/// s.value = AsyncData(1, isLoading: true);
-/// print(s.isRefreshing); // true
-/// ```
-///
-/// ### .isReloading
-///
-/// Returns true if the state is reloading with having a value or error, and is the loading state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.isReloading); // false
-/// s.value = AsyncState.loading(data: 1);
-/// print(s.isReloading); // true
-/// s.value = AsyncState.loading(error: ('error', null));
-/// print(s.isReloading); // true
-/// ```
-///
-/// ### .requireValue
-///
-/// Force unwrap the value of the state and throw an error if it has an error or is null.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.data(1));
-/// print(s.requireValue); // 1
-/// ```
-///
-/// ### .value
-///
-/// Return the current value if exists.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.data(1));
-/// print(s.value); // 1 or null
-/// ```
-///
-/// ### .error
-///
-/// Return the current error if exists.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.error('error', null));
-/// print(s.error); // 'error' or null
-/// ```
-///
-/// ### .stackTrace
-///
-/// Return the current stack trace if exists.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.error('error', StackTrace(...)));
-/// print(s.stackTrace); // StackTrace(...) or null
-/// ```
-///
-/// ### .map
-///
-/// If you want to handle the states of the signal `map` will enforce all branching.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// signal.value.map(
-///  data: (value) => 'Value: $value',
-///  error: (error, stackTrace) => 'Error: $error',
-///  loading: () => 'Loading...',
+/// // Pipe the stream directly into the signal!
+/// numbers.listen(
+///   (val) => counter.add(val),
+///   onError: (err) => counter.addError(err),
+///   onDone: () => counter.close(),
 /// );
 /// ```
 ///
-/// ### .maybeMap
-///
-/// If you want to handle some of the states of the signal `maybeMap` will provide a default and optional overrides.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// signal.value.maybeMap(
-///  data: (value) => 'Value: $value',
-///  orElse: () => 'Loading...',
-/// );
-/// ```
-///
-/// ### Pattern Matching
-///
-/// Instead of `map` and `maybeMap` it is also possible to use [dart switch expressions](https://dart.dev/language/patterns) to handle the branching.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// final value = switch (signal.value) {
-///     AsyncData<int> data => 'value: ${data.value}',
-///     AsyncError<int> error => 'error: ${error.error}',
-///     AsyncLoading<int>() => 'loading',
-/// };
-/// ```
-/// @link https://dartsignals.dev/async/state
+/// @link https://dartsignals.dev/async/signal
 /// {@endtemplate}
 class AsyncSignal<T> extends Signal<AsyncState<T>>
     with EventSinkSignalMixin<T> {
@@ -179,13 +76,12 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
 
   /// Internal Completer for values
   @internal
-  Completer<bool> completer = Completer<bool>();
+  Completer<T> completer = Completer<T>();
 
   /// The future of the signal completer
   Future<T> get future async {
     untracked(() => value);
-    await completer.future;
-    return super.value.requireValue;
+    return completer.future;
   }
 
   /// Returns true if the signal is completed an error or data
@@ -198,8 +94,9 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   void setError(Object error, [StackTrace? stackTrace]) {
     batch(() {
       value = AsyncState.error(error, stackTrace);
-      if (completer.isCompleted) completer = Completer<bool>();
-      completer.complete(true);
+      if (completer.isCompleted) completer = Completer<T>();
+      completer.completeError(error, stackTrace);
+      completer.future.then<void>((_) {}, onError: (_) {});
     });
   }
 
@@ -207,8 +104,8 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   void setValue(T value) {
     batch(() {
       this.value = AsyncState.data(value);
-      if (completer.isCompleted) completer = Completer<bool>();
-      completer.complete(true);
+      if (completer.isCompleted) completer = Completer<T>();
+      completer.complete(value);
     });
   }
 
@@ -216,16 +113,17 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   void setLoading([AsyncState<T>? state]) {
     batch(() {
       value = state ?? AsyncState.loading();
-      completer = Completer<bool>();
+      completer = Completer<T>();
     });
   }
 
   /// Reset the signal to the initial value
   void reset([AsyncState<T>? value]) {
     batch(() {
-      this.value = value ?? _initialValue;
+      final val = value ?? _initialValue;
+      this.value = val;
       _initialized = false;
-      if (completer.isCompleted) completer = Completer<bool>();
+      if (completer.isCompleted) completer = Completer<T>();
     });
   }
 
@@ -263,166 +161,18 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   T get requireValue => super.value.requireValue;
 }
 
-/// {@template signal}
-/// `AsyncState` is class commonly used with Future/Stream signals to represent the states the signal can be in.
+/// Helper function to create an [AsyncSignal] initialized with an [AsyncState].
 ///
-/// ## AsyncSignal
-///
-/// `AsyncState` is the default state if you want to create a `AsyncSignal` directly:
-///
+/// ### Example
 /// ```dart
-/// final s = asyncSignal(AsyncState.data(1));
-/// s.value = AsyncState.loading(); // or AsyncLoading();
-/// s.value = AsyncState.error('Error', null); // or AsyncError();
+/// // Create an AsyncSignal initialized to a loading state
+/// final counter = asyncSignal<int>(AsyncState.loading());
+///
+/// // Create an AsyncSignal initialized with initial data
+/// final status = asyncSignal<String>(AsyncState.data('Active'));
 /// ```
 ///
-/// ## AsyncState
-///
-/// `AsyncState` is a sealed union made up of `AsyncLoading`, `AsyncData` and `AsyncError`.
-///
-/// ### .future
-///
-/// Sometimes you need to await a signal value in a async function until a value is completed and in this case use the .future getter.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// s.value = AsyncState.data(1);
-/// await s.future; // Waits until data or error is set
-/// ```
-///
-/// ### .isCompleted
-///
-/// Returns true if the future has completed with an error or value:
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// s.value = AsyncState.data(1);
-/// print(s.isCompleted); // true
-/// ```
-///
-/// ### .hasValue
-///
-/// Returns true if a value has been set regardless of the state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.hasValue); // false
-/// s.value = AsyncState.data(1);
-/// print(s.hasValue); // true
-/// ```
-///
-/// ### .hasError
-///
-/// Returns true if a error has been set regardless of the state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.hasError); // false
-/// s.value = AsyncState.error('error', null);
-/// print(s.hasError); // true
-/// ```
-///
-/// ### .isRefreshing
-///
-/// Returns true if the state is refreshing with a loading flag, has a value or error and is not the loading state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.isRefreshing); // false
-/// s.value = AsyncState.error('error', null, isLoading: true);
-/// print(s.isRefreshing); // true
-/// s.value = AsyncData(1, isLoading: true);
-/// print(s.isRefreshing); // true
-/// ```
-///
-/// ### .isReloading
-///
-/// Returns true if the state is reloading with having a value or error, and is the loading state.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
-/// print(s.isReloading); // false
-/// s.value = AsyncState.loading(data: 1);
-/// print(s.isReloading); // true
-/// s.value = AsyncState.loading(error: ('error', null));
-/// print(s.isReloading); // true
-/// ```
-///
-/// ### .requireValue
-///
-/// Force unwrap the value of the state and throw an error if it has an error or is null.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.data(1));
-/// print(s.requireValue); // 1
-/// ```
-///
-/// ### .value
-///
-/// Return the current value if exists.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.data(1));
-/// print(s.value); // 1 or null
-/// ```
-///
-/// ### .error
-///
-/// Return the current error if exists.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.error('error', null));
-/// print(s.error); // 'error' or null
-/// ```
-///
-/// ### .stackTrace
-///
-/// Return the current stack trace if exists.
-///
-/// ```dart
-/// final s = asyncSignal<int>(AsyncState.error('error', StackTrace(...)));
-/// print(s.stackTrace); // StackTrace(...) or null
-/// ```
-///
-/// ### .map
-///
-/// If you want to handle the states of the signal `map` will enforce all branching.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// signal.value.map(
-///  data: (value) => 'Value: $value',
-///  error: (error, stackTrace) => 'Error: $error',
-///  loading: () => 'Loading...',
-/// );
-/// ```
-///
-/// ### .maybeMap
-///
-/// If you want to handle some of the states of the signal `maybeMap` will provide a default and optional overrides.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// signal.value.maybeMap(
-///  data: (value) => 'Value: $value',
-///  orElse: () => 'Loading...',
-/// );
-/// ```
-///
-/// ### Pattern Matching
-///
-/// Instead of `map` and `maybeMap` it is also possible to use [dart switch expressions](https://dart.dev/language/patterns) to handle the branching.
-///
-/// ```dart
-/// final signal = asyncSignal<int>(AsyncState.data(1));
-/// final value = switch (signal.value) {
-///     AsyncData<int> data => 'value: ${data.value}',
-///     AsyncError<int> error => 'error: ${error.error}',
-///     AsyncLoading<int>() => 'loading',
-/// };
-/// ```
-/// @link https://dartsignals.dev/async/state
-/// {@endtemplate}
+/// @link https://dartsignals.dev/async/signal
 AsyncSignal<T> asyncSignal<T>(
   AsyncState<T> value, {
   AsyncSignalOptions<T>? options,

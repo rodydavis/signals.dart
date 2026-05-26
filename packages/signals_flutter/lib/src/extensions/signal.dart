@@ -24,6 +24,11 @@ extension FlutterReadonlySignalUtils<T> on ReadonlySignal<T> {
     BuildContext context, {
     String? debugLabel,
   }) {
+    if (onSignalRead != null) {
+      onSignalRead!(this);
+      return peek();
+    }
+
     // 1. If context is our custom SignalElement/SignalStatefulElement, delegate to it
     if (context is SignalElement) {
       context.watchSignal(this);

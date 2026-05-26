@@ -1,26 +1,42 @@
 import 'package:flutter/widgets.dart';
 import 'package:signals_core/signals_core.dart' as core;
 
-/// A [StatefulWidget] that automatically tracks any signals read during its [build] phase.
-///
-/// Subclasses of [SignalStatefulWidget] do not need to call `.watch(context)` or wrap their build
-/// in a builder; any signal value accessed synchronously inside State's [build] will automatically trigger rebuilds.
-///
+/// A reactive [StatefulWidget] that implicitly tracks and rebuilds on signal changes.
+/// 
+/// Subclasses of `SignalStatefulWidget` establish a dynamic reactive context directly at the
+/// Flutter element layer. Any signal value accessed synchronously inside State's [build] method
+/// is **implicitly tracked** and subscribed to. When a signal changes, only that element is rebuilt.
+/// 
+/// This offers a clean, Javascript-style reactivity experience while retaining all stateful lifecycles.
+/// It is the modern, highly recommended replacement for the legacy, deprecated `SignalsMixin`.
+/// 
+/// ### Implicit Reactivity Example (Stateful)
 /// ```dart
-/// final counter = signal(0);
-///
-/// class MyWidget extends SignalStatefulWidget {
+/// class CounterControl extends SignalStatefulWidget {
+///   const CounterControl({super.key});
+/// 
 ///   @override
-///   State<MyWidget> createState() => _MyWidgetState();
+///   State<CounterControl> createState() => _CounterControlState();
 /// }
-///
-/// class _MyWidgetState extends State<MyWidget> {
+/// 
+/// class _CounterControlState extends State<CounterControl> {
+///   // Create state signals directly inside the State object:
+///   final count = signal(0);
+/// 
 ///   @override
 ///   Widget build(BuildContext context) {
-///     return Text('Count: ${counter.value}');
+///     // Automatically tracked on access and safely unsubscribed on unmount:
+///     return ElevatedButton(
+///       onPressed: () => count.value++,
+///       child: Text('Count: ${count.value}'),
+///     );
 ///   }
 /// }
 /// ```
+/// 
+/// > [!IMPORTANT]
+/// > Only signals accessed *synchronously* during the execution of the `build` method are tracked.
+/// > Signals read inside async callbacks, listeners, or deferred tasks are not subscribed to.
 abstract class SignalStatefulWidget extends StatefulWidget {
   /// Constructor for [SignalStatefulWidget].
   const SignalStatefulWidget({super.key});
