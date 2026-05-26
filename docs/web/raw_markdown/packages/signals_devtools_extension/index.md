@@ -11,20 +11,28 @@ description: Signals DevTools extension.
 dart pub add signals_devtools_extension
 ```
 
-The `signals_devtools_extension` package installs a custom visual debugging tool directly inside Flutter DevTools. It provides visual insights, timeline updates, and reactive relationship diagrams of all active signals in your application.
+The `signals_devtools_extension` package provides a premium, highly interactive debugging console and visualization dashboard directly embedded inside Flutter DevTools. It allows developers to inspect, audit, pause, and profile reactive states in real-time, instantly exposing dependency flows, memory lifecycles, and update cycles across all mobile, desktop, and web applications.
 
 ## Key Features
 
-- **📈 Updates Feed**: View a chronological timeline stream of every single signal value mutation, computation evaluation, and side effect run.
-- **🕸 Dependency Graph Viewer**: Visualize your application's entire reactive architecture. Track source signals through computations down to downstream effects.
-- **🔍 State Inspector**: Pause updates and inspect current values, dependencies, and listener states of any reactive node.
+- **📈 Real-Time Updates Timeline**: View a live, chronological stream of all signal value mutations, computation re-evaluations, and side effect executions complete with deep value diffs and microsecond-level timestamps.
+- **🕸 Interactive Physics Node Graph**: Render your entire application's reactive structure visually! Tracks the direct flow from raw input `Signals` to reactive intermediate `Computeds` down to final rendering sink `Effects` or widgets.
+- **⏸️ Reaction Pause & Replay**: Freeze the reactive event stream dynamically at any point. Snapshot current states, inspect value trees, and play/resume events to track sequential microtask mutations step-by-step.
+- **🔍 Deep Node Metadata Drawer**: Select any reactive node inside the graph or table to slide out a comprehensive inspector listing its ID, human-readable debug label, stringified value representation, and dynamic lists of upstream sources and downstream targets.
+- **🛡️ Diagnostic Logging & Coalescing**: Option to enable direct VM console print logging or group sequential microtask updates to inspect coalesced batch updates.
 
 
 ## Quick Start
 
 ```dart
-// Simply run your Flutter app in debug mode.
-// The "Signals" tab will automatically appear in your Flutter DevTools panel!
+// 1. Run your Flutter application in Debug or Profile Mode:
+//    flutter run
+//
+// 2. Open Dart DevTools inside your browser or IDE.
+//
+// 3. Locate the custom "Signals" tab in the main DevTools tab header panel.
+//
+// 4. Click the tab to immediately explore and profile your reactive states!
 ```
 
 ## Package Contents

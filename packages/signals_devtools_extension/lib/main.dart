@@ -2,46 +2,55 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// # Signals DevTools Extension Entry Point
+/// # 🛠️ Signals DevTools Extension
 ///
-/// This is the entry point for the Signals DevTools Extension. When loaded inside
-/// Dart/Flutter DevTools, it executes this Flutter web application as an iframe.
+/// A premium, state-of-the-art interactive debugger and visual diagnostic dashboard for the Signals reactive framework, seamlessly embedded inside Dart & Flutter DevTools.
 ///
-/// :::tip
-/// To run the DevTools extension locally in a simulated environment for development, use the following command:
-/// ```bash
-/// flutter run -d chrome --dart-define=use_simulated_environment=true
-/// ```
-/// :::
+/// The extension executes as an optimized Flutter Web application loaded inside an iframe by the DevTools shell. It establishes a secure, bi-directional event tunnel with the running host application using the Dart VM Service.
 ///
 /// ---
 ///
-/// ## How It Works
+/// ## 🌟 Premium Diagnostic Features
 ///
-/// 1. **Reactivity Diagnostics**: The extension communicates with the running host application via Dart VM Service extensions.
-/// 2. **Real-time Synchronization**: As signals are created, updated, or deleted, events are pushed to DevTools and rendered inside this extension.
-/// 3. **Dependency Graph**: The extension uses a `GraphView` to visually plot the reactive dependencies between signals, computed states, and effects.
+/// ### 1. Chronological Updates Timeline
+/// - **Live Stream Feed**: Captures every single signal modification, computation re-evaluation, and side effect run in real-time.
+/// - **Pause & Snapshot**: Suspend the update stream at any moment to dissect current state values without interference from active events.
+/// - **Detailed Diff Views**: Displays the exact `prevValue` and `newValue` alongside the node's unique ID and exact execution timestamp.
 ///
-/// ## Integration and Usage in Client Applications
+/// ### 2. Visual Dependency Graph
+/// - **Interactive Node Mapping**: Visualizes the entire reactive tree of your application using a beautiful, physics-based `GraphView`.
+/// - **Node Typing**: Clearly distinguishes between `Signals` (source inputs), `Computeds` (intermediate reactive transformers), and `Effects` (sink execution blocks).
+/// - **Dynamic Focus**: Click or hover over any node in the graph to immediately highlight its direct upstream dependencies and downstream targets.
 ///
-/// The DevTools extension is packaged alongside the `signals` package and is automatically discovered by Flutter DevTools.
+/// ### 3. Real-time Node Inspector & Drawer
+/// - **Deep Metadata View**: Pause updates and select any node to slide open a detail drawer showing its full runtime model: ID, label, value representation, upstream source lists, and downstream targets.
 ///
-/// ### Prerequisites
+/// ---
 ///
-/// - A Flutter application using `signals` or `signals_flutter`.
-/// - Run the application in **Debug Mode** or **Profile Mode** (VM service is disabled in Release Mode).
+/// ## 🚀 Getting Started & Local Integration
 ///
-/// ### Setup Instructions
-///
-/// No manual setup is needed! In a debug environment, simply:
+/// No manual integration code is required! In a debug environment, simply:
 ///
 /// 1. Start your Flutter application:
 ///    ```bash
 ///    flutter run
 ///    ```
 /// 2. Open Dart DevTools from your IDE or terminal.
-/// 3. Look for the custom **Signals** tab in the DevTools menu.
-/// 4. Click the tab to inspect your application's reactive graph.
+/// 3. Locate the custom **Signals** tab in the main DevTools menu panel.
+/// 4. Click the tab to inspect your application's reactive graph!
+///
+/// ---
+///
+/// ## 🛠️ Local Development & Simulation
+///
+/// To run and debug the DevTools extension itself in a simulated environment using hot-reload, execute the following command:
+///
+/// ```bash
+/// flutter run -d chrome --dart-define=use_simulated_environment=true
+/// ```
+///
+/// > [!IMPORTANT]
+/// > Reactivity diagnostics are only active in **Debug** or **Profile** modes. In **Release** builds, the VM Service extension is stripped out by the Dart compiler to optimize final application size and performance.
 library;
 
 
