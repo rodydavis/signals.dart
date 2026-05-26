@@ -4,15 +4,17 @@ import 'package:analyzer/error/error.dart' hide LintCode;
 import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
-const _errorMessage = 'Use of positional builder arguments in Watch / SignalBuilder is discouraged.';
-const _correctionMessage = 'Use the named "builder:" parameter to ensure compatibility and consistency with the v7 API.';
+const _errorMessage =
+    'Use of positional builder arguments in Watch / SignalBuilder is discouraged.';
+const _correctionMessage =
+    'Use the named "builder:" parameter to ensure compatibility and consistency with the v7 API.';
 
-/// A Dart static analysis rule that detects positional builder parameters in `Watch` 
+/// A Dart static analysis rule that detects positional builder parameters in `Watch`
 /// or `SignalBuilder` constructors and encourages using the named `builder` argument.
 ///
 /// :::note
 /// In `signals` v7, to make the API more readable and consistent with standard Flutter components,
-/// `Watch` and `SignalBuilder` support the named `builder` parameter. Using positional 
+/// `Watch` and `SignalBuilder` support the named `builder` parameter. Using positional
 /// parameters can be harder to read and may be deprecated in future versions.
 /// :::
 ///

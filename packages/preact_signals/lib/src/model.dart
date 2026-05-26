@@ -213,7 +213,7 @@ class SignalModelConstructor<T> {
 /// // Define a reactive counter model constructor
 /// final counterModel = createModel(() {
 ///   final count = signal(0);
-///   
+///
 ///   // Captured nested effect - will be disposed automatically!
 ///   effect(() {
 ///     print('Nested logger: count is ${count.value}');

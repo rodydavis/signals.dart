@@ -4,18 +4,18 @@ import 'package:signals_core/signals_core.dart' as core;
 
 /// A premium custom painter that automatically repaints when any observed signal changes,
 /// bypassing Flutter's widget build and layout phases completely.
-/// 
+///
 /// `SignalCustomPainter` registers subscriptions to the provided list of [signals]. When any
 /// of these signals fire, a GPU repaint is scheduled directly via `markNeedsPaint()`, bypassing
 /// the widget-tree build cycle and layout passes for unmatched graphics performance.
-/// 
+///
 /// ### Canvas Particle/Graph Example
 /// ```dart
 /// final cursorOffset = signal(const Offset(0, 0));
-/// 
+///
 /// class StarField extends StatelessWidget {
 ///   const StarField({super.key});
-/// 
+///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     return SignalCustomPaint(
@@ -24,12 +24,12 @@ import 'package:signals_core/signals_core.dart' as core;
 ///     );
 ///   }
 /// }
-/// 
+///
 /// class StarPainter extends SignalCustomPainter {
 ///   StarPainter(this.offsetSignal) : super(signals: [offsetSignal]);
-/// 
+///
 ///   final ReadonlySignal<Offset> offsetSignal;
-/// 
+///
 ///   @override
 ///   void paint(Canvas canvas, Size size) {
 ///     final paint = Paint()..color = Colors.amber;
@@ -37,7 +37,7 @@ import 'package:signals_core/signals_core.dart' as core;
 ///     // Note: Signal tracking is suspended during paint, so .value or .peek() are both safe!
 ///     canvas.drawCircle(offsetSignal.value, 15.0, paint);
 ///   }
-/// 
+///
 ///   @override
 ///   bool shouldRepaint(covariant StarPainter oldDelegate) => true;
 /// }
@@ -58,7 +58,7 @@ abstract class SignalCustomPainter {
 
 /// A high-performance canvas painting widget that subscribes to signals and renders
 /// directly on the GPU, completely bypassing the widget build and layout phases.
-/// 
+///
 /// Use `SignalCustomPaint` in performance-critical rendering scenarios like real-time charts,
 /// complex visual animations, particle systems, or game loops.
 class SignalCustomPaint extends SingleChildRenderObjectWidget {
@@ -202,15 +202,15 @@ class SignalProxyWidget extends SingleChildRenderObjectWidget {
 }
 
 /// A high-performance, leaf render-object widget driven by a double progress signal.
-/// 
+///
 /// `SignalPainterWidget` bypasses the entire widget build and layout phases, subscribing
 /// directly to a [progress] signal and rendering on the canvas. When [progress] updates,
 /// only the GPU paint phase is run.
-/// 
+///
 /// ### Example
 /// ```dart
 /// final progress = signal(0.0);
-/// 
+///
 /// @override
 /// Widget build(BuildContext context) {
 ///   return SignalPainterWidget(

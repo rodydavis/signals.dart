@@ -193,4 +193,3 @@ AstNode? _findStateClass(AstNode node) {
         statelessClass.isAssignableFromType(extendsType);
   });
 }
-

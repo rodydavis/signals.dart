@@ -29,7 +29,7 @@
 ///   });
 ///
 ///   // Reassigning an identical value structure does NOT trigger a rebuild!
-///   items.value = [1, 2, 3]; 
+///   items.value = [1, 2, 3];
 ///
 ///   // Triggers rebuild
 ///   items.value = [1, 2, 3, 4];

@@ -42,7 +42,7 @@ class CopyMarkdown extends StatelessComponent {
               }, 2000);
             }
           })(this)
-        '''
+        ''',
       },
       [
         RawText('''

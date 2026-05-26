@@ -38,7 +38,7 @@ typedef EffectCallback = Function();
 ///
 /// ```dart
 /// final counter = signal(0);
-/// 
+///
 /// effect(() {
 ///   final count = counter.value;
 ///   final timer = Timer(Duration(seconds: 1), () => print('Timer fired for $count'));
@@ -59,7 +59,7 @@ typedef EffectCallback = Function();
 ///     onDispose: () => print('Effect has been unmounted!'),
 ///   ),
 /// );
-/// 
+///
 /// dispose(); // Prints: "Effect has been unmounted!"
 /// ```
 ///
@@ -74,11 +74,11 @@ typedef EffectCallback = Function();
 ///
 /// effect(() {
 ///   // Active subscription to a
-///   final valA = a.value; 
-///   
+///   final valA = a.value;
+///
 ///   // Read b non-reactively using untracked to prevent circular subscriptions
 ///   final valB = untracked(() => b.value);
-///   
+///
 ///   print('A: $valA, B: $valB');
 /// });
 /// ```

@@ -16,30 +16,30 @@ typedef _SignalMetadata = ({
 
 /// A State mixin that automatically handles subscription and cleanup of signals
 /// and effects created locally within a [StatefulWidget].
-/// 
+///
 /// :::caution
 /// **DEPRECATED**: This mixin is deprecated. While fully supported for backward compatibility,
 /// it adds extra stateful widget lifecycle overhead and manual binding.
-/// 
+///
 /// For superior, self-contained reactivity without mixin overhead, migrate to modern, high-performance APIs:
 /// - Use [SignalWidget] for stateless reactive widgets.
 /// - Use [SignalStatefulWidget] for stateful reactive widgets.
 /// - Use [SignalBuilder] for surgical, localized rebuilding.
 /// :::
-/// 
+///
 /// ### Legacy Usage Example
 /// ```dart
 /// class CounterWidget extends StatefulWidget {
 ///   const CounterWidget({super.key});
-/// 
+///
 ///   @override
 ///   State<CounterWidget> createState() => _CounterWidgetState();
 /// }
-/// 
+///
 /// class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
 ///   late final count = createSignal(0);
 ///   late final doubled = createComputed(() => count.value * 2);
-/// 
+///
 ///   @override
 ///   void initState() {
 ///     super.initState();
@@ -47,7 +47,7 @@ typedef _SignalMetadata = ({
 ///       print('Count: ${count.value}, Doubled: ${doubled.value}');
 ///     });
 ///   }
-/// 
+///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     return Column(
@@ -63,21 +63,21 @@ typedef _SignalMetadata = ({
 ///   }
 /// }
 /// ```
-/// 
+///
 /// ### Modern Migration Example
 /// ```dart
 /// // Modern alternative using SignalStatefulWidget:
 /// class CounterWidget extends SignalStatefulWidget {
 ///   const CounterWidget({super.key});
-/// 
+///
 ///   @override
 ///   State<CounterWidget> createState() => _CounterWidgetState();
 /// }
-/// 
+///
 /// class _CounterWidgetState extends State<CounterWidget> {
 ///   final count = signal(0);
 ///   late final doubled = computed(() => count.value * 2);
-/// 
+///
 ///   @override
 ///   void initState() {
 ///     super.initState();
@@ -86,7 +86,7 @@ typedef _SignalMetadata = ({
 ///       print('Count: ${count.value}, Doubled: ${doubled.value}');
 ///     });
 ///   }
-/// 
+///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     // Implicitly tracks both signals and rebuilds on change:

@@ -3,17 +3,17 @@ import 'package:signals_core/signals_core.dart' as core;
 import 'signal_builder.dart';
 
 /// A deprecated widget for watching signal changes in the widget tree.
-/// 
+///
 /// :::caution
 /// **DEPRECATED**: Use [SignalBuilder] instead for superior, self-contained reactivity
 /// and consistent API design.
 /// :::
-/// 
+///
 /// ### Migration to [SignalBuilder]
 /// ```dart
 /// // Deprecated legacy pattern:
 /// Watch((context) => Text('$counter'))
-/// 
+///
 /// // Modern, streamlined pattern:
 /// SignalBuilder(builder: (context) => Text('${counter.value}'))
 /// ```

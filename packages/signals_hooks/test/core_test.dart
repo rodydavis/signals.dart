@@ -246,7 +246,8 @@ void main() {
     });
 
     group('LazySignal', () {
-      testWidgets('starts uninitialized and sets value correctly', (tester) async {
+      testWidgets('starts uninitialized and sets value correctly',
+          (tester) async {
         await tester.pumpWidget(
           HookBuilder(
             builder: (context) {
@@ -272,4 +273,3 @@ void main() {
     });
   });
 }
-

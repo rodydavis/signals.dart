@@ -28,7 +28,8 @@ void reconcileBatchSnapshots() {
   batchSnapshots = null;
 
   while (snapshots != null) {
-    if (snapshots.source.equalityCheck.equals(snapshots.source.internalValue, snapshots.value)) {
+    if (snapshots.source.equalityCheck
+        .equals(snapshots.source.internalValue, snapshots.value)) {
       snapshots.source.version = snapshots.version;
     }
     snapshots = snapshots.next;

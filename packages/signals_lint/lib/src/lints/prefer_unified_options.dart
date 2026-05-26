@@ -4,15 +4,17 @@ import 'package:analyzer/error/error.dart' hide LintCode;
 import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
-const _errorMessage = 'Positional or direct named parameters for signal configuration are deprecated in v7.';
-const _correctionMessage = 'Bundle configuration parameters under a unified options object (e.g. SignalOptions, ComputedOptions, AsyncSignalOptions).';
+const _errorMessage =
+    'Positional or direct named parameters for signal configuration are deprecated in v7.';
+const _correctionMessage =
+    'Bundle configuration parameters under a unified options object (e.g. SignalOptions, ComputedOptions, AsyncSignalOptions).';
 
-/// A Dart static analysis rule that detects deprecated positional or scattered named configuration 
+/// A Dart static analysis rule that detects deprecated positional or scattered named configuration
 /// parameters for signals and ensures they are bundled under a unified options object.
 ///
 /// :::important
-/// In `signals` v7, parameters like `autoDispose`, `equals`, or custom comparators are no longer 
-/// passed directly as separate parameters to signal creators. Instead, they must be bundled into 
+/// In `signals` v7, parameters like `autoDispose`, `equals`, or custom comparators are no longer
+/// passed directly as separate parameters to signal creators. Instead, they must be bundled into
 /// a unified, type-safe configuration object (such as [SignalOptions], [ComputedOptions], or [AsyncSignalOptions]).
 /// :::
 ///

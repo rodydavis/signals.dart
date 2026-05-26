@@ -124,7 +124,8 @@ void main() {
     });
 
     group('useConnect', () {
-      testWidgets('connects stream to signal and disposes subscription', (tester) async {
+      testWidgets('connects stream to signal and disposes subscription',
+          (tester) async {
         final counter = signal(0);
         final stream = Stream<int>.value(42);
 
@@ -148,4 +149,3 @@ void main() {
     });
   });
 }
-

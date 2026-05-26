@@ -1,12 +1,12 @@
 import 'package:analyzer/source/source_range.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
-/// An IDE quick-fix refactoring tool (Dart Assist) that automatically wraps any 
+/// An IDE quick-fix refactoring tool (Dart Assist) that automatically wraps any
 /// instantiated widget expression inside a [SignalBuilder] component.
 ///
 /// :::tip
-/// Wrapping a widget inside `SignalBuilder(builder: (context) => ...)` optimizes rebuilding 
-/// performance by confining redraws strictly to the smallest possible sub-tree whenever 
+/// Wrapping a widget inside `SignalBuilder(builder: (context) => ...)` optimizes rebuilding
+/// performance by confining redraws strictly to the smallest possible sub-tree whenever
 /// reactive signals read inside the builder change.
 /// :::
 ///
@@ -56,7 +56,8 @@ class WrapWithSignalBuilder extends DartAssist {
       );
 
       changeBuilder.addDartFileEdit((builder) {
-        builder.addSimpleInsertion(node.offset, 'SignalBuilder(builder: (context) => ');
+        builder.addSimpleInsertion(
+            node.offset, 'SignalBuilder(builder: (context) => ');
         builder.addSimpleInsertion(node.end, ')');
       });
     });

@@ -19,7 +19,7 @@ part of 'signals.dart';
 /// final fullName = computed(() => "${firstName.value} ${lastName.value}");
 ///
 /// // Accessing .value: prints "Jane Doe"
-/// print(fullName.value); 
+/// print(fullName.value);
 ///
 /// // Update a dependency: fullName will automatically reflect changes on next read
 /// firstName.value = "John";
@@ -42,7 +42,7 @@ part of 'signals.dart';
 /// });
 ///
 /// // Force re-runs the callback
-/// timeString.recompute(); 
+/// timeString.recompute();
 /// ```
 ///
 /// ### 2. Resource Management & Disposal
@@ -56,7 +56,7 @@ part of 'signals.dart';
 ///   () => 42,
 ///   options: ComputedOptions(autoDispose: true),
 /// );
-/// 
+///
 /// s.onDispose(() => print('Computed destroyed'));
 ///
 /// final dispose = s.subscribe((_) {});
@@ -82,7 +82,7 @@ part of 'signals.dart';
 ///
 /// class _EvenOddWidgetState extends State<EvenOddWidget> {
 ///   final counter = signal(0);
-///   
+///
 ///   // Derived state tied directly to the State object lifecycle
 ///   late final isEven = computed(() => counter.value.isEven);
 ///

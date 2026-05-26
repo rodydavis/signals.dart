@@ -161,8 +161,7 @@ IterableSignal<T> useIterableSignal<T>(
   List<Object?> keys = const <Object>[],
   IterableSignalOptions<T>? options,
 ]) {
-  final s =
-      useMemoized(() => iterableSignal(value, options: options), keys);
+  final s = useMemoized(() => iterableSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
 
@@ -266,8 +265,7 @@ TrackedSignal<T> useTrackedSignal<T>(
   List<Object?> keys = const <Object>[],
   TrackedSignalOptions<T>? options,
 ]) {
-  final s =
-      useMemoized(() => trackedSignal(value, options: options), keys);
+  final s = useMemoized(() => trackedSignal(value, options: options), keys);
   return useExistingSignal(s, keys: keys);
 }
 

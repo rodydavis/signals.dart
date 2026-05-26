@@ -249,8 +249,13 @@ void main() {
       expect(callCount, 1);
     });
 
-    test('should respect custom equalityCheck when reconciling batch snapshots', () {
-      final a = signal(1, SignalOptions<int>(equality: SignalEquality.custom((int x, int y) => x.isOdd == y.isOdd)));
+    test('should respect custom equalityCheck when reconciling batch snapshots',
+        () {
+      final a = signal(
+          1,
+          SignalOptions<int>(
+              equality:
+                  SignalEquality.custom((int x, int y) => x.isOdd == y.isOdd)));
       final spy = Spy(() => a.value);
       effect(spy.call);
       spy.resetHistory();

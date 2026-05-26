@@ -8,14 +8,17 @@ _ImplicitSignalTrackingHookState _useImplicitSignalTracking() {
   return use(const _ImplicitSignalTrackingHook());
 }
 
-class _ImplicitSignalTrackingHook extends Hook<_ImplicitSignalTrackingHookState> {
+class _ImplicitSignalTrackingHook
+    extends Hook<_ImplicitSignalTrackingHookState> {
   const _ImplicitSignalTrackingHook();
 
   @override
-  _ImplicitSignalTrackingHookState createState() => _ImplicitSignalTrackingHookState();
+  _ImplicitSignalTrackingHookState createState() =>
+      _ImplicitSignalTrackingHookState();
 }
 
-class _ImplicitSignalTrackingHookState extends HookState<_ImplicitSignalTrackingHookState, _ImplicitSignalTrackingHook> {
+class _ImplicitSignalTrackingHookState extends HookState<
+    _ImplicitSignalTrackingHookState, _ImplicitSignalTrackingHook> {
   final _watch = <int, VoidCallback>{};
   bool _initializing = false;
 

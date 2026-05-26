@@ -1,13 +1,13 @@
 import 'package:analyzer/source/source_range.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
-/// An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard 
+/// An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard
 /// `StatefulWidget` to extend the reactive [SignalStatefulWidget] instead.
 ///
 /// :::tip
-/// By extending `SignalStatefulWidget` instead of `StatefulWidget`, your widget state automatically 
-/// registers fine-grained dependency tracking for any signals referenced within its `build` method. It 
-/// will rebuild automatically when their values change, removing the need for manual listener 
+/// By extending `SignalStatefulWidget` instead of `StatefulWidget`, your widget state automatically
+/// registers fine-grained dependency tracking for any signals referenced within its `build` method. It
+/// will rebuild automatically when their values change, removing the need for manual listener
 /// lifecycle management or `setState` calls.
 /// :::
 ///

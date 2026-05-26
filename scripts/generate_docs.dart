@@ -6,7 +6,8 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 final Map<String, String> _globalDocLinks = {};
-final Map<String, Map<String, List<MapEntry<String, String>>>> _allPackageSidebars = {};
+final Map<String, Map<String, List<MapEntry<String, String>>>>
+    _allPackageSidebars = {};
 
 class MemberInfo {
   final String name;
@@ -45,7 +46,8 @@ class DeclInfo {
 }
 
 void main() {
-  final rootDir = '/Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework';
+  final rootDir =
+      '/Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework';
   final packagesDir = p.join(rootDir, 'packages');
   final docsContentDir = p.join(rootDir, 'docs', 'content', 'packages');
   final skillsDir = '/Users/rodydavis/.gemini/config/skills';
@@ -110,15 +112,23 @@ void main() {
     for (final decl in decls) {
       final catPath = getCategoryAndPage(pkgName, decl);
       if (catPath != null) {
-        final targetPkg = (pkgName == 'signals_core' || pkgName == 'signals_flutter') ? 'signals' : pkgName;
+        final targetPkg =
+            (pkgName == 'signals_core' || pkgName == 'signals_flutter')
+                ? 'signals'
+                : pkgName;
         _globalDocLinks[decl.name] = '/packages/$targetPkg/$catPath';
-        
+
         // Map lowercase or common variants of factory functions
-        if (decl.name == 'Signal') _globalDocLinks['signal'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'Computed') _globalDocLinks['computed'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'Effect') _globalDocLinks['effect'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'LinkedSignal') _globalDocLinks['linkedSignal'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'ReadonlySignal') _globalDocLinks['readonly'] = '/packages/$targetPkg/$catPath';
+        if (decl.name == 'Signal')
+          _globalDocLinks['signal'] = '/packages/$targetPkg/$catPath';
+        if (decl.name == 'Computed')
+          _globalDocLinks['computed'] = '/packages/$targetPkg/$catPath';
+        if (decl.name == 'Effect')
+          _globalDocLinks['effect'] = '/packages/$targetPkg/$catPath';
+        if (decl.name == 'LinkedSignal')
+          _globalDocLinks['linkedSignal'] = '/packages/$targetPkg/$catPath';
+        if (decl.name == 'ReadonlySignal')
+          _globalDocLinks['readonly'] = '/packages/$targetPkg/$catPath';
         if (decl.name == 'FutureSignal') {
           _globalDocLinks['futureSignal'] = '/packages/$targetPkg/$catPath';
           _globalDocLinks['computedAsync'] = '/packages/$targetPkg/$catPath';
@@ -154,7 +164,7 @@ void main() {
 
     // Combine declarations based on user inclusion requirements
     final List<DeclInfo> combinedDecls = [];
-    
+
     // Own declarations
     if (parsedDecls.containsKey(pkgName)) {
       combinedDecls.addAll(parsedDecls[pkgName]!);
@@ -195,12 +205,15 @@ void main() {
     final List<DeclInfo> finalDecls = uniqueDecls.values.toList();
 
     // Sort declarations by name for readability
-    finalDecls.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    finalDecls
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
 
-    print('  Generating docs for $pkgName with ${finalDecls.length} declarations.');
+    print(
+        '  Generating docs for $pkgName with ${finalDecls.length} declarations.');
 
     // 3. Generate Jaspr Content Markdown Page
-    generateWebsiteMarkdown(pkgName, version, description, finalDecls, docsContentDir, rootDir);
+    generateWebsiteMarkdown(
+        pkgName, version, description, finalDecls, docsContentDir, rootDir);
 
     // 4. Update/Generate SKILL.md
     generateSkillMarkdown(pkgName, version, description, finalDecls, skillsDir);
@@ -223,7 +236,8 @@ void main() {
         final updated = convertCallouts(content);
         if (content != updated) {
           entity.writeAsStringSync(updated);
-          print('Preprocessed callouts in manual file: ${p.relative(entity.path, from: rootDir)}');
+          print(
+              'Preprocessed callouts in manual file: ${p.relative(entity.path, from: rootDir)}');
         }
       }
     }
@@ -256,13 +270,15 @@ Set<String> getExportedFiles(String entrypointPath) {
               // We skip other external packages
               continue;
             }
-            final nextPath = p.canonicalize(p.join(p.dirname(currentPath), uri));
+            final nextPath =
+                p.canonicalize(p.join(p.dirname(currentPath), uri));
             helper(nextPath);
           }
         } else if (directive is PartDirective) {
           final uri = directive.uri.stringValue;
           if (uri != null) {
-            final nextPath = p.canonicalize(p.join(p.dirname(currentPath), uri));
+            final nextPath =
+                p.canonicalize(p.join(p.dirname(currentPath), uri));
             helper(nextPath);
           }
         }
@@ -271,6 +287,7 @@ Set<String> getExportedFiles(String entrypointPath) {
       // Quietly continue if file parsing fails
     }
   }
+
   helper(entrypointPath);
   if (files.length <= 1) {
     final libDir = p.dirname(entrypointPath);
@@ -340,7 +357,8 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
             members.add(MemberInfo(
               name: mName,
               type: 'method',
-              signature: '${isStatic}${retType.isNotEmpty ? "$retType " : ""}$mName$paramList',
+              signature:
+                  '${isStatic}${retType.isNotEmpty ? "$retType " : ""}$mName$paramList',
               comment: mComment,
               isStatic: member.isStatic,
             ));
@@ -354,7 +372,8 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
               members.add(MemberInfo(
                 name: fName,
                 type: 'field',
-                signature: '${isStatic}${typeStr.isNotEmpty ? "$typeStr " : ""}$fName',
+                signature:
+                    '${isStatic}${typeStr.isNotEmpty ? "$typeStr " : ""}$fName',
                 comment: fComment,
                 isStatic: member.isStatic,
               ));
@@ -383,7 +402,8 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
             members.add(MemberInfo(
               name: mName,
               type: 'method',
-              signature: '${retType.isNotEmpty ? "$retType " : ""}$mName$paramList',
+              signature:
+                  '${retType.isNotEmpty ? "$retType " : ""}$mName$paramList',
               comment: mComment,
               isStatic: false,
             ));
@@ -414,7 +434,8 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
         final name = declaration.name.lexeme;
         if (name.startsWith('_')) continue;
         final comment = cleanComment(declaration.documentationComment);
-        final paramList = declaration.functionExpression.parameters?.toSource() ?? '';
+        final paramList =
+            declaration.functionExpression.parameters?.toSource() ?? '';
         final retType = declaration.returnType?.toSource() ?? '';
         final sig = '${retType.isNotEmpty ? "$retType " : ""}$name$paramList';
         decls.add(DeclInfo(
@@ -457,7 +478,8 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
             members.add(MemberInfo(
               name: mName,
               type: 'method',
-              signature: '${retType.isNotEmpty ? "$retType " : ""}$mName$paramList',
+              signature:
+                  '${retType.isNotEmpty ? "$retType " : ""}$mName$paramList',
               comment: mComment,
               isStatic: false,
             ));
@@ -481,20 +503,22 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
 
 String? getCategoryAndPage(String pkgName, DeclInfo decl) {
   final comment = decl.comment;
-  
+
   // 1. Check if there is an explicit @link tag first!
-  final linkRegExp = RegExp(r'@link\s+https://dartsignals\.dev/([a-zA-Z0-9_\-/]+)');
+  final linkRegExp =
+      RegExp(r'@link\s+https://dartsignals\.dev/([a-zA-Z0-9_\-/]+)');
   final match = linkRegExp.firstMatch(comment);
   if (match != null) {
     return match.group(1)!;
   }
-  
+
   final name = decl.name;
   final nameLower = name.toLowerCase();
-  
+
   // 2. Mappings for signals_hooks
   if (pkgName == 'signals_hooks') {
-    final slug = name.split(RegExp(r'(?<=[a-z0-9])(?=[A-Z])')).join('-').toLowerCase();
+    final slug =
+        name.split(RegExp(r'(?<=[a-z0-9])(?=[A-Z])')).join('-').toLowerCase();
     if (nameLower.contains('widget') || nameLower.contains('builder')) {
       return 'widgets/$slug';
     }
@@ -508,23 +532,38 @@ String? getCategoryAndPage(String pkgName, DeclInfo decl) {
 
   // 3.5 Mappings for signals_lint
   if (pkgName == 'signals_lint') {
-    final allowedPrefixes = ['SignalsAvoid', 'SignalsPrefer', 'WrapWith', 'Convert', 'Migrate'];
+    final allowedPrefixes = [
+      'SignalsAvoid',
+      'SignalsPrefer',
+      'WrapWith',
+      'Convert',
+      'Migrate'
+    ];
     if (!allowedPrefixes.any((prefix) => name.startsWith(prefix))) {
       return null;
     }
-    final slug = name.split(RegExp(r'(?<=[a-z0-9])(?=[A-Z])')).join('-').toLowerCase();
+    final slug =
+        name.split(RegExp(r'(?<=[a-z0-9])(?=[A-Z])')).join('-').toLowerCase();
     return 'flutter/$slug';
   }
-  
+
   // 4. Mappings for signals_flutter
   if (pkgName == 'signals_flutter') {
-    if (name == 'signal' || name == 'lazySignal' || name == 'FlutterSignal' || name == 'createSignal') {
+    if (name == 'signal' ||
+        name == 'lazySignal' ||
+        name == 'FlutterSignal' ||
+        name == 'createSignal') {
       return 'flutter/signal';
     }
-    if (name == 'computed' || name == 'FlutterComputed' || name == 'createComputed') {
+    if (name == 'computed' ||
+        name == 'FlutterComputed' ||
+        name == 'createComputed') {
       return 'flutter/computed';
     }
-    if (nameLower.contains('watch') || name == 'SignalBuilder' || name == 'SignalAnimatedBuilder' || name == 'FlutterReadonlySignalUtils') {
+    if (nameLower.contains('watch') ||
+        name == 'SignalBuilder' ||
+        name == 'SignalAnimatedBuilder' ||
+        name == 'FlutterReadonlySignalUtils') {
       return 'flutter/watch';
     }
     if (name == 'SignalProvider') {
@@ -533,28 +572,42 @@ String? getCategoryAndPage(String pkgName, DeclInfo decl) {
     if (name == 'SignalsMixin') {
       return 'flutter/signals-mixin';
     }
-    if (name == 'valueListenableToSignal' || name == 'ValueListenableSignalMixin' || name == 'SignalValueListenableUtils') {
+    if (name == 'valueListenableToSignal' ||
+        name == 'ValueListenableSignalMixin' ||
+        name == 'SignalValueListenableUtils') {
       return 'flutter/value-listenable';
     }
-    if (name == 'valueNotifierToSignal' || name == 'ValueNotifierSignalMixin' || name == 'SignalValueNotifierUtils') {
+    if (name == 'valueNotifierToSignal' ||
+        name == 'ValueNotifierSignalMixin' ||
+        name == 'SignalValueNotifierUtils') {
       return 'flutter/value-notifier';
     }
   }
-  
+
   // 5. Mappings for preact_signals, signals_core, signals
-  if (pkgName == 'signals_core' || pkgName == 'preact_signals' || pkgName == 'signals') {
+  if (pkgName == 'signals_core' ||
+      pkgName == 'preact_signals' ||
+      pkgName == 'signals') {
     // Core
     if (name == 'Signal' || name == 'signal') return 'core/signal';
     if (name == 'Computed' || name == 'computed') return 'core/computed';
     if (name == 'Effect' || name == 'effect') return 'core/effect';
     if (name == 'batch') return 'core/batch';
     if (name == 'untracked') return 'core/untracked';
-    if (name == 'linkedSignal' || name == 'LinkedSignal') return 'core/linked-signal';
+    if (name == 'linkedSignal' || name == 'LinkedSignal')
+      return 'core/linked-signal';
     if (name == 'readonly' || name == 'ReadonlySignal') return 'core/readonly';
     if (name.toLowerCase().startsWith('action')) return 'core/action';
-    if (name == 'SignalEquality' || name == 'SignalStandardEquality' || name == 'SignalIdentityEquality' || name == 'SignalCustomEquality' || name == 'SignalDeepEquality') return 'utilities/equality';
-    if (name == 'SignalModel' || name == 'SignalModelOptions' || name == 'SignalModelConstructor' || name == 'createModel') return 'utilities/model';
-    
+    if (name == 'SignalEquality' ||
+        name == 'SignalStandardEquality' ||
+        name == 'SignalIdentityEquality' ||
+        name == 'SignalCustomEquality' ||
+        name == 'SignalDeepEquality') return 'utilities/equality';
+    if (name == 'SignalModel' ||
+        name == 'SignalModelOptions' ||
+        name == 'SignalModelConstructor' ||
+        name == 'createModel') return 'utilities/model';
+
     // Mixins
     if (name == 'SignalsMixin') return 'mixins/signals-mixin';
     if (name == 'ChangeStackSignalMixin') return 'mixins/change-stack';
@@ -569,9 +622,12 @@ String? getCategoryAndPage(String pkgName, DeclInfo decl) {
     if (name == 'TrackedSignalMixin') return 'mixins/tracked';
     if (name == 'ValueListenableSignalMixin') return 'mixins/value-listenable';
     if (name == 'ValueNotifierSignalMixin') return 'mixins/value-notifier';
-    
+
     // Async
-    if (name == 'FutureSignal' || name == 'futureSignal' || name == 'computedAsync' || name == 'computedFrom') {
+    if (name == 'FutureSignal' ||
+        name == 'futureSignal' ||
+        name == 'computedAsync' ||
+        name == 'computedFrom') {
       if (nameLower.contains('computed')) return 'async/computed';
       return 'async/future';
     }
@@ -582,25 +638,29 @@ String? getCategoryAndPage(String pkgName, DeclInfo decl) {
         name.startsWith('AsyncLoading') ||
         name.startsWith('AsyncData') ||
         name.startsWith('AsyncError')) return 'async/state';
-    if (name == 'AsyncSignal' || name == 'asyncSignal' || name == 'AsyncSignalOptions') return 'async/signal';
-    
+    if (name == 'AsyncSignal' ||
+        name == 'asyncSignal' ||
+        name == 'AsyncSignalOptions') return 'async/signal';
+
     // Value
     if (name == 'ChangeStackSignal') return 'value/change-stack';
     if (name == 'IterableSignal') return 'value/iterable';
     if (name == 'ListSignal' || name == 'listSignal') return 'value/list';
     if (name == 'SetSignal' || name == 'setSignal') return 'value/set';
     if (name == 'MapSignal' || name == 'mapSignal') return 'value/map';
-    
+
     // Utilities
-    if (name == 'SignalContainer' || name == 'signalContainer') return 'utilities/container';
-    if (name == 'SignalsObserver' || name == 'signalsObserver') return 'utilities/observer';
+    if (name == 'SignalContainer' || name == 'signalContainer')
+      return 'utilities/container';
+    if (name == 'SignalsObserver' || name == 'signalsObserver')
+      return 'utilities/observer';
     if (name.startsWith('Persisted') ||
         name.startsWith('SignalsKeyValue') ||
         name.startsWith('SignalsInMemoryKeyValue')) {
       return 'utilities/persisted';
     }
   }
-  
+
   return null;
 }
 
@@ -637,7 +697,8 @@ String stripFrontmatter(String content) {
 String _resolveReferencesInPlainMarkdown(String text) {
   // Find [Word] or [Word.member] where Word is a word consisting of letters, digits, and underscores/dashes.
   // We match bracketed expressions that don't already have a markdown URL format after them.
-  final regExp = RegExp(r'\[([a-zA-Z0-9_-]+)(?:<[a-zA-Z0-9_,-]+>)?(?:\.([a-zA-Z0-9_-]+))?\](?!\()');
+  final regExp = RegExp(
+      r'\[([a-zA-Z0-9_-]+)(?:<[a-zA-Z0-9_,-]+>)?(?:\.([a-zA-Z0-9_-]+))?\](?!\()');
   return text.replaceAllMapped(regExp, (match) {
     final name = match.group(1)!;
     final member = match.group(2);
@@ -663,13 +724,13 @@ String resolveDartReferences(String text) {
   for (var i = 0; i < codeBlockParts.length; i++) {
     // Every odd-indexed part is inside a code block
     if (i % 2 == 1) continue;
-    
+
     // Split by single-backtick inline code
     final inlineParts = codeBlockParts[i].split('`');
     for (var j = 0; j < inlineParts.length; j++) {
       // Every odd-indexed part is inside inline code
       if (j % 2 == 1) continue;
-      
+
       // Even-indexed parts are normal text where we resolve references
       inlineParts[j] = _resolveReferencesInPlainMarkdown(inlineParts[j]);
     }
@@ -683,28 +744,32 @@ String cleanDocumentationComment(String comment) {
   // Remove {@template ...} and {@endtemplate}
   cleaned = cleaned.replaceAll(RegExp(r'\{@template\s+[a-zA-Z0-9_-]+\}'), '');
   cleaned = cleaned.replaceAll('{@endtemplate}', '');
-  
+
   // Strip lines starting with @link
-  cleaned = cleaned.split('\n').where((line) => !line.trim().startsWith('@link')).join('\n');
-  
+  cleaned = cleaned
+      .split('\n')
+      .where((line) => !line.trim().startsWith('@link'))
+      .join('\n');
+
   // Replace ```diff with ```dart
   cleaned = cleaned.replaceAll('```diff', '```dart');
-  
+
   // Resolve [Bracketed] Dart references to HTML/markdown links
   cleaned = resolveDartReferences(cleaned);
-  
+
   return convertCallouts(cleaned.trim());
 }
 
 String convertCallouts(String text) {
   var result = text;
-  
+
   // Replace :::caution, :::warning, etc.
-  final regExp = RegExp(r':::(info|caution|warning|danger|tip|note|success|error)\s*\n?([\s\S]*?)\n?\s*:::');
+  final regExp = RegExp(
+      r':::(info|caution|warning|danger|tip|note|success|error)\s*\n?([\s\S]*?)\n?\s*:::');
   result = result.replaceAllMapped(regExp, (match) {
     final type = match.group(1)!;
     final content = match.group(2)!;
-    
+
     // Map to supported jaspr_content Callout components
     String tagName;
     switch (type.toLowerCase()) {
@@ -727,10 +792,10 @@ String convertCallouts(String text) {
       default:
         tagName = 'Info';
     }
-    
+
     return '<$tagName>\n$content\n</$tagName>';
   });
-  
+
   return result;
 }
 
@@ -738,7 +803,8 @@ Map<String, String> getPackageOverview(String pkgName) {
   switch (pkgName) {
     case 'preact_signals':
       return {
-        'overview': 'The `preact_signals` package is a direct, ultra-high-performance Dart port of Preact.js Signals (v7.0.0). It brings fine-grained reactive programming to Dart VM, command-line interfaces, server environments, and web targets with maximum memory efficiency and minimal execution overhead.',
+        'overview':
+            'The `preact_signals` package is a direct, ultra-high-performance Dart port of Preact.js Signals (v7.0.0). It brings fine-grained reactive programming to Dart VM, command-line interfaces, server environments, and web targets with maximum memory efficiency and minimal execution overhead.',
         'features': '''
 - **⚡ High Performance**: Built on a highly optimized, double-linked reactive graph that automatically caches derived values.
 - **📦 Memory Efficient**: Automatic memory cleanup and garbage collection of inactive nodes.
@@ -767,7 +833,8 @@ void main() {
 
     case 'signals_core':
       return {
-        'overview': 'The `signals_core` package exposes the foundational building blocks of the entire Signals reactive framework. It is 100% platform-agnostic, zero-dependency, and can be integrated into any Dart codebase—including shelf servers, database layers, command-line scripts, or serverless functions.',
+        'overview':
+            'The `signals_core` package exposes the foundational building blocks of the entire Signals reactive framework. It is 100% platform-agnostic, zero-dependency, and can be integrated into any Dart codebase—including shelf servers, database layers, command-line scripts, or serverless functions.',
         'features': '''
 - **📐 Signals & Computeds**: Declare reactive variables and lazy, cacheable derived states.
 - **⚡ Effects**: Trigger side effects (like saving to databases, logging, or writing to files) automatically in response to dependency changes.
@@ -793,7 +860,8 @@ void main() {
 
     case 'signals_flutter':
       return {
-        'overview': 'The `signals_flutter` package delivers high-performance, premium reactive UI updates for Flutter applications. By binding signals directly to the widget tree, it enables surgical, localized widget rebuilds without redrawing parent elements or complex state management boilerplate.',
+        'overview':
+            'The `signals_flutter` package delivers high-performance, premium reactive UI updates for Flutter applications. By binding signals directly to the widget tree, it enables surgical, localized widget rebuilds without redrawing parent elements or complex state management boilerplate.',
         'features': '''
 - **🚀 Implicit Tracking**: Inherit from [SignalWidget] or [SignalStatefulWidget] to establish automatic, mixin-free reactivity inside widget build methods.
 - **⚡ Surgical Rebuilds**: Use [SignalBuilder] to surgically rebuild specific, localized nodes of the widget tree without redrawing parent elements.
@@ -822,7 +890,8 @@ class CounterWidget extends SignalWidget {
 
     case 'signals_hooks':
       return {
-        'overview': 'The `signals_hooks` package provides seamless, type-safe bindings for the highly popular `flutter_hooks` package. It enables developers to declare, instantiate, and automatically clean up reactive signals directly inside hook-based functional widgets.',
+        'overview':
+            'The `signals_hooks` package provides seamless, type-safe bindings for the highly popular `flutter_hooks` package. It enables developers to declare, instantiate, and automatically clean up reactive signals directly inside hook-based functional widgets.',
         'features': '''
 - **🎣 Hook-based Signalling**: Instantly declare state with `useSignal()` inside functional Hook widgets.
 - **🌀 Automatic Disposal**: No manual cleanup or dispose overrides required; the hook manages the entire signal life cycle.
@@ -852,7 +921,8 @@ class HookCounter extends HookWidget {
 
     case 'signals_lint':
       return {
-        'overview': 'The `signals_lint` package is a developer productivity toolkit containing custom compiler diagnostics, real-time IDE analysis rules, and automated quick-fixes. It guarantees that reactive signals are consumed according to best practices, preventing memory leaks and anti-patterns at code time.',
+        'overview':
+            'The `signals_lint` package is a developer productivity toolkit containing custom compiler diagnostics, real-time IDE analysis rules, and automated quick-fixes. It guarantees that reactive signals are consumed according to best practices, preventing memory leaks and anti-patterns at code time.',
         'features': '''
 - **🛡 Anti-pattern Detection**: Warns when signals are instantiated directly inside build methods instead of state initializers.
 - **💡 Real-time IDE Quick-fixes**: Supports automated quick-fixes (like replacing standard state parameters with reactive watch methods).
@@ -868,7 +938,8 @@ analyzer:
 
     case 'signals_devtools_extension':
       return {
-        'overview': 'The `signals_devtools_extension` package provides a premium, highly interactive debugging console and visualization dashboard directly embedded inside Flutter DevTools. It allows developers to inspect, audit, pause, and profile reactive states in real-time, instantly exposing dependency flows, memory lifecycles, and update cycles across all mobile, desktop, and web applications.',
+        'overview':
+            'The `signals_devtools_extension` package provides a premium, highly interactive debugging console and visualization dashboard directly embedded inside Flutter DevTools. It allows developers to inspect, audit, pause, and profile reactive states in real-time, instantly exposing dependency flows, memory lifecycles, and update cycles across all mobile, desktop, and web applications.',
         'features': '''
 - **📈 Real-Time Updates Timeline**: View a live, chronological stream of all signal value mutations, computation re-evaluations, and side effect executions complete with deep value diffs and microsecond-level timestamps.
 - **🕸 Interactive Physics Node Graph**: Render your entire application\'s reactive structure visually! Tracks the direct flow from raw input `Signals` to reactive intermediate `Computeds` down to final rendering sink `Effects` or widgets.
@@ -887,7 +958,8 @@ flutter run
 
     case 'signals':
       return {
-        'overview': 'The `signals` package is the main overarching package for the Signals framework. It exports the complete core reactive package (`signals_core`) along with full Flutter extensions (`signals_flutter`) to provide a seamless out-of-the-box state management developer experience.',
+        'overview':
+            'The `signals` package is the main overarching package for the Signals framework. It exports the complete core reactive package (`signals_core`) along with full Flutter extensions (`signals_flutter`) to provide a seamless out-of-the-box state management developer experience.',
         'features': '''
 - **📦 Unified Import**: Direct access to all core signals, computations, batch updates, reactive collections, and Flutter builders.
 - **🎯 Full Reactivity**: The single source of truth for building extremely responsive, state-of-the-art Flutter and Dart applications.
@@ -916,7 +988,8 @@ String renderMembersMarkdown(DeclInfo decl) {
 
   final buffer = StringBuffer();
 
-  final constructors = decl.members.where((m) => m.type == 'constructor').toList();
+  final constructors =
+      decl.members.where((m) => m.type == 'constructor').toList();
   final fields = decl.members.where((m) => m.type == 'field').toList();
   final methods = decl.members.where((m) => m.type == 'method').toList();
 
@@ -927,7 +1000,8 @@ String renderMembersMarkdown(DeclInfo decl) {
     for (final m in constructors) {
       final anchor1 = m.name.toLowerCase().replaceAll('.', '-');
       final anchor2 = m.name.toLowerCase().split('.').last;
-      buffer.writeln('##### <a name="$anchor1"></a><a name="$anchor2"></a>`${m.signature}`');
+      buffer.writeln(
+          '##### <a name="$anchor1"></a><a name="$anchor2"></a>`${m.signature}`');
       buffer.writeln();
       if (m.comment.isNotEmpty) {
         buffer.writeln(cleanDocumentationComment(m.comment));
@@ -1005,8 +1079,14 @@ void generateWebsiteMarkdown(
     final category = parts[0];
     final pageName = parts[1];
 
-    var title = pageName.split('-').map((word) => word.isEmpty ? '' : '${word[0].toUpperCase()}${word.substring(1)}').join(' ');
-    if (pathDecls.first.type == 'class' || pathDecls.first.type == 'mixin' || category == 'hooks') {
+    var title = pageName
+        .split('-')
+        .map((word) =>
+            word.isEmpty ? '' : '${word[0].toUpperCase()}${word.substring(1)}')
+        .join(' ');
+    if (pathDecls.first.type == 'class' ||
+        pathDecls.first.type == 'mixin' ||
+        category == 'hooks') {
       title = pathDecls.first.name;
     }
     var pageDesc = '';
@@ -1022,15 +1102,21 @@ void generateWebsiteMarkdown(
     }
 
     final variantRegExp = RegExp(r'^(action|ActionExt)\d+$');
-    final primaryDecls = pathDecls.where((d) => !variantRegExp.hasMatch(d.name)).toList();
-    final variantDecls = pathDecls.where((d) => variantRegExp.hasMatch(d.name)).toList();
+    final primaryDecls =
+        pathDecls.where((d) => !variantRegExp.hasMatch(d.name)).toList();
+    final variantDecls =
+        pathDecls.where((d) => variantRegExp.hasMatch(d.name)).toList();
 
     // Sort variants so action0..10 are in order, and ActionExt0..10 are in order
     variantDecls.sort((a, b) {
-      final aNum = int.tryParse(RegExp(r'\d+').firstMatch(a.name)?.group(0) ?? '') ?? 0;
-      final bNum = int.tryParse(RegExp(r'\d+').firstMatch(b.name)?.group(0) ?? '') ?? 0;
-      if (a.name.startsWith('action') && b.name.startsWith('ActionExt')) return -1;
-      if (a.name.startsWith('ActionExt') && b.name.startsWith('action')) return 1;
+      final aNum =
+          int.tryParse(RegExp(r'\d+').firstMatch(a.name)?.group(0) ?? '') ?? 0;
+      final bNum =
+          int.tryParse(RegExp(r'\d+').firstMatch(b.name)?.group(0) ?? '') ?? 0;
+      if (a.name.startsWith('action') && b.name.startsWith('ActionExt'))
+        return -1;
+      if (a.name.startsWith('ActionExt') && b.name.startsWith('action'))
+        return 1;
       return aNum.compareTo(bNum);
     });
 
@@ -1077,7 +1163,8 @@ void generateWebsiteMarkdown(
       }
       contentBuffer.writeln('## Type-Safe Variants & Extensions');
       contentBuffer.writeln();
-      contentBuffer.writeln('To ensure complete type safety and optimize static analysis in Dart, the package exposes distinct variants and extension methods corresponding to the number of arguments (from 0 up to 10):');
+      contentBuffer.writeln(
+          'To ensure complete type safety and optimize static analysis in Dart, the package exposes distinct variants and extension methods corresponding to the number of arguments (from 0 up to 10):');
       contentBuffer.writeln();
 
       // Table of variants
@@ -1086,14 +1173,18 @@ void generateWebsiteMarkdown(
       for (final decl in variantDecls) {
         final comment = cleanDocumentationComment(decl.comment);
         final desc = extractDescription(comment);
-        final signature = decl.signature ?? (decl.members.isNotEmpty ? decl.members.first.signature : decl.name);
+        final signature = decl.signature ??
+            (decl.members.isNotEmpty
+                ? decl.members.first.signature
+                : decl.name);
         contentBuffer.writeln('| `${decl.name}` | $desc <br/> `signature` |');
       }
       contentBuffer.writeln();
 
       // Full details block (collapsible)
       contentBuffer.writeln('<details>');
-      contentBuffer.writeln('<summary>Show Full API Signatures & Examples</summary>');
+      contentBuffer
+          .writeln('<summary>Show Full API Signatures & Examples</summary>');
       contentBuffer.writeln();
       for (final decl in variantDecls) {
         contentBuffer.writeln('### ${decl.name}');
@@ -1117,9 +1208,11 @@ void generateWebsiteMarkdown(
     var content = contentBuffer.toString().trim();
 
     // Fallback to manual markdown if AST comment is short or empty
-    var manualFile = File(p.join(rootDir, 'docs', 'content', category, '$pageName.md'));
+    var manualFile =
+        File(p.join(rootDir, 'docs', 'content', category, '$pageName.md'));
     if (!manualFile.existsSync()) {
-      manualFile = File(p.join(rootDir, 'website', 'src', 'content', 'docs', category, '$pageName.md'));
+      manualFile = File(p.join(rootDir, 'website', 'src', 'content', 'docs',
+          category, '$pageName.md'));
     }
     if (manualFile.existsSync() && content.length < 1000) {
       final manualContent = manualFile.readAsStringSync();
@@ -1149,7 +1242,9 @@ void generateWebsiteMarkdown(
     targetFile.writeAsStringSync(pageBuffer.toString());
 
     // Register for package main index.md listing
-    pagesByCategory.putIfAbsent(category, () => []).add(MapEntry(title, '/packages/$pkgName/$category/$pageName'));
+    pagesByCategory
+        .putIfAbsent(category, () => [])
+        .add(MapEntry(title, '/packages/$pkgName/$category/$pageName'));
   }
 
   // Create package index.md landing page
@@ -1164,21 +1259,23 @@ void generateWebsiteMarkdown(
   indexBuffer.writeln('description: $description');
   indexBuffer.writeln('---');
   indexBuffer.writeln();
-  
+
   indexBuffer.writeln('> Version: `$version`');
   indexBuffer.writeln();
 
   // Show installation command
-  final isFlutterPkg = pkgName == 'signals_flutter' || pkgName == 'signals_hooks';
-  final installCmd = isFlutterPkg ? 'flutter pub add $pkgName' : 'dart pub add $pkgName';
-  
+  final isFlutterPkg =
+      pkgName == 'signals_flutter' || pkgName == 'signals_hooks';
+  final installCmd =
+      isFlutterPkg ? 'flutter pub add $pkgName' : 'dart pub add $pkgName';
+
   indexBuffer.writeln('## Installation');
   indexBuffer.writeln();
   indexBuffer.writeln('```bash');
   indexBuffer.writeln(installCmd);
   indexBuffer.writeln('```');
   indexBuffer.writeln();
-  
+
   indexBuffer.writeln(overview);
   indexBuffer.writeln();
 
@@ -1232,22 +1329,24 @@ void generateWebsiteMarkdown(
           icon = '🪝';
           break;
       }
-      
+
       indexBuffer.writeln('  <div class="category-card">');
       indexBuffer.writeln('    <div class="category-header">');
       indexBuffer.writeln('      <span class="category-icon">$icon</span>');
-      indexBuffer.writeln('      <span class="category-title-text">$categoryTitle</span>');
+      indexBuffer.writeln(
+          '      <span class="category-title-text">$categoryTitle</span>');
       indexBuffer.writeln('    </div>');
       indexBuffer.writeln('    <div class="category-links">');
       for (final entry in pagesByCategory[category]!) {
-        indexBuffer.writeln('      <a class="content-link" href="${entry.value}">${entry.key}</a>');
+        indexBuffer.writeln(
+            '      <a class="content-link" href="${entry.value}">${entry.key}</a>');
       }
       indexBuffer.writeln('    </div>');
       indexBuffer.writeln('  </div>');
     }
     indexBuffer.writeln('</div>');
     indexBuffer.writeln();
-    
+
     indexBuffer.writeln('''
 <style>
   .package-contents-grid {
@@ -1332,21 +1431,41 @@ void generateSkillMarkdown(
   String skillsOutputDir,
 ) {
   final priorityPrimitives = {
-    'Signal', 'signal',
-    'Computed', 'computed',
-    'Effect', 'effect',
+    'Signal',
+    'signal',
+    'Computed',
+    'computed',
+    'Effect',
+    'effect',
     'batch',
     'untracked',
-    'futureSignal', 'computedAsync', 'computedFrom',
+    'futureSignal',
+    'computedAsync',
+    'computedFrom',
     'streamSignal',
-    'listSignal', 'ListSignal',
-    'setSignal', 'SetSignal',
-    'mapSignal', 'MapSignal',
-    'linkedSignal', 'LinkedSignal',
-    'connect', 'Connect',
-    'AsyncState', 'AsyncValue', 'AsyncLoading', 'AsyncData', 'AsyncError',
-    'SignalWidget', 'SignalBuilder', 'SignalStatefulWidget', 'SignalProvider', 'SignalsMixin',
-    'useSignal', 'useComputed', 'useAsyncComputed',
+    'listSignal',
+    'ListSignal',
+    'setSignal',
+    'SetSignal',
+    'mapSignal',
+    'MapSignal',
+    'linkedSignal',
+    'LinkedSignal',
+    'connect',
+    'Connect',
+    'AsyncState',
+    'AsyncValue',
+    'AsyncLoading',
+    'AsyncData',
+    'AsyncError',
+    'SignalWidget',
+    'SignalBuilder',
+    'SignalStatefulWidget',
+    'SignalProvider',
+    'SignalsMixin',
+    'useSignal',
+    'useComputed',
+    'useAsyncComputed',
   };
 
   final buffer = StringBuffer();
@@ -1357,7 +1476,8 @@ void generateSkillMarkdown(
   buffer.writeln();
   buffer.writeln('# $pkgName API Best Practices & Primitive Definitions');
   buffer.writeln();
-  buffer.writeln('This guide outlines the primitive definitions, classes, functions, and standard design paradigms exposed by `package:$pkgName` (version `$version`).');
+  buffer.writeln(
+      'This guide outlines the primitive definitions, classes, functions, and standard design paradigms exposed by `package:$pkgName` (version `$version`).');
   buffer.writeln();
 
   // Sort declarations: priority ones first, then alphabetical by name
@@ -1371,9 +1491,17 @@ void generateSkillMarkdown(
   });
 
   // Group sorted declarations
-  final priorityList = sortedDecls.where((d) => priorityPrimitives.contains(d.name)).toList();
-  final nonPriorityClasses = sortedDecls.where((d) => !priorityPrimitives.contains(d.name) && (d.type == 'class' || d.type == 'mixin')).toList();
-  final nonPriorityFunctions = sortedDecls.where((d) => !priorityPrimitives.contains(d.name) && d.type == 'function').toList();
+  final priorityList =
+      sortedDecls.where((d) => priorityPrimitives.contains(d.name)).toList();
+  final nonPriorityClasses = sortedDecls
+      .where((d) =>
+          !priorityPrimitives.contains(d.name) &&
+          (d.type == 'class' || d.type == 'mixin'))
+      .toList();
+  final nonPriorityFunctions = sortedDecls
+      .where(
+          (d) => !priorityPrimitives.contains(d.name) && d.type == 'function')
+      .toList();
   final extensions = sortedDecls.where((d) => d.type == 'extension').toList();
   final variables = sortedDecls.where((d) => d.type == 'variable').toList();
 
@@ -1387,7 +1515,10 @@ void generateSkillMarkdown(
     if (_globalDocLinks.containsKey(lowerName)) {
       return 'https://dartsignals.dev${_globalDocLinks[lowerName]}';
     }
-    final targetPkg = (pkgName == 'signals_core' || pkgName == 'signals_flutter') ? 'signals' : pkgName;
+    final targetPkg =
+        (pkgName == 'signals_core' || pkgName == 'signals_flutter')
+            ? 'signals'
+            : pkgName;
     return 'https://dartsignals.dev/packages/$targetPkg';
   }
 
@@ -1395,13 +1526,14 @@ void generateSkillMarkdown(
   if (priorityList.isNotEmpty) {
     buffer.writeln('## Core Reactivity Primitives');
     buffer.writeln();
-    buffer.writeln('These are the primary reactive primitives and components exposed by this package. Use them as the primary building blocks for your application state.');
+    buffer.writeln(
+        'These are the primary reactive primitives and components exposed by this package. Use them as the primary building blocks for your application state.');
     buffer.writeln();
 
     for (final decl in priorityList) {
       final cleanedComment = cleanDocumentationComment(decl.comment);
       final link = getOnlineDocLink(decl);
-      
+
       buffer.writeln('### `${decl.name}` (${decl.type})');
       buffer.writeln();
       buffer.writeln('[Read full documentation and examples]($link)');
@@ -1435,14 +1567,15 @@ void generateSkillMarkdown(
   if (nonPriorityClasses.isNotEmpty) {
     buffer.writeln('## Primary Interfaces & Classes');
     buffer.writeln();
-    buffer.writeln('The following additional classes and mixins support advanced reactivity, state bindings, or standard patterns:');
+    buffer.writeln(
+        'The following additional classes and mixins support advanced reactivity, state bindings, or standard patterns:');
     buffer.writeln();
 
     for (final decl in nonPriorityClasses) {
       final cleanedComment = cleanDocumentationComment(decl.comment);
       final desc = extractDescription(cleanedComment);
       final link = getOnlineDocLink(decl);
-      
+
       buffer.writeln('### Class `${decl.name}`');
       if (desc.isNotEmpty) {
         buffer.writeln('$desc');
@@ -1451,7 +1584,7 @@ void generateSkillMarkdown(
       }
       buffer.writeln('- **Type**: `${decl.type}`');
       buffer.writeln('- **Documentation**: [Online API Reference]($link)');
-      
+
       if (decl.members.isNotEmpty) {
         buffer.writeln('- **Key Members**:');
         for (final m in decl.members.take(8)) {
@@ -1466,14 +1599,15 @@ void generateSkillMarkdown(
   if (nonPriorityFunctions.isNotEmpty) {
     buffer.writeln('## Key Utility Functions');
     buffer.writeln();
-    buffer.writeln('The following standalone helper functions perform specialized reactive orchestrations:');
+    buffer.writeln(
+        'The following standalone helper functions perform specialized reactive orchestrations:');
     buffer.writeln();
 
     for (final decl in nonPriorityFunctions) {
       final cleanedComment = cleanDocumentationComment(decl.comment);
       final desc = extractDescription(cleanedComment);
       final link = getOnlineDocLink(decl);
-      
+
       buffer.writeln('### Function `${decl.name}`');
       buffer.writeln('```dart');
       buffer.writeln('${decl.signature ?? decl.name}');
@@ -1490,7 +1624,8 @@ void generateSkillMarkdown(
   if (extensions.isNotEmpty) {
     buffer.writeln('## API Extension Utilities');
     buffer.writeln();
-    buffer.writeln('The following extension methods add seamless reactive bindings or features directly to standard Dart types:');
+    buffer.writeln(
+        'The following extension methods add seamless reactive bindings or features directly to standard Dart types:');
     buffer.writeln();
 
     for (final decl in extensions) {
@@ -1498,7 +1633,7 @@ void generateSkillMarkdown(
       final desc = extractDescription(cleanedComment);
       final link = getOnlineDocLink(decl);
       final target = decl.extendedType ?? 'unknown type';
-      
+
       buffer.writeln('### Extension `${decl.name}` on `$target`');
       if (desc.isNotEmpty) {
         buffer.writeln('$desc');
@@ -1523,7 +1658,7 @@ void generateSkillMarkdown(
       final cleanedComment = cleanDocumentationComment(decl.comment);
       final desc = extractDescription(cleanedComment);
       final link = getOnlineDocLink(decl);
-      
+
       buffer.writeln('### `${decl.name}`');
       buffer.writeln('```dart');
       buffer.writeln('${decl.signature ?? decl.name}');
@@ -1538,9 +1673,12 @@ void generateSkillMarkdown(
 
   buffer.writeln('## Usage and Best Practices');
   buffer.writeln();
-  buffer.writeln('- Always favor fine-grained, computed dependencies rather than manual callbacks where possible.');
-  buffer.writeln('- Clean up effects and stream listeners by calling the returned dispose functions.');
-  buffer.writeln('- Restrict mutating signals directly within computed properties or active rendering phases to prevent cyclic dependencies.');
+  buffer.writeln(
+      '- Always favor fine-grained, computed dependencies rather than manual callbacks where possible.');
+  buffer.writeln(
+      '- Clean up effects and stream listeners by calling the returned dispose functions.');
+  buffer.writeln(
+      '- Restrict mutating signals directly within computed properties or active rendering phases to prevent cyclic dependencies.');
 
   final skillPkgDir = p.join(skillsOutputDir, pkgName);
   Directory(skillPkgDir).createSync(recursive: true);
@@ -1555,10 +1693,12 @@ void generateLLMFiles(String rootDir) {
   Directory(rawMdDir).createSync(recursive: true);
 
   // We will keep a list of all pages for llms.txt & llms-full.txt
-  final List<({String title, String description, String path, String content})> allPages = [];
+  final List<({String title, String description, String path, String content})>
+      allPages = [];
 
   // Helper to register page
-  void registerPage(String title, String description, String routePath, String originalMarkdown) {
+  void registerPage(String title, String description, String routePath,
+      String originalMarkdown) {
     // Write copy to raw_markdown
     final targetRawFile = File(p.join(rawMdDir, '$routePath.md'));
     targetRawFile.parent.createSync(recursive: true);
@@ -1591,23 +1731,28 @@ void generateLLMFiles(String rootDir) {
       final fm = parseFrontmatter(rawContent);
       final title = fm['title'] ?? relPath;
       final description = fm['description'] ?? 'Documentation for $title';
-      
+
       final routePath = relPath.replaceAll('.md', '');
       registerPage(title, description, routePath, rawContent);
     }
   }
 
   // 2. Process all generated files under docs/content/packages/
-  final genPackagesDir = Directory(p.join(rootDir, 'docs', 'content', 'packages'));
+  final genPackagesDir =
+      Directory(p.join(rootDir, 'docs', 'content', 'packages'));
   if (genPackagesDir.existsSync()) {
-    final genFiles = genPackagesDir.listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.md'));
+    final genFiles = genPackagesDir
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.md'));
     for (final file in genFiles) {
-      final relativeToPackages = p.relative(file.path, from: genPackagesDir.path);
+      final relativeToPackages =
+          p.relative(file.path, from: genPackagesDir.path);
       final rawContent = file.readAsStringSync();
       final fm = parseFrontmatter(rawContent);
       final title = fm['title'] ?? relativeToPackages;
       final description = fm['description'] ?? 'API reference for $title';
-      
+
       final routePath = 'packages/${relativeToPackages.replaceAll('.md', '')}';
       registerPage(title, description, routePath, rawContent);
     }
@@ -1617,18 +1762,22 @@ void generateLLMFiles(String rootDir) {
   final llmsBuffer = StringBuffer();
   llmsBuffer.writeln('# Signals.dart');
   llmsBuffer.writeln();
-  llmsBuffer.writeln('> Fine-grained reactive programming framework for Dart and Flutter. Based on the Preact Signals model, offering 100% native, glitch-free, memoized reactivity across VM, CLI, server, web, and Flutter.');
+  llmsBuffer.writeln(
+      '> Fine-grained reactive programming framework for Dart and Flutter. Based on the Preact Signals model, offering 100% native, glitch-free, memoized reactivity across VM, CLI, server, web, and Flutter.');
   llmsBuffer.writeln();
-  
+
   // Group pages into sections
-  final manualDocs = allPages.where((p) => !p.path.startsWith('packages/')).toList();
-  final pkgDocs = allPages.where((p) => p.path.startsWith('packages/')).toList();
+  final manualDocs =
+      allPages.where((p) => !p.path.startsWith('packages/')).toList();
+  final pkgDocs =
+      allPages.where((p) => p.path.startsWith('packages/')).toList();
 
   llmsBuffer.writeln('## Core Guides & Reference');
   llmsBuffer.writeln();
   for (final page in manualDocs) {
     final urlPath = page.path == 'index' ? '' : page.path;
-    llmsBuffer.writeln('- [${page.title}](https://dartsignals.dev/$urlPath): ${page.description}');
+    llmsBuffer.writeln(
+        '- [${page.title}](https://dartsignals.dev/$urlPath): ${page.description}');
   }
   llmsBuffer.writeln();
 
@@ -1648,25 +1797,29 @@ void generateLLMFiles(String rootDir) {
     llmsBuffer.writeln('### Package `package:$pkgName`');
     llmsBuffer.writeln();
     for (final page in pagesByPackage[pkgName]!) {
-      llmsBuffer.writeln('- [${page.title}](https://dartsignals.dev/${page.path}): ${page.description}');
+      llmsBuffer.writeln(
+          '- [${page.title}](https://dartsignals.dev/${page.path}): ${page.description}');
     }
     llmsBuffer.writeln();
   }
 
-  File(p.join(rootDir, 'docs', 'web', 'llms.txt')).writeAsStringSync(llmsBuffer.toString());
+  File(p.join(rootDir, 'docs', 'web', 'llms.txt'))
+      .writeAsStringSync(llmsBuffer.toString());
   print('Generated docs/web/llms.txt');
 
   // 4. Generate llms-full.txt (Concatenated markdown for LLM ingestion)
   final llmsFullBuffer = StringBuffer();
   llmsFullBuffer.writeln('# Signals.dart - Full Reference Manual');
   llmsFullBuffer.writeln();
-  llmsFullBuffer.writeln('> This document concatenates all manuals, guides, and API references for package:signals.dart.');
+  llmsFullBuffer.writeln(
+      '> This document concatenates all manuals, guides, and API references for package:signals.dart.');
   llmsFullBuffer.writeln();
 
   for (final page in allPages) {
     llmsFullBuffer.writeln('---');
     llmsFullBuffer.writeln('## Page: ${page.title}');
-    llmsFullBuffer.writeln('Url: https://dartsignals.dev/${page.path == "index" ? "" : page.path}');
+    llmsFullBuffer.writeln(
+        'Url: https://dartsignals.dev/${page.path == "index" ? "" : page.path}');
     llmsFullBuffer.writeln('Description: ${page.description}');
     llmsFullBuffer.writeln('---');
     llmsFullBuffer.writeln();
@@ -1674,7 +1827,8 @@ void generateLLMFiles(String rootDir) {
     llmsFullBuffer.writeln();
   }
 
-  File(p.join(rootDir, 'docs', 'web', 'llms-full.txt')).writeAsStringSync(llmsFullBuffer.toString());
+  File(p.join(rootDir, 'docs', 'web', 'llms-full.txt'))
+      .writeAsStringSync(llmsFullBuffer.toString());
   print('Generated docs/web/llms-full.txt');
 }
 
@@ -1731,21 +1885,21 @@ String extractDescription(String comment) {
   if (lines.isEmpty) return '';
   final firstLine = lines.first.trim();
   if (firstLine.isEmpty) return '';
-  
+
   var cleanText = firstLine
       .replaceAllMapped(RegExp(r'\[([^\]]+)\]\([^)]+\)'), (m) => m[1]!)
       .replaceAllMapped(RegExp(r'\[([^\]]+)\]'), (m) => m[1]!)
       .replaceAll(RegExp(r'`'), '');
-      
+
   cleanText = cleanText.replaceAll(RegExp(r'^#+\s+'), '');
-  
+
   final dotIndex = cleanText.indexOf(RegExp(r'\.\s'));
   if (dotIndex != -1) {
     cleanText = cleanText.substring(0, dotIndex + 1);
   } else if (!cleanText.endsWith('.')) {
     cleanText = '$cleanText.';
   }
-  
+
   if (cleanText.length > 150) {
     return '${cleanText.substring(0, 147)}...';
   }
@@ -1766,7 +1920,8 @@ String generatePackageGroups(String pkgName) {
     buffer.writeln('            title: \'$title\',');
     buffer.writeln('            links: [');
     for (final entry in pkgSidebar[category]!) {
-      buffer.writeln('              SidebarLink(text: "${entry.key}", href: \'${entry.value}\'),');
+      buffer.writeln(
+          '              SidebarLink(text: "${entry.key}", href: \'${entry.value}\'),');
     }
     buffer.writeln('            ],');
     buffer.writeln('          ),');
@@ -1781,7 +1936,8 @@ String generateSidebarLinksOnly(String pkgName) {
     final sortedCategories = getSortedCategories(pkgSidebar);
     for (final category in sortedCategories) {
       for (final entry in pkgSidebar[category]!) {
-        buffer.writeln('              SidebarLink(text: "${entry.key}", href: \'${entry.value}\'),');
+        buffer.writeln(
+            '              SidebarLink(text: "${entry.key}", href: \'${entry.value}\'),');
       }
     }
   }
@@ -1789,9 +1945,11 @@ String generateSidebarLinksOnly(String pkgName) {
 }
 
 void generateNavigationFile(String rootDir) {
-  final navFile = File(p.join(rootDir, 'docs', 'lib', 'components', 'navigation.dart'));
-  final bgImageValue = r'''url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%2364748b\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'m6 8 4 4 4-4\'/%3E%3C/svg%3E")''';
-  
+  final navFile =
+      File(p.join(rootDir, 'docs', 'lib', 'components', 'navigation.dart'));
+  final bgImageValue =
+      r'''url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%2364748b\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'m6 8 4 4 4-4\'/%3E%3C/svg%3E")''';
+
   final buffer = StringBuffer();
   buffer.writeln('''// GENERATED FILE - DO NOT EDIT MANUALLY
 // Generated by scripts/generate_docs.dart

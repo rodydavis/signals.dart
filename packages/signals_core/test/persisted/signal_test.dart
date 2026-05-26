@@ -258,7 +258,8 @@ void main() {
       });
     });
 
-    group('Nullable Persisted Signal direct encode/decode fallback coverage', () {
+    group('Nullable Persisted Signal direct encode/decode fallback coverage',
+        () {
       test('PersistedNullableBoolSignal', () {
         final signal = PersistedNullableBoolSignal(null, 'test');
         expect(signal.encode(null), '');
@@ -275,7 +276,8 @@ void main() {
         expect(signal.decode('1.23'), 1.23);
       });
       test('PersistedNullableEnumSignal', () {
-        final signal = PersistedNullableEnumSignal<TestEnum>(null, 'test', TestEnum.values);
+        final signal = PersistedNullableEnumSignal<TestEnum>(
+            null, 'test', TestEnum.values);
         expect(signal.encode(null), '');
         expect(signal.encode(TestEnum.b), 'b');
         expect(signal.decode(''), isNull);

@@ -335,7 +335,8 @@ void main() {
     test('equality and hashCode', () {
       const opt1 = IterableSignalOptions<int>(name: 'test', autoDispose: false);
       const opt2 = IterableSignalOptions<int>(name: 'test', autoDispose: false);
-      const opt3 = IterableSignalOptions<int>(name: 'different', autoDispose: false);
+      const opt3 =
+          IterableSignalOptions<int>(name: 'different', autoDispose: false);
 
       expect(opt1 == opt1, isTrue);
       expect(opt1 == opt2, isTrue);

@@ -287,7 +287,7 @@ FutureSignal<T> useAsyncComputed<T>(
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     final counter = useSignal(0);
-///     
+///
 ///     // Automatically connects the periodic stream to the counter signal
 ///     final periodicStream = useMemoized(
 ///       () => Stream.periodic(const Duration(seconds: 1), (i) => i),
@@ -306,4 +306,3 @@ Connect<T, S> useConnect<T, S extends T>(
   useEffect(() => connector.dispose, [connector]);
   return connector;
 }
-

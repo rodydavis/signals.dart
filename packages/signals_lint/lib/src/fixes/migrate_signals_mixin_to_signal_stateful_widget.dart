@@ -3,7 +3,7 @@ import 'package:analyzer/source/source_range.dart';
 import 'package:collection/collection.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
-/// An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a deprecated 
+/// An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a deprecated
 /// `SignalsMixin` usage on a `State` class to extend the reactive [SignalStatefulWidget] instead.
 ///
 /// :::important
@@ -86,8 +86,9 @@ class MigrateSignalsMixinToSignalStatefulWidget extends DartAssist {
             .where((t) => t != signalsMixinType)
             .map((t) => t.toSource())
             .join(', ');
-        
-        final mixinReplacement = otherMixins.isEmpty ? '' : ' with $otherMixins';
+
+        final mixinReplacement =
+            otherMixins.isEmpty ? '' : ' with $otherMixins';
         builder.addSimpleReplacement(withClause.sourceRange, mixinReplacement);
 
         // 2. Try to find the parent StatefulWidget and change it to SignalStatefulWidget
@@ -112,7 +113,8 @@ class MigrateSignalsMixinToSignalStatefulWidget extends DartAssist {
                 if (widgetClass != null) {
                   final widgetExtends = widgetClass.extendsClause;
                   if (widgetExtends != null &&
-                      widgetExtends.superclass.name.lexeme == 'StatefulWidget') {
+                      widgetExtends.superclass.name.lexeme ==
+                          'StatefulWidget') {
                     builder.addSimpleReplacement(
                       widgetExtends.superclass.sourceRange,
                       'SignalStatefulWidget',

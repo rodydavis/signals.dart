@@ -5,22 +5,22 @@ import '../core/signal.dart';
 
 /// A premium dependency-injection / state propagation widget that allows passing
 /// reactive signals down the Flutter widget tree using [InheritedNotifier].
-/// 
+///
 /// `SignalProvider` makes a signal accessible to all child widgets in the subtree.
 /// Any child widget that reads the signal using `SignalProvider.of<T>(context)` will
 /// automatically rebuild when the signal's value changes, while parent widgets remain unaffected.
-/// 
+///
 /// ### Example Usage
-/// 
+///
 /// First, define a custom signal or class that extends [FlutterSignal]:
 /// ```dart
 /// class CounterSignal extends FlutterSignal<int> {
 ///   CounterSignal([super.value = 0]);
-/// 
+///
 ///   void increment() => value++;
 /// }
 /// ```
-/// 
+///
 /// Next, wrap your widget subtree with `SignalProvider`:
 /// ```dart
 /// SignalProvider<CounterSignal>(
@@ -28,17 +28,17 @@ import '../core/signal.dart';
 ///   child: const CounterDisplay(),
 /// )
 /// ```
-/// 
+///
 /// Inside a child widget, access the signal using `SignalProvider.of`:
 /// ```dart
 /// class CounterDisplay extends StatelessWidget {
 ///   const CounterDisplay({super.key});
-/// 
+///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     // Obtain the counter signal and automatically subscribe this widget to rebuilds:
 ///     final counter = SignalProvider.of<CounterSignal>(context)!;
-/// 
+///
 ///     return Scaffold(
 ///       body: Center(
 ///         child: Text(
@@ -55,14 +55,14 @@ import '../core/signal.dart';
 ///   }
 /// }
 /// ```
-/// 
+///
 /// > [!TIP]
 /// > When retrieving the signal in callbacks (like `onPressed`), always pass `listen: false` to avoid
 /// > subscribing the callback's enclosing widget to unnecessary rebuilds.
 class SignalProvider<T extends FlutterReadonlySignal>
     extends InheritedNotifier<T> {
   /// Creates a [SignalProvider] that exposes a [FlutterReadonlySignal] to its descendents.
-  /// 
+  ///
   /// The [create] callback is invoked once to instantiate the signal.
   /// The [child] is the widget subtree that will have access to the signal.
   SignalProvider({
@@ -78,7 +78,7 @@ class SignalProvider<T extends FlutterReadonlySignal>
   late final T notifier = _setup();
 
   /// Retrieves the [SignalProvider] instance of the specified type [T] from the [BuildContext].
-  /// 
+  ///
   /// - If [listen] is true (default), the calling widget is registered as a dependent
   ///   on the provider, causing the widget to rebuild whenever the signal changes.
   /// - If [listen] is false, the provider is located without subscribing the widget
@@ -96,7 +96,7 @@ class SignalProvider<T extends FlutterReadonlySignal>
   }
 
   /// Retrieves the reactive signal instance of type [T] directly from the nearest [SignalProvider].
-  /// 
+  ///
   /// - If [listen] is true (default), the calling widget will automatically subscribe
   ///   to the signal and rebuild whenever the signal's value changes.
   /// - If [listen] is false, the signal is returned without establishing a subscription.

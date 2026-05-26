@@ -2,12 +2,12 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/source/source_range.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
-/// An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a positional or named 
+/// An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a positional or named
 /// `Watch` constructor call to use the modern, type-safe [SignalBuilder] component.
 ///
 /// :::important
-/// The `Watch` widget was updated and aligned under the standard [SignalBuilder] paradigm in v7. 
-/// This automated refactoring quick-fix updates your positional widget structure to a type-safe 
+/// The `Watch` widget was updated and aligned under the standard [SignalBuilder] paradigm in v7.
+/// This automated refactoring quick-fix updates your positional widget structure to a type-safe
 /// `SignalBuilder(builder: (context) => ...)` signature seamlessly.
 /// :::
 ///

@@ -53,7 +53,6 @@
 /// > Reactivity diagnostics are only active in **Debug** or **Profile** modes. In **Release** builds, the VM Service extension is stripped out by the Dart compiler to optimize final application size and performance.
 library;
 
-
 import 'package:flutter/material.dart';
 import 'src/signals_devtools_extension.dart';
 

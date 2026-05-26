@@ -11,7 +11,8 @@ extension StatelessWidgetConvertWidgetExtension on StatelessWidget {
 /// Extension to convert standard Flutter widgets to reactive Signal stateful widgets.
 extension StatefulWidgetConvertWidgetExtension on StatefulWidget {
   /// Converts this [StatefulWidget] to a [SignalStatefulWidget].
-  SignalStatefulWidget toSignalStatefulWidget() => ConvertedSignalStatefulWidget(this);
+  SignalStatefulWidget toSignalStatefulWidget() =>
+      ConvertedSignalStatefulWidget(this);
 }
 
 /// Extension to convert standard Flutter elements to their reactive counterparts.

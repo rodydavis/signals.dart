@@ -35,7 +35,7 @@ import 'untracked.dart';
 ///   // Set up a subscriber effect
 ///   effect(() => print('${a.value} ${b.value}'));
 ///   // Prints immediately: "a b"
-/// 
+///
 ///   a.value = 'aa'; // Prints: "aa b"
 ///   b.value = 'bb'; // Prints: "aa bb"
 /// }
@@ -75,7 +75,7 @@ import 'untracked.dart';
 /// ### Type-Safety & Extensions
 ///
 /// While `action` accepts any generic `Function`, Dart's static analysis benefits greatly from
-/// type-safe variants or extensions. 
+/// type-safe variants or extensions.
 ///
 /// - **Type-safe functions**: Use `action0` through `action10` (e.g. `action2(...)` for 2 arguments) to preserve type arguments.
 /// - **Extensions**: Call `.action` directly on any Dart function (e.g., `myFunction.action`).
@@ -107,9 +107,9 @@ Function action(Function fn) => switch (fn) {
           e,
           f,
         ) =>
-          batch(
-            () => untracked(() => (fn as dynamic)(a, b, c, d, e, f)),
-          ),
+            batch(
+              () => untracked(() => (fn as dynamic)(a, b, c, d, e, f)),
+            ),
       void Function(Never, Never, Never, Never, Never, Never, Never) _ => (
           a,
           b,
@@ -119,9 +119,9 @@ Function action(Function fn) => switch (fn) {
           f,
           g,
         ) =>
-          batch(
-            () => untracked(() => (fn as dynamic)(a, b, c, d, e, f, g)),
-          ),
+            batch(
+              () => untracked(() => (fn as dynamic)(a, b, c, d, e, f, g)),
+            ),
       void Function(
         Never,
         Never,
@@ -142,9 +142,9 @@ Function action(Function fn) => switch (fn) {
           g,
           h,
         ) =>
-          batch(
-            () => untracked(() => (fn as dynamic)(a, b, c, d, e, f, g, h)),
-          ),
+            batch(
+              () => untracked(() => (fn as dynamic)(a, b, c, d, e, f, g, h)),
+            ),
       void Function(
         Never,
         Never,
@@ -167,9 +167,9 @@ Function action(Function fn) => switch (fn) {
           h,
           i,
         ) =>
-          batch(
-            () => untracked(() => (fn as dynamic)(a, b, c, d, e, f, g, h, i)),
-          ),
+            batch(
+              () => untracked(() => (fn as dynamic)(a, b, c, d, e, f, g, h, i)),
+            ),
       void Function(
         Never,
         Never,
@@ -194,11 +194,11 @@ Function action(Function fn) => switch (fn) {
           i,
           j,
         ) =>
-          batch(
-            () => untracked(
-              () => (fn as dynamic)(a, b, c, d, e, f, g, h, i, j),
+            batch(
+              () => untracked(
+                () => (fn as dynamic)(a, b, c, d, e, f, g, h, i, j),
+              ),
             ),
-          ),
       _ => fn,
     };
 

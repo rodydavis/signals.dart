@@ -3,14 +3,16 @@ import 'package:analyzer/error/error.dart' hide LintCode;
 import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
-const _errorMessage = 'SignalsMixin is deprecated in v7 to avoid unnecessary state overhead.';
-const _correctionMessage = 'Migrate your widget to extend SignalWidget / SignalStatefulWidget, or use SignalBuilder to surgically wrap only the rebuildable widgets.';
+const _errorMessage =
+    'SignalsMixin is deprecated in v7 to avoid unnecessary state overhead.';
+const _correctionMessage =
+    'Migrate your widget to extend SignalWidget / SignalStatefulWidget, or use SignalBuilder to surgically wrap only the rebuildable widgets.';
 
 /// A Dart static analysis rule that detects and warns against using the deprecated `SignalsMixin` in v7.
 ///
 /// :::warning
-/// In `signals` v7, `SignalsMixin` was deprecated to avoid unnecessary state tracking and 
-/// CPU/memory overhead. For optimal performance and a cleaner reactive codebase, you should 
+/// In `signals` v7, `SignalsMixin` was deprecated to avoid unnecessary state tracking and
+/// CPU/memory overhead. For optimal performance and a cleaner reactive codebase, you should
 /// migrate to specialized widgets like [SignalWidget], [SignalStatefulWidget], or [SignalBuilder].
 /// :::
 ///

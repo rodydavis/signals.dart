@@ -3,21 +3,21 @@ import 'package:signals_core/signals_core.dart' as core;
 import 'signal_widget.dart';
 
 /// A premium, surgical builder widget that rebuilds locally on signal changes.
-/// 
+///
 /// `SignalBuilder` tracks any signals read dynamically within its `builder` callback and
 /// automatically subscribes to them. When any of these signals update, only the `SignalBuilder`
 /// is rebuilt, preventing costly rebuilds of the surrounding widget subtree.
-/// 
+///
 /// This widget provides predictable, immediate, and memory-safe subscription management,
 /// automatically tearing down all active signal subscriptions when the builder is unmounted.
-/// 
+///
 /// ### Surgical Counter Example
 /// ```dart
 /// final count = signal(0);
-/// 
+///
 /// class CounterPage extends StatelessWidget {
 ///   const CounterPage({super.key});
-/// 
+///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     return Scaffold(
@@ -46,13 +46,13 @@ import 'signal_widget.dart';
 ///   }
 /// }
 /// ```
-/// 
+///
 /// > [!TIP]
 /// > Keep `SignalBuilder` widgets as small and leaf-level as possible in your tree to maximize
 /// > rendering performance.
 class SignalBuilder extends SignalWidget {
   /// Creates a [SignalBuilder] widget.
-  /// 
+  ///
   /// The [builder] is called to construct the widget tree and tracks read signals.
   /// The optional [dependencies] allows explicitly specifying a list of signals to watch
   /// regardless of whether they are read during the build phase.

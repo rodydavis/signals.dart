@@ -208,7 +208,7 @@ class Signal<T> extends signals.Signal<T>
 /// ## Key API Capabilities
 ///
 /// ### 1. Reading & Writing via `.value`
-/// The `.value` property is the default way to interact with a signal. 
+/// The `.value` property is the default way to interact with a signal.
 /// - **Inside a Reactive Context:** Accessing `.value` inside a [computed] block or [effect] callback automatically registers the signal as a dependency, establishing an active subscription.
 /// - **Outside a Reactive Context:** Acts as a standard getter and setter, allowing you to fetch or update the underlying state.
 ///
@@ -252,7 +252,7 @@ class Signal<T> extends signals.Signal<T>
 ///
 /// ```dart
 /// final numbers = signal([1, 2, 3]);
-/// 
+///
 /// // Modify the list in-place and force notify
 /// numbers.value.add(4);
 /// numbers.set(numbers.value, force: true);
@@ -272,9 +272,9 @@ class Signal<T> extends signals.Signal<T>
 ///
 /// // Create active subscriber
 /// final dispose = s.subscribe((_) {});
-/// 
+///
 /// // Cancel subscription: s has no listeners, so it self-disposes
-/// dispose(); 
+/// dispose();
 /// // Prints: "Signal has been disposed!"
 /// ```
 ///
@@ -323,7 +323,7 @@ class Signal<T> extends signals.Signal<T>
 ///
 /// class CounterDisplay extends SignalStatefulWidget {
 ///   const CounterDisplay({super.key});
-///   
+///
 ///   @override
 ///   State<CounterDisplay> createState() => _CounterDisplayState();
 /// }
@@ -377,10 +377,10 @@ class Signal<T> extends signals.Signal<T>
 /// ```dart
 /// test('mocking global signals', () {
 ///   final apiToken = signal("production_token");
-///   
+///
 ///   // Override with test mock token
 ///   apiToken.overrideWith("mock_test_token");
-///   
+///
 ///   expect(apiToken.value, "mock_test_token");
 /// });
 /// ```

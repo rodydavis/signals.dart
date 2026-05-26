@@ -248,7 +248,8 @@ SignalContainer<T, Arg, Computed<T>> computedContainer<T, Arg>(
 ///   return futureSignal(() => fetchPost(id));
 /// });
 /// ```
-SignalContainer<AsyncState<T>, Arg, FutureSignal<T>> futureSignalContainer<T, Arg>(
+SignalContainer<AsyncState<T>, Arg, FutureSignal<T>>
+    futureSignalContainer<T, Arg>(
   FutureSignal<T> Function(Arg) create, {
   bool cache = false,
   void Function(Arg key, FutureSignal<T> signal)? onEvict,
@@ -267,7 +268,8 @@ SignalContainer<AsyncState<T>, Arg, FutureSignal<T>> futureSignalContainer<T, Ar
 ///   return streamSignal(() => listenToRoom(roomId));
 /// });
 /// ```
-SignalContainer<AsyncState<T>, Arg, StreamSignal<T>> streamSignalContainer<T, Arg>(
+SignalContainer<AsyncState<T>, Arg, StreamSignal<T>>
+    streamSignalContainer<T, Arg>(
   StreamSignal<T> Function(Arg) create, {
   bool cache = false,
   void Function(Arg key, StreamSignal<T> signal)? onEvict,

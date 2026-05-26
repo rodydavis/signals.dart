@@ -9,7 +9,7 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   ///
   /// Converted [ValueNotifier] objects become mutable [Signal] instances. Setting the value
   /// on the signal or the notifier automatically propagates the update to the other.
-  /// 
+  ///
   /// The subscription is fully memory-safe and automatically unsubscribed when the signal
   /// is disposed.
   ///
@@ -17,10 +17,10 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   /// ```dart
   /// final notifier = ValueNotifier(10);
   /// final signal = notifier.toSignal();
-  /// 
+  ///
   /// signal.value = 20;
   /// print(notifier.value); // 20
-  /// 
+  ///
   /// notifier.value = 30;
   /// print(signal.value); // 30
   /// ```
@@ -31,7 +31,7 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   /// final signal = Signal(10);
   /// final notifier = signal.toValueNotifier();
   /// ```
-  /// 
+  ///
   /// @link https://dartsignals.dev/flutter/value-notifier
   /// {@endtemplate}
   Signal<T> toSignal({
@@ -75,10 +75,10 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
 }
 
 /// A global helper function to convert a Flutter [ValueNotifier] to a mutable [Signal].
-/// 
+///
 /// Updates to either the notifier or the returned signal will automatically update the other.
 /// This helper is a functional equivalent of the `toSignal()` extension method.
-/// 
+///
 /// ### Example
 /// ```dart
 /// final textControllerValue = ValueNotifier('');

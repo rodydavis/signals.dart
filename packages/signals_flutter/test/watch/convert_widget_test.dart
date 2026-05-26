@@ -30,7 +30,8 @@ class StandardStatefulCounter extends StatefulWidget {
   });
 
   @override
-  State<StandardStatefulCounter> createState() => _StandardStatefulCounterState();
+  State<StandardStatefulCounter> createState() =>
+      _StandardStatefulCounterState();
 }
 
 class _StandardStatefulCounterState extends State<StandardStatefulCounter> {
@@ -43,7 +44,8 @@ class _StandardStatefulCounterState extends State<StandardStatefulCounter> {
 
 void main() {
   group('Convert Widget Tests', () {
-    testWidgets('StatelessWidget toSignalWidget compiles and tracks signals implicitly',
+    testWidgets(
+        'StatelessWidget toSignalWidget compiles and tracks signals implicitly',
         (tester) async {
       final counter = signal(10);
       int buildCount = 0;
@@ -73,7 +75,8 @@ void main() {
       expect(find.text('Count: 11'), findsOneWidget);
     });
 
-    testWidgets('StatefulWidget toSignalStatefulWidget compiles and tracks signals implicitly',
+    testWidgets(
+        'StatefulWidget toSignalStatefulWidget compiles and tracks signals implicitly',
         (tester) async {
       final counter = signal(20);
       int buildCount = 0;

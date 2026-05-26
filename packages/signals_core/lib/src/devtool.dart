@@ -61,10 +61,8 @@ class DevToolsSignalsObserver implements SignalsObserver {
       _signals.removeWhere((ref) => ref.target == null);
       _computed.removeWhere((ref) => ref.target == null);
       _effects.removeWhere((ref) => ref.target == null);
-      final activeEffectIds = _effects
-          .map((ref) => ref.target?.globalId)
-          .whereType<int>()
-          .toSet();
+      final activeEffectIds =
+          _effects.map((ref) => ref.target?.globalId).whereType<int>().toSet();
       _effectCount.removeWhere((id, _) => !activeEffectIds.contains(id));
     }
   }
