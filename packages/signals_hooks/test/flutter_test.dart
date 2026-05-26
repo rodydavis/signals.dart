@@ -44,8 +44,8 @@ void main() {
             builder: (context) {
               final state = useValueNotifierToSignal(
                 notifier,
-                const [],
-                SignalOptions(name: 'notifierSignal', autoDispose: true),
+                keys: const [],
+                options: SignalOptions(name: 'notifierSignal', autoDispose: true),
               );
               return Text('${state.globalId} - ${state.name}',
                   textDirection: TextDirection.ltr);
@@ -114,8 +114,8 @@ void main() {
             builder: (context) {
               final state = useValueListenableToSignal(
                 notifier,
-                const [],
-                SignalOptions(name: 'listenableSignal', autoDispose: true),
+                keys: const [],
+                options: SignalOptions(name: 'listenableSignal', autoDispose: true),
               );
               return Text('${state.globalId} - ${state.name}',
                   textDirection: TextDirection.ltr);

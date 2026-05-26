@@ -217,8 +217,8 @@ void main() {
             builder: (context) {
               final val = useLinkedSignal<int, int>(
                 () => sourceSignal.value,
-                const [],
-                LinkedSignalOptions(
+                keys: const [],
+                options: LinkedSignalOptions(
                   computation: (src, prev) => src * 2,
                 ),
               );
