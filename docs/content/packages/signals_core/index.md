@@ -52,7 +52,7 @@ void main() {
       <a class="content-link" href="/packages/signals_core/core/batch">Batch</a>
       <a class="content-link" href="/packages/signals_core/core/computed">Computed</a>
       <a class="content-link" href="/packages/signals_core/core/effect">Effect</a>
-      <a class="content-link" href="/packages/signals_core/core/linked-signal">Linked Signal</a>
+      <a class="content-link" href="/packages/signals_core/core/linked-signal">LinkedSignal</a>
       <a class="content-link" href="/packages/signals_core/core/readonly">ReadonlySignal</a>
       <a class="content-link" href="/packages/signals_core/core/signal">Signal</a>
       <a class="content-link" href="/packages/signals_core/core/untracked">Untracked</a>

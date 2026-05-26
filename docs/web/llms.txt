@@ -18,7 +18,7 @@
 ### Package `package:signals_flutter`
 
 - [Untracked](https://dartsignals.dev/packages/signals_flutter/core/untracked): Runs a callback function **fn** that can read signal values without establishing a reactive subscription.
-- [Linked Signal](https://dartsignals.dev/packages/signals_flutter/core/linked-signal): How to create and use a linked signal
+- [LinkedSignal](https://dartsignals.dev/packages/signals_flutter/core/linked-signal): A writable computed signal that derives its value from a source,.
 - [Effect](https://dartsignals.dev/packages/signals_flutter/core/effect): Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
 - [ReadonlySignal](https://dartsignals.dev/packages/signals_flutter/core/readonly): An interface for read-only signals.
 - [Signal](https://dartsignals.dev/packages/signals_flutter/core/signal): Represents a mutable reactive state container.
@@ -63,7 +63,7 @@
 ### Package `package:signals_core`
 
 - [Untracked](https://dartsignals.dev/packages/signals_core/core/untracked): Runs a callback function **fn** that can read signal values without establishing a reactive subscription.
-- [Linked Signal](https://dartsignals.dev/packages/signals_core/core/linked-signal): How to create and use a linked signal
+- [LinkedSignal](https://dartsignals.dev/packages/signals_core/core/linked-signal): A writable computed signal that derives its value from a source,.
 - [Effect](https://dartsignals.dev/packages/signals_core/core/effect): Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
 - [ReadonlySignal](https://dartsignals.dev/packages/signals_core/core/readonly): An interface for read-only signals.
 - [Signal](https://dartsignals.dev/packages/signals_core/core/signal): Represents a mutable reactive state container.
@@ -120,7 +120,7 @@
 ### Package `package:signals`
 
 - [Untracked](https://dartsignals.dev/packages/signals/core/untracked): Runs a callback function **fn** that can read signal values without establishing a reactive subscription.
-- [Linked Signal](https://dartsignals.dev/packages/signals/core/linked-signal): How to create and use a linked signal
+- [LinkedSignal](https://dartsignals.dev/packages/signals/core/linked-signal): A writable computed signal that derives its value from a source,.
 - [Effect](https://dartsignals.dev/packages/signals/core/effect): Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
 - [ReadonlySignal](https://dartsignals.dev/packages/signals/core/readonly): An interface for read-only signals.
 - [Signal](https://dartsignals.dev/packages/signals/core/signal): Represents a mutable reactive state container.

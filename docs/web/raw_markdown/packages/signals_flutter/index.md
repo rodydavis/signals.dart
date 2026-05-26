@@ -55,7 +55,7 @@ class CounterWidget extends SignalWidget {
       <a class="content-link" href="/packages/signals_flutter/core/batch">Batch</a>
       <a class="content-link" href="/packages/signals_flutter/core/computed">Computed</a>
       <a class="content-link" href="/packages/signals_flutter/core/effect">Effect</a>
-      <a class="content-link" href="/packages/signals_flutter/core/linked-signal">Linked Signal</a>
+      <a class="content-link" href="/packages/signals_flutter/core/linked-signal">LinkedSignal</a>
       <a class="content-link" href="/packages/signals_flutter/core/readonly">ReadonlySignal</a>
       <a class="content-link" href="/packages/signals_flutter/core/signal">Signal</a>
       <a class="content-link" href="/packages/signals_flutter/core/untracked">Untracked</a>

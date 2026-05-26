@@ -16,6 +16,7 @@ dependencies:
     sdk: flutter
   signals_core: ^7.0.0
   signals_flutter: ^7.0.0
+  signals_hooks: ^7.0.0
 
 dev_dependencies:
   flutter_test:

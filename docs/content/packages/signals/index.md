@@ -43,7 +43,7 @@ final doubleCount = computed(() => count.value * 2);
       <a class="content-link" href="/packages/signals/core/batch">Batch</a>
       <a class="content-link" href="/packages/signals/core/computed">Computed</a>
       <a class="content-link" href="/packages/signals/core/effect">Effect</a>
-      <a class="content-link" href="/packages/signals/core/linked-signal">Linked Signal</a>
+      <a class="content-link" href="/packages/signals/core/linked-signal">LinkedSignal</a>
       <a class="content-link" href="/packages/signals/core/readonly">ReadonlySignal</a>
       <a class="content-link" href="/packages/signals/core/signal">Signal</a>
       <a class="content-link" href="/packages/signals/core/untracked">Untracked</a>
