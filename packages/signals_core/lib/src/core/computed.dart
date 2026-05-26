@@ -354,6 +354,7 @@ class Computed<T> extends signals.Computed<T>
   }
 
   @override
+  @internal
   void afterCreate(T val) {
     if (kDebugMode) {
       SignalsObserver.instance?.onComputedCreated(this);
@@ -361,6 +362,7 @@ class Computed<T> extends signals.Computed<T>
   }
 
   @override
+  @internal
   void beforeUpdate(T val) {
     if (kDebugMode) {
       SignalsObserver.instance?.onComputedUpdated(this, val);

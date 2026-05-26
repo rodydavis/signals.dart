@@ -1,13 +1,13 @@
 ---
 title: SetSignalMixin
-description: A mixin that adds reactive Set methods and operations to a Signal.
+description: A mixin that adds reactive <code>Set</code> methods and operations to a Signal.
 ---
 
-A mixin that adds reactive `Set` methods and operations to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>Set</code> methods and operations to a [Signal](/packages/signals/core/signal)
 holding a **Set** value.
 
-This mixin delegates all standard **Set** operations (such as mutations like `add`,
-`remove`, `addAll`, `removeAll`, `retainAll`, and `clear`) to the underlying set,
+This mixin delegates all standard **Set** operations (such as mutations like <code>add</code>,
+<code>remove</code>, <code>addAll</code>, <code>removeAll</code>, <code>retainAll</code>, and <code>clear</code>) to the underlying set,
 while ensuring that any reads register a dependency and any mutations
 automatically trigger reactive updates.
 
@@ -41,13 +41,16 @@ void main() {
 ```
 
 <Success>
-Since mutations on `SetSignalMixin` notify listeners automatically, you do not
-need to assign `numbers.value = ...` to force updates. Methods like `add`, `addAll`,
-and `remove` take care of notification.
+Since mutations on <code>SetSignalMixin</code> notify listeners automatically, you do not
+need to assign <code>numbers.value = ...</code> to force updates. Methods like <code>add</code>, <code>addAll</code>,
+and <code>remove</code> take care of notification.
 </Success>
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="add"></a>`bool add(E value)`
 
@@ -76,3 +79,5 @@ and `remove` take care of notification.
 ##### <a name="retainwhere"></a>`void retainWhere(bool Function(E element) test)`
 
 ##### <a name="union"></a>`Set<E> union(Set<E> other)`
+
+</details>

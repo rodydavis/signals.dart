@@ -7,8 +7,8 @@ A mixin that implements the standard **EventSink** interface for a [Signal](/pac
 holding an [AsyncState](/packages/signals/async/state) value.
 
 This mixin is designed specifically to interface with **Stream** consumers or
-other asynchronous data producers. It maps **add** to `AsyncState.data(...)`,
-**addError** to `AsyncState.error(...)`, and **close** to disposing the signal.
+other asynchronous data producers. It maps **add** to <code>AsyncState.data(...)</code>,
+**addError** to <code>AsyncState.error(...)</code>, and **close** to disposing the signal.
 
 <Info>
 This mixin only works with signals whose value is of type [AsyncState<T>](/packages/signals/async/state).
@@ -55,8 +55,13 @@ after closing will result in an exception.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="add"></a>`void add(T event)`
 
 ##### <a name="adderror"></a>`void addError(Object error, [StackTrace? stackTrace])`
 
 ##### <a name="close"></a>`void close()`
+
+</details>

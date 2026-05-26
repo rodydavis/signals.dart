@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 
 import '../core/readonly.dart';
-import '../core/signal.dart';
 
 /// A premium dependency-injection / state propagation widget that allows passing
 /// reactive signals down the Flutter widget tree using [InheritedNotifier].
@@ -10,18 +9,13 @@ import '../core/signal.dart';
 /// Any child widget that reads the signal using `SignalProvider.of<T>(context)` will
 /// automatically rebuild when the signal's value changes, while parent widgets remain unaffected.
 ///
+/// For version 7, `SignalProvider` is a stateful widget that manages the lifecycle of the created
+/// signal, ensuring it is persisted across parent rebuilds and automatically calling `dispose()`
+/// when the provider is unmounted to prevent memory leaks.
+///
 /// ### Example Usage
 ///
-/// First, define a custom signal or class that extends [FlutterSignal]:
-/// ```dart
-/// class CounterSignal extends FlutterSignal<int> {
-///   CounterSignal([super.value = 0]);
-///
-///   void increment() => value++;
-/// }
-/// ```
-///
-/// Next, wrap your widget subtree with `SignalProvider`:
+/// #### 1. Standard Constructor (Manages Lifecycle)
 /// ```dart
 /// SignalProvider<CounterSignal>(
 ///   create: () => CounterSignal(0),
@@ -29,70 +23,121 @@ import '../core/signal.dart';
 /// )
 /// ```
 ///
-/// Inside a child widget, access the signal using `SignalProvider.of`:
+/// #### 2. Value Constructor (Exposes Existing Instance)
+/// If the signal is created elsewhere (e.g. in a StatefulWidget's State or globally) and you want
+/// to expose it without managing its lifecycle or calling dispose, use [SignalProvider.value]:
 /// ```dart
-/// class CounterDisplay extends StatelessWidget {
-///   const CounterDisplay({super.key});
-///
-///   @override
-///   Widget build(BuildContext context) {
-///     // Obtain the counter signal and automatically subscribe this widget to rebuilds:
-///     final counter = SignalProvider.of<CounterSignal>(context)!;
-///
-///     return Scaffold(
-///       body: Center(
-///         child: Text(
-///           'Count: ${counter.value}',
-///           style: Theme.of(context).textTheme.headlineMedium,
-///         ),
-///       ),
-///       floatingActionButton: FloatingActionButton(
-///         // Use listen: false to obtain the reference without subscribing to rebuilds:
-///         onPressed: () => SignalProvider.of<CounterSignal>(context, listen: false)!.increment(),
-///         child: const Icon(Icons.add),
-///       ),
-///     );
-///   }
-/// }
+/// SignalProvider<CounterSignal>.value(
+///   value: myCounterSignal,
+///   child: const CounterDisplay(),
+/// )
 /// ```
 ///
-/// > [!TIP]
-/// > When retrieving the signal in callbacks (like `onPressed`), always pass `listen: false` to avoid
-/// > subscribing the callback's enclosing widget to unnecessary rebuilds.
-class SignalProvider<T extends FlutterReadonlySignal>
-    extends InheritedNotifier<T> {
-  /// Creates a [SignalProvider] that exposes a [FlutterReadonlySignal] to its descendents.
+/// #### 3. Multi-Providing Multiple Signals
+/// Wrap multiple providers in a flat list to avoid deeply nested trees using [SignalProvider.multi]:
+/// ```dart
+/// SignalProvider.multi(
+///   providers: [
+///     SignalProvider<Counter>(create: () => Counter()),
+///     SignalProvider<User>(create: () => User()),
+///   ],
+///   child: const MyApp(),
+/// )
+/// ```
+class SignalProvider<T extends FlutterReadonlySignal> extends StatefulWidget {
+  /// Creates a [SignalProvider] that manages the lifecycle of a created signal.
   ///
   /// The [create] callback is invoked once to instantiate the signal.
-  /// The [child] is the widget subtree that will have access to the signal.
-  SignalProvider({
+  /// When this provider is unmounted, it automatically calls `dispose()` on the signal.
+  const SignalProvider({
     super.key,
     required T Function() create,
-    required super.child,
-  }) : _setup = create;
+    this.child,
+    this.dispose,
+  }) : _create = create,
+       _value = null;
 
-  final T Function() _setup;
+  /// Exposes an existing signal [value] to the widget tree.
+  ///
+  /// Unlike the default constructor, the signal is NOT created by this provider,
+  /// and its lifecycle (including disposal) must be managed elsewhere.
+  const SignalProvider.value({
+    super.key,
+    required T value,
+    this.child,
+  }) : _value = value,
+       _create = null,
+       dispose = null;
+
+  /// Private constructor for internal cloning and subclass usage.
+  const SignalProvider._({
+    super.key,
+    required T Function()? create,
+    required T? value,
+    required this.child,
+    required this.dispose,
+  }) : _create = create,
+       _value = value;
+
+  final T Function()? _create;
+  final T? _value;
+
+  /// The widget subtree that will have access to the signal.
+  final Widget? child;
+
+  /// An optional custom dispose callback.
+  final void Function(T)? dispose;
+
+  /// Creates a [SignalProvider] that wraps multiple other [SignalProvider]s.
+  ///
+  /// This is a convenience constructor to avoid deeply nested trees when
+  /// providing multiple signals.
+  const factory SignalProvider.multi({
+    Key? key,
+    required List<SignalProvider> providers,
+    required Widget child,
+  }) = _MultiSignalProvider<T>;
+
+  /// Returns a clone of this [SignalProvider] with a new [child] widget.
+  /// Used internally by [MultiSignalProvider].
+  SignalProvider<T> copyWith(Widget child) {
+    return SignalProvider<T>._(
+      key: key,
+      create: _create,
+      value: _value,
+      dispose: dispose,
+      child: child,
+    );
+  }
 
   @override
-  // ignore: overridden_fields
-  late final T notifier = _setup();
+  State<SignalProvider<T>> createState() => _SignalProviderState<T>();
 
-  /// Retrieves the [SignalProvider] instance of the specified type [T] from the [BuildContext].
-  ///
-  /// - If [listen] is true (default), the calling widget is registered as a dependent
-  ///   on the provider, causing the widget to rebuild whenever the signal changes.
-  /// - If [listen] is false, the provider is located without subscribing the widget
-  ///   to rebuilds. This is ideal for obtaining callbacks or methods from the signal
-  ///   without introducing rebuild overhead.
-  static SignalProvider<T>? providerOf<T extends FlutterSignal>(
+  /// Retrieves the [_InheritedSignalProvider] instance of the specified type [T] from the [BuildContext].
+  static _InheritedSignalProvider<T>? _inheritedProviderOf<T extends FlutterReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {
     if (listen) {
-      return context.dependOnInheritedWidgetOfExactType<SignalProvider<T>>();
+      return context.dependOnInheritedWidgetOfExactType<_InheritedSignalProvider<T>>();
     } else {
-      return context.findAncestorWidgetOfExactType<SignalProvider<T>>();
+      final element = context.getElementForInheritedWidgetOfExactType<_InheritedSignalProvider<T>>();
+      return element?.widget as _InheritedSignalProvider<T>?;
     }
+  }
+
+  /// Retrieves the [SignalProvider] widget itself from the ancestor path.
+  ///
+  /// Note: Prefer using `SignalProvider.of<T>(context)` to retrieve the reactive
+  /// signal directly.
+  static SignalProvider<T>? providerOf<T extends FlutterReadonlySignal>(
+    BuildContext context, {
+    bool listen = true,
+  }) {
+    if (listen) {
+      context.dependOnInheritedWidgetOfExactType<_InheritedSignalProvider<T>>();
+    }
+    return context.findAncestorWidgetOfExactType<SignalProvider<T>>();
   }
 
   /// Retrieves the reactive signal instance of type [T] directly from the nearest [SignalProvider].
@@ -101,11 +146,135 @@ class SignalProvider<T extends FlutterReadonlySignal>
   ///   to the signal and rebuild whenever the signal's value changes.
   /// - If [listen] is false, the signal is returned without establishing a subscription.
   ///   Use `listen: false` when mutating the signal inside action callbacks.
-  static T? of<T extends FlutterSignal>(
+  static T? of<T extends FlutterReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {
-    final instance = SignalProvider.providerOf<T>(context, listen: listen);
-    return instance?.notifier;
+    final provider = _inheritedProviderOf<T>(context, listen: listen);
+    return provider?.notifier;
+  }
+}
+
+class _SignalProviderState<T extends FlutterReadonlySignal>
+    extends State<SignalProvider<T>> {
+  late T _signal;
+  bool _isCreated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initSignal();
+  }
+
+  void _initSignal() {
+    if (widget._create != null) {
+      _signal = widget._create!();
+      _isCreated = true;
+    } else {
+      _signal = widget._value!;
+      _isCreated = false;
+    }
+  }
+
+  @override
+  void didUpdateWidget(SignalProvider<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget._value != null && widget._value != oldWidget._value) {
+      _signal = widget._value!;
+      _isCreated = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_isCreated) {
+      if (widget.dispose != null) {
+        widget.dispose!(_signal);
+      } else {
+        try {
+          (_signal as dynamic).dispose();
+        } catch (_) {}
+      }
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _InheritedSignalProvider<T>(
+      notifier: _signal,
+      child: widget.child ?? const SizedBox.shrink(),
+    );
+  }
+}
+
+/// Internal inherited widget implementation for [SignalProvider].
+class _InheritedSignalProvider<T extends FlutterReadonlySignal>
+    extends InheritedNotifier<T> {
+  const _InheritedSignalProvider({
+    super.key,
+    required super.notifier,
+    required super.child,
+  });
+}
+
+/// A dependency-injection / state propagation widget that allows passing
+/// multiple reactive signals down the Flutter widget tree.
+///
+/// This avoids the deeply nested trees that result from nesting multiple
+/// single [SignalProvider] widgets.
+class MultiSignalProvider extends StatelessWidget {
+  /// Exposes multiple [SignalProvider] widgets inside a flat list.
+  const MultiSignalProvider({
+    super.key,
+    required this.providers,
+    required this.child,
+  });
+
+  /// The list of single [SignalProvider] widgets to nest.
+  final List<SignalProvider> providers;
+
+  /// The widget subtree that will have access to the provided signals.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget tree = child;
+    for (final provider in providers.reversed) {
+      tree = provider.copyWith(tree);
+    }
+    return tree;
+  }
+}
+
+/// Private implementation of generic MultiSignalProvider returned by factory constructor.
+class _MultiSignalProvider<T extends FlutterReadonlySignal>
+    extends SignalProvider<T> {
+  const _MultiSignalProvider({
+    super.key,
+    required this.providers,
+    required Widget child,
+  }) : super._(
+          create: null,
+          value: null,
+          child: child,
+          dispose: null,
+        );
+
+  final List<SignalProvider> providers;
+
+  @override
+  State<SignalProvider<T>> createState() => _MultiSignalProviderState<T>();
+}
+
+class _MultiSignalProviderState<T extends FlutterReadonlySignal>
+    extends State<_MultiSignalProvider<T>> {
+  @override
+  Widget build(BuildContext context) {
+    Widget tree = widget.child!;
+    for (final provider in widget.providers.reversed) {
+      tree = provider.copyWith(tree);
+    }
+    return tree;
   }
 }

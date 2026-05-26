@@ -6,8 +6,8 @@ description: Creates a new FutureSignal and subscribes to it.
 Creates a new [FutureSignal](/packages/signals/async/future) and subscribes to it.
 
 A [FutureSignal](/packages/signals/async/future) wraps a standard Dart **Future** in a reactive state container, allowing you to
-easily read the asynchronous operation's progress (`loading`, `error`, `data`) directly
-in your build method without needing `FutureBuilder`.
+easily read the asynchronous operation's progress (<code>loading</code>, <code>error</code>, <code>data</code>) directly
+in your build method without needing <code>FutureBuilder</code>.
 
 <Success>
 The signal automatically manages the lifecycle of the future and rebuilds the host widget

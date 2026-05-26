@@ -68,8 +68,8 @@ void main() {
       <a class="content-link" href="/packages/signals_core/async/signal">AsyncSignal</a>
       <a class="content-link" href="/packages/signals_core/async/computed">Computed</a>
       <a class="content-link" href="/packages/signals_core/async/connect">Connect</a>
-      <a class="content-link" href="/packages/signals_core/async/future">Future</a>
-      <a class="content-link" href="/packages/signals_core/async/stream">StreamSignal</a>
+      <a class="content-link" href="/packages/signals_core/async/future">FutureSignal</a>
+      <a class="content-link" href="/packages/signals_core/async/stream">Stream</a>
     </div>
   </div>
   <div class="category-card">

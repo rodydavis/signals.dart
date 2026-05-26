@@ -42,14 +42,19 @@ void main() {
 
 <Warning>
 This class works best with values that are immutable or copied when updated.
-If you mutate an object in-place directly without assigning a new value using the `.value`
-setter or `set(...)`, the history queue will store references to the same mutated object, and
+If you mutate an object in-place directly without assigning a new value using the <code>.value</code>
+setter or <code>set(...)</code>, the history queue will store references to the same mutated object, and
 undo/redo operations will not reflect changes correctly.
 </Warning>
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="changestacksignal"></a><a name="changestacksignal"></a>`ChangeStackSignal(super.value, {int? limit, ChangeSignalOptions<T>? options, @Deprecated('Use options: ChangeSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: ChangeSignalOptions(name: ...) instead') String? debugLabel})`
 
 Creates a [ChangeStackSignal](/packages/signals/value/change-stack) initialized with the provided **value**.
+
+</details>

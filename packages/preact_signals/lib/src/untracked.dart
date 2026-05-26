@@ -18,7 +18,7 @@ import 'globals.dart';
 ///
 /// ### Example Usage
 ///
-/// ````dart
+/// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
 ///
 /// void main() {
@@ -42,17 +42,17 @@ import 'globals.dart';
 ///   // Updating the threshold will NOT trigger the effect, because it was read inside `untracked`
 ///   loggingThreshold.value = 10;
 /// }
-/// ````
+/// ```
 ///
-/// :::tip
-/// [untracked] is particularly useful inside event handlers, conditional logging, or when you are performing
-/// a write to a signal based on another signal's value inside an effect to prevent infinite dependency cycles.
-/// :::
+/// <Info>
+///   [untracked] is particularly useful inside event handlers, conditional logging, or when you are performing
+///   a write to a signal based on another signal's value inside an effect to prevent infinite dependency cycles.
+/// </Info>
 ///
-/// :::danger
-/// Be cautious when using [untracked], as it bypasses the dependency tracking system. If the values read inside
-/// [untracked] change, your reactive side effects or computed derivations will *not* automatically re-run.
-/// :::
+/// <Warning>
+///   Be cautious when using [untracked], as it bypasses the dependency tracking system. If the values read inside
+///   [untracked] change, your reactive side effects or computed derivations will *not* automatically re-run.
+/// </Warning>
 T untracked<T>(
   /// The callback function.
   T Function() fn,

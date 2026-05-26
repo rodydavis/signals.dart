@@ -6,7 +6,7 @@ description: Creates a new SetSignal and subscribes to it.
 Creates a new [SetSignal](/packages/signals/value/set) and subscribes to it.
 
 A [SetSignal](/packages/signals/value/set) provides a reactive wrapper around a standard Dart **Set**. It tracks mutations
-(such as `.add()`, `.remove()`, `.clear()`) and automatically triggers rebuilds of the host **HookWidget**.
+(such as <code>.add()</code>, <code>.remove()</code>, <code>.clear()</code>) and automatically triggers rebuilds of the host **HookWidget**.
 
 <Success>
 Useful for managing collections of unique items, like active filters, selected item IDs,

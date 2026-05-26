@@ -8,7 +8,7 @@ An interface for read-only signals.
 A [ReadonlySignal](/packages/preact_signals/core/readonly) is a reactive container whose value can be read but not directly mutated.
 Under the hood, any [Signal](/packages/signals/core/signal) implements or can be cast/exposed as a [ReadonlySignal](/packages/preact_signals/core/readonly). This
 is a core architectural pattern for encapsulating state: classes can modify state internally
-using a private mutable `Signal`, while exposing a public `ReadonlySignal` to consumers to
+using a private mutable <code>Signal</code>, while exposing a public <code>ReadonlySignal</code> to consumers to
 enforce unidirectional data flow.
 
 Whenever the underlying value changes, any active [effect](/packages/signals/core/effect) or [computed](/packages/signals/flutter/computed) signal that reads this
@@ -61,6 +61,9 @@ throughout your application.
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="node"></a>`Node? node`
 
 @internal
@@ -76,8 +79,13 @@ A linked list of subscription nodes pointing to targets.
 @internal
 Brand symbol to uniquely distinguish signals.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="globalid"></a>`int globalId`
 
@@ -120,7 +128,7 @@ Helper method to get the current value
 
 ##### <a name="peek"></a>`T peek()`
 
-In the rare instance that you have an effect that should write to another signal based on the previous value, but you _don't_ want the effect to be subscribed to that signal, you can read a signals's previous value via `signal.peek()`.
+In the rare instance that you have an effect that should write to another signal based on the previous value, but you _don't_ want the effect to be subscribed to that signal, you can read a signals's previous value via <code>signal.peek()</code>.
 
 ```dart
 final counter = signal(0);
@@ -135,7 +143,7 @@ effect(() {
 });
 ```
 
-Note that you should only use `signal.peek()` if you really need it. Reading a signal's value via `signal.value` is the preferred way in most scenarios.
+Note that you should only use <code>signal.peek()</code> if you really need it. Reading a signal's value via <code>signal.value</code> is the preferred way in most scenarios.
 
 ##### <a name="subscribe"></a>`void Function() subscribe(void Function(T value) fn)`
 
@@ -188,6 +196,8 @@ Registers a subscription callback **fn** on value changes.
 @internal
 Unregisters a subscription node.
 
+</details>
+
 
 
 ---
@@ -204,7 +214,7 @@ immutable value source into the signals reactivity system.
 
 Parameters:
 - **value**: The initial value held by the read-only signal.
-- **options**: Optional configuration options (e.g., custom debug name or lifecycle callbacks like `watched`/`unwatched`).
+- **options**: Optional configuration options (e.g., custom debug name or lifecycle callbacks like <code>watched</code>/<code>unwatched</code>).
 
 Returns:
 - A [ReadonlySignal](/packages/preact_signals/core/readonly) containing the initial value.

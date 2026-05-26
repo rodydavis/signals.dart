@@ -5,9 +5,9 @@ description: A premium reactive **HookWidget** that both supports Flutter Hooks 
 
 A premium reactive **HookWidget** that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
 
-`SignalHookWidget` establishes a dynamic reactive context directly at the Flutter element layer.
-Any signal accessed via `.value` inside the **buildWidget** method is **implicitly tracked** and
-subscribed to. At the same time, you can call any hooks (like `useSignal`, `useFocusNode`, etc.)
+<code>SignalHookWidget</code> establishes a dynamic reactive context directly at the Flutter element layer.
+Any signal accessed via <code>.value</code> inside the **buildWidget** method is **implicitly tracked** and
+subscribed to. At the same time, you can call any hooks (like <code>useSignal</code>, <code>useFocusNode</code>, etc.)
 within **buildWidget**.
 
 This provides the ultimate developer experience, combining the power of implicit, boilerplate-free
@@ -43,15 +43,25 @@ class MyDualWidget extends SignalHookWidget {
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalhookwidget"></a><a name="signalhookwidget"></a>`SignalHookWidget({super.key})`
 
 Constructor for [SignalHookWidget](/packages/signals_hooks/widgets/signal-hook-widget).
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="buildwidget"></a>`Widget buildWidget(BuildContext context)`
 
 Subclasses override this method instead of **build** to define their widget tree.
 
 ##### <a name="build"></a>`Widget build(BuildContext context)`
+
+</details>

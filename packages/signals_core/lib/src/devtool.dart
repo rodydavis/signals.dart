@@ -50,6 +50,11 @@ class DevToolsSignalsObserver implements SignalsObserver {
   final Map<int, int> _effectCount = {};
   final Set<WeakReference<Effect>> _effects = {};
 
+  /// Create a DevToolsSignalsObserver and register the VM service extensions.
+  DevToolsSignalsObserver() {
+    _initDevTools();
+  }
+
   bool _devToolsInitialized = false;
   bool _devToolsEnabled = kDebugMode;
   int _pruneCounter = 0;
@@ -276,7 +281,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         return {
           'id': e.globalId,
           'label': e.debugLabel,
-          'value': e.toString(),
+          'value': e.peek()?.toString(),
           'targets': targets.join(','),
           'type': 'signal',
         };
@@ -296,7 +301,7 @@ class DevToolsSignalsObserver implements SignalsObserver {
         return {
           'id': e.globalId,
           'label': e.debugLabel,
-          'value': e.toString(),
+          'value': e.peek()?.toString(),
           'sources': sources.join(','),
           'targets': targets.join(','),
           'type': 'computed',

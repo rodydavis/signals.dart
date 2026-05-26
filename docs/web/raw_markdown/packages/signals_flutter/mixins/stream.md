@@ -8,7 +8,7 @@ A mixin that implements the standard **Stream** interface for a [ReadonlySignal]
 This mixin allows you to treat a read-only or writable signal as a standard asynchronous
 **Stream**, where updates to the signal's value are pushed as stream events.
 This provides out-of-the-box compatibility with the entire asynchronous Dart SDK,
-such as stream transformers, `await for` loops, and Flutter's **StreamBuilder**.
+such as stream transformers, <code>await for</code> loops, and Flutter's **StreamBuilder**.
 
 ### Example Usage
 
@@ -64,6 +64,9 @@ automatically when the signal is disposed.
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="any"></a>`Future<bool> any(bool Function(T element) test)`
 
@@ -138,3 +141,5 @@ automatically when the signal is disposed.
 ##### <a name="transform"></a>`Stream<S> transform(StreamTransformer<T, S> streamTransformer)`
 
 ##### <a name="where"></a>`Stream<T> where(bool Function(T event) test)`
+
+</details>

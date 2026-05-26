@@ -102,14 +102,19 @@ class SignalEffectException implements Exception {
   SignalEffectException(this.error, [this.stackTrace]);
 }
 
-/// Combines multiple signal writes into a single update that is flushed only after the callback completes.
+/// Combines multiple signal writes into a single update transaction that is flushed only after the callback completes.
 ///
 /// Under normal circumstances, writing to a signal immediately notifies all of its active subscribers
-/// (effects and computed signals), which can cause multiple redundant computations if you are updating
-/// several signals sequentially.
+/// (effects and computed signals), which can cause multiple redundant updates or temporary inconsistent/glitchy states
+/// if you are updating several related signals sequentially.
 ///
-/// By wrapping your mutations in [batch], notifications are deferred. Subscribed [effect]s and [computed]
+/// By wrapping your mutations in [batch], notification events are deferred. Subscribed [effect]s and [computed]
 /// signals will only run once at the very end of the batch callback block.
+///
+/// <Info>
+///   Always use [batch] when performing multiple state transitions together. This avoids flickering UI, unnecessary
+///   rebuilds, and transient states where some dependencies are updated but others are not.
+/// </Info>
 ///
 /// ### Nested Batches
 ///
@@ -130,7 +135,7 @@ class SignalEffectException implements Exception {
 ///
 /// ### Example Usage
 ///
-/// ````dart
+/// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
 ///
 /// void main() {
@@ -148,12 +153,7 @@ class SignalEffectException implements Exception {
 ///   });
 ///   // Prints: "Name changed to: John Smith" (Only once, not twice!)
 /// }
-/// ````
-///
-/// :::tip
-/// Always use [batch] when performing multiple state transitions together. This avoids flickering UI, unnecessary
-/// rebuilds, and transient states where some dependencies are updated but others are not.
-/// :::
+/// ```
 T batch<T>(
   /// The callback function.
   T Function() fn,

@@ -53,7 +53,7 @@ void main() {
 
 <Warning>
 This mixin only works with values that are immutable or are copied/cloned when changed.
-If you mutate an object in-place directly without replacing the value using `set` or the `.value`
+If you mutate an object in-place directly without replacing the value using <code>set</code> or the <code>.value</code>
 setter, the history queue will store references to the same mutated object, and undo/redo
 will appear to do nothing.
 </Warning>
@@ -61,12 +61,20 @@ will appear to do nothing.
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="limit"></a>`int? limit`
 
 Max values to keep in history
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="history"></a>`Iterable<SignalChange<T>> history`
 
@@ -105,3 +113,5 @@ Clear undo stack
 ##### <a name="clearredo"></a>`void clearRedo()`
 
 Clear redo stack
+
+</details>

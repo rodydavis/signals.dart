@@ -9,7 +9,7 @@ A **TrackedSignal** extends standard signals by maintaining a record of its prev
 current value. This allows you to inspect history changes, calculate delta differences, or perform custom transition animations.
 
 <Success>
-You can access both the current value using `.value` and the previous value using `.previousValue`.
+You can access both the current value using <code>.value</code> and the previous value using <code>.previousValue</code>.
 </Success>
 
 ### Parameters

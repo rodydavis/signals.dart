@@ -6,14 +6,14 @@ description: A reactive Signal that holds a **Map** and implements the **Map** i
 A reactive [Signal](/packages/signals/core/signal) that holds a **Map** and implements the **Map** interface.
 
 [MapSignal](/packages/signals/value/map) lets you listen to changes on a map reactively and mutate it directly using
-standard map operations (like adding/modifying keys with `operator []=`, `addAll`, `remove`,
-`clear`, etc.). Any mutations automatically trigger reactive updates to all active listeners
+standard map operations (like adding/modifying keys with <code>operator []=</code>, <code>addAll</code>, <code>remove</code>,
+<code>clear</code>, etc.). Any mutations automatically trigger reactive updates to all active listeners
 (e.g., inside an [effect](/packages/signals/core/effect) or [computed](/packages/signals/flutter/computed)).
 
 Additionally, [MapSignal](/packages/signals/value/map) defines convenient operators:
-- `<<` injects/adds all entries from another map into the current map.
-- `&` forks/concatenates the map with another map into a new [MapSignal](/packages/signals/value/map).
-- `|` pipes/concatenates the map with another signal holding a map into a new [MapSignal](/packages/signals/value/map).
+- <code><<</code> injects/adds all entries from another map into the current map.
+- <code>&</code> forks/concatenates the map with another map into a new [MapSignal](/packages/signals/value/map).
+- <code>|</code> pipes/concatenates the map with another signal holding a map into a new [MapSignal](/packages/signals/value/map).
 
 ### Example Usage
 
@@ -40,18 +40,26 @@ void main() {
 
 <Success>
 Mutating the collection directly calls the reactive set() routine under the hood automatically. You
-do not need to assign `settings.value = ...` manually!
+do not need to assign <code>settings.value = ...</code> manually!
 </Success>
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="mapsignal"></a><a name="mapsignal"></a>`MapSignal(super.value, {MapSignalOptions<K, V>? options, @Deprecated('Use options: MapSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: MapSignalOptions(name: ...) instead') String? debugLabel})`
 
 Creates a [MapSignal](/packages/signals/value/map) with the given **value**.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="<<"></a>`MapSignal<K, V> <<(Map<K, V> other)`
 
@@ -68,6 +76,8 @@ Pipe: create a new signal by sending value from source to other
 ##### <a name="=="></a>`bool ==(Object other)`
 
 ##### <a name="hashcode"></a>`int hashCode`
+
+</details>
 
 
 

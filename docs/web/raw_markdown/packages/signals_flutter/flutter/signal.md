@@ -6,7 +6,7 @@ description: A mutable, reactive state cell that exposes both standard Signals a
 A mutable, reactive state cell that exposes both standard Signals and Flutter
 **ValueNotifier** interfaces.
 
-`FlutterSignal` extends the core `Signal` class and mixes in `ValueNotifierSignalMixin`,
+<code>FlutterSignal</code> extends the core <code>Signal</code> class and mixes in <code>ValueNotifierSignalMixin</code>,
 making it completely interoperable with Flutter's build pipelines and widgets that expect
 a **ValueNotifier** or **ValueListenable**.
 
@@ -25,6 +25,9 @@ count.value++; // Mutates the signal and triggers both Signals and ValueNotifier
 
 
 ### Constructors
+
+<details>
+<summary> View Constructors </summary>
 
 ##### <a name="fluttersignal"></a><a name="fluttersignal"></a>`FlutterSignal(super.internalValue, {super.options, @Deprecated('Use options: SignalOptions(autoDispose: ...) instead') super.autoDispose, @Deprecated('Use options: SignalOptions(name: ...) instead') super.debugLabel, this.runCallbackOnListen = false})`
 
@@ -48,7 +51,14 @@ final db = FlutterSignal.lazy<DatabaseConnection>();
 db.value = DatabaseConnect(...);
 ```
 
+</details>
+
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="runcallbackonlisten"></a>`bool runCallbackOnListen`
+
+</details>

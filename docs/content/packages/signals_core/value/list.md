@@ -6,14 +6,14 @@ description: A reactive Signal that holds a **List** and implements the **List**
 A reactive [Signal](/packages/signals/core/signal) that holds a **List** and implements the **List** interface.
 
 [ListSignal](/packages/signals/value/list) lets you listen to changes on a list reactively and mutate it directly using
-standard list operations (like `add`, `addAll`, `remove`, operators `[]` and `[]=`, etc.).
+standard list operations (like <code>add</code>, <code>addAll</code>, <code>remove</code>, operators <code>[]</code> and <code>[]=</code>, etc.).
 Any mutations automatically trigger reactive updates to all active listeners (e.g., inside an
 [effect](/packages/signals/core/effect) or [computed](/packages/signals/flutter/computed)).
 
 Additionally, [ListSignal](/packages/signals/value/list) defines convenient operators:
-- `<<` injects/adds all items from an iterable into the list.
-- `&` forks/concatenates the list with an iterable into a new [ListSignal](/packages/signals/value/list).
-- `|` pipes/concatenates the list with another signal holding an iterable into a new [ListSignal](/packages/signals/value/list).
+- <code><<</code> injects/adds all items from an iterable into the list.
+- <code>&</code> forks/concatenates the list with an iterable into a new [ListSignal](/packages/signals/value/list).
+- <code>|</code> pipes/concatenates the list with another signal holding an iterable into a new [ListSignal](/packages/signals/value/list).
 
 ### Example Usage
 
@@ -40,18 +40,26 @@ void main() {
 
 <Success>
 Mutating the collection directly calls the reactive set() routine under the hood automatically. You
-do not need to assign `numbers.value = ...` manually!
+do not need to assign <code>numbers.value = ...</code> manually!
 </Success>
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="listsignal"></a><a name="listsignal"></a>`ListSignal(super.value, {ListSignalOptions<E>? options, @Deprecated('Use options: ListSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: ListSignalOptions(name: ...) instead') String? debugLabel})`
 
 Creates a [ListSignal](/packages/signals/value/list) with the given **value**.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="<<"></a>`ListSignal<E> <<(Iterable<E> other)`
 
@@ -68,6 +76,8 @@ Pipe: create a new signal by sending value from source to other
 ##### <a name="=="></a>`bool ==(Object other)`
 
 ##### <a name="hashcode"></a>`int hashCode`
+
+</details>
 
 
 

@@ -47,6 +47,11 @@ or written to anymore. Any subsequent **add** calls will throw an exception.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="add"></a>`void add(T event)`
 
 ##### <a name="close"></a>`void close()`
+
+</details>

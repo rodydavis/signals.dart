@@ -5,8 +5,8 @@ description: A mixin that adds tracking for the initial and previous values to a
 
 A mixin that adds tracking for the initial and previous values to a [Signal](/packages/signals/core/signal).
 
-[TrackedSignalMixin](/packages/signals/mixins/tracked) stores the `initialValue` (the value the signal had when it was
-created or initialized) and the `previousValue` (the value of the signal right before
+[TrackedSignalMixin](/packages/signals/mixins/tracked) stores the <code>initialValue</code> (the value the signal had when it was
+created or initialized) and the <code>previousValue</code> (the value of the signal right before
 the most recent update).
 
 <Info>
@@ -40,12 +40,15 @@ void main() {
 
 <Warning>
 This mixin only works with values that are immutable or are copied/cloned on mutation.
-If the value is mutated directly in-place without re-assigning, `initialValue` and
-`previousValue` will end up pointing to the same modified instance as the current value.
+If the value is mutated directly in-place without re-assigning, <code>initialValue</code> and
+<code>previousValue</code> will end up pointing to the same modified instance as the current value.
 </Warning>
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="initialvalue"></a>`T initialValue`
 
@@ -58,3 +61,5 @@ Get the previous value (if exists)
 ##### <a name="aftercreate"></a>`void afterCreate(T val)`
 
 ##### <a name="beforeupdate"></a>`void beforeUpdate(val)`
+
+</details>

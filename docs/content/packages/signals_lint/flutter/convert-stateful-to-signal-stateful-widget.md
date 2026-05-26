@@ -4,18 +4,18 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard
-`StatefulWidget` to extend the reactive **SignalStatefulWidget** instead.
+<code>StatefulWidget</code> to extend the reactive **SignalStatefulWidget** instead.
 
 <Success>
-By extending `SignalStatefulWidget` instead of `StatefulWidget`, your widget state automatically
-registers fine-grained dependency tracking for any signals referenced within its `build` method. It
+By extending <code>SignalStatefulWidget</code> instead of <code>StatefulWidget</code>, your widget state automatically
+registers fine-grained dependency tracking for any signals referenced within its <code>build</code> method. It
 will rebuild automatically when their values change, removing the need for manual listener
-lifecycle management or `setState` calls.
+lifecycle management or <code>setState</code> calls.
 </Success>
 
 ### How to use
-1. Place your cursor on the widget class declaration (e.g., `class MyWidget extends StatefulWidget`).
-2. Click the lightbulb icon or press your IDE's quick-fix shortcut (`Alt+Enter` or `Cmd+.`).
+1. Place your cursor on the widget class declaration (e.g., <code>class MyWidget extends StatefulWidget</code>).
+2. Click the lightbulb icon or press your IDE's quick-fix shortcut (<code>Alt+Enter</code> or <code>Cmd+.</code>).
 3. Select the **Convert to SignalStatefulWidget** assist option.
 
 ### Examples
@@ -43,9 +43,19 @@ class CounterWidget extends SignalStatefulWidget {
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="convertstatefultosignalstatefulwidget"></a><a name="convertstatefultosignalstatefulwidget"></a>`ConvertStatefulToSignalStatefulWidget()`
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="run"></a>`void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)`
+
+</details>

@@ -1,13 +1,13 @@
 ---
 title: IterableSignalMixin
-description: A mixin that adds reactive Iterable methods and properties to a Signal.
+description: A mixin that adds reactive <code>Iterable</code> methods and properties to a Signal.
 ---
 
-A mixin that adds reactive `Iterable` methods and properties to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>Iterable</code> methods and properties to a [Signal](/packages/signals/core/signal)
 holding an **Iterable** value.
 
-This mixin delegates all standard **Iterable** operations (such as `length`,
-`first`, `last`, `map`, `where`, and `any`) directly to the underlying
+This mixin delegates all standard **Iterable** operations (such as <code>length</code>,
+<code>first</code>, <code>last</code>, <code>map</code>, <code>where</code>, and <code>any</code>) directly to the underlying
 collection, while ensuring that any read operations register a reactive
 dependency on the signal.
 
@@ -40,12 +40,15 @@ void main() {
 
 <Warning>
 Direct mutation of elements inside the iterable will NOT notify listeners
-unless you reassign the value or use a specialized signal class like `ListSignal`,
-`SetSignal`, or `MapSignal` which automatically trigger updates when modified.
+unless you reassign the value or use a specialized signal class like <code>ListSignal</code>,
+<code>SetSignal</code>, or <code>MapSignal</code> which automatically trigger updates when modified.
 </Warning>
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="any"></a>`bool any(bool Function(E element) test)`
 
@@ -106,3 +109,5 @@ unless you reassign the value or use a specialized signal class like `ListSignal
 ##### <a name="where"></a>`Iterable<E> where(bool Function(E element) test)`
 
 ##### <a name="wheretype"></a>`Iterable<R> whereType()`
+
+</details>

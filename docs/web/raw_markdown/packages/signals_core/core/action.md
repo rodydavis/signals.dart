@@ -9,13 +9,13 @@ An **action** is a higher-order function that takes a callback and returns a new
 with the exact same signature. When the returned function is executed, it runs the original
 callback inside both a [batch](/packages/signals/core/batch) and an [untracked](/packages/signals/core/untracked) block.
 
-### Why use `action` instead of `batch`?
+### Why use <code>action</code> instead of <code>batch</code>?
 
-1. **Reusability**: `batch(fn)` executes the callback immediately. In contrast, `action(fn)`
+1. **Reusability**: <code>batch(fn)</code> executes the callback immediately. In contrast, <code>action(fn)</code>
    returns a *reusable function* that you can store, pass around, and invoke multiple times
    to perform batch transactions on demand.
-2. **Untracked Execution**: The callback runs inside `untracked`. If you invoke the action
-   from within an `effect` or a `computed` signal, the outer reactive context **will not**
+2. **Untracked Execution**: The callback runs inside <code>untracked</code>. If you invoke the action
+   from within an <code>effect</code> or a <code>computed</code> signal, the outer reactive context **will not**
    establish subscriptions to any signals read inside the action.
 
 ---
@@ -76,11 +76,11 @@ Total prints: **2** (initial execution + 1 coalesced update).
 
 ### Type-Safety & Extensions
 
-While `action` accepts any generic `Function`, Dart's static analysis benefits greatly from
+While <code>action</code> accepts any generic <code>Function</code>, Dart's static analysis benefits greatly from
 type-safe variants or extensions.
 
-- **Type-safe functions**: Use `action0` through `action10` (e.g. `action2(...)` for 2 arguments) to preserve type arguments.
-- **Extensions**: Call `.action` directly on any Dart function (e.g., `myFunction.action`).
+- **Type-safe functions**: Use <code>action0</code> through <code>action10</code> (e.g. <code>action2(...)</code> for 2 arguments) to preserve type arguments.
+- **Extensions**: Call <code>.action</code> directly on any Dart function (e.g., <code>myFunction.action</code>).
 
 
 ---
@@ -269,7 +269,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Extension on a 0-argument function to wrap it in a type-safe action.
 
-Enables calling `.action` directly on any 0-argument function to wrap it.
+Enables calling <code>.action</code> directly on any 0-argument function to wrap it.
 
 ### Example Usage
 
@@ -301,9 +301,14 @@ void main() {
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function() action`
 
 Wraps the 0-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -312,7 +317,7 @@ Wraps the 0-argument function in a type-safe action.
 
 Extension on a 1-argument function to wrap it in a type-safe action.
 
-Enables calling `.action` directly on any 1-argument function to wrap it.
+Enables calling <code>.action</code> directly on any 1-argument function to wrap it.
 
 ### Example Usage
 
@@ -344,9 +349,14 @@ void main() {
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A) action`
 
 Wraps the 1-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -355,7 +365,7 @@ Wraps the 1-argument function in a type-safe action.
 
 Extension on a 2-argument function to wrap it in a type-safe action.
 
-Enables calling `.action` directly on any 2-argument function to wrap it.
+Enables calling <code>.action</code> directly on any 2-argument function to wrap it.
 
 ### Example Usage
 
@@ -387,9 +397,14 @@ void main() {
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B) action`
 
 Wraps the 2-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -398,7 +413,7 @@ Wraps the 2-argument function in a type-safe action.
 
 Extension on a 3-argument function to wrap it in a type-safe action.
 
-Enables calling `.action` directly on any 3-argument function to wrap it.
+Enables calling <code>.action</code> directly on any 3-argument function to wrap it.
 
 ### Example Usage
 
@@ -432,9 +447,14 @@ void main() {
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C) action`
 
 Wraps the 3-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -446,9 +466,14 @@ Extension on a 4-argument function to wrap it in a type-safe action.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C, D) action`
 
 Wraps the 4-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -460,9 +485,14 @@ Extension on a 5-argument function to wrap it in a type-safe action.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C, D, E) action`
 
 Wraps the 5-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -474,9 +504,14 @@ Extension on a 6-argument function to wrap it in a type-safe action.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C, D, E, F) action`
 
 Wraps the 6-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -488,9 +523,14 @@ Extension on a 7-argument function to wrap it in a type-safe action.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C, D, E, F, G) action`
 
 Wraps the 7-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -502,9 +542,14 @@ Extension on an 8-argument function to wrap it in a type-safe action.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C, D, E, F, G, H) action`
 
 Wraps the 8-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -516,9 +561,14 @@ Extension on a 9-argument function to wrap it in a type-safe action.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C, D, E, F, G, H, I) action`
 
 Wraps the 9-argument function in a type-safe action.
+
+</details>
 
 
 ---
@@ -530,9 +580,14 @@ Extension on a 10-argument function to wrap it in a type-safe action.
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="action"></a>`R Function(A, B, C, D, E, F, G, H, I, J) action`
 
 Wraps the 10-argument function in a type-safe action.
+
+</details>
 
 
 ---

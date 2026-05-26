@@ -6,7 +6,7 @@ description: Creates a new ListSignal and subscribes to it.
 Creates a new [ListSignal](/packages/signals/value/list) and subscribes to it.
 
 A [ListSignal](/packages/signals/value/list) provides a reactive wrapper around a standard Dart **List**. It tracks mutations
-(such as `.add()`, `.remove()`, or setting an element at an index) and automatically triggers
+(such as <code>.add()</code>, <code>.remove()</code>, or setting an element at an index) and automatically triggers
 rebuilds of the host **HookWidget** when they occur.
 
 <Success>

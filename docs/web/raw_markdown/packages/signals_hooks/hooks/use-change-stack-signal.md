@@ -9,7 +9,7 @@ A [ChangeStackSignal](/packages/signals/value/change-stack) maintains an undo/re
 undo/redo mechanisms for user edits, document updates, or game actions.
 
 <Success>
-Use `.undo()` to step backwards, `.redo()` to step forwards, and check `.canUndo` and `.canRedo`
+Use <code>.undo()</code> to step backwards, <code>.redo()</code> to step forwards, and check <code>.canUndo</code> and <code>.canRedo</code>
 to determine button enabling states.
 </Success>
 

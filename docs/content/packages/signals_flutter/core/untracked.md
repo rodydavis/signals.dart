@@ -5,7 +5,7 @@ description: Runs a callback function **fn** that can read signal values without
 
 Runs a callback function **fn** that can read signal values without establishing a reactive subscription.
 
-Normally, reading a signal's value (via `.value` or `()`) inside an [effect](/packages/signals/core/effect) or a [computed](/packages/signals/flutter/computed) callback
+Normally, reading a signal's value (via <code>.value</code> or <code>()</code>) inside an [effect](/packages/signals/core/effect) or a [computed](/packages/signals/flutter/computed) callback
 automatically subscribes the surrounding context to that signal. If the signal changes, the context is
 re-executed.
 
@@ -21,7 +21,7 @@ Returns:
 
 ### Example Usage
 
-````dart
+```dart
 import 'package:preact_signals/preact_signals.dart';
 
 void main() {
@@ -45,14 +45,14 @@ void main() {
   // Updating the threshold will NOT trigger the effect, because it was read inside `untracked`
   loggingThreshold.value = 10;
 }
-````
+```
 
-<Success>
-[untracked] is particularly useful inside event handlers, conditional logging, or when you are performing
-a write to a signal based on another signal's value inside an effect to prevent infinite dependency cycles.
-</Success>
+<Info>
+  [untracked](/packages/signals/core/untracked) is particularly useful inside event handlers, conditional logging, or when you are performing
+  a write to a signal based on another signal's value inside an effect to prevent infinite dependency cycles.
+</Info>
 
-<Error>
-Be cautious when using [untracked], as it bypasses the dependency tracking system. If the values read inside
-[untracked] change, your reactive side effects or computed derivations will *not* automatically re-run.
-</Error>
+<Warning>
+  Be cautious when using [untracked](/packages/signals/core/untracked), as it bypasses the dependency tracking system. If the values read inside
+  [untracked](/packages/signals/core/untracked) change, your reactive side effects or computed derivations will *not* automatically re-run.
+</Warning>

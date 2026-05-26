@@ -8,7 +8,7 @@ description: A global helper function to convert a Flutter **ValueNotifier** to 
 A global helper function to convert a Flutter **ValueNotifier** to a mutable [Signal](/packages/signals/core/signal).
 
 Updates to either the notifier or the returned signal will automatically update the other.
-This helper is a functional equivalent of the `toSignal()` extension method.
+This helper is a functional equivalent of the <code>toSignal()</code> extension method.
 
 ### Example
 ```dart
@@ -25,6 +25,9 @@ Extension on **ValueNotifier** to seamlessly bridge standard Flutter mutable val
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="tosignal"></a>`Signal<T> toSignal({String? debugLabel, bool autoDispose = false})`
 
@@ -55,6 +58,8 @@ final signal = Signal(10);
 final notifier = signal.toValueNotifier();
 ```
 
+</details>
+
 
 
 ---
@@ -65,6 +70,9 @@ final notifier = signal.toValueNotifier();
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="runcallbackonlisten"></a>`bool runCallbackOnListen`
 
@@ -77,3 +85,5 @@ If true, the callback will be run when the listener is added
 ##### <a name="haslisteners"></a>`bool hasListeners`
 
 ##### <a name="notifylisteners"></a>`void notifyListeners()`
+
+</details>

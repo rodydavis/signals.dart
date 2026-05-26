@@ -79,15 +79,16 @@ class MapSignal<K, V> extends Signal<Map<K, V>>
 
   @override
   bool operator ==(Object other) {
-    return other is MapSignal<K, V> && value == other.value;
+    return other is MapSignal<K, V> && peek() == other.peek();
   }
 
   @override
   int get hashCode {
+    final val = peek();
     return Object.hashAll([
       globalId.hashCode,
-      value.hashCode,
-      for (final item in value.entries) item.hashCode,
+      val.hashCode,
+      for (final item in val.entries) item.hashCode,
     ]);
   }
 }

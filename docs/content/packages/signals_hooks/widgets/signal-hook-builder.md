@@ -38,18 +38,33 @@ Widget build(BuildContext context) {
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalhookbuilder"></a><a name="signalhookbuilder"></a>`SignalHookBuilder({super.key, required this.builder})`
 
 Creates a [SignalHookBuilder](/packages/signals_hooks/widgets/signal-hook-builder) widget.
 
+</details>
+
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="builder"></a>`Widget Function(BuildContext context) builder`
 
 The widget builder callback.
 
+</details>
+
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="buildwidget"></a>`Widget buildWidget(BuildContext context)`
+
+</details>

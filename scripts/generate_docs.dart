@@ -233,7 +233,8 @@ void main() {
           continue;
         }
         final content = entity.readAsStringSync();
-        final updated = convertCallouts(content);
+        var updated = convertCallouts(content);
+        updated = convertAllInlineBackticks(updated);
         if (content != updated) {
           entity.writeAsStringSync(updated);
           print(
@@ -757,7 +758,23 @@ String cleanDocumentationComment(String comment) {
   // Resolve [Bracketed] Dart references to HTML/markdown links
   cleaned = resolveDartReferences(cleaned);
 
-  return convertCallouts(cleaned.trim());
+  final calloutsConverted = convertCallouts(cleaned.trim());
+  return convertAllInlineBackticks(calloutsConverted);
+}
+
+String convertAllInlineBackticks(String text) {
+  // Split by fenced code blocks to ensure we don't process brackets/backticks inside code blocks
+  final codeBlockParts = text.split('```');
+  for (var i = 0; i < codeBlockParts.length; i++) {
+    // Every even-indexed part is outside a fenced code block
+    if (i % 2 == 0) {
+      codeBlockParts[i] = codeBlockParts[i].replaceAllMapped(RegExp(r'`([^`\n]+)`'), (match) {
+        final code = match.group(1)!;
+        return '<code>$code</code>';
+      });
+    }
+  }
+  return codeBlockParts.join('```');
 }
 
 String convertCallouts(String text) {
@@ -997,6 +1014,9 @@ String renderMembersMarkdown(DeclInfo decl) {
     buffer.writeln();
     buffer.writeln('### Constructors');
     buffer.writeln();
+    buffer.writeln('<details>');
+    buffer.writeln('<summary> View Constructors </summary>');
+    buffer.writeln();
     for (final m in constructors) {
       final anchor1 = m.name.toLowerCase().replaceAll('.', '-');
       final anchor2 = m.name.toLowerCase().split('.').last;
@@ -1008,11 +1028,16 @@ String renderMembersMarkdown(DeclInfo decl) {
         buffer.writeln();
       }
     }
+    buffer.writeln('</details>');
+    buffer.writeln();
   }
 
   if (fields.isNotEmpty) {
     buffer.writeln();
     buffer.writeln('### Properties');
+    buffer.writeln();
+    buffer.writeln('<details>');
+    buffer.writeln('<summary> View Properties </summary>');
     buffer.writeln();
     for (final m in fields) {
       final anchor = m.name.toLowerCase();
@@ -1023,11 +1048,16 @@ String renderMembersMarkdown(DeclInfo decl) {
         buffer.writeln();
       }
     }
+    buffer.writeln('</details>');
+    buffer.writeln();
   }
 
   if (methods.isNotEmpty) {
     buffer.writeln();
     buffer.writeln('### Methods');
+    buffer.writeln();
+    buffer.writeln('<details>');
+    buffer.writeln('<summary> View Methods </summary>');
     buffer.writeln();
     for (final m in methods) {
       final anchor = m.name.toLowerCase();
@@ -1038,6 +1068,8 @@ String renderMembersMarkdown(DeclInfo decl) {
         buffer.writeln();
       }
     }
+    buffer.writeln('</details>');
+    buffer.writeln();
   }
 
   return buffer.toString();
@@ -2304,6 +2336,25 @@ class Sidebar extends StatelessComponent {
               ]),
             ]),
         ]),
+        script(
+          content: """
+(function() {
+  function scrollToActive() {
+    var active = document.querySelector(".sidebar .active");
+    if (active) {
+      active.scrollIntoView({ block: "nearest", behavior: "instant" });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scrollToActive);
+  } else {
+    scrollToActive();
+  }
+  setTimeout(scrollToActive, 50);
+  setTimeout(scrollToActive, 150);
+})();
+""",
+        ),
       ]),
     ]);
   }

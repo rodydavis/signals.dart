@@ -1,13 +1,13 @@
 ---
 title: ListSignalMixin
-description: A mixin that adds reactive List methods and operators to a Signal.
+description: A mixin that adds reactive <code>List</code> methods and operators to a Signal.
 ---
 
-A mixin that adds reactive `List` methods and operators to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>List</code> methods and operators to a [Signal](/packages/signals/core/signal)
 holding a **List** value.
 
-This mixin delegates all standard **List** operations (such as mutations like `add`,
-`remove`, `insert`, `sort`, and `clear`, and accessor operators like `[]` and `[]=`)
+This mixin delegates all standard **List** operations (such as mutations like <code>add</code>,
+<code>remove</code>, <code>insert</code>, <code>sort</code>, and <code>clear</code>, and accessor operators like <code>[]</code> and <code>[]=</code>)
 to the underlying list, while ensuring that any reads register a dependency
 and any mutations automatically trigger reactive updates.
 
@@ -41,13 +41,16 @@ void main() {
 ```
 
 <Success>
-Since mutations on `ListSignalMixin` notify listeners automatically, you do not
-need to assign `numbers.value = ...` to force updates. Methods like `add`, `addAll`,
-and operator `[]=` take care of notification.
+Since mutations on <code>ListSignalMixin</code> notify listeners automatically, you do not
+need to assign <code>numbers.value = ...</code> to force updates. Methods like <code>add</code>, <code>addAll</code>,
+and operator <code>[]=</code> take care of notification.
 </Success>
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="cast"></a>`List<R> cast()`
 
@@ -126,3 +129,5 @@ and operator `[]=` take care of notification.
 Return a new array that is sorted by the **compare** function
 
 ##### <a name="sublist"></a>`List<E> sublist(int start, [int? end])`
+
+</details>

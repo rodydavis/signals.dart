@@ -7,90 +7,105 @@ description: Creates a new model constructor with an instanced factory.
 
 Creates a new model constructor with an instanced factory.
 
-A [SignalModel](/packages/preact_signals/utilities/model) is an elegant wrapper around complex models (such as Maps or classes)
-that tracks and automatically disposes of any [Effect](/packages/signals/core/effect)s created during the model's
-instantiation.
+A [SignalModel](/packages/preact_signals/utilities/model) is a highly powerful architectural primitive designed to manage cohesive packages
+of related state, business logic, actions, and side effects.
 
-When the returned [SignalModelConstructor](/packages/preact_signals/utilities/model) is invoked, it starts capturing nested effects.
-If the factory returns a standard Dart **Map**, and `wrapInAction` is enabled (default), all nested
-functions within that Map are automatically wrapped in batched [action](/packages/preact_signals/core/action)s.
+Under the hood, [SignalModel](/packages/preact_signals/utilities/model) automatically tracks, scopes, and manages the lifecycle of any [Effect](/packages/signals/core/effect)s
+instantiated during its factory execution. When the model is disposed (by calling <code>model.dispose()</code>),
+all nested/captured effects are clean up automatically, ensuring complete prevention of memory leaks.
 
-### Example Usage
+Furthermore, if the factory returns a standard Dart **Map**, and <code>wrapInAction</code> is enabled (default),
+all nested function properties are automatically wrapped in batched [action](/packages/preact_signals/core/action) transactions to optimize updates.
+
+### 1. Advanced Architecture: Type-Safe Wrappers using Dart 3+ Extension Types
+While dynamic subscript access <code>model['increment']()</code> is fast and flexible, it lacks static analysis safety.
+To achieve compile-time type-safety, you can wrap the returned <code>SignalModel</code> in a standard Dart 3 **extension type**:
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
+import 'package:signals/signals.dart';
 
-// Define a reactive counter model constructor
+// 1. Define the reactive model constructor
 final counterModel = createModel(() {
   final count = signal(0);
 
-  // Captured nested effect - will be disposed automatically!
+  // Captured nested side-effect (e.g. logging or syncing to local storage)
   effect(() {
     print('Nested logger: count is ${count.value}');
   });
 
-  return {
+  return <String, dynamic>{
     'count': count,
     'increment': () => count.value++,
   };
 });
 
+// 2. Create a premium, compile-safe extension type wrapper
+extension type TypeSafeCounter(SignalModel<Map<String, dynamic>> _model) {
+  int get count => (_model['count'] as Signal<int>).value;
+  set count(int val) => (_model['count'] as Signal<int>).value = val;
+
+  void increment() => (_model['increment'] as Function)();
+  void dispose() => _model.dispose();
+}
+
 void main() {
-  // Instantiate the model
-  final model = counterModel();
+  // 3. Instantiate and wrap the model
+  final counter = TypeSafeCounter(counterModel());
 
-  final increment = model['increment'] as Function;
-  increment(); // Prints: Nested logger: count is 1
+  // Now you have a beautifully autocomplete-friendly, compile-safe API!
+  print(counter.count); // Prints: 0 (and registers effect print: Nested logger: count is 0)
+  counter.increment();  // Prints: Nested logger: count is 1
 
-  // Clean up all captured effects
-  model.dispose();
+  // Dispose when done to clean up all captured nested effects
+  counter.dispose();
 }
 ```
+
+<Info>
+  Favor using Dart 3 extension types whenever you define models. They cost zero runtime overhead
+  (compiling down to the raw model) while granting complete compile-safe parameters and autocomplete functionality.
+</Info>
 
 
 ---
 
 ## SignalModel
 
-A wrapper for models constructed with [createModel](/packages/preact_signals/utilities/model).
+A premium wrapper for cohesive state packages constructed with [createModel](/packages/preact_signals/utilities/model).
 
 It holds the instanced model **value** and all the [Effect](/packages/signals/core/effect)s that were captured
 during its construction. Disposing the [SignalModel](/packages/preact_signals/utilities/model) automatically disposes of all
-nested/captured effects, avoiding memory leaks.
+nested/captured effects, completely avoiding memory leaks.
 
-### Example Usage
+### Premium Pattern: Dart 3+ Extension Type Wrappers
+To avoid unchecked subscript access like <code>model['count'].value</code>, wrap your model in an extension type:
 
 ```dart
-import 'package:preact_signals/preact_signals.dart';
-
-void main() {
-  final counterModel = createModel(() {
-    final count = signal(0);
-    effect(() => print('Count is: ${count.value}'));
-    return {
-      'count': count,
-      'increment': () => count.value++,
-    };
-  });
-
-  final model = counterModel();
-  final increment = model['increment'] as Function;
-  increment(); // Triggers print: Count is: 1
-
-  // Disposes of captured effects
-  model.dispose();
+extension type TypeSafeCounter(SignalModel<Map<String, dynamic>> _model) {
+  int get count => (_model['count'] as Signal<int>).value;
+  set count(int val) => (_model['count'] as Signal<int>).value = val;
+  void increment() => (_model['increment'] as Function)();
+  void dispose() => _model.dispose();
 }
 ```
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalmodel"></a><a name="signalmodel"></a>`SignalModel(this.value, this._effects, {this.options = const SignalModelOptions()})`
 
 Creates a new model instance.
 
+</details>
+
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="value"></a>`T value`
 
@@ -100,8 +115,13 @@ The instanced model value.
 
 Options used to configure this model.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="[]"></a>`dynamic [](Object? key)`
 
@@ -114,6 +134,8 @@ Set properties dynamically if the underlying **value** is a **Map**.
 ##### <a name="dispose"></a>`void dispose()`
 
 Disposes of all captured effects.
+
+</details>
 
 
 
@@ -140,12 +162,20 @@ final options = const SignalModelOptions(
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalmodeloptions"></a><a name="signalmodeloptions"></a>`SignalModelOptions({this.name, this.wrapInAction = true})`
 
 Creates a new instance of [SignalModelOptions](/packages/preact_signals/utilities/model).
 
+</details>
+
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="name"></a>`String? name`
 
@@ -156,8 +186,13 @@ The name or debug label of the model.
 Whether to automatically wrap returned Map functions in actions.
 Defaults to true.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="copywith"></a>`SignalModelOptions copyWith({String? name, bool? wrapInAction})`
 
@@ -166,6 +201,8 @@ Copy options with new values.
 ##### <a name="=="></a>`bool ==(Object other)`
 
 ##### <a name="hashcode"></a>`int hashCode`
+
+</details>
 
 
 
@@ -190,20 +227,35 @@ print(model.value); // Prints: data
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalmodelconstructor"></a><a name="signalmodelconstructor"></a>`SignalModelConstructor(this._factory, {this.options = const SignalModelOptions()})`
 
 Creates a new instance of [SignalModelConstructor](/packages/preact_signals/utilities/model).
 
+</details>
+
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="options"></a>`SignalModelOptions options`
 
 Options used to configure this constructor.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="call"></a>`SignalModel<T> call()`
 
 Instantiates a new [SignalModel](/packages/preact_signals/utilities/model) instance.
+
+</details>

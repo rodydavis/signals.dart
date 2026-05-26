@@ -10,9 +10,9 @@ if necessary (signals created in this manner are managed by the Hook lifetime). 
 will automatically rebuild whenever this signal's value changes.
 
 <Warning>
-If you want the signal to survive widget disposal (e.g. shared state), do not use [useSignal](/packages/signals_hooks/hooks/use-signal).
-Instead, define your signal globally or in a controller, and subscribe to it using [useExistingSignal](/packages/signals_hooks/hooks/use-existing-signal)
-or [useSignalValue](/packages/signals_hooks/hooks/use-signal-value).
+  If you want the signal to survive widget disposal (e.g. shared state), do not use [useSignal](/packages/signals_hooks/hooks/use-signal).
+  Instead, define your signal globally or in a controller, and subscribe to it using [useExistingSignal](/packages/signals_hooks/hooks/use-existing-signal)
+  or [useSignalValue](/packages/signals_hooks/hooks/use-signal-value).
 </Warning>
 
 ### Parameters

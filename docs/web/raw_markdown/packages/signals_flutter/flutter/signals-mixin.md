@@ -96,6 +96,9 @@ class _CounterWidgetState extends State<CounterWidget> {
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="disposesignal"></a>`void disposeSignal(int id)`
 
 Dispose and remove signal
@@ -148,35 +151,35 @@ Create a signal holding an async value
 
 ##### <a name="createsignal"></a>`FlutterSignal<V> createSignal(V val, {String? debugLabel})`
 
-Create a `signal<T>` and watch for changes
+Create a <code>signal<T></code> and watch for changes
 
 ##### <a name="createlistsignal"></a>`ListSignal<V> createListSignal(List<V> list, {String? debugLabel})`
 
-Create a [ListSignal](/packages/signals/value/list) `<T>` and watch for changes
+Create a [ListSignal](/packages/signals/value/list) <code><T></code> and watch for changes
 
 ##### <a name="createsetsignal"></a>`SetSignal<V> createSetSignal(Set<V> set, {String? debugLabel})`
 
-Create a [SetSignal](/packages/signals/value/set) `<T>` and watch for changes
+Create a [SetSignal](/packages/signals/value/set) <code><T></code> and watch for changes
 
 ##### <a name="createqueuesignal"></a>`QueueSignal<V> createQueueSignal(Queue<V> queue, {String? debugLabel})`
 
-Create a **QueueSignal** `<T>` and watch for changes
+Create a **QueueSignal** <code><T></code> and watch for changes
 
 ##### <a name="createmapsignal"></a>`MapSignal<K, V> createMapSignal(Map<K, V> value, {String? debugLabel})`
 
-Create a [MapSignal](/packages/signals/value/map) `<K, V>` and watch for changes
+Create a [MapSignal](/packages/signals/value/map) <code><K, V></code> and watch for changes
 
 ##### <a name="createcomputed"></a>`FlutterComputed<V> createComputed(V Function() cb, {String? debugLabel})`
 
-Create a `computed<T>` and watch for changes
+Create a <code>computed<T></code> and watch for changes
 
 ##### <a name="bindsignal"></a>`S bindSignal(S val)`
 
-Bind an existing `signal<T>` and watch for changes
+Bind an existing <code>signal<T></code> and watch for changes
 
 ##### <a name="unbindsignal"></a>`S unbindSignal(S val)`
 
-Unbind an existing `signal<T>` changes
+Unbind an existing <code>signal<T></code> changes
 
 ##### <a name="watchsignal"></a>`V watchSignal(S val)`
 
@@ -184,7 +187,7 @@ Watch signal value
 
 ##### <a name="unwatchsignal"></a>`V unwatchSignal(S val)`
 
-Unwatch an existing `signal<T>` value changes
+Unwatch an existing <code>signal<T></code> value changes
 
 ##### <a name="listensignal"></a>`void listenSignal(ReadonlySignal<dynamic> target, void Function() callback, {String? debugLabel})`
 
@@ -208,3 +211,5 @@ effect every render.
 Reset all stored signals and effects
 
 ##### <a name="dispose"></a>`void dispose()`
+
+</details>

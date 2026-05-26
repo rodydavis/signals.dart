@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-When you need to store the state of your signals between app launches you can create a `PersistedSignal` from this example code.
+When you need to store the state of your signals between app launches you can create a <code>PersistedSignal</code> from this example code.
 
 You need to have a store that can be [SharedPreferences](https://pub.dev/packages/shared_preferences), [SQLite](https://pub.dev/packages/sqlite3), in memory, or any other storage solution. The store just needs to be able to save and restore the data.
 

@@ -4,10 +4,10 @@ description: A Dart static analysis rule that detects and warns against using th
 ---
 
 A Dart static analysis rule that detects and warns against using the deprecated
-`.watch(context)` and `.unwatch(context)` extension methods in v7.
+<code>.watch(context)</code> and <code>.unwatch(context)</code> extension methods in v7.
 
 <Warning>
-The `.watch(context)` extension was deprecated in `signals` v7 due to performance concerns
+The <code>.watch(context)</code> extension was deprecated in <code>signals</code> v7 due to performance concerns
 and unexpected side effects with Flutter's build lifecycle. Using it can trigger unnecessary
 widget rebuilds. In v7, you must migrate to specialized reactive components like
 [SignalBuilder](/packages/signals/flutter/watch), **SignalWidget**, or **SignalStatefulWidget**.
@@ -37,9 +37,19 @@ Widget build(BuildContext context) {
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalsavoiddeprecatedwatchextension"></a><a name="signalsavoiddeprecatedwatchextension"></a>`SignalsAvoidDeprecatedWatchExtension()`
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="run"></a>`void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)`
+
+</details>

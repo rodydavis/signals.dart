@@ -44,10 +44,10 @@ void Function(signals.ReadonlySignal)? onSignalRead;
 /// }
 /// ```
 ///
-/// :::tip
-/// Use [ReadonlySignal] to prevent consumers of your stores or controllers from bypassing the
-/// formal API methods. This guarantees predictable state flow throughout your application.
-/// :::
+/// <Info>
+///   Use [ReadonlySignal] to prevent consumers of your stores or controllers from bypassing the
+///   formal API methods. This guarantees predictable state flow throughout your application.
+/// </Info>
 abstract class ReadonlySignal<T> = signals.ReadonlySignal<T>
     with ReadonlySignalMixin<T>, SignalsAutoDisposeMixin<T>;
 
@@ -73,6 +73,17 @@ mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
   T get value {
     onSignalRead?.call(this);
     return super.value;
+  }
+
+  @override
+  T peek() {
+    final prev = onSignalRead;
+    onSignalRead = null;
+    try {
+      return super.peek();
+    } finally {
+      onSignalRead = prev;
+    }
   }
 }
 
@@ -105,10 +116,10 @@ mixin ReadonlySignalMixin<T> on signals.ReadonlySignal<T> {
 /// }
 /// ```
 ///
-/// :::caution
-/// If you are trying to derive a value from other signals, do not use [readonly]. Use [computed] instead
-/// to ensure the derived signal automatically re-evaluates when its source signals change.
-/// :::
+/// <Warning>
+///   If you are trying to derive a value from other signals, do not use [readonly]. Use [computed] instead
+///   to ensure the derived signal automatically re-evaluates when its source signals change.
+/// </Warning>
 ReadonlySignal<T> readonly<T>(
   /// The initial value for the signal
   T value, {

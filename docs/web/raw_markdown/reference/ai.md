@@ -13,8 +13,8 @@ Instead of manually feeding individual files into your AI chat or workspace, you
 
 | Endpoint | Contents | Best Use Case |
 | :--- | :--- | :--- |
-| **`https://dartsignals.dev/llms.txt`** | Full user guides and core reference documentation. | Adding project context to lightweight assistants. |
-| **`https://dartsignals.dev/llms-full.txt`** | Complete, comprehensive reference manual (expanded details). | In-depth code generation and technical codebases. |
+| **<code>https://dartsignals.dev/llms.txt</code>** | Full user guides and core reference documentation. | Adding project context to lightweight assistants. |
+| **<code>https://dartsignals.dev/llms-full.txt</code>** | Complete, comprehensive reference manual (expanded details). | In-depth code generation and technical codebases. |
 
 ### Adding to Local Workspace Context
 If your AI coding assistant is scoped to your local project directory, you can download the endpoint directly to your workspace:
@@ -23,23 +23,23 @@ If your AI coding assistant is scoped to your local project directory, you can d
 curl https://dartsignals.dev/llms.txt > signals.md
 ```
 
-Once downloaded to your project root, you can reference the file (e.g. using `@signals.md` in cursor/copilot) to supply instant, highly relevant context.
+Once downloaded to your project root, you can reference the file (e.g. using <code>@signals.md</code> in cursor/copilot) to supply instant, highly relevant context.
 
 ---
 
 ## Prepackaged AI Developer Skills
 
-To enable AI agents and coding assistants to write clean, idiomatic code for version 7 of the reactive framework, we package modular, high-fidelity developer **Skills** in the repository under the `/skills` folder.
+To enable AI agents and coding assistants to write clean, idiomatic code for version 7 of the reactive framework, we package modular, high-fidelity developer **Skills** in the repository under the <code>/skills</code> folder.
 
 These skills act as a system prompt extension that teaches the AI best practices, common gotchas (like the async tracking gap), and lifecycle optimization tracks:
 
-* **`signals-preact-dart`**: Deep knowledge of the core reactive primitives (`signal`, `computed`, `effect`, `batch`, `untracked`).
-* **`signals-dart`**: Best practices for async signal operations (`FutureSignal`, `StreamSignal`), reactive collections, writable computed signals (`linkedSignal`), and value semantics.
-* **`signals-flutter`**: Comprehensive guides on element-level reactive UI integration, high-frequency GPU rendering bypasses, lifecycle side-effects, and `.watch(context)` extensions.
-* **`signals-migration-6-to-7`**: Detailed instructions, patterns, and refactoring techniques to safely upgrade applications from signals v6.x to v7.0.0.
+* **<code>signals-preact-dart</code>**: Deep knowledge of the core reactive primitives (<code>signal</code>, <code>computed</code>, <code>effect</code>, <code>batch</code>, <code>untracked</code>).
+* **<code>signals-dart</code>**: Best practices for async signal operations (<code>FutureSignal</code>, <code>StreamSignal</code>), reactive collections, writable computed signals (<code>linkedSignal</code>), and value semantics.
+* **<code>signals-flutter</code>**: Comprehensive guides on element-level reactive UI integration, high-frequency GPU rendering bypasses, lifecycle side-effects, and <code>.watch(context)</code> extensions.
+* **<code>signals-migration-6-to-7</code>**: Detailed instructions, patterns, and refactoring techniques to safely upgrade applications from signals v6.x to v7.0.0.
 
 ### One-Command Skill Installation
-You can instantly install all available signals skills into your local AI workspace using the unified `skills.sh` registry CLI:
+You can instantly install all available signals skills into your local AI workspace using the unified <code>skills.sh</code> registry CLI:
 
 ```bash
 npx skills add rodydavis/signals.dart

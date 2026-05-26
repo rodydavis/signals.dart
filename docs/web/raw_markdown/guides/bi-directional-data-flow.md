@@ -26,9 +26,9 @@ effect(() {
 });
 ```
 
-In this example, `a` and `b` are two signals that are dependent on each other. When `a` changes, `b` should update, and when `b` changes, `a` should update.
+In this example, <code>a</code> and <code>b</code> are two signals that are dependent on each other. When <code>a</code> changes, <code>b</code> should update, and when <code>b</code> changes, <code>a</code> should update.
 
-This however can lead to an infinite loop and will throw a `EffectCycleDetectionError`. To prevent this, you can use the `untracked` method to prevent the signal from updating itself.
+This however can lead to an infinite loop and will throw a <code>EffectCycleDetectionError</code>. To prevent this, you can use the <code>untracked</code> method to prevent the signal from updating itself.
 
 ```dart
 final a = signal(0);

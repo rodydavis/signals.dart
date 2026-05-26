@@ -10,10 +10,10 @@ import 'base.dart';
 /// and you want to reactive-bind the [HookWidget] to rebuild whenever the signal emits
 /// a new value.
 ///
-/// :::tip
-/// If you only need the value of the signal inside the build method and do not
-/// need the signal instance itself, consider using [useSignalValue] instead.
-/// :::
+/// <Info>
+///   If you only need the value of the signal inside the build method and do not
+///   need the signal instance itself, consider using [useSignalValue] instead.
+/// </Info>
 ///
 /// ### Parameters
 /// - [value]: The existing [ReadonlySignal] or [Signal] instance to subscribe to.
@@ -68,10 +68,10 @@ S useExistingSignal<T, S extends ReadonlySignal<T>>(
 /// This is a convenience hook that is equivalent to invoking `useExistingSignal(signal).value`.
 /// It triggers a rebuild of the host [HookWidget] whenever the signal's value changes.
 ///
-/// :::tip
-/// This hook is the preferred way to consume external/global signals when you only
-/// need read-only access to their values and want standard Flutter Hook ergonomics.
-/// :::
+/// <Info>
+///   This hook is the preferred way to consume external/global signals when you only
+///   need read-only access to their values and want standard Flutter Hook ergonomics.
+/// </Info>
 ///
 /// ### Parameters
 /// - [value]: The existing [ReadonlySignal] or [Signal] instance to retrieve the value from and subscribe to.
@@ -121,11 +121,11 @@ T useSignalValue<T, S extends ReadonlySignal<T>>(
 /// if necessary (signals created in this manner are managed by the Hook lifetime). The widget
 /// will automatically rebuild whenever this signal's value changes.
 ///
-/// :::caution
-/// If you want the signal to survive widget disposal (e.g. shared state), do not use [useSignal].
-/// Instead, define your signal globally or in a controller, and subscribe to it using [useExistingSignal]
-/// or [useSignalValue].
-/// :::
+/// <Warning>
+///   If you want the signal to survive widget disposal (e.g. shared state), do not use [useSignal].
+///   Instead, define your signal globally or in a controller, and subscribe to it using [useExistingSignal]
+///   or [useSignalValue].
+/// </Warning>
 ///
 /// ### Parameters
 /// - [value]: The initial value of the signal.
@@ -184,10 +184,10 @@ FlutterSignal<T> useSignal<T>(
 ///
 /// The host widget will rebuild whenever the derived value changes.
 ///
-/// :::tip
-/// Use computed signals to keep build methods clean and prevent unnecessary re-computations
-/// of expensive operations (e.g., filtering, sorting, or formatting data).
-/// :::
+/// <Info>
+///   Use computed signals to keep build methods clean and prevent unnecessary re-computations
+///   of expensive operations (e.g., filtering, sorting, or formatting data).
+/// </Info>
 ///
 /// ### Parameters
 /// - [value]: The computation callback that derives the computed value.
@@ -245,10 +245,10 @@ FlutterComputed<T> useComputed<T>(
 /// Any reactive signal accessed inside the callback [cb] is tracked as a dependency, and the effect
 /// is executed automatically whenever those signals change.
 ///
-/// :::caution
-/// Avoid modifying signals inside the effect callback that could trigger infinite loops or
-/// unintentional side effects.
-/// :::
+/// <Warning>
+///   Avoid modifying signals inside the effect callback that could trigger infinite loops or
+///   unintentional side effects.
+/// </Warning>
 ///
 /// ### Parameters
 /// - [cb]: The effect callback to execute when tracked dependencies change.
@@ -311,10 +311,10 @@ void useSignalEffect(
 /// A [LinkedSignal] is a specialized signal that "links" to another reactive source or computed value,
 /// automatically updating or resetting itself based on a custom computation function when the source changes.
 ///
-/// :::tip
-/// This is perfect for situations like editing a form field where the default value is derived from a
-/// dynamic source (e.g. an item index, a fetched database record) but the user can also edit the value locally.
-/// :::
+/// <Info>
+///   This is perfect for situations like editing a form field where the default value is derived from a
+///   dynamic source (e.g. an item index, a fetched database record) but the user can also edit the value locally.
+/// </Info>
 ///
 /// ### Parameters
 /// - [source]: A computation function that yields the source value of type [S].
@@ -377,10 +377,10 @@ LinkedSignal<T, S> useLinkedSignal<T, S>(
 /// A lazy signal is a signal that doesn't have an initial value on creation. Reading its `.value`
 /// before setting it will throw a [LazySignalInitializationError].
 ///
-/// :::tip
-/// Ideal for binding late-initialized state, such as data fetched in a lifecycle effect
-/// or passed asynchronously from platform channels.
-/// :::
+/// <Info>
+///   Ideal for binding late-initialized state, such as data fetched in a lifecycle effect
+///   or passed asynchronously from platform channels.
+/// </Info>
 ///
 /// ### Parameters
 /// - [keys]: A list of objects to watch. If any key changes, the signal is re-created.

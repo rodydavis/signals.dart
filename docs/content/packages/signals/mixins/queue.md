@@ -1,13 +1,13 @@
 ---
 title: QueueSignalMixin
-description: A mixin that adds reactive Queue methods and operations to a Signal.
+description: A mixin that adds reactive <code>Queue</code> methods and operations to a Signal.
 ---
 
-A mixin that adds reactive `Queue` methods and operations to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>Queue</code> methods and operations to a [Signal](/packages/signals/core/signal)
 holding a **Queue** value.
 
-This mixin delegates all standard **Queue** operations (such as mutations like `add`,
-`addAll`, `addFirst`, `addLast`, `removeFirst`, `removeLast`, and `clear`) to the
+This mixin delegates all standard **Queue** operations (such as mutations like <code>add</code>,
+<code>addAll</code>, <code>addFirst</code>, <code>addLast</code>, <code>removeFirst</code>, <code>removeLast</code>, and <code>clear</code>) to the
 underlying queue, while ensuring that any reads register a dependency and any
 mutations automatically trigger reactive updates.
 
@@ -46,13 +46,16 @@ void main() {
 ```
 
 <Success>
-Since mutations on `QueueSignalMixin` notify listeners automatically, you do not
-need to assign `signal.value = ...` to force updates. Methods like `addFirst`,
-`addLast`, `removeFirst`, and `removeLast` take care of notification.
+Since mutations on <code>QueueSignalMixin</code> notify listeners automatically, you do not
+need to assign <code>signal.value = ...</code> to force updates. Methods like <code>addFirst</code>,
+<code>addLast</code>, <code>removeFirst</code>, and <code>removeLast</code> take care of notification.
 </Success>
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="add"></a>`void add(T value)`
 
@@ -133,3 +136,5 @@ need to assign `signal.value = ...` to force updates. Methods like `addFirst`,
 ##### <a name="where"></a>`Iterable<T> where(bool Function(T element) test)`
 
 ##### <a name="wheretype"></a>`Iterable<U> whereType()`
+
+</details>

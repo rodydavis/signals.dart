@@ -50,6 +50,9 @@ Function? initNodes() {
             final current = nodes[idx];
             if (n.type == 'signal' || n.type == 'computed') {
               current.value = n.value;
+              current.sources = n.sources ?? current.sources;
+              current.targets = n.targets ?? current.targets;
+              nodes[idx] = current;
               nodeUpdate.value = current;
             } else {
               nodes[idx] = n;

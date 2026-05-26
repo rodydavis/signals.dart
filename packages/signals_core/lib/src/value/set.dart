@@ -83,15 +83,16 @@ class SetSignal<E> extends Signal<Set<E>>
 
   @override
   bool operator ==(Object other) {
-    return other is SetSignal<E> && value == other.value;
+    return other is SetSignal<E> && peek() == other.peek();
   }
 
   @override
   int get hashCode {
+    final val = peek();
     return Object.hashAll([
       globalId.hashCode,
-      value.hashCode,
-      for (final item in value) item.hashCode,
+      val.hashCode,
+      for (final item in val) item.hashCode,
     ]);
   }
 }

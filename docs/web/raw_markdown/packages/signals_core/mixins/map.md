@@ -1,16 +1,16 @@
 ---
 title: MapSignalMixin
-description: A mixin that adds reactive Map methods and operators directly to a Signal.
+description: A mixin that adds reactive <code>Map</code> methods and operators directly to a Signal.
 ---
 
-A mixin that adds reactive `Map` methods and operators directly to a [Signal](/packages/signals/core/signal).
+A mixin that adds reactive <code>Map</code> methods and operators directly to a [Signal](/packages/signals/core/signal).
 
-This mixin delegates all standard **Map** operations (such as mutations like `[]=`, `clear`,
-`remove`, and lookups like `containsKey`, `isEmpty`, `keys`, `values`) to the underlying
+This mixin delegates all standard **Map** operations (such as mutations like <code>[]=</code>, <code>clear</code>,
+<code>remove</code>, and lookups like <code>containsKey</code>, <code>isEmpty</code>, <code>keys</code>, <code>values</code>) to the underlying
 map value.
 
 Every mutating operation automatically updates the signal and notifies its observers
-(by forcing a change notification using `force: true`).
+(by forcing a change notification using <code>force: true</code>).
 
 ### Simple Example
 ```dart
@@ -33,6 +33,9 @@ cart.remove('apple'); // Prints: Cart length: 1
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="[]"></a>`V? [](Object? key)`
 
@@ -79,3 +82,5 @@ cart.remove('apple'); // Prints: Cart length: 1
 ##### <a name="tomap"></a>`Map<K, V> toMap()`
 
 Snapshot of **MapEntries**
+
+</details>

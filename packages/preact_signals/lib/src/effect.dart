@@ -10,22 +10,56 @@ import 'options.dart';
 /// An [Effect] tracks which signals are accessed within its callback function,
 /// and automatically schedules itself to re-run whenever those dependencies change.
 ///
+/// Under the hood, the reactivity engine tracks reads on `.value` inside the active effect block.
+/// Once the block completes, a subscription is registered for each accessed signal. When any of those signals
+/// mutate, the effect is added to the microtask queue and executed synchronously during the next tick.
+///
+/// <Warning>
+///   Do not modify a tracked signal *directly* inside an effect callback, as this will trigger another execution
+///   of the same effect, causing an infinite loop (cycle) and throwing a cycle detection error.
+///   To read a signal non-reactively, use `.peek()`.
+/// </Warning>
+///
 /// ### Example Usage
 ///
+/// #### 1. Standard Side-Effect
 /// ```dart
 /// import 'package:preact_signals/preact_signals.dart';
 ///
 /// final count = signal(0);
 ///
 /// void main() {
+///   // Creates and immediately starts the effect
 ///   final logger = Effect(() {
 ///     print('Active count is: ${count.value}');
-///     return () => print('Cleaning up effect!');
 ///   });
 ///
-///   count.value = 1; // Prints: "Cleaning up effect!" then "Active count is: 1"
+///   count.value = 1; // Prints: "Active count is: 1"
 ///   logger.dispose();
 /// }
+/// ```
+///
+/// #### 2. Effect Cleanup Callback
+/// If your effect returns a function, that function is registered as a **cleanup callback**.
+/// The cleanup callback is executed right before the next effect run, or when the effect is disposed.
+/// This is highly useful for cleaning up timers, controllers, or other subscriptions:
+/// ```dart
+/// final query = signal('search_term');
+///
+/// final searchEffect = Effect(() {
+///   final currentQuery = query.value;
+///   print('Initiating search for: $currentQuery');
+///
+///   final timer = Timer(Duration(milliseconds: 500), () {
+///     print('Search completed for: $currentQuery');
+///   });
+///
+///   // Return cleanup callback
+///   return () {
+///     print('Cancelling previous search timer');
+///     timer.cancel();
+///   };
+/// });
 /// ```
 class Effect with Listenable {
   /// @internal
@@ -52,7 +86,14 @@ class Effect with Listenable {
   /// The name of the effect for debugging.
   final String? name;
 
-  /// Creates a new [Effect] instance with the callback [fn].
+  /// Creates a new [Effect] instance with the passive side-effect callback [fn].
+  ///
+  /// You can optionally provide:
+  /// - A [name] for debugging/observer tracing.
+  ///
+  /// ```dart
+  /// final effectObj = Effect(() => print(count.value), name: 'count_logger');
+  /// ```
   Effect(
     this.fn, {
     String? name,
@@ -121,7 +162,8 @@ class Effect with Listenable {
     }
   }
 
-  /// Dispose of the effect and stop future callbacks
+  /// Disposes of the effect, stopping future callback executions,
+  /// executing any registered cleanup routines, and unsubscribing from all dependency signals.
   void dispose() {
     flags |= DISPOSED;
     if (!((flags & RUNNING) != 0)) {
@@ -129,7 +171,9 @@ class Effect with Listenable {
     }
   }
 
-  /// Activate the effect starting with the callback
+  /// Activates/Runs the effect immediately.
+  ///
+  /// Returns a bound disposer function that can be called to stop the effect.
   void Function() call() {
     try {
       callback();
@@ -203,9 +247,9 @@ class Effect with Listenable {
   }
 }
 
-/// Convenient global constructor for creating and immediately starting an [Effect].
+/// Creates and immediately executes a new reactive [Effect].
 ///
-/// Returns a disposer function that can be called to stop the effect and unsubscribe
+/// Returns a bound disposer function that can be called to stop the effect and unsubscribe
 /// it from all tracked signals.
 ///
 /// ### Example Usage
@@ -216,11 +260,12 @@ class Effect with Listenable {
 /// final count = signal(0);
 /// final dispose = effect(() {
 ///   print('Count is: ${count.value}');
+///   return () => print('Cleaning up!');
 /// });
 ///
 /// void main() {
-///   count.value = 10; // Prints: Count is: 10
-///   dispose(); // Unsubscribes and cleans up resources
+///   count.value = 10; // Prints: "Cleaning up!" then "Count is: 10"
+///   dispose(); // Stops the effect and unsubscribes
 /// }
 /// ```
 void Function() effect(

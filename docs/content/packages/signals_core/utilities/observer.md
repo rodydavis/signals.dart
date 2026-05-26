@@ -1,9 +1,9 @@
 ---
 title: SignalsObserver
-description: You can observe all signal values in the dart application by providing an implementation of SignalsObserver:.
+description: You can observe all signal values in the dart application by providing an implementation of <code>SignalsObserver</code>:.
 ---
 
-You can observe all signal values in the dart application by providing an implementation of `SignalsObserver`:
+You can observe all signal values in the dart application by providing an implementation of <code>SignalsObserver</code>:
 
 ```dart
 abstract class SignalsObserver {
@@ -15,7 +15,7 @@ abstract class SignalsObserver {
 }
 ```
 
-> There is a prebuilt `LoggingSignalsObserver` for printing updates to the console.
+> There is a prebuilt <code>LoggingSignalsObserver</code> for printing updates to the console.
 
 To add the observer override the instance at the start of the application:
 
@@ -26,17 +26,25 @@ void main() {
 }
 ```
 
-This will have a slight performance hit since every update will be tracked via the observer. It is recommended to only set the `SignalsObserver.instance` in debug or profile mode.
+This will have a slight performance hit since every update will be tracked via the observer. It is recommended to only set the <code>SignalsObserver.instance</code> in debug or profile mode.
 
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="instance"></a>`static SignalsObserver? instance`
 
 The current observer instance.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="onsignalcreated"></a>`void onSignalCreated(Signal<T> instance, T value)`
 
@@ -65,3 +73,5 @@ Called when a effect is called.
 ##### <a name="oneffectremoved"></a>`void onEffectRemoved(Effect instance)`
 
 Called when a effect is disposed.
+
+</details>

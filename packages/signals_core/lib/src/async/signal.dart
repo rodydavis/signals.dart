@@ -7,59 +7,91 @@ import '../mixins/event_sink.dart';
 import 'state.dart';
 
 /// {@template signal}
-/// A [Signal] specifically designed for manual asynchronous state management.
+/// A highly powerful [Signal] specifically designed for manual, imperative asynchronous state management.
 ///
-/// `AsyncSignal<T>` wraps an [AsyncState<T>] (which can be loading, data, or error)
-/// and provides utility getters like [.future] to easily await its completion.
+/// Unlike declarative reactive signals like [futureSignal] or [streamSignal] (which automatically wrap and listen
+/// to an existing `Future` or `Stream`), `AsyncSignal<T>` gives you full manual/imperative control over pushing
+/// async states ([AsyncState.loading], [AsyncState.data], and [AsyncState.error]) into the reactive graph.
 ///
-/// ### Simple Example
+/// This is the perfect state primitive for building custom repositories, handling manual user action triggers
+/// (e.g., submitting a registration form, calling an API on button click), or bridging low-level callback-based APIs
+/// into reactive states.
+///
+/// ### 1. Imperative State Mutations
+/// You can update the state of the signal directly using specialized mutation helpers:
+/// - `setLoading()` puts the signal into a clean `AsyncLoading` state.
+/// - `setValue(T data)` pushes a new `AsyncData` state containing the data.
+/// - `setError(Object error, [StackTrace? stackTrace])` transitions the signal to an `AsyncError` state.
+///
 /// ```dart
-/// // Create an AsyncSignal starting in a loading state
-/// final weather = asyncSignal<double>(AsyncState.loading());
+/// final authState = asyncSignal<User>(AsyncState.loading());
 ///
-/// // Update the value with data
-/// weather.value = AsyncState.data(72.5); // or AsyncData(72.5)
-///
-/// // Or set an error
-/// weather.value = AsyncState.error('Failed to fetch weather', null);
+/// Future<void> login(String email, String password) async {
+///   try {
+///     authState.setLoading(); // Set UI to loading state
+///     final user = await authApi.signIn(email, password);
+///     authState.setValue(user); // Push success data
+///   } catch (err, stack) {
+///     authState.setError(err, stack); // Push error state
+///   }
+/// }
 /// ```
 ///
-/// ### Awaiting Completion with `.future`
-/// Sometimes you need to await the signal until it completes with a value.
-/// You can await the [.future] getter, which returns a `Future<T>` that resolves
-/// when a data value is pushed, or throws when an error is set.
+/// ### 2. Awaiting Async Completion via `.future`
+/// An outstanding capability of `AsyncSignal` is its built-in `.future` getter. Any part of your code can await
+/// this future. It returns a standard `Future<T>` that resolves when the signal next receives a data value,
+/// or throws if the signal next receives an error state.
 ///
 /// ```dart
-/// final s = asyncSignal<int>(AsyncState.loading());
+/// final loginSignal = asyncSignal<User>(AsyncState.loading());
 ///
-/// // Start a background task
-/// Future.delayed(Duration(seconds: 1), () => s.setValue(42));
+/// // Task A: Start background operation
+/// Future.delayed(Duration(seconds: 2), () {
+///   loginSignal.setValue(User(name: 'Charlie'));
+/// });
 ///
-/// // Await the completion of the signal!
-/// final result = await s.future; // Waits and resolves to 42
+/// // Task B: Wait for the signal to resolve!
+/// final user = await loginSignal.future; // Suspends execution until Task A completes!
+/// print(user.name); // 'Charlie'
 /// ```
 ///
-/// ### Direct Mutators: `setValue`, `setError`, and `setLoading`
-/// Instead of manually instantiating [AsyncData] or [AsyncError], you can use
-/// helper methods directly on `AsyncSignal`:
-/// - `s.setValue(value)` wraps the value in `AsyncData` and notifies listeners.
-/// - `s.setError(error, [stackTrace])` wraps the error in `AsyncError` and notifies.
-/// - `s.setLoading()` puts the signal back into a clean `AsyncLoading` state.
+/// ### 3. Rendering in Flutter using `Watch` and `AsyncState` Pattern matching
+/// In your Flutter widgets, you can seamlessly watch the signal and use Dart's native pattern matching
+/// on [AsyncState] to render different widgets corresponding to the current asynchronous lifecycle:
 ///
-/// ### EventSink Integration
-/// `AsyncSignal` implements the standard [EventSink] interface. You can pass it directly
-/// to stream listeners or use it to pipeline event streams:
 /// ```dart
-/// final numbers = Stream.periodic(Duration(seconds: 1), (i) => i).take(5);
-/// final counter = asyncSignal<int>(AsyncState.loading());
+/// Widget build(BuildContext context) {
+///   final state = authState.watch(context);
+///   
+///   return state.map(
+///     data: (user) => HomeScreen(user: user),
+///     error: (error, stackTrace) => ErrorWidget(error),
+///     loading: () => const CircularProgressIndicator(),
+///   );
+/// }
+/// ```
 ///
-/// // Pipe the stream directly into the signal!
-/// numbers.listen(
-///   (val) => counter.add(val),
-///   onError: (err) => counter.addError(err),
-///   onDone: () => counter.close(),
+/// ### 4. Bridging callback/event-driven systems via `EventSink`
+/// `AsyncSignal` implements Dart's standard [EventSink] interface. This allows it to act directly as an event sink
+/// for streams, websockets, or callback listeners:
+///
+/// ```dart
+/// final messageLog = asyncSignal<String>(AsyncState.loading());
+/// final chatStream = webSocket.stream.map((event) => event.toString());
+///
+/// // Automatically push all incoming messages and errors from the stream into the signal:
+/// chatStream.listen(
+///   (msg) => messageLog.add(msg),
+///   onError: (err) => messageLog.addError(err),
+///   onDone: () => messageLog.close(),
 /// );
 /// ```
+///
+/// <Info>
+///   Favor `AsyncSignal` when you need manual, callback-driven, or button-press-triggered state mutations.
+///   For auto-triggering, declarative, or read-only asynchronous data dependencies (like pulling data when an ID changes),
+///   favor [futureSignal] or [computedAsync] instead.
+/// </Info>
 ///
 /// @link https://dartsignals.dev/async/signal
 /// {@endtemplate}

@@ -229,8 +229,8 @@ class DynamicSidebar extends StatelessComponent {
               SidebarLink(text: "AsyncSignal", href: '/packages/signals_core/async/signal'),
               SidebarLink(text: "Computed", href: '/packages/signals_core/async/computed'),
               SidebarLink(text: "Connect", href: '/packages/signals_core/async/connect'),
-              SidebarLink(text: "Future", href: '/packages/signals_core/async/future'),
-              SidebarLink(text: "StreamSignal", href: '/packages/signals_core/async/stream'),
+              SidebarLink(text: "FutureSignal", href: '/packages/signals_core/async/future'),
+              SidebarLink(text: "Stream", href: '/packages/signals_core/async/stream'),
             ],
           ),
           SidebarGroup(
@@ -302,7 +302,7 @@ class DynamicSidebar extends StatelessComponent {
               SidebarLink(text: "AsyncSignal", href: '/packages/signals_flutter/async/signal'),
               SidebarLink(text: "Computed", href: '/packages/signals_flutter/async/computed'),
               SidebarLink(text: "Connect", href: '/packages/signals_flutter/async/connect'),
-              SidebarLink(text: "Future", href: '/packages/signals_flutter/async/future'),
+              SidebarLink(text: "FutureSignal", href: '/packages/signals_flutter/async/future'),
               SidebarLink(text: "Stream", href: '/packages/signals_flutter/async/stream'),
             ],
           ),
@@ -618,6 +618,25 @@ class Sidebar extends StatelessComponent {
               ]),
             ]),
         ]),
+        script(
+          content: """
+(function() {
+  function scrollToActive() {
+    var active = document.querySelector(".sidebar .active");
+    if (active) {
+      active.scrollIntoView({ block: "nearest", behavior: "instant" });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scrollToActive);
+  } else {
+    scrollToActive();
+  }
+  setTimeout(scrollToActive, 50);
+  setTimeout(scrollToActive, 150);
+})();
+""",
+        ),
       ]),
     ]);
   }

@@ -6,7 +6,7 @@ description: Creates a new StreamSignal and subscribes to it.
 Creates a new [StreamSignal](/packages/signals/async/stream) and subscribes to it.
 
 A [StreamSignal](/packages/signals/async/stream) wraps a standard Dart **Stream**, capturing emitted events, errors,
-and done notifications as reactive states (`loading`, `data`, `error`). The host widget
+and done notifications as reactive states (<code>loading</code>, <code>data</code>, <code>error</code>). The host widget
 is automatically rebuilt on every stream emission.
 
 <Success>

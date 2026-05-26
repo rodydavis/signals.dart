@@ -64,12 +64,20 @@ void main() {
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalcontainer"></a><a name="signalcontainer"></a>`SignalContainer(this._create, {this.cache = false, this.onEvict})`
 
 Signal container used to create multiple signals via args
 
+</details>
+
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="cache"></a>`bool cache`
 
@@ -83,8 +91,13 @@ Optional callback when a signal is removed/evicted from the cache
 
 Store of created signals (if cache is true)
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="call"></a>`S call(Arg arg)`
 
@@ -137,6 +150,8 @@ Retrieve the cached signal for **arg** if it exists, without creating a new one 
 ##### <a name="removewhere"></a>`void removeWhere(bool Function(Arg key, S signal) test)`
 
 Filter and remove matching cached signals.
+
+</details>
 
 
 

@@ -61,6 +61,7 @@ class Signal<T> extends signals.Signal<T>
   }
 
   @override
+  @internal
   void afterCreate(T val) {
     if (kDebugMode) {
       SignalsObserver.instance?.onSignalCreated(this, val);
@@ -69,6 +70,7 @@ class Signal<T> extends signals.Signal<T>
   }
 
   @override
+  @internal
   void beforeUpdate(T val) {
     if (kDebugMode) {
       SignalsObserver.instance?.onSignalUpdated(this, val);

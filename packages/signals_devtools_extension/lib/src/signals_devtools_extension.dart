@@ -57,6 +57,7 @@ class SignalsExtensionHomePage extends StatefulWidget {
 class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
   final activeTab = signal<int>(0); // 0 = Updates, 1 = Graph
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  VoidCallback? _nodesSubscriptionCleanup;
 
   @override
   void initState() {
@@ -65,8 +66,18 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
   }
 
   Future<void> init() async {
-    initNodes();
+    await serviceManager.onServiceAvailable;
+    final cancel = initNodes();
+    if (cancel != null) {
+      _nodesSubscriptionCleanup = () => cancel();
+    }
     await refreshNodes();
+  }
+
+  @override
+  void dispose() {
+    _nodesSubscriptionCleanup?.call();
+    super.dispose();
   }
 
   @override

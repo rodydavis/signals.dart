@@ -1,92 +1,69 @@
 ---
 title: FutureSignal
-description: Future signals can be created by extension or method.
+description: Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a react...
 ---
 
-Future signals can be created by extension or method.
+Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive [AsyncState](/packages/signals/async/state).
 
-### futureSignal
+You can construct a future signal via the helper function [futureSignal](/packages/signals/async/future) or by calling the <code>.toSignal()</code> extension method on any standard **Future**.
 
+### 1. Basic Async Fetching
 ```dart
-final s = futureSignal(() async => 1);
+final s = futureSignal(() async {
+  final data = await fetchUserData(123);
+  return data;
+});
 ```
 
-### toSignal()
-
+Or via the extension:
 ```dart
-final s = Future(() => 1).toSignal();
+final s = fetchUserData(123).toSignal();
 ```
 
-## .value, .peek()
-
-Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
-
-The `value` getter returns the value of the future if it completed successfully.
-
-> .peek() can also be used to not subscribe in an effect
+### 2. Consuming and Pattern Matching <code>AsyncState</code>
+Reading <code>.value</code> on a [FutureSignal](/packages/signals/async/future) returns an [AsyncState](/packages/signals/async/state) object. You can safely pattern-match or map this state to reactively build your user interface or perform side-effects:
 
 ```dart
-final s = futureSignal(() => Future(() => 1));
-final value = s.value.value; // 1 or null
+effect(() {
+  s.value.map(
+    data: (user) => print('User fetched successfully: ${user.name}'),
+    error: (err, stack) => print('Failed to fetch user: $err'),
+    loading: () => print('Loading user...'),
+  );
+});
 ```
 
-## .reset()
-
-The `reset` method resets the future to its initial state to recall on the next evaluation.
+### 3. Reset, Refresh, and Reload
+- **<code>reset()</code>**: Reverts the signal back to its initial/loading state.
+- **<code>refresh()</code>**: Triggers a new evaluation of the future while maintaining the current data in the meantime (sets <code>isLoading</code> to true but does not discard existing data/error).
+- **<code>reload()</code>**: Discards current state, sets the signal to <code>AsyncLoading</code>, and executes a fresh evaluation of the future.
 
 ```dart
-final s = futureSignal(() => Future(() => 1));
-s.reset();
+final s = futureSignal(() => fetchConfig());
+s.refresh(); // Triggers reload under the hood
 ```
 
-## .refresh()
-
-Refresh the future value by setting `isLoading` to true, but maintain the current state (AsyncData, AsyncLoading, AsyncError).
+### 4. Reactive Dependencies
+Any reactive signals read *synchronously* inside the future callback are registered as dependencies. When they mutate, the future signal automatically invalidates and schedules a fresh fetch.
 
 ```dart
-final s = futureSignal(() => Future(() => 1));
-s.refresh();
-print(s.value.isLoading); // true
+final userId = signal(123);
+final userProfile = futureSignal(() async {
+  // Subscribes to userId! Mutating userId automatically re-runs this future.
+  final currentId = userId.value;
+  return fetchUserProfile(currentId);
+});
 ```
 
-## .reload()
-
-Reload the future value by setting the state to `AsyncLoading` and pass in the value or error as data.
-
-```dart
-final s = futureSignal(() => Future(() => 1));
-s.reload();
-print(s.value is AsyncLoading); // true
-```
-
-## Dependencies
-
-By default the callback will be called once and the future will be cached unless a signal is read in the callback.
-
-```dart
-final count = signal(0);
-final s = futureSignal(() async => count.value);
-
-await s.future; // 0
-count.value = 1;
-await s.future; // 1
-```
-
-If there are signals that need to be tracked across an async gap then use the `dependencies` when creating the `futureSignal` to [`reset`](#.reset()) every time any signal in the dependency array changes.
-
-```dart
-final count = signal(0);
-final s = futureSignal(
-    () async => count.value,
-    dependencies: [count],
-);
-s.value; // state with count 0
-count.value = 1; // resets the future
-s.value; // state with count 1
-```
+<Info>
+  If you need to track dependencies across an asynchronous gap (i.e. reading a signal's value *after* an <code>await</code>), pass them explicitly in the <code>dependencies</code> list inside <code>AsyncSignalOptions</code> or the constructor to guarantee they are properly subscribed.
+</Info>
 
 
 ### Constructors
+
+<details>
+<summary> View Constructors </summary>
 
 ##### <a name="futuresignal"></a><a name="futuresignal"></a>`FutureSignal(Future<T> Function() fn, {AsyncSignalOptions<T>? options, @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead') T? initialValue, @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead') List<ReadonlySignal<dynamic>>? dependencies, @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy, @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: AsyncSignalOptions(name: ...) instead') String? debugLabel})`
 
@@ -106,9 +83,9 @@ final s = Future(() => 1).toSignal();
 
 ## .value, .peek()
 
-Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+Returns [<code>AsyncState<T></code>](/dart/async/state) for the value and can handle the various states.
 
-The `value` getter returns the value of the future if it completed successfully.
+The <code>value</code> getter returns the value of the future if it completed successfully.
 
 > .peek() can also be used to not subscribe in an effect
 
@@ -119,7 +96,7 @@ final value = s.value.value; // 1 or null
 
 ## .reset()
 
-The `reset` method resets the future to its initial state to recall on the next evaluation.
+The <code>reset</code> method resets the future to its initial state to recall on the next evaluation.
 
 ```dart
 final s = futureSignal(() => Future(() => 1));
@@ -128,7 +105,7 @@ s.reset();
 
 ## .refresh()
 
-Refresh the future value by setting `isLoading` to true, but maintain the current state (AsyncData, AsyncLoading, AsyncError).
+Refresh the future value by setting <code>isLoading</code> to true, but maintain the current state (AsyncData, AsyncLoading, AsyncError).
 
 ```dart
 final s = futureSignal(() => Future(() => 1));
@@ -138,7 +115,7 @@ print(s.value.isLoading); // true
 
 ## .reload()
 
-Reload the future value by setting the state to `AsyncLoading` and pass in the value or error as data.
+Reload the future value by setting the state to <code>AsyncLoading</code> and pass in the value or error as data.
 
 ```dart
 final s = futureSignal(() => Future(() => 1));
@@ -159,7 +136,7 @@ count.value = 1;
 await s.future; // 1
 ```
 
-If there are signals that need to be tracked across an async gap then use the `dependencies` when creating the `futureSignal` to [`reset`](#.reset()) every time any signal in the dependency array changes.
+If there are signals that need to be tracked across an async gap then use the <code>dependencies</code> when creating the <code>futureSignal</code> to [<code>reset</code>](#.reset()) every time any signal in the dependency array changes.
 
 ```dart
 final count = signal(0);
@@ -172,15 +149,25 @@ count.value = 1; // resets the future
 s.value; // state with count 1
 ```
 
+</details>
+
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="dependencies"></a>`List<ReadonlySignal<dynamic>> dependencies`
 
 List of dependencies to recompute the future
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="dispose"></a>`void dispose()`
 
@@ -193,6 +180,8 @@ List of dependencies to recompute the future
 ##### <a name="reload"></a>`Future<void> reload()`
 
 ##### <a name="refresh"></a>`Future<void> refresh()`
+
+</details>
 
 
 
@@ -216,9 +205,9 @@ final s = Future(() => 1).toSignal();
 
 ## .value, .peek()
 
-Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+Returns [<code>AsyncState<T></code>](/dart/async/state) for the value and can handle the various states.
 
-The `value` getter returns the value of the future if it completed successfully.
+The <code>value</code> getter returns the value of the future if it completed successfully.
 
 > .peek() can also be used to not subscribe in an effect
 
@@ -229,7 +218,7 @@ final value = s.value.value; // 1 or null
 
 ## .reset()
 
-The `reset` method resets the future to its initial state to recall on the next evaluation.
+The <code>reset</code> method resets the future to its initial state to recall on the next evaluation.
 
 ```dart
 final s = futureSignal(() => Future(() => 1));
@@ -238,7 +227,7 @@ s.reset();
 
 ## .refresh()
 
-Refresh the future value by setting `isLoading` to true, but maintain the current state (AsyncData, AsyncLoading, AsyncError).
+Refresh the future value by setting <code>isLoading</code> to true, but maintain the current state (AsyncData, AsyncLoading, AsyncError).
 
 ```dart
 final s = futureSignal(() => Future(() => 1));
@@ -248,7 +237,7 @@ print(s.value.isLoading); // true
 
 ## .reload()
 
-Reload the future value by setting the state to `AsyncLoading` and pass in the value or error as data.
+Reload the future value by setting the state to <code>AsyncLoading</code> and pass in the value or error as data.
 
 ```dart
 final s = futureSignal(() => Future(() => 1));
@@ -269,7 +258,7 @@ count.value = 1;
 await s.future; // 1
 ```
 
-If there are signals that need to be tracked across an async gap then use the `dependencies` when creating the `futureSignal` to [`reset`](#.reset()) every time any signal in the dependency array changes.
+If there are signals that need to be tracked across an async gap then use the <code>dependencies</code> when creating the <code>futureSignal</code> to [<code>reset</code>](#.reset()) every time any signal in the dependency array changes.
 
 ```dart
 final count = signal(0);

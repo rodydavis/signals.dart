@@ -8,10 +8,10 @@ Creates a new [LinkedSignal](/packages/signals/core/linked-signal) that resets i
 A [LinkedSignal](/packages/signals/core/linked-signal) is a specialized signal that "links" to another reactive source or computed value,
 automatically updating or resetting itself based on a custom computation function when the source changes.
 
-<Success>
-This is perfect for situations like editing a form field where the default value is derived from a
-dynamic source (e.g. an item index, a fetched database record) but the user can also edit the value locally.
-</Success>
+<Info>
+  This is perfect for situations like editing a form field where the default value is derived from a
+  dynamic source (e.g. an item index, a fetched database record) but the user can also edit the value locally.
+</Info>
 
 ### Parameters
 - **source**: A computation function that yields the source value of type **S**.

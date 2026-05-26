@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-> Note: `Consumer` can also be used instead of Watch.
+> Note: <code>Consumer</code> can also be used instead of Watch.
 
 ## GetIt
 
@@ -227,7 +227,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-You can use any class that implements `Disposable` and it will be disposed when the widget is removed from the widget tree. You also don't need to provide a `dispose` function for the ScopedRef.
+You can use any class that implements <code>Disposable</code> and it will be disposed when the widget is removed from the widget tree. You also don't need to provide a <code>dispose</code> function for the ScopedRef.
 
 ```dart
 class Counter implements Disposable {

@@ -1,11 +1,11 @@
 ---
 title: PersistedSignal
-description: A Signal whose value is persistently stored in a key-value database.
+description: A <code>Signal</code> whose value is persistently stored in a key-value database.
 ---
 
-A `Signal` whose value is persistently stored in a key-value database.
+A <code>Signal</code> whose value is persistently stored in a key-value database.
 
-`PersistedSignal` allows application state (such as user preferences, theme options,
+<code>PersistedSignal</code> allows application state (such as user preferences, theme options,
 authentication tokens, and drafts) to automatically survive application restarts
 without writing tedious boilerplate for manual loading and saving.
 
@@ -68,16 +68,26 @@ class PersistedUserSignal extends PersistedSignal<User> {
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistedsignal"></a><a name="persistedsignal"></a>`PersistedSignal(super.internalValue, {required this.key, required this.store, PersistedSignalOptions<T>? options, @Deprecated('Use options: PersistedSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: PersistedSignalOptions(name: ...) instead') String? debugLabel, bool autoInit = true})`
 
-Creates a new `PersistedSignal`.
+Creates a new <code>PersistedSignal</code>.
+
+</details>
 
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="key"></a>`String key`
 
 ##### <a name="store"></a>`SignalsKeyValueStore store`
+
+</details>
 
 
 
@@ -87,7 +97,7 @@ Creates a new `PersistedSignal`.
 
 An abstract class defining the persistence adapter contract for [PersistedSignal](/packages/signals/utilities/persisted).
 
-Implement this interface to bind `PersistedSignal` to your storage engine of
+Implement this interface to bind <code>PersistedSignal</code> to your storage engine of
 choice, such as local files, SQLite, SharedPreferences, Hive, or indexedDB.
 
 ### Example: Custom Shared Preferences Store (Flutter)
@@ -119,12 +129,20 @@ class SharedPreferencesStore implements SignalsKeyValueStore {
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="defaultstore"></a>`static SignalsKeyValueStore defaultStore`
 
 The default store to be used if no store is provided.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="setitem"></a>`Future<void> setItem(String key, String value)`
 
@@ -138,6 +156,8 @@ Gets an item from the store.
 
 Removes an item from the store.
 
+</details>
+
 
 
 ---
@@ -146,29 +166,37 @@ Removes an item from the store.
 
 A mixin that adds local persistence capabilities to a standard [Signal](/packages/signals/core/signal).
 
-By mixing in `PersistedSignalMixin<T>` on a `Signal<T>` subclass, the signal
+By mixing in <code>PersistedSignalMixin<T></code> on a <code>Signal<T></code> subclass, the signal
 will automatically retrieve its stored state on boot and save its state whenever
-`.value` is mutated.
+<code>.value</code> is mutated.
 
-Classes mixing in `PersistedSignalMixin<T>` must implement:
+Classes mixing in <code>PersistedSignalMixin<T></code> must implement:
 - **key**: A unique identifier string for the key-value database.
 - **store**: An implementation of [SignalsKeyValueStore](/packages/signals/utilities/persisted).
 
 ### Serialization Customization
-By default, the mixin uses standard JSON parsing (`jsonDecode` / `jsonEncode`).
-If your data type `T` is not natively supported by JSON, override:
-- **decode** to convert the raw string value back into type `T`.
-- **encode** to serialize type `T` into a string.
+By default, the mixin uses standard JSON parsing (<code>jsonDecode</code> / <code>jsonEncode</code>).
+If your data type <code>T</code> is not natively supported by JSON, override:
+- **decode** to convert the raw string value back into type <code>T</code>.
+- **encode** to serialize type <code>T</code> into a string.
 
 
 ### Properties
+
+<details>
+<summary> View Properties </summary>
 
 ##### <a name="loaded"></a>`bool loaded`
 
 Whether the signal has been loaded from the store.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="key"></a>`String key`
 
@@ -202,6 +230,8 @@ Decodes the value from a string.
 
 Encodes the value to a string.
 
+</details>
+
 
 
 ---
@@ -215,12 +245,20 @@ This serves as a fallback engine and does not persist across restarts/reload.
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="store"></a>`store`
 
 The in-memory store.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="getitem"></a>`Future<String?> getItem(String key)`
 
@@ -228,29 +266,41 @@ The in-memory store.
 
 ##### <a name="setitem"></a>`Future<void> setItem(String key, String value)`
 
+</details>
+
 
 
 ---
 
 ## PersistedNullableStringSignal
 
-A `PersistedSignal` that stores a nullable string value.
+A <code>PersistedSignal</code> that stores a nullable string value.
 
 > [!warning] An empty value is considered null
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistednullablestringsignal"></a><a name="persistednullablestringsignal"></a>`PersistedNullableStringSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `NullableStringSignal`.
+Creates a new <code>NullableStringSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`String? decode(String value)`
 
 ##### <a name="encode"></a>`String encode(String? value)`
+
+</details>
 
 
 
@@ -258,21 +308,31 @@ Creates a new `NullableStringSignal`.
 
 ## PersistedNullableIntSignal
 
-A `PersistedSignal` that stores a nullable integer value.
+A <code>PersistedSignal</code> that stores a nullable integer value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistednullableintsignal"></a><a name="persistednullableintsignal"></a>`PersistedNullableIntSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `NullableIntSignal`.
+Creates a new <code>NullableIntSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`int? decode(String value)`
 
 ##### <a name="encode"></a>`String encode(int? value)`
+
+</details>
 
 
 
@@ -280,21 +340,31 @@ Creates a new `NullableIntSignal`.
 
 ## PersistedNullableNumSignal
 
-A `PersistedSignal` that stores a nullable numeric value.
+A <code>PersistedSignal</code> that stores a nullable numeric value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistednullablenumsignal"></a><a name="persistednullablenumsignal"></a>`PersistedNullableNumSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `NullableNumSignal`.
+Creates a new <code>NullableNumSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`num? decode(String value)`
 
 ##### <a name="encode"></a>`String encode(num? value)`
+
+</details>
 
 
 
@@ -302,21 +372,31 @@ Creates a new `NullableNumSignal`.
 
 ## PersistedNullableBoolSignal
 
-A `PersistedSignal` that stores a nullable string value.
+A <code>PersistedSignal</code> that stores a nullable string value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistednullableboolsignal"></a><a name="persistednullableboolsignal"></a>`PersistedNullableBoolSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `NullableBoolSignal`.
+Creates a new <code>NullableBoolSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`bool? decode(String value)`
 
 ##### <a name="encode"></a>`String encode(bool? value)`
+
+</details>
 
 
 
@@ -324,21 +404,31 @@ Creates a new `NullableBoolSignal`.
 
 ## PersistedNullableDoubleSignal
 
-A `PersistedSignal` that stores a nullable double value.
+A <code>PersistedSignal</code> that stores a nullable double value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistednullabledoublesignal"></a><a name="persistednullabledoublesignal"></a>`PersistedNullableDoubleSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `NullableDoubleSignal`.
+Creates a new <code>NullableDoubleSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`double? decode(String value)`
 
 ##### <a name="encode"></a>`String encode(double? value)`
+
+</details>
 
 
 
@@ -346,26 +436,41 @@ Creates a new `NullableDoubleSignal`.
 
 ## PersistedNullableEnumSignal
 
-A `PersistedSignal` that stores a nullable enum value.
+A <code>PersistedSignal</code> that stores a nullable enum value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistednullableenumsignal"></a><a name="persistednullableenumsignal"></a>`PersistedNullableEnumSignal(super.val, String key, this.values, {SignalsKeyValueStore? store})`
 
-Creates a new `NullableEnumSignal`.
+Creates a new <code>NullableEnumSignal</code>.
+
+</details>
 
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="values"></a>`List<T> values`
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`T? decode(String value)`
 
 ##### <a name="encode"></a>`String encode(T? value)`
+
+</details>
 
 
 
@@ -373,21 +478,31 @@ Creates a new `NullableEnumSignal`.
 
 ## PersistedIntSignal
 
-A `PersistedSignal` that stores an integer value.
+A <code>PersistedSignal</code> that stores an integer value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistedintsignal"></a><a name="persistedintsignal"></a>`PersistedIntSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `IntSignal`.
+Creates a new <code>IntSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`int decode(String value)`
 
 ##### <a name="encode"></a>`String encode(int value)`
+
+</details>
 
 
 
@@ -395,21 +510,31 @@ Creates a new `IntSignal`.
 
 ## PersistedBoolSignal
 
-A `PersistedSignal` that stores a boolean value.
+A <code>PersistedSignal</code> that stores a boolean value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistedboolsignal"></a><a name="persistedboolsignal"></a>`PersistedBoolSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `BoolSignal`.
+Creates a new <code>BoolSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`bool decode(String value)`
 
 ##### <a name="encode"></a>`String encode(bool value)`
+
+</details>
 
 
 
@@ -417,21 +542,31 @@ Creates a new `BoolSignal`.
 
 ## PersistedDoubleSignal
 
-A `PersistedSignal` that stores an double value.
+A <code>PersistedSignal</code> that stores an double value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persisteddoublesignal"></a><a name="persisteddoublesignal"></a>`PersistedDoubleSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `DoubleSignal`.
+Creates a new <code>DoubleSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`double decode(String value)`
 
 ##### <a name="encode"></a>`String encode(double value)`
+
+</details>
 
 
 
@@ -439,21 +574,31 @@ Creates a new `DoubleSignal`.
 
 ## PersistedNumSignal
 
-A `PersistedSignal` that stores a numeric value.
+A <code>PersistedSignal</code> that stores a numeric value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistednumsignal"></a><a name="persistednumsignal"></a>`PersistedNumSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `NumSignal`.
+Creates a new <code>NumSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`num decode(String value)`
 
 ##### <a name="encode"></a>`String encode(num value)`
+
+</details>
 
 
 
@@ -461,21 +606,31 @@ Creates a new `NumSignal`.
 
 ## PersistedStringSignal
 
-A `PersistedSignal` that stores a string value.
+A <code>PersistedSignal</code> that stores a string value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistedstringsignal"></a><a name="persistedstringsignal"></a>`PersistedStringSignal(super.val, String key, {SignalsKeyValueStore? store})`
 
-Creates a new `StringSignal`.
+Creates a new <code>StringSignal</code>.
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`String decode(String value)`
 
 ##### <a name="encode"></a>`String encode(String value)`
+
+</details>
 
 
 
@@ -483,26 +638,41 @@ Creates a new `StringSignal`.
 
 ## PersistedEnumSignal
 
-A `PersistedSignal` that stores an enum value.
+A <code>PersistedSignal</code> that stores an enum value.
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistedenumsignal"></a><a name="persistedenumsignal"></a>`PersistedEnumSignal(super.val, String key, this.values, {SignalsKeyValueStore? store})`
 
-Creates a new `EnumSignal`.
+Creates a new <code>EnumSignal</code>.
+
+</details>
 
 
 ### Properties
 
+<details>
+<summary> View Properties </summary>
+
 ##### <a name="values"></a>`List<T> values`
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="decode"></a>`T decode(String value)`
 
 ##### <a name="encode"></a>`String encode(T value)`
+
+</details>
 
 
 
@@ -515,15 +685,25 @@ Configuration options for a [PersistedSignal](/packages/signals/utilities/persis
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="persistedsignaloptions"></a><a name="persistedsignaloptions"></a>`PersistedSignalOptions({super.name, super.autoDispose, super.watched, super.unwatched})`
 
 Creates a new [PersistedSignalOptions](/packages/signals/utilities/persisted) instance.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="copywith"></a>`PersistedSignalOptions<T> copyWith({String? name, bool? autoDispose, void Function()? watched, void Function()? unwatched})`
 
 ##### <a name="=="></a>`bool ==(Object other)`
 
 ##### <a name="hashcode"></a>`int hashCode`
+
+</details>

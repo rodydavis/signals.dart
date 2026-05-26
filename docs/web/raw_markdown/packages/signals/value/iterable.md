@@ -6,9 +6,9 @@ description: A reactive Signal that holds an **Iterable** and implements the **I
 A reactive [Signal](/packages/signals/core/signal) that holds an **Iterable** and implements the **Iterable** interface.
 
 [IterableSignal](/packages/signals/value/iterable) allows you to listen to changes on an iterable collection reactively. It
-exposes all standard **Iterable** properties and methods (like `length`, `first`, `map`, `where`, etc.)
-directly on the signal itself. Calling these methods inside a reactive context (like an `effect`
-or `computed` block) will automatically track them as dependencies.
+exposes all standard **Iterable** properties and methods (like <code>length</code>, <code>first</code>, <code>map</code>, <code>where</code>, etc.)
+directly on the signal itself. Calling these methods inside a reactive context (like an <code>effect</code>
+or <code>computed</code> block) will automatically track them as dependencies.
 
 ### Example Usage
 
@@ -35,13 +35,23 @@ use specialized signals like [ListSignal](/packages/signals/value/list), [SetSig
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="iterablesignal"></a><a name="iterablesignal"></a>`IterableSignal(super.value, {IterableSignalOptions<E>? options, @Deprecated('Use options: IterableSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: IterableSignalOptions(name: ...) instead') String? debugLabel})`
 
 Creates a [IterableSignal](/packages/signals/value/iterable) with the given **value**.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="=="></a>`bool ==(Object other)`
 
 ##### <a name="hashcode"></a>`int hashCode`
+
+</details>

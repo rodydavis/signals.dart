@@ -5,13 +5,13 @@ description: Subscribes to an existing ReadonlySignal (or Signal) and returns it
 
 Subscribes to an existing [ReadonlySignal](/packages/preact_signals/core/readonly) (or [Signal](/packages/signals/core/signal)) and returns its current value.
 
-This is a convenience hook that is equivalent to invoking `useExistingSignal(signal).value`.
+This is a convenience hook that is equivalent to invoking <code>useExistingSignal(signal).value</code>.
 It triggers a rebuild of the host **HookWidget** whenever the signal's value changes.
 
-<Success>
-This hook is the preferred way to consume external/global signals when you only
-need read-only access to their values and want standard Flutter Hook ergonomics.
-</Success>
+<Info>
+  This hook is the preferred way to consume external/global signals when you only
+  need read-only access to their values and want standard Flutter Hook ergonomics.
+</Info>
 
 ### Parameters
 - **value**: The existing [ReadonlySignal](/packages/preact_signals/core/readonly) or [Signal](/packages/signals/core/signal) instance to retrieve the value from and subscribe to.

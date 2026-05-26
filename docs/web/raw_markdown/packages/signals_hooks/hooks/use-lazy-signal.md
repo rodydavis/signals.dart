@@ -5,13 +5,13 @@ description: Creates a new Signal that starts uninitialized and subscribes to it
 
 Creates a new [Signal](/packages/signals/core/signal) that starts uninitialized and subscribes to it.
 
-A lazy signal is a signal that doesn't have an initial value on creation. Reading its `.value`
+A lazy signal is a signal that doesn't have an initial value on creation. Reading its <code>.value</code>
 before setting it will throw a **LazySignalInitializationError**.
 
-<Success>
-Ideal for binding late-initialized state, such as data fetched in a lifecycle effect
-or passed asynchronously from platform channels.
-</Success>
+<Info>
+  Ideal for binding late-initialized state, such as data fetched in a lifecycle effect
+  or passed asynchronously from platform channels.
+</Info>
 
 ### Parameters
 - **keys**: A list of objects to watch. If any key changes, the signal is re-created.

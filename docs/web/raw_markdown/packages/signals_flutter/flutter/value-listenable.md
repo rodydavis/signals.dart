@@ -7,7 +7,7 @@ description: A global helper function to convert a Flutter **ValueListenable** t
 
 A global helper function to convert a Flutter **ValueListenable** to a [ReadonlySignal](/packages/preact_signals/core/readonly).
 
-This helper is a functional equivalent of the `toSignal()` extension method.
+This helper is a functional equivalent of the <code>toSignal()</code> extension method.
 
 ### Example
 ```dart
@@ -24,6 +24,9 @@ Extension on **ValueListenable** to seamlessly bridge standard Flutter values to
 
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="tosignal"></a>`ReadonlySignal<T> toSignal({String? debugLabel, bool autoDispose = false})`
 
@@ -50,6 +53,8 @@ final signal = Signal(10);
 final listenable = signal.toValueListenable();
 ```
 
+</details>
+
 
 
 ---
@@ -61,6 +66,9 @@ final listenable = signal.toValueListenable();
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="runcallbackonlisten"></a>`bool runCallbackOnListen`
 
 If true, the callback will be run when the listener is added
@@ -68,3 +76,5 @@ If true, the callback will be run when the listener is added
 ##### <a name="addlistener"></a>`void addListener(VoidCallback listener)`
 
 ##### <a name="removelistener"></a>`void removeListener(VoidCallback listener)`
+
+</details>

@@ -4,7 +4,7 @@ description: A Dart lint rule that checks and reports instances where a signal o
 ---
 
 A Dart lint rule that checks and reports instances where a signal or computed
-variable is created directly inside Flutter's `build(BuildContext context)` method.
+variable is created directly inside Flutter's <code>build(BuildContext context)</code> method.
 
 <Warning>
 Creating a signal inside the build method is a severe reactive anti-pattern.
@@ -50,9 +50,19 @@ final mySignal = signal(42);
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalsavoidcreateinbuildmethod"></a><a name="signalsavoidcreateinbuildmethod"></a>`SignalsAvoidCreateInBuildMethod()`
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="run"></a>`void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)`
+
+</details>

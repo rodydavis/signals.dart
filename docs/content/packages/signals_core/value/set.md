@@ -6,14 +6,14 @@ description: A reactive Signal that holds a **Set** and implements the **Set** i
 A reactive [Signal](/packages/signals/core/signal) that holds a **Set** and implements the **Set** interface.
 
 [SetSignal](/packages/signals/value/set) lets you listen to changes on a set reactively and mutate it directly using
-standard set operations (like `add`, `addAll`, `remove`, `clear`, etc.). Any mutations
+standard set operations (like <code>add</code>, <code>addAll</code>, <code>remove</code>, <code>clear</code>, etc.). Any mutations
 automatically trigger reactive updates to all active listeners (e.g., inside an [effect](/packages/signals/core/effect)
 or [computed](/packages/signals/flutter/computed)).
 
 Additionally, [SetSignal](/packages/signals/value/set) defines convenient operators:
-- `<<` injects/adds all items from another set into the current set.
-- `&` forks/unions the set with another set into a new [SetSignal](/packages/signals/value/set).
-- `|` pipes/unions the set with another signal holding an iterable into a new [SetSignal](/packages/signals/value/set).
+- <code><<</code> injects/adds all items from another set into the current set.
+- <code>&</code> forks/unions the set with another set into a new [SetSignal](/packages/signals/value/set).
+- <code>|</code> pipes/unions the set with another signal holding an iterable into a new [SetSignal](/packages/signals/value/set).
 
 ### Example Usage
 
@@ -41,18 +41,26 @@ void main() {
 
 <Success>
 Mutating the collection directly calls the reactive set() routine under the hood automatically. You
-do not need to assign `numbers.value = ...` manually!
+do not need to assign <code>numbers.value = ...</code> manually!
 </Success>
 
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="setsignal"></a><a name="setsignal"></a>`SetSignal(super.value, {SetSignalOptions<E>? options, @Deprecated('Use options: SetSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: SetSignalOptions(name: ...) instead') String? debugLabel})`
 
 Creates a [SetSignal](/packages/signals/value/set) with the given **value**.
 
+</details>
+
 
 ### Methods
+
+<details>
+<summary> View Methods </summary>
 
 ##### <a name="<<"></a>`SetSignal<E> <<(Set<E> other)`
 
@@ -69,6 +77,8 @@ Pipe: create a new signal by sending value from source to other
 ##### <a name="=="></a>`bool ==(Object other)`
 
 ##### <a name="hashcode"></a>`int hashCode`
+
+</details>
 
 
 

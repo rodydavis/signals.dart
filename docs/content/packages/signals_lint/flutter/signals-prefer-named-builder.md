@@ -1,14 +1,14 @@
 ---
 title: SignalsPreferNamedBuilder
-description: A Dart static analysis rule that detects positional builder parameters in Watch.
+description: A Dart static analysis rule that detects positional builder parameters in <code>Watch</code>.
 ---
 
-A Dart static analysis rule that detects positional builder parameters in `Watch`
-or `SignalBuilder` constructors and encourages using the named `builder` argument.
+A Dart static analysis rule that detects positional builder parameters in <code>Watch</code>
+or <code>SignalBuilder</code> constructors and encourages using the named <code>builder</code> argument.
 
 <Info>
-In `signals` v7, to make the API more readable and consistent with standard Flutter components,
-`Watch` and `SignalBuilder` support the named `builder` parameter. Using positional
+In <code>signals</code> v7, to make the API more readable and consistent with standard Flutter components,
+<code>Watch</code> and <code>SignalBuilder</code> support the named <code>builder</code> parameter. Using positional
 parameters can be harder to read and may be deprecated in future versions.
 </Info>
 
@@ -31,9 +31,19 @@ Watch(
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="signalsprefernamedbuilder"></a><a name="signalsprefernamedbuilder"></a>`SignalsPreferNamedBuilder()`
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="run"></a>`void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)`
+
+</details>

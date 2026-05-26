@@ -7,16 +7,16 @@ description: Create an asynchronous computed signal with implicit dependency tra
 
 Create an asynchronous computed signal with implicit dependency tracking.
 
-`computedAsync` takes an asynchronous **callback** function to compute the value
+<code>computedAsync</code> takes an asynchronous **callback** function to compute the value
 of the signal. Any signal read *synchronously* inside the callback is automatically
 tracked as a dependency, and the computed signal is re-evaluated when any of those
 dependencies change.
 
 ### ⚠️ The Async Gap Gotcha
-Because Dart yields execution at every `await` expression, the reactive context that
+Because Dart yields execution at every <code>await</code> expression, the reactive context that
 automatically tracks reads is lost after an asynchronous gap.
 
-**Rule:** All signal values MUST be read synchronously *before* the first `await` statement.
+**Rule:** All signal values MUST be read synchronously *before* the first <code>await</code> statement.
 
 #### ❌ Incorrect Pattern (Signal read after await is NOT tracked):
 ```dart
@@ -65,18 +65,18 @@ final searchResults = computedAsync(() async {
 
 Create an asynchronous computed signal by explicitly declaring its dependencies.
 
-`computedFrom` takes a list of **signals** and a **callback** function to compute
+<code>computedFrom</code> takes a list of **signals** and a **callback** function to compute
 the value of the signal every time one of the declared **signals** changes.
 
-Unlike [computedAsync](/packages/signals/async/computed), which tracks dependencies implicitly, `computedFrom` is
+Unlike [computedAsync](/packages/signals/async/computed), which tracks dependencies implicitly, <code>computedFrom</code> is
 immune to the **Async Gap Gotcha** because all tracking is declared upfront.
 
-### Why use `computedFrom`?
-When writing asynchronous code, Dart yields control at every `await` keyword.
+### Why use <code>computedFrom</code>?
+When writing asynchronous code, Dart yields control at every <code>await</code> keyword.
 Implicit tracking (in [computedAsync](/packages/signals/async/computed) or [computed](/packages/signals/flutter/computed)) cannot track reads that happen
 *after* an asynchronous gap because the active reactive reader context is lost.
 
-`computedFrom` solves this by:
+<code>computedFrom</code> solves this by:
 1. Subscribing to the list of input **signals** synchronously.
 2. Reading their latest values synchronously.
 3. Passing those resolved values into your callback as an ordered list of arguments.

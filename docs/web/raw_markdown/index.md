@@ -32,10 +32,10 @@ Take a look at signals in action with this interactive DartPad:
 ## Packages & Reference
 
 We offer specialized packages for all layers of your stack:
-- [`preact_signals`](/packages/preact_signals): The raw, low-level reactivity engine.
-- [`signals_core`](/packages/signals_core): Pure Dart reactive collections, mixins, and async primitives.
-- [`signals_flutter`](/packages/signals_flutter): Surgical UI bindings and GPU-optimized rendering.
-- [`signals_hooks`](/packages/signals_hooks): Hooks integration for standard Flutter Hook projects.
-- [`signals_lint`](/packages/signals_lint): Static analysis rules and IDE assists.
-- [`signals_devtools_extension`](/packages/signals_devtools_extension): Visual inspector in DevTools.
-- [`signals`](/packages/signals): The unified umbrella package for most apps.
+- [<code>preact_signals</code>](/packages/preact_signals): The raw, low-level reactivity engine.
+- [<code>signals_core</code>](/packages/signals_core): Pure Dart reactive collections, mixins, and async primitives.
+- [<code>signals_flutter</code>](/packages/signals_flutter): Surgical UI bindings and GPU-optimized rendering.
+- [<code>signals_hooks</code>](/packages/signals_hooks): Hooks integration for standard Flutter Hook projects.
+- [<code>signals_lint</code>](/packages/signals_lint): Static analysis rules and IDE assists.
+- [<code>signals_devtools_extension</code>](/packages/signals_devtools_extension): Visual inspector in DevTools.
+- [<code>signals</code>](/packages/signals): The unified umbrella package for most apps.

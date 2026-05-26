@@ -10,8 +10,8 @@ Any reactive signal accessed inside the callback **cb** is tracked as a dependen
 is executed automatically whenever those signals change.
 
 <Warning>
-Avoid modifying signals inside the effect callback that could trigger infinite loops or
-unintentional side effects.
+  Avoid modifying signals inside the effect callback that could trigger infinite loops or
+  unintentional side effects.
 </Warning>
 
 ### Parameters

@@ -11,10 +11,10 @@ signals inside the callback change, or if any of the hook **keys** change.
 
 The host widget will rebuild whenever the derived value changes.
 
-<Success>
-Use computed signals to keep build methods clean and prevent unnecessary re-computations
-of expensive operations (e.g., filtering, sorting, or formatting data).
-</Success>
+<Info>
+  Use computed signals to keep build methods clean and prevent unnecessary re-computations
+  of expensive operations (e.g., filtering, sorting, or formatting data).
+</Info>
 
 ### Parameters
 - **value**: The computation callback that derives the computed value.

@@ -54,33 +54,21 @@ class SignalModelOptions {
   int get hashCode => Object.hash(name, wrapInAction);
 }
 
-/// A wrapper for models constructed with [createModel].
+/// A premium wrapper for cohesive state packages constructed with [createModel].
 ///
 /// It holds the instanced model [value] and all the [Effect]s that were captured
 /// during its construction. Disposing the [SignalModel] automatically disposes of all
-/// nested/captured effects, avoiding memory leaks.
+/// nested/captured effects, completely avoiding memory leaks.
 ///
-/// ### Example Usage
+/// ### Premium Pattern: Dart 3+ Extension Type Wrappers
+/// To avoid unchecked subscript access like `model['count'].value`, wrap your model in an extension type:
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
-///
-/// void main() {
-///   final counterModel = createModel(() {
-///     final count = signal(0);
-///     effect(() => print('Count is: ${count.value}'));
-///     return {
-///       'count': count,
-///       'increment': () => count.value++,
-///     };
-///   });
-///
-///   final model = counterModel();
-///   final increment = model['increment'] as Function;
-///   increment(); // Triggers print: Count is: 1
-///
-///   // Disposes of captured effects
-///   model.dispose();
+/// extension type TypeSafeCounter(SignalModel<Map<String, dynamic>> _model) {
+///   int get count => (_model['count'] as Signal<int>).value;
+///   set count(int val) => (_model['count'] as Signal<int>).value = val;
+///   void increment() => (_model['increment'] as Function)();
+///   void dispose() => _model.dispose();
 /// }
 /// ```
 class SignalModel<T> {
@@ -197,45 +185,64 @@ class SignalModelConstructor<T> {
 
 /// Creates a new model constructor with an instanced factory.
 ///
-/// A [SignalModel] is an elegant wrapper around complex models (such as Maps or classes)
-/// that tracks and automatically disposes of any [Effect]s created during the model's
-/// instantiation.
+/// A [SignalModel] is a highly powerful architectural primitive designed to manage cohesive packages
+/// of related state, business logic, actions, and side effects.
 ///
-/// When the returned [SignalModelConstructor] is invoked, it starts capturing nested effects.
-/// If the factory returns a standard Dart [Map], and `wrapInAction` is enabled (default), all nested
-/// functions within that Map are automatically wrapped in batched [action]s.
+/// Under the hood, [SignalModel] automatically tracks, scopes, and manages the lifecycle of any [Effect]s
+/// instantiated during its factory execution. When the model is disposed (by calling `model.dispose()`),
+/// all nested/captured effects are clean up automatically, ensuring complete prevention of memory leaks.
 ///
-/// ### Example Usage
+/// Furthermore, if the factory returns a standard Dart [Map], and `wrapInAction` is enabled (default),
+/// all nested function properties are automatically wrapped in batched [action] transactions to optimize updates.
+///
+/// ### 1. Advanced Architecture: Type-Safe Wrappers using Dart 3+ Extension Types
+/// While dynamic subscript access `model['increment']()` is fast and flexible, it lacks static analysis safety.
+/// To achieve compile-time type-safety, you can wrap the returned `SignalModel` in a standard Dart 3 **extension type**:
 ///
 /// ```dart
-/// import 'package:preact_signals/preact_signals.dart';
+/// import 'package:signals/signals.dart';
 ///
-/// // Define a reactive counter model constructor
+/// // 1. Define the reactive model constructor
 /// final counterModel = createModel(() {
 ///   final count = signal(0);
-///
-///   // Captured nested effect - will be disposed automatically!
+///   
+///   // Captured nested side-effect (e.g. logging or syncing to local storage)
 ///   effect(() {
 ///     print('Nested logger: count is ${count.value}');
 ///   });
-///
-///   return {
+///   
+///   return <String, dynamic>{
 ///     'count': count,
 ///     'increment': () => count.value++,
 ///   };
 /// });
 ///
+/// // 2. Create a premium, compile-safe extension type wrapper
+/// extension type TypeSafeCounter(SignalModel<Map<String, dynamic>> _model) {
+///   int get count => (_model['count'] as Signal<int>).value;
+///   set count(int val) => (_model['count'] as Signal<int>).value = val;
+///   
+///   void increment() => (_model['increment'] as Function)();
+///   void dispose() => _model.dispose();
+/// }
+///
 /// void main() {
-///   // Instantiate the model
-///   final model = counterModel();
-///
-///   final increment = model['increment'] as Function;
-///   increment(); // Prints: Nested logger: count is 1
-///
-///   // Clean up all captured effects
-///   model.dispose();
+///   // 3. Instantiate and wrap the model
+///   final counter = TypeSafeCounter(counterModel());
+///   
+///   // Now you have a beautifully autocomplete-friendly, compile-safe API!
+///   print(counter.count); // Prints: 0 (and registers effect print: Nested logger: count is 0)
+///   counter.increment();  // Prints: Nested logger: count is 1
+///   
+///   // Dispose when done to clean up all captured nested effects
+///   counter.dispose();
 /// }
 /// ```
+///
+/// <Info>
+///   Favor using Dart 3 extension types whenever you define models. They cost zero runtime overhead
+///   (compiling down to the raw model) while granting complete compile-safe parameters and autocomplete functionality.
+/// </Info>
 SignalModelConstructor<T> createModel<T>(
   T Function() factory, {
   SignalModelOptions options = const SignalModelOptions(),

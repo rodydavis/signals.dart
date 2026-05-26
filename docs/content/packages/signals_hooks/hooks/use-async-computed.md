@@ -6,7 +6,7 @@ description: Creates a new FutureSignal from a computed async value and subscrib
 Creates a new [FutureSignal](/packages/signals/async/future) from a computed async value and subscribes to it.
 
 This hook allows you to construct an async computation that automatically reruns whenever its
-reactive dependencies (e.g. other signals accessed via `.value`) or hook keys change.
+reactive dependencies (e.g. other signals accessed via <code>.value</code>) or hook keys change.
 
 <Success>
 It combines the capabilities of computed/derived state with asynchronous futures, serving as a powerful

@@ -10,10 +10,10 @@ or provided via a dependency injection framework (like provider, get_it, or rive
 and you want to reactive-bind the **HookWidget** to rebuild whenever the signal emits
 a new value.
 
-<Success>
-If you only need the value of the signal inside the build method and do not
-need the signal instance itself, consider using [useSignalValue](/packages/signals_hooks/hooks/use-signal-value) instead.
-</Success>
+<Info>
+  If you only need the value of the signal inside the build method and do not
+  need the signal instance itself, consider using [useSignalValue](/packages/signals_hooks/hooks/use-signal-value) instead.
+</Info>
 
 ### Parameters
 - **value**: The existing [ReadonlySignal](/packages/preact_signals/core/readonly) or [Signal](/packages/signals/core/signal) instance to subscribe to.
@@ -23,7 +23,7 @@ need the signal instance itself, consider using [useSignalValue](/packages/signa
 
 ### Returns
 The same signal instance passed in **value**, allowing you to interact with it
-directly (e.g., read its `.value` or write to it if it is a mutable [Signal](/packages/signals/core/signal)).
+directly (e.g., read its <code>.value</code> or write to it if it is a mutable [Signal](/packages/signals/core/signal)).
 
 ### Example
 

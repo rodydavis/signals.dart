@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import '../core/signals.dart';
 
 /// A mixin that adds tracking for the initial and previous values to a [Signal].
@@ -50,6 +51,7 @@ mixin TrackedSignalMixin<T> on ReadonlySignal<T> {
   T? _previousValue;
 
   @override
+  @internal
   void afterCreate(T val) {
     super.afterCreate(val);
     _initialValue = val;
@@ -57,6 +59,7 @@ mixin TrackedSignalMixin<T> on ReadonlySignal<T> {
   }
 
   @override
+  @internal
   void beforeUpdate(val) {
     final ready = isInitialized;
     super.beforeUpdate(val);

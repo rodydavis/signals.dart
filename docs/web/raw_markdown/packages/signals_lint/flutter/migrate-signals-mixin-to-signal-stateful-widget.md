@@ -4,18 +4,18 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a deprecated
-`SignalsMixin` usage on a `State` class to extend the reactive **SignalStatefulWidget** instead.
+<code>SignalsMixin</code> usage on a <code>State</code> class to extend the reactive **SignalStatefulWidget** instead.
 
 :::important
-Since `SignalsMixin` is deprecated in `signals` v7, this automated quick-fix does two things:
-1. Removes `SignalsMixin` from your State class's `with` clause.
-2. Changes the parent widget class's superclass from `StatefulWidget` to `SignalStatefulWidget`.
+Since <code>SignalsMixin</code> is deprecated in <code>signals</code> v7, this automated quick-fix does two things:
+1. Removes <code>SignalsMixin</code> from your State class's <code>with</code> clause.
+2. Changes the parent widget class's superclass from <code>StatefulWidget</code> to <code>SignalStatefulWidget</code>.
 This results in a cleaner, highly optimized codebase that runs with zero unnecessary overhead.
 :::
 
 ### How to use
-1. Place your cursor on the `SignalsMixin` name in the State's class signature.
-2. Click the lightbulb icon or press your IDE's quick-fix shortcut (`Alt+Enter` or `Cmd+.`).
+1. Place your cursor on the <code>SignalsMixin</code> name in the State's class signature.
+2. Click the lightbulb icon or press your IDE's quick-fix shortcut (<code>Alt+Enter</code> or <code>Cmd+.</code>).
 3. Select the **Migrate SignalsMixin to SignalStatefulWidget** assist option.
 
 ### Examples
@@ -55,9 +55,19 @@ class _MyWidgetState extends State<MyWidget> {
 
 ### Constructors
 
+<details>
+<summary> View Constructors </summary>
+
 ##### <a name="migratesignalsmixintosignalstatefulwidget"></a><a name="migratesignalsmixintosignalstatefulwidget"></a>`MigrateSignalsMixinToSignalStatefulWidget()`
+
+</details>
 
 
 ### Methods
 
+<details>
+<summary> View Methods </summary>
+
 ##### <a name="run"></a>`void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)`
+
+</details>

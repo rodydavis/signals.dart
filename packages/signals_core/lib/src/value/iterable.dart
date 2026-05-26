@@ -49,15 +49,16 @@ class IterableSignal<E> extends Signal<Iterable<E>>
 
   @override
   bool operator ==(Object other) {
-    return other is IterableSignal<E> && value == other.value;
+    return other is IterableSignal<E> && peek() == other.peek();
   }
 
   @override
   int get hashCode {
+    final val = peek();
     return Object.hashAll([
       globalId.hashCode,
-      value.hashCode,
-      for (final item in value) item.hashCode,
+      val.hashCode,
+      for (final item in val) item.hashCode,
     ]);
   }
 }
