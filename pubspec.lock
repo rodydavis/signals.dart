@@ -327,12 +327,11 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_hooks:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: flutter_hooks
-      sha256: "8ae1f090e5f4ef5cfa6670ce1ab5dddadd33f3533a7f9ba19d9f958aa2a89f42"
-      url: "https://pub.dev"
-    source: hosted
+      path: "/Users/rodydavis/dev/flutter_hooks/packages/flutter_hooks"
+      relative: false
+    source: path
     version: "0.21.3+1"
   flutter_lints:
     dependency: transitive

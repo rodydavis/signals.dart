@@ -2,37 +2,27 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:signals/signals_core.dart' as core;
 
-/// A hook that implicitly tracks any signal read during the build phase of a [HookWidget]
-/// and automatically rebuilds the widget when they change.
-_ImplicitSignalTrackingHookState _useImplicitSignalTracking() {
-  return use(const _ImplicitSignalTrackingHook());
-}
+/// Element for [SignalHookWidget] that manages both standard Flutter Hooks
+/// lifecycle and implicit signal subscription.
+class SignalHookElement extends StatelessHookElement {
+  /// Constructor for [SignalHookElement].
+  SignalHookElement(super.widget);
 
-class _ImplicitSignalTrackingHook
-    extends Hook<_ImplicitSignalTrackingHookState> {
-  const _ImplicitSignalTrackingHook();
-
-  @override
-  _ImplicitSignalTrackingHookState createState() =>
-      _ImplicitSignalTrackingHookState();
-}
-
-class _ImplicitSignalTrackingHookState extends HookState<
-    _ImplicitSignalTrackingHookState, _ImplicitSignalTrackingHook> {
   final _watch = <int, VoidCallback>{};
   bool _initializing = false;
 
+  /// Subscribes to changes of the provided [value] and schedules a rebuild.
   void watchSignal(core.ReadonlySignal value) {
     _watch.putIfAbsent(
       value.globalId,
       () => value.subscribe((val) {
         if (_initializing) return;
-        setState(() {});
+        markNeedsBuild();
       }),
     );
   }
 
-  void updateWatch(Set<core.ReadonlySignal> signals) {
+  void _updateWatch(Set<core.ReadonlySignal> signals) {
     _initializing = true;
     try {
       final toRemove = <int>[];
@@ -54,24 +44,46 @@ class _ImplicitSignalTrackingHookState extends HookState<
   }
 
   @override
-  void dispose() {
+  Widget build() {
+    final signals = <core.ReadonlySignal>{};
+    final oldOnSignalRead = core.onSignalRead;
+    core.onSignalRead = (signal) {
+      if (signal is core.ReadonlySignal) {
+        signals.add(signal);
+      }
+    };
+
+    try {
+      return super.build(); // Delegates to StatelessHookElement.build() -> widget.build(context)
+    } finally {
+      core.onSignalRead = oldOnSignalRead;
+      if (signals.isEmpty) {
+        for (final dispose in _watch.values) {
+          dispose();
+        }
+        _watch.clear();
+      } else {
+        _updateWatch(signals);
+      }
+    }
+  }
+
+  @override
+  void unmount() {
     for (final dispose in _watch.values) {
       dispose();
     }
     _watch.clear();
-    super.dispose();
+    super.unmount();
   }
-
-  @override
-  _ImplicitSignalTrackingHookState build(BuildContext context) => this;
 }
 
 /// A premium reactive [HookWidget] that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
 ///
 /// `SignalHookWidget` establishes a dynamic reactive context directly at the Flutter element layer.
-/// Any signal accessed via `.value` inside the [buildWidget] method is **implicitly tracked** and
-/// subscribed to. At the same time, you can call any hooks (like `useSignal`, `useFocusNode`, etc.)
-/// within [buildWidget].
+/// Any signal accessed via `.value` inside the [build] method is **implicitly tracked** and
+/// subscribed to. At the same time, you can call any hooks (like `useFocusNode`, `useTextEditingController`, etc.)
+/// within [build].
 ///
 /// This provides the ultimate developer experience, combining the power of implicit, boilerplate-free
 /// signal tracking with the rich lifecycle management of Flutter Hooks.
@@ -84,7 +96,7 @@ class _ImplicitSignalTrackingHookState extends HookState<
 ///   const MyDualWidget({super.key});
 ///
 ///   @override
-///   Widget buildWidget(BuildContext context) {
+///   Widget build(BuildContext context) {
 ///     // 1. Declare hooks seamlessly:
 ///     final controller = useTextEditingController();
 ///     final focusNode = useFocusNode();
@@ -106,27 +118,21 @@ abstract class SignalHookWidget extends HookWidget {
   /// Constructor for [SignalHookWidget].
   const SignalHookWidget({super.key});
 
-  /// Subclasses override this method instead of [build] to define their widget tree.
-  Widget buildWidget(BuildContext context);
+  @override
+  StatelessHookElement createElement() => SignalHookElement(this);
 
+  /// Subclasses override this method to define their widget tree.
+  ///
+  /// For backward compatibility, this defaults to calling [buildWidget].
   @override
   Widget build(BuildContext context) {
-    final state = _useImplicitSignalTracking();
+    return buildWidget(context);
+  }
 
-    final signals = <core.ReadonlySignal>{};
-    final oldOnSignalRead = core.onSignalRead;
-    core.onSignalRead = (signal) {
-      if (signal is core.ReadonlySignal) {
-        signals.add(signal);
-      }
-    };
-
-    try {
-      return buildWidget(context);
-    } finally {
-      core.onSignalRead = oldOnSignalRead;
-      state.updateWatch(signals);
-    }
+  /// Subclasses override this method instead of [build] to define their widget tree.
+  @Deprecated('Override build(context) directly instead of buildWidget(context)')
+  Widget buildWidget(BuildContext context) {
+    throw UnimplementedError('Subclasses must override either build or buildWidget');
   }
 }
 
@@ -172,5 +178,5 @@ class SignalHookBuilder extends SignalHookWidget {
   final Widget Function(BuildContext context) builder;
 
   @override
-  Widget buildWidget(BuildContext context) => builder(context);
+  Widget build(BuildContext context) => builder(context);
 }

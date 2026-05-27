@@ -1,6 +1,6 @@
 name: signals_hooks
 description: "flutter_hooks bindings for signals"
-version: 7.0.0
+version: 7.1.0
 repository: https://github.com/rodydavis/signals.dart
 homepage: https://dartsignals.dev/
 documentation: https://dartsignals.dev/
