@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: dart-lang/setup-dart@v1.5.0
+      - uses: dart-lang/setup-dart@v1.7.2
 
       - uses: subosito/flutter-action@v2.10.0
         with:
