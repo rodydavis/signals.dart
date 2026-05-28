@@ -1,14 +1,12 @@
 // ignore_for_file: deprecated_member_use
+import 'package:analyzer/analysis_rule/analysis_rule.dart';
+import 'package:analyzer/analysis_rule/rule_context.dart';
+import 'package:analyzer/analysis_rule/rule_visitor_registry.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/error/error.dart' hide LintCode;
-import 'package:analyzer/error/listener.dart';
-import 'package:custom_lint_builder/custom_lint_builder.dart';
-
-const TypeChecker buildContextType = TypeChecker.fromName(
-  'BuildContext',
-  packageName: 'flutter',
-);
+import 'package:analyzer/error/error.dart';
+import '../utils.dart';
 
 const buildMethod = 'build';
 
@@ -36,149 +34,106 @@ Widget build(BuildContext context) {
 
 /// A Dart lint rule that checks and reports instances where a signal or computed
 /// variable is created directly inside Flutter's `build(BuildContext context)` method.
-///
-/// :::caution
-/// Creating a signal inside the build method is a severe reactive anti-pattern.
-/// On every widget rebuild, a brand new signal instance is created, resetting its value
-/// and breaking state persistence. This can lead to bugs, infinite rebuild loops, and
-/// high memory consumption.
-/// :::
-///
-/// ### Examples
-///
-/// **Incorrect:**
-/// ```dart
-/// class MyWidget extends StatelessWidget {
-///   @override
-///   Widget build(BuildContext context) {
-///     final counter = signal(0); // LINT: Created in build() method
-///     return Text('${counter.value}');
-///   }
-/// }
-/// ```
-///
-/// **Correct:**
-/// ```dart
-/// class MyWidget extends StatelessWidget {
-///   // Define signals outside the build method (e.g. as a field, in an InheritedWidget, or global)
-///   final counter = signal(0);
-///
-///   @override
-///   Widget build(BuildContext context) {
-///     return Text('${counter.value}');
-///   }
-/// }
-/// ```
-///
-/// ### How to suppress
-/// If you have a highly specific edge case and need to ignore this lint, you can suppress it by adding
-/// a line-level comment:
-/// ```dart
-/// // ignore: signals_avoid_create_in_build_method
-/// final mySignal = signal(42);
-/// ```
-class SignalsAvoidCreateInBuildMethod extends DartLintRule {
-  const SignalsAvoidCreateInBuildMethod() : super(code: _code);
+class SignalsAvoidCreateInBuildMethod extends AnalysisRule {
+  SignalsAvoidCreateInBuildMethod()
+      : super(
+          name: 'signals_avoid_create_in_build_method',
+          description: 'Avoid creating signals inside Flutter build methods.',
+        );
 
   static const _code = LintCode(
-    name: 'signals_avoid_create_in_build_method',
-    problemMessage: _errorMessage,
+    'signals_avoid_create_in_build_method',
+    _errorMessage,
     correctionMessage: _correctionMessage,
-    errorSeverity: ErrorSeverity.WARNING,
   );
 
   @override
-  void run(
-    CustomLintResolver resolver,
-    ErrorReporter reporter,
-    CustomLintContext context,
+  LintCode get diagnosticCode => _code;
+
+  @override
+  void registerNodeProcessors(
+    RuleVisitorRegistry registry,
+    RuleContext context,
   ) {
-    const types = [
-      TypeChecker.fromName(
-        'Signal',
-        packageName: 'signals_core',
-      ),
-      TypeChecker.fromName(
-        'ReadonlySignal',
-        packageName: 'signals_core',
-      ),
-      TypeChecker.fromName(
-        'Computed',
-        packageName: 'signals_core',
-      ),
-      TypeChecker.fromName(
-        'SignalValueNotifier',
-        packageName: 'signals_flutter',
-      ),
-      TypeChecker.fromName(
-        'SignalValueListenable',
-        packageName: 'signals_flutter',
-      ),
-    ];
-
-    const creatorNames = {
-      'signal',
-      'computed',
-      'listSignal',
-      'setSignal',
-      'mapSignal',
-      'iterableSignal',
-      'queueSignal',
-      'futureSignal',
-      'streamSignal',
-      'asyncSignal',
-      'computedFrom',
-      'computedAsync',
-      'linkedSignal',
-    };
-
-    void checkNode(AstNode node, DartType? type, String? name) {
-      final isCreator = (name != null && creatorNames.contains(name)) ||
-          (type != null && types.any((e) => e.isAssignableFromType(type)));
-
-      if (!isCreator) return;
-
-      final ancestor = node.thisOrAncestorMatching((method) {
-        final isMethod =
-            method is MethodDeclaration && method.name.lexeme == buildMethod;
-        if (!isMethod) return false;
-
-        return _findStateClass(node) != null;
-      });
-
-      if (ancestor != null) {
-        reporter.atNode(node, code);
-      }
-    }
-
-    context.registry.addVariableDeclaration((node) {
-      final element = node.declaredElement;
-      if (element == null) return;
-      checkNode(node, element.type, null);
-    });
-
-    context.registry.addInstanceCreationExpression((node) {
-      final type = node.staticType;
-      checkNode(node, type, null);
-    });
-
-    context.registry.addMethodInvocation((node) {
-      final name = node.methodName.name;
-      final type = node.staticType;
-      checkNode(node, type, name);
-    });
+    final visitor = _Visitor(this, context);
+    registry.addVariableDeclaration(this, visitor);
+    registry.addInstanceCreationExpression(this, visitor);
+    registry.addMethodInvocation(this, visitor);
   }
 }
 
-const TypeChecker stateClass = TypeChecker.fromName(
-  'State',
-  packageName: 'flutter',
-);
+class _Visitor extends SimpleAstVisitor<void> {
+  final SignalsAvoidCreateInBuildMethod rule;
+  final RuleContext context;
 
-const TypeChecker statelessClass = TypeChecker.fromName(
-  'StatelessWidget',
-  packageName: 'flutter',
-);
+  _Visitor(this.rule, this.context);
+
+  static const creatorNames = {
+    'signal',
+    'computed',
+    'listSignal',
+    'setSignal',
+    'mapSignal',
+    'iterableSignal',
+    'queueSignal',
+    'futureSignal',
+    'streamSignal',
+    'asyncSignal',
+    'computedFrom',
+    'computedAsync',
+    'linkedSignal',
+  };
+
+  void checkNode(AstNode node, DartType? type, String? name) {
+    final isCreator = (name != null && creatorNames.contains(name)) ||
+        (type != null && (
+          isTypeOf(type, 'Signal', 'signals_core') ||
+          isTypeOf(type, 'ReadonlySignal', 'signals_core') ||
+          isTypeOf(type, 'Computed', 'signals_core') ||
+          isTypeOf(type, 'SignalValueNotifier', 'signals_flutter') ||
+          isTypeOf(type, 'SignalValueListenable', 'signals_flutter')
+        ));
+
+    if (!isCreator) return;
+
+    final ancestor = node.thisOrAncestorMatching((method) {
+      final isMethod =
+          method is MethodDeclaration && method.name.lexeme == buildMethod;
+      if (!isMethod) return false;
+
+      return _findStateClass(node) != null;
+    });
+
+    if (ancestor != null) {
+      rule.reportAtNode(node);
+    }
+  }
+
+  @override
+  void visitVariableDeclaration(VariableDeclaration node) {
+    final fragment = node.declaredFragment;
+    final element = fragment?.element;
+    if (element == null) return;
+    checkNode(node, element.type, null);
+  }
+
+  @override
+  void visitInstanceCreationExpression(InstanceCreationExpression node) {
+    final type = node.staticType;
+    checkNode(node, type, null);
+  }
+
+  @override
+  void visitMethodInvocation(MethodInvocation node) {
+    final name = node.methodName.name;
+    final type = node.staticType;
+    checkNode(node, type, name);
+  }
+}
+
+const stateClassPackage = 'flutter';
+const stateClassName = 'State';
+const statelessWidgetName = 'StatelessWidget';
 
 AstNode? _findStateClass(AstNode node) {
   return node.parent?.thisOrAncestorMatching((node) {
@@ -189,7 +144,7 @@ AstNode? _findStateClass(AstNode node) {
     final extendsType = extendsClause.superclass.type;
     if (extendsType == null) return false;
 
-    return stateClass.isAssignableFromType(extendsType) ||
-        statelessClass.isAssignableFromType(extendsType);
+    return isTypeOf(extendsType, stateClassName, stateClassPackage) ||
+        isTypeOf(extendsType, statelessWidgetName, stateClassPackage);
   });
 }

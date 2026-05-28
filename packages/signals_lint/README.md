@@ -1,71 +1,121 @@
+# signals_lint
+
 Linter and developer tools for [signals](https://pub.dev/packages/signals).
 
-## Getting started
+This package is built on Dart's official standard `analysis_server_plugin` framework, meaning it runs natively inside the Dart Analysis Server. You get real-time lint warnings, suggestions, and automated quick-fixes/assists directly in your IDE (VS Code, Android Studio, IntelliJ) and via standard terminal commands.
 
-Run this command in the root of your Flutter project:
+---
+
+## Getting Started
+
+### 1. Add dependency
+
+Add `signals_lint` to the `dev_dependencies` of your Dart or Flutter project:
 
 ```sh
-flutter pub add -d signals_lint custom_lint
+dart pub add -d signals_lint
 ```
 
-Then edit your `analysis_options.yaml` file and add these lines of code:
+### 2. Configure analyzer plugin
+
+Edit your `analysis_options.yaml` file to register `signals_lint` as an analyzer plugin:
 
 ```yaml
 analyzer:
   plugins:
-    - custom_lint
+    - signals_lint
 ```
 
-Then run:
+### 3. Run analysis
+
+Verify that the plugin is running by executing:
 
 ```sh
-flutter clean
-flutter pub get
-dart run custom_lint
+dart analyze
+# or for Flutter projects
+flutter analyze
 ```
 
-## Fixes
+---
 
-### Wrap with Watch
+## Lint Rules
 
-Wrap any Widget with `Watch` to automatically rebuild it when a signal is emitted.
+| Rule Name | Severity | Description |
+| :--- | :--- | :--- |
+| `signals_avoid_create_in_build_method` | **Warning** | Warns against creating signals inside widget `build` methods. |
+| `signals_avoid_deprecated_watch_extension` | **Warning** | Flags deprecated `.watch(context)` and `.unwatch()` extensions. |
+| `signals_avoid_deprecated_signals_mixin` | **Warning** | Flags usages of the legacy `SignalsMixin`. |
+| `signals_prefer_named_builder` | **Info** | Encourages using named builder constructor arguments over positional parameters. |
+| `signals_prefer_unified_options` | **Info** | Recommends consolidation of configuration parameters under unified option objects. |
 
-Before:
+---
 
+## Automated IDE Assists & Quick-Fixes
+
+### 1. Wrap with SignalBuilder
+
+Quickly wraps any widget in a `SignalBuilder` to reactively rebuild it whenever referenced signals emit updates.
+
+**Before:**
 ```dart
-class Widget extends StatelessWidget {
+class MyWidget extends StatelessWidget {
+  final count = signal(0);
+
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'Hello World',
-      style: TextStyle(
-        color: Colors.black,
-      ),
+    return Text('Count: $count');
+  }
+}
+```
+
+**After (via automated assist):**
+```dart
+class MyWidget extends StatelessWidget {
+  final count = signal(0);
+
+  @override
+  Widget build(BuildContext context) {
+    return SignalBuilder(
+      builder: (context) => Text('Count: $count'),
     );
   }
 }
 ```
 
-After:
+### 2. Convert StatelessWidget to SignalWidget
 
+Converts a standard `StatelessWidget` to `SignalWidget` to optimize reactive widget builds.
+
+**Before:**
 ```dart
-class Widget extends StatelessWidget {
+class CounterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Watch((context) => Text(
-        'Hello World',
-        style: TextStyle(
-          color: Colors.black,
-        ),
-      ));
+    return Text('Count: ${counter.value}');
   }
 }
 ```
 
-## Other packages
+**After (via automated assist):**
+```dart
+class CounterView extends SignalWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text('Count: ${counter.value}');
+  }
+}
+```
 
-| Package           | Pub                                                                                                              |
-|-------------------|------------------------------------------------------------------------------------------------------------------|
-| `signals`         | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals)                         |
-| `signals_core`    | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core)          |
+### 3. Convert StatefulWidget to SignalStatefulWidget
+
+Refactors a standard `StatefulWidget` to a `SignalStatefulWidget` to gain built-in signal utilities.
+
+---
+
+## Core Packages
+
+| Package | Pub |
+| :--- | :--- |
+| `signals` | [![signals](https://img.shields.io/pub/v/signals.svg)](https://pub.dev/packages/signals) |
+| `signals_core` | [![signals_core](https://img.shields.io/pub/v/signals_core.svg)](https://pub.dev/packages/signals_core) |
 | `signals_flutter` | [![signals_flutter](https://img.shields.io/pub/v/signals_flutter.svg)](https://pub.dev/packages/signals_flutter) |

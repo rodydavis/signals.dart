@@ -1,65 +1,38 @@
-import 'package:analyzer/source/source_range.dart';
-import 'package:custom_lint_builder/custom_lint_builder.dart';
+import 'package:analysis_server_plugin/edit/dart/correction_producer.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
+import 'package:analyzer_plugin/utilities/assist/assist.dart';
 
-/// An IDE quick-fix refactoring tool (Dart Assist) that automatically wraps any
+/// An IDE quick-assist refactoring tool that automatically wraps any
 /// instantiated widget expression inside a [SignalBuilder] component.
-///
-/// :::tip
-/// Wrapping a widget inside `SignalBuilder(builder: (context) => ...)` optimizes rebuilding
-/// performance by confining redraws strictly to the smallest possible sub-tree whenever
-/// reactive signals read inside the builder change.
-/// :::
-///
-/// ### How to use
-/// 1. Place your cursor on any widget constructor call (e.g., `Text('...')`).
-/// 2. Click the lightbulb icon or press your IDE's quick-fix shortcut (`Alt+Enter` or `Cmd+.`).
-/// 3. Select the **Wrap with SignalBuilder** assist option.
-///
-/// ### Examples
-///
-/// **Before (Cursor on `Text` constructor):**
-/// ```dart
-/// Widget build(BuildContext context) {
-///   return Text('Counter: ${counter.value}');
-/// }
-/// ```
-///
-/// **After (Apply Assist):**
-/// ```dart
-/// Widget build(BuildContext context) {
-///   return SignalBuilder(builder: (context) => Text('Counter: ${counter.value}'));
-/// }
-/// ```
-class WrapWithSignalBuilder extends DartAssist {
-  WrapWithSignalBuilder();
+class WrapWithSignalBuilder extends ResolvedCorrectionProducer {
+  static const _assistKind = AssistKind(
+    'signals_lint.assist.wrapWithSignalBuilder',
+    50,
+    'Wrap with SignalBuilder',
+  );
+
+  WrapWithSignalBuilder({required super.context});
 
   @override
-  void run(
-    CustomLintResolver resolver,
-    ChangeReporter reporter,
-    CustomLintContext context,
-    SourceRange target,
-  ) {
-    context.registry.addInstanceCreationExpression((node) {
-      if (!target.intersects(node.constructorName.sourceRange)) {
-        return;
-      }
+  CorrectionApplicability get applicability =>
+      CorrectionApplicability.singleLocation;
 
-      final createdType = node.constructorName.type.type;
-      if (createdType == null) {
-        return;
-      }
+  @override
+  AssistKind get assistKind => _assistKind;
 
-      final changeBuilder = reporter.createChangeBuilder(
-        message: 'Wrap with SignalBuilder',
-        priority: 5,
-      );
+  @override
+  Future<void> compute(ChangeBuilder builder) async {
+    final instanceCreation = node.thisOrAncestorOfType<InstanceCreationExpression>();
+    if (instanceCreation == null) return;
 
-      changeBuilder.addDartFileEdit((builder) {
-        builder.addSimpleInsertion(
-            node.offset, 'SignalBuilder(builder: (context) => ');
-        builder.addSimpleInsertion(node.end, ')');
-      });
+    final createdType = instanceCreation.constructorName.type.type;
+    if (createdType == null) return;
+
+    await builder.addDartFileEdit(file, (builder) {
+      builder.addSimpleInsertion(
+          instanceCreation.offset, 'SignalBuilder(builder: (context) => ');
+      builder.addSimpleInsertion(instanceCreation.end, ')');
     });
   }
 }
