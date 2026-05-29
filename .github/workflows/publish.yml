@@ -48,3 +48,9 @@ jobs:
       - name: Publish Packages
         run: |
           melos publish --no-dry-run --yes
+
+      - name: Publish signals_lint
+        if: startsWith(github.ref, 'refs/tags/signals_lint-v')
+        run: |
+          cd packages/signals_lint
+          dart pub publish --force

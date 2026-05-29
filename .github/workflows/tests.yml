@@ -28,8 +28,23 @@ jobs:
       - name: Install dependencies
         run: melos exec --no-private flutter pub get
       
+      - name: Install dependencies (signals_lint)
+        run: |
+          cd packages/signals_lint
+          dart pub get
+
       - name: Analyze packages
         run: melos run analyze
 
+      - name: Analyze signals_lint
+        run: |
+          cd packages/signals_lint
+          dart analyze
+
       - name: Test packages
         run: melos run test
+
+      - name: Test signals_lint
+        run: |
+          cd packages/signals_lint
+          dart test
