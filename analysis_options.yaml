@@ -28,3 +28,13 @@ linter:
     - public_member_api_docs
 formatter:
   trailing_commas: preserve
+
+plugins:
+  signals_lint:
+    path: packages/signals_lint
+    diagnostics:
+      signals_avoid_create_in_build_method: true
+      signals_avoid_deprecated_signals_mixin: true
+      signals_avoid_deprecated_watch_extension: true
+      signals_prefer_named_builder: true
+      signals_prefer_unified_options: true

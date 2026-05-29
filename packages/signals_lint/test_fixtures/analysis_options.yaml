@@ -1,0 +1,3 @@
+plugins:
+  signals_lint:
+    path: ../
