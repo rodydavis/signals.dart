@@ -816,6 +816,17 @@ class DynamicSidebar extends StatelessComponent {
             ],
           ),
           const SidebarGroup(
+            title: 'AI Developer Skills',
+            links: [
+              SidebarLink(text: "signals-dart", href: '/skills/signals-dart'),
+              SidebarLink(text: "signals-flutter", href: '/skills/signals-flutter'),
+              SidebarLink(text: "signals-hooks", href: '/skills/signals-hooks'),
+              SidebarLink(text: "signals-lint", href: '/skills/signals-lint'),
+              SidebarLink(text: "signals-migration-6-to-7", href: '/skills/signals-migration-6-to-7'),
+              SidebarLink(text: "signals-preact-dart", href: '/skills/signals-preact-dart'),
+            ],
+          ),
+          const SidebarGroup(
             title: 'Guides',
             links: [
               SidebarLink(text: "Persisted Signals", href: '/guides/persisted-signals'),

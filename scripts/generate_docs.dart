@@ -2660,6 +2660,17 @@ class DynamicSidebar extends StatelessComponent {
             ],
           ),
           const SidebarGroup(
+            title: 'AI Developer Skills',
+            links: [
+              SidebarLink(text: "signals-dart", href: '/skills/signals-dart'),
+              SidebarLink(text: "signals-flutter", href: '/skills/signals-flutter'),
+              SidebarLink(text: "signals-hooks", href: '/skills/signals-hooks'),
+              SidebarLink(text: "signals-lint", href: '/skills/signals-lint'),
+              SidebarLink(text: "signals-migration-6-to-7", href: '/skills/signals-migration-6-to-7'),
+              SidebarLink(text: "signals-preact-dart", href: '/skills/signals-preact-dart'),
+            ],
+          ),
+          const SidebarGroup(
             title: 'Guides',
             links: [
               SidebarLink(text: "Persisted Signals", href: '/guides/persisted-signals'),
@@ -3194,6 +3205,77 @@ void generateVSCodeAndSkills(
         File(p.join(dirPath, 'SKILL.md')).writeAsStringSync(renderedSkill);
       }
       print('  Generated Skill: ${target.pkgName} at both monorepo and vscode extensions levels.');
+    }
+
+    // 6. Generate AI Skills documentation preview pages for the Jaspr site
+    final skillsDir = Directory(p.join(rootDir, 'skills'));
+    final docsSkillsDir = Directory(p.join(rootDir, 'docs', 'content', 'skills'));
+    if (skillsDir.existsSync()) {
+      docsSkillsDir.createSync(recursive: true);
+      for (final entity in skillsDir.listSync()) {
+        if (entity is Directory) {
+          final skillName = p.basename(entity.path);
+          final skillFile = File(p.join(entity.path, 'SKILL.md'));
+          if (skillFile.existsSync()) {
+            final content = skillFile.readAsStringSync();
+            // Extract frontmatter description and name
+            var name = skillName;
+            var description = 'AI Developer Skill for $skillName';
+            var skillBody = content;
+
+            final frontmatterMatch = RegExp(r'^---\r?\n([\s\S]*?)\r?\n---').firstMatch(content);
+            if (frontmatterMatch != null) {
+              final frontmatterText = frontmatterMatch.group(1) ?? '';
+              // Parse frontmatter yaml-like lines
+              for (final line in frontmatterText.split('\n')) {
+                final parts = line.split(':');
+                if (parts.length >= 2) {
+                  final key = parts[0].trim();
+                  final val = parts.sublist(1).join(':').trim();
+                  if (key == 'name') {
+                    name = val;
+                  } else if (key == 'description') {
+                    description = val;
+                  }
+                }
+              }
+              // Strip frontmatter from skillBody
+              skillBody = content.substring(frontmatterMatch.end).trim();
+            }
+
+            // Generate the Jaspr markdown page
+            final docsSkillFile = File(p.join(docsSkillsDir.path, '$skillName.md'));
+            final newContent = StringBuffer();
+            newContent.writeln('---');
+            newContent.writeln('title: $name AI Skill');
+            newContent.writeln('description: $description');
+            newContent.writeln('---');
+            newContent.writeln();
+            newContent.writeln('# $name AI Developer Skill');
+            newContent.writeln();
+            newContent.writeln('> $description');
+            newContent.writeln();
+            newContent.writeln('---');
+            newContent.writeln();
+            newContent.writeln('### 📥 Installation');
+            newContent.writeln();
+            newContent.writeln('To instantly install this AI developer skill into your local workspace under `.agents/skills/`, run:');
+            newContent.writeln();
+            newContent.writeln('```bash');
+            newContent.writeln('npx skills add rodydavis/signals.dart');
+            newContent.writeln('```');
+            newContent.writeln();
+            newContent.writeln('---');
+            newContent.writeln();
+            newContent.writeln('## 📄 SKILL.md Preview');
+            newContent.writeln();
+            newContent.writeln(skillBody);
+
+            docsSkillFile.writeAsStringSync(newContent.toString());
+            print('  Generated Docs Skill Page: ${docsSkillFile.path}');
+          }
+        }
+      }
     }
   } else {
     print('Error: skill_definition.md.mustache template not found!');
