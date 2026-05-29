@@ -4,6 +4,7 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
+import 'package:mustache_template/mustache_template.dart';
 
 final Map<String, String> _globalDocLinks = {};
 final Map<String, Map<String, List<MapEntry<String, String>>>>
@@ -467,6 +468,9 @@ void main() {
 
   // 7. Dynamically generate the Jaspr navigation side menu (navigation.dart) to keep it in sync with index/TOC
   generateNavigationFile(rootDir);
+
+  // 8. Generate VS Code snippets, WebView UI and monorepo AI developer skills via mustache
+  generateVSCodeAndSkills(rootDir, parsedDecls, parsedMeta);
 
   print('\nDocumentation and Skills successfully generated!');
 }
@@ -3026,4 +3030,172 @@ class Sidebar extends StatelessComponent {
 
   navFile.writeAsStringSync(buffer.toString());
   print('Generated docs/lib/components/navigation.dart');
+}
+
+void generateVSCodeAndSkills(
+  String rootDir,
+  Map<String, List<DeclInfo>> parsedDecls,
+  Map<String, Map<String, dynamic>> parsedMeta,
+) {
+  print('\nGenerating VS Code and Skills via Mustache...');
+  // 1. Read snippets_data.yaml
+  final yamlFile = File(p.join(rootDir, 'scripts', 'snippets_data.yaml'));
+  if (!yamlFile.existsSync()) {
+    print('Error: snippets_data.yaml not found!');
+    return;
+  }
+  final List yamlList = loadYaml(yamlFile.readAsStringSync()) as List;
+
+  // 2. Prepare snippets data for Mustache
+  final List<Map<String, dynamic>> snippets = [];
+  for (final item in yamlList) {
+    final map = Map<String, dynamic>.from(item as Map);
+    final List<String> bodyLines = List<String>.from(map['body'] as List);
+    final List<Map<String, dynamic>> bodyLinesMap = [];
+    for (var i = 0; i < bodyLines.length; i++) {
+      bodyLinesMap.add({
+        'line': bodyLines[i],
+        'last': i == bodyLines.length - 1,
+      });
+    }
+    map['body_lines'] = bodyLinesMap;
+    snippets.add(map);
+  }
+
+  for (var i = 0; i < snippets.length; i++) {
+    snippets[i]['last'] = i == snippets.length - 1;
+  }
+
+  // 3. Render VS Code snippets file
+  final snippetsTemplateFile = File(p.join(rootDir, 'scripts', 'templates', 'vscode_snippets.json.mustache'));
+  if (snippetsTemplateFile.existsSync()) {
+    final template = Template(snippetsTemplateFile.readAsStringSync(), htmlEscapeValues: false);
+    final rendered = template.renderString({'snippets': snippets});
+    final targetSnippetsFile = File(p.join(rootDir, 'editors', 'vscode', 'snippets', 'signals.json'));
+    targetSnippetsFile.parent.createSync(recursive: true);
+    targetSnippetsFile.writeAsStringSync(rendered);
+    print('  Generated VS Code snippets: ${targetSnippetsFile.path}');
+  } else {
+    print('Error: vscode_snippets.json.mustache template not found!');
+  }
+
+  // 4. Render VS Code extension.ts (visual cheat-sheet HTML)
+  final extensionTemplateFile = File(p.join(rootDir, 'scripts', 'templates', 'extension.ts.mustache'));
+  if (extensionTemplateFile.existsSync()) {
+    final coreSnippets = snippets.where((s) => s['isFlutter'] == false).map((s) {
+      final copy = Map<String, dynamic>.from(s);
+      if (copy['example'] != null) {
+        copy['example'] = (copy['example'] as String).replaceAll('\$', '\\\$');
+      }
+      return copy;
+    }).toList();
+    final flutterSnippets = snippets.where((s) => s['isFlutter'] == true).map((s) {
+      final copy = Map<String, dynamic>.from(s);
+      if (copy['example'] != null) {
+        copy['example'] = (copy['example'] as String).replaceAll('\$', '\\\$');
+      }
+      return copy;
+    }).toList();
+
+    for (var i = 0; i < coreSnippets.length; i++) {
+      coreSnippets[i]['last'] = i == coreSnippets.length - 1;
+    }
+    for (var i = 0; i < flutterSnippets.length; i++) {
+      flutterSnippets[i]['last'] = i == flutterSnippets.length - 1;
+    }
+
+    final signalsVersion = parsedMeta['signals']?['version'] ?? '7.0.0';
+
+    final template = Template(extensionTemplateFile.readAsStringSync(), htmlEscapeValues: false);
+    final rendered = template.renderString({
+      'core_snippets': coreSnippets,
+      'flutter_snippets': flutterSnippets,
+      'signals_version': signalsVersion,
+    });
+    final targetExtensionFile = File(p.join(rootDir, 'editors', 'vscode', 'src', 'web', 'extension.ts'));
+    targetExtensionFile.parent.createSync(recursive: true);
+    targetExtensionFile.writeAsStringSync(rendered);
+    print('  Generated VS Code extension.ts: ${targetExtensionFile.path}');
+  } else {
+    print('Error: extension.ts.mustache template not found!');
+  }
+
+  // 5. Render AI Developer Skills (SKILL.md)
+  final skillTemplateFile = File(p.join(rootDir, 'scripts', 'templates', 'skill_definition.md.mustache'));
+  if (skillTemplateFile.existsSync()) {
+    final skillTemplate = Template(skillTemplateFile.readAsStringSync(), htmlEscapeValues: false);
+
+    final skillTargets = [
+      (
+        pkgName: 'signals-dart',
+        originPkg: 'signals_core',
+        description: 'Advanced reactive state primitives, collections, mixins, and utilities of signals_core.',
+        isFlutter: false,
+      ),
+      (
+        pkgName: 'signals-flutter',
+        originPkg: 'signals_flutter',
+        description: 'Comprehensive guide and best practices for integrating reactive signals cleanly inside Flutter applications.',
+        isFlutter: true,
+      ),
+    ];
+
+    for (final target in skillTargets) {
+      final filteredSnippets = snippets.where((s) => s['isFlutter'] == target.isFlutter).toList();
+      for (var i = 0; i < filteredSnippets.length; i++) {
+        filteredSnippets[i]['last'] = i == filteredSnippets.length - 1;
+      }
+
+      final List<DeclInfo> pkgDecls = parsedDecls[target.originPkg] ?? [];
+      final List<Map<String, dynamic>> parsedDeclsMap = [];
+      for (final d in pkgDecls) {
+        if (d.name.startsWith('_')) continue;
+        
+        final List<Map<String, dynamic>> membersList = [];
+        for (final m in d.members) {
+          membersList.add({
+            'name': m.name,
+            'type': m.type,
+            'signature': m.signature,
+            'comment': cleanDocumentationComment(m.comment),
+            'isStatic': m.isStatic,
+          });
+        }
+
+        parsedDeclsMap.add({
+          'name': d.name,
+          'type': d.type,
+          'comment': cleanDocumentationComment(d.comment),
+          'signature': d.signature,
+          'isDeprecated': d.isDeprecated,
+          'members': membersList,
+          'has_members': membersList.isNotEmpty,
+        });
+      }
+
+      final pkgMeta = parsedMeta[target.originPkg] ?? {'version': '7.0.0'};
+      final version = pkgMeta['version'] ?? '7.0.0';
+
+      final renderedSkill = skillTemplate.renderString({
+        'pkgName': target.pkgName,
+        'description': target.description,
+        'version': version,
+        'snippets': filteredSnippets,
+        'decls': parsedDeclsMap,
+      });
+
+      final targetSkillDirs = [
+        p.join(rootDir, 'skills', target.pkgName),
+        p.join(rootDir, 'editors', 'vscode', 'skills', target.pkgName),
+      ];
+
+      for (final dirPath in targetSkillDirs) {
+        Directory(dirPath).createSync(recursive: true);
+        File(p.join(dirPath, 'SKILL.md')).writeAsStringSync(renderedSkill);
+      }
+      print('  Generated Skill: ${target.pkgName} at both monorepo and vscode extensions levels.');
+    }
+  } else {
+    print('Error: skill_definition.md.mustache template not found!');
+  }
 }

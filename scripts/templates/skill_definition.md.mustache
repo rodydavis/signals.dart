@@ -1,0 +1,59 @@
+---
+name: {{pkgName}}
+description: {{description}} (v{{version}})
+---
+
+# {{pkgName}} API Best Practices & Primitive Definitions
+
+This guide outlines advanced state management primitives, reactive collections, async features, and value options semantics in `package:{{pkgName}}` (version `{{version}}`).
+
+---
+
+## 🚀 Reactive Primitives Cheat-Sheet
+
+Here is a curated reference of all reactivity constructs available in this package:
+
+{{#snippets}}
+### {{{name}}} (prefix: `{{{prefix}}}`)
+- **Category**: {{category}}
+- **Description**: {{{description}}}
+
+**Standard Usage Example**:
+```dart
+{{{example}}}
+```
+
+---
+{{/snippets}}
+
+## 📦 Parsed Library API & Signature Reference
+
+The following APIs are exported and available inside this package. Use them according to these signature patterns:
+
+{{#decls}}
+### {{type}} `{{name}}`
+{{#isDeprecated}}
+> [!WARNING]
+> This API is deprecated. Avoid using it in new code.
+{{/isDeprecated}}
+
+{{{comment}}}
+
+{{#signature}}
+**Signature**:
+```dart
+{{{signature}}}
+```
+{{/signature}}
+
+{{#has_members}}
+#### Members of `{{name}}`
+| Member | Type | Signature | Description |
+| :--- | :--- | :--- | :--- |
+{{#members}}
+| **{{name}}** | `{{type}}` | `{{{signature}}}` | {{{comment}}} |
+{{/members}}
+{{/has_members}}
+
+---
+{{/decls}}

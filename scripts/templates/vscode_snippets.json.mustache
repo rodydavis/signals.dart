@@ -1,0 +1,14 @@
+{
+{{#snippets}}
+  "{{name}}": {
+    "scope": "dart",
+    "prefix": "{{prefix}}",
+    "description": "{{description}}",
+    "body": [
+{{#body_lines}}
+      "{{{line}}}"{{^last}},{{/last}}
+{{/body_lines}}
+    ]
+  }{{^last}},{{/last}}
+{{/snippets}}
+}
