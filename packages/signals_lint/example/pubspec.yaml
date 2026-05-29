@@ -1,7 +1,6 @@
 name: signals_lint_example
 description: A new Flutter project.
 publish_to: "none"
-resolution: workspace
 version: 1.0.0+1
 
 environment:
@@ -22,3 +21,17 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  signals:
+    path: ../../signals
+  signals_core:
+    path: ../../signals_core
+  signals_flutter:
+    path: ../../signals_flutter
+  signals_hooks:
+    path: ../../signals_hooks
+  preact_signals:
+    path: ../../preact_signals
+  signals_lint:
+    path: ../

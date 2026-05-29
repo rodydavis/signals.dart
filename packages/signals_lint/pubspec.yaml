@@ -14,7 +14,6 @@ topics:
 environment:
   sdk: ^3.5.0
 
-resolution: workspace
 
 dependencies:
   analyzer: ">=6.0.0 <14.0.0"
@@ -28,3 +27,15 @@ dev_dependencies:
   signals: ^7.0.0
   analyzer_testing: ^0.2.6
   test_reflective_loader: ^0.3.0
+
+dependency_overrides:
+  signals:
+    path: ../signals
+  signals_core:
+    path: ../signals_core
+  signals_flutter:
+    path: ../signals_flutter
+  signals_hooks:
+    path: ../signals_hooks
+  preact_signals:
+    path: ../preact_signals
