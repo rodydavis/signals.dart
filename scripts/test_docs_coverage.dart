@@ -133,6 +133,28 @@ void main(List<String> args) {
 
     // signals_devtools_extension
     'SignalsDevToolsExtension',
+
+    // computedFrom overloads & extensions
+    'computedFrom1',
+    'computedFrom2',
+    'computedFrom3',
+    'computedFrom4',
+    'computedFrom5',
+    'computedFrom6',
+    'computedFrom7',
+    'computedFrom8',
+    'computedFrom9',
+    'computedFrom10',
+    'ComputedFromExt1',
+    'ComputedFromExt2',
+    'ComputedFromExt3',
+    'ComputedFromExt4',
+    'ComputedFromExt5',
+    'ComputedFromExt6',
+    'ComputedFromExt7',
+    'ComputedFromExt8',
+    'ComputedFromExt9',
+    'ComputedFromExt10',
   };
 
   print('================================================================');
@@ -624,7 +646,8 @@ String? getCategoryAndPage(String pkgName, DeclInfo decl) {
     if (name == 'FutureSignal' ||
         name == 'futureSignal' ||
         name == 'computedAsync' ||
-        name == 'computedFrom') {
+        name.startsWith('computedFrom') ||
+        name.startsWith('ComputedFromExt')) {
       if (nameLower.contains('computed')) return 'async/computed';
       return 'async/future';
     }
