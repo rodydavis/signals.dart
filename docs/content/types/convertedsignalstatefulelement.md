@@ -29,4 +29,5 @@ The **ConvertedSignalStatefulElement** type is referenced and used in the follow
 * [signals_flutter](/packages/signals_flutter)
 * [ConvertedSignalStatefulElement](/packages/signals/extensions/converted-signal-stateful-element) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
 * [signals](/packages/signals)
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

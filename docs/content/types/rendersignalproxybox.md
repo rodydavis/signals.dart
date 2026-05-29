@@ -34,4 +34,5 @@ The **RenderSignalProxyBox** type is referenced and used in the following pages:
 * [RenderSignalProxyBox](/packages/signals/render/render-signal-proxy-box) <span style="opacity: 0.6; font-size: 0.85em;">(signals/render)</span>
 * [signals](/packages/signals)
 * [SignalProxyWidget](/packages/signals/widgets/signal-proxy-widget) <span style="opacity: 0.6; font-size: 0.85em;">(signals/widgets)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

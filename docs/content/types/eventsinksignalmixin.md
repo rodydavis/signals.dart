@@ -79,4 +79,5 @@ The **EventSinkSignalMixin** type is referenced and used in the following pages:
 * [signals_core](/packages/signals_core)
 * [EventSinkSignalMixin](/packages/signals/mixins/event-sink) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [signals](/packages/signals)
+* [signals-dart AI Skill](/skills/signals-dart) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

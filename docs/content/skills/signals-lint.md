@@ -14,7 +14,7 @@ description: Standardized compiler diagnostics, static analysis lints, and autom
 To instantly install this AI developer skill into your local workspace under `.agents/skills/`, run:
 
 ```bash
-npx skills add rodydavis/signals.dart
+npx skills add rodydavis/signals.dart/tree/main/skills/signals-lint
 ```
 
 ---

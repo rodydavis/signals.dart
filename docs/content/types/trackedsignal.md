@@ -36,4 +36,6 @@ The **TrackedSignal** type is referenced and used in the following pages:
 * [TrackedSignalMixin](/packages/signals_core/mixins/tracked) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/mixins)</span>
 * [TrackedSignalMixin](/packages/signals/mixins/tracked) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [useTrackedSignal](/packages/signals_hooks/hooks/use-tracked-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [signals-dart AI Skill](/skills/signals-dart) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
+* [signals-hooks AI Skill](/skills/signals-hooks) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

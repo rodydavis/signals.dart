@@ -74,4 +74,6 @@ The **SignalEffect** type is referenced and used in the following pages:
 * [SignalEffect](/packages/signals_flutter/effects/signal-effect) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/effects)</span>
 * [signals](/packages/signals)
 * [SignalEffect](/packages/signals/effects/signal-effect) <span style="opacity: 0.6; font-size: 0.85em;">(signals/effects)</span>
+* [signals-migration-6-to-7 AI Skill](/skills/signals-migration-6-to-7) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

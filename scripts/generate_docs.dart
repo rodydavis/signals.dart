@@ -3262,7 +3262,7 @@ void generateVSCodeAndSkills(
             newContent.writeln('To instantly install this AI developer skill into your local workspace under `.agents/skills/`, run:');
             newContent.writeln();
             newContent.writeln('```bash');
-            newContent.writeln('npx skills add rodydavis/signals.dart');
+            newContent.writeln('npx skills add rodydavis/signals.dart/tree/main/skills/$skillName');
             newContent.writeln('```');
             newContent.writeln();
             newContent.writeln('---');

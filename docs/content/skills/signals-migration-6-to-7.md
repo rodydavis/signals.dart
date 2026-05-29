@@ -14,7 +14,7 @@ description: Detailed guidelines, patterns, and rules for migrating codebases fr
 To instantly install this AI developer skill into your local workspace under `.agents/skills/`, run:
 
 ```bash
-npx skills add rodydavis/signals.dart
+npx skills add rodydavis/signals.dart/tree/main/skills/signals-migration-6-to-7
 ```
 
 ---

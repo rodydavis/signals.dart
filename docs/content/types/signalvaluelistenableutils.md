@@ -30,4 +30,5 @@ The **SignalValueListenableUtils** type is referenced and used in the following 
 
 * [Signal Value Listenable Utils](/packages/signals_flutter/extensions/signal-value-listenable-utils) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/extensions)</span>
 * [Signal Value Listenable Utils](/packages/signals/extensions/signal-value-listenable-utils) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

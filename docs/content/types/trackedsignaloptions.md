@@ -30,4 +30,5 @@ The **TrackedSignalOptions** type is referenced and used in the following pages:
 * [TrackedSignalMixin](/packages/signals_flutter/mixins/tracked) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/mixins)</span>
 * [TrackedSignalMixin](/packages/signals_core/mixins/tracked) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/mixins)</span>
 * [TrackedSignalMixin](/packages/signals/mixins/tracked) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
+* [signals-dart AI Skill](/skills/signals-dart) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

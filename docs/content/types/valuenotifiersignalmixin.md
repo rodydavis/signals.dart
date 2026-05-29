@@ -35,4 +35,5 @@ The **ValueNotifierSignalMixin** type is referenced and used in the following pa
 * [ValueNotifierSignalMixin](/packages/signals/mixins/value-notifier-signal-mixin) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [FlutterSignal](/packages/signals/signals/flutter-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
 * [signals](/packages/signals)
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

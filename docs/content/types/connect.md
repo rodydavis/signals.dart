@@ -123,4 +123,5 @@ The **Connect** type is referenced and used in the following pages:
 * [signals](/packages/signals)
 * [signals_hooks](/packages/signals_hooks)
 * [useConnect](/packages/signals_hooks/hooks/use-connect) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [signals-dart AI Skill](/skills/signals-dart) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

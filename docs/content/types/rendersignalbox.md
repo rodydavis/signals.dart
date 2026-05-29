@@ -35,4 +35,5 @@ The **RenderSignalBox** type is referenced and used in the following pages:
 * [RenderSignalBox](/packages/signals/render/render-signal-box) <span style="opacity: 0.6; font-size: 0.85em;">(signals/render)</span>
 * [signals](/packages/signals)
 * [SignalPainterWidget](/packages/signals/widgets/signal-painter-widget) <span style="opacity: 0.6; font-size: 0.85em;">(signals/widgets)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

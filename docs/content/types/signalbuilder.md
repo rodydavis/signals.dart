@@ -89,4 +89,7 @@ The **SignalBuilder** type is referenced and used in the following pages:
 * [Watch](/packages/signals/widgets/watch) <span style="opacity: 0.6; font-size: 0.85em;">(signals/widgets)</span>
 * [SignalWidget](/packages/signals/widgets/signal-widget) <span style="opacity: 0.6; font-size: 0.85em;">(signals/widgets)</span>
 * [SignalBuilder](/packages/signals/widgets/signal-builder) <span style="opacity: 0.6; font-size: 0.85em;">(signals/widgets)</span>
+* [signals-lint AI Skill](/skills/signals-lint) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
+* [signals-migration-6-to-7 AI Skill](/skills/signals-migration-6-to-7) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

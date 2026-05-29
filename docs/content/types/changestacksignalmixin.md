@@ -96,4 +96,5 @@ The **ChangeStackSignalMixin** type is referenced and used in the following page
 * [TrackedSignalMixin](/packages/signals/mixins/tracked) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [ChangeStackSignalMixin](/packages/signals/mixins/change-stack) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [signals](/packages/signals)
+* [signals-dart AI Skill](/skills/signals-dart) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

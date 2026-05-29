@@ -14,7 +14,7 @@ description: Core reactive programming best practices and primitive definitions 
 To instantly install this AI developer skill into your local workspace under `.agents/skills/`, run:
 
 ```bash
-npx skills add rodydavis/signals.dart
+npx skills add rodydavis/signals.dart/tree/main/skills/signals-preact-dart
 ```
 
 ---

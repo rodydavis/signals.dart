@@ -33,4 +33,5 @@ The **ValueListenableSignalMixin** type is referenced and used in the following 
 * [ValueListenableSignalMixin](/packages/signals/mixins/value-listenable-signal-mixin) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [FlutterComputed](/packages/signals/signals/flutter-computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
 * [signals](/packages/signals)
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

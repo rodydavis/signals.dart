@@ -82,4 +82,5 @@ The **SignalProvider** type is referenced and used in the following pages:
 * [MultiSignalProvider](/packages/signals/widgets/multi-signal-provider) <span style="opacity: 0.6; font-size: 0.85em;">(signals/widgets)</span>
 * [SignalProvider](/packages/signals/widgets/signal-provider) <span style="opacity: 0.6; font-size: 0.85em;">(signals/widgets)</span>
 * [useSignalProvider](/packages/signals_hooks/hooks/use-signal-provider) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

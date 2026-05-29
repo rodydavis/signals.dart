@@ -33,4 +33,5 @@ The **SignalElement** type is referenced and used in the following pages:
 * [SignalElement](/packages/signals/extensions/signal-element) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
 * [Stateless Element Convert Extension](/packages/signals/extensions/stateless-element-convert-extension) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
 * [signals](/packages/signals)
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 
