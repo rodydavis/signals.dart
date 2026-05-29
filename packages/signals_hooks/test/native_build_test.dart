@@ -16,7 +16,7 @@ class NativeSignalHookWidget extends SignalHookWidget {
   Widget build(BuildContext context) {
     // 2. Direct hook use alongside implicit signal tracking:
     final focusNode = useFocusNode();
-    assert(focusNode != null);
+    assert(focusNode.toString().isNotEmpty);
 
     return Text(
       'Native: ${counter.value}',
@@ -93,7 +93,7 @@ void main() {
         SignalHookBuilder(
           builder: (context) {
             final focusNode = useFocusNode();
-            assert(focusNode != null);
+            assert(focusNode.toString().isNotEmpty);
             return Text(
               'Builder: ${counter.value}',
               textDirection: TextDirection.ltr,
