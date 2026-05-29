@@ -3080,8 +3080,12 @@ void generateVSCodeAndSkills(
   // 3. Render VS Code snippets file
   final snippetsTemplateFile = File(p.join(rootDir, 'scripts', 'templates', 'vscode_snippets.json.mustache'));
   if (snippetsTemplateFile.existsSync()) {
+    final activeSnippetsForVSCode = snippets.where((s) => s['deprecated'] != true).toList();
+    for (var i = 0; i < activeSnippetsForVSCode.length; i++) {
+      activeSnippetsForVSCode[i]['last'] = i == activeSnippetsForVSCode.length - 1;
+    }
     final template = Template(snippetsTemplateFile.readAsStringSync(), htmlEscapeValues: false);
-    final rendered = template.renderString({'snippets': snippets});
+    final rendered = template.renderString({'snippets': activeSnippetsForVSCode});
     final targetSnippetsFile = File(p.join(rootDir, 'editors', 'vscode', 'snippets', 'signals.json'));
     targetSnippetsFile.parent.createSync(recursive: true);
     targetSnippetsFile.writeAsStringSync(rendered);

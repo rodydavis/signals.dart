@@ -172,6 +172,7 @@
   description: "Explicit in-place Flutter Watch widget rebuilding only the returned closure closure."
   category: "Flutter"
   isFlutter: true
+  deprecated: true
   body:
     - "Watch.builder("
     - "  builder: (context) {"
@@ -188,6 +189,7 @@
   description: "Rebuilds only the wrapped closure when tracked signals change, avoiding full-widget GPU paints."
   category: "Flutter"
   isFlutter: true
+  deprecated: true
   body:
     - "Watch((context) => ${1:widget}),"
   example: |

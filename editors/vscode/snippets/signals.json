@@ -115,26 +115,6 @@
       "}, options: SignalContainerOptions(name: '${1:name}', autoDispose: ${5:false}));"
     ]
   },
-  "Watch builder": {
-    "scope": "dart",
-    "prefix": "watchb",
-    "description": "Explicit in-place Flutter Watch widget rebuilding only the returned closure closure.",
-    "body": [
-      "Watch.builder(",
-      "  builder: (context) {",
-      "    return ${1:widget};",
-      "  },",
-      "),"
-    ]
-  },
-  "Watch": {
-    "scope": "dart",
-    "prefix": "watch",
-    "description": "Rebuilds only the wrapped closure when tracked signals change, avoiding full-widget GPU paints.",
-    "body": [
-      "Watch((context) => ${1:widget}),"
-    ]
-  },
   "SignalBuilder": {
     "scope": "dart",
     "prefix": "sigb",
