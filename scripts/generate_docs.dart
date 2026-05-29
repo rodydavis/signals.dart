@@ -3269,7 +3269,9 @@ void generateVSCodeAndSkills(
             newContent.writeln();
             newContent.writeln('## 📄 SKILL.md Preview');
             newContent.writeln();
+            newContent.writeln('````plaintext');
             newContent.writeln(skillBody);
+            newContent.writeln('````');
 
             docsSkillFile.writeAsStringSync(newContent.toString());
             print('  Generated Docs Skill Page: ${docsSkillFile.path}');

@@ -21,6 +21,7 @@ npx skills add rodydavis/signals.dart/tree/main/skills/signals-hooks
 
 ## 📄 SKILL.md Preview
 
+````plaintext
 # Reactive State Hooks (`signals_hooks`)
 
 This skill covers orchestrating reactive state signals within `flutter_hooks` codebases utilizing the `signals_hooks` package.
@@ -120,3 +121,4 @@ testWidgets('useSignal test', (tester) async {
   expect(find.text('43'), findsOneWidget);
 });
 ```
+````

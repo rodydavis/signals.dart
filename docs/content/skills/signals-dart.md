@@ -21,6 +21,7 @@ npx skills add rodydavis/signals.dart/tree/main/skills/signals-dart
 
 ## 📄 SKILL.md Preview
 
+````plaintext
 # signals-dart API Best Practices & Primitive Definitions
 
 This guide outlines advanced state management primitives, reactive collections, async features, and value options semantics in `package:signals-dart` (version `7.0.0`).
@@ -6720,3 +6721,4 @@ A <code>PersistedSignal</code> that stores a nullable double value.
 | **encode** | `method` | `String encode(double? value)` |  |
 
 ---
+````

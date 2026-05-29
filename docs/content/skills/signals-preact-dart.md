@@ -21,6 +21,7 @@ npx skills add rodydavis/signals.dart/tree/main/skills/signals-preact-dart
 
 ## 📄 SKILL.md Preview
 
+````plaintext
 # Preact Signals in Dart
 
 This skill covers the core reactive programming primitives and implementation patterns of the `preact_signals` package.
@@ -139,3 +140,4 @@ dispose(); // Clean up subscription
 - **Synchronous Context**: Dependencies are tracked dynamically based on which signals are read during the execution of the callback.
 - **Cycle Detection**: Reading a computed signal inside its own execution flow or setting dependencies inside computed callbacks causes cycles. Avoid side-effects inside computed getters.
 - **Lazy Initial Value**: Lazy computed signals are not evaluated when created. Always call `isInitialized` or check the initialization status before forcing a `.peek()` inside observers to avoid re-entrancy cycle crashes.
+````

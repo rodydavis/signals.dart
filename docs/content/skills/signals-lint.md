@@ -21,6 +21,7 @@ npx skills add rodydavis/signals.dart/tree/main/skills/signals-lint
 
 ## 📄 SKILL.md Preview
 
+````plaintext
 # signals_lint Tooling & Rules
 
 This skill covers working with static code analysis, custom compiler warning diagnostics, and automated quick-fixes in the **signals.dart** ecosystem.
@@ -91,3 +92,4 @@ Place your cursor on the relevant class name or widget instantiation inside your
 3. **`ConvertStatefulToSignalStatefulWidget`**: Refactors a standard `StatefulWidget` to a `SignalStatefulWidget`.
 4. **`MigrateSignalsMixinToSignalStatefulWidget`**: Strips the legacy `SignalsMixin` and converts the class structure to `SignalStatefulWidget`.
 5. **`MigrateWatchToSignalBuilder`**: Converts legacy `Watch(...)` instances into clean `SignalBuilder` widgets.
+````

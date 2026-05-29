@@ -21,6 +21,7 @@ npx skills add rodydavis/signals.dart/tree/main/skills/signals-flutter
 
 ## 📄 SKILL.md Preview
 
+````plaintext
 # signals-flutter API Best Practices & Primitive Definitions
 
 This guide outlines advanced state management primitives, reactive collections, async features, and value options semantics in `package:signals-flutter` (version `7.1.0`).
@@ -1447,3 +1448,4 @@ The low-level **RenderBox** used by [SignalPainterWidget](/types/signalpainterwi
 | **detach** | `method` | `void detach()` |  |
 
 ---
+````

@@ -21,6 +21,7 @@ npx skills add rodydavis/signals.dart/tree/main/skills/signals-migration-6-to-7
 
 ## 📄 SKILL.md Preview
 
+````plaintext
 # Migrating from signals.dart v6 to v7
 
 This guide provides comprehensive instructions for migrating applications and packages using `signals.dart` from version 6.x to 7.0.0.
@@ -151,3 +152,4 @@ To make migrating from v6 to v7 completely effortless, the **`signals_lint`** to
 - **Converts positional `Watch`** and `Watch.builder` instances into unified `SignalBuilder` components.
 - **Promotes standard `StatelessWidget` and `StatefulWidget`** widgets to reactive `SignalWidget` and `SignalStatefulWidget` widgets on command.
 - **Quickly wraps any widget** expression in a surgically targeted `SignalBuilder`.
+````
