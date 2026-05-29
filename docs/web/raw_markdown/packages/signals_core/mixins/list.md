@@ -3,7 +3,7 @@ title: ListSignalMixin
 description: A mixin that adds reactive <code>List</code> methods and operators to a Signal.
 ---
 
-A mixin that adds reactive <code>List</code> methods and operators to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>List</code> methods and operators to a [Signal](/types/signal)
 holding a **List** value.
 
 This mixin delegates all standard **List** operations (such as mutations like <code>add</code>,
@@ -12,7 +12,7 @@ to the underlying list, while ensuring that any reads register a dependency
 and any mutations automatically trigger reactive updates.
 
 <Info>
-This mixin only works with signals that have a value type extending **List<E>**.
+This mixin only works with signals that have a value type extending <strong>List<E></strong>.
 </Info>
 
 ### Example Usage

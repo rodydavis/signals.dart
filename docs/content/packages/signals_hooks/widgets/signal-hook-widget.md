@@ -1,14 +1,14 @@
 ---
 title: SignalHookWidget
-description: A premium reactive **HookWidget** that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
+description: A premium reactive widget that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
 ---
 
-A premium reactive **HookWidget** that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
+A premium reactive widget that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
 
 <code>SignalHookWidget</code> establishes a dynamic reactive context directly at the Flutter element layer.
-Any signal accessed via <code>.value</code> inside the **buildWidget** method is **implicitly tracked** and
-subscribed to. At the same time, you can call any hooks (like <code>useSignal</code>, <code>useFocusNode</code>, etc.)
-within **buildWidget**.
+Any signal accessed via <code>.value</code> inside the **build** method is **implicitly tracked** and
+subscribed to. At the same time, you can call any hooks (like <code>useFocusNode</code>, <code>useTextEditingController</code>, etc.)
+within **build**.
 
 This provides the ultimate developer experience, combining the power of implicit, boilerplate-free
 signal tracking with the rich lifecycle management of Flutter Hooks.
@@ -21,7 +21,7 @@ class MyDualWidget extends SignalHookWidget {
   const MyDualWidget({super.key});
 
   @override
-  Widget buildWidget(BuildContext context) {
+  Widget build(BuildContext context) {
     // 1. Declare hooks seamlessly:
     final controller = useTextEditingController();
     final focusNode = useFocusNode();
@@ -46,9 +46,9 @@ class MyDualWidget extends SignalHookWidget {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalhookwidget"></a><a name="signalhookwidget"></a>`SignalHookWidget({super.key})`
+##### <a name="signalhookwidget"></a><a name="signalhookwidget"></a><code>SignalHookWidget({super.key})</code>
 
-Constructor for [SignalHookWidget](/packages/signals_hooks/widgets/signal-hook-widget).
+Constructor for [SignalHookWidget](/types/signalhookwidget).
 
 </details>
 
@@ -58,10 +58,16 @@ Constructor for [SignalHookWidget](/packages/signals_hooks/widgets/signal-hook-w
 <details>
 <summary> View Methods </summary>
 
-##### <a name="buildwidget"></a>`Widget buildWidget(BuildContext context)`
+##### <a name="createelement"></a><code>StatelessElement createElement()</code>
+
+##### <a name="build"></a><code>Widget build(BuildContext context)</code>
+
+Subclasses override this method to define their widget tree.
+
+For backward compatibility, this defaults to calling **buildWidget**.
+
+##### <a name="buildwidget"></a><code>Widget buildWidget(BuildContext context)</code>
 
 Subclasses override this method instead of **build** to define their widget tree.
-
-##### <a name="build"></a>`Widget build(BuildContext context)`
 
 </details>

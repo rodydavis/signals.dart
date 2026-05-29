@@ -3,7 +3,7 @@ title: useSignalValue
 description: Subscribes to an existing ReadonlySignal (or Signal) and returns its current value.
 ---
 
-Subscribes to an existing [ReadonlySignal](/packages/preact_signals/core/readonly) (or [Signal](/packages/signals/core/signal)) and returns its current value.
+Subscribes to an existing [ReadonlySignal](/types/readonlysignal) (or [Signal](/types/signal)) and returns its current value.
 
 This is a convenience hook that is equivalent to invoking <code>useExistingSignal(signal).value</code>.
 It triggers a rebuild of the host **HookWidget** whenever the signal's value changes.
@@ -14,7 +14,7 @@ It triggers a rebuild of the host **HookWidget** whenever the signal's value cha
 </Info>
 
 ### Parameters
-- **value**: The existing [ReadonlySignal](/packages/preact_signals/core/readonly) or [Signal](/packages/signals/core/signal) instance to retrieve the value from and subscribe to.
+- **value**: The existing [ReadonlySignal](/types/readonlysignal) or [Signal](/types/signal) instance to retrieve the value from and subscribe to.
 - **keys**: A list of objects to watch for changes. If any key changes, the hook will be re-evaluated
   and subscribe to the new signal.
 

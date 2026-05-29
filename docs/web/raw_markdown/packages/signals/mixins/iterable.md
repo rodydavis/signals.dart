@@ -3,7 +3,7 @@ title: IterableSignalMixin
 description: A mixin that adds reactive <code>Iterable</code> methods and properties to a Signal.
 ---
 
-A mixin that adds reactive <code>Iterable</code> methods and properties to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>Iterable</code> methods and properties to a [Signal](/types/signal)
 holding an **Iterable** value.
 
 This mixin delegates all standard **Iterable** operations (such as <code>length</code>,
@@ -12,7 +12,7 @@ collection, while ensuring that any read operations register a reactive
 dependency on the signal.
 
 <Info>
-This mixin only works with signals that have a value type extending **Iterable<E>**.
+This mixin only works with signals that have a value type extending <strong>Iterable<E></strong>.
 </Info>
 
 ### Example Usage

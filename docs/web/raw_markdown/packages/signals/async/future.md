@@ -1,11 +1,11 @@
 ---
 title: FutureSignal
-description: Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a react...
+description: Future signals wrap a standard asynchronous Future and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive ...
 ---
 
-Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive [AsyncState](/packages/signals/async/state).
+Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive [AsyncState](/types/asyncstate).
 
-You can construct a future signal via the helper function [futureSignal](/packages/signals/async/future) or by calling the <code>.toSignal()</code> extension method on any standard **Future**.
+You can construct a future signal via the helper function [futureSignal](/types/futuresignal) or by calling the <code>.toSignal()</code> extension method on any standard **Future**.
 
 ### 1. Basic Async Fetching
 ```dart
@@ -21,7 +21,7 @@ final s = fetchUserData(123).toSignal();
 ```
 
 ### 2. Consuming and Pattern Matching <code>AsyncState</code>
-Reading <code>.value</code> on a [FutureSignal](/packages/signals/async/future) returns an [AsyncState](/packages/signals/async/state) object. You can safely pattern-match or map this state to reactively build your user interface or perform side-effects:
+Reading <code>.value</code> on a [FutureSignal](/types/futuresignal) returns an [AsyncState](/types/asyncstate) object. You can safely pattern-match or map this state to reactively build your user interface or perform side-effects:
 
 ```dart
 effect(() {
@@ -56,7 +56,7 @@ final userProfile = futureSignal(() async {
 ```
 
 <Info>
-  If you need to track dependencies across an asynchronous gap (i.e. reading a signal's value *after* an <code>await</code>), pass them explicitly in the <code>dependencies</code> list inside <code>AsyncSignalOptions</code> or the constructor to guarantee they are properly subscribed.
+  If you need to track dependencies across an asynchronous gap (i.e. reading a signal's value <em>after</em> an <code>await</code>), pass them explicitly in the <code>dependencies</code> list inside <code>AsyncSignalOptions</code> or the constructor to guarantee they are properly subscribed.
 </Info>
 
 

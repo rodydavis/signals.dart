@@ -1,19 +1,19 @@
 ---
 title: ListSignal
-description: A reactive Signal that holds a **List** and implements the **List** interface.
+description: A reactive Signal that holds a List and implements the List interface.
 ---
 
-A reactive [Signal](/packages/signals/core/signal) that holds a **List** and implements the **List** interface.
+A reactive [Signal](/types/signal) that holds a **List** and implements the **List** interface.
 
-[ListSignal](/packages/signals/value/list) lets you listen to changes on a list reactively and mutate it directly using
+[ListSignal](/types/listsignal) lets you listen to changes on a list reactively and mutate it directly using
 standard list operations (like <code>add</code>, <code>addAll</code>, <code>remove</code>, operators <code>[]</code> and <code>[]=</code>, etc.).
 Any mutations automatically trigger reactive updates to all active listeners (e.g., inside an
-[effect](/packages/signals/core/effect) or [computed](/packages/signals/flutter/computed)).
+[effect](/types/effect) or [computed](/types/computed)).
 
-Additionally, [ListSignal](/packages/signals/value/list) defines convenient operators:
+Additionally, [ListSignal](/types/listsignal) defines convenient operators:
 - <code><<</code> injects/adds all items from an iterable into the list.
-- <code>&</code> forks/concatenates the list with an iterable into a new [ListSignal](/packages/signals/value/list).
-- <code>|</code> pipes/concatenates the list with another signal holding an iterable into a new [ListSignal](/packages/signals/value/list).
+- <code>&</code> forks/concatenates the list with an iterable into a new [ListSignal](/types/listsignal).
+- <code>|</code> pipes/concatenates the list with another signal holding an iterable into a new [ListSignal](/types/listsignal).
 
 ### Example Usage
 
@@ -49,9 +49,9 @@ do not need to assign <code>numbers.value = ...</code> manually!
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="listsignal"></a><a name="listsignal"></a>`ListSignal(super.value, {ListSignalOptions<E>? options, @Deprecated('Use options: ListSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: ListSignalOptions(name: ...) instead') String? debugLabel})`
+##### <a name="listsignal"></a><a name="listsignal"></a><code>ListSignal(super.value, {ListSignalOptions<E>? options, @Deprecated('Use options: ListSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: ListSignalOptions(name: ...) instead') String? debugLabel})</code>
 
-Creates a [ListSignal](/packages/signals/value/list) with the given **value**.
+Creates a [ListSignal](/types/listsignal) with the given **value**.
 
 </details>
 
@@ -61,21 +61,21 @@ Creates a [ListSignal](/packages/signals/value/list) with the given **value**.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="<<"></a>`ListSignal<E> <<(Iterable<E> other)`
+##### <a name="<<"></a><code>ListSignal<E> <<(Iterable<E> other)</code>
 
 Inject: Update current signal value with iterable
 
-##### <a name="&"></a>`ListSignal<E> &(Iterable<E> other)`
+##### <a name="&"></a><code>ListSignal<E> &(Iterable<E> other)</code>
 
 Fork: create a new signal which value is the concatenation of source signal and iterable parameter
 
-##### <a name="|"></a>`ListSignal<E> |(Signal<Iterable<E>> other)`
+##### <a name="|"></a><code>ListSignal<E> |(Signal<Iterable<E>> other)</code>
 
 Pipe: create a new signal by sending value from source to other
 
-##### <a name="=="></a>`bool ==(Object other)`
+##### <a name="=="></a><code>bool ==(Object other)</code>
 
-##### <a name="hashcode"></a>`int hashCode`
+##### <a name="hashcode"></a><code>int hashCode</code>
 
 </details>
 
@@ -85,7 +85,7 @@ Pipe: create a new signal by sending value from source to other
 
 ## listSignal
 
-Creates a [ListSignal](/packages/signals/value/list) initialized with the provided **list**.
+Creates a [ListSignal](/types/listsignal) initialized with the provided **list**.
 
 This is a convenience helper function for creating reactive list signals.
 

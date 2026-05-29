@@ -1,9 +1,9 @@
 ---
 title: StreamSignalMixin
-description: A mixin that implements the standard **Stream** interface for a ReadonlySignal.
+description: A mixin that implements the standard Stream interface for a ReadonlySignal.
 ---
 
-A mixin that implements the standard **Stream** interface for a [ReadonlySignal](/packages/preact_signals/core/readonly).
+A mixin that implements the standard **Stream** interface for a [ReadonlySignal](/types/readonlysignal).
 
 This mixin allows you to treat a read-only or writable signal as a standard asynchronous
 **Stream**, where updates to the signal's value are pushed as stream events.
@@ -57,7 +57,7 @@ Widget build(BuildContext context) {
 ```
 
 <Success>
-Since [StreamSignalMixin](/packages/signals/mixins/stream) creates an internal broadcast **StreamController**, multiple listeners
+Since <a href="/types/streamsignalmixin">StreamSignalMixin</a> creates an internal broadcast <strong>StreamController</strong>, multiple listeners
 can subscribe simultaneously. All subscriptions are closed and resources are released
 automatically when the signal is disposed.
 </Success>

@@ -1,16 +1,16 @@
 ---
 title: Untracked
-description: Runs a callback function **fn** that can read signal values without establishing a reactive subscription.
+description: Runs a callback function fn that can read signal values without establishing a reactive subscription.
 ---
 
 Runs a callback function **fn** that can read signal values without establishing a reactive subscription.
 
-Normally, reading a signal's value (via <code>.value</code> or <code>()</code>) inside an [effect](/packages/signals/core/effect) or a [computed](/packages/signals/flutter/computed) callback
+Normally, reading a signal's value (via <code>.value</code> or <code>()</code>) inside an [effect](/types/effect) or a [computed](/types/computed) callback
 automatically subscribes the surrounding context to that signal. If the signal changes, the context is
 re-executed.
 
 In some scenarios, you want to read a signal's current value inside a reactive context but *avoid* creating
-a subscription. This is where [untracked](/packages/signals/core/untracked) is useful. It temporarily suspends active tracking, executes **fn**,
+a subscription. This is where [untracked](/types/untracked) is useful. It temporarily suspends active tracking, executes **fn**,
 and then restores tracking.
 
 Parameters:
@@ -48,11 +48,11 @@ void main() {
 ```
 
 <Info>
-  [untracked](/packages/signals/core/untracked) is particularly useful inside event handlers, conditional logging, or when you are performing
+  <a href="/types/untracked">untracked</a> is particularly useful inside event handlers, conditional logging, or when you are performing
   a write to a signal based on another signal's value inside an effect to prevent infinite dependency cycles.
 </Info>
 
 <Warning>
-  Be cautious when using [untracked](/packages/signals/core/untracked), as it bypasses the dependency tracking system. If the values read inside
-  [untracked](/packages/signals/core/untracked) change, your reactive side effects or computed derivations will *not* automatically re-run.
+  Be cautious when using <a href="/types/untracked">untracked</a>, as it bypasses the dependency tracking system. If the values read inside
+  <a href="/types/untracked">untracked</a> change, your reactive side effects or computed derivations will <em>not</em> automatically re-run.
 </Warning>

@@ -3,9 +3,9 @@ title: useMapSignal
 description: Creates a new MapSignal and subscribes to it.
 ---
 
-Creates a new [MapSignal](/packages/signals/value/map) and subscribes to it.
+Creates a new [MapSignal](/types/mapsignal) and subscribes to it.
 
-A [MapSignal](/packages/signals/value/map) provides a reactive wrapper around a standard Dart **Map**. It tracks in-place mutations
+A [MapSignal](/types/mapsignal) provides a reactive wrapper around a standard Dart **Map**. It tracks in-place mutations
 (such as entry addition, value updates, or key removals) and automatically triggers rebuilds of the host **HookWidget**.
 
 <Success>

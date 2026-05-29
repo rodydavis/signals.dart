@@ -7,7 +7,7 @@ Wraps a callback function into a reusable, batched, and untracked action.
 
 An **action** is a higher-order function that takes a callback and returns a new function
 with the exact same signature. When the returned function is executed, it runs the original
-callback inside both a [batch](/packages/signals/core/batch) and an [untracked](/packages/signals/core/untracked) block.
+callback inside both a [batch](/types/batch) and an [untracked](/types/untracked) block.
 
 ### Why use <code>action</code> instead of <code>batch</code>?
 
@@ -46,7 +46,7 @@ Total prints: **3** (initial execution + 2 updates).
 
 #### With Actions (Coalesced Transaction)
 
-By wrapping the state-mutating function in [action](/packages/preact_signals/core/action), all updates are postponed and flushed
+By wrapping the state-mutating function in [action](/types/action), all updates are postponed and flushed
 in a single notification block once the function completes:
 
 ```dart
@@ -91,28 +91,28 @@ To ensure complete type safety and optimize static analysis in Dart, the package
 
 | Variant / Extension | Description |
 | --- | --- |
-| `action0` | Wraps a 0-argument callback function in a type-safe action. <br/> `signature` |
-| `action1` | Wraps a 1-argument callback function in a type-safe action. <br/> `signature` |
-| `action2` | Wraps a 2-argument callback function in a type-safe action. <br/> `signature` |
-| `action3` | Wraps a 3-argument callback function in a type-safe action. <br/> `signature` |
-| `action4` | Wraps a 4-argument callback function in a type-safe action. <br/> `signature` |
-| `action5` | Wraps a 5-argument callback function in a type-safe action. <br/> `signature` |
-| `action6` | Wraps a 6-argument callback function in a type-safe action. <br/> `signature` |
-| `action7` | Wraps a 7-argument callback function in a type-safe action. <br/> `signature` |
-| `action8` | Wraps an 8-argument callback function in a type-safe action. <br/> `signature` |
-| `action9` | Wraps a 9-argument callback function in a type-safe action. <br/> `signature` |
-| `action10` | Wraps a 10-argument callback function in a type-safe action. <br/> `signature` |
-| `ActionExt0` | Extension on a 0-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt1` | Extension on a 1-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt2` | Extension on a 2-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt3` | Extension on a 3-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt4` | Extension on a 4-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt5` | Extension on a 5-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt6` | Extension on a 6-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt7` | Extension on a 7-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt8` | Extension on an 8-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt9` | Extension on a 9-argument function to wrap it in a type-safe action. <br/> `signature` |
-| `ActionExt10` | Extension on a 10-argument function to wrap it in a type-safe action. <br/> `signature` |
+| <code>action0</code> | Wraps a 0-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action1</code> | Wraps a 1-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action2</code> | Wraps a 2-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action3</code> | Wraps a 3-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action4</code> | Wraps a 4-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action5</code> | Wraps a 5-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action6</code> | Wraps a 6-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action7</code> | Wraps a 7-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action8</code> | Wraps an 8-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action9</code> | Wraps a 9-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>action10</code> | Wraps a 10-argument callback function in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt0</code> | Extension on a 0-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt1</code> | Extension on a 1-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt2</code> | Extension on a 2-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt3</code> | Extension on a 3-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt4</code> | Extension on a 4-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt5</code> | Extension on a 5-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt6</code> | Extension on a 6-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt7</code> | Extension on a 7-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt8</code> | Extension on an 8-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt9</code> | Extension on a 9-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
+| <code>ActionExt10</code> | Extension on a 10-argument function to wrap it in a type-safe action. <br/> <code>signature</code> |
 
 <details>
 <summary>Show Full API Signatures & Examples</summary>
@@ -121,7 +121,7 @@ To ensure complete type safety and optimize static analysis in Dart, the package
 
 Wraps a 0-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -138,7 +138,7 @@ final increment = action0(() {
 
 Wraps a 1-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -155,7 +155,7 @@ final setName = action1((String newName) {
 
 Wraps a 2-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -172,7 +172,7 @@ final updateProfile = action2((String newName, int newAge) {
 
 Wraps a 3-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -190,7 +190,7 @@ final setCoordinates = action3((double lat, double lng, String label) {
 
 Wraps a 4-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -209,7 +209,7 @@ final updateUserData = action4((String name, int age, double score, bool active)
 
 Wraps a 5-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -229,7 +229,7 @@ final setConfig = action5((int w, int h, String title, bool dark, double opacity
 
 Wraps a 6-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -237,7 +237,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps a 7-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -245,7 +245,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps an 8-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -253,7 +253,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps a 9-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -261,7 +261,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps a 10-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -304,7 +304,7 @@ void main() {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function() action`
+##### <a name="action"></a><code>R Function() action</code>
 
 Wraps the 0-argument function in a type-safe action.
 
@@ -352,7 +352,7 @@ void main() {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A) action`
+##### <a name="action"></a><code>R Function(A) action</code>
 
 Wraps the 1-argument function in a type-safe action.
 
@@ -400,7 +400,7 @@ void main() {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B) action`
+##### <a name="action"></a><code>R Function(A, B) action</code>
 
 Wraps the 2-argument function in a type-safe action.
 
@@ -450,7 +450,7 @@ void main() {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C) action`
+##### <a name="action"></a><code>R Function(A, B, C) action</code>
 
 Wraps the 3-argument function in a type-safe action.
 
@@ -469,7 +469,7 @@ Extension on a 4-argument function to wrap it in a type-safe action.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C, D) action`
+##### <a name="action"></a><code>R Function(A, B, C, D) action</code>
 
 Wraps the 4-argument function in a type-safe action.
 
@@ -488,7 +488,7 @@ Extension on a 5-argument function to wrap it in a type-safe action.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C, D, E) action`
+##### <a name="action"></a><code>R Function(A, B, C, D, E) action</code>
 
 Wraps the 5-argument function in a type-safe action.
 
@@ -507,7 +507,7 @@ Extension on a 6-argument function to wrap it in a type-safe action.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C, D, E, F) action`
+##### <a name="action"></a><code>R Function(A, B, C, D, E, F) action</code>
 
 Wraps the 6-argument function in a type-safe action.
 
@@ -526,7 +526,7 @@ Extension on a 7-argument function to wrap it in a type-safe action.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C, D, E, F, G) action`
+##### <a name="action"></a><code>R Function(A, B, C, D, E, F, G) action</code>
 
 Wraps the 7-argument function in a type-safe action.
 
@@ -545,7 +545,7 @@ Extension on an 8-argument function to wrap it in a type-safe action.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C, D, E, F, G, H) action`
+##### <a name="action"></a><code>R Function(A, B, C, D, E, F, G, H) action</code>
 
 Wraps the 8-argument function in a type-safe action.
 
@@ -564,7 +564,7 @@ Extension on a 9-argument function to wrap it in a type-safe action.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C, D, E, F, G, H, I) action`
+##### <a name="action"></a><code>R Function(A, B, C, D, E, F, G, H, I) action</code>
 
 Wraps the 9-argument function in a type-safe action.
 
@@ -583,7 +583,7 @@ Extension on a 10-argument function to wrap it in a type-safe action.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="action"></a>`R Function(A, B, C, D, E, F, G, H, I, J) action`
+##### <a name="action"></a><code>R Function(A, B, C, D, E, F, G, H, I, J) action</code>
 
 Wraps the 10-argument function in a type-safe action.
 

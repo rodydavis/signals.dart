@@ -7,15 +7,15 @@ description: Creates a new model constructor with an instanced factory.
 
 Creates a new model constructor with an instanced factory.
 
-A [SignalModel](/packages/preact_signals/utilities/model) is a highly powerful architectural primitive designed to manage cohesive packages
+A [SignalModel](/types/signalmodel) is a highly powerful architectural primitive designed to manage cohesive packages
 of related state, business logic, actions, and side effects.
 
-Under the hood, [SignalModel](/packages/preact_signals/utilities/model) automatically tracks, scopes, and manages the lifecycle of any [Effect](/packages/signals/core/effect)s
+Under the hood, [SignalModel](/types/signalmodel) automatically tracks, scopes, and manages the lifecycle of any [Effect](/types/effect)s
 instantiated during its factory execution. When the model is disposed (by calling <code>model.dispose()</code>),
 all nested/captured effects are clean up automatically, ensuring complete prevention of memory leaks.
 
 Furthermore, if the factory returns a standard Dart **Map**, and <code>wrapInAction</code> is enabled (default),
-all nested function properties are automatically wrapped in batched [action](/packages/preact_signals/core/action) transactions to optimize updates.
+all nested function properties are automatically wrapped in batched [action](/types/action) transactions to optimize updates.
 
 ### 1. Advanced Architecture: Type-Safe Wrappers using Dart 3+ Extension Types
 While dynamic subscript access <code>model['increment']()</code> is fast and flexible, it lacks static analysis safety.
@@ -71,10 +71,10 @@ void main() {
 
 ## SignalModel
 
-A premium wrapper for cohesive state packages constructed with [createModel](/packages/preact_signals/utilities/model).
+A premium wrapper for cohesive state packages constructed with [createModel](/types/createmodel).
 
-It holds the instanced model **value** and all the [Effect](/packages/signals/core/effect)s that were captured
-during its construction. Disposing the [SignalModel](/packages/preact_signals/utilities/model) automatically disposes of all
+It holds the instanced model **value** and all the [Effect](/types/effect)s that were captured
+during its construction. Disposing the [SignalModel](/types/signalmodel) automatically disposes of all
 nested/captured effects, completely avoiding memory leaks.
 
 ### Premium Pattern: Dart 3+ Extension Type Wrappers
@@ -143,7 +143,7 @@ Disposes of all captured effects.
 
 ## SignalModelOptions
 
-Options for configuring a [SignalModel](/packages/preact_signals/utilities/model).
+Options for configuring a [SignalModel](/types/signalmodel).
 
 Provides configuration for debug labeling (**name**) and whether to automatically wrap Map functions
 in transaction-safe, batched actions (**wrapInAction**).
@@ -167,7 +167,7 @@ final options = const SignalModelOptions(
 
 ##### <a name="signalmodeloptions"></a><a name="signalmodeloptions"></a>`SignalModelOptions({this.name, this.wrapInAction = true})`
 
-Creates a new instance of [SignalModelOptions](/packages/preact_signals/utilities/model).
+Creates a new instance of [SignalModelOptions](/types/signalmodeloptions).
 
 </details>
 
@@ -212,7 +212,7 @@ Copy options with new values.
 
 A constructor for models that manages nested effects.
 
-The model constructor starts capturing effects when called, storing them inside the returned [SignalModel](/packages/preact_signals/utilities/model).
+The model constructor starts capturing effects when called, storing them inside the returned [SignalModel](/types/signalmodel).
 
 ### Example Usage
 
@@ -232,7 +232,7 @@ print(model.value); // Prints: data
 
 ##### <a name="signalmodelconstructor"></a><a name="signalmodelconstructor"></a>`SignalModelConstructor(this._factory, {this.options = const SignalModelOptions()})`
 
-Creates a new instance of [SignalModelConstructor](/packages/preact_signals/utilities/model).
+Creates a new instance of [SignalModelConstructor](/types/signalmodelconstructor).
 
 </details>
 
@@ -256,6 +256,6 @@ Options used to configure this constructor.
 
 ##### <a name="call"></a>`SignalModel<T> call()`
 
-Instantiates a new [SignalModel](/packages/preact_signals/utilities/model) instance.
+Instantiates a new [SignalModel](/types/signalmodel) instance.
 
 </details>

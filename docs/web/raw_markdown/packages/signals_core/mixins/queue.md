@@ -3,7 +3,7 @@ title: QueueSignalMixin
 description: A mixin that adds reactive <code>Queue</code> methods and operations to a Signal.
 ---
 
-A mixin that adds reactive <code>Queue</code> methods and operations to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>Queue</code> methods and operations to a [Signal](/types/signal)
 holding a **Queue** value.
 
 This mixin delegates all standard **Queue** operations (such as mutations like <code>add</code>,
@@ -12,7 +12,7 @@ underlying queue, while ensuring that any reads register a dependency and any
 mutations automatically trigger reactive updates.
 
 <Info>
-This mixin only works with signals that have a value type extending **Queue<T>**.
+This mixin only works with signals that have a value type extending <strong>Queue<T></strong>.
 </Info>
 
 ### Example Usage
@@ -136,5 +136,86 @@ need to assign <code>signal.value = ...</code> to force updates. Methods like <c
 ##### <a name="where"></a>`Iterable<T> where(bool Function(T element) test)`
 
 ##### <a name="wheretype"></a>`Iterable<U> whereType()`
+
+</details>
+
+
+
+---
+
+## SignalQueueUtils
+
+Utility extension methods on **Queue** to convert them to [QueueSignal](/types/queuesignal)s.
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="tosignal"></a>`QueueSignal<T> toSignal({QueueSignalOptions<T>? options, @Deprecated('Use options: QueueSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: QueueSignalOptions(name: ...) instead') String? debugLabel})`
+
+Convert an existing list to [QueueSignal](/types/queuesignal)
+
+</details>
+
+
+
+---
+
+## queueSignal
+
+Creates a [QueueSignal](/types/queuesignal) with the given **list** (Queue).
+
+
+---
+
+## QueueSignalOptions
+
+Configuration options for a [QueueSignal](/types/queuesignal).
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="queuesignaloptions"></a><a name="queuesignaloptions"></a>`QueueSignalOptions({super.name, super.autoDispose, super.watched, super.unwatched, super.equality = const SignalDeepEquality()})`
+
+Creates a new [QueueSignalOptions](/types/queuesignaloptions) instance.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="copywith"></a>`QueueSignalOptions<T> copyWith({String? name, bool? autoDispose, void Function()? watched, void Function()? unwatched, SignalEquality<Queue<T>>? equality})`
+
+##### <a name="=="></a>`bool ==(Object other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## QueueSignal
+
+A [Signal](/types/signal) that holds a **Queue**.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="queuesignal"></a><a name="queuesignal"></a>`QueueSignal(super.value, {QueueSignalOptions<T>? options, @Deprecated('Use options: QueueSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: QueueSignalOptions(name: ...) instead') String? debugLabel})`
+
+Creates a [QueueSignal](/types/queuesignal) with the given **value**.
 
 </details>

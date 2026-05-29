@@ -4,7 +4,7 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard
-<code>StatefulWidget</code> to extend the reactive **SignalStatefulWidget** instead.
+<code>StatefulWidget</code> to extend the reactive [SignalStatefulWidget](/types/signalstatefulwidget) instead.
 
 <Success>
 By extending <code>SignalStatefulWidget</code> instead of <code>StatefulWidget</code>, your widget state automatically
@@ -46,7 +46,7 @@ class CounterWidget extends SignalStatefulWidget {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="convertstatefultosignalstatefulwidget"></a><a name="convertstatefultosignalstatefulwidget"></a>`ConvertStatefulToSignalStatefulWidget()`
+##### <a name="convertstatefultosignalstatefulwidget"></a><a name="convertstatefultosignalstatefulwidget"></a><code>ConvertStatefulToSignalStatefulWidget()</code>
 
 </details>
 
@@ -56,6 +56,6 @@ class CounterWidget extends SignalStatefulWidget {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)</code>
 
 </details>

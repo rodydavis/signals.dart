@@ -11,13 +11,13 @@ and error outcomes.
 
 ### State Hierarchy
 The states are modeled as a robust hierarchy of immutable types:
-- [AsyncLoading](/packages/signals/async/state): Pure loading state with no pre-existing data.
-- [AsyncData](/packages/signals/async/state): Success state holding a resolved value of type <code>T</code>.
-  - [AsyncDataRefreshing](/packages/signals/async/state): Refreshing in the background (holding historical data).
-  - [AsyncDataReloading](/packages/signals/async/state): Reloading (holding historical data).
-- [AsyncError](/packages/signals/async/state): Failure state holding an error and optional stack trace.
-  - [AsyncErrorRefreshing](/packages/signals/async/state): Refreshing in the background (holding historical error).
-  - [AsyncErrorReloading](/packages/signals/async/state): Reloading (holding historical error).
+- [AsyncLoading](/types/asyncloading): Pure loading state with no pre-existing data.
+- [AsyncData](/types/asyncdata): Success state holding a resolved value of type <code>T</code>.
+  - [AsyncDataRefreshing](/types/asyncdatarefreshing): Refreshing in the background (holding historical data).
+  - [AsyncDataReloading](/types/asyncdatareloading): Reloading (holding historical data).
+- [AsyncError](/types/asyncerror): Failure state holding an error and optional stack trace.
+  - [AsyncErrorRefreshing](/types/asyncerrorrefreshing): Refreshing in the background (holding historical error).
+  - [AsyncErrorReloading](/types/asyncerrorreloading): Reloading (holding historical error).
 
 ### Pattern Matching & Switch Expressions
 Standard Dart switch expressions provide type-safe branching across all states:
@@ -55,33 +55,33 @@ state.map(
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncstate"></a><a name="asyncstate"></a>`AsyncState()`
+##### <a name="asyncstate"></a><a name="asyncstate"></a><code>AsyncState()</code>
 
-##### <a name="asyncstate-datareloading"></a><a name="datareloading"></a>`AsyncState.dataReloading(T data)`
+##### <a name="asyncstate-datareloading"></a><a name="datareloading"></a><code>AsyncState.dataReloading(T data)</code>
 
 Create a state with a value that is reloading
 
-##### <a name="asyncstate-datarefreshing"></a><a name="datarefreshing"></a>`AsyncState.dataRefreshing(T data)`
+##### <a name="asyncstate-datarefreshing"></a><a name="datarefreshing"></a><code>AsyncState.dataRefreshing(T data)</code>
 
 Create a state with a value that is refreshing
 
-##### <a name="asyncstate-data"></a><a name="data"></a>`AsyncState.data(T data)`
+##### <a name="asyncstate-data"></a><a name="data"></a><code>AsyncState.data(T data)</code>
 
 Create a state with a value
 
-##### <a name="asyncstate-errorreloading"></a><a name="errorreloading"></a>`AsyncState.errorReloading(Object error, [StackTrace? stackTrace])`
+##### <a name="asyncstate-errorreloading"></a><a name="errorreloading"></a><code>AsyncState.errorReloading(Object error, [StackTrace? stackTrace])</code>
 
 Create a state with an error that is reloading
 
-##### <a name="asyncstate-errorrefreshing"></a><a name="errorrefreshing"></a>`AsyncState.errorRefreshing(Object error, [StackTrace? stackTrace])`
+##### <a name="asyncstate-errorrefreshing"></a><a name="errorrefreshing"></a><code>AsyncState.errorRefreshing(Object error, [StackTrace? stackTrace])</code>
 
 Create a state with an error that is refreshing
 
-##### <a name="asyncstate-error"></a><a name="error"></a>`AsyncState.error(Object error, [StackTrace? stackTrace])`
+##### <a name="asyncstate-error"></a><a name="error"></a><code>AsyncState.error(Object error, [StackTrace? stackTrace])</code>
 
 Create a state with an error
 
-##### <a name="asyncstate-loading"></a><a name="loading"></a>`AsyncState.loading()`
+##### <a name="asyncstate-loading"></a><a name="loading"></a><code>AsyncState.loading()</code>
 
 Create a loading state
 
@@ -93,47 +93,47 @@ Create a loading state
 <details>
 <summary> View Methods </summary>
 
-##### <a name="hasvalue"></a>`bool hasValue`
+##### <a name="hasvalue"></a><code>bool hasValue</code>
 
 Returns true if the state has a value
 
-##### <a name="haserror"></a>`bool hasError`
+##### <a name="haserror"></a><code>bool hasError</code>
 
 Returns true if the state has an error
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
 Check if the state is a loading state
 
-##### <a name="isrefreshing"></a>`bool isRefreshing`
+##### <a name="isrefreshing"></a><code>bool isRefreshing</code>
 
 Returns true if the state is refreshing with a loading flag,
  has a value or error and is not the loading state
 
-##### <a name="isreloading"></a>`bool isReloading`
+##### <a name="isreloading"></a><code>bool isReloading</code>
 
 Returns true if the state is reloading with having a value or error,
 and is the loading state
 
-##### <a name="requirevalue"></a>`T requireValue`
+##### <a name="requirevalue"></a><code>T requireValue</code>
 
 Force unwrap the value of the state.
 
 This will throw an error if the state does not have a value.
 
-##### <a name="value"></a>`T? value`
+##### <a name="value"></a><code>T? value</code>
 
 Returns the value of the state.
 
-##### <a name="error"></a>`Object? error`
+##### <a name="error"></a><code>Object? error</code>
 
 Returns the error of the state.
 
-##### <a name="stacktrace"></a>`StackTrace? stackTrace`
+##### <a name="stacktrace"></a><code>StackTrace? stackTrace</code>
 
 Returns the stack trace of the state.
 
-##### <a name="map"></a>`E map({required AsyncDataBuilder<E, T> data, required AsyncErrorBuilder<E> error, required AsyncStateBuilder<E> loading, AsyncStateBuilder<E>? reloading, AsyncStateBuilder<E>? refreshing})`
+##### <a name="map"></a><code>E map({required AsyncDataBuilder<E, T> data, required AsyncErrorBuilder<E> error, required AsyncStateBuilder<E> loading, AsyncStateBuilder<E>? reloading, AsyncStateBuilder<E>? refreshing})</code>
 
 Map the state to a value.
 
@@ -150,7 +150,7 @@ The error <code>Function</code> below can be one of two types:
 - (dynamic) -> FutureOr
 - (dynamic, StackTrace) -> FutureOr
 
-##### <a name="maybemap"></a>`E maybeMap({AsyncDataBuilder<E, T>? data, AsyncErrorBuilder<E>? error, AsyncStateBuilder<E>? loading, AsyncStateBuilder<E>? reloading, AsyncStateBuilder<E>? refreshing, required AsyncStateBuilder<E> orElse})`
+##### <a name="maybemap"></a><code>E maybeMap({AsyncDataBuilder<E, T>? data, AsyncErrorBuilder<E>? error, AsyncStateBuilder<E>? loading, AsyncStateBuilder<E>? reloading, AsyncStateBuilder<E>? refreshing, required AsyncStateBuilder<E> orElse})</code>
 
 Map the state to a value with optional or else.
 
@@ -166,9 +166,9 @@ The error <code>Function</code> below can be one of two types:
 - (dynamic) -> FutureOr
 - (dynamic, StackTrace) -> FutureOr
 
-##### <a name="=="></a>`bool ==(covariant AsyncState<T> other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState<T> other)</code>
 
-##### <a name="hashcode"></a>`int hashCode`
+##### <a name="hashcode"></a><code>int hashCode</code>
 
 </details>
 
@@ -187,7 +187,7 @@ has remained the same and is being refreshed.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncerrorrefreshing"></a><a name="asyncerrorrefreshing"></a>`AsyncErrorRefreshing(super.error, super.stackTrace)`
+##### <a name="asyncerrorrefreshing"></a><a name="asyncerrorrefreshing"></a><code>AsyncErrorRefreshing(super.error, super.stackTrace)</code>
 
 Create a state with an error that is refreshing
 
@@ -199,11 +199,11 @@ Create a state with an error that is refreshing
 <details>
 <summary> View Methods </summary>
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
-##### <a name="isrefreshing"></a>`bool isRefreshing`
+##### <a name="isrefreshing"></a><code>bool isRefreshing</code>
 
-##### <a name="=="></a>`bool ==(covariant AsyncState other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState other)</code>
 
 </details>
 
@@ -222,7 +222,7 @@ has remained the same and is being refreshed
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncdatarefreshing"></a><a name="asyncdatarefreshing"></a>`AsyncDataRefreshing(super.data)`
+##### <a name="asyncdatarefreshing"></a><a name="asyncdatarefreshing"></a><code>AsyncDataRefreshing(super.data)</code>
 
 Create a state with a value that is refreshing
 
@@ -234,11 +234,48 @@ Create a state with a value that is refreshing
 <details>
 <summary> View Methods </summary>
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
-##### <a name="isrefreshing"></a>`bool isRefreshing`
+##### <a name="isrefreshing"></a><code>bool isRefreshing</code>
 
-##### <a name="=="></a>`bool ==(covariant AsyncState other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState other)</code>
+
+</details>
+
+
+
+---
+
+## LinkedSignalPreviousState
+
+Previous state of a [LinkedSignal](/types/linkedsignal), containing both the **source** value
+and the computed **value** from that source version.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="linkedsignalpreviousstate"></a><a name="linkedsignalpreviousstate"></a><code>LinkedSignalPreviousState(this.source, this.value)</code>
+
+Creates a [LinkedSignalPreviousState](/types/linkedsignalpreviousstate).
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="source"></a><code>S source</code>
+
+The source value.
+
+##### <a name="value"></a><code>T value</code>
+
+The computed value.
 
 </details>
 
@@ -257,7 +294,7 @@ has changed and is being reloaded.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncerrorreloading"></a><a name="asyncerrorreloading"></a>`AsyncErrorReloading(super.error, super.stackTrace)`
+##### <a name="asyncerrorreloading"></a><a name="asyncerrorreloading"></a><code>AsyncErrorReloading(super.error, super.stackTrace)</code>
 
 Create a state with an error that is reloading
 
@@ -269,11 +306,11 @@ Create a state with an error that is reloading
 <details>
 <summary> View Methods </summary>
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
-##### <a name="isreloading"></a>`bool isReloading`
+##### <a name="isreloading"></a><code>bool isReloading</code>
 
-##### <a name="=="></a>`bool ==(covariant AsyncState other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState other)</code>
 
 </details>
 
@@ -292,7 +329,7 @@ has changed and is being reloaded.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncdatareloading"></a><a name="asyncdatareloading"></a>`AsyncDataReloading(super.data)`
+##### <a name="asyncdatareloading"></a><a name="asyncdatareloading"></a><code>AsyncDataReloading(super.data)</code>
 
 Create a state with a value that is reloading
 
@@ -304,11 +341,11 @@ Create a state with a value that is reloading
 <details>
 <summary> View Methods </summary>
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
-##### <a name="isreloading"></a>`bool isReloading`
+##### <a name="isreloading"></a><code>bool isReloading</code>
 
-##### <a name="=="></a>`bool ==(covariant AsyncState other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState other)</code>
 
 </details>
 
@@ -318,7 +355,7 @@ Create a state with a value that is reloading
 
 ## AsyncLoading
 
-State for an [AsyncState](/packages/signals/async/state) with a loading state
+State for an [AsyncState](/types/asyncstate) with a loading state
 
 
 ### Constructors
@@ -326,9 +363,9 @@ State for an [AsyncState](/packages/signals/async/state) with a loading state
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncloading"></a><a name="asyncloading"></a>`AsyncLoading()`
+##### <a name="asyncloading"></a><a name="asyncloading"></a><code>AsyncLoading()</code>
 
-State for an [AsyncState](/packages/signals/async/state) with a loading state
+State for an [AsyncState](/types/asyncstate) with a loading state
 
 </details>
 
@@ -338,27 +375,27 @@ State for an [AsyncState](/packages/signals/async/state) with a loading state
 <details>
 <summary> View Methods </summary>
 
-##### <a name="hasvalue"></a>`bool hasValue`
+##### <a name="hasvalue"></a><code>bool hasValue</code>
 
-##### <a name="haserror"></a>`bool hasError`
+##### <a name="haserror"></a><code>bool hasError</code>
 
-##### <a name="value"></a>`T? value`
+##### <a name="value"></a><code>T? value</code>
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
-##### <a name="isrefreshing"></a>`bool isRefreshing`
+##### <a name="isrefreshing"></a><code>bool isRefreshing</code>
 
-##### <a name="isreloading"></a>`bool isReloading`
+##### <a name="isreloading"></a><code>bool isReloading</code>
 
-##### <a name="requirevalue"></a>`T requireValue`
+##### <a name="requirevalue"></a><code>T requireValue</code>
 
-##### <a name="error"></a>`Object? error`
+##### <a name="error"></a><code>Object? error</code>
 
-##### <a name="stacktrace"></a>`StackTrace? stackTrace`
+##### <a name="stacktrace"></a><code>StackTrace? stackTrace</code>
 
-##### <a name="=="></a>`bool ==(covariant AsyncState other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState other)</code>
 
-##### <a name="hashcode"></a>`int hashCode`
+##### <a name="hashcode"></a><code>int hashCode</code>
 
 </details>
 
@@ -368,7 +405,7 @@ State for an [AsyncState](/packages/signals/async/state) with a loading state
 
 ## AsyncError
 
-State for an [AsyncState](/packages/signals/async/state) with an error
+State for an [AsyncState](/types/asyncstate) with an error
 
 
 ### Constructors
@@ -376,9 +413,9 @@ State for an [AsyncState](/packages/signals/async/state) with an error
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncerror"></a><a name="asyncerror"></a>`AsyncError(this.error, this.stackTrace)`
+##### <a name="asyncerror"></a><a name="asyncerror"></a><code>AsyncError(this.error, this.stackTrace)</code>
 
-State for an [AsyncState](/packages/signals/async/state) with an error
+State for an [AsyncState](/types/asyncstate) with an error
 
 </details>
 
@@ -388,9 +425,9 @@ State for an [AsyncState](/packages/signals/async/state) with an error
 <details>
 <summary> View Properties </summary>
 
-##### <a name="error"></a>`Object error`
+##### <a name="error"></a><code>Object error</code>
 
-##### <a name="stacktrace"></a>`StackTrace stackTrace`
+##### <a name="stacktrace"></a><code>StackTrace stackTrace</code>
 
 </details>
 
@@ -400,23 +437,23 @@ State for an [AsyncState](/packages/signals/async/state) with an error
 <details>
 <summary> View Methods </summary>
 
-##### <a name="hasvalue"></a>`bool hasValue`
+##### <a name="hasvalue"></a><code>bool hasValue</code>
 
-##### <a name="haserror"></a>`bool hasError`
+##### <a name="haserror"></a><code>bool hasError</code>
 
-##### <a name="value"></a>`T? value`
+##### <a name="value"></a><code>T? value</code>
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
-##### <a name="isrefreshing"></a>`bool isRefreshing`
+##### <a name="isrefreshing"></a><code>bool isRefreshing</code>
 
-##### <a name="isreloading"></a>`bool isReloading`
+##### <a name="isreloading"></a><code>bool isReloading</code>
 
-##### <a name="requirevalue"></a>`T requireValue`
+##### <a name="requirevalue"></a><code>T requireValue</code>
 
-##### <a name="=="></a>`bool ==(covariant AsyncState other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState other)</code>
 
-##### <a name="hashcode"></a>`int hashCode`
+##### <a name="hashcode"></a><code>int hashCode</code>
 
 </details>
 
@@ -426,7 +463,7 @@ State for an [AsyncState](/packages/signals/async/state) with an error
 
 ## AsyncData
 
-State for an [AsyncState](/packages/signals/async/state) with a value
+State for an [AsyncState](/types/asyncstate) with a value
 
 
 ### Constructors
@@ -434,9 +471,9 @@ State for an [AsyncState](/packages/signals/async/state) with a value
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="asyncdata"></a><a name="asyncdata"></a>`AsyncData(T data)`
+##### <a name="asyncdata"></a><a name="asyncdata"></a><code>AsyncData(T data)</code>
 
-State for an [AsyncState](/packages/signals/async/state) with a value
+State for an [AsyncState](/types/asyncstate) with a value
 
 </details>
 
@@ -446,7 +483,7 @@ State for an [AsyncState](/packages/signals/async/state) with a value
 <details>
 <summary> View Properties </summary>
 
-##### <a name="value"></a>`T value`
+##### <a name="value"></a><code>T value</code>
 
 </details>
 
@@ -456,24 +493,44 @@ State for an [AsyncState](/packages/signals/async/state) with a value
 <details>
 <summary> View Methods </summary>
 
-##### <a name="hasvalue"></a>`bool hasValue`
+##### <a name="hasvalue"></a><code>bool hasValue</code>
 
-##### <a name="haserror"></a>`bool hasError`
+##### <a name="haserror"></a><code>bool hasError</code>
 
-##### <a name="isloading"></a>`bool isLoading`
+##### <a name="isloading"></a><code>bool isLoading</code>
 
-##### <a name="isrefreshing"></a>`bool isRefreshing`
+##### <a name="isrefreshing"></a><code>bool isRefreshing</code>
 
-##### <a name="isreloading"></a>`bool isReloading`
+##### <a name="isreloading"></a><code>bool isReloading</code>
 
-##### <a name="requirevalue"></a>`T requireValue`
+##### <a name="requirevalue"></a><code>T requireValue</code>
 
-##### <a name="error"></a>`Object? error`
+##### <a name="error"></a><code>Object? error</code>
 
-##### <a name="stacktrace"></a>`StackTrace? stackTrace`
+##### <a name="stacktrace"></a><code>StackTrace? stackTrace</code>
 
-##### <a name="=="></a>`bool ==(covariant AsyncState other)`
+##### <a name="=="></a><code>bool ==(covariant AsyncState other)</code>
 
-##### <a name="hashcode"></a>`int hashCode`
+##### <a name="hashcode"></a><code>int hashCode</code>
+
+</details>
+
+
+
+---
+
+## AsyncSignalState
+
+Extensions for [Signal<AsyncState<T>>]
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="selectdata"></a><code>Computed<AsyncState<R>> selectData(R Function(T data) selector)</code>
+
+Select from data when available, preserving async state
 
 </details>

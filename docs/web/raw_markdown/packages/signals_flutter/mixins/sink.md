@@ -1,11 +1,11 @@
 ---
 title: SinkSignalMixin
-description: A mixin that implements the standard **Sink** interface for a Signal.
+description: A mixin that implements the standard Sink interface for a Signal.
 ---
 
-A mixin that implements the standard **Sink** interface for a [Signal](/packages/signals/core/signal).
+A mixin that implements the standard **Sink** interface for a [Signal](/types/signal).
 
-This mixin allows you to treat a writable [Signal](/packages/signals/core/signal) as a sink of events, where
+This mixin allows you to treat a writable [Signal](/types/signal) as a sink of events, where
 adding an element using **add** automatically updates the signal's value and
 notifies all reactive listeners. Calling **close** automatically disposes
 the signal, freeing up resources and removing all active subscriptions.
@@ -40,8 +40,8 @@ void main() {
 ```
 
 <Warning>
-Once **close** is called, the signal is permanently disposed and cannot be reused
-or written to anymore. Any subsequent **add** calls will throw an exception.
+Once <strong>close</strong> is called, the signal is permanently disposed and cannot be reused
+or written to anymore. Any subsequent <strong>add</strong> calls will throw an exception.
 </Warning>
 
 

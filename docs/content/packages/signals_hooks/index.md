@@ -3,7 +3,7 @@ title: signals_hooks
 description: flutter_hooks bindings for signals
 ---
 
-> Version: `7.0.0`
+> Version: <code>7.1.0</code>
 
 ## Installation
 
@@ -11,11 +11,11 @@ description: flutter_hooks bindings for signals
 flutter pub add signals_hooks
 ```
 
-The `signals_hooks` package provides seamless, type-safe bindings for the highly popular `flutter_hooks` package. It enables developers to declare, instantiate, and automatically clean up reactive signals directly inside hook-based functional widgets.
+The <code>signals_hooks</code> package provides seamless, type-safe bindings for the highly popular <code>flutter_hooks</code> package. It enables developers to declare, instantiate, and automatically clean up reactive signals directly inside hook-based functional widgets.
 
 ## Key Features
 
-- **🎣 Hook-based Signalling**: Instantly declare state with `useSignal()` inside functional Hook widgets.
+- **🎣 Hook-based Signalling**: Instantly declare state with <code>useSignal()</code> inside functional Hook widgets.
 - **🌀 Automatic Disposal**: No manual cleanup or dispose overrides required; the hook manages the entire signal life cycle.
 - **⚡ useComputed & useAsyncComputed**: Create cacheable hook-scoped computations and fetch async states inside your Hook widgets.
 
@@ -48,12 +48,13 @@ class HookCounter extends HookWidget {
 <div class="package-contents-grid">
   <div class="category-card">
     <div class="category-header">
-      <span class="category-icon">📄</span>
-      <span class="category-title-text">Widgets</span>
+      <span class="category-icon">📱</span>
+      <span class="category-title-text">Flutter Widgets</span>
     </div>
     <div class="category-links">
       <a class="content-link" href="/packages/signals_hooks/widgets/signal-hook-builder">SignalHookBuilder</a>
       <a class="content-link" href="/packages/signals_hooks/widgets/signal-hook-widget">SignalHookWidget</a>
+      <a class="content-link" href="/packages/signals_hooks/widgets/signal-stateful-hook-widget">SignalStatefulHookWidget</a>
     </div>
   </div>
   <div class="category-card">
@@ -78,6 +79,7 @@ class HookCounter extends HookWidget {
       <a class="content-link" href="/packages/signals_hooks/hooks/use-set-signal">useSetSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-signal">useSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-signal-effect">useSignalEffect</a>
+      <a class="content-link" href="/packages/signals_hooks/hooks/use-signal-provider">useSignalProvider</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-signal-value">useSignalValue</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-stream-signal">useStreamSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-tracked-signal">useTrackedSignal</a>
@@ -96,27 +98,24 @@ class HookCounter extends HookWidget {
     margin-bottom: 2rem;
   }
   .category-card {
-    background-color: var(--card-bg, #ffffff);
-    border: 1px solid var(--card-border, #e2e8f0);
-    border-radius: 12px;
-    padding: 1.25rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: transparent;
+    border: none;
+    border-left: 3px solid var(--card-accent, #3b82f6);
+    padding: 0.25rem 0 0.5rem 1rem;
+    transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
   }
   .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.08);
-    border-color: #3b82f6 !important;
+    border-left-color: var(--card-accent-hover, #2563eb);
   }
   .category-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.75rem;
-    border-bottom: 1px solid var(--card-border, #e2e8f0);
-    padding-bottom: 0.5rem;
+    padding-bottom: 0px;
+    border-bottom: none;
   }
   .category-icon {
     font-size: 1.25rem;
@@ -145,13 +144,13 @@ class HookCounter extends HookWidget {
     transform: translateX(2px);
   }
   :root {
-    --card-bg: #ffffff;
-    --card-border: #e2e8f0;
+    --card-accent: #3b82f6;
+    --card-accent-hover: #2563eb;
     --heading-color: #0f172a;
   }
-  html.dark {
-    --card-bg: #1e293b;
-    --card-border: #334155;
+  html.dark, [data-theme="dark"], html[data-theme="dark"] {
+    --card-accent: #60a5fa;
+    --card-accent-hover: #93c5fd;
     --heading-color: #f8fafc;
   }
 </style>

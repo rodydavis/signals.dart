@@ -1,19 +1,19 @@
 ---
 title: SetSignal
-description: A reactive Signal that holds a **Set** and implements the **Set** interface.
+description: A reactive Signal that holds a Set and implements the Set interface.
 ---
 
-A reactive [Signal](/packages/signals/core/signal) that holds a **Set** and implements the **Set** interface.
+A reactive [Signal](/types/signal) that holds a **Set** and implements the **Set** interface.
 
-[SetSignal](/packages/signals/value/set) lets you listen to changes on a set reactively and mutate it directly using
+[SetSignal](/types/setsignal) lets you listen to changes on a set reactively and mutate it directly using
 standard set operations (like <code>add</code>, <code>addAll</code>, <code>remove</code>, <code>clear</code>, etc.). Any mutations
-automatically trigger reactive updates to all active listeners (e.g., inside an [effect](/packages/signals/core/effect)
-or [computed](/packages/signals/flutter/computed)).
+automatically trigger reactive updates to all active listeners (e.g., inside an [effect](/types/effect)
+or [computed](/types/computed)).
 
-Additionally, [SetSignal](/packages/signals/value/set) defines convenient operators:
+Additionally, [SetSignal](/types/setsignal) defines convenient operators:
 - <code><<</code> injects/adds all items from another set into the current set.
-- <code>&</code> forks/unions the set with another set into a new [SetSignal](/packages/signals/value/set).
-- <code>|</code> pipes/unions the set with another signal holding an iterable into a new [SetSignal](/packages/signals/value/set).
+- <code>&</code> forks/unions the set with another set into a new [SetSignal](/types/setsignal).
+- <code>|</code> pipes/unions the set with another signal holding an iterable into a new [SetSignal](/types/setsignal).
 
 ### Example Usage
 
@@ -52,7 +52,7 @@ do not need to assign <code>numbers.value = ...</code> manually!
 
 ##### <a name="setsignal"></a><a name="setsignal"></a>`SetSignal(super.value, {SetSignalOptions<E>? options, @Deprecated('Use options: SetSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: SetSignalOptions(name: ...) instead') String? debugLabel})`
 
-Creates a [SetSignal](/packages/signals/value/set) with the given **value**.
+Creates a [SetSignal](/types/setsignal) with the given **value**.
 
 </details>
 
@@ -86,7 +86,7 @@ Pipe: create a new signal by sending value from source to other
 
 ## setSignal
 
-Creates a [SetSignal](/packages/signals/value/set) initialized with the provided **set**.
+Creates a [SetSignal](/types/setsignal) initialized with the provided **set**.
 
 This is a convenience helper function for creating reactive set signals.
 

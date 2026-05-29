@@ -118,7 +118,7 @@ print(equality.equals(listA, listA)); // true
 
 ##### <a name="signalidentityequality"></a><a name="signalidentityequality"></a>`SignalIdentityEquality()`
 
-Creates a new [SignalIdentityEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalIdentityEquality](/types/signalidentityequality) instance.
 
 </details>
 
@@ -157,7 +157,7 @@ print(equality.equals([1, [2, 3]], [1, [2, 3]])); // true
 
 ##### <a name="signaldeepequality"></a><a name="signaldeepequality"></a>`SignalDeepEquality()`
 
-Creates a new [SignalDeepEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalDeepEquality](/types/signaldeepequality) instance.
 
 </details>
 
@@ -195,7 +195,7 @@ final equality = SignalEquality.custom((User a, User b) => a.id == b.id);
 
 ##### <a name="signalcustomequality"></a><a name="signalcustomequality"></a>`SignalCustomEquality(this._fn)`
 
-Creates a new [SignalCustomEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalCustomEquality](/types/signalcustomequality) instance.
 
 </details>
 
@@ -234,7 +234,7 @@ print(equality.equals(5, 5)); // true
 
 ##### <a name="signalstandardequality"></a><a name="signalstandardequality"></a>`SignalStandardEquality()`
 
-Creates a new [SignalStandardEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalStandardEquality](/types/signalstandardequality) instance.
 
 </details>
 

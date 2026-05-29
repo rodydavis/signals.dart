@@ -1,11 +1,11 @@
 ---
 title: useTrackedSignal
-description: Creates a new **TrackedSignal** and subscribes to it.
+description: Creates a new TrackedSignal and subscribes to it.
 ---
 
-Creates a new **TrackedSignal** and subscribes to it.
+Creates a new [TrackedSignal](/types/trackedsignal) and subscribes to it.
 
-A **TrackedSignal** extends standard signals by maintaining a record of its previous value alongside its
+A [TrackedSignal](/types/trackedsignal) extends standard signals by maintaining a record of its previous value alongside its
 current value. This allows you to inspect history changes, calculate delta differences, or perform custom transition animations.
 
 <Success>

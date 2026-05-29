@@ -5,7 +5,7 @@ description: The main widget of the Signals DevTools Extension.
 
 The main widget of the Signals DevTools Extension.
 
-Wraps the [SignalsExtensionHomePage](/packages/signals_devtools_extension/flutter/devtools) inside a <code>DevToolsExtension</code> container
+Wraps the **SignalsExtensionHomePage** inside a <code>DevToolsExtension</code> container
 supplied by the <code>devtools_extensions</code> package. This allows it to:
 - Connect securely to the Dart VM Service.
 - Retrieve the application context and themes from DevTools.
@@ -35,7 +35,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalsdevtoolsextension"></a><a name="signalsdevtoolsextension"></a>`SignalsDevToolsExtension({super.key})`
+##### <a name="signalsdevtoolsextension"></a><a name="signalsdevtoolsextension"></a><code>SignalsDevToolsExtension({super.key})</code>
 
 </details>
 
@@ -45,7 +45,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="build"></a>`Widget build(BuildContext context)`
+##### <a name="build"></a><code>Widget build(BuildContext context)</code>
 
 </details>
 
@@ -61,9 +61,9 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="$node"></a><a name="$node"></a>`$Node({required this.id, required this.type, this.label, this.value, this.sources, this.targets})`
+##### <a name="$node"></a><a name="$node"></a><code>$Node({required this.id, required this.type, this.label, this.value, this.sources, this.targets})</code>
 
-##### <a name="$node-fromjson"></a><a name="fromjson"></a>`$Node.fromJson(Map<String, dynamic> item)`
+##### <a name="$node-fromjson"></a><a name="fromjson"></a><code>$Node.fromJson(Map<String, dynamic> item)</code>
 
 </details>
 
@@ -73,17 +73,17 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Properties </summary>
 
-##### <a name="id"></a>`int id`
+##### <a name="id"></a><code>int id</code>
 
-##### <a name="type"></a>`String type`
+##### <a name="type"></a><code>String type</code>
 
-##### <a name="label"></a>`String? label`
+##### <a name="label"></a><code>String? label</code>
 
-##### <a name="value"></a>`String? value`
+##### <a name="value"></a><code>String? value</code>
 
-##### <a name="sources"></a>`String? sources`
+##### <a name="sources"></a><code>String? sources</code>
 
-##### <a name="targets"></a>`String? targets`
+##### <a name="targets"></a><code>String? targets</code>
 
 </details>
 
@@ -93,7 +93,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="tostring"></a>`String toString()`
+##### <a name="tostring"></a><code>String toString()</code>
 
 </details>
 
@@ -109,7 +109,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="backgroundgrid"></a><a name="backgroundgrid"></a>`BackgroundGrid({super.key, required this.backgroundColor, required this.foregroundColor})`
+##### <a name="backgroundgrid"></a><a name="backgroundgrid"></a><code>BackgroundGrid({super.key, required this.backgroundColor, required this.foregroundColor})</code>
 
 </details>
 
@@ -119,9 +119,9 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Properties </summary>
 
-##### <a name="backgroundcolor"></a>`Color backgroundColor`
+##### <a name="backgroundcolor"></a><code>Color backgroundColor</code>
 
-##### <a name="foregroundcolor"></a>`Color foregroundColor`
+##### <a name="foregroundcolor"></a><code>Color foregroundColor</code>
 
 </details>
 
@@ -131,7 +131,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="build"></a>`Widget build(BuildContext context)`
+##### <a name="build"></a><code>Widget build(BuildContext context)</code>
 
 </details>
 
@@ -147,7 +147,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="nodegraph"></a><a name="nodegraph"></a>`NodeGraph({super.key})`
+##### <a name="nodegraph"></a><a name="nodegraph"></a><code>NodeGraph({super.key})</code>
 
 </details>
 
@@ -157,7 +157,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="createstate"></a>`State<NodeGraph> createState()`
+##### <a name="createstate"></a><code>State<NodeGraph> createState()</code>
 
 </details>
 
@@ -173,7 +173,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="nodestable"></a><a name="nodestable"></a>`NodesTable({super.key})`
+##### <a name="nodestable"></a><a name="nodestable"></a><code>NodesTable({super.key})</code>
 
 </details>
 
@@ -183,7 +183,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="build"></a>`Widget build(BuildContext context)`
+##### <a name="build"></a><code>Widget build(BuildContext context)</code>
 
 </details>
 
@@ -199,7 +199,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="nodeview"></a><a name="nodeview"></a>`NodeView({required this.nodeId, super.key})`
+##### <a name="nodeview"></a><a name="nodeview"></a><code>NodeView({required this.nodeId, super.key})</code>
 
 </details>
 
@@ -209,7 +209,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Properties </summary>
 
-##### <a name="nodeid"></a>`int nodeId`
+##### <a name="nodeid"></a><code>int nodeId</code>
 
 </details>
 
@@ -219,7 +219,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="build"></a>`Widget build(BuildContext context)`
+##### <a name="build"></a><code>Widget build(BuildContext context)</code>
 
 </details>
 
@@ -235,7 +235,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalsextensionhomepage"></a><a name="signalsextensionhomepage"></a>`SignalsExtensionHomePage({super.key})`
+##### <a name="signalsextensionhomepage"></a><a name="signalsextensionhomepage"></a><code>SignalsExtensionHomePage({super.key})</code>
 
 </details>
 
@@ -245,7 +245,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="createstate"></a>`State<SignalsExtensionHomePage> createState()`
+##### <a name="createstate"></a><code>State<SignalsExtensionHomePage> createState()</code>
 
 </details>
 
@@ -261,7 +261,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalupdate"></a><a name="signalupdate"></a>`SignalUpdate({required this.type, required this.signalType, required this.signalName, required this.signalId, this.prevValue, this.newValue, required this.timestamp, this.depth = 0})`
+##### <a name="signalupdate"></a><a name="signalupdate"></a><code>SignalUpdate({required this.type, required this.signalType, required this.signalName, required this.signalId, this.prevValue, this.newValue, required this.timestamp, this.depth = 0})</code>
 
 </details>
 
@@ -271,21 +271,21 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Properties </summary>
 
-##### <a name="type"></a>`String type`
+##### <a name="type"></a><code>String type</code>
 
-##### <a name="signaltype"></a>`String signalType`
+##### <a name="signaltype"></a><code>String signalType</code>
 
-##### <a name="signalname"></a>`String signalName`
+##### <a name="signalname"></a><code>String signalName</code>
 
-##### <a name="signalid"></a>`int signalId`
+##### <a name="signalid"></a><code>int signalId</code>
 
-##### <a name="prevvalue"></a>`String? prevValue`
+##### <a name="prevvalue"></a><code>String? prevValue</code>
 
-##### <a name="newvalue"></a>`String? newValue`
+##### <a name="newvalue"></a><code>String? newValue</code>
 
-##### <a name="timestamp"></a>`DateTime timestamp`
+##### <a name="timestamp"></a><code>DateTime timestamp</code>
 
-##### <a name="depth"></a>`int depth`
+##### <a name="depth"></a><code>int depth</code>
 
 </details>
 
@@ -301,7 +301,7 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="updatesview"></a><a name="updatesview"></a>`UpdatesView({super.key})`
+##### <a name="updatesview"></a><a name="updatesview"></a><code>UpdatesView({super.key})</code>
 
 </details>
 
@@ -311,6 +311,6 @@ updates, and removal of nodes dynamically using standard event streams.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="build"></a>`Widget build(BuildContext context)`
+##### <a name="build"></a><code>Widget build(BuildContext context)</code>
 
 </details>

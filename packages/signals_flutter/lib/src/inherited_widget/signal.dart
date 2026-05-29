@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-
-import '../core/readonly.dart';
+import 'package:signals_core/signals_core.dart' as core;
 
 /// A premium dependency-injection / state propagation widget that allows passing
 /// reactive signals down the Flutter widget tree using [InheritedNotifier].
@@ -44,7 +43,7 @@ import '../core/readonly.dart';
 ///   child: const MyApp(),
 /// )
 /// ```
-class SignalProvider<T extends FlutterReadonlySignal> extends StatefulWidget {
+class SignalProvider<T extends core.ReadonlySignal> extends StatefulWidget {
   /// Creates a [SignalProvider] that manages the lifecycle of a created signal.
   ///
   /// The [create] callback is invoked once to instantiate the signal.
@@ -114,7 +113,7 @@ class SignalProvider<T extends FlutterReadonlySignal> extends StatefulWidget {
   State<SignalProvider<T>> createState() => _SignalProviderState<T>();
 
   /// Retrieves the [_InheritedSignalProvider] instance of the specified type [T] from the [BuildContext].
-  static _InheritedSignalProvider<T>? _inheritedProviderOf<T extends FlutterReadonlySignal>(
+  static _InheritedSignalProvider<T>? _inheritedProviderOf<T extends core.ReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {
@@ -130,7 +129,7 @@ class SignalProvider<T extends FlutterReadonlySignal> extends StatefulWidget {
   ///
   /// Note: Prefer using `SignalProvider.of<T>(context)` to retrieve the reactive
   /// signal directly.
-  static SignalProvider<T>? providerOf<T extends FlutterReadonlySignal>(
+  static SignalProvider<T>? providerOf<T extends core.ReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {
@@ -146,19 +145,21 @@ class SignalProvider<T extends FlutterReadonlySignal> extends StatefulWidget {
   ///   to the signal and rebuild whenever the signal's value changes.
   /// - If [listen] is false, the signal is returned without establishing a subscription.
   ///   Use `listen: false` when mutating the signal inside action callbacks.
-  static T? of<T extends FlutterReadonlySignal>(
+  static T? of<T extends core.ReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {
     final provider = _inheritedProviderOf<T>(context, listen: listen);
-    return provider?.notifier;
+    return provider?.signal;
   }
 }
 
-class _SignalProviderState<T extends FlutterReadonlySignal>
+class _SignalProviderState<T extends core.ReadonlySignal>
     extends State<SignalProvider<T>> {
   late T _signal;
   bool _isCreated = false;
+  Listenable? _notifier;
+  _SignalListenableAdapter? _adapter;
 
   @override
   void initState() {
@@ -167,12 +168,22 @@ class _SignalProviderState<T extends FlutterReadonlySignal>
   }
 
   void _initSignal() {
+    _adapter?.dispose();
+    _adapter = null;
+
     if (widget._create != null) {
       _signal = widget._create!();
       _isCreated = true;
     } else {
       _signal = widget._value!;
       _isCreated = false;
+    }
+
+    if (_signal is Listenable) {
+      _notifier = _signal as Listenable;
+    } else {
+      _adapter = _SignalListenableAdapter(_signal);
+      _notifier = _adapter;
     }
   }
 
@@ -182,11 +193,13 @@ class _SignalProviderState<T extends FlutterReadonlySignal>
     if (widget._value != null && widget._value != oldWidget._value) {
       _signal = widget._value!;
       _isCreated = false;
+      _initSignal();
     }
   }
 
   @override
   void dispose() {
+    _adapter?.dispose();
     if (_isCreated) {
       if (widget.dispose != null) {
         widget.dispose!(_signal);
@@ -202,20 +215,39 @@ class _SignalProviderState<T extends FlutterReadonlySignal>
   @override
   Widget build(BuildContext context) {
     return _InheritedSignalProvider<T>(
-      notifier: _signal,
+      notifier: _notifier!,
+      signal: _signal,
       child: widget.child ?? const SizedBox.shrink(),
     );
   }
 }
 
+/// A custom Listenable adapter to bridge standard signals that do not implement Listenable.
+class _SignalListenableAdapter extends ChangeNotifier {
+  _SignalListenableAdapter(core.ReadonlySignal signal) {
+    _cleanup = signal.subscribe((_) => notifyListeners());
+  }
+
+  late final VoidCallback _cleanup;
+
+  @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
+  }
+}
+
 /// Internal inherited widget implementation for [SignalProvider].
-class _InheritedSignalProvider<T extends FlutterReadonlySignal>
-    extends InheritedNotifier<T> {
+class _InheritedSignalProvider<T extends core.ReadonlySignal>
+    extends InheritedNotifier<Listenable> {
   const _InheritedSignalProvider({
     super.key,
     required super.notifier,
+    required this.signal,
     required super.child,
   });
+
+  final T signal;
 }
 
 /// A dependency-injection / state propagation widget that allows passing
@@ -248,7 +280,7 @@ class MultiSignalProvider extends StatelessWidget {
 }
 
 /// Private implementation of generic MultiSignalProvider returned by factory constructor.
-class _MultiSignalProvider<T extends FlutterReadonlySignal>
+class _MultiSignalProvider<T extends core.ReadonlySignal>
     extends SignalProvider<T> {
   const _MultiSignalProvider({
     super.key,
@@ -267,7 +299,7 @@ class _MultiSignalProvider<T extends FlutterReadonlySignal>
   State<SignalProvider<T>> createState() => _MultiSignalProviderState<T>();
 }
 
-class _MultiSignalProviderState<T extends FlutterReadonlySignal>
+class _MultiSignalProviderState<T extends core.ReadonlySignal>
     extends State<_MultiSignalProvider<T>> {
   @override
   Widget build(BuildContext context) {

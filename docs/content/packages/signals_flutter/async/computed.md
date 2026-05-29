@@ -68,12 +68,12 @@ Create an asynchronous computed signal by explicitly declaring its dependencies.
 <code>computedFrom</code> takes a list of **signals** and a **callback** function to compute
 the value of the signal every time one of the declared **signals** changes.
 
-Unlike [computedAsync](/packages/signals/async/computed), which tracks dependencies implicitly, <code>computedFrom</code> is
+Unlike [computedAsync](/types/computedasync), which tracks dependencies implicitly, <code>computedFrom</code> is
 immune to the **Async Gap Gotcha** because all tracking is declared upfront.
 
 ### Why use <code>computedFrom</code>?
 When writing asynchronous code, Dart yields control at every <code>await</code> keyword.
-Implicit tracking (in [computedAsync](/packages/signals/async/computed) or [computed](/packages/signals/flutter/computed)) cannot track reads that happen
+Implicit tracking (in [computedAsync](/types/computedasync) or [computed](/types/computed)) cannot track reads that happen
 *after* an asynchronous gap because the active reactive reader context is lost.
 
 <code>computedFrom</code> solves this by:

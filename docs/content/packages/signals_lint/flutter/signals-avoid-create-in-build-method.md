@@ -53,7 +53,7 @@ final mySignal = signal(42);
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalsavoidcreateinbuildmethod"></a><a name="signalsavoidcreateinbuildmethod"></a>`SignalsAvoidCreateInBuildMethod()`
+##### <a name="signalsavoidcreateinbuildmethod"></a><a name="signalsavoidcreateinbuildmethod"></a><code>SignalsAvoidCreateInBuildMethod()</code>
 
 </details>
 
@@ -63,6 +63,6 @@ final mySignal = signal(42);
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)</code>
 
 </details>

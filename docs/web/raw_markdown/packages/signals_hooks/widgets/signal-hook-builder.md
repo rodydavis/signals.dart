@@ -3,7 +3,7 @@ title: SignalHookBuilder
 description: A premium, localized builder widget that behaves exactly like SignalHookWidget.
 ---
 
-A premium, localized builder widget that behaves exactly like [SignalHookWidget](/packages/signals_hooks/widgets/signal-hook-widget)
+A premium, localized builder widget that behaves exactly like [SignalHookWidget](/types/signalhookwidget)
 but in a builder format.
 
 Allows mixing hooks and implicit signal tracking within a localized subtree builder callback.
@@ -43,7 +43,7 @@ Widget build(BuildContext context) {
 
 ##### <a name="signalhookbuilder"></a><a name="signalhookbuilder"></a>`SignalHookBuilder({super.key, required this.builder})`
 
-Creates a [SignalHookBuilder](/packages/signals_hooks/widgets/signal-hook-builder) widget.
+Creates a [SignalHookBuilder](/types/signalhookbuilder) widget.
 
 </details>
 
@@ -65,6 +65,6 @@ The widget builder callback.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="buildwidget"></a>`Widget buildWidget(BuildContext context)`
+##### <a name="build"></a>`Widget build(BuildContext context)`
 
 </details>

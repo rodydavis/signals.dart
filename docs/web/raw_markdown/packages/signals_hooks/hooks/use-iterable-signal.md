@@ -3,9 +3,9 @@ title: useIterableSignal
 description: Creates a new IterableSignal and subscribes to it.
 ---
 
-Creates a new [IterableSignal](/packages/signals/value/iterable) and subscribes to it.
+Creates a new [IterableSignal](/types/iterablesignal) and subscribes to it.
 
-An [IterableSignal](/packages/signals/value/iterable) provides a reactive wrapper around a Dart **Iterable**, notifying subscribers
+An [IterableSignal](/types/iterablesignal) provides a reactive wrapper around a Dart **Iterable**, notifying subscribers
 and rebuilding **HookWidget**s when the iterable structure is mutated or replaced.
 
 ### Parameters

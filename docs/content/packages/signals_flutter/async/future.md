@@ -1,11 +1,11 @@
 ---
 title: FutureSignal
-description: Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a react...
+description: Future signals wrap a standard asynchronous Future and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive ...
 ---
 
-Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive [AsyncState](/packages/signals/async/state).
+Future signals wrap a standard asynchronous **Future** and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive [AsyncState](/types/asyncstate).
 
-You can construct a future signal via the helper function [futureSignal](/packages/signals/async/future) or by calling the <code>.toSignal()</code> extension method on any standard **Future**.
+You can construct a future signal via the helper function [futureSignal](/types/futuresignal) or by calling the <code>.toSignal()</code> extension method on any standard **Future**.
 
 ### 1. Basic Async Fetching
 ```dart
@@ -21,7 +21,7 @@ final s = fetchUserData(123).toSignal();
 ```
 
 ### 2. Consuming and Pattern Matching <code>AsyncState</code>
-Reading <code>.value</code> on a [FutureSignal](/packages/signals/async/future) returns an [AsyncState](/packages/signals/async/state) object. You can safely pattern-match or map this state to reactively build your user interface or perform side-effects:
+Reading <code>.value</code> on a [FutureSignal](/types/futuresignal) returns an [AsyncState](/types/asyncstate) object. You can safely pattern-match or map this state to reactively build your user interface or perform side-effects:
 
 ```dart
 effect(() {
@@ -56,7 +56,7 @@ final userProfile = futureSignal(() async {
 ```
 
 <Info>
-  If you need to track dependencies across an asynchronous gap (i.e. reading a signal's value *after* an <code>await</code>), pass them explicitly in the <code>dependencies</code> list inside <code>AsyncSignalOptions</code> or the constructor to guarantee they are properly subscribed.
+  If you need to track dependencies across an asynchronous gap (i.e. reading a signal's value <em>after</em> an <code>await</code>), pass them explicitly in the <code>dependencies</code> list inside <code>AsyncSignalOptions</code> or the constructor to guarantee they are properly subscribed.
 </Info>
 
 
@@ -65,7 +65,7 @@ final userProfile = futureSignal(() async {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="futuresignal"></a><a name="futuresignal"></a>`FutureSignal(Future<T> Function() fn, {AsyncSignalOptions<T>? options, @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead') T? initialValue, @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead') List<ReadonlySignal<dynamic>>? dependencies, @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy, @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: AsyncSignalOptions(name: ...) instead') String? debugLabel})`
+##### <a name="futuresignal"></a><a name="futuresignal"></a><code>FutureSignal(Future<T> Function() fn, {AsyncSignalOptions<T>? options, @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead') T? initialValue, @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead') List<ReadonlySignal<dynamic>>? dependencies, @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy, @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: AsyncSignalOptions(name: ...) instead') String? debugLabel})</code>
 
 Future signals can be created by extension or method.
 
@@ -157,7 +157,7 @@ s.value; // state with count 1
 <details>
 <summary> View Properties </summary>
 
-##### <a name="dependencies"></a>`List<ReadonlySignal<dynamic>> dependencies`
+##### <a name="dependencies"></a><code>List<ReadonlySignal<dynamic>> dependencies</code>
 
 List of dependencies to recompute the future
 
@@ -169,17 +169,17 @@ List of dependencies to recompute the future
 <details>
 <summary> View Methods </summary>
 
-##### <a name="dispose"></a>`void dispose()`
+##### <a name="dispose"></a><code>void dispose()</code>
 
-##### <a name="reset"></a>`void reset([AsyncState<T>? value])`
+##### <a name="reset"></a><code>void reset([AsyncState<T>? value])</code>
 
-##### <a name="init"></a>`void init()`
+##### <a name="init"></a><code>void init()</code>
 
-##### <a name="value"></a>`AsyncState<T> value`
+##### <a name="value"></a><code>AsyncState<T> value</code>
 
-##### <a name="reload"></a>`Future<void> reload()`
+##### <a name="reload"></a><code>Future<void> reload()</code>
 
-##### <a name="refresh"></a>`Future<void> refresh()`
+##### <a name="refresh"></a><code>Future<void> refresh()</code>
 
 </details>
 

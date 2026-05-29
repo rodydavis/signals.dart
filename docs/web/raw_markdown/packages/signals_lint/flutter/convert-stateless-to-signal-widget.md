@@ -4,7 +4,7 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard
-<code>StatelessWidget</code> to extend the reactive **SignalWidget** instead.
+<code>StatelessWidget</code> to extend the reactive [SignalWidget](/types/signalwidget) instead.
 
 <Success>
 By extending <code>SignalWidget</code> instead of <code>StatelessWidget</code>, your widget automatically registers

@@ -7,7 +7,7 @@ Wraps a callback function into a reusable, batched, and untracked action.
 
 An **action** is a higher-order function that takes a callback and returns a new function
 with the exact same signature. When the returned function is executed, it runs the original
-callback inside both a [batch](/packages/signals/core/batch) and an [untracked](/packages/signals/core/untracked) block.
+callback inside both a [batch](/types/batch) and an [untracked](/types/untracked) block.
 
 ### Why use <code>action</code> instead of <code>batch</code>?
 
@@ -46,7 +46,7 @@ Total prints: **3** (initial execution + 2 updates).
 
 #### With Actions (Coalesced Transaction)
 
-By wrapping the state-mutating function in [action](/packages/preact_signals/core/action), all updates are postponed and flushed
+By wrapping the state-mutating function in [action](/types/action), all updates are postponed and flushed
 in a single notification block once the function completes:
 
 ```dart
@@ -121,7 +121,7 @@ To ensure complete type safety and optimize static analysis in Dart, the package
 
 Wraps a 0-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -138,7 +138,7 @@ final increment = action0(() {
 
 Wraps a 1-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -155,7 +155,7 @@ final setName = action1((String newName) {
 
 Wraps a 2-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -172,7 +172,7 @@ final updateProfile = action2((String newName, int newAge) {
 
 Wraps a 3-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -190,7 +190,7 @@ final setCoordinates = action3((double lat, double lng, String label) {
 
 Wraps a 4-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -209,7 +209,7 @@ final updateUserData = action4((String name, int age, double score, bool active)
 
 Wraps a 5-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ### Example Usage
 
@@ -229,7 +229,7 @@ final setConfig = action5((int w, int h, String title, bool dark, double opacity
 
 Wraps a 6-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -237,7 +237,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps a 7-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -245,7 +245,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps an 8-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -253,7 +253,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps a 9-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 
@@ -261,7 +261,7 @@ Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) 
 
 Wraps a 10-argument callback function in a type-safe action.
 
-Executes **fn** inside a transaction-safe [batch](/packages/signals/core/batch) and [untracked](/packages/signals/core/untracked) block.
+Executes **fn** inside a transaction-safe [batch](/types/batch) and [untracked](/types/untracked) block.
 
 ---
 

@@ -4,7 +4,7 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically wraps any
-instantiated widget expression inside a [SignalBuilder](/packages/signals/flutter/watch) component.
+instantiated widget expression inside a [SignalBuilder](/types/signalbuilder) component.
 
 <Success>
 Wrapping a widget inside <code>SignalBuilder(builder: (context) => ...)</code> optimizes rebuilding
@@ -39,7 +39,7 @@ Widget build(BuildContext context) {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="wrapwithsignalbuilder"></a><a name="wrapwithsignalbuilder"></a>`WrapWithSignalBuilder()`
+##### <a name="wrapwithsignalbuilder"></a><a name="wrapwithsignalbuilder"></a><code>WrapWithSignalBuilder()</code>
 
 </details>
 
@@ -49,6 +49,6 @@ Widget build(BuildContext context) {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)</code>
 
 </details>

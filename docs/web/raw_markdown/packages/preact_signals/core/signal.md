@@ -6,7 +6,7 @@ description: Represents a mutable reactive state container that sits at the foun
 Represents a mutable reactive state container that sits at the foundation of the reactivity system.
 
 Signals hold a single, mutable **value** that can be read or modified. When a signal's value
-is updated, any active computations (like [Computed](/packages/signals/core/computed)) or effects (like [effect](/packages/signals/core/effect)) that
+is updated, any active computations (like [Computed](/types/computed)) or effects (like [effect](/types/effect)) that
 read the signal's value inside their execution context are automatically notified and scheduled to re-run.
 
 Under the hood, this establishes a reactive dependency graph where reading a signal registers the reader as a
@@ -57,7 +57,7 @@ effect(() {
 
 ##### <a name="signal"></a><a name="signal"></a>`Signal(this._internalValue, {String? name, void Function()? watched, void Function()? unwatched, ReadonlySignalOptions<T>? options, SignalEquality<T>? equality})`
 
-Creates a new [Signal](/packages/signals/core/signal) instance with the given initial value.
+Creates a new [Signal](/types/signal) instance with the given initial value.
 
 You can optionally provide:
 - A **name** for debugging/observer tracing.
@@ -70,7 +70,7 @@ final count = Signal(0, name: 'counter_signal');
 
 ##### <a name="signal-lazy"></a><a name="lazy"></a>`Signal.lazy({String? name, void Function()? watched, void Function()? unwatched, ReadonlySignalOptions<T>? options, SignalEquality<T>? equality})`
 
-Creates a new lazy [Signal](/packages/signals/core/signal) instance that is computed on-demand upon first read.
+Creates a new lazy [Signal](/types/signal) instance that is computed on-demand upon first read.
 
 <Warning>
   Reading a lazy signal before a value has been explicitly set or assigned via <code>.value = ...</code> or <code>.set(...)</code>
@@ -103,11 +103,6 @@ print(lazyUser.value); // Safe to read now
 
 ##### <a name="unwatched"></a>`void Function()? unwatched`
 
-##### <a name="batchsnapshotversion"></a>`int batchSnapshotVersion`
-
-@internal
-The global batch snapshot version tracked during mutation cycles.
-
 ##### <a name="version"></a>`int version`
 
 Version numbers should always be >= 0, because the special value -1 is used
@@ -129,17 +124,7 @@ Get the active equality check
 
 Check if the value is set and not a lazy signal
 
-##### <a name="isinitialized"></a>`isInitialized(bool val)`
-
-@internal
-Set if the signal is initialized.
-
 ##### <a name="internalvalue"></a>`T internalValue`
-
-##### <a name="internalvalue"></a>`internalValue(T value)`
-
-@internal
-Set the internal raw value of the signal.
 
 ##### <a name="internalrefresh"></a>`bool internalRefresh()`
 
@@ -153,7 +138,7 @@ Set the internal raw value of the signal.
 
 Gets the current value of the signal.
 
-If read inside an active reactive context (e.g., an [effect](/packages/signals/core/effect) or [computed](/packages/signals/flutter/computed) signal),
+If read inside an active reactive context (e.g., an [effect](/types/effect) or [computed](/types/computed) signal),
 the calling context automatically subscribes to updates of this signal.
 
 ##### <a name="value"></a>`value(T val)`
@@ -181,10 +166,238 @@ numbers.value.add(4); // In-place modification
 numbers.set(numbers.value, force: true); // Force notify downstream subscribers
 ```
 
-##### <a name="internalsetvalue"></a>`void internalSetValue(T val)`
+</details>
 
-@internal
-Sets the internal value of the signal during batch updates.
+
+
+---
+
+## ReadonlySignalOptions
+
+Configuration options for a [ReadonlySignal](/types/readonlysignal).
+
+Allows intercepting the signal's active subscription state changes
+via **watched** and **unwatched** callback event listeners. This is extremely useful
+for initiating or canceling active background fetching, web sockets, or timer loops.
+
+### Example Usage
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final stockTicker = signal(
+  0.0,
+  options: ReadonlySignalOptions(
+    name: 'stock-ticker',
+    watched: () => print('Stock Ticker is actively being listened to!'),
+    unwatched: () => print('No more listeners, sleeping the ticker.'),
+  ),
+);
+```
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="readonlysignaloptions"></a><a name="readonlysignaloptions"></a>`ReadonlySignalOptions({super.name, this.watched, this.unwatched})`
+
+Creates a new [ReadonlySignalOptions](/types/readonlysignaloptions) instance.
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="watched"></a>`void Function()? watched`
+
+Callback called when the signal goes from 0 to >=1 listeners.
+
+##### <a name="unwatched"></a>`void Function()? unwatched`
+
+Callback called when the signal goes from >=1 to 0 listeners.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="copywith"></a>`ReadonlySignalOptions<T> copyWith({String? name, void Function()? watched, void Function()? unwatched})`
+
+Creates a copy of this options with custom overrides.
+
+##### <a name="=="></a>`bool ==(Object other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## ComputedOptions
+
+Configuration options for a [Computed](/types/computed) signal.
+
+Enables configuring debugging names and subscription state event listeners
+for computed derivations.
+
+### Example Usage
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final count = signal(0);
+final doubleCount = computed(
+  () => count.value * 2,
+  options: ComputedOptions(
+    name: 'double-count',
+    watched: () => print('Computed doubleCount is active'),
+    unwatched: () => print('Computed doubleCount is inactive'),
+  ),
+);
+```
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="computedoptions"></a><a name="computedoptions"></a>`ComputedOptions({super.name, super.watched, super.unwatched})`
+
+Creates a new [ComputedOptions](/types/computedoptions) instance.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="copywith"></a>`ComputedOptions<T> copyWith({String? name, void Function()? watched, void Function()? unwatched})`
+
+##### <a name="=="></a>`bool ==(Object other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## SignalOptions
+
+Configuration options for a [Signal](/types/signal).
+
+Extends [ReadonlySignalOptions](/types/readonlysignaloptions) to also support custom **equality** checkers,
+which control whether incoming values trigger update events.
+
+### Example Usage
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final items = signal(
+  [1, 2, 3],
+  options: SignalOptions(
+    name: 'item-list',
+    equality: SignalEquality.deep(),
+    watched: () => print('Items watch active'),
+    unwatched: () => print('Items watch inactive'),
+  ),
+);
+```
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="signaloptions"></a><a name="signaloptions"></a>`SignalOptions({super.name, super.watched, super.unwatched, SignalEquality<T>? equality})`
+
+Creates a new [SignalOptions](/types/signaloptions) instance.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="equalitycheck"></a>`SignalEquality<T> equalityCheck`
+
+Get the active equality check
+
+##### <a name="copywith"></a>`SignalOptions<T> copyWith({String? name, void Function()? watched, void Function()? unwatched})`
+
+##### <a name="=="></a>`bool ==(Object other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## EffectOptions
+
+Configuration options for reactive [Effect](/types/effect)s.
+
+Permits naming the effect for debugging, performance profiling,
+and tracing within the signals developer tools.
+
+### Example Usage
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+final count = signal(0);
+
+final logger = effect(
+  () => print('Count changed to: ${count.value}'),
+  options: const EffectOptions(name: 'counter-logger'),
+);
+```
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="effectoptions"></a><a name="effectoptions"></a>`EffectOptions({super.name})`
+
+Creates a new [EffectOptions](/types/effectoptions) instance.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="copywith"></a>`EffectOptions copyWith({String? name})`
+
+Creates a copy of this options with custom overrides.
+
+##### <a name="=="></a>`bool ==(Object other)`
+
+##### <a name="hashcode"></a>`int hashCode`
 
 </details>
 
@@ -204,3 +417,85 @@ import 'package:preact_signals/preact_signals.dart';
 final count = signal(0);
 final name = signal('Jane');
 ```
+
+
+---
+
+## SignalOptionsBase
+
+Base configuration options for reactive components and signals.
+
+Contains common options across all signals, computed values, and effects,
+such as the debug **name**.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="signaloptionsbase"></a><a name="signaloptionsbase"></a>`SignalOptionsBase({this.name})`
+
+Creates a new [SignalOptionsBase](/types/signaloptionsbase) instance.
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="name"></a>`String? name`
+
+The name for debugging, tracing, and DevTools inspection.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="=="></a>`bool ==(Object other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## SignalEffectException
+
+Error for when a effect fails to run the callback
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="signaleffectexception"></a><a name="signaleffectexception"></a>`SignalEffectException(this.error, [this.stackTrace])`
+
+Error for when a effect fails to run the callback
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="error"></a>`Object? error`
+
+Error during callback
+
+##### <a name="stacktrace"></a>`StackTrace? stackTrace`
+
+StackTrace for where the error started
+
+</details>

@@ -3,7 +3,7 @@ title: signals
 description: Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more.
 ---
 
-> Version: `7.0.0`
+> Version: <code>7.0.0</code>
 
 ## Installation
 
@@ -11,7 +11,7 @@ description: Reactivity made simple. Do more by doing less. Supports Flutter and
 dart pub add signals
 ```
 
-The `signals` package is the main overarching package for the Signals framework. It exports the complete core reactive package (`signals_core`) along with full Flutter extensions (`signals_flutter`) to provide a seamless out-of-the-box state management developer experience.
+The <code>signals</code> package is the main overarching package for the Signals framework. It exports the complete core reactive package (<code>signals_core</code>) along with full Flutter extensions (<code>signals_flutter</code>) to provide a seamless out-of-the-box state management developer experience.
 
 ## Key Features
 
@@ -36,23 +36,23 @@ final doubleCount = computed(() => count.value * 2);
   <div class="category-card">
     <div class="category-header">
       <span class="category-icon">📦</span>
-      <span class="category-title-text">Core</span>
+      <span class="category-title-text">Core Primitives</span>
     </div>
     <div class="category-links">
       <a class="content-link" href="/packages/signals/core/action">Action</a>
       <a class="content-link" href="/packages/signals/core/batch">Batch</a>
+      <a class="content-link" href="/packages/signals/core/signal">Signal</a>
       <a class="content-link" href="/packages/signals/core/computed">Computed</a>
       <a class="content-link" href="/packages/signals/core/effect">Effect</a>
       <a class="content-link" href="/packages/signals/core/linked-signal">LinkedSignal</a>
       <a class="content-link" href="/packages/signals/core/readonly">ReadonlySignal</a>
-      <a class="content-link" href="/packages/signals/core/signal">Signal</a>
       <a class="content-link" href="/packages/signals/core/untracked">Untracked</a>
     </div>
   </div>
   <div class="category-card">
     <div class="category-header">
       <span class="category-icon">⚡</span>
-      <span class="category-title-text">Async</span>
+      <span class="category-title-text">Async Primitives</span>
     </div>
     <div class="category-links">
       <a class="content-link" href="/packages/signals/async/state">AsyncState</a>
@@ -66,7 +66,7 @@ final doubleCount = computed(() => count.value * 2);
   <div class="category-card">
     <div class="category-header">
       <span class="category-icon">🔢</span>
-      <span class="category-title-text">Value</span>
+      <span class="category-title-text">Reactive Collections</span>
     </div>
     <div class="category-links">
       <a class="content-link" href="/packages/signals/value/change-stack">ChangeStackSignal</a>
@@ -79,7 +79,7 @@ final doubleCount = computed(() => count.value * 2);
   <div class="category-card">
     <div class="category-header">
       <span class="category-icon">🔌</span>
-      <span class="category-title-text">Mixins</span>
+      <span class="category-title-text">Reactive Mixins</span>
     </div>
     <div class="category-links">
       <a class="content-link" href="/packages/signals/mixins/change-stack">ChangeStackSignalMixin</a>
@@ -89,9 +89,12 @@ final doubleCount = computed(() => count.value * 2);
       <a class="content-link" href="/packages/signals/mixins/map">MapSignalMixin</a>
       <a class="content-link" href="/packages/signals/mixins/queue">QueueSignalMixin</a>
       <a class="content-link" href="/packages/signals/mixins/set">SetSignalMixin</a>
+      <a class="content-link" href="/packages/signals/mixins/signals-mixin">SignalsMixin</a>
       <a class="content-link" href="/packages/signals/mixins/sink">SinkSignalMixin</a>
       <a class="content-link" href="/packages/signals/mixins/stream">StreamSignalMixin</a>
       <a class="content-link" href="/packages/signals/mixins/tracked">TrackedSignalMixin</a>
+      <a class="content-link" href="/packages/signals/mixins/value-listenable-signal-mixin">ValueListenableSignalMixin</a>
+      <a class="content-link" href="/packages/signals/mixins/value-notifier-signal-mixin">ValueNotifierSignalMixin</a>
     </div>
   </div>
   <div class="category-card">
@@ -100,26 +103,85 @@ final doubleCount = computed(() => count.value * 2);
       <span class="category-title-text">Utilities</span>
     </div>
     <div class="category-links">
-      <a class="content-link" href="/packages/signals/utilities/model">Model</a>
-      <a class="content-link" href="/packages/signals/utilities/persisted">PersistedSignal</a>
       <a class="content-link" href="/packages/signals/utilities/container">SignalContainer</a>
-      <a class="content-link" href="/packages/signals/utilities/equality">SignalEquality</a>
+      <a class="content-link" href="/packages/signals/utilities/model">Model</a>
       <a class="content-link" href="/packages/signals/utilities/observer">SignalsObserver</a>
+      <a class="content-link" href="/packages/signals/utilities/persisted">PersistedSignal</a>
+      <a class="content-link" href="/packages/signals/utilities/equality">SignalEquality</a>
     </div>
   </div>
   <div class="category-card">
     <div class="category-header">
-      <span class="category-icon">💙</span>
-      <span class="category-title-text">Flutter</span>
+      <span class="category-icon">🧩</span>
+      <span class="category-title-text">Widget & Context Extensions</span>
     </div>
     <div class="category-links">
-      <a class="content-link" href="/packages/signals/flutter/computed">FlutterComputed</a>
-      <a class="content-link" href="/packages/signals/flutter/watch">SignalAnimatedBuilder</a>
-      <a class="content-link" href="/packages/signals/flutter/signal">FlutterSignal</a>
-      <a class="content-link" href="/packages/signals/flutter/signal-provider">SignalProvider</a>
-      <a class="content-link" href="/packages/signals/flutter/signals-mixin">SignalsMixin</a>
-      <a class="content-link" href="/packages/signals/flutter/value-listenable">Value Listenable</a>
-      <a class="content-link" href="/packages/signals/flutter/value-notifier">Value Notifier</a>
+      <a class="content-link" href="/packages/signals/extensions/converted-signal-stateful-element">ConvertedSignalStatefulElement</a>
+      <a class="content-link" href="/packages/signals/extensions/converted-signal-stateful-widget">ConvertedSignalStatefulWidget</a>
+      <a class="content-link" href="/packages/signals/extensions/converted-signal-widget">ConvertedSignalWidget</a>
+      <a class="content-link" href="/packages/signals/extensions/lazy-signal">Lazy Signal</a>
+      <a class="content-link" href="/packages/signals/extensions/signal-custom-painter">SignalCustomPainter</a>
+      <a class="content-link" href="/packages/signals/extensions/signal-element">SignalElement</a>
+      <a class="content-link" href="/packages/signals/extensions/signal-stateful-element">SignalStatefulElement</a>
+      <a class="content-link" href="/packages/signals/extensions/signal-stateful-widget">SignalStatefulWidget</a>
+      <a class="content-link" href="/packages/signals/extensions/signal-value-listenable-utils">Signal Value Listenable Utils</a>
+      <a class="content-link" href="/packages/signals/extensions/signal-value-notifier-utils">Signal Value Notifier Utils</a>
+      <a class="content-link" href="/packages/signals/extensions/stateful-element-convert-extension">Stateful Element Convert Extension</a>
+      <a class="content-link" href="/packages/signals/extensions/stateful-widget-convert-widget-extension">Stateful Widget Convert Widget Extension</a>
+      <a class="content-link" href="/packages/signals/extensions/stateless-element-convert-extension">Stateless Element Convert Extension</a>
+      <a class="content-link" href="/packages/signals/extensions/stateless-widget-convert-widget-extension">Stateless Widget Convert Widget Extension</a>
+      <a class="content-link" href="/packages/signals/extensions/value-listenable-to-signal">Value Listenable To Signal</a>
+      <a class="content-link" href="/packages/signals/extensions/value-notifier-to-signal">Value Notifier To Signal</a>
+    </div>
+  </div>
+  <div class="category-card">
+    <div class="category-header">
+      <span class="category-icon">⚡</span>
+      <span class="category-title-text">Reactive Signals</span>
+    </div>
+    <div class="category-links">
+      <a class="content-link" href="/packages/signals/signals/flutter-computed">FlutterComputed</a>
+      <a class="content-link" href="/packages/signals/signals/flutter-readonly-signal">Flutter Readonly Signal</a>
+      <a class="content-link" href="/packages/signals/signals/flutter-signal">FlutterSignal</a>
+      <a class="content-link" href="/packages/signals/signals/ticker-signal">TickerSignal</a>
+    </div>
+  </div>
+  <div class="category-card">
+    <div class="category-header">
+      <span class="category-icon">📱</span>
+      <span class="category-title-text">Flutter Widgets</span>
+    </div>
+    <div class="category-links">
+      <a class="content-link" href="/packages/signals/widgets/multi-signal-provider">MultiSignalProvider</a>
+      <a class="content-link" href="/packages/signals/widgets/signal-animated-builder">SignalAnimatedBuilder</a>
+      <a class="content-link" href="/packages/signals/widgets/signal-builder">SignalBuilder</a>
+      <a class="content-link" href="/packages/signals/widgets/signal-custom-paint">SignalCustomPaint</a>
+      <a class="content-link" href="/packages/signals/widgets/signal-painter-widget">SignalPainterWidget</a>
+      <a class="content-link" href="/packages/signals/widgets/signal-provider">SignalProvider</a>
+      <a class="content-link" href="/packages/signals/widgets/signal-proxy-widget">SignalProxyWidget</a>
+      <a class="content-link" href="/packages/signals/widgets/signal-widget">SignalWidget</a>
+      <a class="content-link" href="/packages/signals/widgets/watch">Watch</a>
+      <a class="content-link" href="/packages/signals/widgets/watch-builder">WatchBuilder</a>
+    </div>
+  </div>
+  <div class="category-card">
+    <div class="category-header">
+      <span class="category-icon">🎨</span>
+      <span class="category-title-text">Low-Level Render Objects</span>
+    </div>
+    <div class="category-links">
+      <a class="content-link" href="/packages/signals/render/render-signal-box">RenderSignalBox</a>
+      <a class="content-link" href="/packages/signals/render/render-signal-custom-paint">RenderSignalCustomPaint</a>
+      <a class="content-link" href="/packages/signals/render/render-signal-proxy-box">RenderSignalProxyBox</a>
+    </div>
+  </div>
+  <div class="category-card">
+    <div class="category-header">
+      <span class="category-icon">🔄</span>
+      <span class="category-title-text">Lifecycle & Effects</span>
+    </div>
+    <div class="category-links">
+      <a class="content-link" href="/packages/signals/effects/signal-effect">SignalEffect</a>
     </div>
   </div>
 </div>
@@ -133,27 +195,24 @@ final doubleCount = computed(() => count.value * 2);
     margin-bottom: 2rem;
   }
   .category-card {
-    background-color: var(--card-bg, #ffffff);
-    border: 1px solid var(--card-border, #e2e8f0);
-    border-radius: 12px;
-    padding: 1.25rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: transparent;
+    border: none;
+    border-left: 3px solid var(--card-accent, #3b82f6);
+    padding: 0.25rem 0 0.5rem 1rem;
+    transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
   }
   .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.08);
-    border-color: #3b82f6 !important;
+    border-left-color: var(--card-accent-hover, #2563eb);
   }
   .category-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.75rem;
-    border-bottom: 1px solid var(--card-border, #e2e8f0);
-    padding-bottom: 0.5rem;
+    padding-bottom: 0px;
+    border-bottom: none;
   }
   .category-icon {
     font-size: 1.25rem;
@@ -182,13 +241,13 @@ final doubleCount = computed(() => count.value * 2);
     transform: translateX(2px);
   }
   :root {
-    --card-bg: #ffffff;
-    --card-border: #e2e8f0;
+    --card-accent: #3b82f6;
+    --card-accent-hover: #2563eb;
     --heading-color: #0f172a;
   }
-  html.dark {
-    --card-bg: #1e293b;
-    --card-border: #334155;
+  html.dark, [data-theme="dark"], html[data-theme="dark"] {
+    --card-accent: #60a5fa;
+    --card-accent-hover: #93c5fd;
     --heading-color: #f8fafc;
   }
 </style>

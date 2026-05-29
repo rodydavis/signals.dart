@@ -4,10 +4,10 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a positional or named
-<code>Watch</code> constructor call to use the modern, type-safe [SignalBuilder](/packages/signals/flutter/watch) component.
+<code>Watch</code> constructor call to use the modern, type-safe [SignalBuilder](/types/signalbuilder) component.
 
 :::important
-The <code>Watch</code> widget was updated and aligned under the standard [SignalBuilder](/packages/signals/flutter/watch) paradigm in v7.
+The <code>Watch</code> widget was updated and aligned under the standard [SignalBuilder](/types/signalbuilder) paradigm in v7.
 This automated refactoring quick-fix updates your positional widget structure to a type-safe
 <code>SignalBuilder(builder: (context) => ...)</code> signature seamlessly.
 :::
@@ -39,7 +39,7 @@ Widget build(BuildContext context) {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="migratewatchtosignalbuilder"></a><a name="migratewatchtosignalbuilder"></a>`MigrateWatchToSignalBuilder()`
+##### <a name="migratewatchtosignalbuilder"></a><a name="migratewatchtosignalbuilder"></a><code>MigrateWatchToSignalBuilder()</code>
 
 </details>
 
@@ -49,6 +49,6 @@ Widget build(BuildContext context) {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)</code>
 
 </details>

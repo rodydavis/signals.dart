@@ -49,7 +49,7 @@ void main() {
                     SignalOptions(name: 'notifierSignal', autoDispose: true),
               );
               return Text('${state.globalId} - ${state.name}',
-                  textDirection: TextDirection.ltr);
+                  textDirection: TextDirection.ltr,);
             },
           ),
         );
@@ -120,7 +120,7 @@ void main() {
                     SignalOptions(name: 'listenableSignal', autoDispose: true),
               );
               return Text('${state.globalId} - ${state.name}',
-                  textDirection: TextDirection.ltr);
+                  textDirection: TextDirection.ltr,);
             },
           ),
         );

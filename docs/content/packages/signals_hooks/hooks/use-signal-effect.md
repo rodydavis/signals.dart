@@ -3,7 +3,7 @@ title: useSignalEffect
 description: Creates a new reactive effect and registers it with the widget's lifecycle.
 ---
 
-Creates a new reactive [effect](/packages/signals/core/effect) and registers it with the widget's lifecycle.
+Creates a new reactive [effect](/types/effect) and registers it with the widget's lifecycle.
 
 The effect is automatically created on build and is disposed of when the widget is unmounted.
 Any reactive signal accessed inside the callback **cb** is tracked as a dependency, and the effect

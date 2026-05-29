@@ -14,7 +14,7 @@ the computation changes such that certain signals are no longer read, those sign
 from the dependency list, preventing redundant triggers.
 
 <Warning>
-  The computation callback **fn** should be **pure** and side-effect free. Writing to other signals or
+  The computation callback <strong>fn</strong> should be <strong>pure</strong> and side-effect free. Writing to other signals or
   performing network/database operations inside a computed callback is a critical anti-pattern that can lead to
   infinite loops (cycles) or unpredictable state transitions.
 </Warning>
@@ -59,9 +59,9 @@ final message = Computed(() {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="computed"></a><a name="computed"></a>`Computed(this.fn, {String? name, void Function()? watched, void Function()? unwatched, ComputedOptions<T>? options})`
+##### <a name="computed"></a><a name="computed"></a><code>Computed(this.fn, {String? name, void Function()? watched, void Function()? unwatched, ComputedOptions<T>? options})</code>
 
-Creates a new [Computed](/packages/signals/core/computed) signal instance with the derivation callback **fn**.
+Creates a new [Computed](/types/computed) signal instance with the derivation callback **fn**.
 
 You can optionally provide:
 - A **name** for debugging/observer tracing.
@@ -79,32 +79,17 @@ final doubleCount = Computed(() => count.value * 2, name: 'double_counter');
 <details>
 <summary> View Properties </summary>
 
-##### <a name="fn"></a>`T Function() fn`
+##### <a name="globalid"></a><code>int globalId</code>
 
-@internal
-The computation callback function.
+##### <a name="name"></a><code>String? name</code>
 
-##### <a name="globalid"></a>`int globalId`
+##### <a name="watched"></a><code>void Function()? watched</code>
 
-##### <a name="name"></a>`String? name`
+##### <a name="unwatched"></a><code>void Function()? unwatched</code>
 
-##### <a name="watched"></a>`void Function()? watched`
+##### <a name="flags"></a><code>int flags</code>
 
-##### <a name="unwatched"></a>`void Function()? unwatched`
-
-##### <a name="internalglobalversion"></a>`int internalGlobalVersion`
-
-@internal
-The internal global version of the computed signal.
-
-##### <a name="flags"></a>`int flags`
-
-##### <a name="error"></a>`SignalEffectException? error`
-
-@internal
-The captured exception from the latest computation run, if any.
-
-##### <a name="version"></a>`int version`
+##### <a name="version"></a><code>int version</code>
 
 </details>
 
@@ -114,28 +99,23 @@ The captured exception from the latest computation run, if any.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="isinitialized"></a>`bool isInitialized`
+##### <a name="isinitialized"></a><code>bool isInitialized</code>
 
 Check if the value has been computed
 
-##### <a name="internalvalue"></a>`T internalValue`
+##### <a name="internalvalue"></a><code>T internalValue</code>
 
-##### <a name="internalvalue"></a>`internalValue(T value)`
+##### <a name="internalrefresh"></a><code>bool internalRefresh()</code>
 
-@internal
-Set the internal value.
+##### <a name="subscribetonode"></a><code>void subscribeToNode(Node node)</code>
 
-##### <a name="internalrefresh"></a>`bool internalRefresh()`
+##### <a name="unsubscribefromnode"></a><code>void unsubscribeFromNode(Node node)</code>
 
-##### <a name="subscribetonode"></a>`void subscribeToNode(Node node)`
+##### <a name="notify"></a><code>void notify()</code>
 
-##### <a name="unsubscribefromnode"></a>`void unsubscribeFromNode(Node node)`
+##### <a name="value"></a><code>T value</code>
 
-##### <a name="notify"></a>`void notify()`
-
-##### <a name="value"></a>`T value`
-
-##### <a name="subscribe"></a>`void Function() subscribe(void Function(T value) fn)`
+##### <a name="subscribe"></a><code>void Function() subscribe(void Function(T value) fn)</code>
 
 </details>
 

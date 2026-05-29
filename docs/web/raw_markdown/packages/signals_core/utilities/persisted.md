@@ -11,12 +11,12 @@ without writing tedious boilerplate for manual loading and saving.
 
 ### Concrete Subclasses
 For common primitive types, use the provided concrete classes:
-- [PersistedBoolSignal](/packages/signals/utilities/persisted) / [PersistedNullableBoolSignal](/packages/signals/utilities/persisted)
-- [PersistedIntSignal](/packages/signals/utilities/persisted) / [PersistedNullableIntSignal](/packages/signals/utilities/persisted)
-- [PersistedDoubleSignal](/packages/signals/utilities/persisted) / [PersistedNullableDoubleSignal](/packages/signals/utilities/persisted)
-- [PersistedNumSignal](/packages/signals/utilities/persisted) / [PersistedNullableNumSignal](/packages/signals/utilities/persisted)
-- [PersistedStringSignal](/packages/signals/utilities/persisted) / [PersistedNullableStringSignal](/packages/signals/utilities/persisted)
-- [PersistedEnumSignal](/packages/signals/utilities/persisted) / [PersistedNullableEnumSignal](/packages/signals/utilities/persisted)
+- [PersistedBoolSignal](/types/persistedboolsignal) / [PersistedNullableBoolSignal](/types/persistednullableboolsignal)
+- [PersistedIntSignal](/types/persistedintsignal) / [PersistedNullableIntSignal](/types/persistednullableintsignal)
+- [PersistedDoubleSignal](/types/persisteddoublesignal) / [PersistedNullableDoubleSignal](/types/persistednullabledoublesignal)
+- [PersistedNumSignal](/types/persistednumsignal) / [PersistedNullableNumSignal](/types/persistednullablenumsignal)
+- [PersistedStringSignal](/types/persistedstringsignal) / [PersistedNullableStringSignal](/types/persistednullablestringsignal)
+- [PersistedEnumSignal](/types/persistedenumsignal) / [PersistedNullableEnumSignal](/types/persistednullableenumsignal)
 
 ### Simple Usage Example
 ```dart
@@ -36,9 +36,9 @@ darkModeSignal.value = true; // Automatically persisted to store
 ```
 
 ### Custom Serialization / Complex Objects
-To persist complex objects (e.g. custom classes), subclass [PersistedSignal](/packages/signals/utilities/persisted)
-and override the **decode** and **encode** methods, or mixin [PersistedSignalMixin](/packages/signals/utilities/persisted)
-on a custom [Signal](/packages/signals/core/signal) class.
+To persist complex objects (e.g. custom classes), subclass [PersistedSignal](/types/persistedsignal)
+and override the **decode** and **encode** methods, or mixin [PersistedSignalMixin](/types/persistedsignalmixin)
+on a custom [Signal](/types/signal) class.
 
 ```dart
 class User {
@@ -95,7 +95,7 @@ Creates a new <code>PersistedSignal</code>.
 
 ## SignalsKeyValueStore
 
-An abstract class defining the persistence adapter contract for [PersistedSignal](/packages/signals/utilities/persisted).
+An abstract class defining the persistence adapter contract for [PersistedSignal](/types/persistedsignal).
 
 Implement this interface to bind <code>PersistedSignal</code> to your storage engine of
 choice, such as local files, SQLite, SharedPreferences, Hive, or indexedDB.
@@ -164,7 +164,7 @@ Removes an item from the store.
 
 ## PersistedSignalMixin
 
-A mixin that adds local persistence capabilities to a standard [Signal](/packages/signals/core/signal).
+A mixin that adds local persistence capabilities to a standard [Signal](/types/signal).
 
 By mixing in <code>PersistedSignalMixin<T></code> on a <code>Signal<T></code> subclass, the signal
 will automatically retrieve its stored state on boot and save its state whenever
@@ -172,7 +172,7 @@ will automatically retrieve its stored state on boot and save its state whenever
 
 Classes mixing in <code>PersistedSignalMixin<T></code> must implement:
 - **key**: A unique identifier string for the key-value database.
-- **store**: An implementation of [SignalsKeyValueStore](/packages/signals/utilities/persisted).
+- **store**: An implementation of [SignalsKeyValueStore](/types/signalskeyvaluestore).
 
 ### Serialization Customization
 By default, the mixin uses standard JSON parsing (<code>jsonDecode</code> / <code>jsonEncode</code>).
@@ -238,7 +238,7 @@ Encodes the value to a string.
 
 ## SignalsInMemoryKeyValueStore
 
-An in-memory, volatile implementation of [SignalsKeyValueStore](/packages/signals/utilities/persisted).
+An in-memory, volatile implementation of [SignalsKeyValueStore](/types/signalskeyvaluestore).
 
 This serves as a fallback engine and does not persist across restarts/reload.
 
@@ -680,7 +680,7 @@ Creates a new <code>EnumSignal</code>.
 
 ## PersistedSignalOptions
 
-Configuration options for a [PersistedSignal](/packages/signals/utilities/persisted).
+Configuration options for a [PersistedSignal](/types/persistedsignal).
 
 
 ### Constructors
@@ -690,7 +690,7 @@ Configuration options for a [PersistedSignal](/packages/signals/utilities/persis
 
 ##### <a name="persistedsignaloptions"></a><a name="persistedsignaloptions"></a>`PersistedSignalOptions({super.name, super.autoDispose, super.watched, super.unwatched})`
 
-Creates a new [PersistedSignalOptions](/packages/signals/utilities/persisted) instance.
+Creates a new [PersistedSignalOptions](/types/persistedsignaloptions) instance.
 
 </details>
 

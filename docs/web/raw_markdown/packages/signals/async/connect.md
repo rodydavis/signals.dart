@@ -3,11 +3,11 @@ title: Connect
 description: A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
 ---
 
-A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive [Signal](/packages/signals/core/signal).
+A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive [Signal](/types/signal).
 
 The concept is inspired by **Angular Signals** integration with RxJS streams.
 
-Start with an existing mutable [Signal](/packages/signals/core/signal) and call <code>connect(signal)</code> to create a connector instance.
+Start with an existing mutable [Signal](/types/signal) and call <code>connect(signal)</code> to create a connector instance.
 
 ### 1. Chaining Streams
 You can bind multiple streams to feed the same destination signal. The connector will handle the subscription management for all streams seamlessly.
@@ -48,7 +48,7 @@ connector.dispose(); // Cancels all stream subscriptions safely
 
 ##### <a name="connect"></a><a name="connect"></a>`Connect(this.signal)`
 
-Connects a **Stream** to a [Signal](/packages/signals/core/signal).
+Connects a **Stream** to a [Signal](/types/signal).
 
 </details>
 
@@ -72,7 +72,7 @@ Internal signal to connect to.
 
 ##### <a name="from"></a>`Connect<T, S> from(Stream<S> source, {bool? cancelOnError, Function? onError, Function? onDone, void Function(T)? onValue})`
 
-Connects a **Stream** to a [Signal](/packages/signals/core/signal).
+Connects a **Stream** to a [Signal](/types/signal).
 
 ```dart
 final counter = signal(0);

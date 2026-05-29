@@ -1,11 +1,11 @@
 ---
 title: useQueueSignal
-description: Creates a new **QueueSignal** and subscribes to it.
+description: Creates a new QueueSignal and subscribes to it.
 ---
 
-Creates a new **QueueSignal** and subscribes to it.
+Creates a new [QueueSignal](/types/queuesignal) and subscribes to it.
 
-A **QueueSignal** wraps a Dart **Queue**, providing reactive tracking for queue operations like adding items to
+A [QueueSignal](/types/queuesignal) wraps a Dart **Queue**, providing reactive tracking for queue operations like adding items to
 the end or removing items from the front. Perfect for task pipelines, notification streams, or undo histories.
 
 ### Parameters

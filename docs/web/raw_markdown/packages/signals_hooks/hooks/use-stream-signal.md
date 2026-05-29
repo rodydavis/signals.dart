@@ -3,14 +3,14 @@ title: useStreamSignal
 description: Creates a new StreamSignal and subscribes to it.
 ---
 
-Creates a new [StreamSignal](/packages/signals/async/stream) and subscribes to it.
+Creates a new [StreamSignal](/types/streamsignal) and subscribes to it.
 
-A [StreamSignal](/packages/signals/async/stream) wraps a standard Dart **Stream**, capturing emitted events, errors,
+A [StreamSignal](/types/streamsignal) wraps a standard Dart **Stream**, capturing emitted events, errors,
 and done notifications as reactive states (<code>loading</code>, <code>data</code>, <code>error</code>). The host widget
 is automatically rebuilt on every stream emission.
 
 <Success>
-Clean up is fully automated: when the **HookWidget** is disposed, the underlying stream subscription
+Clean up is fully automated: when the <strong>HookWidget</strong> is disposed, the underlying stream subscription
 is cancelled to prevent memory leaks.
 </Success>
 

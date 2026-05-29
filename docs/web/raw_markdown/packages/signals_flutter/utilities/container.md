@@ -157,6 +157,26 @@ Filter and remove matching cached signals.
 
 ---
 
+## readonlySignalContainer
+
+Create a signal container used to instance signals based on args
+
+```dart
+final container = readonlySignalContainer<Cache, String>((e) {
+  return signal(Cache(e));
+});
+
+final cacheA = container('cache-a');
+final cacheB = container('cache-b');
+final cacheC = container('cache-c');
+```
+
+The signals cannot be updated but allows for
+using computed where the value is only derived from other signals.
+
+
+---
+
 ## signalContainer
 
 Create a signal container used to instance signals based on args
@@ -173,4 +193,43 @@ final cacheC = container('cache-c');
 cacheA.value = 'a';
 cacheB.value = 'b';
 cacheC.value = 'c';
+```
+
+
+---
+
+## streamSignalContainer
+
+Create a signal container for StreamSignals based on args.
+
+```dart
+final container = streamSignalContainer<Message, int>((roomId) {
+  return streamSignal(() => listenToRoom(roomId));
+});
+```
+
+
+---
+
+## computedContainer
+
+Create a signal container for computed signals based on args.
+
+```dart
+final container = computedContainer<int, int>((arg) {
+  return computed(() => sourceSignal.value * arg);
+});
+```
+
+
+---
+
+## futureSignalContainer
+
+Create a signal container for FutureSignals based on args.
+
+```dart
+final container = futureSignalContainer<Post, int>((id) {
+  return futureSignal(() => fetchPost(id));
+});
 ```

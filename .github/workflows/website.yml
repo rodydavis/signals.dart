@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1.5.0
+        uses: dart-lang/setup-dart@v1.7.2
 
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2.10.0
@@ -55,4 +55,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

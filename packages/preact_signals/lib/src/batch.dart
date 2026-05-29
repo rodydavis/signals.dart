@@ -100,6 +100,18 @@ class SignalEffectException implements Exception {
 
   /// Error for when a effect fails to run the callback
   SignalEffectException(this.error, [this.stackTrace]);
+
+  @override
+  String toString() {
+    String message = 'SignalEffectException';
+    if (error != null) {
+      message += '\nCause: $error';
+    }
+    if (stackTrace != null) {
+      message += '\n$stackTrace';
+    }
+    return message;
+  }
 }
 
 /// Combines multiple signal writes into a single update transaction that is flushed only after the callback completes.

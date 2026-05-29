@@ -9,7 +9,7 @@ parameters for signals and ensures they are bundled under a unified options obje
 :::important
 In <code>signals</code> v7, parameters like <code>autoDispose</code>, <code>equals</code>, or custom comparators are no longer
 passed directly as separate parameters to signal creators. Instead, they must be bundled into
-a unified, type-safe configuration object (such as **SignalOptions**, **ComputedOptions**, or [AsyncSignalOptions](/packages/signals/async/signal)).
+a unified, type-safe configuration object (such as [SignalOptions](/types/signaloptions), [ComputedOptions](/types/computedoptions), or [AsyncSignalOptions](/types/asyncsignaloptions)).
 :::
 
 ### Examples

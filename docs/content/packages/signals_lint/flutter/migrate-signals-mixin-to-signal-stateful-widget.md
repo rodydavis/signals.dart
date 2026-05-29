@@ -4,7 +4,7 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a deprecated
-<code>SignalsMixin</code> usage on a <code>State</code> class to extend the reactive **SignalStatefulWidget** instead.
+<code>SignalsMixin</code> usage on a <code>State</code> class to extend the reactive [SignalStatefulWidget](/types/signalstatefulwidget) instead.
 
 :::important
 Since <code>SignalsMixin</code> is deprecated in <code>signals</code> v7, this automated quick-fix does two things:
@@ -58,7 +58,7 @@ class _MyWidgetState extends State<MyWidget> {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="migratesignalsmixintosignalstatefulwidget"></a><a name="migratesignalsmixintosignalstatefulwidget"></a>`MigrateSignalsMixinToSignalStatefulWidget()`
+##### <a name="migratesignalsmixintosignalstatefulwidget"></a><a name="migratesignalsmixintosignalstatefulwidget"></a><code>MigrateSignalsMixinToSignalStatefulWidget()</code>
 
 </details>
 
@@ -68,6 +68,6 @@ class _MyWidgetState extends State<MyWidget> {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ChangeReporter reporter, CustomLintContext context, SourceRange target)</code>
 
 </details>
