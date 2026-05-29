@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "100.0.0"
-  analysis_server_plugin:
-    dependency: transitive
-    description:
-      name: analysis_server_plugin
-      sha256: c4021359e7a673ecd9c6db5f11fea12fabb55e0ba96fa08c78920ae81936f1d1
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.15"
   analyzer:
     dependency: transitive
     description:
@@ -25,22 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "13.0.0"
-  analyzer_plugin:
-    dependency: transitive
-    description:
-      name: analyzer_plugin
-      sha256: "9a81dc36f7f71890d7cf83960a3a7df1e6c9a24035f98eb848e91ad48b1d21c6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.9"
-  analyzer_testing:
-    dependency: transitive
-    description:
-      name: analyzer_testing
-      sha256: da27ae9bd4bf3ce4ebab6295cf922ca21a2b14ea8fcacc859342aca796a48a2d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.6"
   ansi_styles:
     dependency: transitive
     description:
@@ -209,14 +185,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.3"
-  dart_style:
-    dependency: transitive
-    description:
-      name: dart_style
-      sha256: "59d53ef8eaed9d288ed9767618e2b31c4fa0383a127db59d5eb2e737a7638a60"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.9"
   dds_service_extensions:
     dependency: transitive
     description:
@@ -789,14 +757,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.18"
-  test_reflective_loader:
-    dependency: transitive
-    description:
-      name: test_reflective_loader
-      sha256: b94229c9ae2a9ebe77d7abfee30641842e7e427b8bd851709de517970b905096
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:

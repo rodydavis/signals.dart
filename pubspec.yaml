@@ -35,7 +35,5 @@ workspace:
   - packages/signals_flutter/example
   - packages/signals_hooks
   - packages/signals_hooks/example
-  - packages/signals_lint
-  - packages/signals_lint/example
 dependencies:
   jaspr: ^0.23.1
