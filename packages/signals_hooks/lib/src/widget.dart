@@ -4,7 +4,7 @@ import 'package:signals/signals_core.dart' as core;
 
 /// Element for [SignalHookWidget] that manages both standard Flutter Hooks
 /// lifecycle and implicit signal subscription.
-class SignalHookElement extends StatelessHookElement {
+class SignalHookElement extends StatelessElement with HookElement {
   /// Constructor for [SignalHookElement].
   SignalHookElement(super.widget);
 
@@ -54,7 +54,7 @@ class SignalHookElement extends StatelessHookElement {
     };
 
     try {
-      return super.build(); // Delegates to StatelessHookElement.build() -> widget.build(context)
+      return super.build(); // Delegates to StatelessElement.build() inside HookElement's context
     } finally {
       core.onSignalRead = oldOnSignalRead;
       if (signals.isEmpty) {
@@ -78,7 +78,7 @@ class SignalHookElement extends StatelessHookElement {
   }
 }
 
-/// A premium reactive [HookWidget] that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
+/// A premium reactive widget that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
 ///
 /// `SignalHookWidget` establishes a dynamic reactive context directly at the Flutter element layer.
 /// Any signal accessed via `.value` inside the [build] method is **implicitly tracked** and
@@ -114,12 +114,12 @@ class SignalHookElement extends StatelessHookElement {
 ///   }
 /// }
 /// ```
-abstract class SignalHookWidget extends HookWidget {
+abstract class SignalHookWidget extends StatelessWidget {
   /// Constructor for [SignalHookWidget].
   const SignalHookWidget({super.key});
 
   @override
-  StatelessHookElement createElement() => SignalHookElement(this);
+  StatelessElement createElement() => SignalHookElement(this);
 
   /// Subclasses override this method to define their widget tree.
   ///
