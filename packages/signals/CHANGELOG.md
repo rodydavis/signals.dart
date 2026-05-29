@@ -1,3 +1,8 @@
+## 7.1.0
+
+- Bump signals_flutter to 7.1.0
+- Bump signals_hooks to 7.1.0
+
 ## 7.0.0
 
 ### ⚠️ BREAKING CHANGES
