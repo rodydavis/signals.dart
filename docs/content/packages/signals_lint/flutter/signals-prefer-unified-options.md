@@ -9,7 +9,7 @@ parameters for signals and ensures they are bundled under a unified options obje
 :::important
 In <code>signals</code> v7, parameters like <code>autoDispose</code>, <code>equals</code>, or custom comparators are no longer
 passed directly as separate parameters to signal creators. Instead, they must be bundled into
-a unified, type-safe configuration object (such as **SignalOptions**, **ComputedOptions**, or [AsyncSignalOptions](/packages/signals/async/signal)).
+a unified, type-safe configuration object (such as [SignalOptions](/types/signaloptions), [ComputedOptions](/types/computedoptions), or [AsyncSignalOptions](/types/asyncsignaloptions)).
 :::
 
 ### Examples
@@ -33,7 +33,7 @@ final counter = signal(
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalspreferunifiedoptions"></a><a name="signalspreferunifiedoptions"></a>`SignalsPreferUnifiedOptions()`
+##### <a name="signalspreferunifiedoptions"></a><a name="signalspreferunifiedoptions"></a><code>SignalsPreferUnifiedOptions()</code>
 
 </details>
 
@@ -43,6 +43,6 @@ final counter = signal(
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)</code>
 
 </details>

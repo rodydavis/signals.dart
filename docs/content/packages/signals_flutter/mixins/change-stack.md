@@ -3,9 +3,9 @@ title: ChangeStackSignalMixin
 description: A mixin that adds undo, redo, and state history replay capabilities to a Signal.
 ---
 
-A mixin that adds undo, redo, and state history replay capabilities to a [Signal](/packages/signals/core/signal).
+A mixin that adds undo, redo, and state history replay capabilities to a [Signal](/types/signal).
 
-[ChangeStackSignalMixin](/packages/signals/mixins/change-stack) keeps track of past states of a signal's value in a double-ended
+[ChangeStackSignalMixin](/types/changestacksignalmixin) keeps track of past states of a signal's value in a double-ended
 queue, allowing you to easily go back to previous values using **undo** and go forward to subsequent
 values using **redo**. You can inspect if undo or redo are available via **canUndo** and **canRedo**.
 
@@ -14,7 +14,7 @@ issues in long-running scenarios.
 
 <Info>
 If you only need access to the initial and immediate previous values of a signal (without a full
-history stack or undo/redo mechanisms), use the lightweight [TrackedSignalMixin](/packages/signals/mixins/tracked) instead.
+history stack or undo/redo mechanisms), use the lightweight <a href="/types/trackedsignalmixin">TrackedSignalMixin</a> instead.
 </Info>
 
 ### Example Usage
@@ -64,7 +64,7 @@ will appear to do nothing.
 <details>
 <summary> View Properties </summary>
 
-##### <a name="limit"></a>`int? limit`
+##### <a name="limit"></a><code>int? limit</code>
 
 Max values to keep in history
 
@@ -76,41 +76,41 @@ Max values to keep in history
 <details>
 <summary> View Methods </summary>
 
-##### <a name="history"></a>`Iterable<SignalChange<T>> history`
+##### <a name="history"></a><code>Iterable<SignalChange<T>> history</code>
 
 List of changes in the history
 
-##### <a name="redos"></a>`Iterable<SignalChange<T>> redos`
+##### <a name="redos"></a><code>Iterable<SignalChange<T>> redos</code>
 
 List of changes in the redo stack
 
-##### <a name="canredo"></a>`bool canRedo`
+##### <a name="canredo"></a><code>bool canRedo</code>
 
 Can redo the previous change
 
-##### <a name="canundo"></a>`bool canUndo`
+##### <a name="canundo"></a><code>bool canUndo</code>
 
 Can undo the previous change
 
-##### <a name="set"></a>`bool set(T val, {bool force = false})`
+##### <a name="set"></a><code>bool set(T val, {bool force = false})</code>
 
-##### <a name="redo"></a>`void redo()`
+##### <a name="redo"></a><code>void redo()</code>
 
 Redo Previous Undo
 
-##### <a name="undo"></a>`void undo()`
+##### <a name="undo"></a><code>void undo()</code>
 
 Undo Last Change
 
-##### <a name="clear"></a>`void clear()`
+##### <a name="clear"></a><code>void clear()</code>
 
 Clear the history for redo and undo
 
-##### <a name="clearundo"></a>`void clearUndo()`
+##### <a name="clearundo"></a><code>void clearUndo()</code>
 
 Clear undo stack
 
-##### <a name="clearredo"></a>`void clearRedo()`
+##### <a name="clearredo"></a><code>void clearRedo()</code>
 
 Clear redo stack
 

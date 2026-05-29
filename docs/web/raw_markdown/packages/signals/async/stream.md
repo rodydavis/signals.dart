@@ -116,9 +116,9 @@ s.value; // state with count 1
 
 ## StreamSignal
 
-Stream signals wrap a standard asynchronous **Stream** and bridge it into the reactive state framework, exposing its emissions as a reactive [AsyncState](/packages/signals/async/state).
+Stream signals wrap a standard asynchronous **Stream** and bridge it into the reactive state framework, exposing its emissions as a reactive [AsyncState](/types/asyncstate).
 
-You can construct a stream signal via the helper function [streamSignal](/packages/signals/async/stream) or by calling the <code>.toSignal()</code> extension method on any standard **Stream**.
+You can construct a stream signal via the helper function [streamSignal](/types/streamsignal) or by calling the <code>.toSignal()</code> extension method on any standard **Stream**.
 
 ### 1. Basic Stream Binding
 ```dart
@@ -131,7 +131,7 @@ final s = countStream().toSignal();
 ```
 
 ### 2. Consuming stream emissions reactively
-Reading <code>.value</code> on a [StreamSignal](/packages/signals/async/stream) returns an [AsyncState](/packages/signals/async/state) object:
+Reading <code>.value</code> on a [StreamSignal](/types/streamsignal) returns an [AsyncState](/types/asyncstate) object:
 
 ```dart
 effect(() {

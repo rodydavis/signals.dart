@@ -1,19 +1,19 @@
 ---
 title: MapSignal
-description: A reactive Signal that holds a **Map** and implements the **Map** interface.
+description: A reactive Signal that holds a Map and implements the Map interface.
 ---
 
-A reactive [Signal](/packages/signals/core/signal) that holds a **Map** and implements the **Map** interface.
+A reactive [Signal](/types/signal) that holds a **Map** and implements the **Map** interface.
 
-[MapSignal](/packages/signals/value/map) lets you listen to changes on a map reactively and mutate it directly using
+[MapSignal](/types/mapsignal) lets you listen to changes on a map reactively and mutate it directly using
 standard map operations (like adding/modifying keys with <code>operator []=</code>, <code>addAll</code>, <code>remove</code>,
 <code>clear</code>, etc.). Any mutations automatically trigger reactive updates to all active listeners
-(e.g., inside an [effect](/packages/signals/core/effect) or [computed](/packages/signals/flutter/computed)).
+(e.g., inside an [effect](/types/effect) or [computed](/types/computed)).
 
-Additionally, [MapSignal](/packages/signals/value/map) defines convenient operators:
+Additionally, [MapSignal](/types/mapsignal) defines convenient operators:
 - <code><<</code> injects/adds all entries from another map into the current map.
-- <code>&</code> forks/concatenates the map with another map into a new [MapSignal](/packages/signals/value/map).
-- <code>|</code> pipes/concatenates the map with another signal holding a map into a new [MapSignal](/packages/signals/value/map).
+- <code>&</code> forks/concatenates the map with another map into a new [MapSignal](/types/mapsignal).
+- <code>|</code> pipes/concatenates the map with another signal holding a map into a new [MapSignal](/types/mapsignal).
 
 ### Example Usage
 
@@ -51,7 +51,7 @@ do not need to assign <code>settings.value = ...</code> manually!
 
 ##### <a name="mapsignal"></a><a name="mapsignal"></a>`MapSignal(super.value, {MapSignalOptions<K, V>? options, @Deprecated('Use options: MapSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: MapSignalOptions(name: ...) instead') String? debugLabel})`
 
-Creates a [MapSignal](/packages/signals/value/map) with the given **value**.
+Creates a [MapSignal](/types/mapsignal) with the given **value**.
 
 </details>
 
@@ -85,7 +85,7 @@ Pipe: create a new signal by sending value from source to other
 
 ## mapSignal
 
-Creates a [MapSignal](/packages/signals/value/map) initialized with the provided **map**.
+Creates a [MapSignal](/types/mapsignal) initialized with the provided **map**.
 
 This is a convenience helper function for creating reactive map signals.
 

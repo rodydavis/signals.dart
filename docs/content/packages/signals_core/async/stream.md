@@ -116,9 +116,9 @@ s.value; // state with count 1
 
 ## StreamSignal
 
-Stream signals wrap a standard asynchronous **Stream** and bridge it into the reactive state framework, exposing its emissions as a reactive [AsyncState](/packages/signals/async/state).
+Stream signals wrap a standard asynchronous **Stream** and bridge it into the reactive state framework, exposing its emissions as a reactive [AsyncState](/types/asyncstate).
 
-You can construct a stream signal via the helper function [streamSignal](/packages/signals/async/stream) or by calling the <code>.toSignal()</code> extension method on any standard **Stream**.
+You can construct a stream signal via the helper function [streamSignal](/types/streamsignal) or by calling the <code>.toSignal()</code> extension method on any standard **Stream**.
 
 ### 1. Basic Stream Binding
 ```dart
@@ -131,7 +131,7 @@ final s = countStream().toSignal();
 ```
 
 ### 2. Consuming stream emissions reactively
-Reading <code>.value</code> on a [StreamSignal](/packages/signals/async/stream) returns an [AsyncState](/packages/signals/async/state) object:
+Reading <code>.value</code> on a [StreamSignal](/types/streamsignal) returns an [AsyncState](/types/asyncstate) object:
 
 ```dart
 effect(() {
@@ -174,7 +174,7 @@ final s = streamSignal(() {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="streamsignal"></a><a name="streamsignal"></a>`StreamSignal(Stream<T> Function() fn, {AsyncSignalOptions<T>? options, @Deprecated('Use options: AsyncSignalOptions(cancelOnError: ...) instead') bool? cancelOnError, @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead') T? initialValue, @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead') List<ReadonlySignal<dynamic>>? dependencies, @Deprecated('Use options: AsyncSignalOptions(onDone: ...) instead') void Function()? onDone, @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy, @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: AsyncSignalOptions(name: ...) instead') String? debugLabel})`
+##### <a name="streamsignal"></a><a name="streamsignal"></a><code>StreamSignal(Stream<T> Function() fn, {AsyncSignalOptions<T>? options, @Deprecated('Use options: AsyncSignalOptions(cancelOnError: ...) instead') bool? cancelOnError, @Deprecated('Use options: AsyncSignalOptions(initialValue: ...) instead') T? initialValue, @Deprecated('Use options: AsyncSignalOptions(dependencies: ...) instead') List<ReadonlySignal<dynamic>>? dependencies, @Deprecated('Use options: AsyncSignalOptions(onDone: ...) instead') void Function()? onDone, @Deprecated('Use options: AsyncSignalOptions(lazy: ...) instead') bool? lazy, @Deprecated('Use options: AsyncSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: AsyncSignalOptions(name: ...) instead') String? debugLabel})</code>
 
 Stream signals can be created by extension or method.
 
@@ -290,11 +290,11 @@ s.value; // state with count 1
 <details>
 <summary> View Properties </summary>
 
-##### <a name="cancelonerror"></a>`bool? cancelOnError`
+##### <a name="cancelonerror"></a><code>bool? cancelOnError</code>
 
 Cancel the subscription on error
 
-##### <a name="dependencies"></a>`List<ReadonlySignal<dynamic>> dependencies`
+##### <a name="dependencies"></a><code>List<ReadonlySignal<dynamic>> dependencies</code>
 
 List of dependencies to recompute the stream
 
@@ -306,48 +306,48 @@ List of dependencies to recompute the stream
 <details>
 <summary> View Methods </summary>
 
-##### <a name="isdone"></a>`bool isDone`
+##### <a name="isdone"></a><code>bool isDone</code>
 
 Check if the signal is done
 
-##### <a name="last"></a>`Future<T> last`
+##### <a name="last"></a><code>Future<T> last</code>
 
 First value of the stream
 
-##### <a name="first"></a>`Future<T> first`
+##### <a name="first"></a><code>Future<T> first</code>
 
 Last value of the stream
 
-##### <a name="execute"></a>`Future<void> execute(Stream<T> src)`
+##### <a name="execute"></a><code>Future<void> execute(Stream<T> src)</code>
 
 Execute the stream
 
-##### <a name="ispaused"></a>`bool isPaused`
+##### <a name="ispaused"></a><code>bool isPaused</code>
 
 Check if the subscription is paused
 
-##### <a name="pause"></a>`void pause([Future<void>? resume])`
+##### <a name="pause"></a><code>void pause([Future<void>? resume])</code>
 
 Pause the subscription
 
-##### <a name="resume"></a>`void resume()`
+##### <a name="resume"></a><code>void resume()</code>
 
 Resume the subscription
 
-##### <a name="cancel"></a>`Future<void> cancel()`
+##### <a name="cancel"></a><code>Future<void> cancel()</code>
 
 Cancel the subscription
 
-##### <a name="reload"></a>`Future<void> reload()`
+##### <a name="reload"></a><code>Future<void> reload()</code>
 
-##### <a name="refresh"></a>`Future<void> refresh()`
+##### <a name="refresh"></a><code>Future<void> refresh()</code>
 
-##### <a name="reset"></a>`void reset([AsyncState<T>? value])`
+##### <a name="reset"></a><code>void reset([AsyncState<T>? value])</code>
 
-##### <a name="dispose"></a>`void dispose()`
+##### <a name="dispose"></a><code>void dispose()</code>
 
-##### <a name="value"></a>`AsyncState<T> value`
+##### <a name="value"></a><code>AsyncState<T> value</code>
 
-##### <a name="seterror"></a>`void setError(Object error, [StackTrace? stackTrace])`
+##### <a name="seterror"></a><code>void setError(Object error, [StackTrace? stackTrace])</code>
 
 </details>

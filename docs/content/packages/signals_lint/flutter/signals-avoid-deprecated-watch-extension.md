@@ -10,7 +10,7 @@ A Dart static analysis rule that detects and warns against using the deprecated
 The <code>.watch(context)</code> extension was deprecated in <code>signals</code> v7 due to performance concerns
 and unexpected side effects with Flutter's build lifecycle. Using it can trigger unnecessary
 widget rebuilds. In v7, you must migrate to specialized reactive components like
-[SignalBuilder](/packages/signals/flutter/watch), **SignalWidget**, or **SignalStatefulWidget**.
+<a href="/types/signalbuilder">SignalBuilder</a>, <a href="/types/signalwidget">SignalWidget</a>, or <a href="/types/signalstatefulwidget">SignalStatefulWidget</a>.
 </Warning>
 
 ### Examples
@@ -40,7 +40,7 @@ Widget build(BuildContext context) {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalsavoiddeprecatedwatchextension"></a><a name="signalsavoiddeprecatedwatchextension"></a>`SignalsAvoidDeprecatedWatchExtension()`
+##### <a name="signalsavoiddeprecatedwatchextension"></a><a name="signalsavoiddeprecatedwatchextension"></a><code>SignalsAvoidDeprecatedWatchExtension()</code>
 
 </details>
 
@@ -50,6 +50,6 @@ Widget build(BuildContext context) {
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)</code>
 
 </details>

@@ -3,14 +3,14 @@ title: TrackedSignalMixin
 description: A mixin that adds tracking for the initial and previous values to a Signal.
 ---
 
-A mixin that adds tracking for the initial and previous values to a [Signal](/packages/signals/core/signal).
+A mixin that adds tracking for the initial and previous values to a [Signal](/types/signal).
 
-[TrackedSignalMixin](/packages/signals/mixins/tracked) stores the <code>initialValue</code> (the value the signal had when it was
+[TrackedSignalMixin](/types/trackedsignalmixin) stores the <code>initialValue</code> (the value the signal had when it was
 created or initialized) and the <code>previousValue</code> (the value of the signal right before
 the most recent update).
 
 <Info>
-If you are looking for full undo/redo capabilities, use [ChangeStackSignalMixin](/packages/signals/mixins/change-stack) instead.
+If you are looking for full undo/redo capabilities, use <a href="/types/changestacksignalmixin">ChangeStackSignalMixin</a> instead.
 </Info>
 
 ### Example Usage
@@ -58,8 +58,65 @@ The initial value the signal was created with
 
 Get the previous value (if exists)
 
-##### <a name="aftercreate"></a>`void afterCreate(T val)`
+</details>
 
-##### <a name="beforeupdate"></a>`void beforeUpdate(val)`
+
+
+---
+
+## trackedSignal
+
+Create a signal that stores the initial and previous value
+
+
+---
+
+## TrackedSignal
+
+A signal that stores the initial and previous value
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="trackedsignal"></a><a name="trackedsignal"></a>`TrackedSignal(super.value, {TrackedSignalOptions<T>? options, @Deprecated('Use options: TrackedSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: TrackedSignalOptions(name: ...) instead') String? debugLabel})`
+
+A signal that stores the initial and previous value
+
+</details>
+
+
+
+---
+
+## TrackedSignalOptions
+
+Configuration options for a [TrackedSignal](/types/trackedsignal).
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="trackedsignaloptions"></a><a name="trackedsignaloptions"></a>`TrackedSignalOptions({super.name, super.autoDispose, super.watched, super.unwatched})`
+
+Creates a new [TrackedSignalOptions](/types/trackedsignaloptions) instance.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="copywith"></a>`TrackedSignalOptions<T> copyWith({String? name, bool? autoDispose, void Function()? watched, void Function()? unwatched})`
+
+##### <a name="=="></a>`bool ==(Object other)`
+
+##### <a name="hashcode"></a>`int hashCode`
 
 </details>

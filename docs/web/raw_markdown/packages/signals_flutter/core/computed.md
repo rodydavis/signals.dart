@@ -14,7 +14,7 @@ the computation changes such that certain signals are no longer read, those sign
 from the dependency list, preventing redundant triggers.
 
 <Warning>
-  The computation callback **fn** should be **pure** and side-effect free. Writing to other signals or
+  The computation callback <strong>fn</strong> should be <strong>pure</strong> and side-effect free. Writing to other signals or
   performing network/database operations inside a computed callback is a critical anti-pattern that can lead to
   infinite loops (cycles) or unpredictable state transitions.
 </Warning>
@@ -61,7 +61,7 @@ final message = Computed(() {
 
 ##### <a name="computed"></a><a name="computed"></a>`Computed(this.fn, {String? name, void Function()? watched, void Function()? unwatched, ComputedOptions<T>? options})`
 
-Creates a new [Computed](/packages/signals/core/computed) signal instance with the derivation callback **fn**.
+Creates a new [Computed](/types/computed) signal instance with the derivation callback **fn**.
 
 You can optionally provide:
 - A **name** for debugging/observer tracing.
@@ -79,11 +79,6 @@ final doubleCount = Computed(() => count.value * 2, name: 'double_counter');
 <details>
 <summary> View Properties </summary>
 
-##### <a name="fn"></a>`T Function() fn`
-
-@internal
-The computation callback function.
-
 ##### <a name="globalid"></a>`int globalId`
 
 ##### <a name="name"></a>`String? name`
@@ -92,17 +87,7 @@ The computation callback function.
 
 ##### <a name="unwatched"></a>`void Function()? unwatched`
 
-##### <a name="internalglobalversion"></a>`int internalGlobalVersion`
-
-@internal
-The internal global version of the computed signal.
-
 ##### <a name="flags"></a>`int flags`
-
-##### <a name="error"></a>`SignalEffectException? error`
-
-@internal
-The captured exception from the latest computation run, if any.
 
 ##### <a name="version"></a>`int version`
 
@@ -119,11 +104,6 @@ The captured exception from the latest computation run, if any.
 Check if the value has been computed
 
 ##### <a name="internalvalue"></a>`T internalValue`
-
-##### <a name="internalvalue"></a>`internalValue(T value)`
-
-@internal
-Set the internal value.
 
 ##### <a name="internalrefresh"></a>`bool internalRefresh()`
 

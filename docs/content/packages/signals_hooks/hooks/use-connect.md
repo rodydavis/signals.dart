@@ -3,17 +3,17 @@ title: useConnect
 description: Creates a new Connect instance and automatically disposes of it when the widget unmounts.
 ---
 
-Creates a new [Connect](/packages/signals/async/connect) instance and automatically disposes of it when the widget unmounts.
+Creates a new [Connect](/types/connect) instance and automatically disposes of it when the widget unmounts.
 
-[Connect](/packages/signals/async/connect) connects one or more streams to feed a target signal.
+[Connect](/types/connect) connects one or more streams to feed a target signal.
 
 <Success>
-Clean up is fully automated: when the **HookWidget** is disposed, all connected streams are unsubscribed,
+Clean up is fully automated: when the <strong>HookWidget</strong> is disposed, all connected streams are unsubscribed,
 and the connected signal is disposed.
 </Success>
 
 ### Parameters
-- [signal](/packages/signals/flutter/signal): The target [Signal](/packages/signals/core/signal) to feed.
+- [signal](/types/signal): The target [Signal](/types/signal) to feed.
 - **stream**: An optional initial stream to connect immediately.
 
 ### Example

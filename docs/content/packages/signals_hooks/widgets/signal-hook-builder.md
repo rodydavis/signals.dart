@@ -3,7 +3,7 @@ title: SignalHookBuilder
 description: A premium, localized builder widget that behaves exactly like SignalHookWidget.
 ---
 
-A premium, localized builder widget that behaves exactly like [SignalHookWidget](/packages/signals_hooks/widgets/signal-hook-widget)
+A premium, localized builder widget that behaves exactly like [SignalHookWidget](/types/signalhookwidget)
 but in a builder format.
 
 Allows mixing hooks and implicit signal tracking within a localized subtree builder callback.
@@ -41,9 +41,9 @@ Widget build(BuildContext context) {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalhookbuilder"></a><a name="signalhookbuilder"></a>`SignalHookBuilder({super.key, required this.builder})`
+##### <a name="signalhookbuilder"></a><a name="signalhookbuilder"></a><code>SignalHookBuilder({super.key, required this.builder})</code>
 
-Creates a [SignalHookBuilder](/packages/signals_hooks/widgets/signal-hook-builder) widget.
+Creates a [SignalHookBuilder](/types/signalhookbuilder) widget.
 
 </details>
 
@@ -53,7 +53,7 @@ Creates a [SignalHookBuilder](/packages/signals_hooks/widgets/signal-hook-builde
 <details>
 <summary> View Properties </summary>
 
-##### <a name="builder"></a>`Widget Function(BuildContext context) builder`
+##### <a name="builder"></a><code>Widget Function(BuildContext context) builder</code>
 
 The widget builder callback.
 
@@ -65,6 +65,6 @@ The widget builder callback.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="buildwidget"></a>`Widget buildWidget(BuildContext context)`
+##### <a name="build"></a><code>Widget build(BuildContext context)</code>
 
 </details>

@@ -3,9 +3,9 @@ title: useSetSignal
 description: Creates a new SetSignal and subscribes to it.
 ---
 
-Creates a new [SetSignal](/packages/signals/value/set) and subscribes to it.
+Creates a new [SetSignal](/types/setsignal) and subscribes to it.
 
-A [SetSignal](/packages/signals/value/set) provides a reactive wrapper around a standard Dart **Set**. It tracks mutations
+A [SetSignal](/types/setsignal) provides a reactive wrapper around a standard Dart **Set**. It tracks mutations
 (such as <code>.add()</code>, <code>.remove()</code>, <code>.clear()</code>) and automatically triggers rebuilds of the host **HookWidget**.
 
 <Success>

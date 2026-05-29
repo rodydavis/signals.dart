@@ -1,13 +1,13 @@
 ---
 title: useValueListenableToSignal
-description: Creates a new ReadonlySignal from a **ValueListenable** and subscribes to it.
+description: Creates a new ReadonlySignal from a ValueListenable and subscribes to it.
 ---
 
-Creates a new [ReadonlySignal](/packages/preact_signals/core/readonly) from a **ValueListenable** and subscribes to it.
+Creates a new [ReadonlySignal](/types/readonlysignal) from a **ValueListenable** and subscribes to it.
 
 This provides read-only interoperability with standard Flutter classes, allowing you to bridge any
 **ValueListenable** (like **ScrollController**, **TextEditingController**, or other custom listenables) into a
-reactive [ReadonlySignal](/packages/preact_signals/core/readonly).
+reactive [ReadonlySignal](/types/readonlysignal).
 
 <Success>
 Perfect for listening to UI framework states such as scroll offsets, keyboard visibility, or text inputs in a

@@ -5,7 +5,7 @@ description: Represents a passive observer that runs arbitrary side-effect code 
 
 Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
 
-An [Effect](/packages/signals/core/effect) tracks which signals are accessed within its callback function,
+An [Effect](/types/effect) tracks which signals are accessed within its callback function,
 and automatically schedules itself to re-run whenever those dependencies change.
 
 Under the hood, the reactivity engine tracks reads on <code>.value</code> inside the active effect block.
@@ -13,7 +13,7 @@ Once the block completes, a subscription is registered for each accessed signal.
 mutate, the effect is added to the microtask queue and executed synchronously during the next tick.
 
 <Warning>
-  Do not modify a tracked signal *directly* inside an effect callback, as this will trigger another execution
+  Do not modify a tracked signal <em>directly</em> inside an effect callback, as this will trigger another execution
   of the same effect, causing an infinite loop (cycle) and throwing a cycle detection error.
   To read a signal non-reactively, use <code>.peek()</code>.
 </Warning>
@@ -68,7 +68,7 @@ final searchEffect = Effect(() {
 
 ##### <a name="effect"></a><a name="effect"></a>`Effect(this.fn, {String? name, EffectOptions? options})`
 
-Creates a new [Effect](/packages/signals/core/effect) instance with the passive side-effect callback **fn**.
+Creates a new [Effect](/types/effect) instance with the passive side-effect callback **fn**.
 
 You can optionally provide:
 - A **name** for debugging/observer tracing.
@@ -85,22 +85,7 @@ final effectObj = Effect(() => print(count.value), name: 'count_logger');
 <details>
 <summary> View Properties </summary>
 
-##### <a name="fn"></a>` Function()? fn`
-
-@internal
-The effect callback.
-
 ##### <a name="globalid"></a>`int globalId`
-
-##### <a name="cleanup"></a>`Function? cleanup`
-
-@internal
-The cleanup callback.
-
-##### <a name="nextbatchedeffect"></a>`Effect? nextBatchedEffect`
-
-@internal
-The next effect in the batched effects queue.
 
 ##### <a name="flags"></a>`int flags`
 
@@ -116,16 +101,6 @@ The name of the effect for debugging.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="callback"></a>`void callback()`
-
-@internal
-Executes the callback function and schedules cleanups.
-
-##### <a name="start"></a>`void Function() start()`
-
-@internal
-Starts tracking dependency subscriptions.
-
 ##### <a name="notify"></a>`void notify()`
 
 ##### <a name="dispose"></a>`void dispose()`
@@ -139,21 +114,6 @@ Activates/Runs the effect immediately.
 
 Returns a bound disposer function that can be called to stop the effect.
 
-##### <a name="cleanupeffect"></a>`void cleanupEffect()`
-
-@internal
-Runs the user-defined cleanup callback if registered.
-
-##### <a name="disposeeffect"></a>`void disposeEffect()`
-
-@internal
-Disposes resources held by the effect.
-
-##### <a name="endeffect"></a>`void endEffect(Listenable? prevContext)`
-
-@internal
-Concludes the current effect evaluation round and restores the evaluation context context.
-
 </details>
 
 
@@ -162,7 +122,7 @@ Concludes the current effect evaluation round and restores the evaluation contex
 
 ## effect
 
-Creates and immediately executes a new reactive [Effect](/packages/signals/core/effect).
+Creates and immediately executes a new reactive [Effect](/types/effect).
 
 Returns a bound disposer function that can be called to stop the effect and unsubscribe
 it from all tracked signals.

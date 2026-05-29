@@ -78,9 +78,9 @@ final username = linkedSignal(
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="linkedsignal"></a><a name="linkedsignal"></a>`LinkedSignal({required S Function() source, LinkedSignalOptions<T, S>? options})`
+##### <a name="linkedsignal"></a><a name="linkedsignal"></a><code>LinkedSignal({required S Function() source, LinkedSignalOptions<T, S>? options})</code>
 
-Creates a new [LinkedSignal](/packages/signals/core/linked-signal).
+Creates a new [LinkedSignal](/types/linkedsignal).
 
 </details>
 
@@ -90,13 +90,13 @@ Creates a new [LinkedSignal](/packages/signals/core/linked-signal).
 <details>
 <summary> View Methods </summary>
 
-##### <a name="set"></a>`bool set(T val, {bool force = false})`
+##### <a name="set"></a><code>bool set(T val, {bool force = false})</code>
 
-##### <a name="value"></a>`T value`
+##### <a name="value"></a><code>T value</code>
 
-##### <a name="value"></a>`value(T val)`
+##### <a name="value"></a><code>value(T val)</code>
 
-##### <a name="dispose"></a>`void dispose()`
+##### <a name="dispose"></a><code>void dispose()</code>
 
 </details>
 

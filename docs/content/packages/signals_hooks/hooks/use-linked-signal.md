@@ -3,9 +3,9 @@ title: useLinkedSignal
 description: Creates a new LinkedSignal that resets its value whenever its source computation changes.
 ---
 
-Creates a new [LinkedSignal](/packages/signals/core/linked-signal) that resets its value whenever its source computation changes.
+Creates a new [LinkedSignal](/types/linkedsignal) that resets its value whenever its source computation changes.
 
-A [LinkedSignal](/packages/signals/core/linked-signal) is a specialized signal that "links" to another reactive source or computed value,
+A [LinkedSignal](/types/linkedsignal) is a specialized signal that "links" to another reactive source or computed value,
 automatically updating or resetting itself based on a custom computation function when the source changes.
 
 <Info>

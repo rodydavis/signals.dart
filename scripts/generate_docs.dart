@@ -8,6 +8,8 @@ import 'package:yaml/yaml.dart';
 final Map<String, String> _globalDocLinks = {};
 final Map<String, Map<String, List<MapEntry<String, String>>>>
     _allPackageSidebars = {};
+final Map<String, String> _casedTypeNames = {};
+final Set<String> _deprecatedHrefs = {};
 
 class MemberInfo {
   final String name;
@@ -33,6 +35,7 @@ class DeclInfo {
   final String? extendedType; // For extensions
   final String? signature; // For functions/variables
   final String originPkg;
+  final bool isDeprecated;
 
   DeclInfo({
     required this.name,
@@ -42,12 +45,13 @@ class DeclInfo {
     required this.originPkg,
     this.extendedType,
     this.signature,
+    this.isDeprecated = false,
   });
 }
 
 void main() {
-  final rootDir =
-      '/Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/build-signals-reactive-framework';
+  final scriptDir = p.dirname(Platform.script.toFilePath());
+  final rootDir = p.canonicalize(p.join(scriptDir, '..'));
   final packagesDir = p.join(rootDir, 'packages');
   final docsContentDir = p.join(rootDir, 'docs', 'content', 'packages');
   final skillsDir = '/Users/rodydavis/.gemini/config/skills';
@@ -105,49 +109,30 @@ void main() {
     parsedDecls[pkgName] = decls;
   }
 
-  // Populate the global documentation links map
+  final libraryPackages = {
+    'preact_signals',
+    'signals_core',
+    'signals_flutter',
+    'signals_hooks',
+    'signals',
+  };
+
+  // Populate the global documentation links map to point to the pretty /types/{type} URLs
   for (final pkgName in packages) {
+    if (!libraryPackages.contains(pkgName)) continue;
     final decls = parsedDecls[pkgName];
     if (decls == null) continue;
     for (final decl in decls) {
-      final catPath = getCategoryAndPage(pkgName, decl);
-      if (catPath != null) {
-        final targetPkg =
-            (pkgName == 'signals_core' || pkgName == 'signals_flutter')
-                ? 'signals'
-                : pkgName;
-        _globalDocLinks[decl.name] = '/packages/$targetPkg/$catPath';
+      if (decl.name.startsWith('_')) continue;
+      final key = decl.name.toLowerCase();
+      _globalDocLinks[decl.name] = '/types/$key';
+      _globalDocLinks[key] = '/types/$key';
 
-        // Map lowercase or common variants of factory functions
-        if (decl.name == 'Signal')
-          _globalDocLinks['signal'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'Computed')
-          _globalDocLinks['computed'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'Effect')
-          _globalDocLinks['effect'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'LinkedSignal')
-          _globalDocLinks['linkedSignal'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'ReadonlySignal')
-          _globalDocLinks['readonly'] = '/packages/$targetPkg/$catPath';
-        if (decl.name == 'FutureSignal') {
-          _globalDocLinks['futureSignal'] = '/packages/$targetPkg/$catPath';
-          _globalDocLinks['computedAsync'] = '/packages/$targetPkg/$catPath';
-        }
-        if (decl.name == 'StreamSignal') {
-          _globalDocLinks['streamSignal'] = '/packages/$targetPkg/$catPath';
-        }
-        if (decl.name == 'ListSignal') {
-          _globalDocLinks['listSignal'] = '/packages/$targetPkg/$catPath';
-        }
-        if (decl.name == 'SetSignal') {
-          _globalDocLinks['setSignal'] = '/packages/$targetPkg/$catPath';
-        }
-        if (decl.name == 'MapSignal') {
-          _globalDocLinks['mapSignal'] = '/packages/$targetPkg/$catPath';
-        }
-        if (decl.name == 'SignalContainer') {
-          _globalDocLinks['signalContainer'] = '/packages/$targetPkg/$catPath';
-        }
+      final existing = _casedTypeNames[key];
+      if (existing == null ||
+          (decl.name.isNotEmpty &&
+              decl.name[0] == decl.name[0].toUpperCase())) {
+        _casedTypeNames[key] = decl.name;
       }
     }
   }
@@ -214,31 +199,263 @@ void main() {
     // 3. Generate Jaspr Content Markdown Page
     generateWebsiteMarkdown(
         pkgName, version, description, finalDecls, docsContentDir, rootDir);
-
-    // 4. Update/Generate SKILL.md
-    generateSkillMarkdown(pkgName, version, description, finalDecls, skillsDir);
   }
+
+  // Phase 2.5: Generate pretty Types reference pages & build Cross-References
+  print('\nGenerating pretty Types reference pages...');
+  final typesContentDir = p.join(rootDir, 'docs', 'content', 'types');
+  if (Directory(typesContentDir).existsSync()) {
+    Directory(typesContentDir).deleteSync(recursive: true);
+  }
+  Directory(typesContentDir).createSync(recursive: true);
+
+  // Group all declarations from all packages by lowercase name to coalesce classes vs functions
+  final Map<String, List<DeclInfo>> groupedTypes = {};
+  for (final pkgName in parsedDecls.keys) {
+    if (!libraryPackages.contains(pkgName)) continue;
+    for (final decl in parsedDecls[pkgName]!) {
+      if (decl.name.startsWith('_')) continue;
+      final key = decl.name.toLowerCase();
+      groupedTypes.putIfAbsent(key, () => []).add(decl);
+
+      final existing = _casedTypeNames[key];
+      if (existing == null ||
+          (decl.name.isNotEmpty &&
+              decl.name[0] == decl.name[0].toUpperCase())) {
+        _casedTypeNames[key] = decl.name;
+      }
+    }
+  }
+
+  // Cross-referencing Scan Pass: Find where types appear in docs
+  print('  Scanning documentation for cross-references...');
+  final Map<String, List<MapEntry<String, String>>> typeReferences = {};
+  final contentDir = p.join(rootDir, 'docs', 'content');
+  final allDocFiles = <File>[];
+  if (Directory(contentDir).existsSync()) {
+    final entities = Directory(contentDir).listSync(recursive: true);
+    for (final entity in entities) {
+      if (entity is File && entity.path.endsWith('.md')) {
+        // Skip types directory itself to avoid self-references
+        if (entity.path.contains('${p.separator}types${p.separator}')) {
+          continue;
+        }
+        allDocFiles.add(entity);
+      }
+    }
+  }
+
+  // Parse files and check for references
+  final List<(String, String, File)> parsedDocFiles = [];
+  for (final file in allDocFiles) {
+    final content = file.readAsStringSync();
+    final fm = parseFrontmatter(content);
+    final title = fm['title'] ?? p.basenameWithoutExtension(file.path);
+
+    // Construct site URL
+    var relPath = p.relative(file.path, from: contentDir);
+    var url = '/' + p.withoutExtension(relPath).replaceAll('\\', '/');
+    if (url.endsWith('/index')) {
+      url = url.substring(0, url.length - 6);
+    }
+    if (url == '/index' || url == '') {
+      url = '/';
+    }
+    parsedDocFiles.add((title, url, file));
+  }
+
+  // For each type key, scan all doc files
+  for (final typeKey in groupedTypes.keys) {
+    final group = groupedTypes[typeKey]!;
+    final primaryName = group.first.name;
+    final referencesList = <MapEntry<String, String>>[];
+
+    final regexes = [
+      RegExp(
+          r'\[(' +
+              RegExp.escape(primaryName) +
+              r')(?:<[^>]+>)?(?:\.[a-zA-Z0-9_-]+)?\]',
+          caseSensitive: false),
+      RegExp(r'\b' + RegExp.escape(primaryName) + r'\b', caseSensitive: false)
+    ];
+
+    for (final doc in parsedDocFiles) {
+      final (title, url, file) = doc;
+      final fileContent = file.readAsStringSync();
+      var hasRef = false;
+      for (final regex in regexes) {
+        if (regex.hasMatch(fileContent)) {
+          hasRef = true;
+          break;
+        }
+      }
+      if (hasRef) {
+        // Ensure no duplicate links
+        if (!referencesList.any((ref) => ref.value == url)) {
+          referencesList.add(MapEntry(title, url));
+        }
+      }
+    }
+    typeReferences[typeKey] = referencesList;
+  }
+
+  // Write Type Markdown files
+  for (final typeKey in groupedTypes.keys) {
+    final group = groupedTypes[typeKey]!;
+    // Prioritize class over function, or longest signature
+    group.sort((a, b) {
+      if (a.type == 'class' && b.type != 'class') return -1;
+      if (b.type == 'class' && a.type != 'class') return 1;
+      return b.comment.length.compareTo(a.comment.length);
+    });
+
+    final primaryName = group.first.name;
+    final primaryPkg = group.first.originPkg;
+
+    final isTypeDeprecated = group.any((d) => d.isDeprecated);
+    if (isTypeDeprecated) {
+      _deprecatedHrefs.add('/types/$typeKey');
+    }
+
+    final typeFile = File(p.join(typesContentDir, '$typeKey.md'));
+    final sb = StringBuffer();
+    sb.writeln('---');
+    sb.writeln('title: "Type: $primaryName"');
+    sb.writeln(
+        'description: "API reference and details for $primaryName from signals.dart."');
+    sb.writeln('---');
+    sb.writeln();
+    if (isTypeDeprecated) {
+      sb.writeln('# $primaryName <span class="deprecated-badge">deprecated</span>');
+    } else {
+      sb.writeln('# $primaryName');
+    }
+    sb.writeln();
+
+    // Kind description banner
+    final kind = group.map((d) => d.type).toSet().join(' & ');
+    sb.writeln('<Info>');
+    sb.writeln('  <strong>Kind:</strong> <code>$kind</code> &nbsp;|&nbsp;');
+    sb.writeln('  <strong>Package:</strong> <code>package:$primaryPkg</code>');
+    if (isTypeDeprecated) {
+      sb.writeln('  &nbsp;|&nbsp; <span class="deprecated-badge">deprecated</span>');
+    }
+    sb.writeln('</Info>');
+    sb.writeln();
+
+    for (final decl in group) {
+      final depBadge = decl.isDeprecated ? ' <span class="deprecated-badge">deprecated</span>' : '';
+      sb.writeln(
+          '## ${decl.type[0].toUpperCase()}${decl.type.substring(1)}: ${decl.name}$depBadge');
+      sb.writeln();
+      if (decl.signature != null && decl.signature!.isNotEmpty) {
+        sb.writeln('```dart');
+        sb.writeln(decl.signature);
+        sb.writeln('```');
+        sb.writeln();
+      } else if (decl.extendedType != null) {
+        sb.writeln('```dart');
+        sb.writeln('extension ${decl.name} on ${decl.extendedType}');
+        sb.writeln('```');
+        sb.writeln();
+      }
+
+      final cleanedComment = cleanDocumentationComment(decl.comment);
+      if (cleanedComment.isNotEmpty) {
+        sb.writeln(cleanedComment);
+        sb.writeln();
+      }
+
+      // Render members table if class or mixin or extension
+      if (decl.members.isNotEmpty) {
+        sb.writeln('### Members of ${decl.name}');
+        sb.writeln();
+        sb.writeln('| Member | Type | Signature | Description |');
+        sb.writeln('| :--- | :--- | :--- | :--- |');
+        for (final m in decl.members) {
+          final firstLine = cleanDocumentationComment(m.comment)
+              .split('\n')
+              .firstWhere(
+                  (line) =>
+                      line.trim().isNotEmpty && !line.trim().startsWith('#'),
+                  orElse: () => '')
+              .replaceAll('|', '\\|')
+              .trim();
+          sb.writeln(
+              '| **${m.name}** | `${m.type}` | `dart ${m.signature}` | $firstLine |');
+        }
+        sb.writeln();
+      }
+    }
+
+    // References section
+    sb.writeln('## References');
+    sb.writeln();
+    sb.writeln(
+        'The **$primaryName** type is referenced and used in the following pages:');
+    sb.writeln();
+    final refs = typeReferences[typeKey] ?? [];
+    if (refs.isNotEmpty) {
+      for (final ref in refs) {
+        final uri = Uri.tryParse(ref.value);
+        String context = '';
+        if (uri != null) {
+          final segments = uri.pathSegments;
+          if (segments.length >= 2) {
+            if (segments[0] == 'packages') {
+              context = segments.skip(1).take(segments.length - 2).join('/');
+              if (context.isEmpty) {
+                context = segments[1];
+              }
+            } else {
+              context = segments.take(segments.length - 1).join('/');
+            }
+          }
+        }
+
+        final normKey = ref.key
+            .toLowerCase()
+            .replaceAll('_', '')
+            .replaceAll('-', '')
+            .replaceAll(' ', '');
+        final normContext = context
+            .toLowerCase()
+            .replaceAll('_', '')
+            .replaceAll('-', '')
+            .replaceAll(' ', '');
+        final showContext = context.isNotEmpty && normKey != normContext;
+
+        final suffix = showContext
+            ? ' <span style="opacity: 0.6; font-size: 0.85em;">($context)</span>'
+            : '';
+        sb.writeln('* [${ref.key}](${ref.value})$suffix');
+      }
+    } else {
+      sb.writeln('* No other guides or pages explicitly reference this type.');
+    }
+    sb.writeln();
+
+    typeFile.writeAsStringSync(sb.toString());
+  }
+  print(
+      '  Successfully generated ${groupedTypes.length} type reference pages!');
 
   // 5. Generate llms.txt, llms-full.txt and copyable raw markdown folder
   generateLLMFiles(rootDir);
 
-  // 6. Preprocess all manual markdown files in docs/content/ to convert :::callouts to XML tags
-  final contentDir = p.join(rootDir, 'docs', 'content');
+  // 6. Preprocess all markdown files in docs/content/ to convert :::callouts and resolve bracket links
   if (Directory(contentDir).existsSync()) {
     final files = Directory(contentDir).listSync(recursive: true);
     for (final entity in files) {
       if (entity is File && entity.path.endsWith('.md')) {
-        // Exclude generated packages directory
-        if (entity.path.contains('${p.separator}packages${p.separator}')) {
-          continue;
-        }
         final content = entity.readAsStringSync();
-        var updated = convertCallouts(content);
+        var updated = resolveDartReferences(content);
+        updated = convertCallouts(updated);
         updated = convertAllInlineBackticks(updated);
         if (content != updated) {
           entity.writeAsStringSync(updated);
           print(
-              'Preprocessed callouts in manual file: ${p.relative(entity.path, from: rootDir)}');
+              'Preprocessed links and callouts in file: ${p.relative(entity.path, from: rootDir)}');
         }
       }
     }
@@ -330,12 +547,55 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
     );
     final unit = result.unit;
     for (final declaration in unit.declarations) {
+      bool isDeprecated = false;
+      if (declaration is AnnotatedNode) {
+        bool isInternal = false;
+        for (final annotation in declaration.metadata) {
+          final annName = annotation.name.name;
+          if (annName == 'internal') {
+            isInternal = true;
+          }
+          if (annName == 'deprecated' || annName == 'Deprecated') {
+            isDeprecated = true;
+          }
+        }
+        if (declaration.documentationComment != null) {
+          final commentText = declaration.documentationComment!.tokens
+              .map((t) => t.lexeme)
+              .join('\n');
+          if (commentText.contains('@internal')) {
+            isInternal = true;
+          }
+          if (commentText.contains('@deprecated')) {
+            isDeprecated = true;
+          }
+        }
+        if (isInternal) continue;
+      }
       if (declaration is ClassDeclaration) {
         final name = declaration.name.lexeme;
         if (name.startsWith('_')) continue;
         final comment = cleanComment(declaration.documentationComment);
         final List<MemberInfo> members = [];
         for (final member in declaration.members) {
+          if (member is AnnotatedNode) {
+            bool memberInternal = false;
+            for (final annotation in member.metadata) {
+              if (annotation.name.name == 'internal') {
+                memberInternal = true;
+                break;
+              }
+            }
+            if (member.documentationComment != null) {
+              final commentText = member.documentationComment!.tokens
+                  .map((t) => t.lexeme)
+                  .join('\n');
+              if (commentText.contains('@internal')) {
+                memberInternal = true;
+              }
+            }
+            if (memberInternal) continue;
+          }
           if (member is ConstructorDeclaration) {
             final consName = member.name?.lexeme ?? '';
             final fullConsName = consName.isEmpty ? name : '$name.$consName';
@@ -387,6 +647,7 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
           comment: comment,
           members: members,
           originPkg: pkgName,
+          isDeprecated: isDeprecated,
         ));
       } else if (declaration is MixinDeclaration) {
         final name = declaration.name.lexeme;
@@ -394,6 +655,24 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
         final comment = cleanComment(declaration.documentationComment);
         final List<MemberInfo> members = [];
         for (final member in declaration.members) {
+          if (member is AnnotatedNode) {
+            bool memberInternal = false;
+            for (final annotation in member.metadata) {
+              if (annotation.name.name == 'internal') {
+                memberInternal = true;
+                break;
+              }
+            }
+            if (member.documentationComment != null) {
+              final commentText = member.documentationComment!.tokens
+                  .map((t) => t.lexeme)
+                  .join('\n');
+              if (commentText.contains('@internal')) {
+                memberInternal = true;
+              }
+            }
+            if (memberInternal) continue;
+          }
           if (member is MethodDeclaration) {
             final mName = member.name.lexeme;
             if (mName.startsWith('_')) continue;
@@ -430,6 +709,7 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
           comment: comment,
           members: members,
           originPkg: pkgName,
+          isDeprecated: isDeprecated,
         ));
       } else if (declaration is FunctionDeclaration) {
         final name = declaration.name.lexeme;
@@ -446,6 +726,7 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
           members: [],
           signature: sig,
           originPkg: pkgName,
+          isDeprecated: isDeprecated,
         ));
       } else if (declaration is TopLevelVariableDeclaration) {
         final comment = cleanComment(declaration.documentationComment);
@@ -461,15 +742,35 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
             members: [],
             signature: sig,
             originPkg: pkgName,
+            isDeprecated: isDeprecated,
           ));
         }
       } else if (declaration is ExtensionDeclaration) {
         final name = declaration.name?.lexeme ?? 'UnnamedExtension';
         if (name.startsWith('_')) continue;
         final comment = cleanComment(declaration.documentationComment);
-        final extendedType = declaration.extendedType.toSource();
+        final extendedType =
+            declaration.onClause?.extendedType.toSource() ?? '';
         final List<MemberInfo> members = [];
         for (final member in declaration.members) {
+          if (member is AnnotatedNode) {
+            bool memberInternal = false;
+            for (final annotation in member.metadata) {
+              if (annotation.name.name == 'internal') {
+                memberInternal = true;
+                break;
+              }
+            }
+            if (member.documentationComment != null) {
+              final commentText = member.documentationComment!.tokens
+                  .map((t) => t.lexeme)
+                  .join('\n');
+              if (commentText.contains('@internal')) {
+                memberInternal = true;
+              }
+            }
+            if (memberInternal) continue;
+          }
           if (member is MethodDeclaration) {
             final mName = member.name.lexeme;
             if (mName.startsWith('_')) continue;
@@ -493,6 +794,7 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
           members: members,
           extendedType: extendedType,
           originPkg: pkgName,
+          isDeprecated: isDeprecated,
         ));
       }
     }
@@ -550,39 +852,71 @@ String? getCategoryAndPage(String pkgName, DeclInfo decl) {
 
   // 4. Mappings for signals_flutter
   if (pkgName == 'signals_flutter') {
-    if (name == 'signal' ||
-        name == 'lazySignal' ||
-        name == 'FlutterSignal' ||
-        name == 'createSignal') {
-      return 'flutter/signal';
+    final slug =
+        name.split(RegExp(r'(?<=[a-z0-9])(?=[A-Z])')).join('-').toLowerCase();
+
+    // Core Signals
+    if (name == 'FlutterSignal' || name == 'signal' || name == 'createSignal') {
+      return 'signals/flutter-signal';
     }
-    if (name == 'computed' ||
-        name == 'FlutterComputed' ||
-        name == 'createComputed') {
-      return 'flutter/computed';
-    }
-    if (nameLower.contains('watch') ||
-        name == 'SignalBuilder' ||
-        name == 'SignalAnimatedBuilder' ||
+    if (name == 'FlutterReadonlySignal' ||
+        name == 'readonly' ||
         name == 'FlutterReadonlySignalUtils') {
-      return 'flutter/watch';
+      return 'signals/flutter-readonly-signal';
     }
-    if (name == 'SignalProvider') {
-      return 'flutter/signal-provider';
+    if (name == 'FlutterComputed' ||
+        name == 'computed' ||
+        name == 'createComputed') {
+      return 'signals/flutter-computed';
     }
-    if (name == 'SignalsMixin') {
-      return 'flutter/signals-mixin';
+    if (name == 'TickerSignal' || name == 'tickerSignal') {
+      return 'signals/ticker-signal';
     }
-    if (name == 'valueListenableToSignal' ||
-        name == 'ValueListenableSignalMixin' ||
-        name == 'SignalValueListenableUtils') {
-      return 'flutter/value-listenable';
+
+    // Widgets
+    final widgets = [
+      'SignalWidget',
+      'SignalBuilder',
+      'SignalAnimatedBuilder',
+      'SignalCustomPaint',
+      'SignalPainterWidget',
+      'SignalProxyWidget',
+      'WatchBuilder',
+      'Watch',
+      'MultiSignalProvider',
+      'SignalProvider'
+    ];
+    if (widgets.contains(name)) {
+      return 'widgets/$slug';
     }
-    if (name == 'valueNotifierToSignal' ||
-        name == 'ValueNotifierSignalMixin' ||
-        name == 'SignalValueNotifierUtils') {
-      return 'flutter/value-notifier';
+
+    // Mixins
+    final mixins = [
+      'SignalsMixin',
+      'ValueListenableSignalMixin',
+      'ValueNotifierSignalMixin'
+    ];
+    if (mixins.contains(name)) {
+      return 'mixins/$slug';
     }
+
+    // Effects
+    if (name == 'SignalEffect' || name == 'signalEffect') {
+      return 'effects/signal-effect';
+    }
+
+    // Render
+    final renderObjects = [
+      'RenderSignalBox',
+      'RenderSignalCustomPaint',
+      'RenderSignalProxyBox'
+    ];
+    if (renderObjects.contains(name)) {
+      return 'render/$slug';
+    }
+
+    // Extensions
+    return 'extensions/$slug';
   }
 
   // 5. Mappings for preact_signals, signals_core, signals
@@ -659,6 +993,45 @@ String? getCategoryAndPage(String pkgName, DeclInfo decl) {
         name.startsWith('SignalsKeyValue') ||
         name.startsWith('SignalsInMemoryKeyValue')) {
       return 'utilities/persisted';
+    }
+
+    // Fallback dynamic mapping rules for unresolved types across core/signals packages
+    if (nameLower.contains('container')) {
+      return 'utilities/container';
+    }
+    if (nameLower.contains('observer') ||
+        nameLower.contains('devtools') ||
+        name == 'onSignalRead') {
+      return 'utilities/observer';
+    }
+    if (nameLower.contains('timer')) {
+      return 'async/signal';
+    }
+    if (nameLower.contains('tracked')) {
+      return 'mixins/tracked';
+    }
+    if (nameLower.contains('queue')) {
+      return 'mixins/queue';
+    }
+    if (nameLower.contains('error') ||
+        nameLower.contains('exception') ||
+        nameLower.contains('fail')) {
+      return 'core/signal';
+    }
+    if (nameLower.contains('changestack') || name == 'changeStack') {
+      return 'value/change-stack';
+    }
+    if (name == 'iterableSignal') {
+      return 'value/iterable';
+    }
+    if (nameLower.contains('state') || name == 'AsyncSignalState') {
+      return 'async/state';
+    }
+    if (nameLower.endsWith('options')) {
+      return 'core/signal';
+    }
+    if (nameLower.contains('signal') || nameLower.contains('readonly')) {
+      return 'core/signal';
     }
   }
 
@@ -768,7 +1141,8 @@ String convertAllInlineBackticks(String text) {
   for (var i = 0; i < codeBlockParts.length; i++) {
     // Every even-indexed part is outside a fenced code block
     if (i % 2 == 0) {
-      codeBlockParts[i] = codeBlockParts[i].replaceAllMapped(RegExp(r'`([^`\n]+)`'), (match) {
+      codeBlockParts[i] =
+          codeBlockParts[i].replaceAllMapped(RegExp(r'`([^`\n]+)`'), (match) {
         final code = match.group(1)!;
         return '<code>$code</code>';
       });
@@ -785,7 +1159,18 @@ String convertCallouts(String text) {
       r':::(info|caution|warning|danger|tip|note|success|error)\s*\n?([\s\S]*?)\n?\s*:::');
   result = result.replaceAllMapped(regExp, (match) {
     final type = match.group(1)!;
-    final content = match.group(2)!;
+    var content = match.group(2)!;
+
+    // Resolve any markdown-style bold, links, and inline code within the callout content.
+    // This ensures they render correctly even though wrapped in custom HTML elements.
+    content = content.replaceAllMapped(
+        RegExp(r'\*\*([^*]+)\*\*'), (m) => '<strong>${m[1]}</strong>');
+    content = content.replaceAllMapped(
+        RegExp(r'\*([^*]+)\*'), (m) => '<em>${m[1]}</em>');
+    content = content.replaceAllMapped(
+        RegExp(r'`([^`\n]+)`'), (m) => '<code>${m[1]}</code>');
+    content = content.replaceAllMapped(RegExp(r'\[([^\]\n]+)\]\(([^)\n]+)\)'),
+        (m) => '<a href="${m[2]}">${m[1]}</a>');
 
     // Map to supported jaspr_content Callout components
     String tagName;
@@ -811,6 +1196,26 @@ String convertCallouts(String text) {
     }
 
     return '<$tagName>\n$content\n</$tagName>';
+  });
+
+  // Also replace within explicit HTML tags: <Warning>, <Info>, etc.
+  final htmlTagRegExp =
+      RegExp(r'<(Warning|Info|Success|Error|Caution|Tip|Note)>([\s\S]*?)</\1>');
+  result = result.replaceAllMapped(htmlTagRegExp, (match) {
+    final tagName = match.group(1)!;
+    var content = match.group(2)!;
+
+    // Resolve markdown-style bold, links, and inline code within the callout content.
+    content = content.replaceAllMapped(
+        RegExp(r'\*\*([^*]+)\*\*'), (m) => '<strong>${m[1]}</strong>');
+    content = content.replaceAllMapped(
+        RegExp(r'\*([^*]+)\*'), (m) => '<em>${m[1]}</em>');
+    content = content.replaceAllMapped(
+        RegExp(r'`([^`\n]+)`'), (m) => '<code>${m[1]}</code>');
+    content = content.replaceAllMapped(RegExp(r'\[([^\]\n]+)\]\(([^)\n]+)\)'),
+        (m) => '<a href="${m[2]}">${m[1]}</a>');
+
+    return '<$tagName>$content</$tagName>';
   });
 
   return result;
@@ -1085,7 +1490,11 @@ void generateWebsiteMarkdown(
 ) {
   // Create output package dir
   final pkgDir = p.join(outputDir, pkgName);
-  Directory(pkgDir).createSync(recursive: true);
+  final dir = Directory(pkgDir);
+  if (dir.existsSync()) {
+    dir.deleteSync(recursive: true);
+  }
+  dir.createSync(recursive: true);
 
   // Group pages by category
   final Map<String, List<MapEntry<String, String>>> pagesByCategory = {};
@@ -1121,6 +1530,7 @@ void generateWebsiteMarkdown(
         category == 'hooks') {
       title = pathDecls.first.name;
     }
+
     var pageDesc = '';
     for (final decl in pathDecls) {
       final cleanedComment = cleanDocumentationComment(decl.comment);
@@ -1277,6 +1687,11 @@ void generateWebsiteMarkdown(
     pagesByCategory
         .putIfAbsent(category, () => [])
         .add(MapEntry(title, '/packages/$pkgName/$category/$pageName'));
+
+    final isPageDeprecated = pathDecls.any((d) => d.isDeprecated);
+    if (isPageDeprecated) {
+      _deprecatedHrefs.add('/packages/$pkgName/$category/$pageName');
+    }
   }
 
   // Create package index.md landing page
@@ -1333,7 +1748,7 @@ void generateWebsiteMarkdown(
     indexBuffer.writeln();
     indexBuffer.writeln('<div class="package-contents-grid">');
     for (final category in pagesByCategory.keys) {
-      final categoryTitle = category[0].toUpperCase() + category.substring(1);
+      final categoryTitle = getCategoryGroupTitle(category);
       var icon = '📄';
       switch (category.toLowerCase()) {
         case 'async':
@@ -1359,6 +1774,21 @@ void generateWebsiteMarkdown(
           break;
         case 'hooks':
           icon = '🪝';
+          break;
+        case 'signals':
+          icon = '⚡';
+          break;
+        case 'widgets':
+          icon = '📱';
+          break;
+        case 'effects':
+          icon = '🔄';
+          break;
+        case 'render':
+          icon = '🎨';
+          break;
+        case 'extensions':
+          icon = '🧩';
           break;
       }
 
@@ -1389,27 +1819,24 @@ void generateWebsiteMarkdown(
     margin-bottom: 2rem;
   }
   .category-card {
-    background-color: var(--card-bg, #ffffff);
-    border: 1px solid var(--card-border, #e2e8f0);
-    border-radius: 12px;
-    padding: 1.25rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: transparent;
+    border: none;
+    border-left: 3px solid var(--card-accent, #3b82f6);
+    padding: 0.25rem 0 0.5rem 1rem;
+    transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
   }
   .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.08);
-    border-color: #3b82f6 !important;
+    border-left-color: var(--card-accent-hover, #2563eb);
   }
   .category-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.75rem;
-    border-bottom: 1px solid var(--card-border, #e2e8f0);
-    padding-bottom: 0.5rem;
+    padding-bottom: 0px;
+    border-bottom: none;
   }
   .category-icon {
     font-size: 1.25rem;
@@ -1438,13 +1865,13 @@ void generateWebsiteMarkdown(
     transform: translateX(2px);
   }
   :root {
-    --card-bg: #ffffff;
-    --card-border: #e2e8f0;
+    --card-accent: #3b82f6;
+    --card-accent-hover: #2563eb;
     --heading-color: #0f172a;
   }
-  html.dark {
-    --card-bg: #1e293b;
-    --card-border: #334155;
+  html.dark, [data-theme="dark"], html[data-theme="dark"] {
+    --card-accent: #60a5fa;
+    --card-accent-hover: #93c5fd;
     --heading-color: #f8fafc;
   }
 </style>
@@ -1867,12 +2294,16 @@ void generateLLMFiles(String rootDir) {
 const _categoryOrder = [
   'core',
   'value',
-  'mixins',
   'async',
+  'signals',
+  'widgets',
+  'mixins',
+  'effects',
+  'render',
+  'extensions',
   'utilities',
   'flutter',
   'hooks',
-  'widgets',
 ];
 
 String getCategoryGroupTitle(String category) {
@@ -1892,7 +2323,15 @@ String getCategoryGroupTitle(String category) {
     case 'hooks':
       return 'Hooks';
     case 'widgets':
-      return 'Widgets';
+      return 'Flutter Widgets';
+    case 'signals':
+      return 'Reactive Signals';
+    case 'effects':
+      return 'Lifecycle & Effects';
+    case 'render':
+      return 'Low-Level Render Objects';
+    case 'extensions':
+      return 'Widget & Context Extensions';
     default:
       return category[0].toUpperCase() + category.substring(1);
   }
@@ -1921,7 +2360,10 @@ String extractDescription(String comment) {
   var cleanText = firstLine
       .replaceAllMapped(RegExp(r'\[([^\]]+)\]\([^)]+\)'), (m) => m[1]!)
       .replaceAllMapped(RegExp(r'\[([^\]]+)\]'), (m) => m[1]!)
-      .replaceAll(RegExp(r'`'), '');
+      .replaceAll(RegExp(r'`'), '')
+      .replaceAll(RegExp(r'\*\*'), '')
+      .replaceAll(RegExp(r'__'), '')
+      .replaceAll(RegExp(r'\*'), '');
 
   cleanText = cleanText.replaceAll(RegExp(r'^#+\s+'), '');
 
@@ -1977,6 +2419,20 @@ String generateSidebarLinksOnly(String pkgName) {
 }
 
 void generateNavigationFile(String rootDir) {
+  final List<String> types = [];
+  final typesDir = Directory(p.join(rootDir, 'docs', 'content', 'types'));
+  if (typesDir.existsSync()) {
+    final files = typesDir
+        .listSync()
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.md'));
+    for (final f in files) {
+      final name = p.basenameWithoutExtension(f.path);
+      types.add(name);
+    }
+    types.sort();
+  }
+
   final navFile =
       File(p.join(rootDir, 'docs', 'lib', 'components', 'navigation.dart'));
   final bgImageValue =
@@ -2085,7 +2541,63 @@ class DynamicHeader extends StatelessComponent {
         },
       ),
     ]),
-  ];
+    css('.deprecated-badge').styles(
+      raw: {
+        'font-size': '10px',
+        'font-weight': '700',
+        'text-transform': 'uppercase',
+        'color': '#ef4444',
+        'background-color': '#fef2f2',
+        'border': '1px solid #fca5a5',
+        'border-radius': '4px',
+        'padding': '1px 6px',
+        'margin-left': '8px',
+        'display': 'inline-flex',
+        'align-items': 'center',
+        'justify-content': 'center',
+        'line-height': '1',
+        'vertical-align': 'middle',
+      },
+    ),
+    css('html.dark .deprecated-badge, [data-theme="dark"] .deprecated-badge').styles(
+      raw: {
+        'color': '#fca5a5',
+        'background-color': '#7f1d1d',
+        'border-color': '#991b1b',
+      },
+    ),''');
+
+  for (final href in _deprecatedHrefs) {
+    buffer.writeln(
+        '''    css('.sidebar-container a[href="$href"]::after, .sidebar a[href="$href"]::after').styles(
+      raw: {
+        'content': '"deprecated"',
+        'font-size': '8px',
+        'font-weight': '700',
+        'text-transform': 'uppercase',
+        'color': '#ef4444',
+        'background-color': '#fef2f2',
+        'border': '1px solid #fca5a5',
+        'border-radius': '4px',
+        'padding': '0 5px',
+        'margin-left': '8px',
+        'display': 'inline-flex',
+        'align-items': 'center',
+        'justify-content': 'center',
+        'line-height': '1',
+        'height': '14px',
+      },
+    ),
+    css('html.dark .sidebar-container a[href="$href"]::after, html.dark .sidebar a[href="$href"]::after, [data-theme="dark"] .sidebar a[href="$href"]::after').styles(
+      raw: {
+        'color': '#fca5a5',
+        'background-color': '#7f1d1d',
+        'border-color': '#991b1b',
+      },
+    ),''');
+  }
+
+  buffer.writeln('''  ];
 }
 
 class DynamicSidebar extends StatelessComponent {
@@ -2095,6 +2607,33 @@ class DynamicSidebar extends StatelessComponent {
   Component build(BuildContext context) {
     final currentUrl = context.page.url;
     print('DEBUG: DynamicSidebar currentUrl = "\$currentUrl"');
+
+    // 1a. Types Section
+    if (currentUrl.startsWith('/types/')) {
+      return Sidebar(
+        groups: [
+          SidebarGroup(
+            links: [
+              SidebarLink(text: "← Back to Overview", href: '/'),
+            ],
+          ),
+          SidebarGroup(
+            title: 'Types Reference',
+            links: [
+''');
+  for (final t in types) {
+    final cased = _casedTypeNames[t] ??
+        (t.isEmpty ? '' : '${t[0].toUpperCase()}${t.substring(1)}');
+    final escapedCased = cased.replaceAll(r'$', r'\$');
+    final escapedT = t.replaceAll(r'$', r'\$');
+    buffer.writeln(
+        "              SidebarLink(text: '$escapedCased', href: '/types/$escapedT'),");
+  }
+  buffer.writeln('''            ],
+          ),
+        ],
+      );
+    }
 
     // 1. Guides Section
     if (!currentUrl.startsWith('/packages/')) {
@@ -2408,6 +2947,7 @@ class Sidebar extends StatelessComponent {
           css('a').styles(
             padding: Padding.only(left: 12.px, top: .5.rem, bottom: .5.rem),
             display: Display.inlineFlex,
+            alignItems: AlignItems.center,
             flex: Flex(grow: 1),
           ),
         ]),

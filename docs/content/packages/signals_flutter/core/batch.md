@@ -9,11 +9,11 @@ Under normal circumstances, writing to a signal immediately notifies all of its 
 (effects and computed signals), which can cause multiple redundant updates or temporary inconsistent/glitchy states
 if you are updating several related signals sequentially.
 
-By wrapping your mutations in [batch](/packages/signals/core/batch), notification events are deferred. Subscribed [effect](/packages/signals/core/effect)s and [computed](/packages/signals/flutter/computed)
+By wrapping your mutations in [batch](/types/batch), notification events are deferred. Subscribed [effect](/types/effect)s and [computed](/types/computed)
 signals will only run once at the very end of the batch callback block.
 
 <Info>
-  Always use [batch](/packages/signals/core/batch) when performing multiple state transitions together. This avoids flickering UI, unnecessary
+  Always use <a href="/types/batch">batch</a> when performing multiple state transitions together. This avoids flickering UI, unnecessary
   rebuilds, and transient states where some dependencies are updated but others are not.
 </Info>
 

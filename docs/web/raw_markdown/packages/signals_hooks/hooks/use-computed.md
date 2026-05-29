@@ -3,7 +3,7 @@ title: useComputed
 description: Creates a new Computed signal and subscribes to it.
 ---
 
-Creates a new [Computed](/packages/signals/core/computed) signal and subscribes to it.
+Creates a new [Computed](/types/computed) signal and subscribes to it.
 
 This hook is useful for deriving state within a **HookWidget** based on other signals or values.
 The callback **value** is evaluated lazily and cached. It is recomputed only when the dependent
@@ -22,7 +22,7 @@ The host widget will rebuild whenever the derived value changes.
 - **debugLabel**: An optional debug label to identify the computed signal in developer tools.
 
 ### Returns
-A [FlutterComputed](/packages/signals/flutter/computed) signal containing the derived value.
+A [FlutterComputed](/types/fluttercomputed) signal containing the derived value.
 
 ### Example
 

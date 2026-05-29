@@ -3,7 +3,7 @@ title: QueueSignalMixin
 description: A mixin that adds reactive <code>Queue</code> methods and operations to a Signal.
 ---
 
-A mixin that adds reactive <code>Queue</code> methods and operations to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>Queue</code> methods and operations to a [Signal](/types/signal)
 holding a **Queue** value.
 
 This mixin delegates all standard **Queue** operations (such as mutations like <code>add</code>,
@@ -12,7 +12,7 @@ underlying queue, while ensuring that any reads register a dependency and any
 mutations automatically trigger reactive updates.
 
 <Info>
-This mixin only works with signals that have a value type extending **Queue<T>**.
+This mixin only works with signals that have a value type extending <strong>Queue<T></strong>.
 </Info>
 
 ### Example Usage
@@ -57,84 +57,165 @@ need to assign <code>signal.value = ...</code> to force updates. Methods like <c
 <details>
 <summary> View Methods </summary>
 
-##### <a name="add"></a>`void add(T value)`
+##### <a name="add"></a><code>void add(T value)</code>
 
-##### <a name="addall"></a>`void addAll(Iterable<T> iterable)`
+##### <a name="addall"></a><code>void addAll(Iterable<T> iterable)</code>
 
-##### <a name="addfirst"></a>`void addFirst(T value)`
+##### <a name="addfirst"></a><code>void addFirst(T value)</code>
 
-##### <a name="addlast"></a>`void addLast(T value)`
+##### <a name="addlast"></a><code>void addLast(T value)</code>
 
-##### <a name="any"></a>`bool any(bool Function(T element) test)`
+##### <a name="any"></a><code>bool any(bool Function(T element) test)</code>
 
-##### <a name="cast"></a>`Queue<R> cast()`
+##### <a name="cast"></a><code>Queue<R> cast()</code>
 
-##### <a name="clear"></a>`void clear()`
+##### <a name="clear"></a><code>void clear()</code>
 
-##### <a name="contains"></a>`bool contains(Object? element)`
+##### <a name="contains"></a><code>bool contains(Object? element)</code>
 
-##### <a name="elementat"></a>`T elementAt(int index)`
+##### <a name="elementat"></a><code>T elementAt(int index)</code>
 
-##### <a name="every"></a>`bool every(bool Function(T element) test)`
+##### <a name="every"></a><code>bool every(bool Function(T element) test)</code>
 
-##### <a name="expand"></a>`Iterable<U> expand(Iterable<U> Function(T element) toElements)`
+##### <a name="expand"></a><code>Iterable<U> expand(Iterable<U> Function(T element) toElements)</code>
 
-##### <a name="first"></a>`T first`
+##### <a name="first"></a><code>T first</code>
 
-##### <a name="firstwhere"></a>`T firstWhere(bool Function(T element) test, {T Function()? orElse})`
+##### <a name="firstwhere"></a><code>T firstWhere(bool Function(T element) test, {T Function()? orElse})</code>
 
-##### <a name="fold"></a>`U fold(U initialValue, U Function(U previousValue, T element) combine)`
+##### <a name="fold"></a><code>U fold(U initialValue, U Function(U previousValue, T element) combine)</code>
 
-##### <a name="followedby"></a>`Iterable<T> followedBy(Iterable<T> other)`
+##### <a name="followedby"></a><code>Iterable<T> followedBy(Iterable<T> other)</code>
 
-##### <a name="foreach"></a>`void forEach(void Function(T element) action)`
+##### <a name="foreach"></a><code>void forEach(void Function(T element) action)</code>
 
-##### <a name="isempty"></a>`bool isEmpty`
+##### <a name="isempty"></a><code>bool isEmpty</code>
 
-##### <a name="isnotempty"></a>`bool isNotEmpty`
+##### <a name="isnotempty"></a><code>bool isNotEmpty</code>
 
-##### <a name="iterator"></a>`Iterator<T> iterator`
+##### <a name="iterator"></a><code>Iterator<T> iterator</code>
 
-##### <a name="join"></a>`String join([String separator = ""])`
+##### <a name="join"></a><code>String join([String separator = ""])</code>
 
-##### <a name="last"></a>`T last`
+##### <a name="last"></a><code>T last</code>
 
-##### <a name="lastwhere"></a>`T lastWhere(bool Function(T element) test, {T Function()? orElse})`
+##### <a name="lastwhere"></a><code>T lastWhere(bool Function(T element) test, {T Function()? orElse})</code>
 
-##### <a name="length"></a>`int length`
+##### <a name="length"></a><code>int length</code>
 
-##### <a name="map"></a>`Iterable<U> map(U Function(T e) toElement)`
+##### <a name="map"></a><code>Iterable<U> map(U Function(T e) toElement)</code>
 
-##### <a name="reduce"></a>`T reduce(T Function(T value, T element) combine)`
+##### <a name="reduce"></a><code>T reduce(T Function(T value, T element) combine)</code>
 
-##### <a name="remove"></a>`bool remove(Object? value)`
+##### <a name="remove"></a><code>bool remove(Object? value)</code>
 
-##### <a name="removefirst"></a>`T removeFirst()`
+##### <a name="removefirst"></a><code>T removeFirst()</code>
 
-##### <a name="removelast"></a>`T removeLast()`
+##### <a name="removelast"></a><code>T removeLast()</code>
 
-##### <a name="removewhere"></a>`void removeWhere(bool Function(T element) test)`
+##### <a name="removewhere"></a><code>void removeWhere(bool Function(T element) test)</code>
 
-##### <a name="retainwhere"></a>`void retainWhere(bool Function(T element) test)`
+##### <a name="retainwhere"></a><code>void retainWhere(bool Function(T element) test)</code>
 
-##### <a name="single"></a>`T single`
+##### <a name="single"></a><code>T single</code>
 
-##### <a name="singlewhere"></a>`T singleWhere(bool Function(T element) test, {T Function()? orElse})`
+##### <a name="singlewhere"></a><code>T singleWhere(bool Function(T element) test, {T Function()? orElse})</code>
 
-##### <a name="skip"></a>`Iterable<T> skip(int count)`
+##### <a name="skip"></a><code>Iterable<T> skip(int count)</code>
 
-##### <a name="skipwhile"></a>`Iterable<T> skipWhile(bool Function(T value) test)`
+##### <a name="skipwhile"></a><code>Iterable<T> skipWhile(bool Function(T value) test)</code>
 
-##### <a name="take"></a>`Iterable<T> take(int count)`
+##### <a name="take"></a><code>Iterable<T> take(int count)</code>
 
-##### <a name="takewhile"></a>`Iterable<T> takeWhile(bool Function(T value) test)`
+##### <a name="takewhile"></a><code>Iterable<T> takeWhile(bool Function(T value) test)</code>
 
-##### <a name="tolist"></a>`List<T> toList({bool growable = true})`
+##### <a name="tolist"></a><code>List<T> toList({bool growable = true})</code>
 
-##### <a name="toset"></a>`Set<T> toSet()`
+##### <a name="toset"></a><code>Set<T> toSet()</code>
 
-##### <a name="where"></a>`Iterable<T> where(bool Function(T element) test)`
+##### <a name="where"></a><code>Iterable<T> where(bool Function(T element) test)</code>
 
-##### <a name="wheretype"></a>`Iterable<U> whereType()`
+##### <a name="wheretype"></a><code>Iterable<U> whereType()</code>
+
+</details>
+
+
+
+---
+
+## SignalQueueUtils
+
+Utility extension methods on **Queue** to convert them to [QueueSignal](/types/queuesignal)s.
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="tosignal"></a><code>QueueSignal<T> toSignal({QueueSignalOptions<T>? options, @Deprecated('Use options: QueueSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: QueueSignalOptions(name: ...) instead') String? debugLabel})</code>
+
+Convert an existing list to [QueueSignal](/types/queuesignal)
+
+</details>
+
+
+
+---
+
+## queueSignal
+
+Creates a [QueueSignal](/types/queuesignal) with the given **list** (Queue).
+
+
+---
+
+## QueueSignalOptions
+
+Configuration options for a [QueueSignal](/types/queuesignal).
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="queuesignaloptions"></a><a name="queuesignaloptions"></a><code>QueueSignalOptions({super.name, super.autoDispose, super.watched, super.unwatched, super.equality = const SignalDeepEquality()})</code>
+
+Creates a new [QueueSignalOptions](/types/queuesignaloptions) instance.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="copywith"></a><code>QueueSignalOptions<T> copyWith({String? name, bool? autoDispose, void Function()? watched, void Function()? unwatched, SignalEquality<Queue<T>>? equality})</code>
+
+##### <a name="=="></a><code>bool ==(Object other)</code>
+
+##### <a name="hashcode"></a><code>int hashCode</code>
+
+</details>
+
+
+
+---
+
+## QueueSignal
+
+A [Signal](/types/signal) that holds a **Queue**.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="queuesignal"></a><a name="queuesignal"></a><code>QueueSignal(super.value, {QueueSignalOptions<T>? options, @Deprecated('Use options: QueueSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: QueueSignalOptions(name: ...) instead') String? debugLabel})</code>
+
+Creates a [QueueSignal](/types/queuesignal) with the given **value**.
 
 </details>

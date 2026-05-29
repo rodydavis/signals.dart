@@ -1,17 +1,17 @@
 ---
 title: EventSinkSignalMixin
-description: A mixin that implements the standard **EventSink** interface for a Signal.
+description: A mixin that implements the standard EventSink interface for a Signal.
 ---
 
-A mixin that implements the standard **EventSink** interface for a [Signal](/packages/signals/core/signal)
-holding an [AsyncState](/packages/signals/async/state) value.
+A mixin that implements the standard **EventSink** interface for a [Signal](/types/signal)
+holding an [AsyncState](/types/asyncstate) value.
 
 This mixin is designed specifically to interface with **Stream** consumers or
 other asynchronous data producers. It maps **add** to <code>AsyncState.data(...)</code>,
 **addError** to <code>AsyncState.error(...)</code>, and **close** to disposing the signal.
 
 <Info>
-This mixin only works with signals whose value is of type [AsyncState<T>](/packages/signals/async/state).
+This mixin only works with signals whose value is of type <a href="/types/asyncstate">AsyncState<T></a>.
 </Info>
 
 ### Example Usage
@@ -48,7 +48,7 @@ void main() {
 ```
 
 <Warning>
-Once **close** is called, the signal is disposed. Trying to call **add** or **addError**
+Once <strong>close</strong> is called, the signal is disposed. Trying to call <strong>add</strong> or <strong>addError</strong>
 after closing will result in an exception.
 </Warning>
 
@@ -58,10 +58,10 @@ after closing will result in an exception.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="add"></a>`void add(T event)`
+##### <a name="add"></a><code>void add(T event)</code>
 
-##### <a name="adderror"></a>`void addError(Object error, [StackTrace? stackTrace])`
+##### <a name="adderror"></a><code>void addError(Object error, [StackTrace? stackTrace])</code>
 
-##### <a name="close"></a>`void close()`
+##### <a name="close"></a><code>void close()</code>
 
 </details>

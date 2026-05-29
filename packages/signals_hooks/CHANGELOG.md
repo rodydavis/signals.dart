@@ -4,6 +4,7 @@
 - Introduced `SignalHookElement` (extending `StatelessHookElement`) to implicitly track reactive signals inside standard `build` methods.
 - Deprecated `buildWidget` in favor of direct `build` overrides.
 - Streamlined `SignalHookBuilder` to support direct standard `build` scope.
+- Generalized the `useSignalProvider<T>()` custom hook to support any standard `ReadonlySignal` from `signals_core`.
 
 ## 7.0.0
 

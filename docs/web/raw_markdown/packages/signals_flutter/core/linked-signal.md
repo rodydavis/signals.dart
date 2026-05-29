@@ -80,7 +80,7 @@ final username = linkedSignal(
 
 ##### <a name="linkedsignal"></a><a name="linkedsignal"></a>`LinkedSignal({required S Function() source, LinkedSignalOptions<T, S>? options})`
 
-Creates a new [LinkedSignal](/packages/signals/core/linked-signal).
+Creates a new [LinkedSignal](/types/linkedsignal).
 
 </details>
 

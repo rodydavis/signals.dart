@@ -8,7 +8,7 @@ A Dart static analysis rule that detects and warns against using the deprecated 
 <Warning>
 In <code>signals</code> v7, <code>SignalsMixin</code> was deprecated to avoid unnecessary state tracking and
 CPU/memory overhead. For optimal performance and a cleaner reactive codebase, you should
-migrate to specialized widgets like **SignalWidget**, **SignalStatefulWidget**, or [SignalBuilder](/packages/signals/flutter/watch).
+migrate to specialized widgets like <a href="/types/signalwidget">SignalWidget</a>, <a href="/types/signalstatefulwidget">SignalStatefulWidget</a>, or <a href="/types/signalbuilder">SignalBuilder</a>.
 </Warning>
 
 ### Examples

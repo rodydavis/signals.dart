@@ -47,11 +47,11 @@ void main() {
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalequality"></a><a name="signalequality"></a>`SignalEquality()`
+##### <a name="signalequality"></a><a name="signalequality"></a><code>SignalEquality()</code>
 
 @nodoc
 
-##### <a name="signalequality-custom"></a><a name="custom"></a>`SignalEquality.custom(bool Function(T a, T b) fn)`
+##### <a name="signalequality-custom"></a><a name="custom"></a><code>SignalEquality.custom(bool Function(T a, T b) fn)</code>
 
 Custom equality check
 
@@ -65,24 +65,24 @@ Uses a user-provided boolean function **fn** to check for equality.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="equals"></a>`bool equals(Object? a, Object? b)`
+##### <a name="equals"></a><code>bool equals(Object? a, Object? b)</code>
 
 Check if two values are equal
 
-##### <a name="standard"></a>`static SignalEquality<T> standard()`
+##### <a name="standard"></a><code>static SignalEquality<T> standard()</code>
 
 Standard equality check (a == b)
 
 Matches two objects if their standard <code>==</code> operator returns true.
 This is the default strategy used by all signals.
 
-##### <a name="identity"></a>`static SignalEquality<T> identity()`
+##### <a name="identity"></a><code>static SignalEquality<T> identity()</code>
 
 Identity equality check (identical(a, b))
 
 Matches two objects only if they are the exact same instance in memory.
 
-##### <a name="deep"></a>`static SignalEquality<T> deep()`
+##### <a name="deep"></a><code>static SignalEquality<T> deep()</code>
 
 Deep equality check
 
@@ -116,9 +116,9 @@ print(equality.equals(listA, listA)); // true
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalidentityequality"></a><a name="signalidentityequality"></a>`SignalIdentityEquality()`
+##### <a name="signalidentityequality"></a><a name="signalidentityequality"></a><code>SignalIdentityEquality()</code>
 
-Creates a new [SignalIdentityEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalIdentityEquality](/types/signalidentityequality) instance.
 
 </details>
 
@@ -128,7 +128,7 @@ Creates a new [SignalIdentityEquality](/packages/preact_signals/utilities/equali
 <details>
 <summary> View Methods </summary>
 
-##### <a name="equals"></a>`bool equals(Object? a, Object? b)`
+##### <a name="equals"></a><code>bool equals(Object? a, Object? b)</code>
 
 </details>
 
@@ -155,9 +155,9 @@ print(equality.equals([1, [2, 3]], [1, [2, 3]])); // true
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signaldeepequality"></a><a name="signaldeepequality"></a>`SignalDeepEquality()`
+##### <a name="signaldeepequality"></a><a name="signaldeepequality"></a><code>SignalDeepEquality()</code>
 
-Creates a new [SignalDeepEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalDeepEquality](/types/signaldeepequality) instance.
 
 </details>
 
@@ -167,7 +167,7 @@ Creates a new [SignalDeepEquality](/packages/preact_signals/utilities/equality) 
 <details>
 <summary> View Methods </summary>
 
-##### <a name="equals"></a>`bool equals(Object? a, Object? b)`
+##### <a name="equals"></a><code>bool equals(Object? a, Object? b)</code>
 
 </details>
 
@@ -193,9 +193,9 @@ final equality = SignalEquality.custom((User a, User b) => a.id == b.id);
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalcustomequality"></a><a name="signalcustomequality"></a>`SignalCustomEquality(this._fn)`
+##### <a name="signalcustomequality"></a><a name="signalcustomequality"></a><code>SignalCustomEquality(this._fn)</code>
 
-Creates a new [SignalCustomEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalCustomEquality](/types/signalcustomequality) instance.
 
 </details>
 
@@ -205,7 +205,7 @@ Creates a new [SignalCustomEquality](/packages/preact_signals/utilities/equality
 <details>
 <summary> View Methods </summary>
 
-##### <a name="equals"></a>`bool equals(Object? a, Object? b)`
+##### <a name="equals"></a><code>bool equals(Object? a, Object? b)</code>
 
 </details>
 
@@ -232,9 +232,9 @@ print(equality.equals(5, 5)); // true
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalstandardequality"></a><a name="signalstandardequality"></a>`SignalStandardEquality()`
+##### <a name="signalstandardequality"></a><a name="signalstandardequality"></a><code>SignalStandardEquality()</code>
 
-Creates a new [SignalStandardEquality](/packages/preact_signals/utilities/equality) instance.
+Creates a new [SignalStandardEquality](/types/signalstandardequality) instance.
 
 </details>
 
@@ -244,6 +244,6 @@ Creates a new [SignalStandardEquality](/packages/preact_signals/utilities/equali
 <details>
 <summary> View Methods </summary>
 
-##### <a name="equals"></a>`bool equals(Object? a, Object? b)`
+##### <a name="equals"></a><code>bool equals(Object? a, Object? b)</code>
 
 </details>

@@ -1,11 +1,11 @@
 ---
 title: IterableSignal
-description: A reactive Signal that holds an **Iterable** and implements the **Iterable** interface.
+description: A reactive Signal that holds an Iterable and implements the Iterable interface.
 ---
 
-A reactive [Signal](/packages/signals/core/signal) that holds an **Iterable** and implements the **Iterable** interface.
+A reactive [Signal](/types/signal) that holds an **Iterable** and implements the **Iterable** interface.
 
-[IterableSignal](/packages/signals/value/iterable) allows you to listen to changes on an iterable collection reactively. It
+[IterableSignal](/types/iterablesignal) allows you to listen to changes on an iterable collection reactively. It
 exposes all standard **Iterable** properties and methods (like <code>length</code>, <code>first</code>, <code>map</code>, <code>where</code>, etc.)
 directly on the signal itself. Calling these methods inside a reactive context (like an <code>effect</code>
 or <code>computed</code> block) will automatically track them as dependencies.
@@ -29,7 +29,7 @@ void main() {
 
 <Warning>
 Direct mutation of the items inside the iterable will NOT trigger updates. To reactively mutate collections,
-use specialized signals like [ListSignal](/packages/signals/value/list), [SetSignal](/packages/signals/value/set), or [MapSignal](/packages/signals/value/map).
+use specialized signals like <a href="/types/listsignal">ListSignal</a>, <a href="/types/setsignal">SetSignal</a>, or <a href="/types/mapsignal">MapSignal</a>.
 </Warning>
 
 
@@ -40,7 +40,7 @@ use specialized signals like [ListSignal](/packages/signals/value/list), [SetSig
 
 ##### <a name="iterablesignal"></a><a name="iterablesignal"></a>`IterableSignal(super.value, {IterableSignalOptions<E>? options, @Deprecated('Use options: IterableSignalOptions(autoDispose: ...) instead') bool? autoDispose, @Deprecated('Use options: IterableSignalOptions(name: ...) instead') String? debugLabel})`
 
-Creates a [IterableSignal](/packages/signals/value/iterable) with the given **value**.
+Creates a [IterableSignal](/types/iterablesignal) with the given **value**.
 
 </details>
 
@@ -55,3 +55,23 @@ Creates a [IterableSignal](/packages/signals/value/iterable) with the given **va
 ##### <a name="hashcode"></a>`int hashCode`
 
 </details>
+
+
+
+---
+
+## iterableSignal
+
+Creates an [IterableSignal](/types/iterablesignal) holding the provided **iterable**.
+
+This is a convenience function that instantiates an [IterableSignal](/types/iterablesignal), which delegates
+all standard **Iterable** operations reactively and tracks changes.
+
+### Example Usage
+
+```dart
+import 'package:signals/signals.dart';
+
+final s = iterableSignal([1, 2, 3]);
+print(s.length); // 3
+```

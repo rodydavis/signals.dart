@@ -3,7 +3,7 @@ title: SetSignalMixin
 description: A mixin that adds reactive <code>Set</code> methods and operations to a Signal.
 ---
 
-A mixin that adds reactive <code>Set</code> methods and operations to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>Set</code> methods and operations to a [Signal](/types/signal)
 holding a **Set** value.
 
 This mixin delegates all standard **Set** operations (such as mutations like <code>add</code>,
@@ -12,7 +12,7 @@ while ensuring that any reads register a dependency and any mutations
 automatically trigger reactive updates.
 
 <Info>
-This mixin only works with signals that have a value type extending **Set<E>**.
+This mixin only works with signals that have a value type extending <strong>Set<E></strong>.
 </Info>
 
 ### Example Usage

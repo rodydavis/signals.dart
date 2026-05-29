@@ -163,5 +163,74 @@ void main() {
 
       expect(find.text('Legacy: 6'), findsOneWidget);
     });
+
+    testWidgets('SignalStatefulHookWidget implicitly tracks signals and supports hooks',
+        (tester) async {
+      final counter = signal(0);
+
+      await tester.pumpWidget(
+        MyStatefulHookWidget(counter: counter),
+      );
+
+      expect(find.text('StatefulHook: 0'), findsOneWidget);
+
+      counter.value++;
+      await tester.pumpAndSettle();
+
+      expect(find.text('StatefulHook: 1'), findsOneWidget);
+    });
+
+    testWidgets('useSignalProvider custom hook resolves signal from SignalProvider',
+        (tester) async {
+      final counter = signal(100);
+
+      await tester.pumpWidget(
+        SignalProvider<FlutterSignal<int>>(
+          create: () => counter,
+          child: const ProviderTestWidget(),
+        ),
+      );
+
+      expect(find.text('ProviderValue: 100'), findsOneWidget);
+
+      counter.value = 200;
+      await tester.pumpAndSettle();
+
+      expect(find.text('ProviderValue: 200'), findsOneWidget);
+    });
   });
 }
+
+class MyStatefulHookWidget extends SignalStatefulHookWidget {
+  const MyStatefulHookWidget({required this.counter, super.key});
+  final Signal<int> counter;
+
+  @override
+  State<MyStatefulHookWidget> createState() => _MyStatefulHookWidgetState();
+}
+
+class _MyStatefulHookWidgetState extends State<MyStatefulHookWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final focusNode = useFocusNode();
+    assert(focusNode.toString().isNotEmpty);
+    return Text(
+      'StatefulHook: ${widget.counter.value}',
+      textDirection: TextDirection.ltr,
+    );
+  }
+}
+
+class ProviderTestWidget extends SignalHookWidget {
+  const ProviderTestWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final counter = useSignalProvider<FlutterSignal<int>>()!;
+    return Text(
+      'ProviderValue: ${counter.value}',
+      textDirection: TextDirection.ltr,
+    );
+  }
+}
+

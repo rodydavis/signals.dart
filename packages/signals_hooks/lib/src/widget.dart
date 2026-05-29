@@ -1,9 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:signals/signals_core.dart' as core;
+import 'package:signals/signals_flutter.dart';
+
 
 /// Element for [SignalHookWidget] that manages both standard Flutter Hooks
 /// lifecycle and implicit signal subscription.
+///
+/// @internal
 class SignalHookElement extends StatelessElement with HookElement {
   /// Constructor for [SignalHookElement].
   SignalHookElement(super.widget);
@@ -180,3 +184,162 @@ class SignalHookBuilder extends SignalHookWidget {
   @override
   Widget build(BuildContext context) => builder(context);
 }
+
+/// Element for [SignalStatefulHookWidget] that manages both standard Flutter Hooks
+/// lifecycle and implicit signal subscription.
+///
+/// @internal
+class SignalStatefulHookElement extends StatefulElement with HookElement {
+  /// Constructor for [SignalStatefulHookElement].
+  SignalStatefulHookElement(super.widget);
+
+  final _watch = <int, VoidCallback>{};
+  bool _initializing = false;
+
+  /// Subscribes to changes of the provided [value] and schedules a rebuild.
+  void watchSignal(core.ReadonlySignal value) {
+    _watch.putIfAbsent(
+      value.globalId,
+      () => value.subscribe((val) {
+        if (_initializing) return;
+        markNeedsBuild();
+      }),
+    );
+  }
+
+  void _updateWatch(Set<core.ReadonlySignal> signals) {
+    _initializing = true;
+    try {
+      final toRemove = <int>[];
+      _watch.forEach((id, dispose) {
+        if (!signals.any((s) => s.globalId == id)) {
+          dispose();
+          toRemove.add(id);
+        }
+      });
+      for (final id in toRemove) {
+        _watch.remove(id);
+      }
+      for (final signal in signals) {
+        watchSignal(signal);
+      }
+    } finally {
+      _initializing = false;
+    }
+  }
+
+  @override
+  Widget build() {
+    final signals = <core.ReadonlySignal>{};
+    final oldOnSignalRead = core.onSignalRead;
+    core.onSignalRead = (signal) {
+      if (signal is core.ReadonlySignal) {
+        signals.add(signal);
+      }
+    };
+
+    try {
+      return super.build(); // Delegates to StatefulElement.build() inside HookElement's context
+    } finally {
+      core.onSignalRead = oldOnSignalRead;
+      if (signals.isEmpty) {
+        for (final dispose in _watch.values) {
+          dispose();
+        }
+        _watch.clear();
+      } else {
+        _updateWatch(signals);
+      }
+    }
+  }
+
+  @override
+  void unmount() {
+    for (final dispose in _watch.values) {
+      dispose();
+    }
+    _watch.clear();
+    super.unmount();
+  }
+}
+
+/// A premium stateful widget that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
+///
+/// Stateful counterpart of [SignalHookWidget].
+///
+/// ### Example Usage
+/// ```dart
+/// class CounterWidget extends SignalStatefulHookWidget {
+///   const CounterWidget({super.key});
+///
+///   @override
+///   State<CounterWidget> createState() => _CounterWidgetState();
+/// }
+///
+/// class _CounterWidgetState extends State<CounterWidget> {
+///   @override
+///   Widget build(BuildContext context) {
+///     // Standard flutter hooks work here:
+///     final controller = useTextEditingController();
+///     // Reactive signals work here as well:
+///     final counter = useSignal(0);
+///     return Column(
+///       children: [
+///         TextField(controller: controller),
+///         Text('Count: $counter'),
+///         ElevatedButton(
+///           onPressed: () => counter.value++,
+///           child: const Text('Increment'),
+///         ),
+///       ],
+///     );
+///   }
+/// }
+/// ```
+abstract class SignalStatefulHookWidget extends StatefulWidget {
+  /// Constructor for [SignalStatefulHookWidget].
+  const SignalStatefulHookWidget({super.key});
+
+  @override
+  StatefulElement createElement() => SignalStatefulHookElement(this);
+}
+
+/// A custom hook to retrieve a generic signal from a [SignalProvider] ancestor higher up in the widget tree.
+///
+/// Under the hood, this uses the BuildContext to look up the provider and registers
+/// a reactive dependency.
+///
+/// Supports standard core signals from `package:signals_core/signals_core.dart` as well
+/// as Flutter-native signals.
+///
+/// ### Example Usage
+/// ```dart
+/// class CounterDisplayWidget extends HookWidget {
+///   const CounterDisplayWidget({super.key});
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     final counter = useSignalProvider<Signal<int>>();
+///     if (counter == null) return const Text('Not found');
+///     return Text('Value: ${counter.value}');
+///   }
+/// }
+/// ```
+T? useSignalProvider<T extends core.ReadonlySignal>() {
+  return use(_SignalProviderHook<T>());
+}
+
+class _SignalProviderHook<T extends core.ReadonlySignal> extends Hook<T?> {
+  const _SignalProviderHook();
+
+  @override
+  _SignalProviderHookState<T> createState() => _SignalProviderHookState<T>();
+}
+
+class _SignalProviderHookState<T extends core.ReadonlySignal> extends HookState<T?, _SignalProviderHook<T>> {
+  @override
+  T? build(BuildContext context) {
+    return SignalProvider.of<T>(context);
+  }
+}
+

@@ -3,10 +3,10 @@ title: useLazySignal
 description: Creates a new Signal that starts uninitialized and subscribes to it.
 ---
 
-Creates a new [Signal](/packages/signals/core/signal) that starts uninitialized and subscribes to it.
+Creates a new [Signal](/types/signal) that starts uninitialized and subscribes to it.
 
 A lazy signal is a signal that doesn't have an initial value on creation. Reading its <code>.value</code>
-before setting it will throw a **LazySignalInitializationError**.
+before setting it will throw a [LazySignalInitializationError](/types/lazysignalinitializationerror).
 
 <Info>
   Ideal for binding late-initialized state, such as data fetched in a lifecycle effect

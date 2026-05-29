@@ -3,9 +3,9 @@ title: useChangeStackSignal
 description: Creates a new ChangeStackSignal and subscribes to it.
 ---
 
-Creates a new [ChangeStackSignal](/packages/signals/value/change-stack) and subscribes to it.
+Creates a new [ChangeStackSignal](/types/changestacksignal) and subscribes to it.
 
-A [ChangeStackSignal](/packages/signals/value/change-stack) maintains an undo/redo history stack of value updates. This enables effortless
+A [ChangeStackSignal](/types/changestacksignal) maintains an undo/redo history stack of value updates. This enables effortless
 undo/redo mechanisms for user edits, document updates, or game actions.
 
 <Success>

@@ -1,9 +1,9 @@
 ---
 title: StreamSignalMixin
-description: A mixin that implements the standard **Stream** interface for a ReadonlySignal.
+description: A mixin that implements the standard Stream interface for a ReadonlySignal.
 ---
 
-A mixin that implements the standard **Stream** interface for a [ReadonlySignal](/packages/preact_signals/core/readonly).
+A mixin that implements the standard **Stream** interface for a [ReadonlySignal](/types/readonlysignal).
 
 This mixin allows you to treat a read-only or writable signal as a standard asynchronous
 **Stream**, where updates to the signal's value are pushed as stream events.
@@ -57,7 +57,7 @@ Widget build(BuildContext context) {
 ```
 
 <Success>
-Since [StreamSignalMixin](/packages/signals/mixins/stream) creates an internal broadcast **StreamController**, multiple listeners
+Since <a href="/types/streamsignalmixin">StreamSignalMixin</a> creates an internal broadcast <strong>StreamController</strong>, multiple listeners
 can subscribe simultaneously. All subscriptions are closed and resources are released
 automatically when the signal is disposed.
 </Success>
@@ -68,78 +68,78 @@ automatically when the signal is disposed.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="any"></a>`Future<bool> any(bool Function(T element) test)`
+##### <a name="any"></a><code>Future<bool> any(bool Function(T element) test)</code>
 
-##### <a name="asbroadcaststream"></a>`Stream<T> asBroadcastStream({void Function(StreamSubscription<T> subscription)? onListen, void Function(StreamSubscription<T> subscription)? onCancel})`
+##### <a name="asbroadcaststream"></a><code>Stream<T> asBroadcastStream({void Function(StreamSubscription<T> subscription)? onListen, void Function(StreamSubscription<T> subscription)? onCancel})</code>
 
-##### <a name="asyncexpand"></a>`Stream<E> asyncExpand(Stream<E>? Function(T event) convert)`
+##### <a name="asyncexpand"></a><code>Stream<E> asyncExpand(Stream<E>? Function(T event) convert)</code>
 
-##### <a name="asyncmap"></a>`Stream<E> asyncMap(FutureOr<E> Function(T event) convert)`
+##### <a name="asyncmap"></a><code>Stream<E> asyncMap(FutureOr<E> Function(T event) convert)</code>
 
-##### <a name="cast"></a>`Stream<R> cast()`
+##### <a name="cast"></a><code>Stream<R> cast()</code>
 
-##### <a name="contains"></a>`Future<bool> contains(Object? needle)`
+##### <a name="contains"></a><code>Future<bool> contains(Object? needle)</code>
 
-##### <a name="distinct"></a>`Stream<T> distinct([bool Function(T previous, T next)? equals])`
+##### <a name="distinct"></a><code>Stream<T> distinct([bool Function(T previous, T next)? equals])</code>
 
-##### <a name="drain"></a>`Future<E> drain([E? futureValue])`
+##### <a name="drain"></a><code>Future<E> drain([E? futureValue])</code>
 
-##### <a name="elementat"></a>`Future<T> elementAt(int index)`
+##### <a name="elementat"></a><code>Future<T> elementAt(int index)</code>
 
-##### <a name="every"></a>`Future<bool> every(bool Function(T element) test)`
+##### <a name="every"></a><code>Future<bool> every(bool Function(T element) test)</code>
 
-##### <a name="expand"></a>`Stream<S> expand(Iterable<S> Function(T element) convert)`
+##### <a name="expand"></a><code>Stream<S> expand(Iterable<S> Function(T element) convert)</code>
 
-##### <a name="first"></a>`Future<T> first`
+##### <a name="first"></a><code>Future<T> first</code>
 
-##### <a name="firstwhere"></a>`Future<T> firstWhere(bool Function(T element) test, {T Function()? orElse})`
+##### <a name="firstwhere"></a><code>Future<T> firstWhere(bool Function(T element) test, {T Function()? orElse})</code>
 
-##### <a name="fold"></a>`Future<S> fold(S initialValue, S Function(S previous, T element) combine)`
+##### <a name="fold"></a><code>Future<S> fold(S initialValue, S Function(S previous, T element) combine)</code>
 
-##### <a name="foreach"></a>`Future<void> forEach(void Function(T element) action)`
+##### <a name="foreach"></a><code>Future<void> forEach(void Function(T element) action)</code>
 
-##### <a name="handleerror"></a>`Stream<T> handleError(Function onError, {bool Function(dynamic error)? test})`
+##### <a name="handleerror"></a><code>Stream<T> handleError(Function onError, {bool Function(dynamic error)? test})</code>
 
-##### <a name="isbroadcast"></a>`bool isBroadcast`
+##### <a name="isbroadcast"></a><code>bool isBroadcast</code>
 
-##### <a name="isempty"></a>`Future<bool> isEmpty`
+##### <a name="isempty"></a><code>Future<bool> isEmpty</code>
 
-##### <a name="join"></a>`Future<String> join([String separator = ""])`
+##### <a name="join"></a><code>Future<String> join([String separator = ""])</code>
 
-##### <a name="last"></a>`Future<T> last`
+##### <a name="last"></a><code>Future<T> last</code>
 
-##### <a name="lastwhere"></a>`Future<T> lastWhere(bool Function(T element) test, {T Function()? orElse})`
+##### <a name="lastwhere"></a><code>Future<T> lastWhere(bool Function(T element) test, {T Function()? orElse})</code>
 
-##### <a name="length"></a>`Future<int> length`
+##### <a name="length"></a><code>Future<int> length</code>
 
-##### <a name="listen"></a>`StreamSubscription<T> listen(void Function(T event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError})`
+##### <a name="listen"></a><code>StreamSubscription<T> listen(void Function(T event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError})</code>
 
-##### <a name="map"></a>`Stream<S> map(S Function(T event) convert)`
+##### <a name="map"></a><code>Stream<S> map(S Function(T event) convert)</code>
 
-##### <a name="pipe"></a>`Future pipe(StreamConsumer<T> streamConsumer)`
+##### <a name="pipe"></a><code>Future pipe(StreamConsumer<T> streamConsumer)</code>
 
-##### <a name="reduce"></a>`Future<T> reduce(T Function(T previous, T element) combine)`
+##### <a name="reduce"></a><code>Future<T> reduce(T Function(T previous, T element) combine)</code>
 
-##### <a name="single"></a>`Future<T> single`
+##### <a name="single"></a><code>Future<T> single</code>
 
-##### <a name="singlewhere"></a>`Future<T> singleWhere(bool Function(T element) test, {T Function()? orElse})`
+##### <a name="singlewhere"></a><code>Future<T> singleWhere(bool Function(T element) test, {T Function()? orElse})</code>
 
-##### <a name="skip"></a>`Stream<T> skip(int count)`
+##### <a name="skip"></a><code>Stream<T> skip(int count)</code>
 
-##### <a name="skipwhile"></a>`Stream<T> skipWhile(bool Function(T element) test)`
+##### <a name="skipwhile"></a><code>Stream<T> skipWhile(bool Function(T element) test)</code>
 
-##### <a name="take"></a>`Stream<T> take(int count)`
+##### <a name="take"></a><code>Stream<T> take(int count)</code>
 
-##### <a name="takewhile"></a>`Stream<T> takeWhile(bool Function(T element) test)`
+##### <a name="takewhile"></a><code>Stream<T> takeWhile(bool Function(T element) test)</code>
 
-##### <a name="timeout"></a>`Stream<T> timeout(Duration timeLimit, {void Function(EventSink<T> sink)? onTimeout})`
+##### <a name="timeout"></a><code>Stream<T> timeout(Duration timeLimit, {void Function(EventSink<T> sink)? onTimeout})</code>
 
-##### <a name="tolist"></a>`Future<List<T>> toList()`
+##### <a name="tolist"></a><code>Future<List<T>> toList()</code>
 
-##### <a name="toset"></a>`Future<Set<T>> toSet()`
+##### <a name="toset"></a><code>Future<Set<T>> toSet()</code>
 
-##### <a name="transform"></a>`Stream<S> transform(StreamTransformer<T, S> streamTransformer)`
+##### <a name="transform"></a><code>Stream<S> transform(StreamTransformer<T, S> streamTransformer)</code>
 
-##### <a name="where"></a>`Stream<T> where(bool Function(T event) test)`
+##### <a name="where"></a><code>Stream<T> where(bool Function(T event) test)</code>
 
 </details>

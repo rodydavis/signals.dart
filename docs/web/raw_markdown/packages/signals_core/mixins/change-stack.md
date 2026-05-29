@@ -3,9 +3,9 @@ title: ChangeStackSignalMixin
 description: A mixin that adds undo, redo, and state history replay capabilities to a Signal.
 ---
 
-A mixin that adds undo, redo, and state history replay capabilities to a [Signal](/packages/signals/core/signal).
+A mixin that adds undo, redo, and state history replay capabilities to a [Signal](/types/signal).
 
-[ChangeStackSignalMixin](/packages/signals/mixins/change-stack) keeps track of past states of a signal's value in a double-ended
+[ChangeStackSignalMixin](/types/changestacksignalmixin) keeps track of past states of a signal's value in a double-ended
 queue, allowing you to easily go back to previous values using **undo** and go forward to subsequent
 values using **redo**. You can inspect if undo or redo are available via **canUndo** and **canRedo**.
 
@@ -14,7 +14,7 @@ issues in long-running scenarios.
 
 <Info>
 If you only need access to the initial and immediate previous values of a signal (without a full
-history stack or undo/redo mechanisms), use the lightweight [TrackedSignalMixin](/packages/signals/mixins/tracked) instead.
+history stack or undo/redo mechanisms), use the lightweight <a href="/types/trackedsignalmixin">TrackedSignalMixin</a> instead.
 </Info>
 
 ### Example Usage

@@ -34,7 +34,7 @@ Watch(
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="signalsprefernamedbuilder"></a><a name="signalsprefernamedbuilder"></a>`SignalsPreferNamedBuilder()`
+##### <a name="signalsprefernamedbuilder"></a><a name="signalsprefernamedbuilder"></a><code>SignalsPreferNamedBuilder()</code>
 
 </details>
 
@@ -44,6 +44,6 @@ Watch(
 <details>
 <summary> View Methods </summary>
 
-##### <a name="run"></a>`void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)`
+##### <a name="run"></a><code>void run(CustomLintResolver resolver, ErrorReporter reporter, CustomLintContext context)</code>
 
 </details>

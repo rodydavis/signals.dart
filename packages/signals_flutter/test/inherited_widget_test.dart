@@ -419,5 +419,41 @@ void main() {
         sigB.dispose();
       },
     );
+
+    testWidgets(
+      'supports standard core ReadonlySignal instances via Listenable adapter conversion',
+      (WidgetTester tester) async {
+        final coreSignal = signal(456);
+        late ReadonlySignal<int> retrieved;
+        int buildCount = 0;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: SignalProvider<ReadonlySignal<int>>.value(
+              value: coreSignal,
+              child: Builder(
+                builder: (context) {
+                  buildCount++;
+                  retrieved = SignalProvider.of<ReadonlySignal<int>>(context)!;
+                  return Text('Value: ${retrieved.value}');
+                },
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+        expect(find.text('Value: 456'), findsOneWidget);
+        expect(buildCount, 1);
+
+        // Mutate core signal - should automatically trigger rebuild via adapter conversion
+        coreSignal.value = 789;
+        await tester.pump();
+        expect(find.text('Value: 789'), findsOneWidget);
+        expect(buildCount, 2);
+
+        coreSignal.dispose();
+      },
+    );
   });
 }

@@ -5,7 +5,7 @@ description: The main widget of the Signals DevTools Extension.
 
 The main widget of the Signals DevTools Extension.
 
-Wraps the [SignalsExtensionHomePage](/packages/signals_devtools_extension/flutter/devtools) inside a <code>DevToolsExtension</code> container
+Wraps the **SignalsExtensionHomePage** inside a <code>DevToolsExtension</code> container
 supplied by the <code>devtools_extensions</code> package. This allows it to:
 - Connect securely to the Dart VM Service.
 - Retrieve the application context and themes from DevTools.

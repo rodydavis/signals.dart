@@ -3,9 +3,9 @@ title: useAsyncSignal
 description: Creates a new mutable AsyncSignal initialized with a specific AsyncState and subscribes to it.
 ---
 
-Creates a new mutable [AsyncSignal](/packages/signals/async/signal) initialized with a specific [AsyncState](/packages/signals/async/state) and subscribes to it.
+Creates a new mutable [AsyncSignal](/types/asyncsignal) initialized with a specific [AsyncState](/types/asyncstate) and subscribes to it.
 
-Unlike [useFutureSignal](/packages/signals_hooks/hooks/use-future-signal) and [useStreamSignal](/packages/signals_hooks/hooks/use-stream-signal), an [AsyncSignal](/packages/signals/async/signal) exposes a mutable container where you can
+Unlike [useFutureSignal](/types/usefuturesignal) and [useStreamSignal](/types/usestreamsignal), an [AsyncSignal](/types/asyncsignal) exposes a mutable container where you can
 manually publish asynchronous states (e.g. <code>AsyncState.loading()</code>, <code>AsyncState.data(...)</code>, or <code>AsyncState.error(...)</code>).
 
 <Success>
@@ -14,7 +14,7 @@ transitions states explicitly under your control.
 </Success>
 
 ### Parameters
-- **value**: The initial [AsyncState](/packages/signals/async/state) (e.g. <code>AsyncState.loading()</code> or <code>AsyncState.data(initialValue)</code>).
+- **value**: The initial [AsyncState](/types/asyncstate) (e.g. <code>AsyncState.loading()</code> or <code>AsyncState.data(initialValue)</code>).
 - **keys**: A list of objects to watch. If any key changes, the async signal will be re-created.
 - **debugLabel**: An optional debug label.
 

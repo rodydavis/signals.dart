@@ -1,3 +1,12 @@
+## 7.1.0
+
+### 🚀 New Features
+- **Decoupled & Generalized `SignalProvider`**: Decoupled `SignalProvider` from `FlutterReadonlySignal` (which implements `Listenable`) and generalized it to accept any standard core `ReadonlySignal` from `signals_core`.
+- **Automatic Listenable Adapter Conversion**: Standard signals that do not implement `Listenable` are automatically wrapped in a lightweight, lifecycle-managed `Listenable` adapter internally under `InheritedNotifier`, maintaining maximum efficiency without manual boilerplate.
+
+### 🐛 Bug Fixes
+- **Dependency Injection Guide**: Fixed primitive type compile errors and generic alignment inside `docs/content/guides/dependency-injection.md`.
+
 ## 7.0.0
 
 ### ⚠️ BREAKING CHANGES

@@ -3,7 +3,7 @@ title: useAsyncComputed
 description: Creates a new FutureSignal from a computed async value and subscribes to it.
 ---
 
-Creates a new [FutureSignal](/packages/signals/async/future) from a computed async value and subscribes to it.
+Creates a new [FutureSignal](/types/futuresignal) from a computed async value and subscribes to it.
 
 This hook allows you to construct an async computation that automatically reruns whenever its
 reactive dependencies (e.g. other signals accessed via <code>.value</code>) or hook keys change.

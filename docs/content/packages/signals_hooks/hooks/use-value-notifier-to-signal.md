@@ -1,17 +1,17 @@
 ---
 title: useValueNotifierToSignal
-description: Creates a new mutable Signal from a **ValueNotifier** and subscribes to it.
+description: Creates a new mutable Signal from a ValueNotifier and subscribes to it.
 ---
 
-Creates a new mutable [Signal](/packages/signals/core/signal) from a **ValueNotifier** and subscribes to it.
+Creates a new mutable [Signal](/types/signal) from a **ValueNotifier** and subscribes to it.
 
 This provides interoperability with standard Flutter classes, allowing you to bridge a **ValueNotifier**
-into a fully reactive [Signal](/packages/signals/core/signal) container. Changes made to the **ValueNotifier** automatically update the signal,
-and changes made to the [signal](/packages/signals/flutter/signal) automatically write back to the **ValueNotifier**.
+into a fully reactive [Signal](/types/signal) container. Changes made to the **ValueNotifier** automatically update the signal,
+and changes made to the [signal](/types/signal) automatically write back to the **ValueNotifier**.
 
 <Success>
 This enables seamless bi-directional integration when working with external packages or existing widgets
-that rely heavily on **ValueNotifier**.
+that rely heavily on <strong>ValueNotifier</strong>.
 </Success>
 
 ### Parameters

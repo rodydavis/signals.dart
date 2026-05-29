@@ -3,7 +3,7 @@ title: MapSignalMixin
 description: A mixin that adds reactive <code>Map</code> methods and operators directly to a Signal.
 ---
 
-A mixin that adds reactive <code>Map</code> methods and operators directly to a [Signal](/packages/signals/core/signal).
+A mixin that adds reactive <code>Map</code> methods and operators directly to a [Signal](/types/signal).
 
 This mixin delegates all standard **Map** operations (such as mutations like <code>[]=</code>, <code>clear</code>,
 <code>remove</code>, and lookups like <code>containsKey</code>, <code>isEmpty</code>, <code>keys</code>, <code>values</code>) to the underlying

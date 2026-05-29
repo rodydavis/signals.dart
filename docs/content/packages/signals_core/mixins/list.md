@@ -3,7 +3,7 @@ title: ListSignalMixin
 description: A mixin that adds reactive <code>List</code> methods and operators to a Signal.
 ---
 
-A mixin that adds reactive <code>List</code> methods and operators to a [Signal](/packages/signals/core/signal)
+A mixin that adds reactive <code>List</code> methods and operators to a [Signal](/types/signal)
 holding a **List** value.
 
 This mixin delegates all standard **List** operations (such as mutations like <code>add</code>,
@@ -12,7 +12,7 @@ to the underlying list, while ensuring that any reads register a dependency
 and any mutations automatically trigger reactive updates.
 
 <Info>
-This mixin only works with signals that have a value type extending **List<E>**.
+This mixin only works with signals that have a value type extending <strong>List<E></strong>.
 </Info>
 
 ### Example Usage
@@ -52,82 +52,82 @@ and operator <code>[]=</code> take care of notification.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="cast"></a>`List<R> cast()`
+##### <a name="cast"></a><code>List<R> cast()</code>
 
-##### <a name="first"></a>`first(E val)`
+##### <a name="first"></a><code>first(E val)</code>
 
-##### <a name="last"></a>`E last`
+##### <a name="last"></a><code>E last</code>
 
-##### <a name="last"></a>`last(E val)`
+##### <a name="last"></a><code>last(E val)</code>
 
-##### <a name="length"></a>`length(int value)`
+##### <a name="length"></a><code>length(int value)</code>
 
-##### <a name="+"></a>`List<E> +(List<E> other)`
+##### <a name="+"></a><code>List<E> +(List<E> other)</code>
 
-##### <a name="[]"></a>`E [](int index)`
+##### <a name="[]"></a><code>E [](int index)</code>
 
-##### <a name="[]="></a>`void []=(int index, E value)`
+##### <a name="[]="></a><code>void []=(int index, E value)</code>
 
-##### <a name="add"></a>`void add(E value)`
+##### <a name="add"></a><code>void add(E value)</code>
 
-##### <a name="addall"></a>`void addAll(Iterable<E> iterable)`
+##### <a name="addall"></a><code>void addAll(Iterable<E> iterable)</code>
 
-##### <a name="asmap"></a>`Map<int, E> asMap()`
+##### <a name="asmap"></a><code>Map<int, E> asMap()</code>
 
-##### <a name="clear"></a>`void clear()`
+##### <a name="clear"></a><code>void clear()</code>
 
-##### <a name="expand"></a>`Iterable<R> expand(Iterable<R> Function(E element) toElements)`
+##### <a name="expand"></a><code>Iterable<R> expand(Iterable<R> Function(E element) toElements)</code>
 
-##### <a name="fillrange"></a>`void fillRange(int start, int end, [E? fillValue])`
+##### <a name="fillrange"></a><code>void fillRange(int start, int end, [E? fillValue])</code>
 
-##### <a name="firstwhere"></a>`E firstWhere(bool Function(E element) test, {E Function()? orElse})`
+##### <a name="firstwhere"></a><code>E firstWhere(bool Function(E element) test, {E Function()? orElse})</code>
 
-##### <a name="fold"></a>`R fold(R initialValue, R Function(R previousValue, E element) combine)`
+##### <a name="fold"></a><code>R fold(R initialValue, R Function(R previousValue, E element) combine)</code>
 
-##### <a name="followedby"></a>`Iterable<E> followedBy(Iterable<E> other)`
+##### <a name="followedby"></a><code>Iterable<E> followedBy(Iterable<E> other)</code>
 
-##### <a name="getrange"></a>`Iterable<E> getRange(int start, int end)`
+##### <a name="getrange"></a><code>Iterable<E> getRange(int start, int end)</code>
 
-##### <a name="indexof"></a>`int indexOf(E element, [int start = 0])`
+##### <a name="indexof"></a><code>int indexOf(E element, [int start = 0])</code>
 
-##### <a name="indexwhere"></a>`int indexWhere(bool Function(E element) test, [int start = 0])`
+##### <a name="indexwhere"></a><code>int indexWhere(bool Function(E element) test, [int start = 0])</code>
 
-##### <a name="insert"></a>`void insert(int index, E element)`
+##### <a name="insert"></a><code>void insert(int index, E element)</code>
 
-##### <a name="insertall"></a>`void insertAll(int index, Iterable<E> iterable)`
+##### <a name="insertall"></a><code>void insertAll(int index, Iterable<E> iterable)</code>
 
-##### <a name="lastindexof"></a>`int lastIndexOf(E element, [int? start])`
+##### <a name="lastindexof"></a><code>int lastIndexOf(E element, [int? start])</code>
 
-##### <a name="lastindexwhere"></a>`int lastIndexWhere(bool Function(E element) test, [int? start])`
+##### <a name="lastindexwhere"></a><code>int lastIndexWhere(bool Function(E element) test, [int? start])</code>
 
-##### <a name="remove"></a>`bool remove(Object? value)`
+##### <a name="remove"></a><code>bool remove(Object? value)</code>
 
-##### <a name="removeat"></a>`E removeAt(int index)`
+##### <a name="removeat"></a><code>E removeAt(int index)</code>
 
-##### <a name="removelast"></a>`E removeLast()`
+##### <a name="removelast"></a><code>E removeLast()</code>
 
-##### <a name="removerange"></a>`void removeRange(int start, int end)`
+##### <a name="removerange"></a><code>void removeRange(int start, int end)</code>
 
-##### <a name="removewhere"></a>`void removeWhere(bool Function(E element) test)`
+##### <a name="removewhere"></a><code>void removeWhere(bool Function(E element) test)</code>
 
-##### <a name="replacerange"></a>`void replaceRange(int start, int end, Iterable<E> replacements)`
+##### <a name="replacerange"></a><code>void replaceRange(int start, int end, Iterable<E> replacements)</code>
 
-##### <a name="retainwhere"></a>`void retainWhere(bool Function(E element) test)`
+##### <a name="retainwhere"></a><code>void retainWhere(bool Function(E element) test)</code>
 
-##### <a name="reversed"></a>`Iterable<E> reversed`
+##### <a name="reversed"></a><code>Iterable<E> reversed</code>
 
-##### <a name="setall"></a>`void setAll(int index, Iterable<E> iterable)`
+##### <a name="setall"></a><code>void setAll(int index, Iterable<E> iterable)</code>
 
-##### <a name="setrange"></a>`void setRange(int start, int end, Iterable<E> iterable, [int skipCount = 0])`
+##### <a name="setrange"></a><code>void setRange(int start, int end, Iterable<E> iterable, [int skipCount = 0])</code>
 
-##### <a name="shuffle"></a>`void shuffle([Random? random])`
+##### <a name="shuffle"></a><code>void shuffle([Random? random])</code>
 
-##### <a name="sort"></a>`void sort([int Function(E a, E b)? compare])`
+##### <a name="sort"></a><code>void sort([int Function(E a, E b)? compare])</code>
 
-##### <a name="sorted"></a>`List<E> sorted([int Function(E a, E b)? compare])`
+##### <a name="sorted"></a><code>List<E> sorted([int Function(E a, E b)? compare])</code>
 
 Return a new array that is sorted by the **compare** function
 
-##### <a name="sublist"></a>`List<E> sublist(int start, [int? end])`
+##### <a name="sublist"></a><code>List<E> sublist(int start, [int? end])</code>
 
 </details>

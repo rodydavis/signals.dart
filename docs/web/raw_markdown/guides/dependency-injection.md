@@ -133,20 +133,17 @@ class MyApp extends ConsumerWidget {
 
 ## InheritedWidget
 
-InheritedWidget is a simple built in way to provide objects to your widgets. This comes at the cost of storing a single signal per type.
-
-> Note: This is a new feature added in version 5.0.0 and is still experimental.
+InheritedWidget is a simple built-in way to provide objects to your widgets.
 
 ```dart
 import 'package:signals/signals_flutter.dart';
-import 'package:signals/signals_flutter_extended.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(
     MaterialApp(
-      home: SignalProvider.value(
-        value: 0,
+      home: SignalProvider(
+        create: () => signal(0),
         child: MyApp(),
       ),
     ),
@@ -156,7 +153,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = SignalProvider.of<int>(context);
+    final counter = SignalProvider.of<Signal<int>>(context)!;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -183,11 +180,11 @@ class Counter extends Signal<int> {
 }
 ...
 home: SignalProvider<Counter>(
-  instance: Counter(0),
+  create: () => Counter(0),
   child: MyApp(),
 ),
 ...
-final counter = SignalProvider.of<Counter>(context);
+final counter = SignalProvider.of<Counter>(context)!;
 counter.value++;
 ```
 

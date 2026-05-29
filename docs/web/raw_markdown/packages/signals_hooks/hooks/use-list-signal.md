@@ -3,14 +3,14 @@ title: useListSignal
 description: Creates a new ListSignal and subscribes to it.
 ---
 
-Creates a new [ListSignal](/packages/signals/value/list) and subscribes to it.
+Creates a new [ListSignal](/types/listsignal) and subscribes to it.
 
-A [ListSignal](/packages/signals/value/list) provides a reactive wrapper around a standard Dart **List**. It tracks mutations
+A [ListSignal](/types/listsignal) provides a reactive wrapper around a standard Dart **List**. It tracks mutations
 (such as <code>.add()</code>, <code>.remove()</code>, or setting an element at an index) and automatically triggers
 rebuilds of the host **HookWidget** when they occur.
 
 <Success>
-Since Dart lists are objects, standard signals only track identity changes. [ListSignal](/packages/signals/value/list) tracks
+Since Dart lists are objects, standard signals only track identity changes. <a href="/types/listsignal">ListSignal</a> tracks
 in-place mutations as well, making it highly efficient for managing dynamic lists in your UI.
 </Success>
 

@@ -3,11 +3,11 @@ title: Connect
 description: A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
 ---
 
-A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive [Signal](/packages/signals/core/signal).
+A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive [Signal](/types/signal).
 
 The concept is inspired by **Angular Signals** integration with RxJS streams.
 
-Start with an existing mutable [Signal](/packages/signals/core/signal) and call <code>connect(signal)</code> to create a connector instance.
+Start with an existing mutable [Signal](/types/signal) and call <code>connect(signal)</code> to create a connector instance.
 
 ### 1. Chaining Streams
 You can bind multiple streams to feed the same destination signal. The connector will handle the subscription management for all streams seamlessly.
@@ -46,9 +46,9 @@ connector.dispose(); // Cancels all stream subscriptions safely
 <details>
 <summary> View Constructors </summary>
 
-##### <a name="connect"></a><a name="connect"></a>`Connect(this.signal)`
+##### <a name="connect"></a><a name="connect"></a><code>Connect(this.signal)</code>
 
-Connects a **Stream** to a [Signal](/packages/signals/core/signal).
+Connects a **Stream** to a [Signal](/types/signal).
 
 </details>
 
@@ -58,7 +58,7 @@ Connects a **Stream** to a [Signal](/packages/signals/core/signal).
 <details>
 <summary> View Properties </summary>
 
-##### <a name="signal"></a>`Signal<T> signal`
+##### <a name="signal"></a><code>Signal<T> signal</code>
 
 Internal signal to connect to.
 
@@ -70,9 +70,9 @@ Internal signal to connect to.
 <details>
 <summary> View Methods </summary>
 
-##### <a name="from"></a>`Connect<T, S> from(Stream<S> source, {bool? cancelOnError, Function? onError, Function? onDone, void Function(T)? onValue})`
+##### <a name="from"></a><code>Connect<T, S> from(Stream<S> source, {bool? cancelOnError, Function? onError, Function? onDone, void Function(T)? onValue})</code>
 
-Connects a **Stream** to a [Signal](/packages/signals/core/signal).
+Connects a **Stream** to a [Signal](/types/signal).
 
 ```dart
 final counter = signal(0);
@@ -86,11 +86,11 @@ c.from(s1).from(s2);
 c.dispose();
 ```
 
-##### <a name="<<"></a>`Connect<T, S> <<(Stream<S> source)`
+##### <a name="<<"></a><code>Connect<T, S> <<(Stream<S> source)</code>
 
 Synonym for <code>from(Stream<T> source)</code>
 
-##### <a name="dispose"></a>`void dispose()`
+##### <a name="dispose"></a><code>void dispose()</code>
 
 Cancels all subscriptions.
 

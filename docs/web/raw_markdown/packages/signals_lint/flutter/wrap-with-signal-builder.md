@@ -4,7 +4,7 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically wraps any
-instantiated widget expression inside a [SignalBuilder](/packages/signals/flutter/watch) component.
+instantiated widget expression inside a [SignalBuilder](/types/signalbuilder) component.
 
 <Success>
 Wrapping a widget inside <code>SignalBuilder(builder: (context) => ...)</code> optimizes rebuilding

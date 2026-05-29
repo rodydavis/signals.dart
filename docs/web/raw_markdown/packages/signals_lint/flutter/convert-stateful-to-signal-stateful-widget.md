@@ -4,7 +4,7 @@ description: An IDE quick-fix refactoring tool (Dart Assist) that automatically 
 ---
 
 An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard
-<code>StatefulWidget</code> to extend the reactive **SignalStatefulWidget** instead.
+<code>StatefulWidget</code> to extend the reactive [SignalStatefulWidget](/types/signalstatefulwidget) instead.
 
 <Success>
 By extending <code>SignalStatefulWidget</code> instead of <code>StatefulWidget</code>, your widget state automatically

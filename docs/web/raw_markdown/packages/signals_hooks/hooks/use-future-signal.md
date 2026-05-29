@@ -3,9 +3,9 @@ title: useFutureSignal
 description: Creates a new FutureSignal and subscribes to it.
 ---
 
-Creates a new [FutureSignal](/packages/signals/async/future) and subscribes to it.
+Creates a new [FutureSignal](/types/futuresignal) and subscribes to it.
 
-A [FutureSignal](/packages/signals/async/future) wraps a standard Dart **Future** in a reactive state container, allowing you to
+A [FutureSignal](/types/futuresignal) wraps a standard Dart **Future** in a reactive state container, allowing you to
 easily read the asynchronous operation's progress (<code>loading</code>, <code>error</code>, <code>data</code>) directly
 in your build method without needing <code>FutureBuilder</code>.
 

@@ -11,13 +11,13 @@ and error outcomes.
 
 ### State Hierarchy
 The states are modeled as a robust hierarchy of immutable types:
-- [AsyncLoading](/packages/signals/async/state): Pure loading state with no pre-existing data.
-- [AsyncData](/packages/signals/async/state): Success state holding a resolved value of type <code>T</code>.
-  - [AsyncDataRefreshing](/packages/signals/async/state): Refreshing in the background (holding historical data).
-  - [AsyncDataReloading](/packages/signals/async/state): Reloading (holding historical data).
-- [AsyncError](/packages/signals/async/state): Failure state holding an error and optional stack trace.
-  - [AsyncErrorRefreshing](/packages/signals/async/state): Refreshing in the background (holding historical error).
-  - [AsyncErrorReloading](/packages/signals/async/state): Reloading (holding historical error).
+- [AsyncLoading](/types/asyncloading): Pure loading state with no pre-existing data.
+- [AsyncData](/types/asyncdata): Success state holding a resolved value of type <code>T</code>.
+  - [AsyncDataRefreshing](/types/asyncdatarefreshing): Refreshing in the background (holding historical data).
+  - [AsyncDataReloading](/types/asyncdatareloading): Reloading (holding historical data).
+- [AsyncError](/types/asyncerror): Failure state holding an error and optional stack trace.
+  - [AsyncErrorRefreshing](/types/asyncerrorrefreshing): Refreshing in the background (holding historical error).
+  - [AsyncErrorReloading](/types/asyncerrorreloading): Reloading (holding historical error).
 
 ### Pattern Matching & Switch Expressions
 Standard Dart switch expressions provide type-safe branching across all states:
@@ -246,6 +246,43 @@ Create a state with a value that is refreshing
 
 ---
 
+## LinkedSignalPreviousState
+
+Previous state of a [LinkedSignal](/types/linkedsignal), containing both the **source** value
+and the computed **value** from that source version.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="linkedsignalpreviousstate"></a><a name="linkedsignalpreviousstate"></a>`LinkedSignalPreviousState(this.source, this.value)`
+
+Creates a [LinkedSignalPreviousState](/types/linkedsignalpreviousstate).
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="source"></a>`S source`
+
+The source value.
+
+##### <a name="value"></a>`T value`
+
+The computed value.
+
+</details>
+
+
+
+---
+
 ## AsyncErrorReloading
 
 A loading state with an error. Signal the query conditions that led to the error
@@ -318,7 +355,7 @@ Create a state with a value that is reloading
 
 ## AsyncLoading
 
-State for an [AsyncState](/packages/signals/async/state) with a loading state
+State for an [AsyncState](/types/asyncstate) with a loading state
 
 
 ### Constructors
@@ -328,7 +365,7 @@ State for an [AsyncState](/packages/signals/async/state) with a loading state
 
 ##### <a name="asyncloading"></a><a name="asyncloading"></a>`AsyncLoading()`
 
-State for an [AsyncState](/packages/signals/async/state) with a loading state
+State for an [AsyncState](/types/asyncstate) with a loading state
 
 </details>
 
@@ -368,7 +405,7 @@ State for an [AsyncState](/packages/signals/async/state) with a loading state
 
 ## AsyncError
 
-State for an [AsyncState](/packages/signals/async/state) with an error
+State for an [AsyncState](/types/asyncstate) with an error
 
 
 ### Constructors
@@ -378,7 +415,7 @@ State for an [AsyncState](/packages/signals/async/state) with an error
 
 ##### <a name="asyncerror"></a><a name="asyncerror"></a>`AsyncError(this.error, this.stackTrace)`
 
-State for an [AsyncState](/packages/signals/async/state) with an error
+State for an [AsyncState](/types/asyncstate) with an error
 
 </details>
 
@@ -426,7 +463,7 @@ State for an [AsyncState](/packages/signals/async/state) with an error
 
 ## AsyncData
 
-State for an [AsyncState](/packages/signals/async/state) with a value
+State for an [AsyncState](/types/asyncstate) with a value
 
 
 ### Constructors
@@ -436,7 +473,7 @@ State for an [AsyncState](/packages/signals/async/state) with a value
 
 ##### <a name="asyncdata"></a><a name="asyncdata"></a>`AsyncData(T data)`
 
-State for an [AsyncState](/packages/signals/async/state) with a value
+State for an [AsyncState](/types/asyncstate) with a value
 
 </details>
 
@@ -475,5 +512,25 @@ State for an [AsyncState](/packages/signals/async/state) with a value
 ##### <a name="=="></a>`bool ==(covariant AsyncState other)`
 
 ##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## AsyncSignalState
+
+Extensions for [Signal<AsyncState<T>>]
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="selectdata"></a>`Computed<AsyncState<R>> selectData(R Function(T data) selector)`
+
+Select from data when available, preserving async state
 
 </details>
