@@ -1,7 +1,7 @@
 name: signals_lint_example
 description: A new Flutter project.
-publish_to: "none"
 resolution: workspace
+publish_to: none
 version: 1.0.0+1
 
 environment:
@@ -14,7 +14,6 @@ dependencies:
     path: ../../signals
 
 dev_dependencies:
-  custom_lint: ^0.8.1
   signals_lint:
     path: ../
   flutter_test:
@@ -23,3 +22,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+

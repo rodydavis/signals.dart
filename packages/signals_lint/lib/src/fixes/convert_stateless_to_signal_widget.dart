@@ -1,79 +1,42 @@
-import 'package:analyzer/source/source_range.dart';
-import 'package:custom_lint_builder/custom_lint_builder.dart';
+import 'package:analysis_server_plugin/edit/dart/correction_producer.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer_plugin/utilities/change_builder/change_builder_core.dart';
+import 'package:analyzer_plugin/utilities/assist/assist.dart';
 
-/// An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard
+/// An IDE quick-assist refactoring tool that automatically converts a standard
 /// `StatelessWidget` to extend the reactive [SignalWidget] instead.
-///
-/// :::tip
-/// By extending `SignalWidget` instead of `StatelessWidget`, your widget automatically registers
-/// fine-grained dependency tracking for any signals referenced within its `build` method. It
-/// will rebuild automatically when their values change, removing the need for manual listener
-/// code or wrapper components.
-/// :::
-///
-/// ### How to use
-/// 1. Place your cursor on the widget class declaration (e.g., `class MyWidget extends StatelessWidget`).
-/// 2. Click the lightbulb icon or press your IDE's quick-fix shortcut (`Alt+Enter` or `Cmd+.`).
-/// 3. Select the **Convert to SignalWidget** assist option.
-///
-/// ### Examples
-///
-/// **Before:**
-/// ```dart
-/// class CounterDisplay extends StatelessWidget {
-///   const CounterDisplay({super.key});
-///
-///   @override
-///   Widget build(BuildContext context) {
-///     return Text('Count: ${counter.value}');
-///   }
-/// }
-/// ```
-///
-/// **After (Apply Assist):**
-/// ```dart
-/// class CounterDisplay extends SignalWidget {
-///   const CounterDisplay({super.key});
-///
-///   @override
-///   Widget build(BuildContext context) {
-///     return Text('Count: ${counter.value}');
-///   }
-/// }
-/// ```
-class ConvertStatelessToSignalWidget extends DartAssist {
-  ConvertStatelessToSignalWidget();
+class ConvertStatelessToSignalWidget extends ResolvedCorrectionProducer {
+  static const _assistKind = AssistKind(
+    'signals_lint.assist.convertStatelessToSignalWidget',
+    60,
+    'Convert to SignalWidget',
+  );
+
+  ConvertStatelessToSignalWidget({required super.context});
 
   @override
-  void run(
-    CustomLintResolver resolver,
-    ChangeReporter reporter,
-    CustomLintContext context,
-    SourceRange target,
-  ) {
-    context.registry.addClassDeclaration((node) {
-      final extendsClause = node.extendsClause;
-      if (extendsClause == null) return;
+  CorrectionApplicability get applicability =>
+      CorrectionApplicability.singleLocation;
 
-      final superclass = extendsClause.superclass;
-      if (superclass.name.lexeme != 'StatelessWidget') return;
+  @override
+  AssistKind get assistKind => _assistKind;
 
-      if (!target.intersects(node.name.sourceRange) &&
-          !target.intersects(extendsClause.sourceRange)) {
-        return;
-      }
+  @override
+  Future<void> compute(ChangeBuilder builder) async {
+    final classDecl = node.thisOrAncestorOfType<ClassDeclaration>();
+    if (classDecl == null) return;
 
-      final changeBuilder = reporter.createChangeBuilder(
-        message: 'Convert to SignalWidget',
-        priority: 6,
+    final extendsClause = classDecl.extendsClause;
+    if (extendsClause == null) return;
+
+    final superclass = extendsClause.superclass;
+    if (superclass.name.lexeme != 'StatelessWidget') return;
+
+    await builder.addDartFileEdit(file, (builder) {
+      builder.addSimpleReplacement(
+        superclass.sourceRange,
+        'SignalWidget',
       );
-
-      changeBuilder.addDartFileEdit((builder) {
-        builder.addSimpleReplacement(
-          superclass.sourceRange,
-          'SignalWidget',
-        );
-      });
     });
   }
 }
