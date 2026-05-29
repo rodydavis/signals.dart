@@ -1,4 +1,4 @@
-## 7.0.0
+## 7.1.0
 
 - **Architecture Migration**: Fully migrated the package from `custom_lint` to Dart's official standard `analysis_server_plugin` framework.
   - Now runs out-of-the-box using the built-in Dart Analysis Server.
