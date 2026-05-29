@@ -62,7 +62,7 @@ import 'state.dart';
 /// ```dart
 /// Widget build(BuildContext context) {
 ///   final state = authState.watch(context);
-///   
+///
 ///   return state.map(
 ///     data: (user) => HomeScreen(user: user),
 ///     error: (error, stackTrace) => ErrorWidget(error),

@@ -53,7 +53,8 @@ void main() {
                       },
                       child: Builder(
                         builder: (childContext) {
-                          retrievedSignal1 = SignalProvider.of<MyTestSignal>(childContext)!;
+                          retrievedSignal1 =
+                              SignalProvider.of<MyTestSignal>(childContext)!;
                           return Text('Value: ${retrievedSignal1.value}');
                         },
                       ),
@@ -91,7 +92,8 @@ void main() {
                       },
                       child: Builder(
                         builder: (childContext) {
-                          retrievedSignal2 = SignalProvider.of<MyTestSignal>(childContext)!;
+                          retrievedSignal2 =
+                              SignalProvider.of<MyTestSignal>(childContext)!;
                           return Text('Value: ${retrievedSignal2.value}');
                         },
                       ),
@@ -232,7 +234,8 @@ void main() {
                         value: existingSignal,
                         child: Builder(
                           builder: (childContext) {
-                            final sig = SignalProvider.of<MyTestSignal>(childContext)!;
+                            final sig =
+                                SignalProvider.of<MyTestSignal>(childContext)!;
                             return Text('Value: ${sig.value}');
                           },
                         ),
@@ -271,7 +274,9 @@ void main() {
             home: SignalProvider.multi(
               providers: [
                 SignalProvider<MyTestSignal>(create: () => MyTestSignal(111)),
-                SignalProvider<MyOtherSignal>(create: () => MyOtherSignal('hello')),
+                SignalProvider<MyOtherSignal>(
+                  create: () => MyOtherSignal('hello'),
+                ),
               ],
               child: Builder(
                 builder: (childContext) {
@@ -297,7 +302,9 @@ void main() {
             home: MultiSignalProvider(
               providers: [
                 SignalProvider<MyTestSignal>(create: () => MyTestSignal(222)),
-                SignalProvider<MyOtherSignal>(create: () => MyOtherSignal('world')),
+                SignalProvider<MyOtherSignal>(
+                  create: () => MyOtherSignal('world'),
+                ),
               ],
               child: Builder(
                 builder: (childContext) {
@@ -330,7 +337,8 @@ void main() {
               child: Builder(
                 builder: (context) {
                   buildCount++;
-                  final retrieved = SignalProvider.of<MyTestSignal>(context, listen: false)!;
+                  final retrieved =
+                      SignalProvider.of<MyTestSignal>(context, listen: false)!;
                   return Text('Value: ${retrieved.peek()}');
                 },
               ),
@@ -346,7 +354,7 @@ void main() {
         mySignal.value = 101;
         await tester.pumpAndSettle();
         expect(buildCount, 1); // Remains 1!
-        
+
         mySignal.dispose();
       },
     );
@@ -362,9 +370,17 @@ void main() {
               value: mySignal,
               child: Builder(
                 builder: (context) {
-                  final provider1 = SignalProvider.providerOf<MyTestSignal>(context, listen: true);
-                  final provider2 = SignalProvider.providerOf<MyTestSignal>(context, listen: false);
-                  return Text('Provider1: ${provider1 != null}, Provider2: ${provider2 != null}');
+                  final provider1 = SignalProvider.providerOf<MyTestSignal>(
+                    context,
+                    listen: true,
+                  );
+                  final provider2 = SignalProvider.providerOf<MyTestSignal>(
+                    context,
+                    listen: false,
+                  );
+                  return Text(
+                    'Provider1: ${provider1 != null}, Provider2: ${provider2 != null}',
+                  );
                 },
               ),
             ),
@@ -395,7 +411,8 @@ void main() {
                   value: currentSignal,
                   child: Builder(
                     builder: (childContext) {
-                      final sig = SignalProvider.of<MyTestSignal>(childContext)!;
+                      final sig =
+                          SignalProvider.of<MyTestSignal>(childContext)!;
                       return Text('Value: ${sig.value}');
                     },
                   ),

@@ -56,8 +56,10 @@ class SignalEffect extends StatefulWidget {
     required this.child,
     this.debugLabel,
     super.key,
-  })  : assert(effect != null || callback != null,
-            'Either effect or callback must be provided'),
+  })  : assert(
+          effect != null || callback != null,
+          'Either effect or callback must be provided',
+        ),
         _effect = effect ?? callback;
 
   /// The callback that runs inside the reactive effect.

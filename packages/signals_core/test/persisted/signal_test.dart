@@ -277,7 +277,10 @@ void main() {
       });
       test('PersistedNullableEnumSignal', () {
         final signal = PersistedNullableEnumSignal<TestEnum>(
-            null, 'test', TestEnum.values);
+          null,
+          'test',
+          TestEnum.values,
+        );
         expect(signal.encode(null), '');
         expect(signal.encode(TestEnum.b), 'b');
         expect(signal.decode(''), isNull);

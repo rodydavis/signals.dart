@@ -108,10 +108,11 @@ void main() {
 
     testWidgets('StatelessElementConvertExtension watchSignal', (tester) async {
       final counter = signal(100);
-      final widget = StandardStatelessElementWatch(counter: counter).toSignalWidget();
+      final widget =
+          StandardStatelessElementWatch(counter: counter).toSignalWidget();
       await tester.pumpWidget(MaterialApp(home: Scaffold(body: widget)));
       expect(find.text('Stateless: 100'), findsOneWidget);
-      
+
       counter.value = 101;
       await tester.pumpAndSettle();
       expect(find.text('Stateless: 101'), findsOneWidget);
@@ -119,10 +120,11 @@ void main() {
 
     testWidgets('StatefulElementConvertExtension watchSignal', (tester) async {
       final counter = signal(200);
-      final widget = StandardStatefulElementWatch(counter: counter).toSignalStatefulWidget();
+      final widget = StandardStatefulElementWatch(counter: counter)
+          .toSignalStatefulWidget();
       await tester.pumpWidget(MaterialApp(home: Scaffold(body: widget)));
       expect(find.text('Stateful: 200'), findsOneWidget);
-      
+
       counter.value = 201;
       await tester.pumpAndSettle();
       expect(find.text('Stateful: 201'), findsOneWidget);

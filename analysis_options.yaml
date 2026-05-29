@@ -13,6 +13,14 @@
 
 include: package:lints/recommended.yaml
 
+analyzer:
+  exclude:
+    - "bazel-bin/**"
+    - "bazel-out/**"
+    - "bazel-signals.dart/**"
+    - "bazel-testlogs/**"
+    - "bazel-*/**"
+
 linter:
   rules:
     - require_trailing_commas

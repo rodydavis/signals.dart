@@ -279,7 +279,7 @@ void main() {
       onSignalRead = (s) {
         called = true;
       };
-      
+
       final widget = MaterialApp(
         home: Scaffold(
           body: Builder(
@@ -294,7 +294,7 @@ void main() {
 
       await tester.pumpWidget(widget);
       onSignalRead = old;
-      
+
       expect(called, isTrue);
     });
 
@@ -330,7 +330,8 @@ void main() {
       count.watch(element);
     });
 
-    testWidgets('context is StatefulElement with SignalsMixin and unwatch', (tester) async {
+    testWidgets('context is StatefulElement with SignalsMixin and unwatch',
+        (tester) async {
       final count = signal(100);
       final key = GlobalKey<_MixinTestWidgetState>();
       await tester.pumpWidget(
@@ -344,11 +345,11 @@ void main() {
         ),
       );
       expect(find.text('Mixin Count: 100'), findsOneWidget);
-      
+
       final state = key.currentState!;
       // ignore: deprecated_member_use_from_same_package
       count.watch(state.context);
-      
+
       // Test unwatch with SignalsMixin
       // ignore: deprecated_member_use_from_same_package
       count.unwatch(state.context);

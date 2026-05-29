@@ -212,9 +212,44 @@ batch(() {
 
 The `createModel` function provides a structured way to define disposable model instances that group signals, computed values, and actions together, matching the design of PreactJS Signals Core.
 
-#### 1. Defining a Model (Map-based with Callable Constructor)
+#### 1. Type-Safe Models with Dart Records (Recommended)
 
-Models are defined using `createModel` with a factory function returning a `Map<String, dynamic>`. The returned object is a callable constructor.
+The simplest and most built-in way to define a compile-safe model is to return a Dart **record** from your factory. Records provide immediate type safety, autocomplete, and compile-time verification with zero setup/overhead.
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+// Define the reactive model constructor returning a Record
+final counterModel = createModel(() {
+  final count = signal(0);
+
+  // Captured nested side-effect (e.g. logging or syncing to local storage)
+  effect(() {
+    print('Nested logger: count is ${count.value}');
+  });
+
+  return (
+    count: count,
+    increment: () => count.value++,
+  );
+});
+
+void main() {
+  // Instantiate the model
+  final model = counterModel();
+
+  // Access properties type-safely via .value
+  print(model.value.count.value); // Prints: 0 (and registers effect print: Nested logger: count is 0)
+  model.value.increment();        // Prints: Nested logger: count is 1
+
+  // Clean up all captured effects
+  model.dispose();
+}
+```
+
+#### 2. Defining a Model (Map-based with Dynamic Lookup)
+
+Models can also be defined using a factory function returning a `Map<String, dynamic>`. The returned object is a callable constructor.
 
 When a `Map` is returned, all functions in the map are automatically wrapped in `action()` under the hood, ensuring state-modifying actions run inside implicit batches and untracked contexts.
 
@@ -248,9 +283,9 @@ void main() {
 }
 ```
 
-#### 2. Zero-Overhead Type-Safe Wrappers (Extension Types)
+#### 3. Zero-Overhead Type-Safe Wrappers (Extension Types)
 
-You can use Dart 3.3+ **Extension Types** to create type-safe wrappers around your Map-based model instance with zero runtime allocation overhead:
+You can use Dart 3.3+ **Extension Types** to create type-safe wrappers around your Map-based model instance with zero runtime allocation overhead when you prefer a class-like API (e.g. implementing getters/setters or hiding subscript lookups):
 
 ```dart
 import 'package:preact_signals/preact_signals.dart';

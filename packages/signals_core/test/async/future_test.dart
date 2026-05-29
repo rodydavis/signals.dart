@@ -195,18 +195,28 @@ void main() {
       final result = await computed.future;
 
       expect(result, 20, reason: 'unexpected result');
-      expect(calls, 1,
-          reason:
-              'the future function was called an unexpected number of times');
-      expect(signalCalls, 1,
-          reason:
-              'the signal function was called an unexpected number of times');
-      expect(heavyComputationCalls, 1,
-          reason:
-              'the heavy computation function was called an unexpected number of times');
-      expect(computedCalls, 1,
-          reason:
-              'the computed function was called an unexpected number of times');
+      expect(
+        calls,
+        1,
+        reason: 'the future function was called an unexpected number of times',
+      );
+      expect(
+        signalCalls,
+        1,
+        reason: 'the signal function was called an unexpected number of times',
+      );
+      expect(
+        heavyComputationCalls,
+        1,
+        reason:
+            'the heavy computation function was called an unexpected number of times',
+      );
+      expect(
+        computedCalls,
+        1,
+        reason:
+            'the computed function was called an unexpected number of times',
+      );
     });
 
     test('deprecated parameters and basic fallback options', () async {

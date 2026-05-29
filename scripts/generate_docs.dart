@@ -326,7 +326,8 @@ void main() {
     sb.writeln('---');
     sb.writeln();
     if (isTypeDeprecated) {
-      sb.writeln('# $primaryName <span class="deprecated-badge">deprecated</span>');
+      sb.writeln(
+          '# $primaryName <span class="deprecated-badge">deprecated</span>');
     } else {
       sb.writeln('# $primaryName');
     }
@@ -338,13 +339,16 @@ void main() {
     sb.writeln('  <strong>Kind:</strong> <code>$kind</code> &nbsp;|&nbsp;');
     sb.writeln('  <strong>Package:</strong> <code>package:$primaryPkg</code>');
     if (isTypeDeprecated) {
-      sb.writeln('  &nbsp;|&nbsp; <span class="deprecated-badge">deprecated</span>');
+      sb.writeln(
+          '  &nbsp;|&nbsp; <span class="deprecated-badge">deprecated</span>');
     }
     sb.writeln('</Info>');
     sb.writeln();
 
     for (final decl in group) {
-      final depBadge = decl.isDeprecated ? ' <span class="deprecated-badge">deprecated</span>' : '';
+      final depBadge = decl.isDeprecated
+          ? ' <span class="deprecated-badge">deprecated</span>'
+          : '';
       sb.writeln(
           '## ${decl.type[0].toUpperCase()}${decl.type.substring(1)}: ${decl.name}$depBadge');
       sb.writeln();
@@ -750,7 +754,7 @@ List<DeclInfo> extractDeclarations(String filePath, String pkgName) {
         if (name.startsWith('_')) continue;
         final comment = cleanComment(declaration.documentationComment);
         final extendedType =
-            declaration.onClause?.extendedType.toSource() ?? '';
+            declaration.extendedType.toSource();
         final List<MemberInfo> members = [];
         for (final member in declaration.members) {
           if (member is AnnotatedNode) {
@@ -2606,7 +2610,6 @@ class DynamicSidebar extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final currentUrl = context.page.url;
-    print('DEBUG: DynamicSidebar currentUrl = "\$currentUrl"');
 
     // 1a. Types Section
     if (currentUrl.startsWith('/types/')) {

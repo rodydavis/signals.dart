@@ -22,7 +22,8 @@ class UpdatesView extends StatelessWidget {
               Icon(
                 Icons.analytics_outlined,
                 size: 64,
-                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                color:
+                    theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
               ),
               const SizedBox(height: 16),
               Text(
@@ -35,7 +36,8 @@ class UpdatesView extends StatelessWidget {
               Text(
                 'Interact with your signals to see live changes.',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                  color:
+                      theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -68,10 +70,12 @@ class UpdatesView extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+              color: theme.colorScheme.surfaceContainerHighest
+                  .withValues(alpha: 0.3),
               border: Border(
                 bottom: BorderSide(
-                  color: theme.colorScheme.outlineVariant.withOpacity(0.4),
+                  color:
+                      theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -94,7 +98,8 @@ class UpdatesView extends StatelessWidget {
                 Text(
                   'Showing latest ${displayItems.length} entries',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                    color: theme.colorScheme.onSurfaceVariant
+                        .withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -125,9 +130,9 @@ class UpdatesView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -181,12 +186,12 @@ class UpdatesView extends StatelessWidget {
         color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.2 : 0.05),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -233,7 +238,7 @@ class UpdatesView extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: badgeColor.withOpacity(0.2),
+                                color: badgeColor.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
@@ -253,7 +258,7 @@ class UpdatesView extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: badgeColor.withOpacity(0.12),
+                              color: badgeColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -270,7 +275,7 @@ class UpdatesView extends StatelessWidget {
                             timeStr,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant
-                                  .withOpacity(0.6),
+                                  .withValues(alpha: 0.6),
                               fontSize: 10,
                             ),
                           ),
@@ -297,7 +302,7 @@ class UpdatesView extends StatelessWidget {
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   fontFamily: 'monospace',
                                   color: theme.colorScheme.onSurfaceVariant
-                                      .withOpacity(0.7),
+                                      .withValues(alpha: 0.7),
                                 ),
                               ),
                               Padding(
@@ -308,7 +313,7 @@ class UpdatesView extends StatelessWidget {
                                   Icons.arrow_forward,
                                   size: 14,
                                   color: theme.colorScheme.onSurfaceVariant
-                                      .withOpacity(0.5),
+                                      .withValues(alpha: 0.5),
                                 ),
                               ),
                               Text(

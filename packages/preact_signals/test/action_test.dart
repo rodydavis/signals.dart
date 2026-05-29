@@ -387,22 +387,46 @@ void main() {
       act6('1', '2', '3', '4', '5', '6');
       expect(a.value, '1 2 3 4 5 6');
 
-      final act7 = action((String t, String u, String v, String w, String x,
-          String y, String z) {
+      final act7 = action((
+        String t,
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
         a.value = '$t $u $v $w $x $y $z';
       });
       act7('1', '2', '3', '4', '5', '6', '7');
       expect(a.value, '1 2 3 4 5 6 7');
 
-      final act8 = action((String s, String t, String u, String v, String w,
-          String x, String y, String z) {
+      final act8 = action((
+        String s,
+        String t,
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
         a.value = '$s $t $u $v $w $x $y $z';
       });
       act8('1', '2', '3', '4', '5', '6', '7', '8');
       expect(a.value, '1 2 3 4 5 6 7 8');
 
-      final act9 = action((String r, String s, String t, String u, String v,
-          String w, String x, String y, String z) {
+      final act9 = action((
+        String r,
+        String s,
+        String t,
+        String u,
+        String v,
+        String w,
+        String x,
+        String y,
+        String z,
+      ) {
         a.value = '$r $s $t $u $v $w $x $y $z';
       });
       act9('1', '2', '3', '4', '5', '6', '7', '8', '9');
@@ -425,7 +449,7 @@ void main() {
       act10('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
       expect(a.value, '1 2 3 4 5 6 7 8 9 10');
 
-      final act11 = (
+      void act11(
         String a,
         String b,
         String c,
@@ -437,7 +461,7 @@ void main() {
         String i,
         String j,
         String k,
-      ) {};
+      ) {}
       expect(action(act11), act11);
     });
   });

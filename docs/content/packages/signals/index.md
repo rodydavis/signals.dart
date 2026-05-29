@@ -3,7 +3,7 @@ title: signals
 description: Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more.
 ---
 
-> Version: <code>7.0.0</code>
+> Version: <code>7.1.0</code>
 
 ## Installation
 

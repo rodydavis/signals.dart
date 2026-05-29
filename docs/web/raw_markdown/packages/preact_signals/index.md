@@ -3,7 +3,7 @@ title: preact_signals
 description: Dart port of Preact.js Signals
 ---
 
-> Version: `7.0.0`
+> Version: `7.0.1`
 
 ## Installation
 

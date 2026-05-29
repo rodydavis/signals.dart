@@ -25,9 +25,13 @@ void main() {
       expect(() => s.internalValue, throwsA(isA<UnimplementedError>()));
       expect(() => s.subscribe((v) {}), throwsA(isA<UnimplementedError>()));
       expect(
-          () => s.subscribeToNode(Node()), throwsA(isA<UnimplementedError>()));
-      expect(() => s.unsubscribeFromNode(Node()),
-          throwsA(isA<UnimplementedError>()));
+        () => s.subscribeToNode(Node()),
+        throwsA(isA<UnimplementedError>()),
+      );
+      expect(
+        () => s.unsubscribeFromNode(Node()),
+        throwsA(isA<UnimplementedError>()),
+      );
       expect(() => s.version, throwsA(isA<UnimplementedError>()));
       expect(() => s.internalRefresh(), throwsA(isA<UnimplementedError>()));
     });

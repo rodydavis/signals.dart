@@ -550,7 +550,6 @@ class DynamicSidebar extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final currentUrl = context.page.url;
-    print('DEBUG: DynamicSidebar currentUrl = "$currentUrl"');
 
     // 1a. Types Section
     if (currentUrl.startsWith('/types/')) {

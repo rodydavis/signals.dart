@@ -22,18 +22,34 @@ void main() {
       void dummy2() {}
 
       final o1 = ReadonlySignalOptions<int>(
-          name: 'a', autoDispose: true, watched: dummy1, unwatched: dummy2);
+        name: 'a',
+        autoDispose: true,
+        watched: dummy1,
+        unwatched: dummy2,
+      );
       final o2 = ReadonlySignalOptions<int>(
-          name: 'a', autoDispose: true, watched: dummy1, unwatched: dummy2);
+        name: 'a',
+        autoDispose: true,
+        watched: dummy1,
+        unwatched: dummy2,
+      );
       final o3 = ReadonlySignalOptions<int>(
-          name: 'b', autoDispose: false, watched: dummy2, unwatched: dummy1);
+        name: 'b',
+        autoDispose: false,
+        watched: dummy2,
+        unwatched: dummy1,
+      );
 
       expect(o1 == o2, isTrue);
       expect(o1 == o3, isFalse);
       expect(o1.hashCode == o2.hashCode, isTrue);
 
       final c1 = o1.copyWith(
-          name: 'b', autoDispose: false, watched: dummy2, unwatched: dummy1);
+        name: 'b',
+        autoDispose: false,
+        watched: dummy2,
+        unwatched: dummy1,
+      );
       expect(c1, equals(o3));
     });
 
@@ -41,11 +57,23 @@ void main() {
       void dummy() {}
 
       final o1 = SignalOptions<int>(
-          name: 'a', autoDispose: true, watched: dummy, unwatched: dummy);
+        name: 'a',
+        autoDispose: true,
+        watched: dummy,
+        unwatched: dummy,
+      );
       final o2 = SignalOptions<int>(
-          name: 'a', autoDispose: true, watched: dummy, unwatched: dummy);
+        name: 'a',
+        autoDispose: true,
+        watched: dummy,
+        unwatched: dummy,
+      );
       final o3 = SignalOptions<int>(
-          name: 'b', autoDispose: false, watched: dummy, unwatched: dummy);
+        name: 'b',
+        autoDispose: false,
+        watched: dummy,
+        unwatched: dummy,
+      );
 
       expect(o1 == o2, isTrue);
       expect(o1 == o3, isFalse);
@@ -59,11 +87,23 @@ void main() {
       void dummy() {}
 
       final o1 = ComputedOptions<int>(
-          name: 'a', autoDispose: true, watched: dummy, unwatched: dummy);
+        name: 'a',
+        autoDispose: true,
+        watched: dummy,
+        unwatched: dummy,
+      );
       final o2 = ComputedOptions<int>(
-          name: 'a', autoDispose: true, watched: dummy, unwatched: dummy);
+        name: 'a',
+        autoDispose: true,
+        watched: dummy,
+        unwatched: dummy,
+      );
       final o3 = ComputedOptions<int>(
-          name: 'b', autoDispose: false, watched: dummy, unwatched: dummy);
+        name: 'b',
+        autoDispose: false,
+        watched: dummy,
+        unwatched: dummy,
+      );
 
       expect(o1 == o2, isTrue);
       expect(o1 == o3, isFalse);

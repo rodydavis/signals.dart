@@ -85,7 +85,8 @@ class StatefulBranchingWidget extends SignalStatefulWidget {
   });
 
   @override
-  State<StatefulBranchingWidget> createState() => _StatefulBranchingWidgetState();
+  State<StatefulBranchingWidget> createState() =>
+      _StatefulBranchingWidgetState();
 }
 
 class _StatefulBranchingWidgetState extends State<StatefulBranchingWidget> {
@@ -161,7 +162,8 @@ void main() {
       expect(find.text('Count: 21'), findsOneWidget);
     });
 
-    testWidgets('dynamic branching in stateful widgets cleans up and updates dependencies dynamically',
+    testWidgets(
+        'dynamic branching in stateful widgets cleans up and updates dependencies dynamically',
         (tester) async {
       final showB = signal(false);
       final signalA = signal(1);

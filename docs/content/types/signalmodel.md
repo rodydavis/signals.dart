@@ -39,6 +39,7 @@ extension type TypeSafeCounter(SignalModel<Map<String, dynamic>> _model) {
 | **SignalModel** | <code>constructor</code> | <code>dart SignalModel(this.value, this._effects, {this.options = const SignalModelOptions()})</code> | Creates a new model instance. |
 | **[]** | <code>method</code> | <code>dart dynamic [](Object? key)</code> | Access properties dynamically if the underlying **value** is a **Map**. |
 | **[]=** | <code>method</code> | <code>dart void []=(dynamic key, dynamic val)</code> | Set properties dynamically if the underlying **value** is a **Map**. |
+| **call** | <code>method</code> | <code>dart T call()</code> | Returns the **value** of this model. Alias for [.value] |
 | **dispose** | <code>method</code> | <code>dart void dispose()</code> | Disposes of all captured effects. |
 
 ## References

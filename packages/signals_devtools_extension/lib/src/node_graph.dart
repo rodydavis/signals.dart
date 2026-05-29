@@ -85,7 +85,7 @@ class _NodeGraphState extends State<NodeGraph> {
                         border: Border(
                           right: BorderSide(
                             color: theme.colorScheme.outlineVariant
-                                .withOpacity(0.4),
+                                .withValues(alpha: 0.4),
                             width: 1,
                           ),
                         ),
@@ -150,7 +150,8 @@ class _NodeGraphState extends State<NodeGraph> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: theme.colorScheme.primaryContainer.withOpacity(0.2),
+                color:
+                    theme.colorScheme.primaryContainer.withValues(alpha: 0.2),
               ),
               child: Icon(
                 Icons.hub_outlined,
@@ -170,7 +171,8 @@ class _NodeGraphState extends State<NodeGraph> {
               'Interact with your application or trigger updates to populate the signals hierarchy.',
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8),
+                color:
+                    theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
               ),
             ),
           ],
@@ -215,13 +217,15 @@ class _NodeGraphState extends State<NodeGraph> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+                      color: theme.colorScheme.outlineVariant
+                          .withValues(alpha: 0.5),
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+                      color: theme.colorScheme.outlineVariant
+                          .withValues(alpha: 0.5),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -259,8 +263,8 @@ class _NodeGraphState extends State<NodeGraph> {
                   child: Text(
                     'No matching nodes found',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color:
-                          theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                      color: theme.colorScheme.onSurfaceVariant
+                          .withValues(alpha: 0.6),
                     ),
                   ),
                 )
@@ -279,14 +283,15 @@ class _NodeGraphState extends State<NodeGraph> {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? theme.colorScheme.primaryContainer
-                                  .withOpacity(isDark ? 0.15 : 0.3)
+                                  .withValues(alpha: isDark ? 0.15 : 0.3)
                               : theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isSelected
-                                ? theme.colorScheme.primary.withOpacity(0.5)
+                                ? theme.colorScheme.primary
+                                    .withValues(alpha: 0.5)
                                 : theme.colorScheme.outlineVariant
-                                    .withOpacity(0.3),
+                                    .withValues(alpha: 0.3),
                             width: isSelected ? 1.5 : 1,
                           ),
                         ),
@@ -326,7 +331,7 @@ class _NodeGraphState extends State<NodeGraph> {
                                           fontFamily: 'monospace',
                                           color: theme
                                               .colorScheme.onSurfaceVariant
-                                              .withOpacity(0.8),
+                                              .withValues(alpha: 0.8),
                                         ),
                                       ),
                                     ],
@@ -336,7 +341,7 @@ class _NodeGraphState extends State<NodeGraph> {
                                   Icons.chevron_right,
                                   size: 16,
                                   color: theme.colorScheme.onSurfaceVariant
-                                      .withOpacity(0.5),
+                                      .withValues(alpha: 0.5),
                                 ),
                               ],
                             ),
@@ -363,8 +368,8 @@ class _NodeGraphState extends State<NodeGraph> {
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
               color: isSelected
-                  ? theme.colorScheme.onPrimary.withOpacity(0.2)
-                  : theme.colorScheme.primaryContainer.withOpacity(0.3),
+                  ? theme.colorScheme.onPrimary.withValues(alpha: 0.2)
+                  : theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
@@ -395,13 +400,13 @@ class _NodeGraphState extends State<NodeGraph> {
           Icon(
             Icons.info_outline,
             size: 48,
-            color: theme.colorScheme.onSurfaceVariant.withOpacity(0.3),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
           ),
           const SizedBox(height: 16),
           Text(
             'Dependency Inspector',
             style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -409,7 +414,7 @@ class _NodeGraphState extends State<NodeGraph> {
           Text(
             'Select a signal or computation to trace its inputs and outputs.',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             ),
           ),
         ],
@@ -450,7 +455,7 @@ class _NodeGraphState extends State<NodeGraph> {
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: theme.colorScheme.outlineVariant.withOpacity(0.4),
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
               ),
             ),
             child: Row(
@@ -472,7 +477,7 @@ class _NodeGraphState extends State<NodeGraph> {
                         'ID: ${node.id}  •  Type: ${node.type}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant
-                              .withOpacity(0.7),
+                              .withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -500,7 +505,7 @@ class _NodeGraphState extends State<NodeGraph> {
               color: isDark ? const Color(0xFF1E1E24) : Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: theme.colorScheme.outlineVariant.withOpacity(0.3),
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
               ),
             ),
             child: Text(
@@ -567,17 +572,17 @@ class _NodeGraphState extends State<NodeGraph> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.onSurface.withOpacity(0.02),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.02),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.colorScheme.outlineVariant.withOpacity(0.2),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.2),
           style: BorderStyle.solid,
         ),
       ),
       child: Text(
         text,
         style: theme.textTheme.bodyMedium?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+          color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
           fontStyle: FontStyle.italic,
         ),
       ),
@@ -593,7 +598,7 @@ class _NodeGraphState extends State<NodeGraph> {
           color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: theme.colorScheme.outlineVariant.withOpacity(0.3),
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
           ),
         ),
         child: InkWell(
@@ -633,7 +638,7 @@ class _NodeGraphState extends State<NodeGraph> {
                           fontFamily: 'monospace',
                           fontSize: 11,
                           color: theme.colorScheme.onSurfaceVariant
-                              .withOpacity(0.6),
+                              .withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -642,7 +647,8 @@ class _NodeGraphState extends State<NodeGraph> {
                 Icon(
                   Icons.arrow_forward_ios,
                   size: 12,
-                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.4),
+                  color:
+                      theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
                 ),
               ],
             ),
@@ -674,7 +680,7 @@ class _NodeGraphState extends State<NodeGraph> {
         icon = Icons.flash_on_outlined;
         break;
       default:
-        bg = theme.colorScheme.surfaceVariant;
+        bg = theme.colorScheme.surfaceContainerHighest;
         fg = theme.colorScheme.onSurfaceVariant;
         icon = Icons.help_outline;
     }

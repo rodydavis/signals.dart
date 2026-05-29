@@ -98,7 +98,8 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
               color: isDark ? const Color(0xFF181824) : Colors.white,
               border: Border(
                 bottom: BorderSide(
-                  color: theme.colorScheme.outlineVariant.withOpacity(0.4),
+                  color:
+                      theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
                   width: 1,
                 ),
               ),
@@ -127,7 +128,7 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
                           color: Colors.green,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.green.withOpacity(0.6),
+                              color: Colors.green.withValues(alpha: 0.6),
                               blurRadius: 4,
                               spreadRadius: 2,
                             ),
@@ -139,7 +140,7 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
                         'Connected',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant
-                              .withOpacity(0.6),
+                              .withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -219,7 +220,7 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
                         'Match JS Signals DevTools features',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onPrimaryContainer
-                              .withOpacity(0.8),
+                              .withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -317,12 +318,12 @@ class _SignalsExtensionHomePageState extends State<SignalsExtensionHomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
         decoration: BoxDecoration(
           color: active
-              ? theme.colorScheme.primary.withOpacity(0.12)
+              ? theme.colorScheme.primary.withValues(alpha: 0.12)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
             color: active
-                ? theme.colorScheme.primary.withOpacity(0.4)
+                ? theme.colorScheme.primary.withValues(alpha: 0.4)
                 : Colors.transparent,
             width: 1.5,
           ),

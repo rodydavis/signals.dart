@@ -214,7 +214,7 @@ packages:
       path: "../../packages/preact_signals"
       relative: true
     source: path
-    version: "7.0.0"
+    version: "7.1.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -277,7 +277,7 @@ packages:
       path: "../../packages/signals"
       relative: true
     source: path
-    version: "7.0.0"
+    version: "7.1.0"
   signals_core:
     dependency: "direct overridden"
     description:
@@ -291,14 +291,14 @@ packages:
       path: "../../packages/signals_flutter"
       relative: true
     source: path
-    version: "7.0.0"
+    version: "7.1.0"
   signals_hooks:
     dependency: "direct overridden"
     description:
       path: "../../packages/signals_hooks"
       relative: true
     source: path
-    version: "7.0.0"
+    version: "7.1.0"
   sky_engine:
     dependency: transitive
     description: flutter

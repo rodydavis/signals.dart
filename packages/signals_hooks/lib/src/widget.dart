@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:signals/signals_core.dart' as core;
 import 'package:signals/signals_flutter.dart';
 
-
 /// Element for [SignalHookWidget] that manages both standard Flutter Hooks
 /// lifecycle and implicit signal subscription.
 ///
@@ -58,7 +57,8 @@ class SignalHookElement extends StatelessElement with HookElement {
     };
 
     try {
-      return super.build(); // Delegates to StatelessElement.build() inside HookElement's context
+      return super
+          .build(); // Delegates to StatelessElement.build() inside HookElement's context
     } finally {
       core.onSignalRead = oldOnSignalRead;
       if (signals.isEmpty) {
@@ -134,9 +134,13 @@ abstract class SignalHookWidget extends StatelessWidget {
   }
 
   /// Subclasses override this method instead of [build] to define their widget tree.
-  @Deprecated('Override build(context) directly instead of buildWidget(context)')
+  @Deprecated(
+    'Override build(context) directly instead of buildWidget(context)',
+  )
   Widget buildWidget(BuildContext context) {
-    throw UnimplementedError('Subclasses must override either build or buildWidget');
+    throw UnimplementedError(
+      'Subclasses must override either build or buildWidget',
+    );
   }
 }
 
@@ -239,7 +243,8 @@ class SignalStatefulHookElement extends StatefulElement with HookElement {
     };
 
     try {
-      return super.build(); // Delegates to StatefulElement.build() inside HookElement's context
+      return super
+          .build(); // Delegates to StatefulElement.build() inside HookElement's context
     } finally {
       core.onSignalRead = oldOnSignalRead;
       if (signals.isEmpty) {
@@ -336,10 +341,10 @@ class _SignalProviderHook<T extends core.ReadonlySignal> extends Hook<T?> {
   _SignalProviderHookState<T> createState() => _SignalProviderHookState<T>();
 }
 
-class _SignalProviderHookState<T extends core.ReadonlySignal> extends HookState<T?, _SignalProviderHook<T>> {
+class _SignalProviderHookState<T extends core.ReadonlySignal>
+    extends HookState<T?, _SignalProviderHook<T>> {
   @override
   T? build(BuildContext context) {
     return SignalProvider.of<T>(context);
   }
 }
-

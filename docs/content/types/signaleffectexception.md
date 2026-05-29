@@ -21,6 +21,7 @@ Error for when a effect fails to run the callback
 | **error** | <code>field</code> | <code>dart Object? error</code> | Error during callback |
 | **stackTrace** | <code>field</code> | <code>dart StackTrace? stackTrace</code> | StackTrace for where the error started |
 | **SignalEffectException** | <code>constructor</code> | <code>dart SignalEffectException(this.error, [this.stackTrace])</code> | Error for when a effect fails to run the callback |
+| **toString** | <code>method</code> | <code>dart String toString()</code> |  |
 
 ## References
 

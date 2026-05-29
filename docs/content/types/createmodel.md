@@ -28,14 +28,48 @@ all nested/captured effects are clean up automatically, ensuring complete preven
 Furthermore, if the factory returns a standard Dart **Map**, and <code>wrapInAction</code> is enabled (default),
 all nested function properties are automatically wrapped in batched [action](/types/action) transactions to optimize updates.
 
-### 1. Advanced Architecture: Type-Safe Wrappers using Dart 3+ Extension Types
-While dynamic subscript access <code>model['increment']()</code> is fast and flexible, it lacks static analysis safety.
-To achieve compile-time type-safety, you can wrap the returned <code>SignalModel</code> in a standard Dart 3 **extension type**:
+### 1. Type-Safe Models using Dart 3+ Records (Recommended)
+The simplest and most built-in way to define a compile-safe model is to return a Dart **record** from your factory.
+Records provide immediate type safety, autocomplete, and compile-time verification without any wrapper boilerplates.
 
 ```dart
 import 'package:signals/signals.dart';
 
-// 1. Define the reactive model constructor
+// Define the reactive model constructor returning a Record
+final counterModel = createModel(() {
+  final count = signal(0);
+
+  // Captured nested side-effect (e.g. logging or syncing to local storage)
+  effect(() {
+    print('Nested logger: count is ${count.value}');
+  });
+
+  return (
+    count: count,
+    increment: () => count.value++,
+  );
+});
+
+void main() {
+  // Instantiate the model
+  final model = counterModel();
+
+  // Access properties type-safely via .value
+  print(model.value.count.value); // Prints: 0 (and registers effect print: Nested logger: count is 0)
+  model.value.increment();        // Prints: Nested logger: count is 1
+
+  // Dispose when done to clean up all captured nested effects
+  model.dispose();
+}
+```
+
+### 2. Object-Oriented Style: Type-Safe Wrappers using Dart 3+ Extension Types
+While records are great for lightweight structures, you can wrap the returned Map-based <code>SignalModel</code> in a standard Dart 3 **extension type** when you prefer a class-like API (e.g. implementing getters/setters or hiding subscript lookups).
+
+```dart
+import 'package:signals/signals.dart';
+
+// 1. Define the reactive model constructor returning a Map
 final counterModel = createModel(() {
   final count = signal(0);
 
@@ -73,8 +107,8 @@ void main() {
 ```
 
 <Info>
-  Favor using Dart 3 extension types whenever you define models. They cost zero runtime overhead
-  (compiling down to the raw model) while granting complete compile-safe parameters and autocomplete functionality.
+  Favor using Dart 3 records or extension types when defining models. They cost zero runtime overhead
+  while granting complete compile-safe parameters and autocomplete functionality.
 </Info>
 
 ## References

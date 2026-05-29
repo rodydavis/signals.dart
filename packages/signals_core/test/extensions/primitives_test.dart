@@ -162,8 +162,9 @@ void main() {
       expect('Dart'.$.replaceRange(1, 3, 'o'), 'Dot');
       expect('a b'.$.split(' '), ['a', 'b']);
       expect(
-          'a b'.$.splitMapJoin(' ', onMatch: (m) => '-', onNonMatch: (n) => n),
-          'a-b');
+        'a b'.$.splitMapJoin(' ', onMatch: (m) => '-', onNonMatch: (n) => n),
+        'a-b',
+      );
       expect('a'.$.codeUnits, [97]);
       expect('a'.$.runes.toList(), [97]);
       expect('DART'.$.toLowerCase(), 'dart');

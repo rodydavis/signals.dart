@@ -178,8 +178,10 @@ void main() {
       final linked = linkedSignal(() => source.value);
 
       linked.dispose();
-      expect(() => linked.value = 20,
-          throwsA(isA<SignalsWriteAfterDisposeError>()));
+      expect(
+        () => linked.value = 20,
+        throwsA(isA<SignalsWriteAfterDisposeError>()),
+      );
     });
   });
 
@@ -203,9 +205,9 @@ void main() {
     });
 
     test('equality and hashCode work correctly', () {
-      final comp =
-          (String s, LinkedSignalPreviousState<int, String>? prev) => s.length;
-      final eq = (String a, String b) => a == b;
+      int comp(String s, LinkedSignalPreviousState<int, String>? prev) =>
+          s.length;
+      bool eq(String a, String b) => a == b;
 
       final options1 = LinkedSignalOptions<int, String>(
         name: 'opt',

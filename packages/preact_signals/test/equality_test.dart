@@ -45,19 +45,21 @@ void main() {
         expect(eq.equals([1, 2], [1, 3]), isFalse);
         expect(eq.equals([1, 2], [1, 2, 3]), isFalse);
         expect(
-            eq.equals([
-              [1]
-            ], [
-              [1]
-            ]),
-            isTrue);
+          eq.equals([
+            [1],
+          ], [
+            [1],
+          ]),
+          isTrue,
+        );
         expect(
-            eq.equals([
-              [1]
-            ], [
-              [2]
-            ]),
-            isFalse);
+          eq.equals([
+            [1],
+          ], [
+            [2],
+          ]),
+          isFalse,
+        );
       });
 
       test('maps recursive comparison', () {
@@ -66,19 +68,21 @@ void main() {
         expect(eq.equals({'a': 1}, {'b': 1}), isFalse);
         expect(eq.equals({'a': 1}, {'a': 1, 'b': 2}), isFalse);
         expect(
-            eq.equals({
-              'a': {'b': 1}
-            }, {
-              'a': {'b': 1}
-            }),
-            isTrue);
+          eq.equals({
+            'a': {'b': 1},
+          }, {
+            'a': {'b': 1},
+          }),
+          isTrue,
+        );
         expect(
-            eq.equals({
-              'a': {'b': 1}
-            }, {
-              'a': {'b': 2}
-            }),
-            isFalse);
+          eq.equals({
+            'a': {'b': 1},
+          }, {
+            'a': {'b': 2},
+          }),
+          isFalse,
+        );
       });
 
       test('sets comparison', () {
@@ -89,23 +93,25 @@ void main() {
 
         // Nested deep comparison in sets
         expect(
-            eq.equals({
-              {1, 2},
-              [3, 4]
-            }, {
-              [3, 4],
-              {2, 1}
-            }),
-            isTrue);
+          eq.equals({
+            {1, 2},
+            [3, 4],
+          }, {
+            [3, 4],
+            {2, 1},
+          }),
+          isTrue,
+        );
         expect(
-            eq.equals({
-              {1, 2},
-              [3, 4]
-            }, {
-              [3, 5],
-              {2, 1}
-            }),
-            isFalse);
+          eq.equals({
+            {1, 2},
+            [3, 4],
+          }, {
+            [3, 5],
+            {2, 1},
+          }),
+          isFalse,
+        );
       });
 
       test('mismatched collection types', () {

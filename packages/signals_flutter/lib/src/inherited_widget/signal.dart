@@ -53,8 +53,8 @@ class SignalProvider<T extends core.ReadonlySignal> extends StatefulWidget {
     required T Function() create,
     this.child,
     this.dispose,
-  }) : _create = create,
-       _value = null;
+  })  : _create = create,
+        _value = null;
 
   /// Exposes an existing signal [value] to the widget tree.
   ///
@@ -64,9 +64,9 @@ class SignalProvider<T extends core.ReadonlySignal> extends StatefulWidget {
     super.key,
     required T value,
     this.child,
-  }) : _value = value,
-       _create = null,
-       dispose = null;
+  })  : _value = value,
+        _create = null,
+        dispose = null;
 
   /// Private constructor for internal cloning and subclass usage.
   const SignalProvider._({
@@ -75,8 +75,8 @@ class SignalProvider<T extends core.ReadonlySignal> extends StatefulWidget {
     required T? value,
     required this.child,
     required this.dispose,
-  }) : _create = create,
-       _value = value;
+  })  : _create = create,
+        _value = value;
 
   final T Function()? _create;
   final T? _value;
@@ -113,14 +113,17 @@ class SignalProvider<T extends core.ReadonlySignal> extends StatefulWidget {
   State<SignalProvider<T>> createState() => _SignalProviderState<T>();
 
   /// Retrieves the [_InheritedSignalProvider] instance of the specified type [T] from the [BuildContext].
-  static _InheritedSignalProvider<T>? _inheritedProviderOf<T extends core.ReadonlySignal>(
+  static _InheritedSignalProvider<T>?
+      _inheritedProviderOf<T extends core.ReadonlySignal>(
     BuildContext context, {
     bool listen = true,
   }) {
     if (listen) {
-      return context.dependOnInheritedWidgetOfExactType<_InheritedSignalProvider<T>>();
+      return context
+          .dependOnInheritedWidgetOfExactType<_InheritedSignalProvider<T>>();
     } else {
-      final element = context.getElementForInheritedWidgetOfExactType<_InheritedSignalProvider<T>>();
+      final element = context.getElementForInheritedWidgetOfExactType<
+          _InheritedSignalProvider<T>>();
       return element?.widget as _InheritedSignalProvider<T>?;
     }
   }

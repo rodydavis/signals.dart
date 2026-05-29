@@ -48,8 +48,10 @@ void main() {
                 options:
                     SignalOptions(name: 'notifierSignal', autoDispose: true),
               );
-              return Text('${state.globalId} - ${state.name}',
-                  textDirection: TextDirection.ltr,);
+              return Text(
+                '${state.globalId} - ${state.name}',
+                textDirection: TextDirection.ltr,
+              );
             },
           ),
         );
@@ -119,8 +121,10 @@ void main() {
                 options:
                     SignalOptions(name: 'listenableSignal', autoDispose: true),
               );
-              return Text('${state.globalId} - ${state.name}',
-                  textDirection: TextDirection.ltr,);
+              return Text(
+                '${state.globalId} - ${state.name}',
+                textDirection: TextDirection.ltr,
+              );
             },
           ),
         );

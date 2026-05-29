@@ -17,8 +17,10 @@ void main() {
         {
           var calls = 0;
           var called = false;
-          final dispose = effect(() => calls++,
-              options: EffectOptions(onDispose: () => called = true));
+          final dispose = effect(
+            () => calls++,
+            options: EffectOptions(onDispose: () => called = true),
+          );
 
           expect(calls, 1);
           expect(called, false);

@@ -75,8 +75,10 @@ void main() {
     expect(s1Node['targets']?.split(','), containsAll([c1Id.toString()]));
     expect(s2Node['targets']?.split(','), containsAll([c1Id.toString()]));
 
-    expect(c1Node['sources']?.split(','),
-        containsAll([s1Id.toString(), s2Id.toString()]));
+    expect(
+      c1Node['sources']?.split(','),
+      containsAll([s1Id.toString(), s2Id.toString()]),
+    );
     expect(c1Node['targets']?.split(','), isNotEmpty);
 
     expect(c1Id.toString(), isNotNull);

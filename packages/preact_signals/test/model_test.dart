@@ -50,8 +50,10 @@ void main() {
       model.dispose();
 
       (model['count'] as Signal<int>).value = 2;
-      expect((model['runCount'] as MutableInt).value,
-          2); // Should not rerun since effect is disposed!
+      expect(
+        (model['runCount'] as MutableInt).value,
+        2,
+      ); // Should not rerun since effect is disposed!
     });
 
     test('should correctly isolate nested models without leakage', () {
@@ -170,7 +172,8 @@ void main() {
 
     test('should support model constructors with parameters', () {
       SignalModel<Map<String, dynamic>> createCounterWithInitial(
-          int initialCount) {
+        int initialCount,
+      ) {
         return createModel(() {
           final count = signal(initialCount);
           return <String, dynamic>{
@@ -292,6 +295,41 @@ void main() {
       final model = modelConstructor();
       expect(model.value, isA<Map>());
       model.dispose();
+    });
+
+    test('should support returning a Dart record for type-safe models', () {
+      final counterModel = createModel(() {
+        final count = signal(0);
+        final runCount = MutableInt(0);
+
+        effect(() {
+          runCount.value++;
+          count.value;
+        });
+
+        return (
+          count: count,
+          increment: () => count.value++,
+          runCount: runCount,
+        );
+      });
+
+      final model = counterModel();
+
+      expect(model.value.runCount.value, 1);
+      expect(model.value.count.value, 0);
+
+      model.value.increment();
+      expect(model.value.runCount.value, 2);
+      expect(model.value.count.value, 1);
+
+      model.dispose();
+
+      model.value.increment();
+      expect(
+        model.value.runCount.value,
+        2,
+      ); // Should not rerun since effect is disposed
     });
   });
 }

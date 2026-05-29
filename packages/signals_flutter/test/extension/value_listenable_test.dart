@@ -27,11 +27,15 @@ void main() {
 
   testWidgets('valueListenableToSignal global function', (tester) async {
     final listenable = ValueNotifier(10);
-    final signal = valueListenableToSignal(listenable, debugLabel: 'my_listenable', autoDispose: true);
-    
+    final signal = valueListenableToSignal(
+      listenable,
+      debugLabel: 'my_listenable',
+      autoDispose: true,
+    );
+
     expect(signal.value, 10);
     expect(signal.globalId, isNotNull);
-    
+
     listenable.value = 20;
     expect(signal.value, 20);
   });

@@ -38,12 +38,12 @@ class NodeView extends StatelessWidget {
             color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: accentColor.withOpacity(0.6),
+              color: accentColor.withValues(alpha: 0.6),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: accentColor.withOpacity(0.15),
+                color: accentColor.withValues(alpha: 0.15),
                 blurRadius: 8,
                 spreadRadius: 1,
                 offset: const Offset(0, 2),
@@ -58,7 +58,7 @@ class NodeView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: accentColor.withOpacity(0.1),
+                  color: accentColor.withValues(alpha: 0.1),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8.5),
                     topRight: Radius.circular(8.5),
@@ -86,8 +86,8 @@ class NodeView extends StatelessWidget {
                       '#${item.id}',
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontFamily: 'monospace',
-                        color:
-                            theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                        color: theme.colorScheme.onSurfaceVariant
+                            .withValues(alpha: 0.6),
                         fontSize: 9,
                       ),
                     ),

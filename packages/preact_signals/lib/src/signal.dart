@@ -190,6 +190,7 @@ class Signal<T> with ReadonlySignal<T> {
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
   @pragma('wasm:prefer-inline')
+
   /// Gets the current value of the signal.
   ///
   /// If read inside an active reactive context (e.g., an [effect] or [computed] signal),

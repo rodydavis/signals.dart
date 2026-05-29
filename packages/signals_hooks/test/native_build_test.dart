@@ -69,7 +69,8 @@ class LegacySignalHookWidget extends SignalHookWidget {
 
 void main() {
   group('Native build Method in SignalHookWidget Tests', () {
-    testWidgets('implicitly tracks signal changes and supports hooks inside standard build method',
+    testWidgets(
+        'implicitly tracks signal changes and supports hooks inside standard build method',
         (tester) async {
       final counter = signal(0);
 
@@ -85,7 +86,8 @@ void main() {
       expect(find.text('Native: 1'), findsOneWidget);
     });
 
-    testWidgets('SignalHookBuilder implicitly tracks signals inside standard builder callback',
+    testWidgets(
+        'SignalHookBuilder implicitly tracks signals inside standard builder callback',
         (tester) async {
       final counter = signal(10);
 
@@ -110,7 +112,8 @@ void main() {
       expect(find.text('Builder: 20'), findsOneWidget);
     });
 
-    testWidgets('unsubscribes from conditionally branched signals when no longer accessed',
+    testWidgets(
+        'unsubscribes from conditionally branched signals when no longer accessed',
         (tester) async {
       final count1 = signal(0);
       final count2 = signal(10);
@@ -148,7 +151,8 @@ void main() {
       expect(buildCount, currentBuildCount);
     });
 
-    testWidgets('backward compatibility: legacy widgets overriding buildWidget still work',
+    testWidgets(
+        'backward compatibility: legacy widgets overriding buildWidget still work',
         (tester) async {
       final counter = signal(5);
 
@@ -164,7 +168,8 @@ void main() {
       expect(find.text('Legacy: 6'), findsOneWidget);
     });
 
-    testWidgets('SignalStatefulHookWidget implicitly tracks signals and supports hooks',
+    testWidgets(
+        'SignalStatefulHookWidget implicitly tracks signals and supports hooks',
         (tester) async {
       final counter = signal(0);
 
@@ -180,7 +185,8 @@ void main() {
       expect(find.text('StatefulHook: 1'), findsOneWidget);
     });
 
-    testWidgets('useSignalProvider custom hook resolves signal from SignalProvider',
+    testWidgets(
+        'useSignalProvider custom hook resolves signal from SignalProvider',
         (tester) async {
       final counter = signal(100);
 
@@ -233,4 +239,3 @@ class ProviderTestWidget extends SignalHookWidget {
     );
   }
 }
-
