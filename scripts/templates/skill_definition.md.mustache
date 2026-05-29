@@ -9,51 +9,24 @@ This guide outlines advanced state management primitives, reactive collections, 
 
 ---
 
-## 🚀 Reactive Primitives Cheat-Sheet
+## 📊 Reactive Primitives Directory
 
-Here is a curated reference of all reactivity constructs available in this package:
+The following table summarizes all available reactive primitives and widgets. Click on any primitive's name to view its detailed documentation, standard usage, and examples.
 
+| Primitive | Prefix | Category | Description |
+| :--- | :--- | :--- | :--- |
 {{#snippets}}
-### {{{name}}} (prefix: `{{{prefix}}}`)
-- **Category**: {{category}}
-- **Description**: {{{description}}}
-
-**Standard Usage Example**:
-```dart
-{{{example}}}
-```
-
----
+| [{{{name}}}](file://{{{rootDir}}}/skills/{{pkgName}}/primitives/{{{name}}}.md) | `{{{prefix}}}` | {{category}} | {{{description}}} |
 {{/snippets}}
 
-## 📦 Parsed Library API & Signature Reference
-
-The following APIs are exported and available inside this package. Use them according to these signature patterns:
-
-{{#decls}}
-### {{type}} `{{name}}`
-{{#isDeprecated}}
-> [!WARNING]
-> This API is deprecated. Avoid using it in new code.
-{{/isDeprecated}}
-
-{{{comment}}}
-
-{{#signature}}
-**Signature**:
-```dart
-{{{signature}}}
-```
-{{/signature}}
-
-{{#has_members}}
-#### Members of `{{name}}`
-| Member | Type | Signature | Description |
-| :--- | :--- | :--- | :--- |
-{{#members}}
-| **{{name}}** | `{{type}}` | `{{{signature}}}` | {{{comment}}} |
-{{/members}}
-{{/has_members}}
-
 ---
+
+## 📦 Parsed Library API Directory
+
+The following table summarizes all available classes, functions, and extensions exported by the package. Click on any API's name to view its detailed signature, members, and documentation.
+
+| API | Type | Description |
+| :--- | :--- | :--- |
+{{#decls}}
+| [{{name}}](file://{{{rootDir}}}/skills/{{pkgName}}/api/{{name}}.md) | `{{type}}` | {{{summary}}} |
 {{/decls}}

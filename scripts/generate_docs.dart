@@ -3149,7 +3149,20 @@ void generateVSCodeAndSkills(
         description: 'Comprehensive guide and best practices for integrating reactive signals cleanly inside Flutter applications.',
         isFlutter: true,
       ),
+      (
+        pkgName: 'signals-preact-dart',
+        originPkg: 'preact_signals',
+        description: 'Core reactive programming best practices and primitive definitions for preact_signals in Dart.',
+        isFlutter: false,
+      ),
     ];
+
+    String getCommentSummary(String comment) {
+      final cleaned = cleanDocumentationComment(comment).trim();
+      if (cleaned.isEmpty) return '';
+      final firstLine = cleaned.split('\n').first.trim();
+      return firstLine.replaceAll('*', '').replaceAll('#', '').replaceAll('`', '').trim();
+    }
 
     for (final target in skillTargets) {
       final filteredSnippets = snippets.where((s) => s['isFlutter'] == target.isFlutter).toList();
@@ -3177,6 +3190,7 @@ void generateVSCodeAndSkills(
           'name': d.name,
           'type': d.type,
           'comment': cleanDocumentationComment(d.comment),
+          'summary': getCommentSummary(d.comment),
           'signature': d.signature,
           'isDeprecated': d.isDeprecated,
           'members': membersList,
@@ -3191,6 +3205,7 @@ void generateVSCodeAndSkills(
         'pkgName': target.pkgName,
         'description': target.description,
         'version': version,
+        'rootDir': rootDir,
         'snippets': filteredSnippets,
         'decls': parsedDeclsMap,
       });
@@ -3202,9 +3217,80 @@ void generateVSCodeAndSkills(
 
       for (final dirPath in targetSkillDirs) {
         Directory(dirPath).createSync(recursive: true);
+        
+        // Clean and create primitives/
+        final primitivesDir = Directory(p.join(dirPath, 'primitives'));
+        if (primitivesDir.existsSync()) primitivesDir.deleteSync(recursive: true);
+        primitivesDir.createSync(recursive: true);
+
+        // Clean and create api/
+        final apiDir = Directory(p.join(dirPath, 'api'));
+        if (apiDir.existsSync()) apiDir.deleteSync(recursive: true);
+        apiDir.createSync(recursive: true);
+
+        // Clean up legacy static directories if present (e.g. core/ in signals-preact-dart)
+        final coreDir = Directory(p.join(dirPath, 'core'));
+        if (coreDir.existsSync()) coreDir.deleteSync(recursive: true);
+
+        // Write main SKILL.md
         File(p.join(dirPath, 'SKILL.md')).writeAsStringSync(renderedSkill);
+
+        // Generate primitive subfiles
+        for (final s in filteredSnippets) {
+          final content = StringBuffer();
+          content.writeln('# Primitive: `${s['name']}` (prefix: `${s['prefix']}`)');
+          content.writeln();
+          content.writeln('- **Category**: ${s['category']}');
+          content.writeln('- **Description**: ${s['description']}');
+          content.writeln();
+          content.writeln('---');
+          content.writeln();
+          content.writeln('## Standard Usage Example');
+          content.writeln();
+          content.writeln('```dart');
+          content.writeln(s['example']);
+          content.writeln('```');
+          
+          File(p.join(primitivesDir.path, '${s['name']}.md')).writeAsStringSync(content.toString());
+        }
+
+        // Generate API subfiles
+        for (final d in parsedDeclsMap) {
+          final content = StringBuffer();
+          content.writeln('# ${d['type']} `${d['name']}`');
+          content.writeln();
+          if (d['isDeprecated'] == true) {
+            content.writeln('> [!WARNING]');
+            content.writeln('> This API is deprecated. Avoid using it in new code.');
+            content.writeln();
+          }
+          content.writeln(d['comment']);
+          content.writeln();
+          content.writeln('---');
+          content.writeln();
+          if (d['signature'] != null && (d['signature'] as String).isNotEmpty) {
+            content.writeln('## Signature');
+            content.writeln();
+            content.writeln('```dart');
+            content.writeln(d['signature']);
+            content.writeln('```');
+            content.writeln();
+          }
+
+          if (d['has_members'] == true) {
+            content.writeln('## Members of `${d['name']}`');
+            content.writeln();
+            content.writeln('| Member | Type | Signature | Description |');
+            content.writeln('| :--- | :--- | :--- | :--- |');
+            for (final m in d['members'] as List) {
+              content.writeln('| **${m['name']}** | `${m['type']}` | `${m['signature']}` | ${m['comment']} |');
+            }
+          }
+
+          File(p.join(apiDir.path, '${d['name']}.md')).writeAsStringSync(content.toString());
+        }
       }
-      print('  Generated Skill: ${target.pkgName} at both monorepo and vscode extensions levels.');
+      print('  Generated Skill: ${target.pkgName} with directory tables and subfiles.');
     }
 
     // 6. Generate AI Skills documentation preview pages for the Jaspr site
