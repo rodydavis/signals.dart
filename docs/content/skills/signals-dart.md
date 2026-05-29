@@ -58,11 +58,6 @@ The following table summarizes all available classes, functions, and extensions 
 
 | API | Type | Description |
 | :--- | :--- | :--- |
-| [reloadSignalsDevTools](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/reloadSignalsDevTools.md) | `function` | Reload the devtools |
-| [disableSignalsDevTools](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/disableSignalsDevTools.md) | `function` | Disable the devtools |
-| [signalsDevToolsEnabled](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/signalsDevToolsEnabled.md) | `function` | Check if the signals devtools are enabled |
-| [signalsDevToolsEnabled](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/signalsDevToolsEnabled.md) | `function` | Manually enable/disable signals devtools |
-| [DevToolsSignalsObserver](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/DevToolsSignalsObserver.md) | `class` | Signals DevTools observer |
 | [TimerSignal](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/TimerSignal.md) | `class` | Emit recurring TimerSignalEvent aka [AsyncSignal](/types/asyncsignal) |
 | [TimerSignalDurationUtils](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/TimerSignalDurationUtils.md) | `extension` | Expose Duration as a [TimerSignal](/types/timersignal) |
 | [timerSignal](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-dart/api/timerSignal.md) | `function` | Create a [TimerSignal](/types/timersignal) |

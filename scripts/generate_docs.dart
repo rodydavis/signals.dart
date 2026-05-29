@@ -3169,7 +3169,7 @@ void generateVSCodeAndSkills(
     }
 
     for (final target in skillTargets) {
-      final filteredSnippets = snippets.where((s) => s['isFlutter'] == target.isFlutter).toList();
+      final filteredSnippets = snippets.where((s) => s['isFlutter'] == target.isFlutter && s['deprecated'] != true).toList();
       for (var i = 0; i < filteredSnippets.length; i++) {
         filteredSnippets[i]['last'] = i == filteredSnippets.length - 1;
       }
@@ -3178,6 +3178,7 @@ void generateVSCodeAndSkills(
       final List<Map<String, dynamic>> parsedDeclsMap = [];
       for (final d in pkgDecls) {
         if (d.name.startsWith('_')) continue;
+        if (d.isDeprecated) continue;
         
         final List<Map<String, dynamic>> membersList = [];
         for (final m in d.members) {
