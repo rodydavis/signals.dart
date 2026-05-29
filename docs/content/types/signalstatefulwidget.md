@@ -76,7 +76,6 @@ The **SignalStatefulWidget** type is referenced and used in the following pages:
 * [ConvertedSignalStatefulWidget](/packages/signals/extensions/converted-signal-stateful-widget) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
 * [SignalStatefulWidget](/packages/signals/extensions/signal-stateful-widget) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
 * [signals](/packages/signals)
-* [signals-dart AI Skill](/skills/signals-dart) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 * [signals-lint AI Skill](/skills/signals-lint) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 * [signals-migration-6-to-7 AI Skill](/skills/signals-migration-6-to-7) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 * [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>

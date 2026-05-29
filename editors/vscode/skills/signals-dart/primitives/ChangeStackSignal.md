@@ -1,4 +1,4 @@
-# Primitive: `ChangeStackSignal` (prefix: `undosig`)
+# Primitive: `ChangeStackSignal`
 
 - **Category**: Utilities
 - **Description**: Track signal values over time, exposing simple, robust undo/redo capabilities.

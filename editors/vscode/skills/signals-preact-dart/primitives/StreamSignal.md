@@ -1,4 +1,4 @@
-# Primitive: `StreamSignal` (prefix: `strsig`)
+# Primitive: `StreamSignal`
 
 - **Category**: Primitive
 - **Description**: Dynamic, lifecycle-safe, self-disposing stream listener mapping to async loading/data/error states.

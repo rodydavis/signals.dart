@@ -1,4 +1,4 @@
-# Primitive: `Signal Container (Read-only)` (prefix: `rsigcon`)
+# Primitive: `Signal Container (Read-only)`
 
 - **Category**: Utilities
 - **Description**: Returns a read-only parameterized caching Signal Container.

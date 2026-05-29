@@ -1,4 +1,4 @@
-# Primitive: `MapSignal` (prefix: `mpsig`)
+# Primitive: `MapSignal`
 
 - **Category**: Collections
 - **Description**: Granular map wrapper supporting isolated dictionary element lookup triggers.

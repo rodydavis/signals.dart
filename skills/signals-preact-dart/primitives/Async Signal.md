@@ -1,4 +1,4 @@
-# Primitive: `Async Signal` (prefix: `asig`)
+# Primitive: `Async Signal`
 
 - **Category**: Primitive
 - **Description**: An async Signal Object mapping loading, data success, and error failure states cleanly.

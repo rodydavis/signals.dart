@@ -1,4 +1,4 @@
-# Primitive: `Watch builder` (prefix: `watchb`)
+# Primitive: `Watch builder`
 
 - **Category**: Flutter
 - **Description**: Explicit in-place Flutter Watch widget rebuilding only the returned closure closure.

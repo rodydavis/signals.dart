@@ -1,4 +1,4 @@
-# Primitive: `FutureSignal` (prefix: `fusig`)
+# Primitive: `FutureSignal`
 
 - **Category**: Primitive
 - **Description**: Bypasses stream subscription overhead and resolves the future-evaluation loop elegantly.

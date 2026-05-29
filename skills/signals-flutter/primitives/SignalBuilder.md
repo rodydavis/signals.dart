@@ -1,4 +1,4 @@
-# Primitive: `SignalBuilder` (prefix: `sigb`)
+# Primitive: `SignalBuilder`
 
 - **Category**: Flutter
 - **Description**: Subscribes to a single signal, rebuilding only this local builder block when it changes.

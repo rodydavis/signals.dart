@@ -1,4 +1,4 @@
-# Primitive: `Computed` (prefix: `comp`)
+# Primitive: `Computed`
 
 - **Category**: Derived
 - **Description**: Combine multiple signals into a derived, lazily-cached, read-only signal.

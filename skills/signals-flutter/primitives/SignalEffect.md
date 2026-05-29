@@ -1,4 +1,4 @@
-# Primitive: `SignalEffect` (prefix: `sigeff`)
+# Primitive: `SignalEffect`
 
 - **Category**: Flutter
 - **Description**: Executes standard Flutter side effects (Snackbars, dialogs) inside widget lifecycles safely.

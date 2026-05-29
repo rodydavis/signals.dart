@@ -1,4 +1,4 @@
-# Primitive: `AsyncComputed` (prefix: `ascomp`)
+# Primitive: `AsyncComputed`
 
 - **Category**: Derived
 - **Description**: Asynchronous Computed is syntax sugar around FutureSignal for async dependent tasks.

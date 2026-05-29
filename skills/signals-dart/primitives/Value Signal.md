@@ -1,4 +1,4 @@
-# Primitive: `Value Signal` (prefix: `valsig`)
+# Primitive: `Value Signal`
 
 - **Category**: Utilities
 - **Description**: Custom Value Signal class definition template.

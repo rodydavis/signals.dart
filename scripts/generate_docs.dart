@@ -3238,7 +3238,7 @@ void generateVSCodeAndSkills(
         // Generate primitive subfiles
         for (final s in filteredSnippets) {
           final content = StringBuffer();
-          content.writeln('# Primitive: `${s['name']}` (prefix: `${s['prefix']}`)');
+          content.writeln('# Primitive: `${s['name']}`');
           content.writeln();
           content.writeln('- **Category**: ${s['category']}');
           content.writeln('- **Description**: ${s['description']}');

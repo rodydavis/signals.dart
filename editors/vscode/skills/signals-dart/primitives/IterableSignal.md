@@ -1,4 +1,4 @@
-# Primitive: `IterableSignal` (prefix: `itrsig`)
+# Primitive: `IterableSignal`
 
 - **Category**: Collections
 - **Description**: Iterable signals wrap collection items lazy-traversals mapped to custom reactivity layer.

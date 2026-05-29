@@ -13,12 +13,12 @@ This guide outlines advanced state management primitives, reactive collections, 
 
 The following table summarizes all available reactive primitives and widgets. Click on any primitive's name to view its detailed documentation, standard usage, and examples.
 
-| Primitive | Prefix | Category | Description |
-| :--- | :--- | :--- | :--- |
-| [Watch builder](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/Watch builder.md) | `watchb` | Flutter | Explicit in-place Flutter Watch widget rebuilding only the returned closure closure. |
-| [Watch](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/Watch.md) | `watch` | Flutter | Rebuilds only the wrapped closure when tracked signals change, avoiding full-widget GPU paints. |
-| [SignalBuilder](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/SignalBuilder.md) | `sigb` | Flutter | Subscribes to a single signal, rebuilding only this local builder block when it changes. |
-| [SignalEffect](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/SignalEffect.md) | `sigeff` | Flutter | Executes standard Flutter side effects (Snackbars, dialogs) inside widget lifecycles safely. |
+| Primitive | Category | Description |
+| :--- | :--- | :--- |
+| [Watch builder](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/Watch builder.md) | Flutter | Explicit in-place Flutter Watch widget rebuilding only the returned closure closure. |
+| [Watch](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/Watch.md) | Flutter | Rebuilds only the wrapped closure when tracked signals change, avoiding full-widget GPU paints. |
+| [SignalBuilder](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/SignalBuilder.md) | Flutter | Subscribes to a single signal, rebuilding only this local builder block when it changes. |
+| [SignalEffect](file:///Users/rodydavis/.gemini/antigravity/worktrees/signals.dart/update-vscode-signals-extension/skills/signals-flutter/primitives/SignalEffect.md) | Flutter | Executes standard Flutter side effects (Snackbars, dialogs) inside widget lifecycles safely. |
 
 ---
 

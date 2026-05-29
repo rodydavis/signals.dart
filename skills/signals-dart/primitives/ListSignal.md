@@ -1,4 +1,4 @@
-# Primitive: `ListSignal` (prefix: `lstsig`)
+# Primitive: `ListSignal`
 
 - **Category**: Collections
 - **Description**: Optimized list wrapper proxying standard operations to support element-level reactivity.

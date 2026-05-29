@@ -1,4 +1,4 @@
-# Primitive: `Watch` (prefix: `watch`)
+# Primitive: `Watch`
 
 - **Category**: Flutter
 - **Description**: Rebuilds only the wrapped closure when tracked signals change, avoiding full-widget GPU paints.

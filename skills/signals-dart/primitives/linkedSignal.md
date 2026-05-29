@@ -1,4 +1,4 @@
-# Primitive: `linkedSignal` (prefix: `linksig`)
+# Primitive: `linkedSignal`
 
 - **Category**: Writable Derived
 - **Description**: A writable derived signal that allows manual updates and resets to a source computation on mutation.
