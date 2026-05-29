@@ -4,9 +4,6 @@ packages:
   - examples/*
   - packages/*
 
-ignore:
-  - packages/signals_lint
-
 scripts:
   analyze:
     exec: dart analyze .

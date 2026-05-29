@@ -52,7 +52,7 @@ class _Visitor extends SimpleAstVisitor<void> {
 
     final arguments = node.argumentList.arguments;
     for (final argument in arguments) {
-      if (argument is! NamedArgument) {
+      if (argument is! NamedExpression) {
         rule.reportAtNode(argument);
         return;
       }

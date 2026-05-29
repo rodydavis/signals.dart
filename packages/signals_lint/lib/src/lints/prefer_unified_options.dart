@@ -75,8 +75,8 @@ class _Visitor extends SimpleAstVisitor<void> {
 
     final arguments = node.argumentList.arguments;
     for (final argument in arguments) {
-      if (argument is NamedArgument) {
-        final paramName = argument.name.lexeme;
+      if (argument is NamedExpression) {
+        final paramName = argument.name.label.name;
         if (deprecatedParams.contains(paramName)) {
           rule.reportAtNode(argument);
           return;

@@ -44,7 +44,7 @@ class MigrateWatchToSignalBuilder extends ResolvedCorrectionProducer {
       final constructorIdentifier = constructorName.name;
       if (constructorIdentifier == null) {
         final arguments = instanceCreation.argumentList.arguments;
-        if (arguments.isNotEmpty && arguments.first is! NamedArgument) {
+        if (arguments.isNotEmpty && arguments.first is! NamedExpression) {
           final positionalArg = arguments.first;
           builder.addSimpleReplacement(
             instanceCreation.sourceRange,
