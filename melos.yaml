@@ -6,8 +6,7 @@ packages:
 
 scripts:
   analyze:
-    exec: dart analyze .
-    concurrency: 1
+    run: melos exec --concurrency=1 -- dart analyze .
   test:dart:
     exec: dart test
     packageFilters:
