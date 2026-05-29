@@ -1,3 +1,7 @@
+## 7.1.0
+
+- Bump signals dev-dependency to 7.2.0
+
 ## 7.0.0
 
 - Bump `signals` dev-dependency to `^7.0.0`.

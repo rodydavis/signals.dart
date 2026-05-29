@@ -170,7 +170,7 @@
 - [StreamSignalMixin](https://dartsignals.dev/packages/signals/mixins/stream): A mixin that implements the standard Stream interface for a ReadonlySignal.
 - [ChangeStackSignalMixin](https://dartsignals.dev/packages/signals/mixins/change-stack): A mixin that adds undo, redo, and state history replay capabilities to a Signal.
 - [FlutterComputed](https://dartsignals.dev/packages/signals/signals/flutter-computed): A read-only reactive signal whose value is automatically computed and cached.
-- [TickerSignal](https://dartsignals.dev/packages/signals/signals/ticker-signal): Ticker signal used to drive animations and can create animation controllers.
+- [Ticker Signal](https://dartsignals.dev/packages/signals/signals/ticker-signal): Ticker signal used to drive animations and can create animation controllers.
 - [FlutterSignal](https://dartsignals.dev/packages/signals/signals/flutter-signal): A mutable, reactive state cell that exposes both standard Signals and Flutter.
 - [Flutter Readonly Signal](https://dartsignals.dev/packages/signals/signals/flutter-readonly-signal): Signal extensions for watching value changes on BuildContext.
 - [AsyncState](https://dartsignals.dev/packages/signals/async/state): A sealed union representing the lifecycle states of an asynchronous operation.

@@ -1,3 +1,7 @@
+## 7.1.0
+
+- **FIX**: Removed redundant unused type parameter `T` from `SignalContainer`. Only `<Arg, S>` are needed now.
+
 ## 7.0.0
 
 ### ⚠️ BREAKING CHANGES

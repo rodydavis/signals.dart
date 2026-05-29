@@ -3,7 +3,7 @@ title: signals_lint
 description: linter and developer tool for signals
 ---
 
-> Version: <code>7.0.0</code>
+> Version: <code>7.1.0</code>
 
 ## Installation
 

@@ -1,3 +1,9 @@
+## 7.2.0
+
+- Bump signals_core to 7.1.0
+- Bump signals_flutter to 7.2.0
+- Bump signals_hooks to 7.2.0
+
 ## 7.1.0
 
 - Bump signals_flutter to 7.1.0

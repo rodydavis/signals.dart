@@ -3,7 +3,7 @@ title: signals_core
 description: The signals library exposes four core functions which are the building blocks to model any business logic you can think of.
 ---
 
-> Version: <code>7.0.0</code>
+> Version: <code>7.1.0</code>
 
 ## Installation
 

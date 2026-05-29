@@ -1,3 +1,7 @@
+## 7.2.0
+
+- Bump signals dependency to 7.2.0
+
 ## 7.1.0
 
 - Added native `Widget build(BuildContext context)` override support directly on `SignalHookWidget`.

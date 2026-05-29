@@ -58,6 +58,5 @@ void main() {
 The **TickerSignal** type is referenced and used in the following pages:
 
 * [Ticker Signal](/packages/signals_flutter/signals/ticker-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/signals)</span>
-* [TickerSignal](/packages/signals/signals/ticker-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
-* [signals](/packages/signals)
+* [Ticker Signal](/packages/signals/signals/ticker-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
 

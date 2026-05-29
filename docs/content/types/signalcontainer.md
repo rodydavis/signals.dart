@@ -95,7 +95,7 @@ void main() {
 ## Function: signalContainer
 
 ```dart
-SignalContainer<T, Arg, Signal<T>> signalContainer(Signal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, Signal<T> signal)? onEvict})
+SignalContainer<Arg, Signal<T>> signalContainer(Signal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, Signal<T> signal)? onEvict})
 ```
 
 Create a signal container used to instance signals based on args

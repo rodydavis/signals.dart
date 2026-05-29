@@ -12382,7 +12382,7 @@ Url: https://dartsignals.dev/packages/signals_flutter/index
 Description: The signals library exposes four core functions which are the building blocks to model any business logic you can think of.
 ---
 
-> Version: `7.1.0`
+> Version: `7.2.0`
 
 ## Installation
 
@@ -23448,7 +23448,7 @@ Url: https://dartsignals.dev/packages/signals_core/index
 Description: The signals library exposes four core functions which are the building blocks to model any business logic you can think of.
 ---
 
-> Version: `7.0.0`
+> Version: `7.1.0`
 
 ## Installation
 
@@ -24238,7 +24238,7 @@ Url: https://dartsignals.dev/packages/signals_lint/index
 Description: linter and developer tool for signals
 ---
 
-> Version: `7.0.0`
+> Version: `7.1.0`
 
 ## Installation
 
@@ -31152,10 +31152,30 @@ updated when any signals accessed from within the callback function change.
 </details>
 
 ---
-## Page: TickerSignal
+## Page: Ticker Signal
 Url: https://dartsignals.dev/packages/signals/signals/ticker-signal
 Description: Ticker signal used to drive animations and can create animation controllers.
 ---
+
+## tickerSignal
+
+Ticker signal used to drive animations and can create animation controllers
+
+```dart
+void main() {
+  final ticker = tickerSignal(); // could be a global
+  final controller = ticker.toAnimationController(); // can be local or global
+  final curve = CurvedAnimation(parent: controller, curve: Curves.easeOut); // can be used outside of widget tree
+  final alpha = IntTween(begin: 0, end: 255).animate(curve);
+  ...
+  final alphaSignal = alpha.toSignal(); // can be converted to a signal
+}
+```
+
+
+---
+
+## TickerSignal
 
 Ticker signal used to drive animations and can create animation controllers
 
@@ -31208,25 +31228,6 @@ void main() {
 Create a new **AnimationController**
 
 </details>
-
-
-
----
-
-## tickerSignal
-
-Ticker signal used to drive animations and can create animation controllers
-
-```dart
-void main() {
-  final ticker = tickerSignal(); // could be a global
-  final controller = ticker.toAnimationController(); // can be local or global
-  final curve = CurvedAnimation(parent: controller, curve: Curves.easeOut); // can be used outside of widget tree
-  final alpha = IntTween(begin: 0, end: 255).animate(curve);
-  ...
-  final alphaSignal = alpha.toSignal(); // can be converted to a signal
-}
-```
 
 ---
 ## Page: FlutterSignal
@@ -35947,7 +35948,7 @@ Url: https://dartsignals.dev/packages/signals/index
 Description: Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more.
 ---
 
-> Version: `7.1.0`
+> Version: `7.2.0`
 
 ## Installation
 
@@ -36087,7 +36088,7 @@ final doubleCount = computed(() => count.value * 2);
       <a class="content-link" href="/packages/signals/signals/flutter-computed">FlutterComputed</a>
       <a class="content-link" href="/packages/signals/signals/flutter-readonly-signal">Flutter Readonly Signal</a>
       <a class="content-link" href="/packages/signals/signals/flutter-signal">FlutterSignal</a>
-      <a class="content-link" href="/packages/signals/signals/ticker-signal">TickerSignal</a>
+      <a class="content-link" href="/packages/signals/signals/ticker-signal">Ticker Signal</a>
     </div>
   </div>
   <div class="category-card">
@@ -37067,7 +37068,7 @@ Url: https://dartsignals.dev/packages/signals_hooks/index
 Description: flutter_hooks bindings for signals
 ---
 
-> Version: `7.1.0`
+> Version: `7.2.0`
 
 ## Installation
 

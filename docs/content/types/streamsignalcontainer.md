@@ -13,7 +13,7 @@ description: "API reference and details for streamSignalContainer from signals.d
 ## Function: streamSignalContainer
 
 ```dart
-SignalContainer<AsyncState<T>, Arg, StreamSignal<T>> streamSignalContainer(StreamSignal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, StreamSignal<T> signal)? onEvict})
+SignalContainer<Arg, StreamSignal<T>> streamSignalContainer(StreamSignal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, StreamSignal<T> signal)? onEvict})
 ```
 
 Create a signal container for StreamSignals based on args.

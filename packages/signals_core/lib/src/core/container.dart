@@ -1,7 +1,6 @@
 import '../value/value.dart';
 import 'signals.dart';
 import '../async/future.dart';
-import '../async/state.dart';
 import '../async/stream.dart';
 
 /// Signal container used to create signals based on args
@@ -61,7 +60,7 @@ import '../async/stream.dart';
 ///  settings.darkMode.value = 'true';
 ///}
 /// ```
-class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
+class SignalContainer<Arg, S> {
   /// If true then signals will be cached when created
   final bool cache;
 
@@ -183,12 +182,12 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
 ///
 /// The signals cannot be updated but allows for
 /// using computed where the value is only derived from other signals.
-SignalContainer<T, Arg, ReadonlySignal<T>> readonlySignalContainer<T, Arg>(
+SignalContainer<Arg, ReadonlySignal<T>> readonlySignalContainer<T, Arg>(
   ReadonlySignal<T> Function(Arg) create, {
   bool cache = false,
   void Function(Arg key, ReadonlySignal<T> signal)? onEvict,
 }) {
-  return SignalContainer<T, Arg, ReadonlySignal<T>>(
+  return SignalContainer<Arg, ReadonlySignal<T>>(
     create,
     cache: cache,
     onEvict: onEvict,
@@ -210,12 +209,12 @@ SignalContainer<T, Arg, ReadonlySignal<T>> readonlySignalContainer<T, Arg>(
 /// cacheB.value = 'b';
 /// cacheC.value = 'c';
 /// ```
-SignalContainer<T, Arg, Signal<T>> signalContainer<T, Arg>(
+SignalContainer<Arg, Signal<T>> signalContainer<T, Arg>(
   Signal<T> Function(Arg) create, {
   bool cache = false,
   void Function(Arg key, Signal<T> signal)? onEvict,
 }) {
-  return SignalContainer<T, Arg, Signal<T>>(
+  return SignalContainer<Arg, Signal<T>>(
     create,
     cache: cache,
     onEvict: onEvict,
@@ -229,12 +228,12 @@ SignalContainer<T, Arg, Signal<T>> signalContainer<T, Arg>(
 ///   return computed(() => sourceSignal.value * arg);
 /// });
 /// ```
-SignalContainer<T, Arg, Computed<T>> computedContainer<T, Arg>(
+SignalContainer<Arg, Computed<T>> computedContainer<T, Arg>(
   Computed<T> Function(Arg) create, {
   bool cache = false,
   void Function(Arg key, Computed<T> signal)? onEvict,
 }) {
-  return SignalContainer<T, Arg, Computed<T>>(
+  return SignalContainer<Arg, Computed<T>>(
     create,
     cache: cache,
     onEvict: onEvict,
@@ -248,13 +247,13 @@ SignalContainer<T, Arg, Computed<T>> computedContainer<T, Arg>(
 ///   return futureSignal(() => fetchPost(id));
 /// });
 /// ```
-SignalContainer<AsyncState<T>, Arg, FutureSignal<T>>
+SignalContainer<Arg, FutureSignal<T>>
     futureSignalContainer<T, Arg>(
   FutureSignal<T> Function(Arg) create, {
   bool cache = false,
   void Function(Arg key, FutureSignal<T> signal)? onEvict,
 }) {
-  return SignalContainer<AsyncState<T>, Arg, FutureSignal<T>>(
+  return SignalContainer<Arg, FutureSignal<T>>(
     create,
     cache: cache,
     onEvict: onEvict,
@@ -268,13 +267,13 @@ SignalContainer<AsyncState<T>, Arg, FutureSignal<T>>
 ///   return streamSignal(() => listenToRoom(roomId));
 /// });
 /// ```
-SignalContainer<AsyncState<T>, Arg, StreamSignal<T>>
+SignalContainer<Arg, StreamSignal<T>>
     streamSignalContainer<T, Arg>(
   StreamSignal<T> Function(Arg) create, {
   bool cache = false,
   void Function(Arg key, StreamSignal<T> signal)? onEvict,
 }) {
-  return SignalContainer<AsyncState<T>, Arg, StreamSignal<T>>(
+  return SignalContainer<Arg, StreamSignal<T>>(
     create,
     cache: cache,
     onEvict: onEvict,

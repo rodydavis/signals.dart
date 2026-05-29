@@ -3,7 +3,7 @@ title: signals
 description: Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more.
 ---
 
-> Version: <code>7.1.0</code>
+> Version: <code>7.2.0</code>
 
 ## Installation
 
@@ -143,7 +143,7 @@ final doubleCount = computed(() => count.value * 2);
       <a class="content-link" href="/packages/signals/signals/flutter-computed">FlutterComputed</a>
       <a class="content-link" href="/packages/signals/signals/flutter-readonly-signal">Flutter Readonly Signal</a>
       <a class="content-link" href="/packages/signals/signals/flutter-signal">FlutterSignal</a>
-      <a class="content-link" href="/packages/signals/signals/ticker-signal">TickerSignal</a>
+      <a class="content-link" href="/packages/signals/signals/ticker-signal">Ticker Signal</a>
     </div>
   </div>
   <div class="category-card">
