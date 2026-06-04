@@ -2,19 +2,60 @@ import 'dart:collection';
 
 import '../core/signals.dart';
 
-/// Change stack signal that can be used to call undo/redo on a value.
+/// A mixin that adds undo, redo, and state history replay capabilities to a [Signal].
+///
+/// [ChangeStackSignalMixin] keeps track of past states of a signal's value in a double-ended
+/// queue, allowing you to easily go back to previous values using [undo] and go forward to subsequent
+/// values using [redo]. You can inspect if undo or redo are available via [canUndo] and [canRedo].
+///
+/// You can also set a [limit] on the maximum size of the history stack, preventing memory leak
+/// issues in long-running scenarios.
+///
+/// :::note
+/// If you only need access to the initial and immediate previous values of a signal (without a full
+/// history stack or undo/redo mechanisms), use the lightweight [TrackedSignalMixin] instead.
+/// :::
+///
+/// ### Example Usage
 ///
 /// ```dart
-/// final s = ChangeStackSignal(0, limit: 5);
-/// s.value = 1;
-/// s.value = 2;
-/// s.value = 3;
-/// print(s.value); // 3
-/// s.undo();
-/// print(s.value); // 2
-/// s.redo();
-/// print(s.value); // 3
+/// import 'package:signals/signals.dart';
+///
+/// class HistorySignal extends Signal<int> with ChangeStackSignalMixin<int> {
+///   HistorySignal(super.internalValue);
+/// }
+///
+/// void main() {
+///   final counter = HistorySignal(0);
+///   counter.limit = 5; // Cap history stack to 5 items
+///
+///   counter.value = 1;
+///   counter.value = 2;
+///   counter.value = 3;
+///
+///   print('Current: ${counter.value}'); // Prints: "Current: 3"
+///   print('Can Undo: ${counter.canUndo}'); // Prints: "Can Undo: true"
+///
+///   // Undo last change
+///   counter.undo();
+///   print('Undone: ${counter.value}'); // Prints: "Undone: 2"
+///
+///   // Undo once more
+///   counter.undo();
+///   print('Undone: ${counter.value}'); // Prints: "Undone: 1"
+///
+///   // Redo the previous undo
+///   counter.redo();
+///   print('Redone: ${counter.value}'); // Prints: "Redone: 2"
+/// }
 /// ```
+///
+/// :::caution
+/// This mixin only works with values that are immutable or are copied/cloned when changed.
+/// If you mutate an object in-place directly without replacing the value using `set` or the `.value`
+/// setter, the history queue will store references to the same mutated object, and undo/redo
+/// will appear to do nothing.
+/// :::
 mixin ChangeStackSignalMixin<T> on Signal<T> {
   /// Max values to keep in history
   int? limit;

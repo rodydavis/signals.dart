@@ -8,6 +8,13 @@ final nodeUpdate = signal<$Node?>(null);
 final nodeRemove = signal<$Node?>(null);
 final reassembleCount = signal<int>(0);
 
+final updates = listSignal<SignalUpdate>([]);
+final isPaused = signal<bool>(false);
+
+void clearUpdates() {
+  updates.clear();
+}
+
 Function? initNodes() {
   final subscription = serviceManager.service?.onExtensionEvent
       .where((e) => e.extensionKind?.startsWith('ext.signals') ?? false)
@@ -27,6 +34,11 @@ Function? initNodes() {
       case 'ext.signals.effectCalled':
         final n = $Node.fromJson(data);
         final idx = nodes.indexWhere((e) => e.id == n.id && e.type == n.type);
+        String? prevValue;
+        if (idx != -1) {
+          prevValue = nodes[idx].value;
+        }
+
         if (n.value == '-1' && n.type == 'effect') {
           nodes.removeWhere((e) => e.id == n.id);
           nodeRemove.value = n;
@@ -38,11 +50,37 @@ Function? initNodes() {
             final current = nodes[idx];
             if (n.type == 'signal' || n.type == 'computed') {
               current.value = n.value;
+              current.sources = n.sources ?? current.sources;
+              current.targets = n.targets ?? current.targets;
+              nodes[idx] = current;
               nodeUpdate.value = current;
             } else {
               nodes[idx] = n;
               nodeUpdate.value = n;
             }
+          }
+        }
+
+        // Log to updates history
+        if (!isPaused.value) {
+          if (kind == 'ext.signals.effectCalled') {
+            updates.add(SignalUpdate(
+              type: 'effect',
+              signalType: 'effect',
+              signalName: n.label ?? 'effect ${n.id}',
+              signalId: n.id,
+              timestamp: DateTime.now(),
+            ));
+          } else {
+            updates.add(SignalUpdate(
+              type: 'update',
+              signalType: n.type,
+              signalName: n.label ?? 'signal ${n.id}',
+              signalId: n.id,
+              prevValue: prevValue ?? 'undefined',
+              newValue: n.value ?? 'undefined',
+              timestamp: DateTime.now(),
+            ));
           }
         }
         break;
@@ -119,4 +157,26 @@ class $Node {
       targets: item['targets'] as String?,
     );
   }
+}
+
+class SignalUpdate {
+  final String type; // 'update' | 'effect' | 'component'
+  final String signalType; // 'signal' | 'computed' | 'effect'
+  final String signalName;
+  final int signalId;
+  final String? prevValue;
+  final String? newValue;
+  final DateTime timestamp;
+  final int depth;
+
+  SignalUpdate({
+    required this.type,
+    required this.signalType,
+    required this.signalName,
+    required this.signalId,
+    this.prevValue,
+    this.newValue,
+    required this.timestamp,
+    this.depth = 0,
+  });
 }

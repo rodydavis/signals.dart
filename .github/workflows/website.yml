@@ -4,6 +4,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pages: write
@@ -14,13 +18,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
-        uses: actions/checkout@v3
-      - name: Install, build, and upload your site output
-        uses: withastro/action@v2
+        uses: actions/checkout@v6
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1.7.2
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2.10.0
         with:
-          path: website
-          node-version: 19
-          package-manager: pnpm@7.26.1
+          channel: "stable"
+
+      - name: Install Jaspr CLI
+        run: dart pub global activate jaspr_cli
+
+      - name: Install dependencies
+        run: |
+          cd docs
+          flutter pub get
+
+      - name: Build Jaspr Static Site
+        run: |
+          cd docs
+          dart pub global run jaspr_cli:jaspr build
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/build/jaspr/
 
   deploy:
     needs: build
@@ -31,4 +55,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

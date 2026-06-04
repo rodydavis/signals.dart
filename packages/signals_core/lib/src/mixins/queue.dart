@@ -1,9 +1,57 @@
+// ignore_for_file: public_member_api_docs
 import 'dart:collection';
 
 import '../core/signals.dart';
 
-/// Mixin to upgrade an queue signal with reactive properties
-mixin QueueSignalMixin<T, S extends Queue<T>> on Signal<S> implements Queue<T> {
+/// A mixin that adds reactive `Queue` methods and operations to a [Signal]
+/// holding a [Queue] value.
+///
+/// This mixin delegates all standard [Queue] operations (such as mutations like `add`,
+/// `addAll`, `addFirst`, `addLast`, `removeFirst`, `removeLast`, and `clear`) to the
+/// underlying queue, while ensuring that any reads register a dependency and any
+/// mutations automatically trigger reactive updates.
+///
+/// :::note
+/// This mixin only works with signals that have a value type extending [Queue<T>].
+/// :::
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'dart:collection';
+/// import 'package:signals/signals.dart';
+///
+/// class MyQueueSignal extends Signal<Queue<int>>
+///     with QueueSignalMixin<int, Queue<int>> {
+///   MyQueueSignal(super.internalValue);
+/// }
+///
+/// void main() {
+///   final q = Queue<int>()..add(1);
+///   final signal = MyQueueSignal(q);
+///
+///   effect(() {
+///     print('Queue elements: $signal, Length: ${signal.length}');
+///   }); // Prints: "Queue elements: {1}, Length: 1"
+///
+///   // Adding to the front of the queue (triggers updates)
+///   signal.addFirst(0); // Prints: "Queue elements: {0, 1}, Length: 2"
+///
+///   // Adding to the back of the queue (triggers updates)
+///   signal.addLast(2); // Prints: "Queue elements: {0, 1, 2}, Length: 3"
+///
+///   // Removing from the front of the queue (triggers updates)
+///   final first = signal.removeFirst(); // Prints: "Queue elements: {1, 2}, Length: 2"
+/// }
+/// ```
+///
+/// :::tip
+/// Since mutations on `QueueSignalMixin` notify listeners automatically, you do not
+/// need to assign `signal.value = ...` to force updates. Methods like `addFirst`,
+/// `addLast`, `removeFirst`, and `removeLast` take care of notification.
+/// :::
+abstract mixin class QueueSignalMixin<T, S extends Queue<T>>
+    implements Signal<S>, Queue<T> {
   @override
   void add(T value) {
     this.value.add(value);
@@ -41,6 +89,7 @@ mixin QueueSignalMixin<T, S extends Queue<T>> on Signal<S> implements Queue<T> {
   @override
   void clear() {
     value.clear();
+    set(value, force: true);
   }
 
   @override
@@ -60,7 +109,7 @@ mixin QueueSignalMixin<T, S extends Queue<T>> on Signal<S> implements Queue<T> {
 
   @override
   Iterable<U> expand<U>(Iterable<U> Function(T element) toElements) {
-    return expand<U>(toElements);
+    return value.expand<U>(toElements);
   }
 
   @override
@@ -73,7 +122,7 @@ mixin QueueSignalMixin<T, S extends Queue<T>> on Signal<S> implements Queue<T> {
 
   @override
   U fold<U>(U initialValue, U Function(U previousValue, T element) combine) {
-    return fold<U>(initialValue, combine);
+    return value.fold<U>(initialValue, combine);
   }
 
   @override

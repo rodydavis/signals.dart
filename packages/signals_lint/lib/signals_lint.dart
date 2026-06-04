@@ -1,20 +1,10 @@
-/// Signals linter
-library;
-
-import 'package:custom_lint_builder/custom_lint_builder.dart';
-import 'src/fixes/wrap_with_watch.dart';
-import 'src/lints/avoid_create_in_build_method.dart';
-
-PluginBase createPlugin() => _SignalsPlugin();
-
-class _SignalsPlugin extends PluginBase {
-  @override
-  List<LintRule> getLintRules(CustomLintConfigs configs) => [
-        SignalsAvoidCreateInBuildMethod(),
-      ];
-
-  @override
-  List<Assist> getAssists() => [
-        WrapWithWatch(),
-      ];
-}
+export 'src/fixes/convert_stateful_to_signal_stateful_widget.dart';
+export 'src/fixes/convert_stateless_to_signal_widget.dart';
+export 'src/fixes/migrate_signals_mixin_to_signal_stateful_widget.dart';
+export 'src/fixes/migrate_watch_to_signal_builder.dart';
+export 'src/fixes/wrap_with_signal_builder.dart';
+export 'src/lints/avoid_create_in_build_method.dart';
+export 'src/lints/avoid_deprecated_signals_mixin.dart';
+export 'src/lints/avoid_deprecated_watch_extension.dart';
+export 'src/lints/prefer_named_builder.dart';
+export 'src/lints/prefer_unified_options.dart';

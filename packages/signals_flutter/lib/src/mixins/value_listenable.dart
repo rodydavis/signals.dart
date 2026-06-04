@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart' show ValueListenable, VoidCallback;
 import '../../signals_core.dart';
 
 /// [ValueListenable] implementation for [ReadonlySignal]
-mixin ValueListenableSignalMixin<T> on ReadonlySignal<T>
-    implements ValueListenable<T> {
+abstract mixin class ValueListenableSignalMixin<T>
+    implements ReadonlySignal<T>, ValueListenable<T> {
   final _listeners = <VoidCallback, void Function()>{};
 
   /// If true, the callback will be run when the listener is added
@@ -12,6 +12,9 @@ mixin ValueListenableSignalMixin<T> on ReadonlySignal<T>
 
   @override
   void addListener(VoidCallback listener) {
+    if (_listeners.isEmpty) {
+      onDispose(_listeners.clear);
+    }
     bool first = true;
     _listeners.putIfAbsent(listener, () {
       return subscribe((_) {
@@ -29,11 +32,5 @@ mixin ValueListenableSignalMixin<T> on ReadonlySignal<T>
   void removeListener(VoidCallback listener) {
     final cleanup = _listeners.remove(listener);
     cleanup?.call();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _listeners.clear();
   }
 }

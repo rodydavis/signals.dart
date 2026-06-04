@@ -8,10 +8,6 @@
 
 # Signals.dart
 
-<a href="https://idx.google.com/new?template=https://github.com/rodydavis/signals.dart">
-  <img height="32" alt="Try in IDX" src="https://cdn.idx.dev/btn/try_dark_32.svg">
-</a>
-
 ## Features
 
 - 🪡 **Fine grained reactivity**: Based on [Preact Signals](https://preactjs.com/blog/signal-boosting/) and provides a fine grained reactivity system that will automatically track dependencies and free them when no longer needed
@@ -37,6 +33,28 @@ VS Code Extension: https://marketplace.visualstudio.com/items?itemName=rodydavis
 | [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                                                  |
 
 [![Star History Chart](https://api.star-history.com/svg?repos=rodydavis/signals.dart&type=Date)](https://star-history.com/#rodydavis/signals.dart&Date)
+
+## AI Developer Skills
+
+To enable AI coding assistants (like Google Antigravity, Gemini, Claude, Cursor, GitHub Copilot, and others) to build high-quality reactive systems with `signals.dart`, this repository includes prepackaged, high-fidelity developer **Skills**.
+
+These skills are located under the [`./skills`](./skills) directory and are fully modular:
+
+*   **[`signals-preact-dart`](./skills/signals-preact-dart)**: Deep knowledge and best practices for core reactive primitives (`signal`, `computed`, `effect`, `batch`, `untracked`).
+*   **[`signals-dart`](./skills/signals-dart)**: Best practices for async signal operations (`FutureSignal`, `StreamSignal`), reactive collections, writable computed signals (`linkedSignal`), and value semantics.
+*   **[`signals-flutter`](./skills/signals-flutter)**: Comprehensive guides on element-level reactive UI integration, high-frequency GPU rendering bypasses, lifecycle side-effects, and `.watch(context)` extensions.
+*   **[`signals-migration-6-to-7`](./skills/signals-migration-6-to-7)**: Detailed instructions, patterns, and refactoring techniques to safely upgrade applications from signals v6.x to v7.0.0.
+
+### How to use them:
+
+#### 1. One-Command Installation via `skills.sh`
+You can instantly install all available signals skills into your global AI environment using the unified [skills.sh](https://skills.sh) registry CLI:
+```bash
+npx skills add rodydavis/signals.dart
+```
+
+#### 2. Manual Reference
+Simply reference the path to the desired skill directory in your AI prompt, or load the contents of the relevant `SKILL.md` files as context for your AI coding assistant.
 
 ## Contributors
 

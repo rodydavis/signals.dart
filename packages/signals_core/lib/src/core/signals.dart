@@ -10,6 +10,7 @@ import 'package:preact_signals/src/globals.dart';
 // ignore: implementation_imports
 import 'package:preact_signals/src/node.dart';
 
+part 'options.dart';
 part 'observer.dart';
 part 'effect.dart';
 part 'computed.dart';
@@ -18,6 +19,7 @@ part 'batch.dart';
 part 'untracked.dart';
 part 'readonly.dart';
 part 'auto_dispose.dart';
+part 'linked_signal.dart';
 
 /// Signal usage error
 class SignalsError extends Error {

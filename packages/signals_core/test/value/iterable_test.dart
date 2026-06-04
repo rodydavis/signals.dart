@@ -1,4 +1,5 @@
 import 'package:signals_core/signals_core.dart';
+import 'package:preact_signals/preact_signals.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -279,25 +280,87 @@ void main() {
     'IterableSignal',
     <T>(val, {autoDispose = false, debugLabel}) => IterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: IterableSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'iterableSignal',
     <T>(val, {autoDispose = false, debugLabel}) => iterableSignal(
       val,
-      autoDispose: autoDispose,
-      debugLabel: debugLabel,
+      options: IterableSignalOptions(
+        autoDispose: autoDispose,
+        name: debugLabel,
+      ),
     ),
   );
   testSignal(
     'toSignal',
     <T>(val, {autoDispose = false, debugLabel}) {
       return val.toSignal(
-        autoDispose: autoDispose,
-        debugLabel: debugLabel,
+        options: IterableSignalOptions(
+          autoDispose: autoDispose,
+          name: debugLabel,
+        ),
       );
     },
   );
+
+  group('IterableSignalOptions', () {
+    test('copyWith', () {
+      const opt = IterableSignalOptions<int>(name: 'a', autoDispose: true);
+      final copiedNull = opt.copyWith();
+      expect(copiedNull.name, 'a');
+      expect(copiedNull.autoDispose, true);
+
+      void watched() {}
+      void unwatched() {}
+      final eq = SignalEquality.deep<Iterable<int>>();
+      final copiedNew = opt.copyWith(
+        name: 'b',
+        autoDispose: false,
+        watched: watched,
+        unwatched: unwatched,
+        equality: eq,
+      );
+      expect(copiedNew.name, 'b');
+      expect(copiedNew.autoDispose, false);
+      expect(copiedNew.watched, watched);
+      expect(copiedNew.unwatched, unwatched);
+      expect(copiedNew.equalityCheck, eq);
+    });
+
+    test('equality and hashCode', () {
+      const opt1 = IterableSignalOptions<int>(name: 'test', autoDispose: false);
+      const opt2 = IterableSignalOptions<int>(name: 'test', autoDispose: false);
+      const opt3 =
+          IterableSignalOptions<int>(name: 'different', autoDispose: false);
+
+      expect(opt1 == opt1, isTrue);
+      expect(opt1 == opt2, isTrue);
+      expect(opt1.hashCode, opt2.hashCode);
+      expect(opt1 == opt3, isFalse);
+      expect((opt1 as dynamic) == 'not options', isFalse);
+    });
+  });
+
+  group('IterableSignal defaults and deprecated options', () {
+    test('IterableSignal constructor with options null', () {
+      final s = IterableSignal([1, 2], autoDispose: true, debugLabel: 'label');
+      expect(s.autoDispose, true);
+    });
+
+    test('iterableSignal constructor with options null', () {
+      final s = iterableSignal([1, 2], autoDispose: true, debugLabel: 'label');
+      expect(s.autoDispose, true);
+    });
+
+    test('toSignal with options null', () {
+      final Iterable<int> it = [1, 2];
+      final s = it.toSignal(autoDispose: true, debugLabel: 'label');
+      expect(s.autoDispose, true);
+    });
+  });
 }

@@ -45,12 +45,12 @@ class Example extends StatelessWidget {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Builder(builder: (context) {
-              return Text(
-                '${count.watch(context)}',
+            SignalBuilder(
+              builder: (context) => Text(
+                '${count.value}',
                 style: Theme.of(context).textTheme.titleLarge,
-              );
-            }),
+              ),
+            ),
             StreamBuilder(
               stream: count,
               builder: (context, snapshot) {
@@ -69,10 +69,10 @@ class Example extends StatelessWidget {
                 );
               },
             ),
-            Watch.builder(
+            SignalBuilder(
               builder: (context) {
                 return Text(
-                  'Watch: ${count.value}',
+                  'SignalBuilder: ${count.value}',
                   style: Theme.of(context).textTheme.titleLarge,
                 );
               },

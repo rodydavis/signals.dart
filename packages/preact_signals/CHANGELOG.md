@@ -1,3 +1,18 @@
+## 7.0.1
+
+- **Feature**: Documented and tested support for defining compile-safe models using Dart 3+ records in `createModel()`.
+- **Documentation**: Restructured the model utilities documentation to introduce three distinct creation patterns: Map-based models (dynamic lookup), Records (lightweight and type-safe), and Extension Types (class-like object wrappers).
+- **Testing**: Added comprehensive unit testing verifying that record-based models properly capture, track, and dispose of nested effects.
+
+## 7.0.0
+
+- **Breaking Change**: Unified `SignalOptions` to accept a non-nullable `equality` parameter defaulting to `SignalStandardEquality<Never>()`.
+- **Feature**: Exposed public `SignalEquality` subclasses: `SignalStandardEquality`, `SignalIdentityEquality`, `SignalCustomEquality`, and `SignalDeepEquality` to allow direct, cohesive constructor calls and imports.
+- **Optimization**: Optimized constant evaluations under generic subclasses by utilising `SignalStandardEquality<Never>()` as a default covariant parameter check.
+- **Release**: Major version synchronization across the board.
+
+## 6.3.1
+
 ## 1.9.4
 
 - Add @pragma for inline and errors

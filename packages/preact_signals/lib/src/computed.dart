@@ -4,13 +4,61 @@ import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
+import 'options.dart';
 import 'readonly.dart';
 
-/// Create a new signal that is computed based on the values of other signals.
+/// Represents a derived, read-only reactive state value computed from one or more other signals.
 ///
-/// The returned computed signal is read-only, and its value is automatically
-/// updated when any signals accessed from within the callback function change.
+/// Computed signals are **lazily evaluated** and **memoized (cached)**. Their callback function [fn]
+/// is only executed when its value is read *and* one of its upstream dependencies has mutated since the
+/// last calculation. If none of the dependencies have changed, the cached value is returned directly.
+///
+/// Under the hood, a `Computed` signal tracks its sources dynamically. If a conditional branch inside
+/// the computation changes such that certain signals are no longer read, those signals are automatically pruned
+/// from the dependency list, preventing redundant triggers.
+///
+/// <Warning>
+///   The computation callback [fn] should be **pure** and side-effect free. Writing to other signals or
+///   performing network/database operations inside a computed callback is a critical anti-pattern that can lead to
+///   infinite loops (cycles) or unpredictable state transitions.
+/// </Warning>
+///
+/// ### Example Usage
+///
+/// #### 1. Basic Derived State
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// void main() {
+///   final firstName = Signal('Jane');
+///   final lastName = Signal('Doe');
+///
+///   // Computed automatically tracks both firstName and lastName
+///   final fullName = Computed(() => '${firstName.value} ${lastName.value}');
+///
+///   print(fullName.value); // Jane Doe
+///   lastName.value = 'Smith';
+///   print(fullName.value); // Jane Smith
+/// }
+/// ```
+///
+/// #### 2. Dynamic Dependency Tracking (Branching)
+/// ```dart
+/// final showFull = Signal(false);
+/// final detailedInfo = Signal('High Latency Alert');
+/// final briefInfo = Signal('Alert');
+///
+/// final message = Computed(() {
+///   if (showFull.value) {
+///     return detailedInfo.value; // Subscribes to detailedInfo
+///   } else {
+///     return briefInfo.value; // Subscribes to briefInfo
+///   }
+/// });
+/// ```
 class Computed<T> with Listenable, ReadonlySignal<T> {
+  /// @internal
+  /// The computation callback function.
   @internal
   T Function() fn;
 
@@ -18,14 +66,24 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   final int globalId;
 
   @override
-  Node? sources;
+  final String? name;
 
+  @override
+  final void Function()? watched;
+
+  @override
+  final void Function()? unwatched;
+
+  /// @internal
+  /// The internal global version of the computed signal.
   @internal
   int internalGlobalVersion;
 
   @override
   int flags;
 
+  /// @internal
+  /// The captured exception from the latest computation run, if any.
   @internal
   SignalEffectException? error;
 
@@ -39,14 +97,33 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   @override
   T get internalValue => _internalValue;
 
+  /// @internal
+  /// Set the internal value.
   @internal
   set internalValue(T value) {
     _internalValue = value;
     _isInitialized = true;
   }
 
-  Computed(this.fn)
-      : internalGlobalVersion = globalVersion - 1,
+  /// Creates a new [Computed] signal instance with the derivation callback [fn].
+  ///
+  /// You can optionally provide:
+  /// - A [name] for debugging/observer tracing.
+  /// - [watched]/[unwatched] hooks triggered when the computed gains its first subscriber or loses its last subscriber.
+  ///
+  /// ```dart
+  /// final doubleCount = Computed(() => count.value * 2, name: 'double_counter');
+  /// ```
+  Computed(
+    this.fn, {
+    String? name,
+    void Function()? watched,
+    void Function()? unwatched,
+    ComputedOptions<T>? options,
+  })  : name = options?.name ?? name,
+        watched = options?.watched ?? watched,
+        unwatched = options?.unwatched ?? unwatched,
+        internalGlobalVersion = globalVersion - 1,
         flags = OUTDATED,
         version = 0,
         globalId = ++lastGlobalId;
@@ -176,13 +253,31 @@ class Computed<T> with Listenable, ReadonlySignal<T> {
   }
 }
 
-/// Create a new signal that is computed based on the values of other signals.
+/// Convenient global constructor for creating a derived computed signal.
 ///
-/// The returned computed signal is read-only, and its value is automatically
-/// updated when any signals accessed from within the callback function change.
+/// Computed signals are lazily evaluated and cached (memoized). Their values
+/// automatically update when any dependency signals accessed inside the callback function change.
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final firstName = signal('Jane');
+/// final lastName = signal('Doe');
+///
+/// final fullName = computed(() => '${firstName.value} ${lastName.value}');
+///
+/// void main() {
+///   print(fullName.value); // Prints: Jane Doe
+/// }
+/// ```
 ReadonlySignal<T> computed<T>(
-  /// The effect callback.
-  T Function() fn,
-) {
-  return Computed<T>(fn);
+  T Function() fn, [
+  ComputedOptions<T>? options,
+]) {
+  return Computed<T>(
+    fn,
+    options: options,
+  );
 }

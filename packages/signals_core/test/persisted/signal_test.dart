@@ -2,25 +2,7 @@ import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
 // A mock store for testing
-class MockStore extends SignalsInMemoryKeyValueStore {
-  @override
-  final Map<String, String?> store = {};
-
-  @override
-  Future<String?> getItem(String key) async {
-    return store[key];
-  }
-
-  @override
-  Future<void> removeItem(String key) async {
-    store.remove(key);
-  }
-
-  @override
-  Future<void> setItem(String key, String value) async {
-    store[key] = value;
-  }
-}
+class MockStore extends SignalsInMemoryKeyValueStore {}
 
 enum TestEnum { a, b, c }
 
@@ -273,6 +255,57 @@ void main() {
         );
         await signal2.init();
         expect(signal2.value, {'b': 2});
+      });
+    });
+
+    group('Nullable Persisted Signal direct encode/decode fallback coverage',
+        () {
+      test('PersistedNullableBoolSignal', () {
+        final signal = PersistedNullableBoolSignal(null, 'test');
+        expect(signal.encode(null), '');
+        expect(signal.encode(true), 'true');
+        expect(signal.encode(false), 'false');
+        expect(signal.decode(''), isNull);
+        expect(signal.decode('true'), true);
+      });
+      test('PersistedNullableDoubleSignal', () {
+        final signal = PersistedNullableDoubleSignal(null, 'test');
+        expect(signal.encode(null), '');
+        expect(signal.encode(1.23), '1.23');
+        expect(signal.decode(''), isNull);
+        expect(signal.decode('1.23'), 1.23);
+      });
+      test('PersistedNullableEnumSignal', () {
+        final signal = PersistedNullableEnumSignal<TestEnum>(
+          null,
+          'test',
+          TestEnum.values,
+        );
+        expect(signal.encode(null), '');
+        expect(signal.encode(TestEnum.b), 'b');
+        expect(signal.decode(''), isNull);
+        expect(signal.decode('b'), TestEnum.b);
+      });
+      test('PersistedNullableIntSignal', () {
+        final signal = PersistedNullableIntSignal(null, 'test');
+        expect(signal.encode(null), '');
+        expect(signal.encode(42), '42');
+        expect(signal.decode(''), isNull);
+        expect(signal.decode('42'), 42);
+      });
+      test('PersistedNullableNumSignal', () {
+        final signal = PersistedNullableNumSignal(null, 'test');
+        expect(signal.encode(null), '');
+        expect(signal.encode(4.2), '4.2');
+        expect(signal.decode(''), isNull);
+        expect(signal.decode('4.2'), 4.2);
+      });
+      test('PersistedNullableStringSignal', () {
+        final signal = PersistedNullableStringSignal(null, 'test');
+        expect(signal.encode(null), '');
+        expect(signal.encode('hello'), 'hello');
+        expect(signal.decode(''), isNull);
+        expect(signal.decode('hello'), 'hello');
       });
     });
   });

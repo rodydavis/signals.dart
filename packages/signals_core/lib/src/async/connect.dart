@@ -3,50 +3,42 @@ import 'dart:async';
 import '../core/signals.dart';
 
 /// {@template connect}
-/// The idea for `connect` comes from Anguar Signals with RxJS:
+/// A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive [Signal].
 ///
-/// <iframe width="560" height="315" src="https://www.youtube.com/embed/R7-KdADEq0A?si=kK8XasbBedE3sPrR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+/// The concept is inspired by **Angular Signals** integration with RxJS streams.
 ///
-/// Start with a signal and then use the `connect` method to create a connector.
-/// Streams will feed Signal value.
+/// Start with an existing mutable [Signal] and call `connect(signal)` to create a connector instance.
 ///
-/// ```dart
-/// final s = signal(0);
-/// final c = connect(s);
-/// ```
-///
-/// ### to
-///
-/// Add streams to the connector.
+/// ### 1. Chaining Streams
+/// You can bind multiple streams to feed the same destination signal. The connector will handle the subscription management for all streams seamlessly.
 ///
 /// ```dart
-/// final s = signal(0);
-/// final c = connect(s);
+/// final counter = signal(0);
+/// final connector = connect(counter);
 ///
-/// final s1 = Stream.value(1);
-/// final s2 = Stream.value(2);
+/// final fastStream = Stream.periodic(Duration(seconds: 1), (i) => i);
+/// final slowStream = Stream.periodic(Duration(seconds: 5), (i) => i * 10);
 ///
-/// c.from(s1).from(s2); // These can be chained
+/// // Values from both streams will be piped into the counter signal!
+/// connector.from(fastStream).from(slowStream);
 /// ```
 ///
-/// ### dispose
-///
-/// Cancel all subscriptions.
+/// ### 2. The Shift Operator (`<<`)
+/// For a more concise and beautiful visual flow, you can use the shift operator (`<<`) to chain streams:
 ///
 /// ```dart
 /// final s = signal(0);
 /// final c = connect(s);
 ///
-/// final s1 = Stream.value(1);
-/// final s2 = Stream.value(2);
-///
-/// c.from(s1).from(s2);
-/// // or
-/// c << s1 << s2
-///
-/// c.dispose(); // This will cancel all subscriptions
+/// c << fastStream << slowStream;
 /// ```
-/// @link https://dartsignals.dev/async/connect
+///
+/// ### 3. Lifecycle and Disposal
+/// To avoid memory leaks, make sure to dispose the connector when it is no longer needed. Disposing the connector will automatically cancel all underlying active stream subscriptions.
+///
+/// ```dart
+/// connector.dispose(); // Cancels all stream subscriptions safely
+/// ```
 /// {@endtemplate}
 class Connect<T, S extends T> {
   /// Connects a [Stream] to a [Signal].

@@ -1,3 +1,38 @@
+## 7.1.0
+
+### 🚀 New Features
+- **Decoupled & Generalized `SignalProvider`**: Decoupled `SignalProvider` from `FlutterReadonlySignal` (which implements `Listenable`) and generalized it to accept any standard core `ReadonlySignal` from `signals_core`.
+- **Automatic Listenable Adapter Conversion**: Standard signals that do not implement `Listenable` are automatically wrapped in a lightweight, lifecycle-managed `Listenable` adapter internally under `InheritedNotifier`, maintaining maximum efficiency without manual boilerplate.
+
+### 🐛 Bug Fixes
+- **Dependency Injection Guide**: Fixed primitive type compile errors and generic alignment inside `docs/content/guides/dependency-injection.md`.
+
+## 7.0.0
+
+### ⚠️ BREAKING CHANGES
+- **SignalBuilder Constructor**: Updated `SignalBuilder` to accept a required named parameter `required Widget Function(BuildContext) builder` instead of a positional function argument. This aligns it perfectly as a drop-in replacement for Flutter's native `Builder` widget.
+
+### 🚀 New Features
+- **SignalProvider & MultiSignalProvider Stateful Lifecycle**: Completely redesigned `SignalProvider` as a `StatefulWidget` to maintain the reactive signal instance across parent rebuild cycles. Adds automatic `dispose()` teardown of created signals when unmounted, custom `dispose` callback support, and `SignalProvider.value` constructor to expose managed signals without teardown. Also adds `SignalProvider.multi` / `MultiSignalProvider` to flatten deeply nested builder hierarchies into a convenient flat list.
+- **SignalWidget & SignalStatefulWidget**: Added stateless and stateful base widgets that establish implicit reactive contexts directly at the element layer. Any signal value accessed synchronously via `.value` in their `build()` methods will automatically schedule surgical, frame-coalesced rebuilds.
+- **SignalAnimatedBuilder**: Added a modern transition builder widget designed for subtree rendering optimization. Accepts an optional pre-built static `child` widget which is cached and never rebuilt when signal values mutate.
+- **SignalEffect / SignalListener**: Added inline side-effects widgets that run reactive callbacks (e.g. snackbars, dialog triggers, routing) when tracked signals mutate. Handles setup, callback updates, and cleanup automatically on unmount.
+- **SignalCustomPaint & SignalPainterWidget**: Added canvas drawing targets that bypass element rebuild cycles by listening directly to signals at the rendering layer to trigger `markNeedsPaint()` directly.
+- **Widget & Element Conversion Options**: Added `toSignalWidget()` on `StatelessWidget` and `toSignalStatefulWidget()` on `StatefulWidget` to seamlessly upgrade standard widgets to reactive versions. Also added `watchSignal` extensions on `StatelessElement` and `StatefulElement`.
+
+### ⚡ Deprecations & Optimizations
+- Deprecated legacy `Watch`, `WatchBuilder`, `SignalsMixin`, and the `.watch(context)` context watch extensions.
+- Modernized legacy `Watch` and `WatchBuilder` under the hood to act as lightweight, stateless adapters delegating directly to `SignalBuilder` and `SignalAnimatedBuilder` to achieve zero-allocation state overhead.
+- Optimized `.watch(context)` extension with a memory-safe `Expando`/`WeakReference`/`Finalizer` engine preventing lapsed-listener memory leaks and object identity hash collisions.
+
+## 6.3.1
+
+ - **REFACTOR**: migrate signal mixins to mixin classes.
+ - **FIX**(flutter): prevent ConcurrentModificationError in SignalsMixin.
+ - **FIX**(signals_flutter): remove listener on dispose for ValueListenable.toSignal().
+ - **FIX**: resolve hashCode collision in .watchSignal.
+ - **FEAT**(signals_flutter): return FlutterSignal/-Computed from SignalsMixin.createSignal/-Computed.
+
 ## 6.3.0
 
 - Fix listener on dispose for ValueListenable.toSignal()

@@ -8,11 +8,10 @@ environment:
 
 dependencies:
   collection: ^1.18.0
-  signals: ^6.0.0
-  sqlite_async: ^0.6.1
+  signals: ^7.0.0
+  sqlite3: ^3.3.1
   test: ^1.25.2
 
 dev_dependencies:
   lints: ^5.0.0
 
-resolution: workspace

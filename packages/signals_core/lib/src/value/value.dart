@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:preact_signals/preact_signals.dart'
+    show SignalDeepEquality, SignalEquality;
 import '../core/signals.dart';
 import '../mixins/changestack.dart';
 import '../mixins/iterable.dart';

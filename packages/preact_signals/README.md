@@ -207,3 +207,124 @@ batch(() {
 });
 // Now the callback completed and we'll trigger the effect.
 ```
+
+### `createModel(fn, {options})`
+
+The `createModel` function provides a structured way to define disposable model instances that group signals, computed values, and actions together, matching the design of PreactJS Signals Core.
+
+#### 1. Type-Safe Models with Dart Records (Recommended)
+
+The simplest and most built-in way to define a compile-safe model is to return a Dart **record** from your factory. Records provide immediate type safety, autocomplete, and compile-time verification with zero setup/overhead.
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+// Define the reactive model constructor returning a Record
+final counterModel = createModel(() {
+  final count = signal(0);
+
+  // Captured nested side-effect (e.g. logging or syncing to local storage)
+  effect(() {
+    print('Nested logger: count is ${count.value}');
+  });
+
+  return (
+    count: count,
+    increment: () => count.value++,
+  );
+});
+
+void main() {
+  // Instantiate the model
+  final model = counterModel();
+
+  // Access properties type-safely via .value
+  print(model.value.count.value); // Prints: 0 (and registers effect print: Nested logger: count is 0)
+  model.value.increment();        // Prints: Nested logger: count is 1
+
+  // Clean up all captured effects
+  model.dispose();
+}
+```
+
+#### 2. Defining a Model (Map-based with Dynamic Lookup)
+
+Models can also be defined using a factory function returning a `Map<String, dynamic>`. The returned object is a callable constructor.
+
+When a `Map` is returned, all functions in the map are automatically wrapped in `action()` under the hood, ensuring state-modifying actions run inside implicit batches and untracked contexts.
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+// Declare a model constructor with options
+final CounterModel = createModel(() {
+  final count = signal(0);
+  
+  return <String, dynamic>{
+    'count': count,
+    'increment': () => count.value += 1,
+    'decrement': () => count.value -= 1,
+  };
+}, options: const SignalModelOptions(name: 'CounterModel'));
+
+void main() {
+  // Instantiate the model
+  final counter = CounterModel();
+
+  // Read signals directly
+  print(counter['count'].value); // Logs: 0
+
+  // Call actions
+  counter['increment']();
+  print(counter['count'].value); // Logs: 1
+
+  // Clean up all captured effects
+  counter.dispose();
+}
+```
+
+#### 3. Zero-Overhead Type-Safe Wrappers (Extension Types)
+
+You can use Dart 3.3+ **Extension Types** to create type-safe wrappers around your Map-based model instance with zero runtime allocation overhead when you prefer a class-like API (e.g. implementing getters/setters or hiding subscript lookups):
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+extension type TypeSafeCounter(SignalModel<Map<String, dynamic>> _model) {
+  int get count => (_model['count'] as Signal<int>).value;
+  void increment() => (_model['increment'] as Function)();
+  void dispose() => _model.dispose();
+}
+
+void main() {
+  final myCounter = TypeSafeCounter(CounterModel());
+  
+  myCounter.increment();
+  print(myCounter.count); // Logs: 1
+
+  myCounter.dispose();
+}
+```
+
+#### 3. Forwarding Parameters during Construction
+
+Parameters can be cleanly forwarded to your model using standard, idiomatic Dart closures:
+
+```dart
+import 'package:preact_signals/preact_signals.dart';
+
+SignalModel<Map<String, dynamic>> createCounterWithInitial(int initialCount) {
+  return createModel(() {
+    final count = signal(initialCount);
+    return <String, dynamic>{
+      'count': count,
+    };
+  })();
+}
+
+void main() {
+  final counter = createCounterWithInitial(10);
+  print(counter['count'].value); // Logs: 10
+  counter.dispose();
+}
+```

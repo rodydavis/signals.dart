@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import 'effect.dart';
 import 'listenable.dart';
+import 'signal.dart';
 
 @internal
 const BRAND_SYMBOL = Symbol('preact-signals');
@@ -75,4 +76,46 @@ void throwOutOfOrderEffect() {
 @pragma('dart2js:noInline')
 void throwSignalEffectException(Object error) {
   throw error;
+}
+
+@internal
+int batchSnapshotVersion = 0;
+
+@internal
+int currentBatchSnapshotVersion = 0;
+
+@internal
+BatchSnapshot? batchSnapshots;
+
+@internal
+class BatchSnapshot {
+  final Signal source;
+  final Object? value;
+  final int version;
+  BatchSnapshot? next;
+
+  BatchSnapshot({
+    required this.source,
+    required this.value,
+    required this.version,
+    this.next,
+  });
+}
+
+@internal
+List<Effect>? capturedEffects;
+
+@internal
+List<Effect>? Function() startCapturingEffects() {
+  final prevCapturedEffects = capturedEffects;
+  capturedEffects = [];
+
+  return () {
+    final modelEffects = capturedEffects;
+    if (capturedEffects != null && prevCapturedEffects != null) {
+      prevCapturedEffects.addAll(capturedEffects!);
+    }
+    capturedEffects = prevCapturedEffects;
+    return modelEffects;
+  };
 }

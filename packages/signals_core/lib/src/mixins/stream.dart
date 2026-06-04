@@ -1,22 +1,76 @@
+// ignore_for_file: public_member_api_docs
 import 'dart:async';
 
 import '../../signals_core.dart';
 
-/// [Stream] implementation for [AsyncState]
-mixin StreamSignalMixin<T> on ReadonlySignal<T> implements Stream<T> {
+/// A mixin that implements the standard [Stream] interface for a [ReadonlySignal].
+///
+/// This mixin allows you to treat a read-only or writable signal as a standard asynchronous
+/// [Stream], where updates to the signal's value are pushed as stream events.
+/// This provides out-of-the-box compatibility with the entire asynchronous Dart SDK,
+/// such as stream transformers, `await for` loops, and Flutter's [StreamBuilder].
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// class MyStreamSignal extends Signal<int> with StreamSignalMixin<int> {
+///   MyStreamSignal(super.internalValue);
+/// }
+///
+/// void main() async {
+///   final counter = MyStreamSignal(0);
+///
+///   // Standard stream subscription
+///   final subscription = counter.listen((val) {
+///     print('Stream emitted: $val');
+///   }); // Prints: "Stream emitted: 0" (if listened immediately)
+///
+///   counter.value = 1; // Prints: "Stream emitted: 1"
+///   counter.value = 2; // Prints: "Stream emitted: 2"
+///
+///   await subscription.cancel();
+/// }
+/// ```
+///
+/// ### Flutter StreamBuilder Example
+///
+/// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:signals/signals_flutter.dart';
+///
+/// class CounterSignal extends Signal<int> with StreamSignalMixin<int> {
+///   CounterSignal(int value) : super(value);
+/// }
+///
+/// final counter = CounterSignal(0);
+///
+/// Widget build(BuildContext context) {
+///   return StreamBuilder<int>(
+///     stream: counter,
+///     builder: (context, snapshot) {
+///       return Text('Count: ${snapshot.data}');
+///     },
+///   );
+/// }
+/// ```
+///
+/// :::tip
+/// Since [StreamSignalMixin] creates an internal broadcast [StreamController], multiple listeners
+/// can subscribe simultaneously. All subscriptions are closed and resources are released
+/// automatically when the signal is disposed.
+/// :::
+abstract mixin class StreamSignalMixin<T>
+    implements ReadonlySignal<T>, Stream<T> {
   final _controller = StreamController<T>.broadcast(sync: true);
 
   late final Stream<T> _stream = () {
     final s = toStream();
     onDispose(subscribe(_controller.add));
+    onDispose(_controller.close);
     return s;
   }();
-
-  @override
-  void dispose() {
-    _controller.close();
-    super.dispose();
-  }
 
   @override
   Future<bool> any(bool Function(T element) test) async {

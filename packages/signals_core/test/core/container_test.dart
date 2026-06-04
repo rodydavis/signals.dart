@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:signals_core/signals_core.dart';
 import 'package:test/test.dart';
 
@@ -71,7 +72,7 @@ void main() {
       expect(container.store.length, 2);
 
       container.dispose();
-      expect(container.store.length, 0);
+      expect(container.store.disposed, true);
     });
 
     test('effect loop', () {
@@ -159,7 +160,97 @@ void main() {
       expect(container.store.length, 2);
 
       container.dispose();
-      expect(container.store.length, 0);
+      expect(container.store.disposed, true);
+    });
+
+    test('Map/Collection-like APIs', () {
+      final container = signalContainer<int, int>(signal, cache: true);
+
+      expect(container.isEmpty, true);
+      expect(container.isNotEmpty, false);
+      expect(container.length, 0);
+
+      container(10);
+      container(20);
+
+      expect(container.isEmpty, false);
+      expect(container.isNotEmpty, true);
+      expect(container.length, 2);
+
+      expect(container.keys, containsAll([10, 20]));
+      expect(container.values.map((s) => s.value), containsAll([10, 20]));
+      expect(container.entries.map((e) => e.key), containsAll([10, 20]));
+
+      expect(container.lookup(10)?.value, 10);
+      expect(container.lookup(30), null);
+
+      container.removeWhere((key, signal) => key == 10);
+      expect(container.length, 1);
+      expect(container.containsKey(10), false);
+      expect(container.containsKey(20), true);
+    });
+
+    test('onEvict callback', () {
+      final evicted = <int, Signal<int>>{};
+      final container = signalContainer<int, int>(
+        signal,
+        cache: true,
+        onEvict: (key, sig) {
+          evicted[key] = sig;
+        },
+      );
+
+      final a = container(5);
+      final b = container(10);
+
+      container.remove(5);
+      expect(evicted.length, 1);
+      expect(evicted[5], a);
+
+      container.clear();
+      expect(evicted.length, 2);
+      expect(evicted[10], b);
+    });
+
+    test('computedContainer', () {
+      final source = signal(2);
+      final container = computedContainer<int, int>(
+        (multiplier) => computed(() => source.value * multiplier),
+        cache: true,
+      );
+
+      final c = container(3);
+      expect(c.value, 6);
+
+      source.value = 5;
+      expect(c.value, 15);
+    });
+
+    test('futureSignalContainer', () async {
+      final container = futureSignalContainer<int, int>(
+        (val) => futureSignal(() async => val * 2),
+        cache: true,
+      );
+
+      final f = container(4);
+      await f.future;
+      expect(f.value.value, 8);
+    });
+
+    test('streamSignalContainer', () async {
+      final controller = StreamController<int>();
+      final container = streamSignalContainer<int, int>(
+        (val) => streamSignal(() => controller.stream),
+        cache: true,
+      );
+
+      final s = container(1);
+      s.value; // Access value to trigger stream subscription
+      controller.add(42);
+      // Wait for stream event propagation
+      await Future.delayed(Duration(milliseconds: 20));
+      expect(s.value.value, 42);
+      await controller.close();
     });
   });
 }

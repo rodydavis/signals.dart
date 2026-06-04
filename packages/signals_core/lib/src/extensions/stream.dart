@@ -2,9 +2,17 @@ import 'dart:async';
 
 import '../async/connect.dart';
 import '../async/stream.dart';
+import '../async/signal.dart';
 import '../core/signals.dart';
 
-/// Extension on stream to provide helpful methods for signals
+/// Extension on [Stream] to provide convenient utilities to convert streams into reactive signals.
+///
+/// ```dart
+/// import 'package:signals_core/signals_core.dart';
+///
+/// final myStream = Stream.periodic(Duration(seconds: 1), (x) => x).take(5);
+/// final mySignal = myStream.toStreamSignal();
+/// ```
 extension SignalStreamUtils<T> on Stream<T> {
   /// Convert a stream to a signal
   ///
@@ -24,29 +32,38 @@ extension SignalStreamUtils<T> on Stream<T> {
   /// stream.toSyncSignal instead.
   StreamSignal<T> toStreamSignal({
     bool? cancelOnError,
-    String? debugLabel,
     T? initialValue,
-    bool autoDispose = false,
     bool lazy = true,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     void Function()? onDone,
+    AsyncSignalOptions<T>? options,
   }) {
     return streamSignal<T>(
       () => this,
       cancelOnError: cancelOnError,
-      debugLabel: debugLabel,
       initialValue: initialValue,
-      autoDispose: autoDispose,
       lazy: lazy,
       dependencies: dependencies,
       onDone: onDone,
+      options: options,
     );
   }
 
-  /// Convert a [Stream] to [ReadonlySignal] and provide initial value.
+  /// Convert a [Stream] to a synchronous [ReadonlySignal] and provide an initial value.
   ///
-  /// This is different than stream.toStreamSignal() that wraps
-  /// the stream events in [StreamSignal].
+  /// This is different from `toStreamSignal()` because it directly feeds the stream's values
+  /// into a standard `Signal<T>`, allowing you to read the bare, synchronous values directly
+  /// instead of wrapping them in an [AsyncState].
+  ///
+  /// ```dart
+  /// import 'package:signals_core/signals_core.dart';
+  ///
+  /// final stream = Stream.value(42);
+  /// final syncSignal = stream.toSyncSignal(0);
+  /// print(syncSignal.value); // 0 (initially)
+  /// // After the stream emits:
+  /// // print(syncSignal.value); // 42
+  /// ```
   ReadonlySignal<T> toSyncSignal(T initialData) {
     final s = signal<T>(initialData);
     final connector = connect<T, T>(s);

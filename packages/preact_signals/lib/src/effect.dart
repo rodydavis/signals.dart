@@ -3,40 +3,112 @@ import 'package:meta/meta.dart';
 import 'batch.dart';
 import 'globals.dart';
 import 'listenable.dart';
-import 'node.dart';
+import 'options.dart';
 
-/// Create an effect to run arbitrary code in response to signal changes.
+/// Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
 ///
-/// An effect tracks which signals are accessed within the given callback
-/// function `fn`, and re-runs the callback when those signals change.
+/// An [Effect] tracks which signals are accessed within its callback function,
+/// and automatically schedules itself to re-run whenever those dependencies change.
 ///
-/// The callback may return a cleanup function. The cleanup function gets
-/// run once, either when the callback is next called or when the effect
-/// gets disposed, whichever happens first.
+/// Under the hood, the reactivity engine tracks reads on `.value` inside the active effect block.
+/// Once the block completes, a subscription is registered for each accessed signal. When any of those signals
+/// mutate, the effect is added to the microtask queue and executed synchronously during the next tick.
+///
+/// <Warning>
+///   Do not modify a tracked signal *directly* inside an effect callback, as this will trigger another execution
+///   of the same effect, causing an infinite loop (cycle) and throwing a cycle detection error.
+///   To read a signal non-reactively, use `.peek()`.
+/// </Warning>
+///
+/// ### Example Usage
+///
+/// #### 1. Standard Side-Effect
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final count = signal(0);
+///
+/// void main() {
+///   // Creates and immediately starts the effect
+///   final logger = Effect(() {
+///     print('Active count is: ${count.value}');
+///   });
+///
+///   count.value = 1; // Prints: "Active count is: 1"
+///   logger.dispose();
+/// }
+/// ```
+///
+/// #### 2. Effect Cleanup Callback
+/// If your effect returns a function, that function is registered as a **cleanup callback**.
+/// The cleanup callback is executed right before the next effect run, or when the effect is disposed.
+/// This is highly useful for cleaning up timers, controllers, or other subscriptions:
+/// ```dart
+/// final query = signal('search_term');
+///
+/// final searchEffect = Effect(() {
+///   final currentQuery = query.value;
+///   print('Initiating search for: $currentQuery');
+///
+///   final timer = Timer(Duration(milliseconds: 500), () {
+///     print('Search completed for: $currentQuery');
+///   });
+///
+///   // Return cleanup callback
+///   return () {
+///     print('Cancelling previous search timer');
+///     timer.cancel();
+///   };
+/// });
+/// ```
 class Effect with Listenable {
+  /// @internal
+  /// The effect callback.
   @internal
   Function()? fn;
 
   @override
   final int globalId;
 
+  /// @internal
+  /// The cleanup callback.
   @internal
   Function? cleanup;
 
-  @override
-  Node? sources;
-
+  /// @internal
+  /// The next effect in the batched effects queue.
   @internal
   Effect? nextBatchedEffect;
 
   @override
   int flags;
 
-  Effect(this.fn)
-      : flags = TRACKING,
-        cleanup = null,
-        globalId = ++lastGlobalId;
+  /// The name of the effect for debugging.
+  final String? name;
 
+  /// Creates a new [Effect] instance with the passive side-effect callback [fn].
+  ///
+  /// You can optionally provide:
+  /// - A [name] for debugging/observer tracing.
+  ///
+  /// ```dart
+  /// final effectObj = Effect(() => print(count.value), name: 'count_logger');
+  /// ```
+  Effect(
+    this.fn, {
+    String? name,
+    EffectOptions? options,
+  })  : name = options?.name ?? name,
+        flags = TRACKING,
+        cleanup = null,
+        globalId = ++lastGlobalId {
+    if (capturedEffects != null) {
+      capturedEffects!.add(this);
+    }
+  }
+
+  /// @internal
+  /// Executes the callback function and schedules cleanups.
   @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
@@ -57,6 +129,8 @@ class Effect with Listenable {
     }
   }
 
+  /// @internal
+  /// Starts tracking dependency subscriptions.
   @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
@@ -88,7 +162,8 @@ class Effect with Listenable {
     }
   }
 
-  /// Dispose of the effect and stop future callbacks
+  /// Disposes of the effect, stopping future callback executions,
+  /// executing any registered cleanup routines, and unsubscribing from all dependency signals.
   void dispose() {
     flags |= DISPOSED;
     if (!((flags & RUNNING) != 0)) {
@@ -96,7 +171,9 @@ class Effect with Listenable {
     }
   }
 
-  /// Activate the effect starting with the callback
+  /// Activates/Runs the effect immediately.
+  ///
+  /// Returns a bound disposer function that can be called to stop the effect.
   void Function() call() {
     try {
       callback();
@@ -109,6 +186,8 @@ class Effect with Listenable {
     return dispose;
   }
 
+  /// @internal
+  /// Runs the user-defined cleanup callback if registered.
   @internal
   void cleanupEffect() {
     final effect = this;
@@ -135,6 +214,8 @@ class Effect with Listenable {
     }
   }
 
+  /// @internal
+  /// Disposes resources held by the effect.
   @internal
   void disposeEffect() {
     final effect = this;
@@ -147,6 +228,8 @@ class Effect with Listenable {
     effect.cleanupEffect();
   }
 
+  /// @internal
+  /// Concludes the current effect evaluation round and restores the evaluation context context.
   @internal
   void endEffect(Listenable? prevContext) {
     final effect = this;
@@ -164,17 +247,30 @@ class Effect with Listenable {
   }
 }
 
-/// Create an effect to run arbitrary code in response to signal changes.
+/// Creates and immediately executes a new reactive [Effect].
 ///
-/// An effect tracks which signals are accessed within the given callback
-/// function `fn`, and re-runs the callback when those signals change.
+/// Returns a bound disposer function that can be called to stop the effect and unsubscribe
+/// it from all tracked signals.
 ///
-/// The callback may return a cleanup function. The cleanup function gets
-/// run once, either when the callback is next called or when the effect
-/// gets disposed, whichever happens first.
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final count = signal(0);
+/// final dispose = effect(() {
+///   print('Count is: ${count.value}');
+///   return () => print('Cleaning up!');
+/// });
+///
+/// void main() {
+///   count.value = 10; // Prints: "Cleaning up!" then "Count is: 10"
+///   dispose(); // Stops the effect and unsubscribes
+/// }
+/// ```
 void Function() effect(
-  /// The effect callback
-  Function() fn,
-) {
-  return Effect(fn)();
+  Function() fn, [
+  EffectOptions? options,
+]) {
+  return Effect(fn, options: options)();
 }

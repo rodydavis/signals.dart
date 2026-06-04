@@ -1,0 +1,50 @@
+name: Automated Package Publisher
+
+on:
+  push:
+    tags:
+      - '*v*' # Triggers on any global tag (v6.3.1) or package-specific tag (signals-v6.3.1)
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false # Do not cancel in-progress runs to avoid partial/broken releases
+
+jobs:
+  publish:
+    # This must match the environment name you configured on pub.dev
+    environment: pub.dev 
+    permissions:
+      id-token: write # Mandatory for OIDC authentication with pub.dev
+      contents: read  # Only read access needed for publishing tag contents
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Fetches full history so Melos can parse conventional commits
+
+      - name: Setup Dart/Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # Melos Action manages setup, bootstrapping, and execution
+      - name: Setup Melos Workspace
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+
+      # Optional: Add testing/linting checks before attempting release
+      - name: Run Quality Checks
+        run: |
+          melos run analyze
+          melos run test
+
+      - name: Dry-Run Publication Validation
+        run: melos publish --dry-run
+
+      # Melos automatically publishes the packages matching the pushed git tags
+      - name: Publish Packages
+        run: |
+          melos publish --no-dry-run --yes

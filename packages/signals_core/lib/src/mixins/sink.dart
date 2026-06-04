@@ -1,7 +1,46 @@
 import '../core/signals.dart';
 
-/// [Sink] implementation for [Signal]
-mixin SinkSignalMixin<T> on Signal<T> implements Sink<T> {
+/// A mixin that implements the standard [Sink] interface for a [Signal].
+///
+/// This mixin allows you to treat a writable [Signal] as a sink of events, where
+/// adding an element using [add] automatically updates the signal's value and
+/// notifies all reactive listeners. Calling [close] automatically disposes
+/// the signal, freeing up resources and removing all active subscriptions.
+///
+/// This provides excellent compatibility with streams, transformers, or any
+/// APIs that expect a standard Dart [Sink].
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// class MySinkSignal extends Signal<int> with SinkSignalMixin<int> {
+///   MySinkSignal(super.internalValue);
+/// }
+///
+/// void main() {
+///   final signal = MySinkSignal(0);
+///
+///   effect(() {
+///     print('Signal value changed to: ${signal.value}');
+///   }); // Prints: "Signal value changed to: 0"
+///
+///   // Treat it as a Sink and push elements to it
+///   signal.add(42); // Prints: "Signal value changed to: 42"
+///   signal.add(100); // Prints: "Signal value changed to: 100"
+///
+///   // Dispose the signal when finished
+///   signal.close();
+///   print('Is disposed: ${signal.disposed}'); // Prints: "Is disposed: true"
+/// }
+/// ```
+///
+/// :::caution
+/// Once [close] is called, the signal is permanently disposed and cannot be reused
+/// or written to anymore. Any subsequent [add] calls will throw an exception.
+/// :::
+abstract mixin class SinkSignalMixin<T> implements Signal<T>, Sink<T> {
   @override
   void add(T event) {
     set(event);

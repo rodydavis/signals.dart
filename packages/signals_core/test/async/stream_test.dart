@@ -281,6 +281,63 @@ void main() {
       expect(signal.peek().error, isA<Exception>());
       expect(signal.isDone, true);
     });
+
+    test('deprecated parameters and fallback options', () async {
+      final s = streamSignal(
+        () => _stream(),
+        initialValue: 0,
+        lazy: false,
+        autoDispose: true,
+        debugLabel: 'stream-dep',
+      );
+      expect(s.peek().value, 0);
+      await s.future;
+      expect(s.peek().value, 10);
+    });
+
+    test('dependencies containing AsyncSignal', () async {
+      final controller = StreamController<String>.broadcast();
+      final dep = asyncSignal<int>(AsyncState.data(1));
+      final s = streamSignal(
+        () => controller.stream,
+        options: AsyncSignalOptions(dependencies: [dep]),
+      );
+
+      s.value; // trigger subscription
+      controller.add('initial');
+      await Future.delayed(Duration.zero);
+      expect(s.value.value, 'initial');
+
+      // Trigger dependency update to AsyncState.data(2)
+      dep.value = AsyncState.data(2);
+
+      controller.add('updated');
+      await Future.delayed(Duration.zero);
+      expect(s.value.value, 'updated');
+    });
+
+    test('dependencies containing AsyncSignal loading bypass', () async {
+      final controller = StreamController<String>.broadcast();
+      final dep = asyncSignal<int>(AsyncState.data(1));
+      final s = streamSignal(
+        () => controller.stream,
+        options: AsyncSignalOptions(dependencies: [dep]),
+      );
+
+      s.value; // trigger subscription
+      controller.add('initial');
+      await Future.delayed(Duration.zero);
+      expect(s.value.value, 'initial');
+
+      // Transition to loading
+      dep.value = AsyncState.loading();
+      // Transition from loading to data(2) (triggers the isLoading && !isLoading early return)
+      dep.value = AsyncState.data(2);
+
+      controller.add('bypass');
+      await Future.delayed(Duration.zero);
+      expect(s.value.value, 'bypass');
+    });
   });
 }
 

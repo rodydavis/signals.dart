@@ -5,8 +5,63 @@ import 'globals.dart';
 import 'listenable.dart';
 import 'node.dart';
 import 'signal.dart';
+import 'options.dart';
+import 'untracked.dart';
 
 /// An interface for read-only signals.
+///
+/// A [ReadonlySignal] is a reactive container whose value can be read but not directly mutated.
+/// Under the hood, any [Signal] implements or can be cast/exposed as a [ReadonlySignal]. This
+/// is a core architectural pattern for encapsulating state: classes can modify state internally
+/// using a private mutable `Signal`, while exposing a public `ReadonlySignal` to consumers to
+/// enforce unidirectional data flow.
+///
+/// Whenever the underlying value changes, any active [effect] or [computed] signal that reads this
+/// signal's value will automatically be re-evaluated.
+///
+/// ### Example Usage
+///
+/// ````dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// class CounterController {
+///   // Keep the mutable state private to the controller
+///   final _counter = signal(0);
+///
+///   // Expose a public read-only signal to external consumers
+///   ReadonlySignal<int> get counter => _counter;
+///
+///   void increment() {
+///     _counter.value++;
+///   }
+///
+///   void decrement() {
+///     _counter.value--;
+///   }
+/// }
+///
+/// void main() {
+///   final controller = CounterController();
+///
+///   // React to updates from the read-only signal
+///   final dispose = effect(() {
+///     print("The current count is: ${controller.counter.value}");
+///   });
+///
+///   // controller.counter.value = 10; // Error: Cannot mutate a ReadonlySignal!
+///
+///   controller.increment(); // Prints: "The current count is: 1"
+///   controller.increment(); // Prints: "The current count is: 2"
+///
+///   dispose();
+/// }
+/// ````
+///
+/// :::tip
+/// Use [ReadonlySignal] to prevent consumers of your stores or controllers from modifying state
+/// bypassing the controller's methods. This ensures consistent, predictable, and traceable mutations
+/// throughout your application.
+/// :::
 mixin class ReadonlySignal<T> {
   /// Global ID of the signal
   int get globalId => throw UnimplementedError();
@@ -14,6 +69,17 @@ mixin class ReadonlySignal<T> {
   /// Compute the current value
   T get value => throw UnimplementedError();
 
+  /// The name of the signal for debugging purposes.
+  String? get name => null;
+
+  /// Callback called when the signal goes from 0 to >=1 listeners.
+  void Function()? get watched => null;
+
+  /// Callback called when the signal goes from >=1 to 0 listeners.
+  void Function()? get unwatched => null;
+
+  /// @internal
+  /// Internal getter for the raw value without subscription tracking.
   @internal
   T get internalValue => throw UnimplementedError();
 
@@ -62,12 +128,18 @@ mixin class ReadonlySignal<T> {
   void Function() subscribe(void Function(T value) fn) =>
       throw UnimplementedError();
 
+  /// @internal
+  /// Subscribes this signal to notifications from a given dependency [node].
   @internal
   void subscribeToNode(Node node) => throw UnimplementedError();
 
+  /// @internal
+  /// Unsubscribes this signal from notifications from a given dependency [node].
   @internal
   void unsubscribeFromNode(Node node) => throw UnimplementedError();
 
+  /// @internal
+  /// Internal subscription mechanism for targets.
   @internal
   void internalSubscribe(Node node) {
     final signal = this;
@@ -75,6 +147,10 @@ mixin class ReadonlySignal<T> {
       node.nextTarget = signal.targets;
       if (signal.targets != null) {
         signal.targets!.prevTarget = node;
+      } else {
+        untracked(() {
+          signal.watched?.call();
+        });
       }
       signal.targets = node;
     }
@@ -82,21 +158,33 @@ mixin class ReadonlySignal<T> {
 
   /// Version numbers should always be >= 0, because the special value -1 is used
   /// by Nodes to signify potentially unused but recyclable nodes.
+  /// @internal
+  /// The current mutation version of the signal.
   @internal
   int get version => throw UnimplementedError();
 
+  /// @internal
+  /// Node representing the dependency hook of this signal.
   @internal
   Node? node;
 
+  /// @internal
+  /// A linked list of subscription nodes pointing to targets.
   @internal
   Node? targets;
 
+  /// @internal
+  /// Refreshes the signal's value internally.
   @internal
   bool internalRefresh() => throw UnimplementedError();
 
+  /// @internal
+  /// Brand symbol to uniquely distinguish signals.
   @internal
   final Symbol brand = BRAND_SYMBOL;
 
+  /// @internal
+  /// Returns target listeners currently subscribing to this signal.
   @internal
   Iterable<Listenable> readonlySignalTargets() sync* {
     final instance = this;
@@ -105,6 +193,8 @@ mixin class ReadonlySignal<T> {
     }
   }
 
+  /// @internal
+  /// Adds this signal as a dependency of the current execution context.
   @internal
   @pragma('vm:prefer-inline')
   @pragma('dart2js:tryInline')
@@ -189,6 +279,8 @@ mixin class ReadonlySignal<T> {
     return null;
   }
 
+  /// @internal
+  /// Registers a subscription callback [fn] on value changes.
   @internal
   void Function() signalSubscribe(
     void Function(T value) fn,
@@ -206,6 +298,8 @@ mixin class ReadonlySignal<T> {
     });
   }
 
+  /// @internal
+  /// Unregisters a subscription node.
   @internal
   void signalUnsubscribe(Node node) {
     final signal = this;
@@ -223,15 +317,53 @@ mixin class ReadonlySignal<T> {
       }
       if (node == signal.targets) {
         signal.targets = next;
+        if (next == null) {
+          untracked(() {
+            signal.unwatched?.call();
+          });
+        }
       }
     }
   }
 }
 
-/// Create a new plain readonly signal
+/// Creates a new read-only signal initialized with [value].
+///
+/// This function returns a [ReadonlySignal] containing [value]. Under the hood, a mutable [Signal]
+/// is created, but it is returned under the [ReadonlySignal] interface to prevent modification by clients.
+///
+/// This is particularly useful when you need to expose a constant reactive value, or bridge some external,
+/// immutable value source into the signals reactivity system.
+///
+/// Parameters:
+/// - [value]: The initial value held by the read-only signal.
+/// - [options]: Optional configuration options (e.g., custom debug name or lifecycle callbacks like `watched`/`unwatched`).
+///
+/// Returns:
+/// - A [ReadonlySignal] containing the initial value.
+///
+/// ### Example Usage
+///
+/// ````dart
+/// import 'package:preact_signals/preact_signals.dart';
+///
+/// final configUrl = readonly('https://api.example.com');
+///
+/// void main() {
+///   effect(() {
+///     print("Connecting to: ${configUrl.value}");
+///   });
+/// }
+/// ````
+///
+/// :::caution
+/// If you are trying to derive a value from other signals, do not use [readonly]. Use [computed] instead
+/// to ensure the derived signal automatically re-evaluates when its source signals change.
+/// :::
 ReadonlySignal<T> readonly<T>(
-  /// The initial value for the signal
-  T value,
-) {
-  return signal<T>(value);
+  /// The initial value for the signal.
+  T value, [
+  ReadonlySignalOptions<T>? options,
+]) {
+  return Signal<T>(value, options: options);
 }

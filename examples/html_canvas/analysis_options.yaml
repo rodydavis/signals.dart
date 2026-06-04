@@ -19,7 +19,6 @@ include: package:lints/recommended.yaml
 #   rules:
 #     - camel_case_types
 
-# analyzer:
 #   exclude:
 #     - path/to/excluded/files/**
 
@@ -28,3 +27,12 @@ include: package:lints/recommended.yaml
 
 # For additional information about configuring this file, see
 # https://dart.dev/guides/language/analysis-options
+analyzer:
+  errors:
+    deprecated_member_use: ignore
+    void_checks: ignore
+    avoid_types_as_parameter_names: ignore
+    avoid_positional_boolean_parameters: ignore
+    lines_longer_than_80_chars: ignore
+    avoid_catches_without_on_clauses: ignore
+    sort_pub_dependencies: ignore

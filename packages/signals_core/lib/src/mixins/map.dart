@@ -1,8 +1,37 @@
+// ignore_for_file: public_member_api_docs
 import '../core/signals.dart';
 
-/// Mixin to upgrade an map signal with reactive properties
-mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
-    implements Map<K, V> {
+/// A mixin that adds reactive `Map` methods and operators directly to a [Signal].
+///
+/// This mixin delegates all standard [Map] operations (such as mutations like `[]=`, `clear`,
+/// `remove`, and lookups like `containsKey`, `isEmpty`, `keys`, `values`) to the underlying
+/// map value.
+///
+/// Every mutating operation automatically updates the signal and notifies its observers
+/// (by forcing a change notification using `force: true`).
+///
+/// ### Simple Example
+/// ```dart
+/// class MyMapSignal<K, V> extends Signal<Map<K, V>>
+///     with MapSignalMixin<K, V, Map<K, V>> {
+///   MyMapSignal(super.value);
+/// }
+///
+/// final cart = MyMapSignal<String, int>({'apple': 1});
+///
+/// // Register an effect reacting to cart changes
+/// effect(() {
+///   print('Cart length: ${cart.length}');
+/// });
+///
+/// // Treating it as a standard Map triggers updates automatically!
+/// cart['banana'] = 3;  // Prints: Cart length: 2
+/// cart.remove('apple'); // Prints: Cart length: 1
+/// ```
+///
+/// @link https://dartsignals.dev/mixins/map
+abstract mixin class MapSignalMixin<K, V, T extends Map<K, V>>
+    implements Signal<T>, Map<K, V> {
   @override
   V? operator [](Object? key) {
     return value[key];

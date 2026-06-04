@@ -1,7 +1,50 @@
+// ignore_for_file: public_member_api_docs
 import '../core/signals.dart';
 
-/// Mixin to upgrade an set signal with reactive properties
-mixin SetSignalMixin<E, T extends Set<E>> on Signal<T> implements Set<E> {
+/// A mixin that adds reactive `Set` methods and operations to a [Signal]
+/// holding a [Set] value.
+///
+/// This mixin delegates all standard [Set] operations (such as mutations like `add`,
+/// `remove`, `addAll`, `removeAll`, `retainAll`, and `clear`) to the underlying set,
+/// while ensuring that any reads register a dependency and any mutations
+/// automatically trigger reactive updates.
+///
+/// :::note
+/// This mixin only works with signals that have a value type extending [Set<E>].
+/// :::
+///
+/// ### Example Usage
+///
+/// ```dart
+/// import 'package:signals/signals.dart';
+///
+/// class MySetSignal extends Signal<Set<int>>
+///     with IterableSignalMixin<int, Set<int>>, SetSignalMixin<int, Set<int>> {
+///   MySetSignal(super.internalValue);
+/// }
+///
+/// void main() {
+///   final numbers = MySetSignal({1, 2, 3});
+///
+///   effect(() {
+///     print('Elements: $numbers, Length: ${numbers.length}');
+///   }); // Prints: "Elements: {1, 2, 3}, Length: 3"
+///
+///   // Adding an element (automatically calls set() and triggers updates)
+///   numbers.add(4); // Prints: "Elements: {1, 2, 3, 4}, Length: 4"
+///
+///   // Removing an element (triggers updates)
+///   numbers.remove(1); // Prints: "Elements: {2, 3, 4}, Length: 3"
+/// }
+/// ```
+///
+/// :::tip
+/// Since mutations on `SetSignalMixin` notify listeners automatically, you do not
+/// need to assign `numbers.value = ...` to force updates. Methods like `add`, `addAll`,
+/// and `remove` take care of notification.
+/// :::
+abstract mixin class SetSignalMixin<E, T extends Set<E>>
+    implements Signal<T>, Set<E> {
   @override
   bool add(E value) {
     final list = this.value;

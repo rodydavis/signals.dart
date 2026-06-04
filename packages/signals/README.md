@@ -226,100 +226,100 @@ batch(() {
 
 ### Flutter
 
-To make signals reactive in Flutter, you can use the `createSignal`/`createComputed` function inside a stateful widget.
+To make signals reactive in Flutter, you can use [SignalWidget] for stateless widgets, or [SignalStatefulWidget] for stateful widgets. These widgets establish an implicit reactive context at the element layer. Any signal accessed via `.value` inside the `build` method is automatically tracked and subscribed to, making manual builders or mixins unnecessary.
+
+#### Stateless Example with `SignalWidget`
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-class Counter extends StatefulWidget {
-  @override
-  _CounterState createState() => _CounterState();
-}
+final counter = signal(0);
+final isEven = computed(() => counter.value.isEven);
+final isOdd = computed(() => counter.value.isOdd);
 
-class _CounterState extends State<Counter> with SignalsMixin {
-  late final counter = createSignal(0);
-  late final isEven = createComputed(() => counter.value.isEven);
-  late final isOdd = createComputed(() => counter.value.isOdd);
+class CounterWidget extends SignalWidget {
+  const CounterWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-	return Column(
-	  children: [
-		Text('Counter: $counter'), // <- No need to use .value since .toString() is overridden to return the value
-		Text('Is Even: $isEven'),
-		Text('Is Odd: $isOdd'),
-		ElevatedButton(
-		  onPressed: () => counter.value++,
-		  child: Text('Increment'),
-		),
-	  ],
-	);
+    return Column(
+      children: [
+        Text('Counter: ${counter.value}'),
+        Text('Is Even: ${isEven.value}'),
+        Text('Is Odd: ${isOdd.value}'),
+        ElevatedButton(
+          onPressed: () => counter.value++,
+          child: const Text('Increment'),
+        ),
+      ],
+    );
   }
 }
 ```
 
-The `SignalsMixin` is a mixin that automatically disposes all signals created in the state when the widget is removed from the widget tree.
-
-#### Fine Grained Rebuilding
-
-By default signals will rebuild the widget that is using the signal.
-
-If you want to rebuild sub-widgets, you can use the `Watch` widget in combination with a signal created with `signal`/`computed`.
+#### Stateful Example with `SignalStatefulWidget`
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-class Counter extends StatefulWidget {
+class CounterWidget extends SignalStatefulWidget {
+  const CounterWidget({super.key});
+
   @override
-  _CounterState createState() => _CounterState();
+  _CounterWidgetState createState() => _CounterWidgetState();
 }
 
-class _CounterState extends State<Counter> {
+class _CounterWidgetState extends State<CounterWidget> {
+  // Local signals scoped to this widget state's lifecycle
+  final counter = signal(0);
+  late final isEven = computed(() => counter.value.isEven);
+  late final isOdd = computed(() => counter.value.isOdd);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Counter: ${counter.value}'),
+        Text('Is Even: ${isEven.value}'),
+        Text('Is Odd: ${isOdd.value}'),
+        ElevatedButton(
+          onPressed: () => counter.value++,
+          child: const Text('Increment'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+#### Surgical / Fine-Grained Rebuilding
+
+By default, the active `SignalWidget` or `SignalStatefulWidget` using a signal will rebuild. If you want to surgically rebuild only a specific sub-widget, you can wrap that sub-widget in a `SignalBuilder` or `SignalAnimatedBuilder` widget:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:signals/signals_flutter.dart';
+
+class CounterWidget extends StatelessWidget {
   final counter = signal(0);
 
   @override
   Widget build(BuildContext context) {
-	return Column(
-	  children: [
-		Watch((context) => Text('Counter: $counter')),
-		ElevatedButton(
-		  onPressed: () => counter.value++,
-		  child: Text('Increment'),
-		),
-	  ],
-	);
+    return Column(
+      children: [
+        // Rebuilds surgically ONLY this Text widget when counter changes:
+        SignalBuilder(
+          builder: (context) => Text('Counter: ${counter.value}'),
+        ),
+        ElevatedButton(
+          onPressed: () => counter.value++,
+          child: const Text('Increment'),
+        ),
+      ],
+    );
   }
-}
-```
-
-There is a drop in replacement for `Builder` in the `Watch` widget that will rebuild the widget when the signal changes.
-
-```diff
-- Builder(builder: (context) {
-+ Watch.builder(builder: (context) {
-  return Text('Counter: $counter');
-});
-```
-
-There is also the `.watch(context)` extension method that can be used to rebuild a widget when a signal changes.
-
-```dart
-...
-final counter = signal(0);
-...
-@override
-Widget build(BuildContext context) {
-  return Column(
-	children: [
-	  Text('Counter: ${counter.watch(context)}'),
-	  ElevatedButton(
-		onPressed: () => counter.value++,
-		child: Text('Increment'),
-	  ),
-	],
-  );
 }
 ```
 

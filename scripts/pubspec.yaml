@@ -1,0 +1,10 @@
+name: scripts
+description: Standalone Dart scripts for documentation and skills generation
+version: 1.0.0
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  analyzer: ^6.4.1
+  path: ^1.9.0
+  yaml: ^3.1.2

@@ -28,32 +28,14 @@ melos:
 workspace:
   - packages/preact_signals
   - packages/signals
+  - packages/signals/example
   - packages/signals_core
   - packages/signals_devtools_extension
   - packages/signals_flutter
+  - packages/signals_flutter/example
   - packages/signals_hooks
+  - packages/signals_hooks/example
   - packages/signals_lint
-
-  - benchmark/frameworks/preact_signals
-  - benchmark/frameworks/signals_core
-
-  - examples/html_todo_app
-  - examples/clean_architecture
-  - examples/eval_calculator
-  - examples/flutter_counter
-  - examples/node_based_editor
-  - examples/dart_mappable_example
-  - examples/animations_example
-  - examples/flutter_colorband
-  - examples/rxdart
-  - examples/crud_dio
-  - examples/persist_shared_preferences
-  - examples/drift_example
-  - examples/dart_examples
-  - examples/infinite_scroll
-  - examples/mvi_example
-  - examples/get_it_signals
-  - examples/auth_flow
-  - examples/flutter_async
-  - examples/shopping_cart
-  - examples/html_canvas
+  - packages/signals_lint/example
+dependencies:
+  jaspr: ^0.23.1

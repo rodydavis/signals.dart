@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
       home: const Example(),
     );
   }
@@ -29,8 +30,8 @@ class Example extends StatefulWidget {
   State<Example> createState() => _ExampleState();
 }
 
-class _ExampleState extends State<Example> with SignalsMixin {
-  late final _counter = createSignal(0);
+class _ExampleState extends State<Example> {
+  late final _counter = signal(0);
   void _incrementCounter() => _counter.value++;
 
   @override
@@ -39,7 +40,7 @@ class _ExampleState extends State<Example> with SignalsMixin {
     _counter.onDispose(() {
       debugPrint('disposed ${_counter.globalId} counter!');
     });
-    createEffect(() {
+    effect(() {
       debugPrint('count: ${_counter()}');
     });
   }
@@ -69,9 +70,11 @@ class _ExampleState extends State<Example> with SignalsMixin {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            SignalBuilder(
+              builder: (context) => Text(
+                '${_counter.value}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             ),
           ],
         ),

@@ -6,3 +6,4 @@ export 'src/core.dart';
 export 'src/value.dart';
 export 'src/async.dart';
 export 'src/flutter.dart';
+export 'src/widget.dart';

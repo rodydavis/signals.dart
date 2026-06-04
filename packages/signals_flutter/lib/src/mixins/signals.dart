@@ -14,28 +14,98 @@ typedef _SignalMetadata = ({
   ({Function cb, EffectCleanup cleanup})? listener,
 });
 
-/// Signals mixin that will automatically rebuild the widget tree when any of
-/// the signals change and dispose of any signals and effects created locally.
+/// A State mixin that automatically handles subscription and cleanup of signals
+/// and effects created locally within a [StatefulWidget].
 ///
+/// :::caution
+/// **DEPRECATED**: This mixin is deprecated. While fully supported for backward compatibility,
+/// it adds extra stateful widget lifecycle overhead and manual binding.
+///
+/// For superior, self-contained reactivity without mixin overhead, migrate to modern, high-performance APIs:
+/// - Use [SignalWidget] for stateless reactive widgets.
+/// - Use [SignalStatefulWidget] for stateful reactive widgets.
+/// - Use [SignalBuilder] for surgical, localized rebuilding.
+/// :::
+///
+/// ### Legacy Usage Example
 /// ```dart
-/// class MyWidget extends StatefulWidget {
-///  ...
+/// class CounterWidget extends StatefulWidget {
+///   const CounterWidget({super.key});
+///
+///   @override
+///   State<CounterWidget> createState() => _CounterWidgetState();
 /// }
 ///
-/// class _MyWidget extends State<MyWidget> with SignalsMixin {
-///   late var _signal = this.createSignal(0);
-///   late var _computed = this.createComputed(() => _signal() * 2);
+/// class _CounterWidgetState extends State<CounterWidget> with SignalsMixin {
+///   late final count = createSignal(0);
+///   late final doubled = createComputed(() => count.value * 2);
 ///
 ///   @override
 ///   void initState() {
 ///     super.initState();
-///     this.createEffect(() {
-///       print('count: $_signal, double: $_computed');
+///     createEffect(() {
+///       print('Count: ${count.value}, Doubled: ${doubled.value}');
 ///     });
 ///   }
-///   ...
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Column(
+///       children: [
+///         Text('Count: ${count.value}'),
+///         Text('Doubled: ${doubled.value}'),
+///         ElevatedButton(
+///           onPressed: () => count.value++,
+///           child: const Text('Increment'),
+///         ),
+///       ],
+///     );
+///   }
 /// }
 /// ```
+///
+/// ### Modern Migration Example
+/// ```dart
+/// // Modern alternative using SignalStatefulWidget:
+/// class CounterWidget extends SignalStatefulWidget {
+///   const CounterWidget({super.key});
+///
+///   @override
+///   State<CounterWidget> createState() => _CounterWidgetState();
+/// }
+///
+/// class _CounterWidgetState extends State<CounterWidget> {
+///   final count = signal(0);
+///   late final doubled = computed(() => count.value * 2);
+///
+///   @override
+///   void initState() {
+///     super.initState();
+///     // For non-widget effects, use the standard `effect` function:
+///     effect(() {
+///       print('Count: ${count.value}, Doubled: ${doubled.value}');
+///     });
+///   }
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     // Implicitly tracks both signals and rebuilds on change:
+///     return Column(
+///       children: [
+///         Text('Count: ${count.value}'),
+///         Text('Doubled: ${doubled.value}'),
+///         ElevatedButton(
+///           onPressed: () => count.value++,
+///           child: const Text('Increment'),
+///         ),
+///       ],
+///     );
+///   }
+/// }
+/// ```
+@Deprecated(
+  'Use SignalWidget, SignalStatefulWidget, or Watch/SignalBuilder instead for superior, self-contained reactivity without stateful mixin overhead.',
+)
 mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   final _signals = HashMap.of(<int, _SignalMetadata>{});
   EffectCleanup? _cleanup;
@@ -220,7 +290,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a signal<T> and watch for changes
+  /// Create a `signal<T>` and watch for changes
   FlutterSignal<V> createSignal<V>(
     V val, {
     String? debugLabel,
@@ -233,7 +303,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [ListSignal]<T> and watch for changes
+  /// Create a [ListSignal] `<T>` and watch for changes
   ListSignal<V> createListSignal<V>(
     List<V> list, {
     String? debugLabel,
@@ -246,7 +316,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [SetSignal]<T> and watch for changes
+  /// Create a [SetSignal] `<T>` and watch for changes
   SetSignal<V> createSetSignal<V>(
     Set<V> set, {
     String? debugLabel,
@@ -259,7 +329,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [QueueSignal]<T> and watch for changes
+  /// Create a [QueueSignal] `<T>` and watch for changes
   QueueSignal<V> createQueueSignal<V>(
     Queue<V> queue, {
     String? debugLabel,
@@ -272,7 +342,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a [MapSignal]<T> and watch for changes
+  /// Create a [MapSignal] `<K, V>` and watch for changes
   MapSignal<K, V> createMapSignal<K, V>(
     Map<K, V> value, {
     String? debugLabel,
@@ -285,7 +355,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  /// Create a computed<T> and watch for changes
+  /// Create a `computed<T>` and watch for changes
   FlutterComputed<V> createComputed<V>(
     V Function() cb, {
     String? debugLabel,
@@ -303,13 +373,13 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return val;
   }
 
-  /// Bind an existing signal<T> and watch for changes
+  /// Bind an existing `signal<T>` and watch for changes
   S bindSignal<V, S extends ReadonlySignal<V>>(S val) {
     _watch(val, false);
     return val;
   }
 
-  /// Unbind an existing signal<T> changes
+  /// Unbind an existing `signal<T>` changes
   S unbindSignal<V, S extends ReadonlySignal<V>>(S val) {
     _unwatch(val);
     return val;
@@ -320,7 +390,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return bindSignal(val).value;
   }
 
-  /// Unwatch an existing signal<T> value changes
+  /// Unwatch an existing `signal<T>` value changes
   V unwatchSignal<V, S extends ReadonlySignal<V>>(S val) {
     return unbindSignal(val).value;
   }

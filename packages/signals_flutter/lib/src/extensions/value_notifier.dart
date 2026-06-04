@@ -2,46 +2,36 @@ import 'package:flutter/foundation.dart';
 
 import '../../signals_core.dart';
 
-/// Extension on [ValueNotifier] to provide helpful methods for signals
+/// Extension on [ValueNotifier] to seamlessly bridge standard Flutter mutable values to reactive signals.
 extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   /// {@template value}
-  /// ## SignalValueNotifier
+  /// ## Bi-directional Signal and ValueNotifier Interoperability
   ///
-  /// To create a `ValueNotifier` that is also a `Signal`:
+  /// Converted [ValueNotifier] objects become mutable [Signal] instances. Setting the value
+  /// on the signal or the notifier automatically propagates the update to the other.
   ///
-  /// ```dart
-  /// final signal = SignalValueNotifier<int>(10);
-  /// // or
-  /// final signal = signalValueNotifier<int>(10);
+  /// The subscription is fully memory-safe and automatically unsubscribed when the signal
+  /// is disposed.
   ///
-  /// expect(signal.value, 10);
-  /// expect(signal is Signal<int>, true);
-  /// expect(signal is ValueNotifier<int>, true);
-  /// ```
-  ///
-  /// > Setting the value on the signal will update the notifier and vice versa.
-  ///
-  /// ## Signal from ValueNotifier
-  ///
-  /// To create a mutable signal from a `ValueNotifier`, use the `toSignal` extension:
-  ///
+  /// ### Example: Converting a ValueNotifier to a Signal
   /// ```dart
   /// final notifier = ValueNotifier(10);
   /// final signal = notifier.toSignal();
+  ///
+  /// signal.value = 20;
+  /// print(notifier.value); // 20
+  ///
+  /// notifier.value = 30;
+  /// print(signal.value); // 30
   /// ```
   ///
-  /// > Setting the value on the signal or notifier will update the other.
-  ///
-  /// ## ValueNotifier from Signal
-  ///
-  /// To create a `ValueNotifier` from a mutable signal, use the `toValueNotifier` extension:
-  ///
+  /// ### Example: Converting a Signal to a ValueNotifier
+  /// To bridge back to a standard [ValueNotifier] for Flutter compatibility:
   /// ```dart
   /// final signal = Signal(10);
   /// final notifier = signal.toValueNotifier();
   /// ```
   ///
-  /// > Setting the value on the signal or notifier will update the other.
   /// @link https://dartsignals.dev/flutter/value-notifier
   /// {@endtemplate}
   Signal<T> toSignal({
@@ -84,46 +74,16 @@ extension SignalValueNotifierUtils<T> on ValueNotifier<T> {
   }
 }
 
-/// {@template value}
-/// ## SignalValueNotifier
+/// A global helper function to convert a Flutter [ValueNotifier] to a mutable [Signal].
 ///
-/// To create a `ValueNotifier` that is also a `Signal`:
+/// Updates to either the notifier or the returned signal will automatically update the other.
+/// This helper is a functional equivalent of the `toSignal()` extension method.
 ///
+/// ### Example
 /// ```dart
-/// final signal = SignalValueNotifier<int>(10);
-/// // or
-/// final signal = signalValueNotifier<int>(10);
-///
-/// expect(signal.value, 10);
-/// expect(signal is Signal<int>, true);
-/// expect(signal is ValueNotifier<int>, true);
+/// final textControllerValue = ValueNotifier('');
+/// final textSignal = valueNotifierToSignal(textControllerValue);
 /// ```
-///
-/// > Setting the value on the signal will update the notifier and vice versa.
-///
-/// ## Signal from ValueNotifier
-///
-/// To create a mutable signal from a `ValueNotifier`, use the `toSignal` extension:
-///
-/// ```dart
-/// final notifier = ValueNotifier(10);
-/// final signal = notifier.toSignal();
-/// ```
-///
-/// > Setting the value on the signal or notifier will update the other.
-///
-/// ## ValueNotifier from Signal
-///
-/// To create a `ValueNotifier` from a mutable signal, use the `toValueNotifier` extension:
-///
-/// ```dart
-/// final signal = Signal(10);
-/// final notifier = signal.toValueNotifier();
-/// ```
-///
-/// > Setting the value on the signal or notifier will update the other.
-/// @link https://dartsignals.dev/flutter/value-notifier
-/// {@endtemplate}
 Signal<T> valueNotifierToSignal<T>(
   ValueNotifier<T> valueNotifier, {
   String? debugLabel,

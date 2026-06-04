@@ -5,16 +5,16 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends SignalStatefulWidget {
   const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with SignalsMixin {
-  late final counter = createSignal(0);
-  late final counterText = createComputed(() => counter.value.toString());
+class _MyAppState extends State<MyApp> {
+  final counter = signal(0);
+  late final counterText = computed(() => counter.value.toString());
 
   @override
   Widget build(BuildContext context) {

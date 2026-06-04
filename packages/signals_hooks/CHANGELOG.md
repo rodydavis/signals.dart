@@ -1,3 +1,23 @@
+## 7.1.0
+
+- Added native `Widget build(BuildContext context)` override support directly on `SignalHookWidget`.
+- Introduced `SignalHookElement` (extending `StatelessHookElement`) to implicitly track reactive signals inside standard `build` methods.
+- Deprecated `buildWidget` in favor of direct `build` overrides.
+- Streamlined `SignalHookBuilder` to support direct standard `build` scope.
+- Generalized the `useSignalProvider<T>()` custom hook to support any standard `ReadonlySignal` from `signals_core`.
+
+## 7.0.0
+
+- Modernized all hook APIs to accept a positional `options` parameter instead of named options.
+- Added new `useLinkedSignal` and `useLazySignal` hooks.
+- Added support for passing positional `SignalOptions` and `AsyncSignalOptions` across all hooks.
+- Re-exported core reactive primitives from `signals_core` including `action`, `action0`-`action10`, and `createModel`.
+- Bump `signals` dependency to `^7.0.0`.
+
+## 6.3.1
+
+ - **FIX**: call super.dispose in SignalHookState.
+
 ## 0.4.0
 
 - Bump signals to 6.3.0

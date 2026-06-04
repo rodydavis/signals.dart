@@ -418,5 +418,325 @@ void main() {
         expect(spy.calls, 0);
       });
     });
+
+    group('.(un)watched()', () {
+      test('should call watched when first subscription occurs', () {
+        var watched = 0;
+        var unwatched = 0;
+        final s = computed(
+          () => 1,
+          ComputedOptions(
+            watched: () => watched++,
+            unwatched: () => unwatched++,
+          ),
+        );
+        expect(watched, 0);
+        final unsubscribe = s.subscribe((_) {});
+        expect(watched, 1);
+        final unsubscribe2 = s.subscribe((_) {});
+        expect(watched, 1);
+        unsubscribe();
+        unsubscribe2();
+        expect(unwatched, 1);
+      });
+
+      test(
+          'should call watched when first subscription occurs w/ nested signal',
+          () {
+        var watched = 0;
+        var unwatched = 0;
+        final s = signal(
+          1,
+          SignalOptions(
+            watched: () => watched++,
+            unwatched: () => unwatched++,
+          ),
+        );
+        final c = computed(
+          () => s.value + 1,
+          ComputedOptions(
+            watched: () => watched++,
+            unwatched: () => unwatched++,
+          ),
+        );
+        expect(watched, 0);
+        final unsubscribe = c.subscribe((_) {});
+        expect(watched, 2);
+        final unsubscribe2 = s.subscribe((_) {});
+        expect(watched, 2);
+        unsubscribe2();
+        unsubscribe();
+        expect(unwatched, 2);
+      });
+    });
+
+    group('graph updates', () {
+      test('should run computeds once for multiple dep changes', () async {
+        final a = signal('a');
+        final b = signal('b');
+
+        final compute = Spy(() => a.value + b.value);
+        final c = computed(compute.call);
+
+        expect(c.value, 'ab');
+        expect(compute.calls, 1);
+        compute.resetHistory();
+
+        a.value = 'aa';
+        b.value = 'bb';
+        c.value;
+        expect(compute.calls, 1);
+      });
+
+      test('should drop A->B->A updates', () async {
+        //     A
+        //   / |
+        //  B  |
+        //   \ |
+        //     C
+        //     |
+        //     D
+        final a = signal(2);
+
+        final b = computed(() => a.value - 1);
+        final c = computed(() => a.value + b.value);
+
+        final compute = Spy(() => 'd: ${c.value}');
+        final d = computed(compute.call);
+
+        // Trigger read
+        expect(d.value, 'd: 3');
+        expect(compute.calls, 1);
+        compute.resetHistory();
+
+        a.value = 4;
+        d.value;
+        expect(compute.calls, 1);
+      });
+
+      test('should only update every signal once (diamond graph)', () {
+        //     A
+        //   /   \
+        //  B     C
+        //   \   /
+        //     D
+        final a = signal('a');
+        final b = computed(() => a.value);
+        final c = computed(() => a.value);
+
+        final spy = Spy(() => '${b.value} ${c.value}');
+        final d = computed(spy.call);
+
+        expect(d.value, 'a a');
+        expect(spy.calls, 1);
+
+        a.value = 'aa';
+        expect(d.value, 'aa aa');
+        expect(spy.calls, 2);
+      });
+
+      test('should only update every signal once (diamond graph + tail)', () {
+        //     A
+        //   /   \
+        //  B     C
+        //   \   /
+        //     D
+        //     |
+        //     E
+        final a = signal('a');
+        final b = computed(() => a.value);
+        final c = computed(() => a.value);
+
+        final d = computed(() => '${b.value} ${c.value}');
+
+        final spy = Spy(() => d.value);
+        final e = computed(spy.call);
+
+        expect(e.value, 'a a');
+        expect(spy.calls, 1);
+
+        a.value = 'aa';
+        expect(e.value, 'aa aa');
+        expect(spy.calls, 2);
+      });
+
+      test('should bail out if result is the same', () {
+        // A->B->C
+        final a = signal('a');
+        final b = computed(() {
+          a.value;
+          return 'foo';
+        });
+
+        final spy = Spy(() => b.value);
+        final c = computed(spy.call);
+
+        expect(c.value, 'foo');
+        expect(spy.calls, 1);
+
+        a.value = 'aa';
+        expect(c.value, 'foo');
+        expect(spy.calls, 1);
+      });
+
+      test(
+          'should only update every signal once (jagged diamond graph + tails)',
+          () {
+        //     A
+        //   /   \
+        //  B     C
+        //  |     |
+        //  |     D
+        //   \   /
+        //     E
+        //   /   \
+        //  F     G
+        final a = signal('a');
+
+        final b = computed(() => a.value);
+        final c = computed(() => a.value);
+
+        final d = computed(() => c.value);
+
+        final eSpy = Spy(() => '${b.value} ${d.value}');
+        final e = computed(eSpy.call);
+
+        final fSpy = Spy(() => e.value);
+        final f = computed(fSpy.call);
+        final gSpy = Spy(() => e.value);
+        final g = computed(gSpy.call);
+
+        expect(f.value, 'a a');
+        expect(fSpy.calls, 1);
+
+        expect(g.value, 'a a');
+        expect(gSpy.calls, 1);
+
+        eSpy.resetHistory();
+        fSpy.resetHistory();
+        gSpy.resetHistory();
+
+        a.value = 'b';
+
+        expect(e.value, 'b b');
+        expect(eSpy.calls, 1);
+
+        expect(f.value, 'b b');
+        expect(fSpy.calls, 1);
+
+        expect(g.value, 'b b');
+        expect(gSpy.calls, 1);
+
+        eSpy.resetHistory();
+        fSpy.resetHistory();
+        gSpy.resetHistory();
+
+        a.value = 'c';
+
+        expect(e.value, 'c c');
+        expect(eSpy.calls, 1);
+
+        expect(f.value, 'c c');
+        expect(fSpy.calls, 1);
+
+        expect(g.value, 'c c');
+        expect(gSpy.calls, 1);
+      });
+
+      test('should only subscribe to signals listened to', () {
+        //    *A
+        //   /   \
+        // *B     C
+        final a = signal('a');
+
+        final b = computed(() => a.value);
+        final spy = Spy(() => a.value);
+        computed(spy.call);
+
+        expect(b.value, 'a');
+        expect(spy.calls, 0);
+
+        a.value = 'aa';
+        expect(b.value, 'aa');
+        expect(spy.calls, 0);
+      });
+
+      test('should only subscribe to signals listened to (2)', () {
+        final a = signal('a');
+        final spyB = Spy(() => a.value);
+        final b = computed(spyB.call);
+
+        final spyC = Spy(() => b.value);
+        final c = computed(spyC.call);
+
+        final d = computed(() => a.value);
+
+        var result = '';
+        final unsub = effect(() {
+          result = c.value;
+        });
+
+        expect(result, 'a');
+        expect(d.value, 'a');
+
+        spyB.resetHistory();
+        spyC.resetHistory();
+        unsub();
+
+        a.value = 'aa';
+
+        expect(spyB.calls, 0);
+        expect(spyC.calls, 0);
+        expect(d.value, 'aa');
+      });
+
+      test('should ensure subs update even if one dep unmarks it', () {
+        //     A
+        //   /   \
+        //  B     *C <- returns same value every time
+        //   \   /
+        //     D
+        final a = signal('a');
+        final b = computed(() => a.value);
+        final c = computed(() {
+          a.value;
+          return 'c';
+        });
+        final spy = Spy(() => '${b.value} ${c.value}');
+        final d = computed(spy.call);
+        expect(d.value, 'a c');
+        spy.resetHistory();
+
+        a.value = 'aa';
+        expect(d.value, 'aa c');
+        expect(spy.calls, 1);
+      });
+
+      test('should ensure subs update even if two deps unmark it', () {
+        //     A
+        //   / | \
+        //  B *C *D
+        //   \ | /
+        //     E
+        final a = signal('a');
+        final b = computed(() => a.value);
+        final c = computed(() {
+          a.value;
+          return 'c';
+        });
+        final d = computed(() {
+          a.value;
+          return 'd';
+        });
+        final spy = Spy(() => '${b.value} ${c.value} ${d.value}');
+        final e = computed(spy.call);
+        expect(e.value, 'a c d');
+        spy.resetHistory();
+
+        a.value = 'aa';
+        expect(e.value, 'aa c d');
+        expect(spy.calls, 1);
+      });
+    });
   });
 }

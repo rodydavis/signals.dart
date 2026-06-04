@@ -8,7 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals: ^6.0.0
+  signals: ^7.0.0
 
 dev_dependencies:
   flutter_test:
@@ -18,4 +18,3 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-resolution: workspace

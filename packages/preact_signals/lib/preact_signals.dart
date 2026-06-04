@@ -6,3 +6,7 @@ export 'src/effect.dart' show effect, Effect;
 export 'src/batch.dart' show batch, SignalEffectException;
 export 'src/untracked.dart' show untracked;
 export 'src/readonly.dart' show readonly, ReadonlySignal;
+export 'src/options.dart';
+export 'src/equality.dart';
+export 'src/action.dart';
+export 'src/model.dart';

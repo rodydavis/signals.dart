@@ -1,0 +1,265 @@
+# Signals.dart
+
+> Fine-grained reactive programming framework for Dart and Flutter. Based on the Preact Signals model, offering 100% native, glitch-free, memoized reactivity across VM, CLI, server, web, and Flutter.
+
+## Core Guides & Reference
+
+- [Signals.dart](https://dartsignals.dev/): Fine-grained reactive programming framework for Dart and Flutter.
+- [Overview](https://dartsignals.dev/reference/overview): An overview of the signals library
+- [Installing](https://dartsignals.dev/reference/install): Learn how to install and configure Signals for pure Dart, Flutter, and developer tooling.
+- [AI Integration](https://dartsignals.dev/reference/ai): Enable LLMs and AI coding assistants to build high-performance reactive systems using Signals.dart.
+- [Persisted Signals](https://dartsignals.dev/guides/persisted-signals): How to save and restore signals.
+- [Dependency Injection](https://dartsignals.dev/guides/dependency-injection): How is Signals can be used with any DI solution or none at all
+- [Bi-directional Data Flow](https://dartsignals.dev/guides/bi-directional-data-flow): By default, Signals are uni-directional but can be used in a bi-directional way if needed.
+- [ValueNotifier](https://dartsignals.dev/guides/value-notifier): How is Signals different than using ValueNotifier?
+
+## Packages & API Reference
+
+### Package `package:signals_flutter`
+
+- [Untracked](https://dartsignals.dev/packages/signals_flutter/core/untracked): Runs a callback function fn that can read signal values without establishing a reactive subscription.
+- [LinkedSignal](https://dartsignals.dev/packages/signals_flutter/core/linked-signal): A highly powerful, mutable computed signal that derives its default value from an underlying source,.
+- [Effect](https://dartsignals.dev/packages/signals_flutter/core/effect): Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
+- [ReadonlySignal](https://dartsignals.dev/packages/signals_flutter/core/readonly): An interface for read-only signals.
+- [Signal](https://dartsignals.dev/packages/signals_flutter/core/signal): Represents a mutable reactive state container that sits at the foundation of the reactivity system.
+- [Computed](https://dartsignals.dev/packages/signals_flutter/core/computed): Represents a derived, read-only reactive state value computed from one or more other signals.
+- [Action](https://dartsignals.dev/packages/signals_flutter/core/action): Wraps a callback function into a reusable, batched, and untracked action.
+- [Batch](https://dartsignals.dev/packages/signals_flutter/core/batch): Combines multiple signal writes into a single update transaction that is flushed only after the callback completes.
+- [MapSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/map): A mixin that adds reactive <code>Map</code> methods and operators directly to a Signal.
+- [TrackedSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/tracked): A mixin that adds tracking for the initial and previous values to a Signal.
+- [ValueListenableSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/value-listenable-signal-mixin): ValueListenable implementation for ReadonlySignal.
+- [SetSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/set): A mixin that adds reactive <code>Set</code> methods and operations to a Signal.
+- [ListSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/list): A mixin that adds reactive <code>List</code> methods and operators to a Signal.
+- [ValueNotifierSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/value-notifier-signal-mixin): ValueNotifier implementation for Signal.
+- [SinkSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/sink): A mixin that implements the standard Sink interface for a Signal.
+- [SignalsMixin](https://dartsignals.dev/packages/signals_flutter/mixins/signals-mixin): A State mixin that automatically handles subscription and cleanup of signals.
+- [QueueSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/queue): A mixin that adds reactive <code>Queue</code> methods and operations to a Signal.
+- [IterableSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/iterable): A mixin that adds reactive <code>Iterable</code> methods and properties to a Signal.
+- [EventSinkSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/event-sink): A mixin that implements the standard EventSink interface for a Signal.
+- [StreamSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/stream): A mixin that implements the standard Stream interface for a ReadonlySignal.
+- [ChangeStackSignalMixin](https://dartsignals.dev/packages/signals_flutter/mixins/change-stack): A mixin that adds undo, redo, and state history replay capabilities to a Signal.
+- [FlutterComputed](https://dartsignals.dev/packages/signals_flutter/signals/flutter-computed): A read-only reactive signal whose value is automatically computed and cached.
+- [Ticker Signal](https://dartsignals.dev/packages/signals_flutter/signals/ticker-signal): Ticker signal used to drive animations and can create animation controllers.
+- [FlutterSignal](https://dartsignals.dev/packages/signals_flutter/signals/flutter-signal): A mutable, reactive state cell that exposes both standard Signals and Flutter.
+- [Flutter Readonly Signal](https://dartsignals.dev/packages/signals_flutter/signals/flutter-readonly-signal): Signal extensions for watching value changes on BuildContext.
+- [AsyncState](https://dartsignals.dev/packages/signals_flutter/async/state): A sealed union representing the lifecycle states of an asynchronous operation.
+- [FutureSignal](https://dartsignals.dev/packages/signals_flutter/async/future): Future signals wrap a standard asynchronous Future and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive ...
+- [AsyncSignal](https://dartsignals.dev/packages/signals_flutter/async/signal): A highly powerful Signal specifically designed for manual, imperative asynchronous state management.
+- [Computed](https://dartsignals.dev/packages/signals_flutter/async/computed): Create an asynchronous computed signal with implicit dependency tracking.
+- [Connect](https://dartsignals.dev/packages/signals_flutter/async/connect): A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
+- [Stream](https://dartsignals.dev/packages/signals_flutter/async/stream): Stream signals can be created by extension or method.
+- [MapSignal](https://dartsignals.dev/packages/signals_flutter/value/map): A reactive Signal that holds a Map and implements the Map interface.
+- [SetSignal](https://dartsignals.dev/packages/signals_flutter/value/set): A reactive Signal that holds a Set and implements the Set interface.
+- [ListSignal](https://dartsignals.dev/packages/signals_flutter/value/list): A reactive Signal that holds a List and implements the List interface.
+- [IterableSignal](https://dartsignals.dev/packages/signals_flutter/value/iterable): A reactive Signal that holds an Iterable and implements the Iterable interface.
+- [ChangeStackSignal](https://dartsignals.dev/packages/signals_flutter/value/change-stack): A reactive Signal that records its history of values, allowing undo and redo operations.
+- [RenderSignalCustomPaint](https://dartsignals.dev/packages/signals_flutter/render/render-signal-custom-paint): The RenderObject for SignalCustomPaint that delegates drawing to SignalCustomPainter.
+- [RenderSignalProxyBox](https://dartsignals.dev/packages/signals_flutter/render/render-signal-proxy-box): A low-level RenderProxyBox that subscribes to multiple reactive signals.
+- [RenderSignalBox](https://dartsignals.dev/packages/signals_flutter/render/render-signal-box): The low-level RenderBox used by SignalPainterWidget to directly subscribe to a progress signal and paint.
+- [Signal Value Listenable Utils](https://dartsignals.dev/packages/signals_flutter/extensions/signal-value-listenable-utils): Extension on ValueListenable to seamlessly bridge standard Flutter values to reactive signals.
+- [Stateful Element Convert Extension](https://dartsignals.dev/packages/signals_flutter/extensions/stateful-element-convert-extension): Extension to convert standard Flutter elements to their reactive counterparts.
+- [ConvertedSignalStatefulElement](https://dartsignals.dev/packages/signals_flutter/extensions/converted-signal-stateful-element): Element for ConvertedSignalStatefulWidget that overrides the widget getter.
+- [SignalStatefulElement](https://dartsignals.dev/packages/signals_flutter/extensions/signal-stateful-element): Element for SignalStatefulWidget that manages implicit signal subscription and handles dynamic branching.
+- [Stateful Widget Convert Widget Extension](https://dartsignals.dev/packages/signals_flutter/extensions/stateful-widget-convert-widget-extension): Extension to convert standard Flutter widgets to reactive Signal stateful widgets.
+- [SignalCustomPainter](https://dartsignals.dev/packages/signals_flutter/extensions/signal-custom-painter): A premium custom painter that automatically repaints when any observed signal changes,.
+- [ConvertedSignalWidget](https://dartsignals.dev/packages/signals_flutter/extensions/converted-signal-widget): A wrapper SignalWidget that wraps a StatelessWidget.
+- [Stateless Widget Convert Widget Extension](https://dartsignals.dev/packages/signals_flutter/extensions/stateless-widget-convert-widget-extension): Extension to convert standard Flutter widgets to reactive Signal widgets.
+- [Signal Value Notifier Utils](https://dartsignals.dev/packages/signals_flutter/extensions/signal-value-notifier-utils): Extension on ValueNotifier to seamlessly bridge standard Flutter mutable values to reactive signals.
+- [SignalElement](https://dartsignals.dev/packages/signals_flutter/extensions/signal-element): Element for SignalWidget that manages implicit signal subscription and handles dynamic branching.
+- [Value Listenable To Signal](https://dartsignals.dev/packages/signals_flutter/extensions/value-listenable-to-signal): A global helper function to convert a Flutter ValueListenable to a ReadonlySignal.
+- [Stateless Element Convert Extension](https://dartsignals.dev/packages/signals_flutter/extensions/stateless-element-convert-extension): Extension to convert standard Flutter elements to their reactive counterparts.
+- [ConvertedSignalStatefulWidget](https://dartsignals.dev/packages/signals_flutter/extensions/converted-signal-stateful-widget): A wrapper SignalStatefulWidget that wraps a StatefulWidget.
+- [Value Notifier To Signal](https://dartsignals.dev/packages/signals_flutter/extensions/value-notifier-to-signal): A global helper function to convert a Flutter ValueNotifier to a mutable Signal.
+- [SignalStatefulWidget](https://dartsignals.dev/packages/signals_flutter/extensions/signal-stateful-widget): A reactive StatefulWidget that implicitly tracks and rebuilds on signal changes.
+- [SignalEquality](https://dartsignals.dev/packages/signals_flutter/utilities/equality): Defines the equality check algorithm used by signals to determine if a new value.
+- [Model](https://dartsignals.dev/packages/signals_flutter/utilities/model): Creates a new model constructor with an instanced factory.
+- [SignalContainer](https://dartsignals.dev/packages/signals_flutter/utilities/container): Signal container used to create signals based on args.
+- [SignalsObserver](https://dartsignals.dev/packages/signals_flutter/utilities/observer): You can observe all signal values in the dart application by providing an implementation of <code>SignalsObserver</code>:.
+- [PersistedSignal](https://dartsignals.dev/packages/signals_flutter/utilities/persisted): A <code>Signal</code> whose value is persistently stored in a key-value database.
+- [signals_flutter](https://dartsignals.dev/packages/signals_flutter/index): The signals library exposes four core functions which are the building blocks to model any business logic you can think of.
+- [SignalEffect](https://dartsignals.dev/packages/signals_flutter/effects/signal-effect): A widget that enables executing scoped reactive side-effects inline within the widget tree.
+- [SignalPainterWidget](https://dartsignals.dev/packages/signals_flutter/widgets/signal-painter-widget): A high-performance, leaf render-object widget driven by a double progress signal.
+- [WatchBuilder](https://dartsignals.dev/packages/signals_flutter/widgets/watch-builder): WatchBuilder.
+- [Watch](https://dartsignals.dev/packages/signals_flutter/widgets/watch): A deprecated widget for watching signal changes in the widget tree.
+- [SignalWidget](https://dartsignals.dev/packages/signals_flutter/widgets/signal-widget): A reactive StatelessWidget that implicitly tracks and rebuilds on signal changes.
+- [MultiSignalProvider](https://dartsignals.dev/packages/signals_flutter/widgets/multi-signal-provider): A dependency-injection / state propagation widget that allows passing.
+- [SignalBuilder](https://dartsignals.dev/packages/signals_flutter/widgets/signal-builder): A premium, surgical builder widget that rebuilds locally on signal changes.
+- [SignalProxyWidget](https://dartsignals.dev/packages/signals_flutter/widgets/signal-proxy-widget): A low-level widget wrapper around RenderSignalProxyBox for custom painting / sizing needs.
+- [SignalCustomPaint](https://dartsignals.dev/packages/signals_flutter/widgets/signal-custom-paint): A high-performance canvas painting widget that subscribes to signals and renders.
+- [SignalAnimatedBuilder](https://dartsignals.dev/packages/signals_flutter/widgets/signal-animated-builder): A reactive builder widget designed for performance optimizations using child caching.
+- [SignalProvider](https://dartsignals.dev/packages/signals_flutter/widgets/signal-provider): A premium dependency-injection / state propagation widget that allows passing.
+
+### Package `package:signals_core`
+
+- [Untracked](https://dartsignals.dev/packages/signals_core/core/untracked): Runs a callback function fn that can read signal values without establishing a reactive subscription.
+- [LinkedSignal](https://dartsignals.dev/packages/signals_core/core/linked-signal): A highly powerful, mutable computed signal that derives its default value from an underlying source,.
+- [Effect](https://dartsignals.dev/packages/signals_core/core/effect): Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
+- [ReadonlySignal](https://dartsignals.dev/packages/signals_core/core/readonly): An interface for read-only signals.
+- [Signal](https://dartsignals.dev/packages/signals_core/core/signal): Represents a mutable reactive state container that sits at the foundation of the reactivity system.
+- [Computed](https://dartsignals.dev/packages/signals_core/core/computed): Represents a derived, read-only reactive state value computed from one or more other signals.
+- [Action](https://dartsignals.dev/packages/signals_core/core/action): Wraps a callback function into a reusable, batched, and untracked action.
+- [Batch](https://dartsignals.dev/packages/signals_core/core/batch): Combines multiple signal writes into a single update transaction that is flushed only after the callback completes.
+- [MapSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/map): A mixin that adds reactive <code>Map</code> methods and operators directly to a Signal.
+- [TrackedSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/tracked): A mixin that adds tracking for the initial and previous values to a Signal.
+- [SetSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/set): A mixin that adds reactive <code>Set</code> methods and operations to a Signal.
+- [ListSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/list): A mixin that adds reactive <code>List</code> methods and operators to a Signal.
+- [SinkSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/sink): A mixin that implements the standard Sink interface for a Signal.
+- [QueueSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/queue): A mixin that adds reactive <code>Queue</code> methods and operations to a Signal.
+- [IterableSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/iterable): A mixin that adds reactive <code>Iterable</code> methods and properties to a Signal.
+- [EventSinkSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/event-sink): A mixin that implements the standard EventSink interface for a Signal.
+- [StreamSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/stream): A mixin that implements the standard Stream interface for a ReadonlySignal.
+- [ChangeStackSignalMixin](https://dartsignals.dev/packages/signals_core/mixins/change-stack): A mixin that adds undo, redo, and state history replay capabilities to a Signal.
+- [AsyncState](https://dartsignals.dev/packages/signals_core/async/state): A sealed union representing the lifecycle states of an asynchronous operation.
+- [FutureSignal](https://dartsignals.dev/packages/signals_core/async/future): Future signals wrap a standard asynchronous Future and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive ...
+- [AsyncSignal](https://dartsignals.dev/packages/signals_core/async/signal): A highly powerful Signal specifically designed for manual, imperative asynchronous state management.
+- [Computed](https://dartsignals.dev/packages/signals_core/async/computed): Create an asynchronous computed signal with implicit dependency tracking.
+- [Connect](https://dartsignals.dev/packages/signals_core/async/connect): A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
+- [Stream](https://dartsignals.dev/packages/signals_core/async/stream): Stream signals can be created by extension or method.
+- [MapSignal](https://dartsignals.dev/packages/signals_core/value/map): A reactive Signal that holds a Map and implements the Map interface.
+- [SetSignal](https://dartsignals.dev/packages/signals_core/value/set): A reactive Signal that holds a Set and implements the Set interface.
+- [ListSignal](https://dartsignals.dev/packages/signals_core/value/list): A reactive Signal that holds a List and implements the List interface.
+- [IterableSignal](https://dartsignals.dev/packages/signals_core/value/iterable): A reactive Signal that holds an Iterable and implements the Iterable interface.
+- [ChangeStackSignal](https://dartsignals.dev/packages/signals_core/value/change-stack): A reactive Signal that records its history of values, allowing undo and redo operations.
+- [SignalEquality](https://dartsignals.dev/packages/signals_core/utilities/equality): Defines the equality check algorithm used by signals to determine if a new value.
+- [Model](https://dartsignals.dev/packages/signals_core/utilities/model): Creates a new model constructor with an instanced factory.
+- [SignalContainer](https://dartsignals.dev/packages/signals_core/utilities/container): Signal container used to create signals based on args.
+- [SignalsObserver](https://dartsignals.dev/packages/signals_core/utilities/observer): You can observe all signal values in the dart application by providing an implementation of <code>SignalsObserver</code>:.
+- [PersistedSignal](https://dartsignals.dev/packages/signals_core/utilities/persisted): A <code>Signal</code> whose value is persistently stored in a key-value database.
+- [signals_core](https://dartsignals.dev/packages/signals_core/index): The signals library exposes four core functions which are the building blocks to model any business logic you can think of.
+
+### Package `package:signals_lint`
+
+- [SignalsAvoidDeprecatedWatchExtension](https://dartsignals.dev/packages/signals_lint/flutter/signals-avoid-deprecated-watch-extension): A Dart static analysis rule that detects and warns against using the deprecated.
+- [WrapWithSignalBuilder](https://dartsignals.dev/packages/signals_lint/flutter/wrap-with-signal-builder): An IDE quick-fix refactoring tool (Dart Assist) that automatically wraps any.
+- [ConvertStatelessToSignalWidget](https://dartsignals.dev/packages/signals_lint/flutter/convert-stateless-to-signal-widget): An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard.
+- [ConvertStatefulToSignalStatefulWidget](https://dartsignals.dev/packages/signals_lint/flutter/convert-stateful-to-signal-stateful-widget): An IDE quick-fix refactoring tool (Dart Assist) that automatically converts a standard.
+- [SignalsAvoidDeprecatedSignalsMixin](https://dartsignals.dev/packages/signals_lint/flutter/signals-avoid-deprecated-signals-mixin): A Dart static analysis rule that detects and warns against using the deprecated <code>SignalsMixin</code> in v7.
+- [SignalsAvoidCreateInBuildMethod](https://dartsignals.dev/packages/signals_lint/flutter/signals-avoid-create-in-build-method): A Dart lint rule that checks and reports instances where a signal or computed.
+- [SignalsPreferNamedBuilder](https://dartsignals.dev/packages/signals_lint/flutter/signals-prefer-named-builder): A Dart static analysis rule that detects positional builder parameters in <code>Watch</code>.
+- [MigrateSignalsMixinToSignalStatefulWidget](https://dartsignals.dev/packages/signals_lint/flutter/migrate-signals-mixin-to-signal-stateful-widget): An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a deprecated.
+- [SignalsPreferUnifiedOptions](https://dartsignals.dev/packages/signals_lint/flutter/signals-prefer-unified-options): A Dart static analysis rule that detects deprecated positional or scattered named configuration.
+- [MigrateWatchToSignalBuilder](https://dartsignals.dev/packages/signals_lint/flutter/migrate-watch-to-signal-builder): An IDE quick-fix refactoring tool (Dart Assist) that automatically migrates a positional or named.
+- [signals_lint](https://dartsignals.dev/packages/signals_lint/index): linter and developer tool for signals
+
+### Package `package:signals_devtools_extension`
+
+- [SignalsDevToolsExtension](https://dartsignals.dev/packages/signals_devtools_extension/flutter/devtools): The main widget of the Signals DevTools Extension.
+- [signals_devtools_extension](https://dartsignals.dev/packages/signals_devtools_extension/index): Signals DevTools extension.
+
+### Package `package:signals`
+
+- [Untracked](https://dartsignals.dev/packages/signals/core/untracked): Runs a callback function fn that can read signal values without establishing a reactive subscription.
+- [LinkedSignal](https://dartsignals.dev/packages/signals/core/linked-signal): A highly powerful, mutable computed signal that derives its default value from an underlying source,.
+- [Effect](https://dartsignals.dev/packages/signals/core/effect): Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
+- [ReadonlySignal](https://dartsignals.dev/packages/signals/core/readonly): An interface for read-only signals.
+- [Signal](https://dartsignals.dev/packages/signals/core/signal): Represents a mutable reactive state container that sits at the foundation of the reactivity system.
+- [Computed](https://dartsignals.dev/packages/signals/core/computed): Represents a derived, read-only reactive state value computed from one or more other signals.
+- [Action](https://dartsignals.dev/packages/signals/core/action): Wraps a callback function into a reusable, batched, and untracked action.
+- [Batch](https://dartsignals.dev/packages/signals/core/batch): Combines multiple signal writes into a single update transaction that is flushed only after the callback completes.
+- [MapSignalMixin](https://dartsignals.dev/packages/signals/mixins/map): A mixin that adds reactive <code>Map</code> methods and operators directly to a Signal.
+- [TrackedSignalMixin](https://dartsignals.dev/packages/signals/mixins/tracked): A mixin that adds tracking for the initial and previous values to a Signal.
+- [ValueListenableSignalMixin](https://dartsignals.dev/packages/signals/mixins/value-listenable-signal-mixin): ValueListenable implementation for ReadonlySignal.
+- [SetSignalMixin](https://dartsignals.dev/packages/signals/mixins/set): A mixin that adds reactive <code>Set</code> methods and operations to a Signal.
+- [ListSignalMixin](https://dartsignals.dev/packages/signals/mixins/list): A mixin that adds reactive <code>List</code> methods and operators to a Signal.
+- [ValueNotifierSignalMixin](https://dartsignals.dev/packages/signals/mixins/value-notifier-signal-mixin): ValueNotifier implementation for Signal.
+- [SinkSignalMixin](https://dartsignals.dev/packages/signals/mixins/sink): A mixin that implements the standard Sink interface for a Signal.
+- [SignalsMixin](https://dartsignals.dev/packages/signals/mixins/signals-mixin): A State mixin that automatically handles subscription and cleanup of signals.
+- [QueueSignalMixin](https://dartsignals.dev/packages/signals/mixins/queue): A mixin that adds reactive <code>Queue</code> methods and operations to a Signal.
+- [IterableSignalMixin](https://dartsignals.dev/packages/signals/mixins/iterable): A mixin that adds reactive <code>Iterable</code> methods and properties to a Signal.
+- [EventSinkSignalMixin](https://dartsignals.dev/packages/signals/mixins/event-sink): A mixin that implements the standard EventSink interface for a Signal.
+- [StreamSignalMixin](https://dartsignals.dev/packages/signals/mixins/stream): A mixin that implements the standard Stream interface for a ReadonlySignal.
+- [ChangeStackSignalMixin](https://dartsignals.dev/packages/signals/mixins/change-stack): A mixin that adds undo, redo, and state history replay capabilities to a Signal.
+- [FlutterComputed](https://dartsignals.dev/packages/signals/signals/flutter-computed): A read-only reactive signal whose value is automatically computed and cached.
+- [TickerSignal](https://dartsignals.dev/packages/signals/signals/ticker-signal): Ticker signal used to drive animations and can create animation controllers.
+- [FlutterSignal](https://dartsignals.dev/packages/signals/signals/flutter-signal): A mutable, reactive state cell that exposes both standard Signals and Flutter.
+- [Flutter Readonly Signal](https://dartsignals.dev/packages/signals/signals/flutter-readonly-signal): Signal extensions for watching value changes on BuildContext.
+- [AsyncState](https://dartsignals.dev/packages/signals/async/state): A sealed union representing the lifecycle states of an asynchronous operation.
+- [FutureSignal](https://dartsignals.dev/packages/signals/async/future): Future signals wrap a standard asynchronous Future and bridge it into the reactive state framework, exposing its lifecycle and value as a reactive ...
+- [AsyncSignal](https://dartsignals.dev/packages/signals/async/signal): A highly powerful Signal specifically designed for manual, imperative asynchronous state management.
+- [Computed](https://dartsignals.dev/packages/signals/async/computed): Create an asynchronous computed signal with implicit dependency tracking.
+- [Connect](https://dartsignals.dev/packages/signals/async/connect): A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
+- [Stream](https://dartsignals.dev/packages/signals/async/stream): Stream signals can be created by extension or method.
+- [MapSignal](https://dartsignals.dev/packages/signals/value/map): A reactive Signal that holds a Map and implements the Map interface.
+- [SetSignal](https://dartsignals.dev/packages/signals/value/set): A reactive Signal that holds a Set and implements the Set interface.
+- [ListSignal](https://dartsignals.dev/packages/signals/value/list): A reactive Signal that holds a List and implements the List interface.
+- [IterableSignal](https://dartsignals.dev/packages/signals/value/iterable): A reactive Signal that holds an Iterable and implements the Iterable interface.
+- [ChangeStackSignal](https://dartsignals.dev/packages/signals/value/change-stack): A reactive Signal that records its history of values, allowing undo and redo operations.
+- [RenderSignalCustomPaint](https://dartsignals.dev/packages/signals/render/render-signal-custom-paint): The RenderObject for SignalCustomPaint that delegates drawing to SignalCustomPainter.
+- [RenderSignalProxyBox](https://dartsignals.dev/packages/signals/render/render-signal-proxy-box): A low-level RenderProxyBox that subscribes to multiple reactive signals.
+- [RenderSignalBox](https://dartsignals.dev/packages/signals/render/render-signal-box): The low-level RenderBox used by SignalPainterWidget to directly subscribe to a progress signal and paint.
+- [Signal Value Listenable Utils](https://dartsignals.dev/packages/signals/extensions/signal-value-listenable-utils): Extension on ValueListenable to seamlessly bridge standard Flutter values to reactive signals.
+- [Stateful Element Convert Extension](https://dartsignals.dev/packages/signals/extensions/stateful-element-convert-extension): Extension to convert standard Flutter elements to their reactive counterparts.
+- [ConvertedSignalStatefulElement](https://dartsignals.dev/packages/signals/extensions/converted-signal-stateful-element): Element for ConvertedSignalStatefulWidget that overrides the widget getter.
+- [SignalStatefulElement](https://dartsignals.dev/packages/signals/extensions/signal-stateful-element): Element for SignalStatefulWidget that manages implicit signal subscription and handles dynamic branching.
+- [Lazy Signal](https://dartsignals.dev/packages/signals/extensions/lazy-signal): Creates a lazy, mutable FlutterSignal of type T whose value can be assigned later.
+- [Stateful Widget Convert Widget Extension](https://dartsignals.dev/packages/signals/extensions/stateful-widget-convert-widget-extension): Extension to convert standard Flutter widgets to reactive Signal stateful widgets.
+- [SignalCustomPainter](https://dartsignals.dev/packages/signals/extensions/signal-custom-painter): A premium custom painter that automatically repaints when any observed signal changes,.
+- [ConvertedSignalWidget](https://dartsignals.dev/packages/signals/extensions/converted-signal-widget): A wrapper SignalWidget that wraps a StatelessWidget.
+- [Stateless Widget Convert Widget Extension](https://dartsignals.dev/packages/signals/extensions/stateless-widget-convert-widget-extension): Extension to convert standard Flutter widgets to reactive Signal widgets.
+- [Signal Value Notifier Utils](https://dartsignals.dev/packages/signals/extensions/signal-value-notifier-utils): Extension on ValueNotifier to seamlessly bridge standard Flutter mutable values to reactive signals.
+- [SignalElement](https://dartsignals.dev/packages/signals/extensions/signal-element): Element for SignalWidget that manages implicit signal subscription and handles dynamic branching.
+- [Value Listenable To Signal](https://dartsignals.dev/packages/signals/extensions/value-listenable-to-signal): A global helper function to convert a Flutter ValueListenable to a ReadonlySignal.
+- [Stateless Element Convert Extension](https://dartsignals.dev/packages/signals/extensions/stateless-element-convert-extension): Extension to convert standard Flutter elements to their reactive counterparts.
+- [ConvertedSignalStatefulWidget](https://dartsignals.dev/packages/signals/extensions/converted-signal-stateful-widget): A wrapper SignalStatefulWidget that wraps a StatefulWidget.
+- [Value Notifier To Signal](https://dartsignals.dev/packages/signals/extensions/value-notifier-to-signal): A global helper function to convert a Flutter ValueNotifier to a mutable Signal.
+- [SignalStatefulWidget](https://dartsignals.dev/packages/signals/extensions/signal-stateful-widget): A reactive StatefulWidget that implicitly tracks and rebuilds on signal changes.
+- [SignalEquality](https://dartsignals.dev/packages/signals/utilities/equality): Defines the equality check algorithm used by signals to determine if a new value.
+- [Model](https://dartsignals.dev/packages/signals/utilities/model): Creates a new model constructor with an instanced factory.
+- [SignalContainer](https://dartsignals.dev/packages/signals/utilities/container): Signal container used to create signals based on args.
+- [SignalsObserver](https://dartsignals.dev/packages/signals/utilities/observer): You can observe all signal values in the dart application by providing an implementation of <code>SignalsObserver</code>:.
+- [PersistedSignal](https://dartsignals.dev/packages/signals/utilities/persisted): A <code>Signal</code> whose value is persistently stored in a key-value database.
+- [signals](https://dartsignals.dev/packages/signals/index): Reactivity made simple. Do more by doing less. Supports Flutter and any Dart project including HTML/JS, CLI, Shelf Server, VM and more.
+- [SignalEffect](https://dartsignals.dev/packages/signals/effects/signal-effect): A widget that enables executing scoped reactive side-effects inline within the widget tree.
+- [SignalPainterWidget](https://dartsignals.dev/packages/signals/widgets/signal-painter-widget): A high-performance, leaf render-object widget driven by a double progress signal.
+- [WatchBuilder](https://dartsignals.dev/packages/signals/widgets/watch-builder): WatchBuilder.
+- [Watch](https://dartsignals.dev/packages/signals/widgets/watch): A deprecated widget for watching signal changes in the widget tree.
+- [SignalWidget](https://dartsignals.dev/packages/signals/widgets/signal-widget): A reactive StatelessWidget that implicitly tracks and rebuilds on signal changes.
+- [MultiSignalProvider](https://dartsignals.dev/packages/signals/widgets/multi-signal-provider): A dependency-injection / state propagation widget that allows passing.
+- [SignalBuilder](https://dartsignals.dev/packages/signals/widgets/signal-builder): A premium, surgical builder widget that rebuilds locally on signal changes.
+- [SignalProxyWidget](https://dartsignals.dev/packages/signals/widgets/signal-proxy-widget): A low-level widget wrapper around RenderSignalProxyBox for custom painting / sizing needs.
+- [SignalCustomPaint](https://dartsignals.dev/packages/signals/widgets/signal-custom-paint): A high-performance canvas painting widget that subscribes to signals and renders.
+- [SignalAnimatedBuilder](https://dartsignals.dev/packages/signals/widgets/signal-animated-builder): A reactive builder widget designed for performance optimizations using child caching.
+- [SignalProvider](https://dartsignals.dev/packages/signals/widgets/signal-provider): A premium dependency-injection / state propagation widget that allows passing.
+
+### Package `package:signals_hooks`
+
+- [signals_hooks](https://dartsignals.dev/packages/signals_hooks/index): flutter_hooks bindings for signals
+- [useIterableSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-iterable-signal): Creates a new IterableSignal and subscribes to it.
+- [useLazySignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-lazy-signal): Creates a new Signal that starts uninitialized and subscribes to it.
+- [useConnect](https://dartsignals.dev/packages/signals_hooks/hooks/use-connect): Creates a new Connect instance and automatically disposes of it when the widget unmounts.
+- [useValueNotifierToSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-value-notifier-to-signal): Creates a new mutable Signal from a ValueNotifier and subscribes to it.
+- [useValueListenableToSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-value-listenable-to-signal): Creates a new ReadonlySignal from a ValueListenable and subscribes to it.
+- [useListSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-list-signal): Creates a new ListSignal and subscribes to it.
+- [useQueueSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-queue-signal): Creates a new QueueSignal and subscribes to it.
+- [useSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-signal): Creates a new Signal that persists across widget rebuilds and subscribes to it.
+- [useSignalValue](https://dartsignals.dev/packages/signals_hooks/hooks/use-signal-value): Subscribes to an existing ReadonlySignal (or Signal) and returns its current value.
+- [useStreamSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-stream-signal): Creates a new StreamSignal and subscribes to it.
+- [useSetSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-set-signal): Creates a new SetSignal and subscribes to it.
+- [useLinkedSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-linked-signal): Creates a new LinkedSignal that resets its value whenever its source computation changes.
+- [useChangeStackSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-change-stack-signal): Creates a new ChangeStackSignal and subscribes to it.
+- [useTrackedSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-tracked-signal): Creates a new TrackedSignal and subscribes to it.
+- [useExistingSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-existing-signal): Subscribes to an existing ReadonlySignal (or Signal) and returns it.
+- [useAsyncSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-async-signal): Creates a new mutable AsyncSignal initialized with a specific AsyncState and subscribes to it.
+- [useComputed](https://dartsignals.dev/packages/signals_hooks/hooks/use-computed): Creates a new Computed signal and subscribes to it.
+- [useSignalProvider](https://dartsignals.dev/packages/signals_hooks/hooks/use-signal-provider): A custom hook to retrieve a generic signal from a SignalProvider ancestor higher up in the widget tree.
+- [useFutureSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-future-signal): Creates a new FutureSignal and subscribes to it.
+- [useAsyncComputed](https://dartsignals.dev/packages/signals_hooks/hooks/use-async-computed): Creates a new FutureSignal from a computed async value and subscribes to it.
+- [useSignalEffect](https://dartsignals.dev/packages/signals_hooks/hooks/use-signal-effect): Creates a new reactive effect and registers it with the widget's lifecycle.
+- [useMapSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-map-signal): Creates a new MapSignal and subscribes to it.
+- [SignalStatefulHookWidget](https://dartsignals.dev/packages/signals_hooks/widgets/signal-stateful-hook-widget): A premium stateful widget that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
+- [SignalHookBuilder](https://dartsignals.dev/packages/signals_hooks/widgets/signal-hook-builder): A premium, localized builder widget that behaves exactly like SignalHookWidget.
+- [SignalHookWidget](https://dartsignals.dev/packages/signals_hooks/widgets/signal-hook-widget): A premium reactive widget that both supports Flutter Hooks and implicitly tracks and rebuilds on signal changes.
+
+### Package `package:preact_signals`
+
+- [Untracked](https://dartsignals.dev/packages/preact_signals/core/untracked): Runs a callback function fn that can read signal values without establishing a reactive subscription.
+- [Effect](https://dartsignals.dev/packages/preact_signals/core/effect): Represents a passive observer that runs arbitrary side-effect code in response to signal changes.
+- [ReadonlySignal](https://dartsignals.dev/packages/preact_signals/core/readonly): An interface for read-only signals.
+- [Signal](https://dartsignals.dev/packages/preact_signals/core/signal): Represents a mutable reactive state container that sits at the foundation of the reactivity system.
+- [Computed](https://dartsignals.dev/packages/preact_signals/core/computed): Represents a derived, read-only reactive state value computed from one or more other signals.
+- [Action](https://dartsignals.dev/packages/preact_signals/core/action): Wraps a callback function into a reusable, batched, and untracked action.
+- [Batch](https://dartsignals.dev/packages/preact_signals/core/batch): Combines multiple signal writes into a single update transaction that is flushed only after the callback completes.
+- [SignalEquality](https://dartsignals.dev/packages/preact_signals/utilities/equality): Defines the equality check algorithm used by signals to determine if a new value.
+- [Model](https://dartsignals.dev/packages/preact_signals/utilities/model): Creates a new model constructor with an instanced factory.
+- [preact_signals](https://dartsignals.dev/packages/preact_signals/index): Dart port of Preact.js Signals
+

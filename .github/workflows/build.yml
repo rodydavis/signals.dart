@@ -18,10 +18,10 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1.5.0
+      - uses: actions/checkout@v6
+      - uses: dart-lang/setup-dart@v1
 
-      - uses: subosito/flutter-action@v2.10.0
+      - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
 
@@ -41,6 +41,6 @@ jobs:
         run: melos run coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v6
         with:
           files: ./lcov.info

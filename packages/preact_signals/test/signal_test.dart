@@ -176,5 +176,83 @@ void main() {
       final a = computed(() {});
       expect(a.brand, const Symbol('preact-signals'));
     });
+
+    test('should support name option via options classes', () {
+      final a = signal(0, const SignalOptions(name: 'counter'));
+      expect(a.name, 'counter');
+
+      final b =
+          computed(() => a.value, const ComputedOptions(name: 'doubleCounter'));
+      expect(b.name, 'doubleCounter');
+    });
+
+    test('should support watched and unwatched callbacks via SignalOptions',
+        () {
+      var watchedCalls = 0;
+      var unwatchedCalls = 0;
+      final a = signal(
+        0,
+        SignalOptions(
+          watched: () => watchedCalls++,
+          unwatched: () => unwatchedCalls++,
+        ),
+      );
+
+      expect(watchedCalls, 0);
+      expect(unwatchedCalls, 0);
+
+      final dispose = effect(
+        () => a.value,
+        const EffectOptions(name: 'logger'),
+      );
+      expect(watchedCalls, 1);
+      expect(unwatchedCalls, 0);
+
+      dispose();
+      expect(watchedCalls, 1);
+      expect(unwatchedCalls, 1);
+    });
+
+    test('should allow updating the signal from watched', () async {
+      final calls = <int>[];
+      var watchedCalls = 0;
+      var unwatchedCalls = 0;
+      late final Signal<int> s;
+      s = signal(
+        1,
+        SignalOptions(
+          watched: () {
+            watchedCalls++;
+            Future(() {
+              s.value = 2;
+            });
+          },
+          unwatched: () => unwatchedCalls++,
+        ),
+      );
+
+      expect(watchedCalls, 0);
+
+      final unsubscribe = s.subscribe((val) {
+        calls.add(s.value);
+      });
+      expect(watchedCalls, 1);
+
+      final unsubscribe2 = s.subscribe((val) {});
+      expect(watchedCalls, 1);
+
+      await Future.delayed(Duration.zero);
+      unsubscribe();
+      unsubscribe2();
+
+      expect(unwatchedCalls, 1);
+      expect(calls, [1, 2]);
+    });
+
+    test('should support name option via ReadonlySignalOptions in readonly()',
+        () {
+      final a = readonly(0, const ReadonlySignalOptions(name: 'constant'));
+      expect(a.name, 'constant');
+    });
   });
 }

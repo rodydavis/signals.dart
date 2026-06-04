@@ -4,7 +4,28 @@ packages:
   - examples/*
   - packages/*
 
+scripts:
+  analyze:
+    run: melos exec --concurrency=1 -- dart analyze .
+  test:dart:
+    exec: dart test
+    packageFilters:
+      dirExists: test
+      flutter: false
+  test:flutter:
+    exec: flutter test
+    packageFilters:
+      dirExists: test
+      flutter: true
+  test:
+    run: melos run test:dart --no-select && melos run test:flutter --no-select
+
 command:
   bootstrap:
-    usePubspecOverrides: false
-
+    usePubspecOverrides: true
+  version:
+    # Generates precise changelogs based on conventional commits
+    updateGitTagRefs: true
+  publish:
+    # Explicitly targets pub.dev (or a private hosted registry)
+    registry: https://pub.dev
