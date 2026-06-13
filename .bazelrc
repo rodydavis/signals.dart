@@ -1,0 +1,11 @@
+# --- Remote Caching ---
+build:http-cache --remote_cache=https://bazel-cache.rodydavis.dev
+build:http-cache --remote_timeout=5
+build:http-cache --remote_local_fallback=true
+build:http-cache --remote_header=Authorization="Bearer ${BAZEL_CACHE_TOKEN}"
+
+build:grpc-cache --remote_cache=grpcs://bazel-grpc-cache.rodydavis.dev
+build:grpc-cache --remote_upload_local_results=true
+build:grpc-cache --remote_timeout=5
+build:grpc-cache --remote_local_fallback=true
+build:grpc-cache --remote_header=Authorization="Bearer ${BAZEL_CACHE_TOKEN}"
