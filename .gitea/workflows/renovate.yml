@@ -1,0 +1,23 @@
+name: Renovate
+on:
+  schedule:
+    - cron: "0 * * * *" # Triggers hourly
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual triggering from the Gitea UI
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/renovatebot/renovate:latest
+    env:
+      RENOVATE_PLATFORM: gitea
+      RENOVATE_ENDPOINT: https://git.rodydavis.dev/api/v1
+      RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+      RENOVATE_AUTODISCOVER: false
+      RENOVATE_REPOSITORIES: ${{ github.repository }}
+    steps:
+      - name: Run Renovate
+        run: renovate
