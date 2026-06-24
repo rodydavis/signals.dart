@@ -56,6 +56,7 @@ class _Visitor extends SimpleAstVisitor<void> {
     'futureSignal',
     'streamSignal',
     'asyncSignal',
+    'mutationSignal',
     'computedFrom',
     'computedAsync',
     'linkedSignal',

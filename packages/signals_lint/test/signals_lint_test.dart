@@ -35,6 +35,8 @@ class State<T extends Widget> {
     newPackage('signals_core').addFile('lib/signals_core.dart', r'''
 class Signal<T> {}
 Signal<T> signal<T>(T value) => Signal<T>();
+class Mutation<T> {}
+Mutation<T> mutationSignal<T>(T value) => Mutation<T>();
 ''');
     newPackage('signals').addFile('lib/signals.dart', r'''
 export 'package:signals_core/signals_core.dart';
@@ -63,6 +65,29 @@ class MyWidget extends StatelessWidget {
     await assertDiagnostics(code, [
       lint(offset1 + 6, length1 - 6), // Matches 's = signal(0)'
       lint(offset2, length2),         // Matches 'signal(0)'
+    ]);
+  }
+
+  Future<void> test_reports_mutation_signal_in_build_method() async {
+    // `mutationSignal` returns a non-Signal type in the test stub so this
+    // exercises the name-based creator allowlist, not the Signal type check.
+    const code = r'''
+import 'package:flutter/flutter.dart';
+import 'package:signals/signals.dart';
+
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final m = mutationSignal(0);
+    return Widget();
+  }
+}
+''';
+    final match = 'mutationSignal(0)';
+    final offset = code.indexOf(match);
+
+    await assertDiagnostics(code, [
+      lint(offset, match.length),
     ]);
   }
 }
@@ -168,6 +193,7 @@ class PreferUnifiedOptionsTest extends AnalysisRuleTest {
     newPackage('signals_core').addFile('lib/signals_core.dart', r'''
 class Signal<T> {}
 Signal<T> signal<T>(T value, {bool? autoDispose, String? debugLabel}) => Signal<T>();
+Signal<T> mutationSignal<T>(T value, {bool? autoDispose}) => Signal<T>();
 ''');
     super.setUp();
   }
@@ -178,6 +204,22 @@ import 'package:signals_core/signals_core.dart';
 
 void foo() {
   final s = signal(0, autoDispose: true);
+}
+''';
+    final match = 'autoDispose: true';
+    final offset = code.indexOf(match);
+
+    await assertDiagnostics(code, [
+      lint(offset, match.length),
+    ]);
+  }
+
+  Future<void> test_reports_deprecated_param_on_mutation_signal() async {
+    const code = r'''
+import 'package:signals_core/signals_core.dart';
+
+void foo() {
+  final m = mutationSignal(0, autoDispose: true);
 }
 ''';
     final match = 'autoDispose: true';
