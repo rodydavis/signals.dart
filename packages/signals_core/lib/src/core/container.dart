@@ -1,6 +1,7 @@
 import '../value/value.dart';
 import 'signals.dart';
 import '../async/future.dart';
+import '../async/mutation.dart';
 import '../async/state.dart';
 import '../async/stream.dart';
 
@@ -275,6 +276,31 @@ SignalContainer<AsyncState<T>, Arg, StreamSignal<T>>
   void Function(Arg key, StreamSignal<T> signal)? onEvict,
 }) {
   return SignalContainer<AsyncState<T>, Arg, StreamSignal<T>>(
+    create,
+    cache: cache,
+    onEvict: onEvict,
+  );
+}
+
+/// Create a signal container for MutationSignals based on args.
+///
+/// `A` is the mutation argument type, `T` the mutation result type, and `Arg`
+/// the container key used to cache/look up each mutation.
+///
+/// ```dart
+/// final container = mutationSignalContainer<Todo, void, int>((listId) {
+///   return mutationSignal<Todo, void>((todo) => api.add(listId, todo));
+/// }, cache: true);
+///
+/// container(1).mutate(myTodo); // per-list mutation, cached by listId
+/// ```
+SignalContainer<MutationState<T>, Arg, MutationSignal<A, T>>
+    mutationSignalContainer<A, T, Arg>(
+  MutationSignal<A, T> Function(Arg) create, {
+  bool cache = false,
+  void Function(Arg key, MutationSignal<A, T> signal)? onEvict,
+}) {
+  return SignalContainer<MutationState<T>, Arg, MutationSignal<A, T>>(
     create,
     cache: cache,
     onEvict: onEvict,

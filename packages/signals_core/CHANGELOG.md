@@ -1,3 +1,10 @@
+## Unreleased
+
+### 🚀 New Features
+- **MutationSignal (`mutationSignal`)**: A new signal for imperative, on-demand asynchronous side effects (mutations). `MutationSignal<A, T>` wraps a mutation function `Future<T> Function(A)` and exposes `mutate(arg)` (fire-and-forget) and `mutateAsync(arg)` (awaitable), with race protection so only the latest invocation updates the state. Its value is a new sealed `MutationState<T>`: `MutationIdle` (the "not run yet" state on top of the standard lifecycle), `MutationPending`, `MutationSuccess`, and `MutationError`, supporting `map`/`maybeMap` and switch pattern matching. Also exposes `variables`, `future`, and `reset()`.
+- **`mutationSignalContainer`**: A keyed container factory for `MutationSignal`s (mirrors `futureSignalContainer`/`streamSignalContainer`), creating and optionally caching one mutation per key.
+- **Mutation extensions**: `Future<T> Function(A).toMutationSignal()` converts a mutation function into a `MutationSignal` (mirrors `Future.toFutureSignal()`), and `Signal<MutationState<T>>.selectData<R>(...)` derives a `Computed<MutationState<R>>` mapping the success value while preserving idle/pending/error (mirrors `AsyncSignalState.selectData`).
+
 ## 7.0.0
 
 ### ⚠️ BREAKING CHANGES
