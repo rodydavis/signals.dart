@@ -41,6 +41,7 @@ export 'src/async/signal.dart';
 export 'src/async/stream.dart';
 export 'src/async/future.dart';
 export 'src/async/computed.dart';
+export 'src/async/mutation.dart';
 
 // Extensions
 export 'src/extensions/object.dart' hide SignalObjectUtils;
@@ -48,6 +49,7 @@ export 'src/extensions/future.dart';
 export 'src/extensions/stream.dart';
 export 'src/extensions/signal.dart';
 export 'src/extensions/async.dart';
+export 'src/extensions/mutation.dart';
 export 'src/extensions/bool.dart';
 export 'src/extensions/comparable.dart';
 export 'src/extensions/double.dart';
