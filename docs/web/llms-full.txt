@@ -3161,6 +3161,36 @@ a signal inside an effect and are reading by value.
 
 ---
 
+## SignalMutationFunctionUtils
+
+Extension on a mutation function <code>Future<T> Function(A)</code> to convert it into
+a [MutationSignal](/types/mutationsignal).
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="tomutationsignal"></a>`MutationSignal<A, T> toMutationSignal({SignalOptions<MutationState<T>>? options})`
+
+Convert this mutation function into a [MutationSignal](/types/mutationsignal).
+
+```dart
+import 'package:signals_core/signals_core.dart';
+
+Future<void> save(Todo todo) => api.add(todo);
+final addTodo = save.toMutationSignal();
+
+addTodo.mutate(myTodo);
+```
+
+</details>
+
+
+
+---
+
 ## SignalDoubleExtensions
 
 Utility extension on **double** to easily lift a double into a reactive [Signal](/types/signal).
@@ -3495,6 +3525,65 @@ a positive integer if <code>this</code> is ordered after **other**,
 and zero if <code>this</code> and **other** are ordered together.
 
 The **other** argument must be a value that is comparable to this object.
+
+</details>
+
+
+
+---
+
+## MutationError
+
+The mutation failed with an error and stack trace.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationerror"></a><a name="mutationerror"></a>`MutationError(this.error, this.stackTrace)`
+
+The mutation failed with an error and stack trace.
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="error"></a>`Object error`
+
+##### <a name="stacktrace"></a>`StackTrace stackTrace`
+
+The stack trace captured when the mutation failed. Always non-null on a
+[MutationError](/types/mutationerror) (defaulted to <code>StackTrace.current</code> by the factory).
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="isidle"></a>`bool isIdle`
+
+##### <a name="ispending"></a>`bool isPending`
+
+##### <a name="hasvalue"></a>`bool hasValue`
+
+##### <a name="haserror"></a>`bool hasError`
+
+##### <a name="value"></a>`T? value`
+
+##### <a name="requirevalue"></a>`T requireValue`
+
+##### <a name="=="></a>`bool ==(covariant MutationState<T> other)`
+
+##### <a name="hashcode"></a>`int hashCode`
 
 </details>
 
@@ -8195,6 +8284,32 @@ State for an [AsyncState](/types/asyncstate) with a loading state
 
 ---
 
+## MutationSignalState
+
+Extensions for [Signal<MutationState<T>>].
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="selectdata"></a>`Computed<MutationState<R>> selectData(R Function(T data) selector)`
+
+Select from the success data when available, preserving the surrounding
+mutation state (idle, pending, error).
+
+```dart
+final mutation = mutationSignal<Todo, Todo>((t) => api.add(t));
+final name = mutation.selectData((todo) => todo.name);
+```
+
+</details>
+
+
+
+---
+
 ## AsyncError
 
 State for an [AsyncState](/types/asyncstate) with an error
@@ -9506,6 +9621,269 @@ Cancel the subscription
 ##### <a name="seterror"></a>`void setError(Object error, [StackTrace? stackTrace])`
 
 </details>
+
+---
+## Page: MutationSignal
+Url: https://dartsignals.dev/packages/signals_flutter/async/mutation
+Description: A Signal for imperative, on-demand asynchronous side effects (mutations),.
+---
+
+A [Signal](/types/signal) for imperative, on-demand asynchronous side effects (mutations),
+inspired by the mutation primitives in Riverpod 3.0 and TanStack Query.
+
+Where [futureSignal](/types/futuresignal) models *reading* data that begins loading immediately,
+a <code>MutationSignal</code> models *writing* data triggered by a user action (saving
+a form, calling a <code>POST</code>/<code>PUT</code>/<code>DELETE</code>, etc). It therefore starts in an
+extra [MutationIdle](/types/mutationidle) state — "not run yet" — on top of the standard
+pending/success/error lifecycle exposed by [MutationState](/types/mutationstate).
+
+The mutation function is supplied once at creation and receives a single
+typed argument <code>A</code>. Use a Dart record for multiple arguments, or <code>void</code>/a
+unit type when none are needed.
+
+```dart
+final addTodo = mutationSignal<Todo, void>((todo) async {
+  await api.add(todo);
+});
+
+// Fire-and-forget (drive the UI from state):
+addTodo.mutate(myTodo);
+
+// Or await the result directly:
+await addTodo.mutateAsync(myTodo);
+
+// Reset back to idle:
+addTodo.reset();
+```
+
+Rendering with pattern matching:
+```dart
+final widget = addTodo.value.map(
+  idle: () => const Text('Ready'),
+  pending: () => const CircularProgressIndicator(),
+  data: (_) => const Text('Saved!'),
+  error: (err, _) => Text('Failed: $err'),
+);
+```
+
+### Race protection
+If **mutate**/**mutateAsync** is called again before a previous run finishes,
+only the **latest** invocation is allowed to update the signal state. Stale
+invocations still resolve their own returned future, but they will not
+overwrite a newer result.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationsignal"></a><a name="mutationsignal"></a>`MutationSignal(this._mutator, {SignalOptions<MutationState<T>>? options})`
+
+Create a [MutationSignal](/types/mutationsignal) from an async mutation function.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="variables"></a>`A? variables`
+
+The argument passed to the most recent **mutate**/**mutateAsync** call.
+
+<code>null</code> before the first run and after **reset**.
+
+##### <a name="iscompleted"></a>`bool isCompleted`
+
+Whether the shared **future** has completed with a value or error.
+
+##### <a name="future"></a>`Future<T> future`
+
+A future that resolves with the result of the in-flight (or next)
+mutation, or throws if it fails. A fresh future is created each time a new
+mutation is started after the previous one settled, and on **reset**.
+
+##### <a name="mutateasync"></a>`Future<T> mutateAsync(A arg)`
+
+Run the mutation and await its result.
+
+Transitions the state to [MutationPending](/types/mutationpending) synchronously, then to
+[MutationSuccess](/types/mutationsuccess) or [MutationError](/types/mutationerror) once it settles. Returns the result
+of *this* invocation (or throws its error) even when a newer mutation
+supersedes it; only the latest invocation updates the shared signal state
+and **future**.
+
+##### <a name="mutate"></a>`void mutate(A arg)`
+
+Run the mutation without awaiting it (fire-and-forget).
+
+Errors are captured into [MutationError](/types/mutationerror) state rather than thrown, so this
+never produces an unhandled async error.
+
+##### <a name="reset"></a>`void reset()`
+
+Reset the signal back to [MutationIdle](/types/mutationidle).
+
+Any in-flight mutation is detached and will no longer update the state.
+A **future** obtained before the reset is settled with a **StateError** so it
+never hangs, and a fresh **future** is prepared for the next mutation.
+
+</details>
+
+
+
+---
+
+## MutationState
+
+A sealed union representing the lifecycle states of an imperative mutation
+(a side-effecting async operation triggered on demand, e.g. submitting a
+form or calling a <code>POST</code>/<code>PUT</code>/<code>DELETE</code> endpoint).
+
+<code>MutationState<T></code> is wrapped by [MutationSignal](/types/mutationsignal) and is heavily inspired by
+the mutation primitives in Riverpod 3.0 and TanStack Query. Unlike
+[AsyncState](/types/asyncstate) (which has no "not started yet" representation because a future
+or stream begins executing immediately), a mutation begins in an [MutationIdle](/types/mutationidle)
+state and only transitions once it has been run.
+
+### State Hierarchy
+- [MutationIdle](/types/mutationidle): The mutation has not been run yet (the extra state on top of
+  the standard loading/data/error lifecycle).
+- [MutationPending](/types/mutationpending): The mutation is currently running.
+- [MutationSuccess](/types/mutationsuccess): The mutation completed successfully with a value of type <code>T</code>.
+- [MutationError](/types/mutationerror): The mutation failed with an error and stack trace.
+
+### Pattern Matching & Switch Expressions
+```dart
+final label = switch (mutation.value) {
+  MutationIdle<int>() => 'Not run yet',
+  MutationPending<int>() => 'Saving...',
+  MutationSuccess<int>(:final value) => 'Saved: $value',
+  MutationError<int>(:final error) => 'Failed: $error',
+};
+```
+
+### Standard Branching Methods (<code>map</code> and <code>maybeMap</code>)
+```dart
+mutation.value.map(
+  idle: () => 'Not run yet',
+  pending: () => 'Saving...',
+  data: (value) => 'Saved: $value',
+  error: (error, stackTrace) => 'Failed: $error',
+);
+```
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationstate"></a><a name="mutationstate"></a>`MutationState()`
+
+Const constructor for [MutationState](/types/mutationstate) subclasses.
+
+##### <a name="mutationstate-idle"></a><a name="idle"></a>`MutationState.idle()`
+
+Create an [MutationIdle](/types/mutationidle) state (the mutation has not been run yet).
+
+##### <a name="mutationstate-pending"></a><a name="pending"></a>`MutationState.pending()`
+
+Create a [MutationPending](/types/mutationpending) state (the mutation is running).
+
+##### <a name="mutationstate-data"></a><a name="data"></a>`MutationState.data(T data)`
+
+Create a [MutationSuccess](/types/mutationsuccess) state with a resolved value.
+
+##### <a name="mutationstate-error"></a><a name="error"></a>`MutationState.error(Object error, [StackTrace? stackTrace])`
+
+Create a [MutationError](/types/mutationerror) state with an error and optional stack trace.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="isidle"></a>`bool isIdle`
+
+Returns true if the mutation has not been run yet.
+
+##### <a name="ispending"></a>`bool isPending`
+
+Returns true if the mutation is currently running.
+
+##### <a name="hasvalue"></a>`bool hasValue`
+
+Returns true if the state holds a resolved value.
+
+##### <a name="haserror"></a>`bool hasError`
+
+Returns true if the state holds an error.
+
+##### <a name="value"></a>`T? value`
+
+Returns the resolved value of the state, or null.
+
+##### <a name="error"></a>`Object? error`
+
+Returns the error of the state, or null.
+
+##### <a name="stacktrace"></a>`StackTrace? stackTrace`
+
+Returns the stack trace of the state, or null.
+
+##### <a name="requirevalue"></a>`T requireValue`
+
+Force unwrap the value of the state.
+
+Throws an **UnsupportedError** if the state does not hold a value.
+
+##### <a name="map"></a>`E map({required MutationStateBuilder<E> idle, required MutationStateBuilder<E> pending, required MutationDataBuilder<E, T> data, required MutationErrorBuilder<E> error})`
+
+Map the state to a value, handling every branch.
+
+The error <code>Function</code> can be one of three types:
+- () -> E
+- (dynamic) -> E
+- (dynamic, StackTrace) -> E
+
+##### <a name="maybemap"></a>`E maybeMap({MutationStateBuilder<E>? idle, MutationStateBuilder<E>? pending, MutationDataBuilder<E, T>? data, MutationErrorBuilder<E>? error, required MutationStateBuilder<E> orElse})`
+
+Map the state to a value with an **orElse** fallback for unhandled branches.
+
+The error <code>Function</code> can be one of three types:
+- () -> E
+- (dynamic) -> E
+- (dynamic, StackTrace) -> E
+
+##### <a name="=="></a>`bool ==(covariant MutationState<T> other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## mutationSignal
+
+Create a [MutationSignal](/types/mutationsignal) from a mutation function.
+
+The function receives a single typed argument <code>A</code> (use a record for multiple
+values) and returns the mutation result <code>T</code>. Configure naming, auto-dispose,
+and other behavior via **options**.
+
+```dart
+final rename = mutationSignal<String, void>((name) => api.rename(name));
+rename.mutate('New name');
+```
 
 ---
 ## Page: MapSignal
@@ -11383,6 +11761,24 @@ Filter and remove matching cached signals.
 
 ---
 
+## mutationSignalContainer
+
+Create a signal container for MutationSignals based on args.
+
+<code>A</code> is the mutation argument type, <code>T</code> the mutation result type, and <code>Arg</code>
+the container key used to cache/look up each mutation.
+
+```dart
+final container = mutationSignalContainer<Todo, void, int>((listId) {
+  return mutationSignal<Todo, void>((todo) => api.add(listId, todo));
+}, cache: true);
+
+container(1).mutate(myTodo); // per-list mutation, cached by listId
+```
+
+
+---
+
 ## readonlySignalContainer
 
 Create a signal container used to instance signals based on args
@@ -12451,6 +12847,7 @@ class CounterWidget extends SignalWidget {
       <a class="content-link" href="/packages/signals_flutter/async/computed">Computed</a>
       <a class="content-link" href="/packages/signals_flutter/async/connect">Connect</a>
       <a class="content-link" href="/packages/signals_flutter/async/future">FutureSignal</a>
+      <a class="content-link" href="/packages/signals_flutter/async/mutation">MutationSignal</a>
       <a class="content-link" href="/packages/signals_flutter/async/stream">Stream</a>
     </div>
   </div>
@@ -15436,6 +15833,36 @@ a signal inside an effect and are reading by value.
 
 ---
 
+## SignalMutationFunctionUtils
+
+Extension on a mutation function <code>Future<T> Function(A)</code> to convert it into
+a [MutationSignal](/types/mutationsignal).
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="tomutationsignal"></a>`MutationSignal<A, T> toMutationSignal({SignalOptions<MutationState<T>>? options})`
+
+Convert this mutation function into a [MutationSignal](/types/mutationsignal).
+
+```dart
+import 'package:signals_core/signals_core.dart';
+
+Future<void> save(Todo todo) => api.add(todo);
+final addTodo = save.toMutationSignal();
+
+addTodo.mutate(myTodo);
+```
+
+</details>
+
+
+
+---
+
 ## SignalDoubleExtensions
 
 Utility extension on **double** to easily lift a double into a reactive [Signal](/types/signal).
@@ -15770,6 +16197,65 @@ a positive integer if <code>this</code> is ordered after **other**,
 and zero if <code>this</code> and **other** are ordered together.
 
 The **other** argument must be a value that is comparable to this object.
+
+</details>
+
+
+
+---
+
+## MutationError
+
+The mutation failed with an error and stack trace.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationerror"></a><a name="mutationerror"></a>`MutationError(this.error, this.stackTrace)`
+
+The mutation failed with an error and stack trace.
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="error"></a>`Object error`
+
+##### <a name="stacktrace"></a>`StackTrace stackTrace`
+
+The stack trace captured when the mutation failed. Always non-null on a
+[MutationError](/types/mutationerror) (defaulted to <code>StackTrace.current</code> by the factory).
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="isidle"></a>`bool isIdle`
+
+##### <a name="ispending"></a>`bool isPending`
+
+##### <a name="hasvalue"></a>`bool hasValue`
+
+##### <a name="haserror"></a>`bool hasError`
+
+##### <a name="value"></a>`T? value`
+
+##### <a name="requirevalue"></a>`T requireValue`
+
+##### <a name="=="></a>`bool ==(covariant MutationState<T> other)`
+
+##### <a name="hashcode"></a>`int hashCode`
 
 </details>
 
@@ -19970,6 +20456,32 @@ State for an [AsyncState](/types/asyncstate) with a loading state
 
 ---
 
+## MutationSignalState
+
+Extensions for [Signal<MutationState<T>>].
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="selectdata"></a>`Computed<MutationState<R>> selectData(R Function(T data) selector)`
+
+Select from the success data when available, preserving the surrounding
+mutation state (idle, pending, error).
+
+```dart
+final mutation = mutationSignal<Todo, Todo>((t) => api.add(t));
+final name = mutation.selectData((todo) => todo.name);
+```
+
+</details>
+
+
+
+---
+
 ## AsyncError
 
 State for an [AsyncState](/types/asyncstate) with an error
@@ -21283,6 +21795,269 @@ Cancel the subscription
 </details>
 
 ---
+## Page: MutationSignal
+Url: https://dartsignals.dev/packages/signals_core/async/mutation
+Description: A Signal for imperative, on-demand asynchronous side effects (mutations),.
+---
+
+A [Signal](/types/signal) for imperative, on-demand asynchronous side effects (mutations),
+inspired by the mutation primitives in Riverpod 3.0 and TanStack Query.
+
+Where [futureSignal](/types/futuresignal) models *reading* data that begins loading immediately,
+a <code>MutationSignal</code> models *writing* data triggered by a user action (saving
+a form, calling a <code>POST</code>/<code>PUT</code>/<code>DELETE</code>, etc). It therefore starts in an
+extra [MutationIdle](/types/mutationidle) state — "not run yet" — on top of the standard
+pending/success/error lifecycle exposed by [MutationState](/types/mutationstate).
+
+The mutation function is supplied once at creation and receives a single
+typed argument <code>A</code>. Use a Dart record for multiple arguments, or <code>void</code>/a
+unit type when none are needed.
+
+```dart
+final addTodo = mutationSignal<Todo, void>((todo) async {
+  await api.add(todo);
+});
+
+// Fire-and-forget (drive the UI from state):
+addTodo.mutate(myTodo);
+
+// Or await the result directly:
+await addTodo.mutateAsync(myTodo);
+
+// Reset back to idle:
+addTodo.reset();
+```
+
+Rendering with pattern matching:
+```dart
+final widget = addTodo.value.map(
+  idle: () => const Text('Ready'),
+  pending: () => const CircularProgressIndicator(),
+  data: (_) => const Text('Saved!'),
+  error: (err, _) => Text('Failed: $err'),
+);
+```
+
+### Race protection
+If **mutate**/**mutateAsync** is called again before a previous run finishes,
+only the **latest** invocation is allowed to update the signal state. Stale
+invocations still resolve their own returned future, but they will not
+overwrite a newer result.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationsignal"></a><a name="mutationsignal"></a>`MutationSignal(this._mutator, {SignalOptions<MutationState<T>>? options})`
+
+Create a [MutationSignal](/types/mutationsignal) from an async mutation function.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="variables"></a>`A? variables`
+
+The argument passed to the most recent **mutate**/**mutateAsync** call.
+
+<code>null</code> before the first run and after **reset**.
+
+##### <a name="iscompleted"></a>`bool isCompleted`
+
+Whether the shared **future** has completed with a value or error.
+
+##### <a name="future"></a>`Future<T> future`
+
+A future that resolves with the result of the in-flight (or next)
+mutation, or throws if it fails. A fresh future is created each time a new
+mutation is started after the previous one settled, and on **reset**.
+
+##### <a name="mutateasync"></a>`Future<T> mutateAsync(A arg)`
+
+Run the mutation and await its result.
+
+Transitions the state to [MutationPending](/types/mutationpending) synchronously, then to
+[MutationSuccess](/types/mutationsuccess) or [MutationError](/types/mutationerror) once it settles. Returns the result
+of *this* invocation (or throws its error) even when a newer mutation
+supersedes it; only the latest invocation updates the shared signal state
+and **future**.
+
+##### <a name="mutate"></a>`void mutate(A arg)`
+
+Run the mutation without awaiting it (fire-and-forget).
+
+Errors are captured into [MutationError](/types/mutationerror) state rather than thrown, so this
+never produces an unhandled async error.
+
+##### <a name="reset"></a>`void reset()`
+
+Reset the signal back to [MutationIdle](/types/mutationidle).
+
+Any in-flight mutation is detached and will no longer update the state.
+A **future** obtained before the reset is settled with a **StateError** so it
+never hangs, and a fresh **future** is prepared for the next mutation.
+
+</details>
+
+
+
+---
+
+## MutationState
+
+A sealed union representing the lifecycle states of an imperative mutation
+(a side-effecting async operation triggered on demand, e.g. submitting a
+form or calling a <code>POST</code>/<code>PUT</code>/<code>DELETE</code> endpoint).
+
+<code>MutationState<T></code> is wrapped by [MutationSignal](/types/mutationsignal) and is heavily inspired by
+the mutation primitives in Riverpod 3.0 and TanStack Query. Unlike
+[AsyncState](/types/asyncstate) (which has no "not started yet" representation because a future
+or stream begins executing immediately), a mutation begins in an [MutationIdle](/types/mutationidle)
+state and only transitions once it has been run.
+
+### State Hierarchy
+- [MutationIdle](/types/mutationidle): The mutation has not been run yet (the extra state on top of
+  the standard loading/data/error lifecycle).
+- [MutationPending](/types/mutationpending): The mutation is currently running.
+- [MutationSuccess](/types/mutationsuccess): The mutation completed successfully with a value of type <code>T</code>.
+- [MutationError](/types/mutationerror): The mutation failed with an error and stack trace.
+
+### Pattern Matching & Switch Expressions
+```dart
+final label = switch (mutation.value) {
+  MutationIdle<int>() => 'Not run yet',
+  MutationPending<int>() => 'Saving...',
+  MutationSuccess<int>(:final value) => 'Saved: $value',
+  MutationError<int>(:final error) => 'Failed: $error',
+};
+```
+
+### Standard Branching Methods (<code>map</code> and <code>maybeMap</code>)
+```dart
+mutation.value.map(
+  idle: () => 'Not run yet',
+  pending: () => 'Saving...',
+  data: (value) => 'Saved: $value',
+  error: (error, stackTrace) => 'Failed: $error',
+);
+```
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationstate"></a><a name="mutationstate"></a>`MutationState()`
+
+Const constructor for [MutationState](/types/mutationstate) subclasses.
+
+##### <a name="mutationstate-idle"></a><a name="idle"></a>`MutationState.idle()`
+
+Create an [MutationIdle](/types/mutationidle) state (the mutation has not been run yet).
+
+##### <a name="mutationstate-pending"></a><a name="pending"></a>`MutationState.pending()`
+
+Create a [MutationPending](/types/mutationpending) state (the mutation is running).
+
+##### <a name="mutationstate-data"></a><a name="data"></a>`MutationState.data(T data)`
+
+Create a [MutationSuccess](/types/mutationsuccess) state with a resolved value.
+
+##### <a name="mutationstate-error"></a><a name="error"></a>`MutationState.error(Object error, [StackTrace? stackTrace])`
+
+Create a [MutationError](/types/mutationerror) state with an error and optional stack trace.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="isidle"></a>`bool isIdle`
+
+Returns true if the mutation has not been run yet.
+
+##### <a name="ispending"></a>`bool isPending`
+
+Returns true if the mutation is currently running.
+
+##### <a name="hasvalue"></a>`bool hasValue`
+
+Returns true if the state holds a resolved value.
+
+##### <a name="haserror"></a>`bool hasError`
+
+Returns true if the state holds an error.
+
+##### <a name="value"></a>`T? value`
+
+Returns the resolved value of the state, or null.
+
+##### <a name="error"></a>`Object? error`
+
+Returns the error of the state, or null.
+
+##### <a name="stacktrace"></a>`StackTrace? stackTrace`
+
+Returns the stack trace of the state, or null.
+
+##### <a name="requirevalue"></a>`T requireValue`
+
+Force unwrap the value of the state.
+
+Throws an **UnsupportedError** if the state does not hold a value.
+
+##### <a name="map"></a>`E map({required MutationStateBuilder<E> idle, required MutationStateBuilder<E> pending, required MutationDataBuilder<E, T> data, required MutationErrorBuilder<E> error})`
+
+Map the state to a value, handling every branch.
+
+The error <code>Function</code> can be one of three types:
+- () -> E
+- (dynamic) -> E
+- (dynamic, StackTrace) -> E
+
+##### <a name="maybemap"></a>`E maybeMap({MutationStateBuilder<E>? idle, MutationStateBuilder<E>? pending, MutationDataBuilder<E, T>? data, MutationErrorBuilder<E>? error, required MutationStateBuilder<E> orElse})`
+
+Map the state to a value with an **orElse** fallback for unhandled branches.
+
+The error <code>Function</code> can be one of three types:
+- () -> E
+- (dynamic) -> E
+- (dynamic, StackTrace) -> E
+
+##### <a name="=="></a>`bool ==(covariant MutationState<T> other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## mutationSignal
+
+Create a [MutationSignal](/types/mutationsignal) from a mutation function.
+
+The function receives a single typed argument <code>A</code> (use a record for multiple
+values) and returns the mutation result <code>T</code>. Configure naming, auto-dispose,
+and other behavior via **options**.
+
+```dart
+final rename = mutationSignal<String, void>((name) => api.rename(name));
+rename.mutate('New name');
+```
+
+---
 ## Page: MapSignal
 Url: https://dartsignals.dev/packages/signals_core/value/map
 Description: A reactive Signal that holds a Map and implements the Map interface.
@@ -22449,6 +23224,24 @@ Filter and remove matching cached signals.
 
 ---
 
+## mutationSignalContainer
+
+Create a signal container for MutationSignals based on args.
+
+<code>A</code> is the mutation argument type, <code>T</code> the mutation result type, and <code>Arg</code>
+the container key used to cache/look up each mutation.
+
+```dart
+final container = mutationSignalContainer<Todo, void, int>((listId) {
+  return mutationSignal<Todo, void>((todo) => api.add(listId, todo));
+}, cache: true);
+
+container(1).mutate(myTodo); // per-list mutation, cached by listId
+```
+
+
+---
+
 ## readonlySignalContainer
 
 Create a signal container used to instance signals based on args
@@ -23514,6 +24307,7 @@ void main() {
       <a class="content-link" href="/packages/signals_core/async/computed">Computed</a>
       <a class="content-link" href="/packages/signals_core/async/connect">Connect</a>
       <a class="content-link" href="/packages/signals_core/async/future">FutureSignal</a>
+      <a class="content-link" href="/packages/signals_core/async/mutation">MutationSignal</a>
       <a class="content-link" href="/packages/signals_core/async/stream">Stream</a>
     </div>
   </div>
@@ -26701,6 +27495,36 @@ a signal inside an effect and are reading by value.
 
 ---
 
+## SignalMutationFunctionUtils
+
+Extension on a mutation function <code>Future<T> Function(A)</code> to convert it into
+a [MutationSignal](/types/mutationsignal).
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="tomutationsignal"></a>`MutationSignal<A, T> toMutationSignal({SignalOptions<MutationState<T>>? options})`
+
+Convert this mutation function into a [MutationSignal](/types/mutationsignal).
+
+```dart
+import 'package:signals_core/signals_core.dart';
+
+Future<void> save(Todo todo) => api.add(todo);
+final addTodo = save.toMutationSignal();
+
+addTodo.mutate(myTodo);
+```
+
+</details>
+
+
+
+---
+
 ## SignalDoubleExtensions
 
 Utility extension on **double** to easily lift a double into a reactive [Signal](/types/signal).
@@ -27035,6 +27859,65 @@ a positive integer if <code>this</code> is ordered after **other**,
 and zero if <code>this</code> and **other** are ordered together.
 
 The **other** argument must be a value that is comparable to this object.
+
+</details>
+
+
+
+---
+
+## MutationError
+
+The mutation failed with an error and stack trace.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationerror"></a><a name="mutationerror"></a>`MutationError(this.error, this.stackTrace)`
+
+The mutation failed with an error and stack trace.
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="error"></a>`Object error`
+
+##### <a name="stacktrace"></a>`StackTrace stackTrace`
+
+The stack trace captured when the mutation failed. Always non-null on a
+[MutationError](/types/mutationerror) (defaulted to <code>StackTrace.current</code> by the factory).
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="isidle"></a>`bool isIdle`
+
+##### <a name="ispending"></a>`bool isPending`
+
+##### <a name="hasvalue"></a>`bool hasValue`
+
+##### <a name="haserror"></a>`bool hasError`
+
+##### <a name="value"></a>`T? value`
+
+##### <a name="requirevalue"></a>`T requireValue`
+
+##### <a name="=="></a>`bool ==(covariant MutationState<T> other)`
+
+##### <a name="hashcode"></a>`int hashCode`
 
 </details>
 
@@ -31734,6 +32617,32 @@ State for an [AsyncState](/types/asyncstate) with a loading state
 
 ---
 
+## MutationSignalState
+
+Extensions for [Signal<MutationState<T>>].
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="selectdata"></a>`Computed<MutationState<R>> selectData(R Function(T data) selector)`
+
+Select from the success data when available, preserving the surrounding
+mutation state (idle, pending, error).
+
+```dart
+final mutation = mutationSignal<Todo, Todo>((t) => api.add(t));
+final name = mutation.selectData((todo) => todo.name);
+```
+
+</details>
+
+
+
+---
+
 ## AsyncError
 
 State for an [AsyncState](/types/asyncstate) with an error
@@ -33045,6 +33954,269 @@ Cancel the subscription
 ##### <a name="seterror"></a>`void setError(Object error, [StackTrace? stackTrace])`
 
 </details>
+
+---
+## Page: MutationSignal
+Url: https://dartsignals.dev/packages/signals/async/mutation
+Description: A Signal for imperative, on-demand asynchronous side effects (mutations),.
+---
+
+A [Signal](/types/signal) for imperative, on-demand asynchronous side effects (mutations),
+inspired by the mutation primitives in Riverpod 3.0 and TanStack Query.
+
+Where [futureSignal](/types/futuresignal) models *reading* data that begins loading immediately,
+a <code>MutationSignal</code> models *writing* data triggered by a user action (saving
+a form, calling a <code>POST</code>/<code>PUT</code>/<code>DELETE</code>, etc). It therefore starts in an
+extra [MutationIdle](/types/mutationidle) state — "not run yet" — on top of the standard
+pending/success/error lifecycle exposed by [MutationState](/types/mutationstate).
+
+The mutation function is supplied once at creation and receives a single
+typed argument <code>A</code>. Use a Dart record for multiple arguments, or <code>void</code>/a
+unit type when none are needed.
+
+```dart
+final addTodo = mutationSignal<Todo, void>((todo) async {
+  await api.add(todo);
+});
+
+// Fire-and-forget (drive the UI from state):
+addTodo.mutate(myTodo);
+
+// Or await the result directly:
+await addTodo.mutateAsync(myTodo);
+
+// Reset back to idle:
+addTodo.reset();
+```
+
+Rendering with pattern matching:
+```dart
+final widget = addTodo.value.map(
+  idle: () => const Text('Ready'),
+  pending: () => const CircularProgressIndicator(),
+  data: (_) => const Text('Saved!'),
+  error: (err, _) => Text('Failed: $err'),
+);
+```
+
+### Race protection
+If **mutate**/**mutateAsync** is called again before a previous run finishes,
+only the **latest** invocation is allowed to update the signal state. Stale
+invocations still resolve their own returned future, but they will not
+overwrite a newer result.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationsignal"></a><a name="mutationsignal"></a>`MutationSignal(this._mutator, {SignalOptions<MutationState<T>>? options})`
+
+Create a [MutationSignal](/types/mutationsignal) from an async mutation function.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="variables"></a>`A? variables`
+
+The argument passed to the most recent **mutate**/**mutateAsync** call.
+
+<code>null</code> before the first run and after **reset**.
+
+##### <a name="iscompleted"></a>`bool isCompleted`
+
+Whether the shared **future** has completed with a value or error.
+
+##### <a name="future"></a>`Future<T> future`
+
+A future that resolves with the result of the in-flight (or next)
+mutation, or throws if it fails. A fresh future is created each time a new
+mutation is started after the previous one settled, and on **reset**.
+
+##### <a name="mutateasync"></a>`Future<T> mutateAsync(A arg)`
+
+Run the mutation and await its result.
+
+Transitions the state to [MutationPending](/types/mutationpending) synchronously, then to
+[MutationSuccess](/types/mutationsuccess) or [MutationError](/types/mutationerror) once it settles. Returns the result
+of *this* invocation (or throws its error) even when a newer mutation
+supersedes it; only the latest invocation updates the shared signal state
+and **future**.
+
+##### <a name="mutate"></a>`void mutate(A arg)`
+
+Run the mutation without awaiting it (fire-and-forget).
+
+Errors are captured into [MutationError](/types/mutationerror) state rather than thrown, so this
+never produces an unhandled async error.
+
+##### <a name="reset"></a>`void reset()`
+
+Reset the signal back to [MutationIdle](/types/mutationidle).
+
+Any in-flight mutation is detached and will no longer update the state.
+A **future** obtained before the reset is settled with a **StateError** so it
+never hangs, and a fresh **future** is prepared for the next mutation.
+
+</details>
+
+
+
+---
+
+## MutationState
+
+A sealed union representing the lifecycle states of an imperative mutation
+(a side-effecting async operation triggered on demand, e.g. submitting a
+form or calling a <code>POST</code>/<code>PUT</code>/<code>DELETE</code> endpoint).
+
+<code>MutationState<T></code> is wrapped by [MutationSignal](/types/mutationsignal) and is heavily inspired by
+the mutation primitives in Riverpod 3.0 and TanStack Query. Unlike
+[AsyncState](/types/asyncstate) (which has no "not started yet" representation because a future
+or stream begins executing immediately), a mutation begins in an [MutationIdle](/types/mutationidle)
+state and only transitions once it has been run.
+
+### State Hierarchy
+- [MutationIdle](/types/mutationidle): The mutation has not been run yet (the extra state on top of
+  the standard loading/data/error lifecycle).
+- [MutationPending](/types/mutationpending): The mutation is currently running.
+- [MutationSuccess](/types/mutationsuccess): The mutation completed successfully with a value of type <code>T</code>.
+- [MutationError](/types/mutationerror): The mutation failed with an error and stack trace.
+
+### Pattern Matching & Switch Expressions
+```dart
+final label = switch (mutation.value) {
+  MutationIdle<int>() => 'Not run yet',
+  MutationPending<int>() => 'Saving...',
+  MutationSuccess<int>(:final value) => 'Saved: $value',
+  MutationError<int>(:final error) => 'Failed: $error',
+};
+```
+
+### Standard Branching Methods (<code>map</code> and <code>maybeMap</code>)
+```dart
+mutation.value.map(
+  idle: () => 'Not run yet',
+  pending: () => 'Saving...',
+  data: (value) => 'Saved: $value',
+  error: (error, stackTrace) => 'Failed: $error',
+);
+```
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationstate"></a><a name="mutationstate"></a>`MutationState()`
+
+Const constructor for [MutationState](/types/mutationstate) subclasses.
+
+##### <a name="mutationstate-idle"></a><a name="idle"></a>`MutationState.idle()`
+
+Create an [MutationIdle](/types/mutationidle) state (the mutation has not been run yet).
+
+##### <a name="mutationstate-pending"></a><a name="pending"></a>`MutationState.pending()`
+
+Create a [MutationPending](/types/mutationpending) state (the mutation is running).
+
+##### <a name="mutationstate-data"></a><a name="data"></a>`MutationState.data(T data)`
+
+Create a [MutationSuccess](/types/mutationsuccess) state with a resolved value.
+
+##### <a name="mutationstate-error"></a><a name="error"></a>`MutationState.error(Object error, [StackTrace? stackTrace])`
+
+Create a [MutationError](/types/mutationerror) state with an error and optional stack trace.
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="isidle"></a>`bool isIdle`
+
+Returns true if the mutation has not been run yet.
+
+##### <a name="ispending"></a>`bool isPending`
+
+Returns true if the mutation is currently running.
+
+##### <a name="hasvalue"></a>`bool hasValue`
+
+Returns true if the state holds a resolved value.
+
+##### <a name="haserror"></a>`bool hasError`
+
+Returns true if the state holds an error.
+
+##### <a name="value"></a>`T? value`
+
+Returns the resolved value of the state, or null.
+
+##### <a name="error"></a>`Object? error`
+
+Returns the error of the state, or null.
+
+##### <a name="stacktrace"></a>`StackTrace? stackTrace`
+
+Returns the stack trace of the state, or null.
+
+##### <a name="requirevalue"></a>`T requireValue`
+
+Force unwrap the value of the state.
+
+Throws an **UnsupportedError** if the state does not hold a value.
+
+##### <a name="map"></a>`E map({required MutationStateBuilder<E> idle, required MutationStateBuilder<E> pending, required MutationDataBuilder<E, T> data, required MutationErrorBuilder<E> error})`
+
+Map the state to a value, handling every branch.
+
+The error <code>Function</code> can be one of three types:
+- () -> E
+- (dynamic) -> E
+- (dynamic, StackTrace) -> E
+
+##### <a name="maybemap"></a>`E maybeMap({MutationStateBuilder<E>? idle, MutationStateBuilder<E>? pending, MutationDataBuilder<E, T>? data, MutationErrorBuilder<E>? error, required MutationStateBuilder<E> orElse})`
+
+Map the state to a value with an **orElse** fallback for unhandled branches.
+
+The error <code>Function</code> can be one of three types:
+- () -> E
+- (dynamic) -> E
+- (dynamic, StackTrace) -> E
+
+##### <a name="=="></a>`bool ==(covariant MutationState<T> other)`
+
+##### <a name="hashcode"></a>`int hashCode`
+
+</details>
+
+
+
+---
+
+## mutationSignal
+
+Create a [MutationSignal](/types/mutationsignal) from a mutation function.
+
+The function receives a single typed argument <code>A</code> (use a record for multiple
+values) and returns the mutation result <code>T</code>. Configure naming, auto-dispose,
+and other behavior via **options**.
+
+```dart
+final rename = mutationSignal<String, void>((name) => api.rename(name));
+rename.mutate('New name');
+```
 
 ---
 ## Page: MapSignal
@@ -34948,6 +36120,24 @@ Filter and remove matching cached signals.
 
 ---
 
+## mutationSignalContainer
+
+Create a signal container for MutationSignals based on args.
+
+<code>A</code> is the mutation argument type, <code>T</code> the mutation result type, and <code>Arg</code>
+the container key used to cache/look up each mutation.
+
+```dart
+final container = mutationSignalContainer<Todo, void, int>((listId) {
+  return mutationSignal<Todo, void>((todo) => api.add(listId, todo));
+}, cache: true);
+
+container(1).mutate(myTodo); // per-list mutation, cached by listId
+```
+
+
+---
+
 ## readonlySignalContainer
 
 Create a signal container used to instance signals based on args
@@ -36004,6 +37194,7 @@ final doubleCount = computed(() => count.value * 2);
       <a class="content-link" href="/packages/signals/async/computed">Computed</a>
       <a class="content-link" href="/packages/signals/async/connect">Connect</a>
       <a class="content-link" href="/packages/signals/async/future">FutureSignal</a>
+      <a class="content-link" href="/packages/signals/async/mutation">MutationSignal</a>
       <a class="content-link" href="/packages/signals/async/stream">Stream</a>
     </div>
   </div>
@@ -37139,6 +38330,7 @@ class HookCounter extends HookWidget {
       <a class="content-link" href="/packages/signals_hooks/hooks/use-linked-signal">useLinkedSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-list-signal">useListSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-map-signal">useMapSignal</a>
+      <a class="content-link" href="/packages/signals_hooks/hooks/use-mutation-signal">useMutationSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-queue-signal">useQueueSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-set-signal">useSetSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-signal">useSignal</a>
@@ -37775,6 +38967,67 @@ class CategoryFilterWidget extends HookWidget {
           onSelected: (_) => toggleCategory(cat),
         );
       }).toList(),
+    );
+  }
+}
+````
+
+---
+## Page: useMutationSignal
+Url: https://dartsignals.dev/packages/signals_hooks/hooks/use-mutation-signal
+Description: Creates a new MutationSignal and subscribes to it.
+---
+
+Creates a new [MutationSignal](/types/mutationsignal) and subscribes to it.
+
+A [MutationSignal](/types/mutationsignal) models an imperative, on-demand asynchronous side effect
+(a mutation), inspired by Riverpod 3.0 and TanStack Query. Unlike
+[useFutureSignal](/types/usefuturesignal), it does not run on creation — it starts in a
+[MutationIdle](/types/mutationidle) state and only transitions when you call <code>mutate</code>/<code>mutateAsync</code>.
+
+<Success>
+Perfect for button-triggered writes (submitting a form, calling a
+<code>POST</code>/<code>PUT</code>/<code>DELETE</code>). The host widget rebuilds as the mutation moves
+through idle → pending → success/error.
+</Success>
+
+### Parameters
+- **mutation**: The mutation function. Receives a single typed argument <code>A</code>
+  (use a record for multiple values) and returns the result <code>T</code>.
+- **keys**: A list of objects to watch. If any key changes, the mutation
+  signal is re-created (resetting it back to [MutationIdle](/types/mutationidle)).
+- **options**: Optional [SignalOptions](/types/signaloptions) to configure the signal.
+
+### Example
+
+````dart
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:signals_hooks/signals_hooks.dart';
+
+class SaveButton extends HookWidget {
+  const SaveButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final save = useMutationSignal<Todo, void>((todo) => api.add(todo));
+
+    return save.value.map(
+      idle: () => ElevatedButton(
+        onPressed: () => save.mutate(Todo('New')),
+        child: const Text('Save'),
+      ),
+      pending: () => const CircularProgressIndicator(),
+      data: (_) => const Text('Saved!'),
+      error: (err, _) => Column(
+        children: [
+          Text('Error: $err', style: const TextStyle(color: Colors.red)),
+          ElevatedButton(
+            onPressed: () => save.mutate(Todo('New')),
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
     );
   }
 }

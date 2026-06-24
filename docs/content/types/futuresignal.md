@@ -178,12 +178,14 @@ The **FutureSignal** type is referenced and used in the following pages:
 * [FutureSignal](/packages/signals_flutter/async/future) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
 * [AsyncSignal](/packages/signals_flutter/async/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
 * [Computed](/packages/signals_flutter/async/computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
+* [MutationSignal](/packages/signals_flutter/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
 * [SignalContainer](/packages/signals_flutter/utilities/container) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/utilities)</span>
 * [signals_flutter](/packages/signals_flutter)
 * [Signal](/packages/signals_core/core/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/core)</span>
 * [FutureSignal](/packages/signals_core/async/future) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
 * [AsyncSignal](/packages/signals_core/async/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
 * [Computed](/packages/signals_core/async/computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
+* [MutationSignal](/packages/signals_core/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
 * [SignalContainer](/packages/signals_core/utilities/container) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/utilities)</span>
 * [signals_core](/packages/signals_core)
 * [Signal](/packages/signals/core/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/core)</span>
@@ -191,6 +193,7 @@ The **FutureSignal** type is referenced and used in the following pages:
 * [FutureSignal](/packages/signals/async/future) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
 * [AsyncSignal](/packages/signals/async/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
 * [Computed](/packages/signals/async/computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
+* [MutationSignal](/packages/signals/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
 * [SignalContainer](/packages/signals/utilities/container) <span style="opacity: 0.6; font-size: 0.85em;">(signals/utilities)</span>
 * [signals](/packages/signals)
 * [useFutureSignal](/packages/signals_hooks/hooks/use-future-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>

@@ -75,6 +75,7 @@ class HookCounter extends HookWidget {
       <a class="content-link" href="/packages/signals_hooks/hooks/use-linked-signal">useLinkedSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-list-signal">useListSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-map-signal">useMapSignal</a>
+      <a class="content-link" href="/packages/signals_hooks/hooks/use-mutation-signal">useMutationSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-queue-signal">useQueueSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-set-signal">useSetSignal</a>
       <a class="content-link" href="/packages/signals_hooks/hooks/use-signal">useSignal</a>

@@ -395,6 +395,7 @@ The **Signal** type is referenced and used in the following pages:
 * [Computed](/packages/signals_flutter/async/computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
 * [Connect](/packages/signals_flutter/async/connect) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
 * [Stream](/packages/signals_flutter/async/stream) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
+* [MutationSignal](/packages/signals_flutter/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
 * [MapSignal](/packages/signals_flutter/value/map) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/value)</span>
 * [SetSignal](/packages/signals_flutter/value/set) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/value)</span>
 * [ListSignal](/packages/signals_flutter/value/list) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/value)</span>
@@ -451,6 +452,7 @@ The **Signal** type is referenced and used in the following pages:
 * [Computed](/packages/signals_core/async/computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
 * [Connect](/packages/signals_core/async/connect) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
 * [Stream](/packages/signals_core/async/stream) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
+* [MutationSignal](/packages/signals_core/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
 * [MapSignal](/packages/signals_core/value/map) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/value)</span>
 * [SetSignal](/packages/signals_core/value/set) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/value)</span>
 * [ListSignal](/packages/signals_core/value/list) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/value)</span>
@@ -497,6 +499,7 @@ The **Signal** type is referenced and used in the following pages:
 * [Computed](/packages/signals/async/computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
 * [Connect](/packages/signals/async/connect) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
 * [Stream](/packages/signals/async/stream) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
+* [MutationSignal](/packages/signals/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
 * [MapSignal](/packages/signals/value/map) <span style="opacity: 0.6; font-size: 0.85em;">(signals/value)</span>
 * [SetSignal](/packages/signals/value/set) <span style="opacity: 0.6; font-size: 0.85em;">(signals/value)</span>
 * [ListSignal](/packages/signals/value/list) <span style="opacity: 0.6; font-size: 0.85em;">(signals/value)</span>
@@ -542,6 +545,7 @@ The **Signal** type is referenced and used in the following pages:
 * [useSignalValue](/packages/signals_hooks/hooks/use-signal-value) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useStreamSignal](/packages/signals_hooks/hooks/use-stream-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useSetSignal](/packages/signals_hooks/hooks/use-set-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [useMutationSignal](/packages/signals_hooks/hooks/use-mutation-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useLinkedSignal](/packages/signals_hooks/hooks/use-linked-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useChangeStackSignal](/packages/signals_hooks/hooks/use-change-stack-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useTrackedSignal](/packages/signals_hooks/hooks/use-tracked-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>

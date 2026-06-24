@@ -403,6 +403,32 @@ State for an [AsyncState](/types/asyncstate) with a loading state
 
 ---
 
+## MutationSignalState
+
+Extensions for [Signal<MutationState<T>>].
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="selectdata"></a><code>Computed<MutationState<R>> selectData(R Function(T data) selector)</code>
+
+Select from the success data when available, preserving the surrounding
+mutation state (idle, pending, error).
+
+```dart
+final mutation = mutationSignal<Todo, Todo>((t) => api.add(t));
+final name = mutation.selectData((todo) => todo.name);
+```
+
+</details>
+
+
+
+---
+
 ## AsyncError
 
 State for an [AsyncState](/types/asyncstate) with an error

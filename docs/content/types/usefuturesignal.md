@@ -73,6 +73,7 @@ class UserProfileWidget extends HookWidget {
 The **useFutureSignal** type is referenced and used in the following pages:
 
 * [signals_hooks](/packages/signals_hooks)
+* [useMutationSignal](/packages/signals_hooks/hooks/use-mutation-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useAsyncSignal](/packages/signals_hooks/hooks/use-async-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useFutureSignal](/packages/signals_hooks/hooks/use-future-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 

@@ -64,15 +64,19 @@ The **SignalOptions** type is referenced and used in the following pages:
 * [Signal](/packages/signals_flutter/core/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/core)</span>
 * [Ticker Signal](/packages/signals_flutter/signals/ticker-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/signals)</span>
 * [FlutterSignal](/packages/signals_flutter/signals/flutter-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/signals)</span>
+* [MutationSignal](/packages/signals_flutter/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/async)</span>
 * [SignalEquality](/packages/signals_flutter/utilities/equality) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/utilities)</span>
 * [Signal](/packages/signals_core/core/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/core)</span>
+* [MutationSignal](/packages/signals_core/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/async)</span>
 * [SignalEquality](/packages/signals_core/utilities/equality) <span style="opacity: 0.6; font-size: 0.85em;">(signals_core/utilities)</span>
 * [SignalsPreferUnifiedOptions](/packages/signals_lint/flutter/signals-prefer-unified-options) <span style="opacity: 0.6; font-size: 0.85em;">(signals_lint/flutter)</span>
 * [Signal](/packages/signals/core/signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/core)</span>
 * [TickerSignal](/packages/signals/signals/ticker-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
 * [FlutterSignal](/packages/signals/signals/flutter-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
+* [MutationSignal](/packages/signals/async/mutation) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>
 * [SignalEquality](/packages/signals/utilities/equality) <span style="opacity: 0.6; font-size: 0.85em;">(signals/utilities)</span>
 * [useSignal](/packages/signals_hooks/hooks/use-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [useMutationSignal](/packages/signals_hooks/hooks/use-mutation-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [Signal](/packages/preact_signals/core/signal) <span style="opacity: 0.6; font-size: 0.85em;">(preact_signals/core)</span>
 * [SignalEquality](/packages/preact_signals/utilities/equality) <span style="opacity: 0.6; font-size: 0.85em;">(preact_signals/utilities)</span>
 
