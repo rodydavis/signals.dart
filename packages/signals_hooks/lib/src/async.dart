@@ -261,6 +261,72 @@ FutureSignal<T> useAsyncComputed<T>(
   return useExistingSignal(s, keys: keys);
 }
 
+/// Creates a new [MutationSignal] and subscribes to it.
+///
+/// A [MutationSignal] models an imperative, on-demand asynchronous side effect
+/// (a mutation). Unlike [useFutureSignal], it does not run on creation; it
+/// starts in a [MutationIdle] state and only transitions when you call
+/// `mutate`/`mutateAsync`.
+///
+/// :::tip
+/// Perfect for button-triggered writes (submitting a form, calling a
+/// `POST`/`PUT`/`DELETE`). The host widget rebuilds as the mutation moves
+/// through idle → pending → success/error.
+/// :::
+///
+/// ### Parameters
+/// - [mutation]: The mutation function. Receives a single typed argument `A`
+///   (use a record for multiple values) and returns the result `T`.
+/// - [keys]: A list of objects to watch. If any key changes, the mutation
+///   signal is re-created (resetting it back to [MutationIdle]).
+/// - [options]: Optional [SignalOptions] to configure the signal.
+///
+/// ### Example
+///
+/// ````dart
+/// import 'package:flutter/material.dart';
+/// import 'package:flutter_hooks/flutter_hooks.dart';
+/// import 'package:signals_hooks/signals_hooks.dart';
+///
+/// class SaveButton extends HookWidget {
+///   const SaveButton({super.key});
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     final save = useMutationSignal<Todo, void>((todo) => api.add(todo));
+///
+///     return save.value.map(
+///       idle: () => ElevatedButton(
+///         onPressed: () => save.mutate(Todo('New')),
+///         child: const Text('Save'),
+///       ),
+///       pending: () => const CircularProgressIndicator(),
+///       data: (_) => const Text('Saved!'),
+///       error: (err, _) => Column(
+///         children: [
+///           Text('Error: $err', style: const TextStyle(color: Colors.red)),
+///           ElevatedButton(
+///             onPressed: () => save.mutate(Todo('New')),
+///             child: const Text('Retry'),
+///           ),
+///         ],
+///       ),
+///     );
+///   }
+/// }
+/// ````
+MutationSignal<A, T> useMutationSignal<A, T>(
+  Future<T> Function(A arg) mutation, {
+  List<Object?> keys = const <Object>[],
+  SignalOptions<MutationState<T>>? options,
+}) {
+  final s = useMemoized(
+    () => mutationSignal<A, T>(mutation, options: options),
+    keys,
+  );
+  return useExistingSignal(s, keys: keys);
+}
+
 /// Creates a new [Connect] instance and automatically disposes of it when the widget unmounts.
 ///
 /// [Connect] connects one or more streams to feed a target signal.

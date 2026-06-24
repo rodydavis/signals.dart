@@ -123,6 +123,57 @@ void main() {
       });
     });
 
+    group('useMutationSignal', () {
+      testWidgets('starts idle then resolves on mutate', (tester) async {
+        MutationSignal<int, int>? state;
+        await tester.pumpWidget(
+          HookBuilder(
+            builder: (context) {
+              state ??= useMutationSignal<int, int>((arg) async => arg * 2);
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
+        );
+
+        expect(state!.value, isA<MutationIdle<int>>());
+
+        state!.mutate(21);
+        // Pending is set synchronously by mutate.
+        expect(state!.value, isA<MutationPending<int>>());
+
+        await tester.pumpAndSettle();
+        expect(state!.value, isA<MutationSuccess<int>>());
+        expect(state!.value.requireValue, 42);
+      });
+
+      testWidgets('rebuilds the widget across state transitions',
+          (tester) async {
+        MutationSignal<int, int>? state;
+        var builds = 0;
+        await tester.pumpWidget(
+          HookBuilder(
+            builder: (context) {
+              builds++;
+              state ??= useMutationSignal<int, int>((arg) async => arg);
+              return Text(
+                state!.value.runtimeType.toString(),
+                textDirection: TextDirection.ltr,
+              );
+            },
+          ),
+        );
+
+        expect(find.text('MutationIdle<int>'), findsOneWidget);
+        final initialBuilds = builds;
+
+        state!.mutate(7);
+        await tester.pumpAndSettle();
+
+        expect(find.text('MutationSuccess<int>'), findsOneWidget);
+        expect(builds, greaterThan(initialBuilds));
+      });
+    });
+
     group('useConnect', () {
       testWidgets('connects stream to signal and disposes subscription',
           (tester) async {
