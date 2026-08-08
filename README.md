@@ -8,6 +8,8 @@
 
 # Signals.dart
 
+Try chat with [CodeWiki](https://codewiki.google/github.com/rodydavis/signals.dart)!
+
 ## Features
 
 - 🪡 **Fine grained reactivity**: Based on [Preact Signals](https://preactjs.com/blog/signal-boosting/) and provides a fine grained reactivity system that will automatically track dependencies and free them when no longer needed
