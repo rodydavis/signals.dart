@@ -34,8 +34,6 @@ VS Code Extension: https://marketplace.visualstudio.com/items?itemName=rodydavis
 | [`preact_signals`](packages/preact_signals)                             | [![signals_lint](https://img.shields.io/pub/v/preact_signals.svg)](https://pub.dev/packages/preact_signals)          |
 | [`signals_devtools_extension`](packages/signals_devtools_extension) |                                                                                                                  |
 
-[![Star History Chart](https://api.star-history.com/svg?repos=rodydavis/signals.dart&type=Date)](https://star-history.com/#rodydavis/signals.dart&Date)
-
 ## AI Developer Skills
 
 To enable AI coding assistants (like Google Antigravity, Gemini, Claude, Cursor, GitHub Copilot, and others) to build high-quality reactive systems with `signals.dart`, this repository includes prepackaged, high-fidelity developer **Skills**.
