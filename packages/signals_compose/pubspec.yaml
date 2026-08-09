@@ -1,0 +1,17 @@
+name: signals_compose
+description: "A new Flutter package project."
+version: 0.0.1-dev.0
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  preact_signals: ^1.9.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
