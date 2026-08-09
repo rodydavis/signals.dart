@@ -30,4 +30,5 @@ The **StatelessElementConvertExtension** type is referenced and used in the foll
 
 * [Stateless Element Convert Extension](/packages/signals_flutter/extensions/stateless-element-convert-extension) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/extensions)</span>
 * [Stateless Element Convert Extension](/packages/signals/extensions/stateless-element-convert-extension) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

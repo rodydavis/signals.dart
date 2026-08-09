@@ -1,0 +1,260 @@
+- name: "signal"
+  prefix: "sig"
+  description: "An observable box containing a mutable value. Reading its value registers a dependency implicitly."
+  category: "Primitive"
+  isFlutter: false
+  body:
+    - "final ${1:name} = signal(${2:value}, options: SignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final counter = signal(0, 
+      options: SignalOptions(name: 'counter')
+    );
+
+    counter.value++; // triggers rebuilds
+
+- name: "Async Signal"
+  prefix: "asig"
+  description: "An async Signal Object mapping loading, data success, and error failure states cleanly."
+  category: "Primitive"
+  isFlutter: false
+  body:
+    - "final ${1:name} = asyncSignal(AsyncState.data(${2:value}), options: AsyncSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final data = asyncSignal(AsyncState.loading(), 
+      options: AsyncSignalOptions(name: 'fetchUser')
+    );
+
+- name: "Computed"
+  prefix: "comp"
+  description: "Combine multiple signals into a derived, lazily-cached, read-only signal."
+  category: "Derived"
+  isFlutter: false
+  body:
+    - "final ${1:name} = computed(() => ${2:value}, options: ComputedOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final isEven = computed(() => 
+      counter.value % 2 == 0,
+      options: ComputedOptions(name: 'isEven')
+    );
+
+- name: "AsyncComputed"
+  prefix: "ascomp"
+  description: "Asynchronous Computed is syntax sugar around FutureSignal for async dependent tasks."
+  category: "Derived"
+  isFlutter: false
+  body:
+    - "final ${1:name} = computedAsync(() => ${2:value}, options: AsyncSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final apiResults = computedAsync(() => 
+      fetchFromApi(searchQuery.value),
+      options: AsyncSignalOptions(name: 'apiResults')
+    );
+
+- name: "linkedSignal"
+  prefix: "linksig"
+  description: "A writable derived signal that allows manual updates and resets to a source computation on mutation."
+  category: "Writable Derived"
+  isFlutter: false
+  body:
+    - "final ${1:name} = linkedSignal(() => ${2:value}, options: LinkedSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final email = signal('bob@email.com');
+    final display = linkedSignal(() => email.value);
+
+    display.value = 'custom@email.com'; // write
+    email.value = 'alice@email.com'; // resets display to alice
+
+- name: "ChangeStackSignal"
+  prefix: "undosig"
+  description: "Track signal values over time, exposing simple, robust undo/redo capabilities."
+  category: "Utilities"
+  isFlutter: false
+  body:
+    - "final ${1:name} = changeStack(${2:value}, limit: ${3:null}, options: SignalOptions(name: '${1:name}', autoDispose: ${4:false}));"
+  example: |
+    final history = changeStack(0);
+    history.value = 1;
+    history.undo(); // back to 0
+
+- name: "IterableSignal"
+  prefix: "itrsig"
+  description: "Iterable signals wrap collection items lazy-traversals mapped to custom reactivity layer."
+  category: "Collections"
+  isFlutter: false
+  body:
+    - "final ${1:name} = iterableSignal(${2:value}, options: IterableSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final elements = iterableSignal([1, 2, 3]);
+
+- name: "ListSignal"
+  prefix: "lstsig"
+  description: "Optimized list wrapper proxying standard operations to support element-level reactivity."
+  category: "Collections"
+  isFlutter: false
+  body:
+    - "final ${1:name} = listSignal([${2:value}], options: ListSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final items = listSignal([1, 2]);
+    items.add(3); // Reacts automatically
+
+- name: "MapSignal"
+  prefix: "mpsig"
+  description: "Granular map wrapper supporting isolated dictionary element lookup triggers."
+  category: "Collections"
+  isFlutter: false
+  body:
+    - "final ${1:name} = mapSignal({${2:value}}, options: MapSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final profile = mapSignal({'username': 'alice'});
+    profile['username'] = 'bob'; // Mutates and triggers reactives
+
+- name: "SetSignal"
+  prefix: "stsig"
+  description: "Custom set wrapper ignoring duplicate entries and triggering mutations on unique inserts."
+  category: "Collections"
+  isFlutter: false
+  body:
+    - "final ${1:name} = setSignal({${2:value}}, options: SetSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final tags = setSignal({'flutter'});
+    tags.add('dart');
+
+- name: "FutureSignal"
+  prefix: "fusig"
+  description: "Bypasses stream subscription overhead and resolves the future-evaluation loop elegantly."
+  category: "Primitive"
+  isFlutter: false
+  body:
+    - "final ${1:name} = futureSignal(() => ${2:value}, options: AsyncSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final userProfile = futureSignal(() => fetchProfile(userId.value));
+
+- name: "StreamSignal"
+  prefix: "strsig"
+  description: "Dynamic, lifecycle-safe, self-disposing stream listener mapping to async loading/data/error states."
+  category: "Primitive"
+  isFlutter: false
+  body:
+    - "final ${1:name} = streamSignal(() => ${2:value}, options: AsyncSignalOptions(name: '${1:name}', autoDispose: ${3:false}));"
+  example: |
+    final messages = streamSignal(() => chatSocket.messages);
+
+- name: "Signal Container (Read-only)"
+  prefix: "rsigcon"
+  description: "Returns a read-only parameterized caching Signal Container."
+  category: "Utilities"
+  isFlutter: false
+  body:
+    - "final ${1:name} = readonlySignalContainer<${2:ArgType}, ${3:ValueType}>((arg) {"
+    - "  return computed<${3:ValueType}>(() => ${4:body});"
+    - "}, options: SignalContainerOptions(name: '${1:name}', autoDispose: ${5:false}));"
+  example: |
+    final userContainer = readonlySignalContainer<String, User>((userId) {
+      return computed(() => users.value[userId]);
+    });
+
+- name: "Signal Container"
+  prefix: "sigcon"
+  description: "Returns a mutable parameterized caching Signal Container."
+  category: "Utilities"
+  isFlutter: false
+  body:
+    - "final ${1:name} = signalContainer<${2:ArgType}, ${3:ValueType}>((arg) {"
+    - "  return signal<${3:ValueType}>(${4:initialValue});"
+    - "}, options: SignalContainerOptions(name: '${1:name}', autoDispose: ${5:false}));"
+  example: |
+    final activeCounters = signalContainer<String, int>((key) {
+      return signal(0);
+    });
+
+- name: "Watch builder"
+  prefix: "watchb"
+  description: "Explicit in-place Flutter Watch widget rebuilding only the returned closure closure."
+  category: "Flutter"
+  isFlutter: true
+  deprecated: true
+  body:
+    - "Watch.builder("
+    - "  builder: (context) {"
+    - "    return ${1:widget};"
+    - "  },"
+    - "),"
+  example: |
+    Watch.builder(
+      builder: (context) => Text('Count: ${counter.value}')
+    )
+
+- name: "Watch"
+  prefix: "watch"
+  description: "Rebuilds only the wrapped closure when tracked signals change, avoiding full-widget GPU paints."
+  category: "Flutter"
+  isFlutter: true
+  deprecated: true
+  body:
+    - "Watch((context) => ${1:widget}),"
+  example: |
+    @override
+    Widget build(BuildContext context) {
+      return Watch((context) {
+        return Text('Count: ${counter.value}');
+      });
+    }
+
+- name: "SignalBuilder"
+  prefix: "sigb"
+  description: "Subscribes to a single signal, rebuilding only this local builder block when it changes."
+  category: "Flutter"
+  isFlutter: true
+  body:
+    - "SignalBuilder("
+    - "  builder: (context, value) {"
+    - "    return ${1:widget};"
+    - "  },"
+    - ")"
+  example: |
+    SignalBuilder(
+      builder: (context, value) {
+        return Text('Value: $value');
+      },
+    )
+
+- name: "SignalEffect"
+  prefix: "sigeff"
+  description: "Executes standard Flutter side effects (Snackbars, dialogs) inside widget lifecycles safely."
+  category: "Flutter"
+  isFlutter: true
+  body:
+    - "SignalEffect("
+    - "  callback: (context) {"
+    - "    ${1:// side effect code}"
+    - "  },"
+    - "  child: ${2:widget},"
+    - ")"
+  example: |
+    SignalEffect(
+      callback: (context) {
+        if (error.value != null) {
+          showDialog(...);
+        }
+      },
+      child: MyContent(),
+    )
+
+- name: "Value Signal"
+  prefix: "valsig"
+  description: "Custom Value Signal class definition template."
+  category: "Utilities"
+  isFlutter: false
+  body:
+    - "class ${1:ClassName} extends ValueSignal<${2:Type}> {"
+    - "  ${1:ClassName}("
+    - "    super.value, {"
+    - "    super.autoDispose,"
+    - "    super.equality,"
+    - "    super.debugLabel = '${1:ClassName}',"
+    - "  });"
+    - "}"
+  example: |
+    class CounterSignal extends ValueSignal<int> {
+      CounterSignal(super.value) : super(debugLabel: 'Counter');
+    }

@@ -24,7 +24,12 @@
     "signals snippets"
   ],
   "activationEvents": [
-    "onLanguage:dart"
+    "onLanguage:dart",
+    "onLanguage:yaml",
+    "onView:signals-explorer",
+    "workspaceContains:pubspec.yaml",
+    "onCommand:signals-dart.installSkills",
+    "onCommand:signals-dart.showDocumentation"
   ],
   "main": "./dist/web/extension.js",
   "contributes": {
@@ -33,7 +38,37 @@
         "language": "dart",
         "path": "./snippets/signals.json"
       }
-    ]
+    ],
+    "commands": [
+      {
+        "command": "signals-dart.installSkills",
+        "title": "Signals: Install AI Developer Skills to Workspace",
+        "category": "Signals"
+      },
+      {
+        "command": "signals-dart.showDocumentation",
+        "title": "Signals: Show Documentation Explorer",
+        "category": "Signals"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "signals-sidebar",
+          "title": "Signals",
+          "icon": "assets/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "signals-sidebar": [
+        {
+          "type": "webview",
+          "id": "signals-explorer",
+          "name": "Signals Explorer"
+        }
+      ]
+    }
   },
   "bugs": {
     "url": "https://github.com/rodydavis/signals.dart/issues",
@@ -61,10 +96,11 @@
   "homepage": " https://dartsignals.dev/",
   "icon": "assets/icon.png",
   "scripts": {
+    "copy-skills": "node scripts/copy-skills.js",
     "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
     "pretest": "npm run compile-web",
-    "vscode:prepublish": "npm run package-web",
-    "build": "npm run compile-web",
+    "vscode:prepublish": "npm run copy-skills && npm run package-web",
+    "build": "npm run copy-skills && npm run compile-web",
     "compile-web": "webpack",
     "watch-web": "webpack --watch",
     "package-web": "webpack --mode production --devtool hidden-source-map",

@@ -4,6 +4,7 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
+import 'package:mustache_template/mustache_template.dart';
 
 final Map<String, String> _globalDocLinks = {};
 final Map<String, Map<String, List<MapEntry<String, String>>>>
@@ -467,6 +468,9 @@ void main() {
 
   // 7. Dynamically generate the Jaspr navigation side menu (navigation.dart) to keep it in sync with index/TOC
   generateNavigationFile(rootDir);
+
+  // 8. Generate VS Code snippets, WebView UI and monorepo AI developer skills via mustache
+  generateVSCodeAndSkills(rootDir, parsedDecls, parsedMeta);
 
   print('\nDocumentation and Skills successfully generated!');
 }
@@ -2656,6 +2660,17 @@ class DynamicSidebar extends StatelessComponent {
             ],
           ),
           const SidebarGroup(
+            title: 'AI Developer Skills',
+            links: [
+              SidebarLink(text: "signals-dart", href: '/skills/signals-dart'),
+              SidebarLink(text: "signals-flutter", href: '/skills/signals-flutter'),
+              SidebarLink(text: "signals-hooks", href: '/skills/signals-hooks'),
+              SidebarLink(text: "signals-lint", href: '/skills/signals-lint'),
+              SidebarLink(text: "signals-migration-6-to-7", href: '/skills/signals-migration-6-to-7'),
+              SidebarLink(text: "signals-preact-dart", href: '/skills/signals-preact-dart'),
+            ],
+          ),
+          const SidebarGroup(
             title: 'Guides',
             links: [
               SidebarLink(text: "Persisted Signals", href: '/guides/persisted-signals'),
@@ -3026,4 +3041,336 @@ class Sidebar extends StatelessComponent {
 
   navFile.writeAsStringSync(buffer.toString());
   print('Generated docs/lib/components/navigation.dart');
+}
+
+void generateVSCodeAndSkills(
+  String rootDir,
+  Map<String, List<DeclInfo>> parsedDecls,
+  Map<String, Map<String, dynamic>> parsedMeta,
+) {
+  print('\nGenerating VS Code and Skills via Mustache...');
+  // 1. Read snippets_data.yaml
+  final yamlFile = File(p.join(rootDir, 'scripts', 'snippets_data.yaml'));
+  if (!yamlFile.existsSync()) {
+    print('Error: snippets_data.yaml not found!');
+    return;
+  }
+  final List yamlList = loadYaml(yamlFile.readAsStringSync()) as List;
+
+  // 2. Prepare snippets data for Mustache
+  final List<Map<String, dynamic>> snippets = [];
+  for (final item in yamlList) {
+    final map = Map<String, dynamic>.from(item as Map);
+    final List<String> bodyLines = List<String>.from(map['body'] as List);
+    final List<Map<String, dynamic>> bodyLinesMap = [];
+    for (var i = 0; i < bodyLines.length; i++) {
+      bodyLinesMap.add({
+        'line': bodyLines[i],
+        'last': i == bodyLines.length - 1,
+      });
+    }
+    map['body_lines'] = bodyLinesMap;
+    snippets.add(map);
+  }
+
+  for (var i = 0; i < snippets.length; i++) {
+    snippets[i]['last'] = i == snippets.length - 1;
+  }
+
+  // 3. Render VS Code snippets file
+  final snippetsTemplateFile = File(p.join(rootDir, 'scripts', 'templates', 'vscode_snippets.json.mustache'));
+  if (snippetsTemplateFile.existsSync()) {
+    final activeSnippetsForVSCode = snippets.where((s) => s['deprecated'] != true).toList();
+    for (var i = 0; i < activeSnippetsForVSCode.length; i++) {
+      activeSnippetsForVSCode[i]['last'] = i == activeSnippetsForVSCode.length - 1;
+    }
+    final template = Template(snippetsTemplateFile.readAsStringSync(), htmlEscapeValues: false);
+    final rendered = template.renderString({'snippets': activeSnippetsForVSCode});
+    final targetSnippetsFile = File(p.join(rootDir, 'editors', 'vscode', 'snippets', 'signals.json'));
+    targetSnippetsFile.parent.createSync(recursive: true);
+    targetSnippetsFile.writeAsStringSync(rendered);
+    print('  Generated VS Code snippets: ${targetSnippetsFile.path}');
+  } else {
+    print('Error: vscode_snippets.json.mustache template not found!');
+  }
+
+  // 4. Render VS Code extension.ts (visual cheat-sheet HTML)
+  final extensionTemplateFile = File(p.join(rootDir, 'scripts', 'templates', 'extension.ts.mustache'));
+  if (extensionTemplateFile.existsSync()) {
+    final coreSnippets = snippets.where((s) => s['isFlutter'] == false).map((s) {
+      final copy = Map<String, dynamic>.from(s);
+      if (copy['example'] != null) {
+        copy['example'] = (copy['example'] as String).replaceAll('\$', '\\\$');
+      }
+      return copy;
+    }).toList();
+    final flutterSnippets = snippets.where((s) => s['isFlutter'] == true).map((s) {
+      final copy = Map<String, dynamic>.from(s);
+      if (copy['example'] != null) {
+        copy['example'] = (copy['example'] as String).replaceAll('\$', '\\\$');
+      }
+      return copy;
+    }).toList();
+
+    for (var i = 0; i < coreSnippets.length; i++) {
+      coreSnippets[i]['last'] = i == coreSnippets.length - 1;
+    }
+    for (var i = 0; i < flutterSnippets.length; i++) {
+      flutterSnippets[i]['last'] = i == flutterSnippets.length - 1;
+    }
+
+    final signalsVersion = parsedMeta['signals']?['version'] ?? '7.0.0';
+
+    final template = Template(extensionTemplateFile.readAsStringSync(), htmlEscapeValues: false);
+    final rendered = template.renderString({
+      'core_snippets': coreSnippets,
+      'flutter_snippets': flutterSnippets,
+      'signals_version': signalsVersion,
+    });
+    final targetExtensionFile = File(p.join(rootDir, 'editors', 'vscode', 'src', 'web', 'extension.ts'));
+    targetExtensionFile.parent.createSync(recursive: true);
+    targetExtensionFile.writeAsStringSync(rendered);
+    print('  Generated VS Code extension.ts: ${targetExtensionFile.path}');
+  } else {
+    print('Error: extension.ts.mustache template not found!');
+  }
+
+  // 5. Render AI Developer Skills (SKILL.md)
+  final skillTemplateFile = File(p.join(rootDir, 'scripts', 'templates', 'skill_definition.md.mustache'));
+  if (skillTemplateFile.existsSync()) {
+    final skillTemplate = Template(skillTemplateFile.readAsStringSync(), htmlEscapeValues: false);
+
+    final skillTargets = [
+      (
+        pkgName: 'signals-dart',
+        originPkg: 'signals_core',
+        description: 'Advanced reactive state primitives, collections, mixins, and utilities of signals_core.',
+        isFlutter: false,
+      ),
+      (
+        pkgName: 'signals-flutter',
+        originPkg: 'signals_flutter',
+        description: 'Comprehensive guide and best practices for integrating reactive signals cleanly inside Flutter applications.',
+        isFlutter: true,
+      ),
+      (
+        pkgName: 'signals-preact-dart',
+        originPkg: 'preact_signals',
+        description: 'Core reactive programming best practices and primitive definitions for preact_signals in Dart.',
+        isFlutter: false,
+      ),
+    ];
+
+    String getCommentSummary(String comment) {
+      final cleaned = cleanDocumentationComment(comment).trim();
+      if (cleaned.isEmpty) return '';
+      final firstLine = cleaned.split('\n').first.trim();
+      return firstLine.replaceAll('*', '').replaceAll('#', '').replaceAll('`', '').trim();
+    }
+
+    for (final target in skillTargets) {
+      final filteredSnippets = snippets.where((s) => s['isFlutter'] == target.isFlutter && s['deprecated'] != true).toList();
+      for (var i = 0; i < filteredSnippets.length; i++) {
+        filteredSnippets[i]['last'] = i == filteredSnippets.length - 1;
+      }
+
+      final List<DeclInfo> pkgDecls = parsedDecls[target.originPkg] ?? [];
+      final List<Map<String, dynamic>> parsedDeclsMap = [];
+      for (final d in pkgDecls) {
+        if (d.name.startsWith('_')) continue;
+        if (d.isDeprecated) continue;
+        
+        final List<Map<String, dynamic>> membersList = [];
+        for (final m in d.members) {
+          membersList.add({
+            'name': m.name,
+            'type': m.type,
+            'signature': m.signature,
+            'comment': cleanDocumentationComment(m.comment),
+            'isStatic': m.isStatic,
+          });
+        }
+
+        parsedDeclsMap.add({
+          'name': d.name,
+          'type': d.type,
+          'comment': cleanDocumentationComment(d.comment),
+          'summary': getCommentSummary(d.comment),
+          'signature': d.signature,
+          'isDeprecated': d.isDeprecated,
+          'members': membersList,
+          'has_members': membersList.isNotEmpty,
+        });
+      }
+
+      final pkgMeta = parsedMeta[target.originPkg] ?? {'version': '7.0.0'};
+      final version = pkgMeta['version'] ?? '7.0.0';
+
+      final renderedSkill = skillTemplate.renderString({
+        'pkgName': target.pkgName,
+        'description': target.description,
+        'version': version,
+        'rootDir': rootDir,
+        'snippets': filteredSnippets,
+        'decls': parsedDeclsMap,
+      });
+
+      final targetSkillDirs = [
+        p.join(rootDir, 'skills', target.pkgName),
+        p.join(rootDir, 'editors', 'vscode', 'skills', target.pkgName),
+      ];
+
+      for (final dirPath in targetSkillDirs) {
+        Directory(dirPath).createSync(recursive: true);
+        
+        // Clean and create primitives/
+        final primitivesDir = Directory(p.join(dirPath, 'primitives'));
+        if (primitivesDir.existsSync()) primitivesDir.deleteSync(recursive: true);
+        primitivesDir.createSync(recursive: true);
+
+        // Clean and create api/
+        final apiDir = Directory(p.join(dirPath, 'api'));
+        if (apiDir.existsSync()) apiDir.deleteSync(recursive: true);
+        apiDir.createSync(recursive: true);
+
+        // Clean up legacy static directories if present (e.g. core/ in signals-preact-dart)
+        final coreDir = Directory(p.join(dirPath, 'core'));
+        if (coreDir.existsSync()) coreDir.deleteSync(recursive: true);
+
+        // Write main SKILL.md
+        File(p.join(dirPath, 'SKILL.md')).writeAsStringSync(renderedSkill);
+
+        // Generate primitive subfiles
+        for (final s in filteredSnippets) {
+          final content = StringBuffer();
+          content.writeln('# Primitive: `${s['name']}`');
+          content.writeln();
+          content.writeln('- **Category**: ${s['category']}');
+          content.writeln('- **Description**: ${s['description']}');
+          content.writeln();
+          content.writeln('---');
+          content.writeln();
+          content.writeln('## Standard Usage Example');
+          content.writeln();
+          content.writeln('```dart');
+          content.writeln(s['example']);
+          content.writeln('```');
+          
+          File(p.join(primitivesDir.path, '${s['name']}.md')).writeAsStringSync(content.toString());
+        }
+
+        // Generate API subfiles
+        for (final d in parsedDeclsMap) {
+          final content = StringBuffer();
+          content.writeln('# ${d['type']} `${d['name']}`');
+          content.writeln();
+          if (d['isDeprecated'] == true) {
+            content.writeln('> [!WARNING]');
+            content.writeln('> This API is deprecated. Avoid using it in new code.');
+            content.writeln();
+          }
+          content.writeln(d['comment']);
+          content.writeln();
+          content.writeln('---');
+          content.writeln();
+          if (d['signature'] != null && (d['signature'] as String).isNotEmpty) {
+            content.writeln('## Signature');
+            content.writeln();
+            content.writeln('```dart');
+            content.writeln(d['signature']);
+            content.writeln('```');
+            content.writeln();
+          }
+
+          if (d['has_members'] == true) {
+            content.writeln('## Members of `${d['name']}`');
+            content.writeln();
+            content.writeln('| Member | Type | Signature | Description |');
+            content.writeln('| :--- | :--- | :--- | :--- |');
+            for (final m in d['members'] as List) {
+              content.writeln('| **${m['name']}** | `${m['type']}` | `${m['signature']}` | ${m['comment']} |');
+            }
+          }
+
+          File(p.join(apiDir.path, '${d['name']}.md')).writeAsStringSync(content.toString());
+        }
+      }
+      print('  Generated Skill: ${target.pkgName} with directory tables and subfiles.');
+    }
+
+    // 6. Generate AI Skills documentation preview pages for the Jaspr site
+    final skillsDir = Directory(p.join(rootDir, 'skills'));
+    final docsSkillsDir = Directory(p.join(rootDir, 'docs', 'content', 'skills'));
+    if (skillsDir.existsSync()) {
+      docsSkillsDir.createSync(recursive: true);
+      for (final entity in skillsDir.listSync()) {
+        if (entity is Directory) {
+          final skillName = p.basename(entity.path);
+          final skillFile = File(p.join(entity.path, 'SKILL.md'));
+          if (skillFile.existsSync()) {
+            final content = skillFile.readAsStringSync();
+            // Extract frontmatter description and name
+            var name = skillName;
+            var description = 'AI Developer Skill for $skillName';
+            var skillBody = content;
+
+            final frontmatterMatch = RegExp(r'^---\r?\n([\s\S]*?)\r?\n---').firstMatch(content);
+            if (frontmatterMatch != null) {
+              final frontmatterText = frontmatterMatch.group(1) ?? '';
+              // Parse frontmatter yaml-like lines
+              for (final line in frontmatterText.split('\n')) {
+                final parts = line.split(':');
+                if (parts.length >= 2) {
+                  final key = parts[0].trim();
+                  final val = parts.sublist(1).join(':').trim();
+                  if (key == 'name') {
+                    name = val;
+                  } else if (key == 'description') {
+                    description = val;
+                  }
+                }
+              }
+              // Strip frontmatter from skillBody
+              skillBody = content.substring(frontmatterMatch.end).trim();
+            }
+
+            // Generate the Jaspr markdown page
+            final docsSkillFile = File(p.join(docsSkillsDir.path, '$skillName.md'));
+            final newContent = StringBuffer();
+            newContent.writeln('---');
+            newContent.writeln('title: $name AI Skill');
+            newContent.writeln('description: $description');
+            newContent.writeln('---');
+            newContent.writeln();
+            newContent.writeln('# $name AI Developer Skill');
+            newContent.writeln();
+            newContent.writeln('> $description');
+            newContent.writeln();
+            newContent.writeln('---');
+            newContent.writeln();
+            newContent.writeln('### 📥 Installation');
+            newContent.writeln();
+            newContent.writeln('To instantly install this AI developer skill into your local workspace under `.agents/skills/`, run:');
+            newContent.writeln();
+            newContent.writeln('```bash');
+            newContent.writeln('npx skills add rodydavis/signals.dart/tree/main/skills/$skillName');
+            newContent.writeln('```');
+            newContent.writeln();
+            newContent.writeln('---');
+            newContent.writeln();
+            newContent.writeln('## 📄 SKILL.md Preview');
+            newContent.writeln();
+            newContent.writeln('````plaintext');
+            newContent.writeln(skillBody);
+            newContent.writeln('````');
+
+            docsSkillFile.writeAsStringSync(newContent.toString());
+            print('  Generated Docs Skill Page: ${docsSkillFile.path}');
+          }
+        }
+      }
+    }
+  } else {
+    print('Error: skill_definition.md.mustache template not found!');
+  }
 }

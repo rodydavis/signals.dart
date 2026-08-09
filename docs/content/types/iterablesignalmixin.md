@@ -104,4 +104,5 @@ The **IterableSignalMixin** type is referenced and used in the following pages:
 * [ListSignalMixin](/packages/signals/mixins/list) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [IterableSignalMixin](/packages/signals/mixins/iterable) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [signals](/packages/signals)
+* [signals-dart AI Skill](/skills/signals-dart) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

@@ -53,4 +53,5 @@ The **FlutterSignal** type is referenced and used in the following pages:
 * [Lazy Signal](/packages/signals/extensions/lazy-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
 * [signals](/packages/signals)
 * [useSignal](/packages/signals_hooks/hooks/use-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

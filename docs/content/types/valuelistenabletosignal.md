@@ -32,4 +32,5 @@ The **valueListenableToSignal** type is referenced and used in the following pag
 
 * [Value Listenable To Signal](/packages/signals_flutter/extensions/value-listenable-to-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/extensions)</span>
 * [Value Listenable To Signal](/packages/signals/extensions/value-listenable-to-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

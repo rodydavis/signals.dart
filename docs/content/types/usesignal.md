@@ -81,4 +81,5 @@ The **useSignal** type is referenced and used in the following pages:
 * [useSignalEffect](/packages/signals_hooks/hooks/use-signal-effect) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [SignalStatefulHookWidget](/packages/signals_hooks/widgets/signal-stateful-hook-widget) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/widgets)</span>
 * [SignalHookWidget](/packages/signals_hooks/widgets/signal-hook-widget) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/widgets)</span>
+* [signals-hooks AI Skill](/skills/signals-hooks) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

@@ -73,4 +73,5 @@ The **useSetSignal** type is referenced and used in the following pages:
 
 * [signals_hooks](/packages/signals_hooks)
 * [useSetSignal](/packages/signals_hooks/hooks/use-set-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [signals-hooks AI Skill](/skills/signals-hooks) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

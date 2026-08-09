@@ -31,4 +31,5 @@ The **FlutterReadonlySignalUtils** type is referenced and used in the following 
 
 * [Flutter Readonly Signal](/packages/signals_flutter/signals/flutter-readonly-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/signals)</span>
 * [Flutter Readonly Signal](/packages/signals/signals/flutter-readonly-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

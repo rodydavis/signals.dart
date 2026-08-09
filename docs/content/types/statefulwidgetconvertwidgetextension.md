@@ -30,4 +30,5 @@ The **StatefulWidgetConvertWidgetExtension** type is referenced and used in the 
 
 * [Stateful Widget Convert Widget Extension](/packages/signals_flutter/extensions/stateful-widget-convert-widget-extension) <span style="opacity: 0.6; font-size: 0.85em;">(signals_flutter/extensions)</span>
 * [Stateful Widget Convert Widget Extension](/packages/signals/extensions/stateful-widget-convert-widget-extension) <span style="opacity: 0.6; font-size: 0.85em;">(signals/extensions)</span>
+* [signals-flutter AI Skill](/skills/signals-flutter) <span style="opacity: 0.6; font-size: 0.85em;">(skills)</span>
 

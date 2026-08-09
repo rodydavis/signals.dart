@@ -1,0 +1,32 @@
+---
+name: {{pkgName}}
+description: {{description}} (v{{version}})
+---
+
+# {{pkgName}} API Best Practices & Primitive Definitions
+
+This guide outlines advanced state management primitives, reactive collections, async features, and value options semantics in `package:{{pkgName}}` (version `{{version}}`).
+
+---
+
+## 📊 Reactive Primitives Directory
+
+The following table summarizes all available reactive primitives and widgets. Click on any primitive's name to view its detailed documentation, standard usage, and examples.
+
+| Primitive | Category | Description |
+| :--- | :--- | :--- |
+{{#snippets}}
+| [{{{name}}}](primitives/{{{name}}}.md) | {{category}} | {{{description}}} |
+{{/snippets}}
+
+---
+
+## 📦 Parsed Library API Directory
+
+The following table summarizes all available classes, functions, and extensions exported by the package. Click on any API's name to view its detailed signature, members, and documentation.
+
+| API | Type | Description |
+| :--- | :--- | :--- |
+{{#decls}}
+| [{{name}}](api/{{name}}.md) | `{{type}}` | {{{summary}}} |
+{{/decls}}
