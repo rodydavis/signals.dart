@@ -157,6 +157,24 @@ Filter and remove matching cached signals.
 
 ---
 
+## mutationSignalContainer
+
+Create a signal container for MutationSignals based on args.
+
+<code>A</code> is the mutation argument type, <code>T</code> the mutation result type, and <code>Arg</code>
+the container key used to cache/look up each mutation.
+
+```dart
+final container = mutationSignalContainer<Todo, void, int>((listId) {
+  return mutationSignal<Todo, void>((todo) => api.add(listId, todo));
+}, cache: true);
+
+container(1).mutate(myTodo); // per-list mutation, cached by listId
+```
+
+
+---
+
 ## readonlySignalContainer
 
 Create a signal container used to instance signals based on args

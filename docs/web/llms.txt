@@ -48,6 +48,7 @@
 - [Computed](https://dartsignals.dev/packages/signals_flutter/async/computed): Create an asynchronous computed signal with implicit dependency tracking.
 - [Connect](https://dartsignals.dev/packages/signals_flutter/async/connect): A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
 - [Stream](https://dartsignals.dev/packages/signals_flutter/async/stream): Stream signals can be created by extension or method.
+- [MutationSignal](https://dartsignals.dev/packages/signals_flutter/async/mutation): A Signal for imperative, on-demand asynchronous side effects (mutations),.
 - [MapSignal](https://dartsignals.dev/packages/signals_flutter/value/map): A reactive Signal that holds a Map and implements the Map interface.
 - [SetSignal](https://dartsignals.dev/packages/signals_flutter/value/set): A reactive Signal that holds a Set and implements the Set interface.
 - [ListSignal](https://dartsignals.dev/packages/signals_flutter/value/list): A reactive Signal that holds a List and implements the List interface.
@@ -115,6 +116,7 @@
 - [Computed](https://dartsignals.dev/packages/signals_core/async/computed): Create an asynchronous computed signal with implicit dependency tracking.
 - [Connect](https://dartsignals.dev/packages/signals_core/async/connect): A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
 - [Stream](https://dartsignals.dev/packages/signals_core/async/stream): Stream signals can be created by extension or method.
+- [MutationSignal](https://dartsignals.dev/packages/signals_core/async/mutation): A Signal for imperative, on-demand asynchronous side effects (mutations),.
 - [MapSignal](https://dartsignals.dev/packages/signals_core/value/map): A reactive Signal that holds a Map and implements the Map interface.
 - [SetSignal](https://dartsignals.dev/packages/signals_core/value/set): A reactive Signal that holds a Set and implements the Set interface.
 - [ListSignal](https://dartsignals.dev/packages/signals_core/value/list): A reactive Signal that holds a List and implements the List interface.
@@ -179,6 +181,7 @@
 - [Computed](https://dartsignals.dev/packages/signals/async/computed): Create an asynchronous computed signal with implicit dependency tracking.
 - [Connect](https://dartsignals.dev/packages/signals/async/connect): A highly powerful connector utility that allows you to dynamically stream and pipe multiple asynchronous streams directly into a single reactive Si...
 - [Stream](https://dartsignals.dev/packages/signals/async/stream): Stream signals can be created by extension or method.
+- [MutationSignal](https://dartsignals.dev/packages/signals/async/mutation): A Signal for imperative, on-demand asynchronous side effects (mutations),.
 - [MapSignal](https://dartsignals.dev/packages/signals/value/map): A reactive Signal that holds a Map and implements the Map interface.
 - [SetSignal](https://dartsignals.dev/packages/signals/value/set): A reactive Signal that holds a Set and implements the Set interface.
 - [ListSignal](https://dartsignals.dev/packages/signals/value/list): A reactive Signal that holds a List and implements the List interface.
@@ -235,6 +238,7 @@
 - [useSignalValue](https://dartsignals.dev/packages/signals_hooks/hooks/use-signal-value): Subscribes to an existing ReadonlySignal (or Signal) and returns its current value.
 - [useStreamSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-stream-signal): Creates a new StreamSignal and subscribes to it.
 - [useSetSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-set-signal): Creates a new SetSignal and subscribes to it.
+- [useMutationSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-mutation-signal): Creates a new MutationSignal and subscribes to it.
 - [useLinkedSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-linked-signal): Creates a new LinkedSignal that resets its value whenever its source computation changes.
 - [useChangeStackSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-change-stack-signal): Creates a new ChangeStackSignal and subscribes to it.
 - [useTrackedSignal](https://dartsignals.dev/packages/signals_hooks/hooks/use-tracked-signal): Creates a new TrackedSignal and subscribes to it.

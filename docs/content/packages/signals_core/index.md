@@ -69,6 +69,7 @@ void main() {
       <a class="content-link" href="/packages/signals_core/async/computed">Computed</a>
       <a class="content-link" href="/packages/signals_core/async/connect">Connect</a>
       <a class="content-link" href="/packages/signals_core/async/future">FutureSignal</a>
+      <a class="content-link" href="/packages/signals_core/async/mutation">MutationSignal</a>
       <a class="content-link" href="/packages/signals_core/async/stream">Stream</a>
     </div>
   </div>

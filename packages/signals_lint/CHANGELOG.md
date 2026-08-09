@@ -10,6 +10,7 @@
   - `signals_avoid_deprecated_signals_mixin`: Flags classes using the legacy `SignalsMixin`.
   - `signals_prefer_named_builder`: Recommends using the named constructor or parameter for `SignalBuilder`.
   - `signals_prefer_unified_options`: Warns when passing scattered creator arguments in favor of consolidated options objects.
+  - `signals_avoid_create_in_build_method` and `signals_prefer_unified_options` now recognize `mutationSignal` as a signal creator.
 - **5 automated IDE code assists & quick-fixes**:
   - `Wrap with SignalBuilder`: Wraps any widget in a `SignalBuilder` to react to signal changes.
   - `Convert StatelessWidget to SignalWidget`: Instantly refactors a `StatelessWidget` to `SignalWidget`.

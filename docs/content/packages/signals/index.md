@@ -60,6 +60,7 @@ final doubleCount = computed(() => count.value * 2);
       <a class="content-link" href="/packages/signals/async/computed">Computed</a>
       <a class="content-link" href="/packages/signals/async/connect">Connect</a>
       <a class="content-link" href="/packages/signals/async/future">FutureSignal</a>
+      <a class="content-link" href="/packages/signals/async/mutation">MutationSignal</a>
       <a class="content-link" href="/packages/signals/async/stream">Stream</a>
     </div>
   </div>

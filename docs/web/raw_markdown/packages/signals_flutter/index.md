@@ -72,6 +72,7 @@ class CounterWidget extends SignalWidget {
       <a class="content-link" href="/packages/signals_flutter/async/computed">Computed</a>
       <a class="content-link" href="/packages/signals_flutter/async/connect">Connect</a>
       <a class="content-link" href="/packages/signals_flutter/async/future">FutureSignal</a>
+      <a class="content-link" href="/packages/signals_flutter/async/mutation">MutationSignal</a>
       <a class="content-link" href="/packages/signals_flutter/async/stream">Stream</a>
     </div>
   </div>

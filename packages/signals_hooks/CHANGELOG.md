@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added `useMutationSignal`, a hook that creates and subscribes to a `MutationSignal` for imperative, on-demand mutations (idle → pending → success/error). Re-creates (and resets) the mutation when `keys` change.
+
 ## 7.1.0
 
 - Added native `Widget build(BuildContext context)` override support directly on `SignalHookWidget`.

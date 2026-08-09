@@ -400,6 +400,7 @@ The **Effect** type is referenced and used in the following pages:
 * [SignalEffect](/packages/signals/effects/signal-effect) <span style="opacity: 0.6; font-size: 0.85em;">(signals/effects)</span>
 * [signals_hooks](/packages/signals_hooks)
 * [useLazySignal](/packages/signals_hooks/hooks/use-lazy-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
+* [useMutationSignal](/packages/signals_hooks/hooks/use-mutation-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [useSignalEffect](/packages/signals_hooks/hooks/use-signal-effect) <span style="opacity: 0.6; font-size: 0.85em;">(signals_hooks/hooks)</span>
 * [Untracked](/packages/preact_signals/core/untracked) <span style="opacity: 0.6; font-size: 0.85em;">(preact_signals/core)</span>
 * [Effect](/packages/preact_signals/core/effect) <span style="opacity: 0.6; font-size: 0.85em;">(preact_signals/core)</span>

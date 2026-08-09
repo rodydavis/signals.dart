@@ -252,5 +252,43 @@ void main() {
       expect(s.value.value, 42);
       await controller.close();
     });
+
+    test('mutationSignalContainer', () async {
+      // Arg = String (cache key / mutation argument), result = int.
+      final container = mutationSignalContainer<String, int, String>(
+        (key) => mutationSignal<String, int>((name) async => name.length),
+        cache: true,
+      );
+
+      final m = container('save-a');
+      // Same key returns the cached instance.
+      expect(identical(container('save-a'), m), isTrue);
+      // Different key returns a different instance.
+      expect(identical(container('save-b'), m), isFalse);
+
+      expect(m.peek(), isA<MutationIdle<int>>());
+      final result = await m.mutateAsync('hello');
+      expect(result, 5);
+      expect(m.peek(), isA<MutationSuccess<int>>());
+      expect(m.peek().requireValue, 5);
+    });
+
+    test('mutationSignalContainer eviction and lookup', () {
+      final evicted = <String>[];
+      final container = mutationSignalContainer<void, int, String>(
+        (key) => mutationSignal<void, int>((_) async => 1),
+        cache: true,
+        onEvict: (key, signal) => evicted.add(key),
+      );
+
+      final a = container('a');
+      expect(container.containsKey('a'), isTrue);
+      expect(container.lookup('a'), same(a));
+      expect(container.lookup('missing'), isNull);
+
+      container.remove('a');
+      expect(container.containsKey('a'), isFalse);
+      expect(evicted, ['a']);
+    });
   });
 }

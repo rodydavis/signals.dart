@@ -1442,6 +1442,36 @@ a signal inside an effect and are reading by value.
 
 ---
 
+## SignalMutationFunctionUtils
+
+Extension on a mutation function <code>Future<T> Function(A)</code> to convert it into
+a [MutationSignal](/types/mutationsignal).
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="tomutationsignal"></a>`MutationSignal<A, T> toMutationSignal({SignalOptions<MutationState<T>>? options})`
+
+Convert this mutation function into a [MutationSignal](/types/mutationsignal).
+
+```dart
+import 'package:signals_core/signals_core.dart';
+
+Future<void> save(Todo todo) => api.add(todo);
+final addTodo = save.toMutationSignal();
+
+addTodo.mutate(myTodo);
+```
+
+</details>
+
+
+
+---
+
 ## SignalDoubleExtensions
 
 Utility extension on **double** to easily lift a double into a reactive [Signal](/types/signal).
@@ -1776,6 +1806,65 @@ a positive integer if <code>this</code> is ordered after **other**,
 and zero if <code>this</code> and **other** are ordered together.
 
 The **other** argument must be a value that is comparable to this object.
+
+</details>
+
+
+
+---
+
+## MutationError
+
+The mutation failed with an error and stack trace.
+
+
+### Constructors
+
+<details>
+<summary> View Constructors </summary>
+
+##### <a name="mutationerror"></a><a name="mutationerror"></a>`MutationError(this.error, this.stackTrace)`
+
+The mutation failed with an error and stack trace.
+
+</details>
+
+
+### Properties
+
+<details>
+<summary> View Properties </summary>
+
+##### <a name="error"></a>`Object error`
+
+##### <a name="stacktrace"></a>`StackTrace stackTrace`
+
+The stack trace captured when the mutation failed. Always non-null on a
+[MutationError](/types/mutationerror) (defaulted to <code>StackTrace.current</code> by the factory).
+
+</details>
+
+
+### Methods
+
+<details>
+<summary> View Methods </summary>
+
+##### <a name="isidle"></a>`bool isIdle`
+
+##### <a name="ispending"></a>`bool isPending`
+
+##### <a name="hasvalue"></a>`bool hasValue`
+
+##### <a name="haserror"></a>`bool hasError`
+
+##### <a name="value"></a>`T? value`
+
+##### <a name="requirevalue"></a>`T requireValue`
+
+##### <a name="=="></a>`bool ==(covariant MutationState<T> other)`
+
+##### <a name="hashcode"></a>`int hashCode`
 
 </details>
 
