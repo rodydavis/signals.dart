@@ -13,7 +13,7 @@ description: "API reference and details for futureSignalContainer from signals.d
 ## Function: futureSignalContainer
 
 ```dart
-SignalContainer<AsyncState<T>, Arg, FutureSignal<T>> futureSignalContainer(FutureSignal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, FutureSignal<T> signal)? onEvict})
+SignalContainer<Arg, FutureSignal<T>> futureSignalContainer(FutureSignal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, FutureSignal<T> signal)? onEvict})
 ```
 
 Create a signal container for FutureSignals based on args.

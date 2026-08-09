@@ -13,7 +13,7 @@ description: "API reference and details for computedContainer from signals.dart.
 ## Function: computedContainer
 
 ```dart
-SignalContainer<T, Arg, Computed<T>> computedContainer(Computed<T> Function(Arg) create, {bool cache = false, void Function(Arg key, Computed<T> signal)? onEvict})
+SignalContainer<Arg, Computed<T>> computedContainer(Computed<T> Function(Arg) create, {bool cache = false, void Function(Arg key, Computed<T> signal)? onEvict})
 ```
 
 Create a signal container for computed signals based on args.

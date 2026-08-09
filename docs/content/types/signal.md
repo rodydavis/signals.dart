@@ -488,7 +488,7 @@ The **Signal** type is referenced and used in the following pages:
 * [StreamSignalMixin](/packages/signals/mixins/stream) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [ChangeStackSignalMixin](/packages/signals/mixins/change-stack) <span style="opacity: 0.6; font-size: 0.85em;">(signals/mixins)</span>
 * [FlutterComputed](/packages/signals/signals/flutter-computed) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
-* [TickerSignal](/packages/signals/signals/ticker-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
+* [Ticker Signal](/packages/signals/signals/ticker-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
 * [FlutterSignal](/packages/signals/signals/flutter-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
 * [Flutter Readonly Signal](/packages/signals/signals/flutter-readonly-signal) <span style="opacity: 0.6; font-size: 0.85em;">(signals/signals)</span>
 * [AsyncState](/packages/signals/async/state) <span style="opacity: 0.6; font-size: 0.85em;">(signals/async)</span>

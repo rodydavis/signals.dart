@@ -1,3 +1,7 @@
+## 7.2.0
+
+- Bump signals_core dependency to 7.1.0
+
 ## 7.1.0
 
 ### 🚀 New Features

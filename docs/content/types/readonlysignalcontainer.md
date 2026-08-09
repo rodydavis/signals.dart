@@ -13,7 +13,7 @@ description: "API reference and details for readonlySignalContainer from signals
 ## Function: readonlySignalContainer
 
 ```dart
-SignalContainer<T, Arg, ReadonlySignal<T>> readonlySignalContainer(ReadonlySignal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, ReadonlySignal<T> signal)? onEvict})
+SignalContainer<Arg, ReadonlySignal<T>> readonlySignalContainer(ReadonlySignal<T> Function(Arg) create, {bool cache = false, void Function(Arg key, ReadonlySignal<T> signal)? onEvict})
 ```
 
 Create a signal container used to instance signals based on args

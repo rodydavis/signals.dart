@@ -16,6 +16,7 @@
   - `Convert StatefulWidget to SignalStatefulWidget`: Refactors a standard `StatefulWidget` to `SignalStatefulWidget`.
   - `Migrate SignalsMixin to SignalStatefulWidget`: Automatically transitions legacy `SignalsMixin` usages to the modern `SignalStatefulWidget` state flow.
   - `Migrate Watch to SignalBuilder`: Converts deprecated `Watch` widgets to `SignalBuilder`.
+- Bump signals dev-dependency to 7.2.0
 
 ## 6.3.1
 

@@ -3,7 +3,7 @@ title: signals_hooks
 description: flutter_hooks bindings for signals
 ---
 
-> Version: <code>7.1.0</code>
+> Version: <code>7.2.0</code>
 
 ## Installation
 
