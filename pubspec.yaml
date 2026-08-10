@@ -38,4 +38,4 @@ workspace:
   - packages/signals_lint
   - packages/signals_lint/example
 dependencies:
-  jaspr: ^0.23.1
+  jaspr: ^0.23.3
