@@ -11,7 +11,7 @@ environment:
 resolution: workspace
 
 dependencies:
-  meta: ^1.3.0
+  meta: ^1.19.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0
