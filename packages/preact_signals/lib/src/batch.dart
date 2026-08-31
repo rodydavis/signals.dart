@@ -11,6 +11,13 @@ void recordBatchSnapshot(Signal source) {
     return;
   }
 
+  // A signal receiving its very first value (Signal.lazy, or LinkedSignal
+  // seeding itself during construction) has no previous value to snapshot
+  // or restore; reading its internal value here would throw.
+  if (!source.isInitialized) {
+    return;
+  }
+
   if (source.batchSnapshotVersion != currentBatchSnapshotVersion) {
     source.batchSnapshotVersion = currentBatchSnapshotVersion;
     batchSnapshots = BatchSnapshot(

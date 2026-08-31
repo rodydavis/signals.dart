@@ -10,6 +10,37 @@ void main() {
       expect(selectedSize.value, 'S');
     });
 
+    test('can be constructed inside a batch', () {
+      // Regression: the constructor seeds itself via set(), and the batch
+      // snapshot used to read its never-initialized value. Only reproduces
+      // once an earlier batch has bumped the snapshot version.
+      final warm = signal(0);
+      batch(() => warm.value = 1);
+
+      final source = signal(0);
+      batch(() {
+        final linked = linkedSignal<int, int>(() => source.value);
+        expect(linked.value, 0);
+      });
+    });
+
+    test('can be constructed lazily inside an effect', () {
+      final warm = signal(0);
+      batch(() => warm.value = 1);
+
+      final source = signal(0);
+      late final Signal<int> linked =
+          linkedSignal<int, int>(() => source.value);
+      int? seen;
+      final dispose = effect(() {
+        seen = linked.value;
+      });
+      expect(seen, 0);
+      source.value = 2;
+      expect(linked.value, 2);
+      dispose();
+    });
+
     test('resets automatically when source dependencies change', () {
       final availableSizes = signal(['S', 'M', 'L']);
       final selectedSize = linkedSignal(() => availableSizes.value[0]);
