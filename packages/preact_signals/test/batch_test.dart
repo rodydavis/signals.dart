@@ -11,6 +11,19 @@ void main() {
       expect(batch(() => 1), 1);
     });
 
+    test('should not throw when a lazy signal is first set inside a batch',
+        () {
+      // Regression: recordBatchSnapshot used to read the internal value of
+      // a signal that had never been initialized. Only reproduces once an
+      // earlier batch has bumped the snapshot version.
+      final warm = signal(0);
+      batch(() => warm.value = 1);
+
+      final lazy = Signal<int>.lazy();
+      batch(() => lazy.value = 42);
+      expect(lazy.value, 42);
+    });
+
     test('should throw errors thrown from the callback', () {
       expect(
         () {
