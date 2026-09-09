@@ -14,7 +14,6 @@ The primary entry library for Flutter applications. It re-exports core signals a
 
 ### [extended.dart](file:///Users/rodydavis/dev/signals.dart/packages/signals_flutter/lib/extended.dart)
 This library provides access to global, reactive system signals. It synchronizes Flutter environment attributes into the reactive graph:
-- `themeDataSignal` (reacts to the current `ThemeData`)
 - `mediaQueryDataSignal` (reacts to `MediaQueryData`)
 - `appLifecycleSignal` (reacts to `AppLifecycleState`)
 - `onPersistentFrameSignal` (fires a Duration on every scheduler tick)

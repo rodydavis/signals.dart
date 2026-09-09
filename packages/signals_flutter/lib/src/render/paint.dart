@@ -11,7 +11,7 @@ import 'package:signals_core/signals_core.dart' as core;
 ///
 /// ### Interactive Star Field Canvas Example
 /// ```dart
-/// import 'package:flutter/material.dart';
+/// import 'package:flutter/widgets.dart';
 /// import 'package:signals/signals_flutter.dart';
 ///
 /// final cursorOffset = signal(const Offset(0, 0));
@@ -44,7 +44,7 @@ import 'package:signals_core/signals_core.dart' as core;
 ///   @override
 ///   void paint(Canvas canvas, Size size) {
 ///     final paint = Paint()
-///       ..color = Colors.white
+///       ..color = const Color(0xFFFFFFFF)
 ///       ..style = PaintingStyle.fill;
 ///
 ///     // Draw 100 stars deterministically distributed across the canvas size
@@ -59,25 +59,25 @@ import 'package:signals_core/signals_core.dart' as core;
 ///       if (distance < 120.0) {
 ///         // Spotlight/Twinkle effect: make stars near the cursor brighter & larger!
 ///         final factor = 1.0 - (distance / 120.0);
-///         paint.color = Colors.amber.withOpacity(0.3 + 0.7 * factor);
+///         paint.color = const Color(0xFFFFC107).withOpacity(0.3 + 0.7 * factor);
 ///         final glowSize = starSize + (factor * 4.0);
 ///         canvas.drawCircle(starPos, glowSize, paint);
 ///
 ///         // Draw premium constellation lines connecting nearby stars to the cursor
 ///         final linePaint = Paint()
-///           ..color = Colors.amber.withOpacity(0.25 * factor)
+///           ..color = const Color(0xFFFFC107).withOpacity(0.25 * factor)
 ///           ..strokeWidth = 1.0;
 ///         canvas.drawLine(offsetSignal.value, starPos, linePaint);
 ///       } else {
 ///         // Normal distant star
-///         paint.color = Colors.white.withOpacity(0.4);
+///         paint.color = const Color(0xFFFFFFFF).withOpacity(0.4);
 ///         canvas.drawCircle(starPos, starSize, paint);
 ///       }
 ///     }
 ///
 ///     // Draw the interactive controller glow source
 ///     final cursorPaint = Paint()
-///       ..color = Colors.amber.withOpacity(0.8)
+///       ..color = const Color(0xFFFFC107).withOpacity(0.8)
 ///       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6.0);
 ///     canvas.drawCircle(offsetSignal.value, 6.0, cursorPaint);
 ///   }

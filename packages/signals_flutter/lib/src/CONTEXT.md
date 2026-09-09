@@ -28,7 +28,6 @@ Contains `SignalProvider`, which allows passing signals down the widget tree usi
 
 ### [extended/](file:///Users/rodydavis/dev/signals.dart/packages/signals_flutter/lib/src/extended/CONTEXT.md)
 Global reactive wrappers for Flutter system state:
-- `themeDataSignal` (Theme)
 - `mediaQueryDataSignal` (MediaQuery)
 - `appLifecycleSignal` (AppLifecycleState)
 - `onPersistentFrameSignal` (Scheduler)
