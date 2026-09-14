@@ -4,10 +4,8 @@ import 'signal_builder.dart';
 
 /// A deprecated widget for watching signal changes in the widget tree.
 ///
-/// <Warning>
-///   **DEPRECATED**: Use [SignalBuilder] instead for superior, self-contained reactivity
-///   and consistent API design.
-/// </Warning>
+/// **DEPRECATED**: Use [SignalBuilder] instead for superior, self-contained reactivity
+/// and consistent API design.
 ///
 /// ### Migration to [SignalBuilder]
 /// ```dart

@@ -114,9 +114,7 @@ FlutterSignal<T> signal<T>(
 
 /// Creates a lazy, mutable [FlutterSignal] of type [T] whose value can be assigned later.
 ///
-/// <Warning>
-///   Reading a lazy signal's value before it has been initialized will throw a runtime error.
-/// </Warning>
+/// **Warning**: Reading a lazy signal's value before it has been initialized will throw a runtime error.
 ///
 /// ### Example
 ///

@@ -63,6 +63,7 @@ class ConvertedSignalStatefulWidget extends SignalStatefulWidget {
   StatefulElement createElement() => ConvertedSignalStatefulElement(this);
 
   @override
+  // ignore: no_logic_in_create_state
   State<StatefulWidget> createState() => widget.createState();
 }
 
