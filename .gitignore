@@ -14,8 +14,11 @@ Thumbs.db
 .vscode
 .vscode-test-web/
 .vscode-test-web
-.fvm/
-.fvm
+.fvm/flutter_sdk
+.fvm/versions/
+.fvm/release
+.fvm/version
+!.fvm/fvm_config.json
 .idx/
 .idx
 .guides/

@@ -6,8 +6,8 @@ documentation: https://dartsignals.dev/
 version: 7.1.0
 
 environment:
-  sdk: ^3.5.0
-  flutter: ">=1.17.0"
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
 
 resolution: workspace
 

@@ -1,44 +1,43 @@
 {
-    "cSpell.words": [
-        "autocommit",
-        "Buchheim",
-        "cachebase",
-        "colorpicker",
-        "computeds",
-        "datetime",
-        "endtemplate",
-        "Finalizer",
-        "Fruchterman",
-        "fullscreen",
-        "genhtml",
-        "graphview",
-        "konami",
-        "lcov",
-        "lerp",
-        "millis",
-        "pathing",
-        "preact",
-        "prefs",
-        "Reingold",
-        "relayout",
-        "rexecute",
-        "rxdart",
-        "scrollables",
-        "sublist",
-        "Tianguang",
-        "Todos",
-        "unawaited",
-        "unlisten",
-        "unwatch",
-        "viewmodel",
-        "vsync"
-    ],
-    // Remove .fvm files from search
-    "search.exclude": {
-        "**/.fvm": true
-    },
-    // Remove from file watching
-    "files.watcherExclude": {
-        "**/.fvm": true
-    }
+  "cSpell.words": [
+    "autocommit",
+    "Buchheim",
+    "cachebase",
+    "colorpicker",
+    "computeds",
+    "datetime",
+    "endtemplate",
+    "Finalizer",
+    "Fruchterman",
+    "fullscreen",
+    "genhtml",
+    "graphview",
+    "konami",
+    "lcov",
+    "lerp",
+    "millis",
+    "pathing",
+    "preact",
+    "prefs",
+    "Reingold",
+    "relayout",
+    "rexecute",
+    "rxdart",
+    "scrollables",
+    "sublist",
+    "Tianguang",
+    "Todos",
+    "unawaited",
+    "unlisten",
+    "unwatch",
+    "viewmodel",
+    "vsync"
+  ],
+  "search.exclude": {
+    "**/.fvm": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  "dart.flutterSdkPath": ".fvm/versions/3.47.2"
 }
