@@ -6,7 +6,7 @@ homepage: https://dartsignals.dev/
 documentation: https://dartsignals.dev/
 
 environment:
-  sdk: ^3.13.0
+  sdk: ^3.5.0
 
 resolution: workspace
 

@@ -2,7 +2,7 @@ name: signals_workspace
 publish_to: none
 
 environment:
-  sdk: ^3.13.0
+  sdk: ^3.5.0
 
 dev_dependencies:
   combine_coverage: ^1.0.1
