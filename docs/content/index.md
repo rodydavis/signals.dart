@@ -25,7 +25,7 @@ description: Fine-grained reactive programming framework for Dart and Flutter.
 
 Take a look at signals in action with this interactive DartPad:
 
-<iframe src="https://dartpad.dev/?id=1b2f58d30c33ee2ee5c5a159b8867861?theme=dark" style="width: 100%; height: 600px; border: 0; border-radius: 8px;"></iframe>
+<iframe src="https://dartpad.dev/?id=1b2f58d30c33ee2ee5c5a159b8867861&theme=dark" style="width: 100%; height: 600px; border: 0; border-radius: 8px;"></iframe>
 
 ---
 
